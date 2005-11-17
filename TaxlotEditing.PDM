@@ -1,0 +1,175 @@
+[Root]
+Most Recent Package=Standard Setup Package 1
+
+
+[Package|Standard Setup Package 1|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\Package1
+
+[Package|Standard Setup Package 1|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Standard Setup Package 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Standard Setup Package 1|Files Found]
+
+[Package|Standard Setup Package 1|Files Released]
+
+[Package|Standard Setup Package 1|Missing Dependency Information]
+C:\Program Files\ArcGIS\DeveloperKit\Addins\ErrorHandlerUI.dll=
+C:\WINDOWS\system32\FM20.DLL=
+C:\Program Files\ArcGIS\com\esriSystemUI.olb=
+C:\Program Files\ArcGIS\com\esriSystem.olb=
+C:\Program Files\ArcGIS\DeveloperKit\Addins\LineNumberRemover.dll=
+C:\Program Files\ArcGIS\DeveloperKit\Addins\LineNumberGenerator.dll=
+C:\Program Files\ArcGIS\DeveloperKit\Addins\InterfaceImplementer.dll=
+C:\Program Files\ArcGIS\com\esriGeometry.olb=
+C:\Program Files\ArcGIS\com\esriGeoDatabaseUI.olb=
+C:\Program Files\ArcGIS\com\esriGeoDatabase.olb=
+C:\Program Files\ArcGIS\com\esriFramework.olb=
+C:\Program Files\ArcGIS\DeveloperKit\Addins\ErrorHandlerRemover.dll=
+C:\Program Files\ArcGIS\com\esriEditorExt.olb=
+C:\Program Files\ArcGIS\com\esriEditor.olb=
+C:\Program Files\ArcGIS\com\esriDisplayUI.olb=
+C:\Program Files\ArcGIS\com\esriDisplay.olb=
+C:\Program Files\ArcGIS\com\esriDataSourcesGDB.olb=
+C:\Program Files\ArcGIS\DeveloperKit\Addins\CompileAndRegister.dll=
+C:\Program Files\ArcGIS\DeveloperKit\Addins\CommandCreateWizard.dll=
+C:\Program Files\ArcGIS\com\esriCatalogUI.olb=
+C:\Program Files\ArcGIS\com\esriCatalog.olb=
+C:\Program Files\ArcGIS\com\esriCartoUI.olb=
+C:\Program Files\ArcGIS\com\esriCarto.olb=
+C:\Program Files\ArcGIS\DeveloperKit\Addins\VBAutomaticReferencesAddIn.dll=
+C:\Program Files\ArcGIS\com\esriArcMapUI.olb=
+C:\Program Files\ArcGIS\com\esriArcMap.olb=
+C:\Program Files\ArcGIS\com\esriArcCatalogUI.olb=
+C:\Program Files\ArcGIS\com\esriArcCatalog.olb=
+
+[Package|Standard Setup Package 1|Out-of-Date Dependency Information]
+
+[Package|Standard Setup Package 1|Files Added]
+c:\active\modelingworkshop_01-05-05\customcode\ormap\ormap.ini=
+c:\active\modelingworkshop_01-05-05\customcode\ormap\taxlotediting.reg=
+
+[Package|Standard Setup Package 1|Files Removed]
+c:\program files\arcgis\developerkit\addins\commandcreatewizard.dll=
+c:\program files\arcgis\developerkit\addins\compileandregister.dll=
+c:\program files\arcgis\developerkit\addins\errorhandlerremover.dll=
+c:\program files\arcgis\developerkit\addins\errorhandlerui.dll=
+c:\program files\arcgis\com\esriarccatalog.olb=
+c:\program files\arcgis\com\esriarccatalogui.olb=
+c:\program files\arcgis\com\esriarcmap.olb=
+c:\program files\arcgis\com\esriarcmapui.olb=
+c:\program files\arcgis\com\esricarto.olb=
+c:\program files\arcgis\com\esricartoui.olb=
+c:\program files\arcgis\com\esricatalog.olb=
+c:\program files\arcgis\com\esricatalogui.olb=
+c:\program files\arcgis\com\esridatasourcesgdb.olb=
+c:\program files\arcgis\com\esridisplay.olb=
+c:\program files\arcgis\com\esridisplayui.olb=
+c:\program files\arcgis\com\esrieditor.olb=
+c:\program files\arcgis\com\esrieditorext.olb=
+c:\program files\arcgis\com\esriframework.olb=
+c:\program files\arcgis\com\esrigeodatabase.olb=
+c:\program files\arcgis\com\esrigeodatabaseui.olb=
+c:\program files\arcgis\com\esrigeometry.olb=
+c:\program files\arcgis\com\esrisystem.olb=
+c:\program files\arcgis\com\esrisystemui.olb=
+c:\program files\arcgis\developerkit\addins\interfaceimplementer.dll=
+c:\program files\arcgis\developerkit\addins\linenumbergenerator.dll=
+c:\program files\arcgis\developerkit\addins\linenumberremover.dll=
+c:\program files\arcgis\developerkit\addins\vbautomaticreferencesaddin.dll=
+c:\program files\microsoft visual studio\vb98\wizards\pdwizard\redist\mdac_typ.exe=
+
+[Package|Standard Setup Package 1|Files In Project]
+C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\TaxlotEditing.dll=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\Program Files\ArcGIS\com\esriArcCatalog.olb=No
+C:\Program Files\ArcGIS\com\esriArcCatalogUI.olb=No
+C:\Program Files\ArcGIS\com\esriArcMap.olb=No
+C:\Program Files\ArcGIS\com\esriArcMapUI.olb=No
+C:\Program Files\ArcGIS\DeveloperKit\Addins\VBAutomaticReferencesAddIn.dll=No
+C:\Program Files\ArcGIS\com\esriCarto.olb=No
+C:\Program Files\ArcGIS\com\esriCartoUI.olb=No
+C:\Program Files\ArcGIS\com\esriCatalog.olb=No
+C:\Program Files\ArcGIS\com\esriCatalogUI.olb=No
+C:\Program Files\ArcGIS\DeveloperKit\Addins\CommandCreateWizard.dll=No
+C:\Program Files\ArcGIS\DeveloperKit\Addins\CompileAndRegister.dll=No
+C:\Program Files\ArcGIS\com\esriDataSourcesGDB.olb=No
+C:\Program Files\ArcGIS\com\esriDisplay.olb=No
+C:\Program Files\ArcGIS\com\esriDisplayUI.olb=No
+C:\Program Files\ArcGIS\com\esriEditor.olb=No
+C:\Program Files\ArcGIS\com\esriEditorExt.olb=No
+C:\Program Files\ArcGIS\DeveloperKit\Addins\ErrorHandlerRemover.dll=No
+C:\Program Files\ArcGIS\com\esriFramework.olb=No
+C:\Program Files\ArcGIS\com\esriGeoDatabase.olb=No
+C:\Program Files\ArcGIS\com\esriGeoDatabaseUI.olb=No
+C:\Program Files\ArcGIS\com\esriGeometry.olb=No
+C:\Program Files\ArcGIS\DeveloperKit\Addins\InterfaceImplementer.dll=No
+C:\Program Files\ArcGIS\DeveloperKit\Addins\LineNumberGenerator.dll=No
+C:\Program Files\ArcGIS\DeveloperKit\Addins\LineNumberRemover.dll=No
+C:\Program Files\ArcGIS\com\esriSystem.olb=No
+C:\Program Files\ArcGIS\com\esriSystemUI.olb=No
+C:\WINDOWS\system32\FM20.DLL=Yes
+C:\Program Files\ArcGIS\DeveloperKit\Addins\ErrorHandlerUI.dll=No
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=No
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\ormap.ini=Yes
+C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\TaxlotEditing.reg=Yes
+
+[Package|Standard Setup Package 1|Configure Registry Files]
+Applicable=Yes
+C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\TaxlotEditing.reg=Both
+
+[Package|Standard Setup Package 1|Configure Remote Servers]
+Applicable=No
+
+[Package|Standard Setup Package 1|Install Locations]
+C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\TaxlotEditing.dll=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\Program Files\ArcGIS\DeveloperKit\Addins\VBAutomaticReferencesAddIn.dll=$(WinSysPath)
+C:\WINDOWS\system32\FM20.DLL=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\ormap.ini=$(AppPath)
+C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\TaxlotEditing.reg=$(AppPath)
+
+[Package|Standard Setup Package 1|Configure Shared Files]
+Applicable=Yes
+C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\TaxlotEditing.dll=No
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=No
+C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\ormap.ini=No
+C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\TaxlotEditing.reg=No
+
+[Package|Standard Setup Package 1|Distribution]
+Type=single
+Size=
+Title=TaxlotEditing
+
+[Package|Standard Setup Package 1|Package]
+PackageFolder=C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\Package1
+ProjectFolder=C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap
+ServerSideCab=
+File1=C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\Package1\setup.exe
+File2=C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\Package1\Setup.Lst
+File3=C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\Package1\TaxlotEditing.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
