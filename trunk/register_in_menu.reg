@@ -1,0 +1,64 @@
+REGEDIT4
+
+[HKEY_CLASSES_ROOT\.dll]
+@="dllfile"
+
+[HKEY_CLASSES_ROOT\.ocx]
+@="ocxfile"
+
+[HKEY_CLASSES_ROOT\.olb]
+@="olbfile"
+
+[HKEY_CLASSES_ROOT\.exe]
+@="exefile"
+
+
+[HKEY_CLASSES_ROOT\dllfile\shell\Register\command]
+@="regsvr32.exe %1"
+
+[HKEY_CLASSES_ROOT\ocxfile\shell\Register\command]
+@="regsvr32.exe %1"
+
+[HKEY_CLASSES_ROOT\olbfile\shell\Register\command]
+@="regsvr32.exe %1"
+
+[HKEY_CLASSES_ROOT\exefile\shell\Register\command]
+@="%1 /register"
+
+[HKEY_CLASSES_ROOT\exefile\shell\Register as COM Server\command]
+@="%1 /regserver"
+
+[HKEY_CLASSES_ROOT\dllfile\shell\Register (Silent)\command]
+@="regsvr32.exe /s %1"
+
+[HKEY_CLASSES_ROOT\ocxfile\shell\Register (Silent)\command]
+@="regsvr32.exe /s %1"
+
+[HKEY_CLASSES_ROOT\olbfile\shell\Register (Silent)\command]
+@="regsvr32.exe /s %1"
+
+
+
+[HKEY_CLASSES_ROOT\dllfile\shell\UnRegister\command]
+@="regsvr32.exe /u %1"
+
+[HKEY_CLASSES_ROOT\ocxfile\shell\UnRegister\command]
+@="regsvr32.exe /u %1"
+
+[HKEY_CLASSES_ROOT\olbfile\shell\UnRegister\command]
+@="regsvr32.exe /u %1"
+
+[HKEY_CLASSES_ROOT\exefile\shell\UnRegister\command]
+@="%1 /unregister"
+
+[HKEY_CLASSES_ROOT\exefile\shell\UnRegister as COM Server\command]
+@="%1 /unregserver"
+
+[HKEY_CLASSES_ROOT\dllfile\shell\UnRegister (Silent)\command]
+@="regsvr32.exe /u /s %1"
+
+[HKEY_CLASSES_ROOT\ocxfile\shell\UnRegister (Silent)\command]
+@="regsvr32.exe /u /s %1"
+
+[HKEY_CLASSES_ROOT\olbfile\shell\UnRegister (Silent)\command]
+@="regsvr32.exe /u /s %1"

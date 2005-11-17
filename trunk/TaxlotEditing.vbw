@@ -1,0 +1,17 @@
+cmdTaxlotAssignment = 22, 22, 897, 810, 
+clsFieldNames = 177, 132, 735, 574, 
+cmdLocate = 66, 66, 624, 508, 
+cmdTaxlotCombine = 66, 132, 624, 574, 
+cmdArrows = 132, 132, 690, 574, Z
+cmdMapIndex = 116, 168, 674, 610, 
+clsTaxLotEditingToolbar = 198, 198, 756, 640, 
+globals = 66, 66, 624, 508, C
+IniFiles = 22, 22, 570, 464, C
+frmTaxlotAssignment = 0, 0, 548, 442, , 62, 36, 713, 544, C
+frmMapIndex = 0, 0, 552, 441, , 79, 2, 744, 365, C
+frmLocate = 125, 210, 724, 636, , 106, 64, 658, 480, C
+frmCombine = 40, 4, 773, 630, , 64, 65, 660, 563, C
+modUtils = 44, 44, 596, 485, 
+clsRowChanged = 88, 88, 636, 530, 
+ErrorHandling = 132, 132, 680, 574, 
+frmArrows = 66, 87, 653, 505, , 22, 29, 609, 447, C
