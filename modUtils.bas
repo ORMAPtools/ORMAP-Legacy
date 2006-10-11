@@ -1,60 +1,145 @@
 Attribute VB_Name = "modUtils"
-'GENERAL UTILITY MODULE
+'
+' File name:            modUtils
+'
+' Initial Author:       Type your name here
+'
+' Date Created:
+'
+' Description:
+'       GENERAL UTILITY MODULE
 'MOST COMMONLY USED PROCEDURES ARE LOCATED HERE
+'
+' Entry points:
+'       List the public variables and their purposes.
+'       List the properties and routines that the module exposes to the rest of the program.
+'
+' Dependencies:
+'       How does this file depend or relate to other files?
+'
+' Issues:
+'       What are unsolved bugs, bottlenecks,
+'       possible future enhancements, and
+'       descriptions of other issues.
+'
+' Method:
+'       Describe any complex details that make sense on the file level.  This includes explanations
+'       of complex algorithms, how different routines within the module interact, and a description
+'       of a data structure used in the module.
+'
+' Updates:
+'            JWM 10/11/2006 added comment header to each function
+'
 
 Option Explicit
-Private Declare Function SendMessageString Lib "user32" Alias "SendMessageA" ( _
-    ByVal hwnd As Long, _
-    ByVal wMsg As Long, _
-    ByVal wParam As Long, _
-    ByVal lParam As String) As Long
-Private m_bContinue As Boolean
+'******************************
+' Global/Public Definitions
+'------------------------------
+' Public API Declarations
+'------------------------------
+
+'------------------------------
+' Public Enums and Constants
+'------------------------------
 Const LB_FINDSTRING = &H18F
 Const LB_FINDSTRINGEXACT = &H1A2
 Const CB_FINDSTRING = &H14C
 Const CB_FINDSTRINGEXACT = &H158
 ' Variables used by the Error handler function - DO NOT REMOVE
-Const c_sModuleFileName As String = "C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\modUtils.bas"
+'++ JWM 10/11/2006 Reomved the path to this module as it will not always be in the same place
+Const c_sModuleFileName As String = "modUtils.bas"
+'------------------------------
+' Public variables
+'------------------------------
 
+'------------------------------
+' Public Types
+'------------------------------
 
+'------------------------------
+' Public loop variables
+'------------------------------
+
+'******************************
+' Private Definitions
+'------------------------------
+' Private API declarations
+'------------------------------
+Private Declare Function SendMessageString Lib "user32" Alias "SendMessageA" ( _
+    ByVal hwnd As Long, _
+    ByVal wMsg As Long, _
+    ByVal wParam As Long, _
+    ByVal lParam As String) As Long
+'------------------------------
+' Private Variables
+'------------------------------
+Private m_bContinue As Boolean
+'------------------------------
+'Private Constants and Enums
+'------------------------------
+
+'------------------------------
+' Private Types
+'------------------------------
+
+'------------------------------
+' Private loop variables
+'------------------------------
+'
+'***************************************************************************
+'Name:  FindFeatureLayerByDS
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Description:   Return the Feature Layer based on its dataset name
+'               This is an easy way to locate a feature layerr in the TOC.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
 Public Function FindFeatureLayerByDS(DatasetName As String) As IFeatureLayer
   On Error GoTo ErrorHandler
-
-  
-    'Return the Feature Layer based on its dataset name
-    'This is an easy way to locate a feature layerr in the TOC
+    
     Dim pMXDoc As IMxDocument
     Dim pMap As IMap
     Dim pFeatureLayer As IFeatureLayer
     Dim pDataset As IDataset
     Dim i As Integer
     
-31:     Set pMXDoc = g_pApp.Document
-32:     Set pMap = pMXDoc.FocusMap
+    Set pMXDoc = g_pApp.Document
+    Set pMap = pMXDoc.FocusMap
   
-34:     With pMap
-35:         For i = 0 To .LayerCount - 1
-36:             If TypeOf .Layer(i) Is IFeatureLayer Then
-37:                 Set pFeatureLayer = .Layer(i)
-38:                 Set pDataset = pFeatureLayer.FeatureClass
-39:                 If Not pDataset Is Nothing Then
-40:                     If UCase(pDataset.Name) = UCase(DatasetName) Then
-41:                         Set FindFeatureLayerByDS = pFeatureLayer
-42:                         Exit For
-43:                     End If
-44:                 End If
-45:             End If
-46:         Next i
-47:     End With
+    With pMap
+        For i = 0 To .LayerCount - 1
+            If TypeOf .Layer(i) Is IFeatureLayer Then
+                Set pFeatureLayer = .Layer(i)
+                Set pDataset = pFeatureLayer.FeatureClass
+                If Not pDataset Is Nothing Then
+'++ JWM 10/11/2006 using strcomp function
+                    If StrComp(pDataset.Name, DatasetName, vbTextCompare) = 0 Then
+                        Set FindFeatureLayerByDS = pFeatureLayer
+                        Exit For
+                    End If
+                End If
+            End If
+        Next i
+    End With
   
-49:     If pFeatureLayer Is Nothing Then
+    If pFeatureLayer Is Nothing Then
 
-51:     End If
-  
+    End If
+Process_Exit:
     Exit Function
-
-
-  Exit Function
 ErrorHandler:
   HandleError True, "FindFeatureLayerByDS " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
@@ -67,335 +152,328 @@ Public Function GetFWorkspace(pObj As esriGeoDatabase.IObject) As IFeatureWorksp
   Dim pFWS As IFeatureWorkspace
   Dim pObjClass As IObjectClass
   Dim pDataset As IDataset
-69:   Set pObjClass = pObj.Class
-70:   Set pDataset = pObjClass
-71:   Set pFWS = pDataset.Workspace
-72:   Set GetFWorkspace = pFWS
+  Set pObjClass = pObj.Class
+  Set pDataset = pObjClass
+  Set pFWS = pDataset.Workspace
+  Set GetFWorkspace = pFWS
 
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "GetFWorkspace " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  ReadValue
+'Initial Author: Chris Buhi
+'Subsequent Author:
+'Created:
+'Purpose:   Reads a value from a row, given a field name
+'
+'Called From:   frmMapIndex.InitForm, modutils.CompareAndSaveValue
+
+'Methods:       Describe any complex details.
+'Parameters:    What variables are brought into this routine?
+'Outputs:       What variables are changed in this routine?
+'Returns:       If a domain field, the descriptive value is returned instead of the stored code
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  Replaced all Exit Function with Goto Process_Exit to have a single exit point
+'***************************************************************************
 Public Function ReadValue(pRow As IRow, pFldName As String, Optional pDataType As String) As Variant
   On Error GoTo ErrorHandler
 
-
-    'Reads a value from a row, given a field name
-    'If a domain field, the descriptive value is returned instead of the stored code
     Dim sVal As String
     Dim lFld As Long
-88:     lFld = pRow.Fields.FindField(pFldName)
-89:     If lFld > -1 Then
-90:       If pDataType = "date" Then
+    lFld = pRow.Fields.FindField(pFldName)
+    If lFld > -1 Then
+      If pDataType = "date" Then
         'If a date and value is null, return a default date value
         '??? How should this be treated?
         Dim pDate As Date
-94:         sVal = IIf(IsNull(pRow.Value(lFld)), pDate, pRow.Value(lFld))
-95:       Else
-96:         sVal = IIf(IsNull(pRow.Value(lFld)), "", pRow.Value(lFld))
-97:       End If
+        sVal = IIf(IsNull(pRow.Value(lFld)), pDate, pRow.Value(lFld))
+      Else
+        sVal = IIf(IsNull(pRow.Value(lFld)), "", pRow.Value(lFld))
+      End If
       'Determine if domain field
       Dim pField As IField
-100:       Set pField = pRow.Fields.Field(lFld)
+      Set pField = pRow.Fields.Field(lFld)
       Dim pDomain As IDomain
-102:       Set pDomain = pField.Domain
-103:       If pDomain Is Nothing Then
-104:         ReadValue = sVal
-        Exit Function
-106:       Else
+      Set pDomain = pField.Domain
+      If pDomain Is Nothing Then
+        ReadValue = sVal
+        GoTo Process_Exit
+      Else
         'Determine type of domain  -If Coded Value, get the description
-108:         If TypeOf pDomain Is ICodedValueDomain Then
+        If TypeOf pDomain Is ICodedValueDomain Then
           Dim pCVDomain As ICodedValueDomain
-110:           Set pCVDomain = pDomain
+          Set pCVDomain = pDomain
           Dim lCode As Long
           Dim vDomainVal As Variant
-113:           vDomainVal = pRow.Value(lFld)
+          vDomainVal = pRow.Value(lFld)
           Dim i As Integer
           'Search the domain for the code
-116:           For i = 0 To pCVDomain.CodeCount - 1
-117:              If pCVDomain.Value(i) = vDomainVal Then
+          For i = 0 To pCVDomain.CodeCount - 1
+             If pCVDomain.Value(i) = vDomainVal Then
               'return the description
-119:               ReadValue = pCVDomain.Name(i)
-              Exit Function
-121:             End If
-122:           Next i
-123:         Else ' If range domain, return the numeric value
-124:           ReadValue = sVal
-          Exit Function
-126:         End If
-127:       End If  'If pDomain is nothing/Else
-128:       ReadValue = sVal
-129:     Else
+              ReadValue = pCVDomain.Name(i)
+              GoTo Process_Exit
+            End If
+          Next i
+        Else ' If range domain, return the numeric value
+          ReadValue = sVal
+          GoTo Process_Exit:
+        End If
+      End If  'If pDomain is nothing/Else
+      ReadValue = sVal
+    Else
       'Field not found
-131:       ReadValue = ""
-132:     End If 'If lFld > -1/Else
+      ReadValue = ""
+    End If 'If lFld > -1/Else
 
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "ReadValue " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
 
+'***************************************************************************
+'Name:  AddCodesToCmb
+'Initial Author:        Chris Buhi
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:   Add the descriptive values from each domain to the drop down comboboxes
+'Called From:
+'Description:   Type the description of the function here.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        What known errors does this routine cause that are NOT captured in error handling routine? If none, say: This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  Single exit point using Goto and made optional parameter true
+'***************************************************************************
 Public Function AddCodesToCmb(pFldName As String, _
                               pFields As IFields, _
                               cboValues As ComboBox, _
                               curVal As Variant, _
-                              Optional blnAllowSpace As Boolean) As Boolean
+                              Optional blnAllowSpace As Boolean = True) As Boolean
   On Error GoTo ErrorHandler
 
-    'Add the descriptive values from each domain to the drop down comboboxes
-149:     If IsMissing(blnAllowSpace) Then blnAllowSpace = True
+    
+'jwm    If IsMissing(blnAllowSpace) Then blnAllowSpace = True
   
    'Get the Coded Value Domain from the field
       Dim lFld As Long
-153:       lFld = pFields.FindField(pFldName)
-154:       If lFld > -1 Then
+      lFld = pFields.FindField(pFldName)
+      If lFld > -1 Then
         Dim pField As IField
-156:         Set pField = pFields.Field(lFld)
+        Set pField = pFields.Field(lFld)
         Dim pDomain As IDomain
-158:         Set pDomain = pField.Domain
-159:         If pDomain Is Nothing Then
-160:           AddCodesToCmb = False
-          Exit Function
-162:         Else
+        Set pDomain = pField.Domain
+        If pDomain Is Nothing Then
+          AddCodesToCmb = False
+          GoTo Process_Exit
+        Else
           'Determine type of domain  -If Coded Value, get the description
-164:           If TypeOf pDomain Is ICodedValueDomain Then
+          If TypeOf pDomain Is ICodedValueDomain Then
             Dim pCVDomain As ICodedValueDomain
-166:             Set pCVDomain = pDomain
+            Set pCVDomain = pDomain
             ' +++ Get a count of the coded values
             Dim lCodes As Long
             Dim i As Long
-170:             lCodes = pCVDomain.CodeCount
+            lCodes = pCVDomain.CodeCount
             Dim sVal As Variant
             ' +++ Loop through the list of values and add them
             ' +++ and their names to the combo box
-174:             If Not blnAllowSpace Then
-175:               With cboValues
-176:               If .ListCount > 0 Then
-177:                 If (.List(0) = "") Or (.List(0) = "") Then
-178:                   .RemoveItem (0)
-179:                 End If
-180:               End If
-181:               If .ListCount > 0 Then
-182:                 If (.List(.ListCount - 1) = "") Or (.List(.ListCount - 1) = "") Then
-183:                   .RemoveItem (.ListCount - 1)
-184:                 End If
-185:               End If
-186:               End With
-187:             End If
-188:             For i = 0 To lCodes - 1
+            If Not blnAllowSpace Then
+              With cboValues
+              If .ListCount > 0 Then
+                If (.List(0) = "") Or (.List(0) = "") Then
+                  .RemoveItem (0)
+                End If
+              End If
+              If .ListCount > 0 Then
+'++ JWM 10/11/2006 Is this if statement comparing against the same thing ?
+                If (.List(.ListCount - 1) = "") Or (.List(.ListCount - 1) = "") Then
+                  .RemoveItem (.ListCount - 1)
+                End If
+              End If
+              End With
+            End If
+            For i = 0 To lCodes - 1
               'Commented line adds codes and description
               'cboValues.AddItem pCVDomain.Value(i) & ": " & pCVDomain.Name(i)
-191:               cboValues.AddItem pCVDomain.Name(i)
-192:             Next i
+              cboValues.AddItem pCVDomain.Name(i)
+            Next i
             'Successful completion of addition
             'If current value is null, add an empty string and make it active
-195:             If curVal = "" Then
-196:               If blnAllowSpace Then
-197:                 cboValues.AddItem ""
-198:                 cboValues.ListIndex = FindControlString(cboValues, "", 0, True)
+            If curVal = "" Then
+              If blnAllowSpace Then
+                cboValues.AddItem ""
+                cboValues.ListIndex = FindControlString(cboValues, "", 0, True)
                 'cboValues.Text = ""
-200:               Else
-201:                 cboValues.ListIndex = 0
-202:               End If
-203:             Else 'Otherwise, select the existing value from the list
-204:               cboValues.ListIndex = FindControlString(cboValues, curVal, 0, True)
-205:             End If
+              Else
+                cboValues.ListIndex = 0
+              End If
+            Else 'Otherwise, select the existing value from the list
+              cboValues.ListIndex = FindControlString(cboValues, curVal, 0, True)
+            End If
             
-207:             AddCodesToCmb = True
-208:           Else
+            AddCodesToCmb = True
+          Else
             'if Range Domain, do not add values
-210:             AddCodesToCmb = False
-211:           End If
-212:         End If 'if a valid domain
-213:       Else 'Field not found
-214:         AddCodesToCmb = False
-215:       End If
+            AddCodesToCmb = False
+          End If
+        End If 'if a valid domain
+      Else 'Field not found
+        AddCodesToCmb = False
+      End If
 
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "AddCodesToCmb " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
-'Public Function AddCodesToCmb_org(pFldName As String, _
-'                              pFields As IFields, _
-'                              cboValues As ComboBox, _
-'                              curVal As Variant, _
-'                              Optional blnAllowSpace As Boolean) As Boolean
-'  On Error GoTo ErrorHandler
-'
-'  'Changed the " " space to ""
-'
-'      If IsMissing(blnAllowSpace) Then blnAllowSpace = True
-'
-'   'Get the Coded Value Domain from the field
-'      Dim lFld As Long
-'      lFld = pFields.FindField(pFldName)
-'      If lFld > -1 Then
-'        Dim pField As IField
-'        Set pField = pFields.Field(lFld)
-'        Dim pDomain As IDomain
-'        Set pDomain = pField.Domain
-'        If pDomain Is Nothing Then
-'          AddCodesToCmb_org = False
-'          Exit Function
-'        Else
-'          'Determine type of domain  -If Coded Value, get the description
-'          If TypeOf pDomain Is ICodedValueDomain Then
-'            Dim pCVDomain As ICodedValueDomain
-'            Set pCVDomain = pDomain
-'            ' +++ Get a count of the coded values
-'            Dim lCodes As Long
-'            Dim i As Long
-'            lCodes = pCVDomain.CodeCount
-'            Dim sVal As Variant
-'            ' +++ Loop through the list of values and add them
-'            ' +++ and their names to the combo box
-'            If Not blnAllowSpace Then
-'              With cboValues
-'              If .ListCount > 0 Then
-'                If (.List(0) = " ") Or (.List(0) = "") Then
-'                  .RemoveItem (0)
-'                End If
-'              End If
-'              If .ListCount > 0 Then
-'                If (.List(.ListCount - 1) = " ") Or (.List(.ListCount - 1) = "") Then
-'                  .RemoveItem (.ListCount - 1)
-'                End If
-'              End If
-'              End With
-'            End If
-'            For i = 0 To lCodes - 1
-'              'Commented line adds codes and description
-'              'cboValues.AddItem pCVDomain.Value(i) & ": " & pCVDomain.Name(i)
-'              cboValues.AddItem pCVDomain.Name(i)
-'            Next i
-'            'Successful completion of addition
-'            'If current value is null, add an empty string and make it active
-'            If curVal = "" Then
-'              If blnAllowSpace Then
-'                cboValues.AddItem " "
-'                cboValues.ListIndex = FindControlString(cboValues, " ", 0, True)
-'                'cboValues.Text = ""
-'              Else
-'                cboValues.ListIndex = 0
-'              End If
-'            Else 'Otherwise, select the existing value from the list
-'              cboValues.ListIndex = FindControlString(cboValues, curVal, 0, True)
-'            End If
-'
-'            AddCodesToCmb_org = True
-'          Else
-'            'if Range Domain, do not add values
-'            AddCodesToCmb_org = False
-'          End If
-'        End If 'if a valid domain
-'      Else 'Field not found
-'        AddCodesToCmb_org = False
-'      End If
-'
-'
-'  Exit Function
-'ErrorHandler:
-'  HandleError True, "AddCodesToCmb_org " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
-'End Function
+'***************************************************************************
+'Name:  ConvertCode
+'Initial Author:        Chris Buhi
+'Subsequent Author:     Type your name here.
+'Created:       10/11/2006
+'Purpose:       Converts a domain descriptive value to the stored code
+'Called From:   frmMapIndex.cmdAssign_Click, modutils.compareandsavevalue, modutils.calctaxlotvalue
+'Description:   Domain values chosen from combo boxes must be converted to the code before being stored.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  Single exit point using goto
+'***************************************************************************
 Public Function ConvertCode(pRow As IRow, pFldName As String, pVal As Variant) As Variant
   On Error GoTo ErrorHandler
 
-
-    'Converts a domain descriptive value to the stored code
-    'Domain values chosen from combo boxes must be converted to the code
-    'before being stored
     Dim lFld As Long
-313:     lFld = pRow.Fields.FindField(pFldName)
-314:     If lFld > -1 Then
+    lFld = pRow.Fields.FindField(pFldName)
+    If lFld > -1 Then
       'Determine if domain field
       Dim pField As IField
-317:       Set pField = pRow.Fields.Field(lFld)
+      Set pField = pRow.Fields.Field(lFld)
       Dim pDomain As IDomain
-319:       Set pDomain = pField.Domain
-320:       If pDomain Is Nothing Then
-321:         ConvertCode = pVal
-        Exit Function
-323:       Else
+      Set pDomain = pField.Domain
+      If pDomain Is Nothing Then
+        ConvertCode = pVal
+        GoTo Process_Exit
+      Else
         'Determine type of domain  -If Coded Value, get the description
-325:         If TypeOf pDomain Is ICodedValueDomain Then
+        If TypeOf pDomain Is ICodedValueDomain Then
           Dim pCVDomain As ICodedValueDomain
-327:           Set pCVDomain = pDomain
+          Set pCVDomain = pDomain
           Dim lCode As Long
           Dim i As Integer
           'Given the description, search the domain for the code
-331:           For i = 0 To pCVDomain.CodeCount - 1
-332:             If pCVDomain.Name(i) = pVal Then
-333:               ConvertCode = pCVDomain.Value(i) 'Return the code value
-              Exit Function
-335:             End If
-336:           Next i
-337:         Else ' If range domain, return the numeric value
-338:           ConvertCode = pVal
-          Exit Function
-340:         End If
-341:       End If  'If pDomain is nothing/Else
-342:       ConvertCode = pVal
-343:     Else
+          For i = 0 To pCVDomain.CodeCount - 1
+            If pCVDomain.Name(i) = pVal Then
+              ConvertCode = pCVDomain.Value(i) 'Return the code value
+              GoTo Process_Exit
+            End If
+          Next i
+        Else ' If range domain, return the numeric value
+          ConvertCode = pVal
+          GoTo Process_Exit
+        End If
+      End If  'If pDomain is nothing/Else
+      ConvertCode = pVal
+    Else
       'Field not found
-345:       ConvertCode = ""
-346:     End If 'If lFld > -1/Else
+      ConvertCode = ""
+    End If 'If lFld > -1/Else
 
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "ConvertCode " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
  
+'***************************************************************************
+'Name:  ConvertToDescription
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:       Converts a domain descriptive value to the stored code
+'Called From:   frmMapIndex.InitForm
+'Description:   Domain values chosen from combo boxes must be converted to the code
+'               before being stored
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  Single exit point using goto
+'***************************************************************************
 Public Function ConvertToDescription(pFlds As IFields, pFldName As String, pVal As Variant) As Variant
   On Error GoTo ErrorHandler
 
-
-    'Converts a domain descriptive value to the stored code
-    'Domain values chosen from combo boxes must be converted to the code
-    'before being stored
     Dim lFld As Long
-362:     lFld = pFlds.FindField(pFldName)
-363:     If lFld > -1 Then
+    lFld = pFlds.FindField(pFldName)
+    If lFld > -1 Then
       'Determine if domain field
       Dim pField As IField
-366:       Set pField = pFlds.Field(lFld)
+      Set pField = pFlds.Field(lFld)
       Dim pDomain As IDomain
-368:       Set pDomain = pField.Domain
-369:       If pDomain Is Nothing Then
-370:         ConvertToDescription = pVal
-        Exit Function
-372:       Else
+      Set pDomain = pField.Domain
+      If pDomain Is Nothing Then
+        ConvertToDescription = pVal
+        GoTo Process_Exit
+      Else
         'Determine type of domain  -If Coded Value, get the description
-374:         If TypeOf pDomain Is ICodedValueDomain Then
+        If TypeOf pDomain Is ICodedValueDomain Then
           Dim pCVDomain As ICodedValueDomain
-376:           Set pCVDomain = pDomain
+          Set pCVDomain = pDomain
           Dim lCode As Long
           Dim i As Integer
           'Given the description, search the domain for the code
-380:           For i = 0 To pCVDomain.CodeCount - 1
-381:             If pCVDomain.Value(i) = pVal Then
-382:               ConvertToDescription = pCVDomain.Name(i) 'Return the code value
-              Exit Function
-384:             End If
-385:           Next i
-386:         Else ' If range domain, return the numeric value
-387:           ConvertToDescription = pVal
-          Exit Function
-389:         End If
-390:       End If  'If pDomain is nothing/Else
-391:       ConvertToDescription = pVal
-392:     Else
+          For i = 0 To pCVDomain.CodeCount - 1
+            If pCVDomain.Value(i) = pVal Then
+              ConvertToDescription = pCVDomain.Name(i) 'Return the code value
+              GoTo Process_Exit
+            End If
+          Next i
+        Else ' If range domain, return the numeric value
+          ConvertToDescription = pVal
+          GoTo Process_Exit
+        End If
+      End If  'If pDomain is nothing/Else
+      ConvertToDescription = pVal
+    Else
       'Field not found
-394:       ConvertToDescription = ""
-395:     End If 'If lFld > -1/Else
+      ConvertToDescription = ""
+    End If 'If lFld > -1/Else
 
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "ConvertToDescription " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
@@ -403,65 +481,83 @@ End Function
  
  
 
-
+'***************************************************************************
+'Name:  CompareAndSaveValue
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Description:   Compare the descriptive value in the GUI to the original descriptive value
+'Purpose:       Return an object that indicates the status (changed/unchanged) of this row
+'Called From:   modutils.ReadValue, modutils.ConvertCode
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
 Public Sub CompareAndSaveValue(pRow As IRow, pFldName As String, vValNew As Variant, pRowChanged As clsRowChanged)
   On Error GoTo ErrorHandler
 
-    'Compare the descriptive value in the GUI to the original descriptive value
-    'Return an object that indicates the status (changed/unchanged) of this row
     Dim vValOrg As Variant
-412:     vValOrg = modUtils.ReadValue(pRow, pFldName)
-413:     If vValNew <> vValOrg Then
+    vValOrg = modUtils.ReadValue(pRow, pFldName)
+    If vValNew <> vValOrg Then
       'Get the Code value that is to be stored in the db
-415:       vValNew = modUtils.ConvertCode(pRow, pFldName, vValNew)
+      vValNew = modUtils.ConvertCode(pRow, pFldName, vValNew)
       'If the value is changed, update the row
       Dim lFld As Long
-418:       lFld = pRow.Fields.FindField(pFldName)
-419:       If lFld > -1 Then
+      lFld = pRow.Fields.FindField(pFldName)
+      If lFld > -1 Then
         Dim pFldType As esriFieldType
-421:         pFldType = pRow.Fields.Field(lFld).Type
-422:         If pFldType = esriFieldTypeDouble Then
+        pFldType = pRow.Fields.Field(lFld).Type
+        If pFldType = esriFieldTypeDouble Then
           Dim dValNew As Double
-424:           If IsNumeric(vValNew) Then dValNew = CDbl(vValNew)
-425:           If dValNew <> vValOrg Then
-426:             pRow.Value(lFld) = dValNew
-427:             pRowChanged.RowChanged = True
-428:           End If
-429:         ElseIf pFldType = esriFieldTypeInteger Or pFldType = esriFieldTypeSmallInteger Then
+          If IsNumeric(vValNew) Then dValNew = CDbl(vValNew)
+          If dValNew <> vValOrg Then
+            pRow.Value(lFld) = dValNew
+            pRowChanged.RowChanged = True
+          End If
+        ElseIf pFldType = esriFieldTypeInteger Or pFldType = esriFieldTypeSmallInteger Then
           Dim iValNew As Long
-431:           If IsNumeric(vValNew) Then iValNew = CLng(vValNew)
-432:           If iValNew <> vValOrg Then
-433:             pRow.Value(lFld) = iValNew
-434:             pRowChanged.RowChanged = True
-435:           End If
-436:         ElseIf pFldType = esriFieldTypeSingle Then
+          If IsNumeric(vValNew) Then iValNew = CLng(vValNew)
+          If iValNew <> vValOrg Then
+            pRow.Value(lFld) = iValNew
+            pRowChanged.RowChanged = True
+          End If
+        ElseIf pFldType = esriFieldTypeSingle Then
           Dim sValNew As Single
-438:           If IsNumeric(vValNew) Then sValNew = CSng(vValNew)
-439:           If sValNew <> vValOrg Then
-440:             pRow.Value(lFld) = sValNew
-441:             pRowChanged.RowChanged = True
-442:           End If
-443:         ElseIf pFldType = esriFieldTypeDate Then
+          If IsNumeric(vValNew) Then sValNew = CSng(vValNew)
+          If sValNew <> vValOrg Then
+            pRow.Value(lFld) = sValNew
+            pRowChanged.RowChanged = True
+          End If
+        ElseIf pFldType = esriFieldTypeDate Then
           Dim dtValNew As Date
-445:           If IsDate(vValNew) Then dtValNew = CDate(vValNew)
-446:           If dtValNew <> vValOrg Then
-447:             pRow.Value(lFld) = dtValNew
-448:             pRowChanged.RowChanged = True
-449:           End If
-450:         ElseIf pFldType = esriFieldTypeString Then
+          If IsDate(vValNew) Then dtValNew = CDate(vValNew)
+          If dtValNew <> vValOrg Then
+            pRow.Value(lFld) = dtValNew
+            pRowChanged.RowChanged = True
+          End If
+        ElseIf pFldType = esriFieldTypeString Then
           Dim sgValNew As String
-452:           sgValNew = vValNew
-453:           If sgValNew <> vValOrg Then
-454:             pRow.Value(lFld) = sgValNew
-455:             pRowChanged.RowChanged = True
-456:           End If
-457:         Else
+          sgValNew = vValNew
+          If sgValNew <> vValOrg Then
+            pRow.Value(lFld) = sgValNew
+            pRowChanged.RowChanged = True
+          End If
+        Else
           'Unknown field type
-459:         End If
-460:      End If
-461:   End If
+        End If
+     End If
+  End If
 
-
+Process_Exit:
   Exit Sub
 ErrorHandler:
   HandleError True, "CompareAndSaveValue " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
@@ -469,61 +565,117 @@ End Sub
 
 
 
+'***************************************************************************
+'Name:  GetValueViaOverlay
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:   Overlay the passed in feature with a feature class
+'Called From: cmdTaxlotAssignment.m_pEditorEvents_OncreateFeature,cmdArrows.GenerateHooks,
+'               modutils.ValidateTaxlotNum, modutils.SetAnnosize
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:       Returns the value from the specified field as a variant
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+
+'***************************************************************************
 Public Function GetValueViaOverlay(pGeom As IGeometry, pOverlayFC As IFeatureClass, sFldName As String) As Variant
   On Error GoTo ErrorHandler
 
-  'Overlay the passed in feature with a feature class and return the value from the specified field
-475:   GetValueViaOverlay = ""
-476:   If Not pGeom Is Nothing And Not pOverlayFC Is Nothing And Not sFldName = "" Then
+  GetValueViaOverlay = ""
+  If Not pGeom Is Nothing And Not pOverlayFC Is Nothing And Not sFldName = "" Then
     Dim pFeatCur As IFeatureCursor
-478:     Set pFeatCur = SpatialQuery(pOverlayFC, pGeom, esriSpatialRelIntersects)
-479:     If Not pFeatCur Is Nothing Then
+    Set pFeatCur = SpatialQuery(pOverlayFC, pGeom, esriSpatialRelIntersects)
+    If Not pFeatCur Is Nothing Then
       'Get the first feature.  if more than one, let the user decide
       Dim pFeat As IFeature
-482:       Set pFeat = pFeatCur.NextFeature
-483:       If Not pFeat Is Nothing Then
+      Set pFeat = pFeatCur.NextFeature
+      If Not pFeat Is Nothing Then
         Dim lFld As Long
-485:         lFld = pFeat.Fields.FindField(sFldName)
-486:         If lFld > -1 Then
+        lFld = pFeat.Fields.FindField(sFldName)
+        If lFld > -1 Then
           'Get the  value
-488:           GetValueViaOverlay = IIf(IsNull(pFeat.Value(lFld)), "", pFeat.Value(lFld))
-489:         End If
-490:       End If
-491:     End If
-492:   End If
+          GetValueViaOverlay = IIf(IsNull(pFeat.Value(lFld)), "", pFeat.Value(lFld))
+        End If
+      End If
+    End If
+  End If
 
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "GetValueViaOverlay " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
-
-
-' Find a string in the control.
-' The third argument is the index *after* which to start the search (first item if omitted).
-' If the fourth argument is True it searches for an exact match.
-' Returns the index of the match, or -1 if not found.
-
+'***************************************************************************
+'Name:  FindControlString
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Purpose:       Find a string in the control.
+'Description:   The third argument is the index *after* which to start the search (first item if omitted).
+'               If the fourth argument is True it searches for an exact match.
+'
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:       The index of the match, or -1 if not found.
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  single exit point
+'***************************************************************************
 Public Function FindControlString(ctrl As Control, ByVal strSearch As String, Optional lStartIdx As Long = -1, Optional ExactMatch As Boolean) As Long
   On Error GoTo ErrorHandler
 
-
   Dim uMsg As Long
-511:   If TypeOf ctrl Is ListBox Then
-512:     uMsg = IIf(ExactMatch, LB_FINDSTRINGEXACT, LB_FINDSTRING)
-513:   ElseIf TypeOf ctrl Is ComboBox Then
-514:     uMsg = IIf(ExactMatch, CB_FINDSTRINGEXACT, CB_FINDSTRING)
-515:   Else
-    Exit Function
-517:   End If
-518:   FindControlString = SendMessageString(ctrl.hwnd, uMsg, lStartIdx, strSearch)
+  If TypeOf ctrl Is ListBox Then
+    uMsg = IIf(ExactMatch, LB_FINDSTRINGEXACT, LB_FINDSTRING)
+  ElseIf TypeOf ctrl Is ComboBox Then
+    uMsg = IIf(ExactMatch, CB_FINDSTRINGEXACT, CB_FINDSTRING)
+  Else
+    GoTo Process_Exit
+  End If
+  FindControlString = SendMessageString(ctrl.hwnd, uMsg, lStartIdx, strSearch)
 
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "FindControlString " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  SpatialQuery
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Purpose:   Return a feature cursor based on the results of a spatial query
+
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:       Returns a search cursor (faster than update)
+'Errors:        What known errors does this routine cause that are NOT captured in error handling routine? If none, say: This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006      Initial creation
+'***************************************************************************
 Public Function SpatialQuery(pFeatureClassIN As esriGeoDatabase.IFeatureClass, _
                              searchGeometry As esrigeometry.IGeometry, _
                              spatialRelation As esriGeoDatabase.esriSpatialRelEnum, _
@@ -531,43 +683,60 @@ Public Function SpatialQuery(pFeatureClassIN As esriGeoDatabase.IFeatureClass, _
                              ) As esriGeoDatabase.IFeatureCursor
   On Error GoTo ErrorHandler
 
-    'Return a feature cursor based on the results of a spatial query
-    'Returns a search cursor (faster than update)
     ' create a spatial query filter
     Dim pSpatialFilter As esriGeoDatabase.ISpatialFilter
-537:     Set pSpatialFilter = New esriGeoDatabase.SpatialFilter
+    Set pSpatialFilter = New esriGeoDatabase.SpatialFilter
     
     ' specify the geometry to query with
-540:     Set pSpatialFilter.Geometry = searchGeometry
+    Set pSpatialFilter.Geometry = searchGeometry
     
     ' specify what the geometry file is called on the Feature Class that we will be querying against
     Dim strShpFld As String
-544:     strShpFld = pFeatureClassIN.ShapeFieldName
-545:     pSpatialFilter.GeometryField = strShpFld
+    strShpFld = pFeatureClassIN.ShapeFieldName
+    pSpatialFilter.GeometryField = strShpFld
     
     'specify the type of spatial operation to use
-548:     pSpatialFilter.SpatialRel = spatialRelation
+    pSpatialFilter.SpatialRel = spatialRelation
 
     ' create the where statement
-551:     pSpatialFilter.whereClause = whereClause
+    pSpatialFilter.whereClause = whereClause
     
     ' create a cursor that will return the results
     Dim pFeatCursor As esriGeoDatabase.IFeatureCursor
     
     ' perform the query
     Dim pQueryFilter As esriGeoDatabase.IQueryFilter
-558:     Set pQueryFilter = pSpatialFilter
-559:     Set pFeatCursor = pFeatureClassIN.Search(pQueryFilter, False)
+    Set pQueryFilter = pSpatialFilter
+    Set pFeatCursor = pFeatureClassIN.Search(pQueryFilter, False)
     
-561:     Set SpatialQuery = pFeatCursor
+    Set SpatialQuery = pFeatCursor
 
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "SpatialQuery " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
-
+'***************************************************************************
+'Name:  SpatialQueryForEdit
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:   Same as SpatialQuery, but returns an update cursor
+'Called From:
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
 Public Function SpatialQueryForEdit(pFeatureClassIN As esriGeoDatabase.IFeatureClass, _
                              searchGeometry As esrigeometry.IGeometry, _
                              spatialRelation As esriGeoDatabase.esriSpatialRelEnum, _
@@ -575,41 +744,61 @@ Public Function SpatialQueryForEdit(pFeatureClassIN As esriGeoDatabase.IFeatureC
                              ) As esriGeoDatabase.IFeatureCursor
   On Error GoTo ErrorHandler
 
-    'Same as SpatialQuery, but returns an update cursor
+    
     ' create a spatial query filter
     Dim pSpatialFilter As esriGeoDatabase.ISpatialFilter
-580:     Set pSpatialFilter = New esriGeoDatabase.SpatialFilter
+    Set pSpatialFilter = New esriGeoDatabase.SpatialFilter
     
     ' specify the geometry to query with
-583:     Set pSpatialFilter.Geometry = searchGeometry
+    Set pSpatialFilter.Geometry = searchGeometry
     
     ' specify what the geometry file is called on the Feature Class that we will be querying against
     Dim strShpFld As String
-587:     strShpFld = pFeatureClassIN.ShapeFieldName
-588:     pSpatialFilter.GeometryField = strShpFld
+    strShpFld = pFeatureClassIN.ShapeFieldName
+    pSpatialFilter.GeometryField = strShpFld
     
     'specify the type of spatial operation to use
-591:     pSpatialFilter.SpatialRel = spatialRelation
+    pSpatialFilter.SpatialRel = spatialRelation
 
     ' create the where statement
-594:     pSpatialFilter.whereClause = whereClause
+    pSpatialFilter.whereClause = whereClause
     
     ' create a cursor that will return the results
     Dim pFeatCursor As esriGeoDatabase.IFeatureCursor
     
     ' perform the query
     Dim pQueryFilter As esriGeoDatabase.IQueryFilter
-601:     Set pQueryFilter = pSpatialFilter
+    Set pQueryFilter = pSpatialFilter
     'Set pFeatCursor = pFeatureClassIN.Search(pQueryFilter, False)
-603:     Set pFeatCursor = pFeatureClassIN.Update(pQueryFilter, False)
+    Set pFeatCursor = pFeatureClassIN.Update(pQueryFilter, False)
     
-605:     Set SpatialQueryForEdit = pFeatCursor
-
+    Set SpatialQueryForEdit = pFeatCursor
 
   Exit Function
 ErrorHandler:
   HandleError True, "SpatialQueryForEdit " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
+'***************************************************************************
+'Name:  AttributeQuery
+'Initial Author:        James Moore
+'Subsequent Author:     Type your name here.
+'Created:       10/11/2006
+'Purpose:
+'Called From:
+'Description:   Type the description of the function here.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        What known errors does this routine cause that are NOT captured in error handling routine? If none, say: This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
 Public Function AttributeQuery(pTable As esriGeoDatabase.ITable, _
                                Optional whereClause As String = "" _
                                ) As esriGeoDatabase.ICursor
@@ -618,394 +807,615 @@ Public Function AttributeQuery(pTable As esriGeoDatabase.ITable, _
 'Return a cursor based on an attribute query
 ' create a query filter
 Dim pQueryFilter As esriGeoDatabase.IQueryFilter
-620: Set pQueryFilter = New esriGeoDatabase.QueryFilter
+Set pQueryFilter = New esriGeoDatabase.QueryFilter
 
 ' create the where statement
 'whereClause = Replace(whereClause, "HYDRO1.", "")
-624: pQueryFilter.whereClause = whereClause
+pQueryFilter.whereClause = whereClause
 
 ' create a cursor that will return the results
 Dim pCursor As esriGeoDatabase.ICursor
 
 ' query the table passed into the fuction
-630: Set pCursor = pTable.Search(pQueryFilter, False)
+Set pCursor = pTable.Search(pQueryFilter, False)
 
 'Count the number of selected records
 Dim selCount As Long
-634: selCount = pTable.RowCount(pQueryFilter)
-635: If selCount = 0 Then
-636:   Set AttributeQuery = Nothing
-637: Else
-638:   Set AttributeQuery = pCursor
-639: End If
+selCount = pTable.RowCount(pQueryFilter)
+If selCount = 0 Then
+  Set AttributeQuery = Nothing
+Else
+  Set AttributeQuery = pCursor
+End If
 
-
-  Exit Function
+Exit Function
 ErrorHandler:
   HandleError True, "AttributeQuery " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
-
+'***************************************************************************
+'Name:  GetDomainDefaultValue
+'Initial Author:
+'Subsequent Author:
+'Created:
+'Purpose:   Returns the default value if this is a domain field with a default
+'Called From:
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  single exit point using goto
+'***************************************************************************
 Public Function GetDomainDefaultValue(pTable As ITable, sFldName As String) As Variant
   On Error GoTo ErrorHandler
 
-     'Returns the default value if this is a domain field with a default
      Dim lFld As Long
      Dim pField As IField
-654:      lFld = pTable.FindField(sFldName)
-655:      If lFld > -1 Then
-656:         Set pField = pTable.Fields.Field(lFld)
-657:      Else
-658:         GetDomainDefaultValue = ""
-        Exit Function
-660:      End If
+     lFld = pTable.FindField(sFldName)
+     If lFld > -1 Then
+        Set pField = pTable.Fields.Field(lFld)
+     Else
+        GetDomainDefaultValue = ""
+        GoTo Process_Exit
+     End If
      Dim pDomain As IDomain
-662:      Set pDomain = pField.Domain
-663:       If pDomain Is Nothing Then
-664:         GetDomainDefaultValue = ""
-        Exit Function
-666:       Else
+     Set pDomain = pField.Domain
+      If pDomain Is Nothing Then
+        GetDomainDefaultValue = ""
+        GoTo Process_Exit
+      Else
         'Determine type of domain  -If Coded Value, get the description
-668:         If TypeOf pDomain Is ICodedValueDomain Then
+        If TypeOf pDomain Is ICodedValueDomain Then
           Dim pCVDomain As ICodedValueDomain
-670:           Set pCVDomain = pDomain
+          Set pCVDomain = pDomain
           Dim lCode As Long
           Dim vDomainVal As Variant
-673:           vDomainVal = pField.DefaultValue
+          vDomainVal = pField.DefaultValue
           Dim i As Integer
           'Search the domain for the code
-676:           For i = 0 To pCVDomain.CodeCount - 1
-677:              If pCVDomain.Value(i) = vDomainVal Then
+          For i = 0 To pCVDomain.CodeCount - 1
+             If pCVDomain.Value(i) = vDomainVal Then
               'return the description
-679:               GetDomainDefaultValue = pCVDomain.Name(i)
-              Exit Function
-681:             End If
-682:           Next i
-683:         Else ' If range domain, return the numeric value
-684:           GetDomainDefaultValue = pField.DefaultValue
-          Exit Function
-686:         End If
-687:       End If  'If pDomain is nothing/Else
+              GetDomainDefaultValue = pCVDomain.Name(i)
+              GoTo Process_Exit
+            End If
+          Next i
+        Else ' If range domain, return the numeric value
+          GetDomainDefaultValue = pField.DefaultValue
+          GoTo Process_Exit
+        End If
+      End If  'If pDomain is nothing/Else
 
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "GetDomainDefaultValue " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  GetSelectedFeatures
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:       Return an IFeatureCursor for the selected features
+'Called From:
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        What known errors does this routine cause that are NOT captured in error handling routine? If none, say: This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  Single exit point
+'***************************************************************************
 Public Function GetSelectedFeatures(pFLayer As IFeatureLayer) As IFeatureCursor
   On Error GoTo ErrorHandler
 
 
-  'return an IFeatureCursor for the selected features
-  
   '  exit if not applicable:
-702:   If Not TypeOf pFLayer Is IFeatureLayer Then
-    Exit Function
-704:   End If
+  If Not TypeOf pFLayer Is IFeatureLayer Then
+    GoTo Process_Exit
+  End If
   
   Dim pFSelection As IFeatureSelection
-707:   Set pFSelection = pFLayer
+  Set pFSelection = pFLayer
   
-709:   pFSelection.SelectionSet.Search Nothing, False, GetSelectedFeatures
+  pFSelection.SelectionSet.Search Nothing, False, GetSelectedFeatures
   
-  Exit Function
-
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "GetSelectedFeatures " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  HasSelectedFeatures
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:       Determines if the feature layer has a selection
+'Called From:
+'Methods:       Describe any complex details.
+'Parameters:
+'Returns:       True or False
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  Single exit point
+'***************************************************************************
 Public Function HasSelectedFeatures(pFLayer As IFeatureLayer2) As Boolean
   On Error GoTo ErrorHandler
-
-  'Determines if the feature layer has a selection
-  If pFLayer Is Nothing Then Exit Function
+  '
+  If pFLayer Is Nothing Then GoTo Process_Exit
   
   '  exit if not applicable:
-726:   If Not TypeOf pFLayer Is IFeatureLayer Then
-    Exit Function
-728:   End If
+  If Not TypeOf pFLayer Is IFeatureLayer Then
+    GoTo Process_Exit
+  End If
   
   Dim pFSelection As IFeatureSelection
   
-732:   Set pFSelection = pFLayer
+  Set pFSelection = pFLayer
   Dim pFeatCur As IFeatureCursor
-734:   pFSelection.SelectionSet.Search Nothing, False, pFeatCur
+  pFSelection.SelectionSet.Search Nothing, False, pFeatCur
   Dim pFeat As IFeature
-736:   If Not pFeatCur Is Nothing Then
-737:     Set pFeat = pFeatCur.NextFeature
-738:     If Not pFeat Is Nothing Then 'At least one feature selected
-739:         Set pFeat = pFeatCur.NextFeature
-740:         If Not pFeat Is Nothing Then 'More than one selected
-741:             HasSelectedFeatures = False
-            Exit Function
-743:         Else
-744:             HasSelectedFeatures = True 'Just one selected
-            Exit Function
-746:         End If
-747:     Else 'nothing selected
-748:         HasSelectedFeatures = False
-        Exit Function
-750:     End If
-751:   End If
+  If Not pFeatCur Is Nothing Then
+    Set pFeat = pFeatCur.NextFeature
+    If Not pFeat Is Nothing Then 'At least one feature selected
+        Set pFeat = pFeatCur.NextFeature
+        If Not pFeat Is Nothing Then 'More than one selected
+            HasSelectedFeatures = False
+            GoTo Process_Exit
+        Else
+            HasSelectedFeatures = True 'Just one selected
+            GoTo Process_Exit
+        End If
+    Else 'nothing selected
+        HasSelectedFeatures = False
+        GoTo Process_Exit
+    End If
+  End If
   
-  Exit Function
-
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "HasSelectedFeatures " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
-
+'***************************************************************************
+'Name:  ParseOMMapNum
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:   Return specific ORMAP values from this string as the whole number represents
+'           multiple entities
+'Called From:
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  Single exit point
+'***************************************************************************
 Public Function ParseOMMapNum(sVal As String, sPartName As String) As String
   On Error GoTo ErrorHandler
-
-
-    'Return specific ORMAP values from this string as the whole number represents
-    'multiple entities
-768:     If Not Len(sVal) = 24 Then
+    
+    If Not Len(sVal) = 24 Then
         'MsgBox "ORMAPMapNumber shoud be 24 characters and instead is " & Len(sVal)
-770:         ParseOMMapNum = ""
-        Exit Function
-772:     End If
+        ParseOMMapNum = ""
+        GoTo Process_Exit
+    End If
     Select Case LCase(sPartName)
         Case "county"
-775:             ParseOMMapNum = ExtractString(sVal, 1, 2)
+            ParseOMMapNum = ExtractString(sVal, 1, 2)
             'If CLng(ParseOMMapNum) < 10 Then ParseOMMapNum = "0" & ParseOMMapNum
         Case "town"
-778:             ParseOMMapNum = ExtractString(sVal, 3, 4)
+            ParseOMMapNum = ExtractString(sVal, 3, 4)
             'If Len(ParseOMMapNum) = 0 Then ParseOMMapNum = "000"
         Case "townpart"
-781:             ParseOMMapNum = ExtractString(sVal, 5, 7)
+            
+            ParseOMMapNum = ExtractString(sVal, 5, 7)
             'If CDbl(ParseOMMapNum) < 10 Then ParseOMMapNum = "0" & ParseOMMapNum
         Case "towndir"
-784:             ParseOMMapNum = ExtractString(sVal, 8, 8)
+            ParseOMMapNum = ExtractString(sVal, 8, 8)
         Case "range"
-786:             ParseOMMapNum = ExtractString(sVal, 9, 10)
+            ParseOMMapNum = ExtractString(sVal, 9, 10)
             'If CLng(ParseOMMapNum) < 10 Then ParseOMMapNum = "0" & ParseOMMapNum
         Case "rangepart"
-789:             ParseOMMapNum = ExtractString(sVal, 11, 13)
+            ParseOMMapNum = ExtractString(sVal, 11, 13)
             'If Len(ParseOMMapNum) = 0 Then ParseOMMapNum = "000"
         Case "rangedir"
-792:             ParseOMMapNum = ExtractString(sVal, 14, 14)
+            ParseOMMapNum = ExtractString(sVal, 14, 14)
         Case "section"
-794:             ParseOMMapNum = ExtractString(sVal, 15, 16)
+            ParseOMMapNum = ExtractString(sVal, 15, 16)
             'If CLng(ParseOMMapNum) < 10 Then ParseOMMapNum = "0" & ParseOMMapNum
         Case "qtr"
-797:             ParseOMMapNum = ExtractString(sVal, 17, 17)
+            ParseOMMapNum = ExtractString(sVal, 17, 17)
             'If Len(ParseOMMapNum) = 0 Then ParseOMMapNum = "0"
         Case "qtrqtr"
-800:             ParseOMMapNum = ExtractString(sVal, 18, 18)
+            ParseOMMapNum = ExtractString(sVal, 18, 18)
             'If Len(ParseOMMapNum) = 0 Then ParseOMMapNum = "0"
         Case "anomaly"
-803:             ParseOMMapNum = ExtractString(sVal, 19, 20)
+            ParseOMMapNum = ExtractString(sVal, 19, 20)
             'If Len(ParseOMMapNum) = 0 Then ParseOMMapNum = "00"
         Case "suffixtype"
-806:              ParseOMMapNum = ExtractString(sVal, 21, 21)
+             ParseOMMapNum = ExtractString(sVal, 21, 21)
             'If Len(ParseOMMapNum) = 0 Then ParseOMMapNum = "0"
         Case "suffixnum"
-809:             ParseOMMapNum = ExtractString(sVal, 22, 24)
+            ParseOMMapNum = ExtractString(sVal, 22, 24)
             'If Len(ParseOMMapNum) = 0 Then ParseOMMapNum = "000"
         Case Else
             'some handling?
-813:     End Select
+    End Select
 
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "ParseOMMapNum " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
-Public Function FormatOMMapNum(sVal As String, sPartName As String) As String
+'***************************************************************************
+'Name:  FormatOMMapNum
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:   Return properly formatted part of OM MapNum string
+'Called From:
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:   A formatted  OM MapNum string
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  Single exit point using goto
+'***************************************************************************
+Public Function FormatOMMapNum(ByRef asVal As String, ByRef asPartName As String) As String
   On Error GoTo ErrorHandler
 
-
-    'Return properly formatted part of OM MapNum string
-826:     FormatOMMapNum = sVal
-    Select Case LCase(sPartName)
+    'FormatOMMapNum = Replace(sVal, ".", "")
+    FormatOMMapNum = asVal
+    Select Case LCase(asPartName)
         Case "county"
-829:             If Len(FormatOMMapNum) <> 2 Then
-830:                 FormatOMMapNum = AddLeadingZeros(FormatOMMapNum, 2)
-831:             End If
+            If Len(FormatOMMapNum) <> 2 Then
+                FormatOMMapNum = AddLeadingZeros(FormatOMMapNum, 2)
+            End If
         Case "town"
-833:             If Len(FormatOMMapNum) <> 2 Then FormatOMMapNum = "00"
+            If Len(FormatOMMapNum) <> 2 Then FormatOMMapNum = "00"
         Case "townpart"
-835:             If Len(FormatOMMapNum) <> 3 Then FormatOMMapNum = "000"
+            FormatOMMapNum = Replace(FormatOMMapNum, "0.", ".")
+            'If Len(FormatOMMapNum) <> 3 Then FormatOMMapNum = "000"
         Case "towndir"
-837:             If Len(FormatOMMapNum) <> 1 Then FormatOMMapNum = "N"
+            If Len(FormatOMMapNum) <> 1 Then FormatOMMapNum = "N"
         Case "range"
-839:             If Len(FormatOMMapNum) <> 2 Then FormatOMMapNum = "01"
+            If Len(FormatOMMapNum) <> 2 Then FormatOMMapNum = "01"
         Case "rangepart"
-841:             If Len(FormatOMMapNum) <> 3 Then FormatOMMapNum = "000"
+            FormatOMMapNum = Replace(FormatOMMapNum, "0.", ".")
+            'If Len(FormatOMMapNum) <> 3 Then FormatOMMapNum = "000"
+            'If Len(sVal) <> 3 Then FormatOMMapNum = "000"
         Case "rangedir"
-843:             If Len(FormatOMMapNum) <> 1 Then FormatOMMapNum = "W"
+            If Len(FormatOMMapNum) <> 1 Then FormatOMMapNum = "W"
         Case "section"
-845:             If Len(FormatOMMapNum) <> 2 Then FormatOMMapNum = "00"
+            If Len(FormatOMMapNum) <> 2 Then FormatOMMapNum = "00"
         Case "qtr"
-847:             If Len(FormatOMMapNum) <> 1 Then FormatOMMapNum = "0"
+            If Len(FormatOMMapNum) <> 1 Then FormatOMMapNum = "0"
         Case "qtrqtr"
-849:             If Len(FormatOMMapNum) <> 1 Then FormatOMMapNum = "0"
+            If Len(FormatOMMapNum) <> 1 Then FormatOMMapNum = "0"
         Case "suffixtype"
-851:             If Len(FormatOMMapNum) <> 1 Then FormatOMMapNum = "0"
+            If Len(FormatOMMapNum) <> 1 Then FormatOMMapNum = "0"
         Case "suffixnum"
-853:             If Len(FormatOMMapNum) <> 0 And Len(FormatOMMapNum) > 3 Then
-854:                 FormatOMMapNum = "000"
-                Exit Function
-856:             ElseIf Len(FormatOMMapNum) = 1 Then
-857:                 FormatOMMapNum = "00" & FormatOMMapNum
-                Exit Function
-859:             ElseIf Len(FormatOMMapNum) = 2 Then
-860:                 FormatOMMapNum = "0" & FormatOMMapNum
-                Exit Function
-862:             End If
+            If Len(FormatOMMapNum) <> 0 And Len(FormatOMMapNum) > 3 Then
+                FormatOMMapNum = "000"
+                GoTo Process_Exit
+            ElseIf Len(FormatOMMapNum) = 1 Then
+                FormatOMMapNum = "00" & FormatOMMapNum
+                GoTo Process_Exit
+            ElseIf Len(FormatOMMapNum) = 2 Then
+                FormatOMMapNum = "0" & FormatOMMapNum
+                GoTo Process_Exit
+            End If
         Case "anomaly"
-864:             If Len(FormatOMMapNum) > 2 Or Len(FormatOMMapNum) = 0 Then
-865:                 FormatOMMapNum = "00"
-                Exit Function
-867:             ElseIf Len(FormatOMMapNum) = 1 Then
-868:                 FormatOMMapNum = "0" & FormatOMMapNum
-                Exit Function
-870:             End If
+            If Len(FormatOMMapNum) > 2 Or Len(FormatOMMapNum) = 0 Then
+                FormatOMMapNum = "00"
+                GoTo Process_Exit
+            ElseIf Len(FormatOMMapNum) = 2 Then
+            
+            ElseIf Len(FormatOMMapNum) = 1 Then
+                FormatOMMapNum = "0" & FormatOMMapNum
+                GoTo Process_Exit
+            End If
         Case Else
             'Nothing to implement now
-873:     End Select
+    End Select
 
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "FormatOMMapNum " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
 
+'***************************************************************************
+'Name:  ExtractString
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Description:   Use the low and high values to extract the required string.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        What known errors does this routine cause that are NOT captured in error handling routine? If none, say: This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
 Private Function ExtractString(sFullString As String, llow As Long, lhigh As Long) As String
   On Error GoTo ErrorHandler
 
-
-    'Use the low and high values to extract the required string
     Dim sVal1 As String
     Dim sVal2 As String
-889:     sVal1 = Right(sFullString, Len(sFullString) - (llow - 1))
-890:     sVal2 = Left(sVal1, (lhigh - llow) + 1)
-891:     ExtractString = sVal2
-
+    sVal1 = Right(sFullString, Len(sFullString) - (llow - 1))
+    sVal2 = Left(sVal1, (lhigh - llow) + 1)
+    ExtractString = sVal2
 
   Exit Function
 ErrorHandler:
   HandleError False, "ExtractString " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  IsTaxlot
+'Initial Author:        James Moore
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Description:   Determines if this feature is in the Taxlot feature class
+'               Used by generic functions to determine what has to be done.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:       True or False
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
 Public Function IsTaxlot(obj As IObject) As Boolean
   On Error GoTo ErrorHandler
-
-
-    'Determines if this feature is in the Taxlot feature class
-    'Used by generic functions to determine what has to be done
+    
     Dim pOC As IObjectClass
     Dim pDS As IDataset
-907:     Set pOC = obj.Class
-908:     Set pDS = pOC
-909:     If LCase(pDS.Name) = LCase(g_pFldnames.FCTaxlot) Then
-910:         IsTaxlot = True
-911:     Else
-912:         IsTaxlot = False
-913:     End If
-
+    Set pOC = obj.Class
+    Set pDS = pOC
+    If LCase(pDS.Name) = LCase(g_pFldnames.FCTaxlot) Then
+        IsTaxlot = True
+    Else
+        IsTaxlot = False
+    End If
 
   Exit Function
 ErrorHandler:
   HandleError True, "IsTaxlot " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  IsMapIndex
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Description:   Determines if this feature is in the Taxlot feature class
+'               Used by generic functions to determine what has to be done.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:       True or False
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
+Public Function IsMapIndex(obj As IObject) As Boolean
+  On Error GoTo ErrorHandler
+
+    Dim pOC As IObjectClass
+    Dim pDS As IDataset
+    Set pOC = obj.Class
+    Set pDS = pOC
+    If LCase(pDS.Name) = LCase(g_pFldnames.FCMapIndex) Then
+        IsMapIndex = True
+    Else
+        IsMapIndex = False
+    End If
+
+
+  Exit Function
+ErrorHandler:
+  HandleError True, "IsMapIndex " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+End Function
+
+'***************************************************************************
+'Name:  IsAnno
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Description:   Determines if this feature is annotation feature class
+'               Used by generic functions to determine what has to be done.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:   True or False
+'Errors:    This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
 Public Function IsAnno(obj As IObject) As Boolean
   On Error GoTo ErrorHandler
 
-924:     IsAnno = False
-    'Determines if this feature is annotation feature class
-    'Used by generic functions to determine what has to be done
+    IsAnno = False
+
     Dim pOC As IObjectClass
     Dim pDS As IDataset
-929:     Set pOC = obj.Class
-930:     Set pDS = pOC
-931:     If TypeOf obj Is IFeature Then
+    Set pOC = obj.Class
+    Set pDS = pOC
+    If TypeOf obj Is IFeature Then
         Dim pFC As IFeatureClass
-933:         Set pFC = pOC
-934:         If pFC.FeatureType = esriFTAnnotation Then IsAnno = True
-935:     End If
+        Set pFC = pOC
+        If pFC.FeatureType = esriFTAnnotation Then IsAnno = True
+    End If
 
 
   Exit Function
 ErrorHandler:
   HandleError True, "IsAnno " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
+'***************************************************************************
+'Name:  ValidateTaxlotNum
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Description:   Ensure that the numeric taxlot number is unique within the current map index
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:    This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  single exit point
+'***************************************************************************
 Public Function ValidateTaxlotNum(sEnteredTLval As String, pGeometry As IGeometry) As Boolean
   On Error GoTo ErrorHandler
 
-
-    'Ensure that the numeric taxlot number is unique within the current map index
     Dim pTaxlotFlayer As IFeatureLayer2
     Dim pTaxlotFclass As IFeatureClass
     Dim pMIFlayer As IFeatureLayer2
     Dim pMIFclass As IFeatureClass
-951:     Set pTaxlotFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
-952:     If pTaxlotFlayer Is Nothing Then
-953:         MsgBox "Unable to locate Taxlot layer in Table of Contents.  " & _
+    Set pTaxlotFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
+    If pTaxlotFlayer Is Nothing Then
+        MsgBox "Unable to locate Taxlot layer in Table of Contents.  " & _
         "This process requires a feature class called " & g_pFldnames.FCTaxlot
-        Exit Function
-956:     End If
-957:     Set pTaxlotFclass = pTaxlotFlayer.FeatureClass
-958:     Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-959:     If pMIFlayer Is Nothing Then
-960:         MsgBox "Unable to locate Map Index layer in Table of Contents.  " & _
+        GoTo Process_Exit
+    End If
+    Set pTaxlotFclass = pTaxlotFlayer.FeatureClass
+    Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+    If pMIFlayer Is Nothing Then
+        MsgBox "Unable to locate Map Index layer in Table of Contents.  " & _
         "This process requires a feature class called " & g_pFldnames.FCMapIndex
-        Exit Function
-963:     End If
-964:     Set pMIFclass = pMIFlayer.FeatureClass
+        GoTo Process_Exit
+    End If
+    Set pMIFclass = pMIFlayer.FeatureClass
     'Get fields needed to populate the form
     Dim lMIOMNum As Long
     Dim lTLOMNum As Long
     Dim lTLTaxlot As Long
     Dim sMIOMval As String
     Dim sTLOMval As String
-971:     lMIOMNum = modUtils.LocateFields(pMIFclass, g_pFldnames.MIORMAPMapNumberFN)
-972:     lTLOMNum = modUtils.LocateFields(pTaxlotFclass, g_pFldnames.TLOrmapMapNumberFN)
-973:     lTLTaxlot = modUtils.LocateFields(pTaxlotFclass, g_pFldnames.TLTaxlotFN)
-974:     sMIOMval = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIORMAPMapNumberFN)
+    lMIOMNum = modUtils.LocateFields(pMIFclass, g_pFldnames.MIORMAPMapNumberFN)
+    lTLOMNum = modUtils.LocateFields(pTaxlotFclass, g_pFldnames.TLOrmapMapNumberFN)
+    lTLTaxlot = modUtils.LocateFields(pTaxlotFclass, g_pFldnames.TLTaxlotFN)
+    sMIOMval = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIORMAPMapNumberFN)
     'if no Mapindex or ORMAP mapnum, then no need to continue
-976:     If sMIOMval = "" Then
-977:         ValidateTaxlotNum = True
-        Exit Function
-979:     End If
+    If sMIOMval = "" Then
+        ValidateTaxlotNum = True
+        GoTo Process_Exit
+    End If
     'Make sure this number is unique within taxlots with this OM number
     Dim pCursor As ICursor
     Dim sWhere As String
-983:     sWhere = g_pFldnames.TLOrmapMapNumberFN & " = '" & sMIOMval & _
+    sWhere = g_pFldnames.TLOrmapMapNumberFN & " = '" & sMIOMval & _
             "' and " & g_pFldnames.TLTaxlotFN & " = '" & sEnteredTLval & "'"
-985:     Set pCursor = AttributeQuery(pTaxlotFclass, sWhere)
-986:     If Not pCursor Is Nothing Then
+    Set pCursor = AttributeQuery(pTaxlotFclass, sWhere)
+    If Not pCursor Is Nothing Then
         Dim pRow As IRow
-988:         Set pRow = pCursor.NextRow
-989:         If Not pRow Is Nothing Then
-990:             ValidateTaxlotNum = False
-991:         Else
-992:             ValidateTaxlotNum = True
-993:         End If
-994:     Else
-995:         ValidateTaxlotNum = True
-996:     End If
+        Set pRow = pCursor.NextRow
+        If Not pRow Is Nothing Then
+            ValidateTaxlotNum = False
+        Else
+            ValidateTaxlotNum = True
+        End If
+    Else
+        ValidateTaxlotNum = True
+    End If
 
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "ValidateTaxlotNum " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  CalcTaxlotValues
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:   Calculates Taxlot vaules from ORMAPMapnum
+'Called From:
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  single exit point using goto
+'***************************************************************************
 Public Sub CalcTaxlotValues(pFeat As IFeature, pMIFlayer As IFeatureLayer)
   On Error GoTo ErrorHandler
 
-    'Calculates Taxlot vaules from ORMAPMapnum
     Dim pTaxlotFclass As IFeatureClass
     Dim pMIFclass As IFeatureClass
     Dim lOMTLNumFld As Long
@@ -1027,290 +1437,438 @@ Public Sub CalcTaxlotValues(pFeat As IFeature, pMIFlayer As IFeatureLayer)
     Dim lTLSpecInterestFld As Long
     Dim lTLMapTaxlotFld As Long
     Dim lTLMapNumberFld As Long
+    Dim lTLAnomalyFld As Long
     Dim lTaxlotMapAcres As Long
     Dim lTaxlotShapeArea As Long
     Dim response As Variant
     
-1033:     Set pTaxlotFclass = pFeat.Class
+    Set pTaxlotFclass = pFeat.Class
     'Find MapIndex
-1035:     Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-1036:     If pMIFlayer Is Nothing Then
-1037:         response = MsgBox("Unable to locate Map Index layer in Table of Contents.  " & _
+    Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+    If pMIFlayer Is Nothing Then
+        response = MsgBox("Unable to locate Map Index layer in Table of Contents.  " & _
         "This process requires a feature class called " & g_pFldnames.FCMapIndex & ".  " & _
         "Load " & g_pFldnames.FCMapIndex & " automatically?", vbYesNo)
-        If response <> vbYes Then Exit Sub
-1041:         modUtils.LoadFCIntoMap g_pFldnames.FCMapIndex, pTaxlotFclass
+        If response <> vbYes Then GoTo Process_Exit
+        modUtils.LoadFCIntoMap g_pFldnames.FCMapIndex, pTaxlotFclass
         'Set m_pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-        If pMIFlayer Is Nothing Then Exit Sub
-1044:     End If
+        If pMIFlayer Is Nothing Then GoTo Process_Exit
+    End If
 
     'Find all fields needed
-1047:     m_bContinue = True
-1048:     lOMTLNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLOrmapTaxlotFN)
-1049:     lOMNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLOrmapMapNumberFN)
-1050:     lMNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLMapNumberFN)
-1051:     lTLCntyFld = LocateFields(pTaxlotFclass, g_pFldnames.TLCountyFN)
-1052:     lTaxlotFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTaxlotFN)
-1053:     lTLTownFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTownFN)
-1054:     lTLTownPartFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTownPartFN)
-1055:     lTLTownDirFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTownDirFN)
-1056:     lTLRangeFld = LocateFields(pTaxlotFclass, g_pFldnames.TLRangeFN)
-1057:     lTLRangePartFld = LocateFields(pTaxlotFclass, g_pFldnames.TLRangePartFN)
-1058:     lTLRangeDirFld = LocateFields(pTaxlotFclass, g_pFldnames.TLRangeDirFN)
-1059:     lTLSectNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSectNumberFN)
-1060:     lTLQtrFld = LocateFields(pTaxlotFclass, g_pFldnames.TLQtrFN)
-1061:     lTLQQFld = LocateFields(pTaxlotFclass, g_pFldnames.TLQtrQtrFN)
-1062:     lTLMapSufTypeFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSufTypeFN)
-1063:     lTLMapSufNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSufNumFN)
-1064:     lTLSpecInterestFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSpecInterestFN)
-1065:     lTLMapTaxlotFld = LocateFields(pTaxlotFclass, g_pFldnames.TLMapTaxlotFN)
-1066:     lTLMapNumberFld = LocateFields(pTaxlotFclass, g_pFldnames.TLMapNumberFN)
-1067:     lTaxlotMapAcres = LocateFields(pTaxlotFclass, g_pFldnames.TLMapAcresFN)
-1068:     lTaxlotShapeArea = LocateFields(pTaxlotFclass, "SHAPE_Area")
-    If Not m_bContinue Then Exit Sub 'If any fields not found
-    'Update Acreage
-1071:     pFeat.Value(lTaxlotMapAcres) = (pFeat.Value(lTaxlotShapeArea) / 43560)
+    m_bContinue = True
+    lOMTLNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLOrmapTaxlotFN)
+    lOMNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLOrmapMapNumberFN)
+    lMNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLMapNumberFN)
+    lTLCntyFld = LocateFields(pTaxlotFclass, g_pFldnames.TLCountyFN)
+    lTaxlotFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTaxlotFN)
+    lTLTownFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTownFN)
+    lTLTownPartFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTownPartFN)
+    lTLTownDirFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTownDirFN)
+    lTLRangeFld = LocateFields(pTaxlotFclass, g_pFldnames.TLRangeFN)
+    lTLRangePartFld = LocateFields(pTaxlotFclass, g_pFldnames.TLRangePartFN)
+    lTLRangeDirFld = LocateFields(pTaxlotFclass, g_pFldnames.TLRangeDirFN)
+    lTLSectNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSectNumberFN)
+    lTLQtrFld = LocateFields(pTaxlotFclass, g_pFldnames.TLQtrFN)
+    lTLQQFld = LocateFields(pTaxlotFclass, g_pFldnames.TLQtrQtrFN)
+    lTLMapSufTypeFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSufTypeFN)
+    lTLMapSufNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSufNumFN)
+    lTLSpecInterestFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSpecInterestFN)
+    lTLMapTaxlotFld = LocateFields(pTaxlotFclass, g_pFldnames.TLMapTaxlotFN)
+    lTLMapNumberFld = LocateFields(pTaxlotFclass, g_pFldnames.TLMapNumberFN)
+    lTaxlotMapAcres = LocateFields(pTaxlotFclass, g_pFldnames.TLMapAcresFN)
+    lTLAnomalyFld = LocateFields(pTaxlotFclass, g_pFldnames.TLAnomalyFN)
+    If Not m_bContinue Then GoTo Process_Exit 'If any fields not found
 
     'Obtain the map index poly via overlay
     Dim sExistVal As String
     Dim pArea As IArea
     Dim pCenter As IPoint
-1077:     Set pArea = pFeat.Shape
-1078:     Set pCenter = pArea.Centroid
     Dim sExistOMMapNum As String
     Dim sExistMapNum As String
+    
+    Set pArea = pFeat.Shape
+    Set pCenter = pArea.Centroid
+    
+    'Update Acreage
+    pFeat.Value(lTaxlotMapAcres) = pArea.Area / 43560  '(pFeat.Value(lTaxlotShapeArea) / 43560)
     'Return the OMMapNum and MapNum and insert values into Taxlot
-1082:     sExistOMMapNum = GetValueViaOverlay(pCenter, pMIFlayer.FeatureClass, g_pFldnames.MIORMAPMapNumberFN)
-    If sExistOMMapNum = "" Then Exit Sub 'If no value for whatever reason, don't continue
-1084:     sExistMapNum = GetValueViaOverlay(pCenter, pMIFlayer.FeatureClass, g_pFldnames.MIMapNumberFN)
-    If sExistMapNum = "" Then Exit Sub 'If no value for whatever reason, don't continue
+    sExistOMMapNum = GetValueViaOverlay(pCenter, pMIFlayer.FeatureClass, g_pFldnames.MIORMAPMapNumberFN)
+    If sExistOMMapNum = "" Then GoTo Process_Exit 'If no value for whatever reason, don't continue
+    sExistMapNum = GetValueViaOverlay(pCenter, pMIFlayer.FeatureClass, g_pFldnames.MIMapNumberFN)
+    If sExistMapNum = "" Then GoTo Process_Exit 'If no value for whatever reason, don't continue
     'Store individual components of map number in taxlot
-1087:     pFeat.Value(lOMNumFld) = sExistOMMapNum
-1088:     pFeat.Value(lMNumFld) = sExistMapNum
+    pFeat.Value(lOMNumFld) = sExistOMMapNum
+    pFeat.Value(lMNumFld) = sExistMapNum
     
     'County
-1091:     sExistVal = ParseOMMapNum(sExistOMMapNum, "county")
-1092:     sExistVal = ConvertCode(pFeat, g_pFldnames.TLCountyFN, sExistVal)
-1093:     pFeat.Value(lTLCntyFld) = CInt(sExistVal) 'Store county in county field
+    sExistVal = ParseOMMapNum(sExistOMMapNum, "county")
+    sExistVal = ConvertCode(pFeat, g_pFldnames.TLCountyFN, sExistVal)
+    pFeat.Value(lTLCntyFld) = CInt(sExistVal) 'Store county in county field
     
     'Town
-1096:     sExistVal = ParseOMMapNum(sExistOMMapNum, "town")
-1097:     pFeat.Value(lTLTownFld) = CInt(sExistVal)
+    sExistVal = ParseOMMapNum(sExistOMMapNum, "town")
+    pFeat.Value(lTLTownFld) = CInt(sExistVal)
 
     'TownPart
-1100:     sExistVal = ParseOMMapNum(sExistOMMapNum, "townpart")
-1101:     pFeat.Value(lTLTownPartFld) = CDbl(sExistVal)
+    sExistVal = ParseOMMapNum(sExistOMMapNum, "townpart")
+    pFeat.Value(lTLTownPartFld) = CDbl(sExistVal)
 
     'TownDir
-1104:     sExistVal = ParseOMMapNum(sExistOMMapNum, "towndir")
-1105:     pFeat.Value(lTLTownDirFld) = sExistVal
+    sExistVal = ParseOMMapNum(sExistOMMapNum, "towndir")
+    pFeat.Value(lTLTownDirFld) = sExistVal
 
     'Range
-1108:     sExistVal = ParseOMMapNum(sExistOMMapNum, "range")
-1109:     pFeat.Value(lTLRangeFld) = CInt(sExistVal)
+    sExistVal = ParseOMMapNum(sExistOMMapNum, "range")
+    pFeat.Value(lTLRangeFld) = CInt(sExistVal)
 
     'RangePart
-1112:     sExistVal = ParseOMMapNum(sExistOMMapNum, "rangepart")
-1113:     pFeat.Value(lTLRangePartFld) = CDbl(sExistVal)
+    sExistVal = ParseOMMapNum(sExistOMMapNum, "rangepart")
+    pFeat.Value(lTLRangePartFld) = CDbl(sExistVal)
 
     'RangeDir
-1116:     sExistVal = ParseOMMapNum(sExistOMMapNum, "rangedir")
-1117:     pFeat.Value(lTLRangeDirFld) = sExistVal
+    sExistVal = ParseOMMapNum(sExistOMMapNum, "rangedir")
+    pFeat.Value(lTLRangeDirFld) = sExistVal
 
     'Section
-1120:     sExistVal = ParseOMMapNum(sExistOMMapNum, "section")
-1121:     pFeat.Value(lTLSectNumFld) = CInt(sExistVal)
+    sExistVal = ParseOMMapNum(sExistOMMapNum, "section")
+    pFeat.Value(lTLSectNumFld) = CInt(sExistVal)
  
     'Qtr
-1124:     sExistVal = ParseOMMapNum(sExistOMMapNum, "qtr")
-1125:     pFeat.Value(lTLQtrFld) = sExistVal
+    sExistVal = ParseOMMapNum(sExistOMMapNum, "qtr")
+    pFeat.Value(lTLQtrFld) = sExistVal
     
     'QtrQtr
-1128:     sExistVal = ParseOMMapNum(sExistOMMapNum, "qtrqtr")
-1129:     pFeat.Value(lTLQQFld) = sExistVal
+    sExistVal = ParseOMMapNum(sExistOMMapNum, "qtrqtr")
+    pFeat.Value(lTLQQFld) = sExistVal
 
     'MapSuffixType
-1132:     sExistVal = ParseOMMapNum(sExistOMMapNum, "suffixtype")
-1133:     sExistVal = ConvertCode(pFeat, g_pFldnames.TLSufTypeFN, sExistVal)
-1134:     pFeat.Value(lTLMapSufTypeFld) = sExistVal
+    sExistVal = ParseOMMapNum(sExistOMMapNum, "suffixtype")
+    sExistVal = ConvertCode(pFeat, g_pFldnames.TLSufTypeFN, sExistVal)
+    pFeat.Value(lTLMapSufTypeFld) = sExistVal
     
     'MapSuffixNum
-1137:     sExistVal = ParseOMMapNum(sExistOMMapNum, "suffixnum")
-1138:     pFeat.Value(lTLMapSufNumFld) = sExistVal
+    sExistVal = ParseOMMapNum(sExistOMMapNum, "suffixnum")
+    pFeat.Value(lTLMapSufNumFld) = sExistVal
+    
+    'Anomaly
+    sExistVal = ParseOMMapNum(sExistOMMapNum, "anomaly")
+    pFeat.Value(lTLAnomalyFld) = sExistVal
     
     'SpecialInterest
-1141:     sExistVal = IIf(IsNull(pFeat.Value(lTLSpecInterestFld)), "00000", pFeat.Value(lTLSpecInterestFld))
-1142:     If Len(sExistVal) < 5 Then
-1143:      Do Until Len(sExistVal) = 5
-1144:         sExistVal = "0" & sExistVal
-1145:      Loop
-1146:     End If
-1147:     pFeat.Value(lTLSpecInterestFld) = sExistVal
+    sExistVal = IIf(IsNull(pFeat.Value(lTLSpecInterestFld)), "00000", pFeat.Value(lTLSpecInterestFld))
+    If Len(sExistVal) < 5 Then
+     Do Until Len(sExistVal) = 5
+        sExistVal = "0" & sExistVal
+     Loop
+    End If
+    pFeat.Value(lTLSpecInterestFld) = sExistVal
     
     'Recalculate OMTaxlot
-    If IsNull(pFeat.Value(lTaxlotFld)) Then Exit Sub
+    If IsNull(pFeat.Value(lTaxlotFld)) Then GoTo Process_Exit
     Dim sTaxlotVal As String
     'Taxlot has actual taxlot number.  ORMAPTaxlot requires a 5-digit number, so leading zeros have to be added
-1153:     sTaxlotVal = pFeat.Value(lTaxlotFld)
-1154:     sTaxlotVal = AddLeadingZeros(sTaxlotVal, 5)
+    sTaxlotVal = pFeat.Value(lTaxlotFld)
+    sTaxlotVal = AddLeadingZeros(sTaxlotVal, 5)
     Dim sNewOMTLNum As String
     Dim sExistOMTLNum As String
-    If IsNull(pFeat.Value(lOMTLNumFld)) Then Exit Sub
-1158:     sExistOMTLNum = pFeat.Value(lOMTLNumFld)
-1159:     sNewOMTLNum = CalcOMTLNum(sExistOMTLNum, pFeat, sTaxlotVal)
+    If IsNull(pFeat.Value(lOMTLNumFld)) Then GoTo Process_Exit
+    sExistOMTLNum = pFeat.Value(lOMTLNumFld)
+    sNewOMTLNum = CalcOMTLNum(sExistOMTLNum, pFeat, sTaxlotVal)
     'If no changes, don't save value
-1161:     If Not sExistOMTLNum = sNewOMTLNum Then
-1162:         pFeat.Value(lOMTLNumFld) = sNewOMTLNum
-1163:     End If
-    
-
+    If Not sExistOMTLNum = sNewOMTLNum Then
+        pFeat.Value(lOMTLNumFld) = sNewOMTLNum
+    End If
+Process_Exit:
   Exit Sub
 ErrorHandler:
   HandleError True, "CalcTaxlotValues " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Sub
 
-Public Function AddLeadingZeros(sCurString As String, lWidth As Long) As String
+'***************************************************************************
+'Name:  AddLeadingZeros
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:   Add leading zeros if necessary
+'Called From:
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  asCurString was being passed by Reference now passed by value
+'***************************************************************************
+Public Function AddLeadingZeros(ByVal asCurString As String, ByRef lWidth As Long) As String
   On Error GoTo ErrorHandler
 
-        'Add leading zeros if necessary
-1175:         If Len(sCurString) < lWidth Then
-1176:          Do Until Len(sCurString) = lWidth
-1177:             sCurString = "0" & sCurString
-1178:          Loop
-1179:         End If
-1180:         AddLeadingZeros = sCurString
+        If Len(asCurString) < lWidth Then
+         Do Until Len(asCurString) = lWidth
+            asCurString = "0" & asCurString
+         Loop
+        End If
+        AddLeadingZeros = asCurString
 
   Exit Function
 ErrorHandler:
   HandleError True, "AddLeadingZeros " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
-Public Function GetCentroid(pFeat As IFeature) As IPoint
+'***************************************************************************
+'Name:  GetCentroid
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Description:   Determines if this feature is annotation feature class then gets the centroid.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:       A Point object
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
+Public Function GetCentroid(ByRef pFeat As IFeature) As IPoint
   On Error GoTo ErrorHandler
 
-    'Determines if this feature is annotation feature class
-1191:         If pFeat.FeatureType = esriFTAnnotation Or pFeat.FeatureType = esriFTDimension Then
+        If pFeat.FeatureType = esriFTAnnotation Or pFeat.FeatureType = esriFTDimension Then
             Dim pArea As IArea
-1193:             Set pArea = pFeat.Shape
-1194:             Set GetCentroid = pArea.Centroid
-1195:         End If
-
+            Set pArea = pFeat.Shape
+            Set GetCentroid = pArea.Centroid
+        End If
 
   Exit Function
 ErrorHandler:
   HandleError True, "GetCentroid " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
-Function CT_GetCenterOfEnvelope(pEnv As IEnvelope) As IPoint
+'***************************************************************************
+'Name:  CT_GetCenterOfEnvelope
+'Initial Author:
+'Subsequent Author:
+'Created:
+'Purpose:
+'Called From:
+'Description:   Type the description of the function here.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:       A Point object
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
+Function CT_GetCenterOfEnvelope(ByRef pEnv As IEnvelope) As IPoint
   On Error GoTo ErrorHandler
 
     Dim pCenter As IPoint
-1207:     Set pCenter = New Point
-1208:     pCenter.X = pEnv.XMin + (pEnv.XMax - pEnv.XMin) / 2
-1209:     pCenter.Y = pEnv.YMin + (pEnv.YMax - pEnv.YMin) / 2
-1210:     Set CT_GetCenterOfEnvelope = pCenter
+    Set pCenter = New Point
+    pCenter.X = pEnv.XMin + (pEnv.XMax - pEnv.XMin) / 2
+    pCenter.Y = pEnv.YMin + (pEnv.YMax - pEnv.YMin) / 2
+    Set CT_GetCenterOfEnvelope = pCenter
 
   Exit Function
 ErrorHandler:
   HandleError True, "CT_GetCenterOfEnvelope " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  GetRelatedObjects
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Description:   Using the passed in object, get related features through a relationship class
+'               This is optimized for anno because there is a single relationship class.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  single exit point
+'***************************************************************************
 Public Function GetRelatedObjects(pObj As IObject) As IFeature
   On Error GoTo ErrorHandler
 
-
-    'Using the passed in object, get related features through a relationship class
-    'This is optimized for anno because there is a single relationship class
     Dim pEnumRelClass As IEnumRelationshipClass
     Dim pRelClass As IRelationshipClass
     Dim pParentSet As esriSystem.ISet
     Dim pParentFeat As IFeature
     
-1228:     Set pEnumRelClass = pObj.Class.RelationshipClasses(esriRelRoleAny)
-1229:     If Not pEnumRelClass Is Nothing Then
-1230:       Set pRelClass = pEnumRelClass.Next
-1231:       If Not pRelClass Is Nothing Then
-1232:           Set pParentSet = pRelClass.GetObjectsRelatedToObject(pObj)
-1233:       End If
-1234:     Else
-        Exit Function
-1236:     End If
-1237:     If Not pParentSet Is Nothing Then
-1238:         Set pParentFeat = pParentSet.Next
-1239:         If Not pParentFeat Is Nothing Then
-1240:             Set GetRelatedObjects = pParentFeat
-1241:         End If
-1242:     End If
+    Set pEnumRelClass = pObj.Class.RelationshipClasses(esriRelRoleAny)
+    If Not pEnumRelClass Is Nothing Then
+      Set pRelClass = pEnumRelClass.Next
+      If Not pRelClass Is Nothing Then
+          Set pParentSet = pRelClass.GetObjectsRelatedToObject(pObj)
+      End If
+    Else
+        GoTo Process_Exit
+    End If
+    If Not pParentSet Is Nothing Then
+        Set pParentFeat = pParentSet.Next
+        If Not pParentFeat Is Nothing Then
+            Set GetRelatedObjects = pParentFeat
+        End If
+    End If
 
-
+Process_Exit:
   Exit Function
 ErrorHandler:
   HandleError True, "GetRelatedObjects " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  GetAnnoSizeByScale
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:
+'Called From:
+'Description:   Type the description of the function here.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        What known errors does this routine cause that are NOT captured in error handling routine? If none, say: This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  Using Strcomp function to compare strings
+'***************************************************************************
 Public Function GetAnnoSizeByScale(sFCName As String, lScale As Long) As Double
   On Error GoTo ErrorHandler
 
     Dim dSize As Double
-1254:     If LCase(sFCName) = LCase(g_pFldnames.FCTLAcrAnno) Then
-            'Determine anno size based on scale
-1256:          If lScale = 120 Then dSize = 0.8
-1257:          If lScale = 240 Then dSize = 1.6
-1258:          If lScale = 360 Then dSize = 2
-1259:          If lScale = 480 Then dSize = 3.2
-1260:          If lScale = 600 Then dSize = 4
-1261:          If lScale = 1200 Then dSize = 8
-1262:          If lScale = 2400 Then dSize = 16
-1263:          If lScale = 4800 Then dSize = 32
-1264:          If lScale = 9600 Then dSize = 48
-1265:          If lScale = 24000 Then dSize = 160
-1266:     ElseIf LCase(sFCName) = LCase(g_pFldnames.FCTLNumAnno) Then
-1267:          If lScale = 120 Then dSize = 1
-1268:          If lScale = 240 Then dSize = 2
-1269:          If lScale = 360 Then dSize = 3
-1270:          If lScale = 480 Then dSize = 4
-1271:          If lScale = 600 Then dSize = 5
-1272:          If lScale = 1200 Then dSize = 10
-1273:          If lScale = 2400 Then dSize = 20
-1274:          If lScale = 4800 Then dSize = 40
-1275:          If lScale = 9600 Then dSize = 64
-1276:          If lScale = 24000 Then dSize = 200
-1277:     Else
+    '++ New coded added 10/21/05
+    With g_pFldnames
+'++START JWM 10/11/2006 using strcomp function
+        If StrComp(sFCName, .FCTLAcrAnno, vbTextCompare) = 0 Then
+        'Determine anno size based on scale
+        If lScale = 120 Then dSize = .AnnoSizeTLAcr120
+        If lScale = 240 Then dSize = .AnnoSizeTLAcr240
+        If lScale = 360 Then dSize = .AnnoSizeTLAcr360
+        If lScale = 480 Then dSize = .AnnoSizeTLAcr480
+        If lScale = 600 Then dSize = .AnnoSizeTLAcr600
+        If lScale = 1200 Then dSize = .AnnoSizeTLAcr1200
+        If lScale = 2400 Then dSize = .AnnoSizeTLAcr2400
+        If lScale = 4800 Then dSize = .AnnoSizeTLAcr4800
+        If lScale = 9600 Then dSize = .AnnoSizeTLAcr9600
+        If lScale = 24000 Then dSize = .AnnoSizeTLAcr24000
+'++END JWM 10/11/2006
+      ElseIf StrComp(sFCName, .FCTLNumAnno, vbTextCompare) = 0 Then
+        If lScale = 120 Then dSize = .AnnoSizeTLNum120
+        If lScale = 240 Then dSize = .AnnoSizeTLNum240
+        If lScale = 360 Then dSize = .AnnoSizeTLNum360
+        If lScale = 480 Then dSize = .AnnoSizeTLNum480
+        If lScale = 600 Then dSize = .AnnoSizeTLNum600
+        If lScale = 1200 Then dSize = .AnnoSizeTLNum1200
+        If lScale = 2400 Then dSize = .AnnoSizeTLNum2400
+        If lScale = 4800 Then dSize = .AnnoSizeTLNum4800
+        If lScale = 9600 Then dSize = .AnnoSizeTLNum9600
+        If lScale = 24000 Then dSize = .AnnoSizeTLNum24000
+      Else
         'Something not being trapped
-1279:         dSize = 10
-1280:     End If
+        dSize = 10
+      End If
+    End With
+    '++end new code
     'TODO #####
     'Determine a default
-1283:     If dSize = 0 Then dSize = 5
-1284:     GetAnnoSizeByScale = dSize
+    If dSize = 0 Then dSize = 5
+    GetAnnoSizeByScale = dSize
 
   Exit Function
 ErrorHandler:
   HandleError True, "GetAnnoSizeByScale " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  FileExists
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:
+'Called From:
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
 Public Function FileExists(sPath As String) As Boolean
   On Error GoTo ErrorHandler
 
 
     Dim pFSO As Object
-1296:     Set pFSO = CreateObject("Scripting.FileSystemObject")
-1297:     If Not pFSO.FileExists(sPath) Then
-1298:         FileExists = False
-1299:     Else
-1300:         FileExists = True
-1301:     End If
+    Set pFSO = CreateObject("Scripting.FileSystemObject")
+    If Not pFSO.FileExists(sPath) Then
+        FileExists = False
+    Else
+        FileExists = True
+    End If
 
 
   Exit Function
 ErrorHandler:
   HandleError True, "FileExists " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
+'***************************************************************************
+'Name:  GetAppRef
+'Initial Author:        James Moore
+'Subsequent Author:     Type your name here.
+'Created:       10/11/2006
+'Called From:
+'Description:   Used to obtain a reference the the Application, which is used throughout the code
+'               This is a more complex process with VB code because the code does not live in the MXD.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006      Initial creation
+'***************************************************************************
 Public Function GetAppRef() As IApplication
   On Error GoTo ErrorHandler
-
-'Used to obtain a reference the the Application, which is used throughout the code
-'This is a more complex process with VB code because the code does not live in the MXD
+  
 Dim doc As IDocument
 Dim app As IApplication
 Dim pMXDoc As IMxDocument
@@ -1318,15 +1876,15 @@ Dim pobjectFactory As IObjectFactory
 Dim rot As AppROT
 Dim strName As String
 
-1320: Set rot = New AppROT
-1321: If rot.Count = 1 Then
-1322:     Set app = rot.Item(0) 'ArcCatalog
-1323: Else
-1324:     Set app = rot.Item(1) 'ArcMap
-1325: End If
-1326: Set pobjectFactory = app
+Set rot = New AppROT
+If rot.Count = 1 Then
+    Set app = rot.Item(0) 'ArcCatalog
+Else
+    Set app = rot.Item(1) 'ArcMap
+End If
+Set pobjectFactory = app
 
-1328: Set GetAppRef = app
+Set GetAppRef = app
 
 
   Exit Function
@@ -1334,10 +1892,29 @@ ErrorHandler:
   HandleError True, "GetAppRef " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  GetMXDocRef
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:   Get a reference to the current map document
+'Called From:
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
 Public Function GetMXDocRef() As IMxDocument
   On Error GoTo ErrorHandler
 
-'Get a reference to the current map document
 Dim doc As IDocument
 Dim app As IApplication
 Dim pMXDoc As IMxDocument
@@ -1345,16 +1922,16 @@ Dim pobjectFactory As IObjectFactory
 Dim rot As AppROT
 Dim strName As String
 
-1347: Set rot = New AppROT
-1348: If rot.Count = 1 Then
-1349:     Set app = rot.Item(0) 'ArcCatalog
-1350: Else
-1351:     Set app = rot.Item(1) 'ArcMap
-1352: End If
-1353: Set pobjectFactory = app
-1354: Set pMXDoc = app.Document
+Set rot = New AppROT
+If rot.Count = 1 Then
+    Set app = rot.Item(0) 'ArcCatalog
+Else
+    Set app = rot.Item(1) 'ArcMap
+End If
+Set pobjectFactory = app
+Set pMXDoc = app.Document
 
-1356: Set GetMXDocRef = pMXDoc
+Set GetMXDocRef = pMXDoc
 
 
   Exit Function
@@ -1362,12 +1939,29 @@ ErrorHandler:
   HandleError True, "GetMXDocRef " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  LoadFCIntoMap
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:       Loads a feature class into the current map
+'Called From:
+'Methods:       Feature class must be in the same feature dataset as pOtherFC.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
 Public Sub LoadFCIntoMap(sFCName As String, pOtherFC As IFeatureClass)
   On Error GoTo ErrorHandler
 
-
-    'Loads a feature class into the current map
-    'Feature class must be in the same feature dataset as pOtherFC
     Dim pWS As IWorkspace
     Dim pFWS As IFeatureWorkspace
     Dim pFC As IFeatureClass
@@ -1375,17 +1969,17 @@ Public Sub LoadFCIntoMap(sFCName As String, pOtherFC As IFeatureClass)
     Dim pDataset As IDataset
     Dim pMXDoc As IMxDocument
     Dim pMap As IMap
-1377:     Set pWS = pOtherFC.FeatureDataset.Workspace
-1378:     Set pFWS = pWS
-1379:     Set pFC = pFWS.OpenFeatureClass(sFCName)
-1380:     Set pFeatLayer = New FeatureLayer
-1381:     Set pFeatLayer.FeatureClass = pFC
-1382:     Set pDataset = pFC
-1383:     pFeatLayer.Name = pDataset.Name
-1384:     Set pMXDoc = g_pApp.Document
-1385:     Set pMap = pMXDoc.FocusMap
-1386:     pMap.AddLayer pFeatLayer
-1387:     pMXDoc.CurrentContentsView.Refresh 0
+    Set pWS = pOtherFC.FeatureDataset.Workspace
+    Set pFWS = pWS
+    Set pFC = pFWS.OpenFeatureClass(sFCName)
+    Set pFeatLayer = New FeatureLayer
+    Set pFeatLayer.FeatureClass = pFC
+    Set pDataset = pFC
+    pFeatLayer.Name = pDataset.Name
+    Set pMXDoc = g_pApp.Document
+    Set pMap = pMXDoc.FocusMap
+    pMap.AddLayer pFeatLayer
+    pMXDoc.CurrentContentsView.Refresh 0
 
 
   Exit Sub
@@ -1393,21 +1987,38 @@ ErrorHandler:
   HandleError True, "LoadFCIntoMap " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Sub
 
-
-
-
+'***************************************************************************
+'Name:  IsOrMapFeature
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Description:   Determines if a feature class part of the ORMAP design,
+'               If not, it will not be used by any code in this project
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
 Public Function IsOrMapFeature(obj As esriGeoDatabase.IObject) As Boolean
   On Error GoTo ErrorHandler
 
-    'Determines if a feature class part of the ORMAP design,
-    'If not, it will not be used by any code in this project
+    
     Dim pOC As IObjectClass
     Dim pDSet As IDataset
     Dim pName As String
-1406:     Set pOC = obj.Class
-1407:     Set pDSet = pOC
-1408:     pName = LCase(Trim(pDSet.Name))
-1409:     If pName = LCase(Trim(g_pFldnames.FCAnno10)) Or pName = LCase(Trim(g_pFldnames.FCAnno100)) Or pName = LCase(Trim(g_pFldnames.FCAnno20)) Or _
+    Set pOC = obj.Class
+    Set pDSet = pOC
+    pName = LCase(Trim(pDSet.Name))
+    If pName = LCase(Trim(g_pFldnames.FCAnno10)) Or pName = LCase(Trim(g_pFldnames.FCAnno100)) Or pName = LCase(Trim(g_pFldnames.FCAnno20)) Or _
         pName = LCase(Trim(g_pFldnames.FCAnno200)) Or pName = LCase(Trim(g_pFldnames.FCAnno2000)) Or pName = LCase(Trim(g_pFldnames.FCAnno30)) Or _
         pName = LCase(Trim(g_pFldnames.FCAnno40)) Or pName = LCase(Trim(g_pFldnames.FCAnno400)) Or pName = LCase(Trim(g_pFldnames.FCAnno50)) Or _
         pName = LCase(Trim(g_pFldnames.FCAnno800)) Or pName = LCase(Trim(g_pFldnames.FCCartoLines)) Or pName = LCase(Trim(g_pFldnames.FCLotsAnno)) Or _
@@ -1415,10 +2026,9 @@ Public Function IsOrMapFeature(obj As esriGeoDatabase.IObject) As Boolean
         pName = LCase(Trim(g_pFldnames.FCTaxCode)) Or pName = LCase(Trim(g_pFldnames.FCTaxCode)) Or pName = LCase(Trim(g_pFldnames.FCTaxCodeAnno)) Or _
         pName = LCase(Trim(g_pFldnames.FCTaxlot)) Or pName = LCase(Trim(g_pFldnames.FCTaxlotLines)) Or pName = LCase(Trim(g_pFldnames.FCTLAcrAnno)) Or _
         pName = LCase(Trim(g_pFldnames.FCTLNumAnno)) Then
-1417:         IsOrMapFeature = True
-1418:     Else
-1419:         IsOrMapFeature = False
-1420:     End If
+    Else
+        IsOrMapFeature = False
+    End If
 
 
   Exit Function
@@ -1426,10 +2036,29 @@ ErrorHandler:
   HandleError True, "IsOrMapFeature " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  SetAnnoSize
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Description:   If working with anno, determine what size it should be.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  single exit point
+'***************************************************************************
 Public Sub SetAnnoSize(obj As IObject, pFeat As IFeature)
   On Error GoTo ErrorHandler
 
-    'If working with anno, determine what size it should be
     Dim sMapNum As String
     Dim pMIFlayer As IFeatureLayer
     Dim pMIFclass As IFeatureClass
@@ -1448,86 +2077,106 @@ Public Sub SetAnnoSize(obj As IObject, pFeat As IFeature)
     Dim pAnnoClass As IObjectClass
     Dim dSize As Double
     
-    'Capture MapNumber for each anno feature created
-1451:     lAnnoMapNumFld = LocateFields(obj.Class, g_pFldnames.MIMapNumberFN)
-    If lAnnoMapNumFld = -1 Then Exit Sub
-    'If new anno feature with no text, determine if it has a shape
     Dim pAnnoFeat As IFeature
     Dim pAOC As IObjectClass
-1456:     Set pAOC = obj.Class
-1457:     Set pAnnoFeat = obj
+    Set pAOC = obj.Class
+    Set pAnnoFeat = obj
+    
+    'Capture MapNumber for each anno feature created
+    lAnnoMapNumFld = LocateFields(obj.Class, g_pFldnames.MIMapNumberFN)
+    If lAnnoMapNumFld = -1 Then GoTo Process_Exit
+    
+
+    'If new anno feature with no text, determine if it has a shape
     Dim lFld As Long
-'    Dim g As Long
-'    g = 0
-'    While g < pAnnoFeat.Fields.FieldCount
-'        MsgBox "field = " & pAnnoFeat.Fields.Field(g).Name
-'        g = g + 1
-'    Wend
-1465:     lFld = pAnnoFeat.Fields.FindField("TextString")
-1466:     If lFld = -1 Then
-1467:         MsgBox "Unable to locate textstring field in anno class.  Cannot set size", vbCritical
-        Exit Sub
-1469:     End If
+    lFld = pAnnoFeat.Fields.FindField("TextString")
+    If lFld = -1 Then
+        MsgBox "Unable to locate textstring field in anno class.  Cannot set size", vbCritical
+        GoTo Process_Exit
+    End If
     Dim vVal As Variant
-1471:     vVal = pAnnoFeat.Value(lFld)
-    If IsNull(vVal) Then Exit Sub
+    vVal = pAnnoFeat.Value(lFld)
+    If IsNull(vVal) Then GoTo Process_Exit
         
     
-1475:     Set pFeat = obj
-1476:     Set pGeometry = pFeat.Shape
-    If pGeometry.IsEmpty Then Exit Sub
-1478:     Set pEnv = pGeometry.Envelope
-1479:     Set pCenter = CT_GetCenterOfEnvelope(pEnv)
-1480:     Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-    If pMIFlayer Is Nothing Then Exit Sub
-1482:     Set pMIFclass = pMIFlayer.FeatureClass
-1483:     sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
-1484:     obj.Value(lAnnoMapNumFld) = sMapNum
+    Set pFeat = obj
+    Set pGeometry = pFeat.Shape
+    If pGeometry.IsEmpty Then GoTo Process_Exit
+    Set pEnv = pGeometry.Envelope
+    Set pCenter = CT_GetCenterOfEnvelope(pEnv)
+    Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+    If pMIFlayer Is Nothing Then GoTo Process_Exit
+    Set pMIFclass = pMIFlayer.FeatureClass
+    sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
     
-    'Update the size to reflect current mapscale
-1487:     sMapScale = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
-    If IsNull(sMapScale) Then Exit Sub
+    'Allow existing anno to be moved without changing MapNumber
+    'Some anno will reside in another Taxlot, but labels the neighboring taxlot
+    If sMapNum = obj.Value(lAnnoMapNumFld) Then
+        obj.Value(lAnnoMapNumFld) = sMapNum
     
-    'Determine which annotation class this is
-1491:     Set pAnnoClass = obj.Class
-1492:     Set pAnnoDset = pAnnoClass
-    'If other anno, don't continue
-1494:     If LCase(pAnnoDset.Name) <> LCase(g_pFldnames.FCTLAcrAnno) And LCase(pAnnoDset.Name) <> LCase(g_pFldnames.FCTLNumAnno) Then
-        Exit Sub
-1496:     End If
-    
-1498:     dSize = modUtils.GetAnnoSizeByScale(pAnnoDset.Name, CLng(sMapScale))
-    'Get the anno feature, its symbol, set the appropriate size
-1500:     Set pAnnotationFeature = obj
-1501:     Set pAnnotationElement = pAnnotationFeature.Annotation
-1502:     Set pElement = pAnnotationElement
-1503:     Set pTextElement = pElement
-1504:     Set pTextSym = pTextElement.Symbol
-'MsgBox "Size = " & dSize
-1506:     pTextSym.Size = dSize
-1507:     pTextElement.Symbol = pTextSym
-1508:     Set pElement = pTextElement
-1509:     Set pAnnotationElement = pElement
-1510:     pAnnotationFeature.Annotation = pAnnotationElement
-
-
+        'Update the size to reflect current mapscale
+        sMapScale = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
+        If IsNull(sMapScale) Then GoTo Process_Exit
+        
+        'Determine which annotation class this is
+        Set pAnnoClass = obj.Class
+        Set pAnnoDset = pAnnoClass
+        'If other anno, don't continue
+        If LCase(pAnnoDset.Name) <> LCase(g_pFldnames.FCTLAcrAnno) And LCase(pAnnoDset.Name) <> LCase(g_pFldnames.FCTLNumAnno) Then
+            GoTo Process_Exit
+        End If
+        
+        dSize = modUtils.GetAnnoSizeByScale(pAnnoDset.Name, CLng(sMapScale))
+        'Get the anno feature, its symbol, set the appropriate size
+        Set pAnnotationFeature = obj
+        Set pAnnotationElement = pAnnotationFeature.Annotation
+        Set pElement = pAnnotationElement
+        Set pTextElement = pElement
+        Set pTextSym = pTextElement.Symbol
+        pTextSym.Size = dSize
+        pTextElement.Symbol = pTextSym
+        Set pElement = pTextElement
+        Set pAnnotationElement = pElement
+        pAnnotationFeature.Annotation = pAnnotationElement
+    End If
+Process_Exit:
   Exit Sub
 ErrorHandler:
   HandleError True, "SetAnnoSize " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Sub
 
+'***************************************************************************
+'Name:  LocateFields
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Description:   Return the index (location) of a field within a feature class.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
 Public Function LocateFields(pFClass As IFeatureClass, pFldName As String) As Long
   On Error GoTo ErrorHandler
 
-    'Return the index (location) of a field within a feature class
+    '
     Dim lFld As Long
-1523:     lFld = pFClass.Fields.FindField(pFldName)
-1524:     If lFld > -1 Then
-1525:       LocateFields = lFld
-1526:     Else
-1527:         MsgBox "Unable to locate " & pFldName & " field in " & _
+    lFld = pFClass.Fields.FindField(pFldName)
+    If lFld > -1 Then
+      LocateFields = lFld
+    Else
+        MsgBox "Unable to locate " & pFldName & " field in " & _
         pFClass.AliasName & " feature class"
-1529:     End If
+    End If
 
 
   Exit Function
@@ -1535,21 +2184,40 @@ ErrorHandler:
   HandleError True, "LocateFields " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  UpdateAutoFields
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Called From:
+'Description:   Code to update AutoDate and AutoWho.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
 Public Sub UpdateAutoFields(pFeat As IFeature)
   On Error GoTo ErrorHandler
 
 
-'Code to update AutoDate and AutoWho
     Dim lAutoDateFld As Long
     Dim lAutoWhoFld As Long
-1544:     lAutoDateFld = pFeat.Fields.FindField(g_pFldnames.AutoDateFN)
-1545:     If lAutoDateFld > -1 Then
-1546:         pFeat.Value(lAutoDateFld) = Now
-1547:     End If
-1548:     lAutoWhoFld = pFeat.Fields.FindField(g_pFldnames.AutoWhoFN)
-1549:     If lAutoWhoFld > -1 Then
-1550:         pFeat.Value(lAutoWhoFld) = Environ("USERNAME")
-1551:     End If
+    lAutoDateFld = pFeat.Fields.FindField(g_pFldnames.AutoDateFN)
+    If lAutoDateFld > -1 Then
+        pFeat.Value(lAutoDateFld) = Now
+    End If
+    lAutoWhoFld = pFeat.Fields.FindField(g_pFldnames.AutoWhoFN)
+    If lAutoWhoFld > -1 Then
+        pFeat.Value(lAutoWhoFld) = Environ("USERNAME")
+    End If
 
 
   Exit Sub
@@ -1557,61 +2225,247 @@ ErrorHandler:
   HandleError True, "UpdateAutoFields " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Sub
 
+'***************************************************************************
+'Name:  Validate5Digits
+'Initial Author:        James Moore
+'Subsequent Author:     Type your name here.
+'Created:       10/11/2006
+'Purpose:
+'Called From:
+'Description:   Type the description of the function here.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        What known errors does this routine cause that are NOT captured in error handling routine? If none, say: This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006      Initial creation
+'***************************************************************************
 Public Function Validate5Digits(sString As String)
   On Error GoTo ErrorHandler
 
             'Make sure taxlot number is 5 characters
-1563:             If Len(sString) < 5 Then
-1564:              Do Until Len(sString) = 5
-1565:                 sString = "0" & sString
-1566:              Loop
-1567:             End If
-1568:             Validate5Digits = sString
+            If Len(sString) < 5 Then
+             Do Until Len(sString) = 5
+                sString = "0" & sString
+             Loop
+            End If
+            Validate5Digits = sString
 
   Exit Function
 ErrorHandler:
   HandleError True, "Validate5Digits " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
+'***************************************************************************
+'Name:  GetSpecialInterests
+'Initial Author:        James Moore
+'Subsequent Author:     Type your name here.
+'Created:       10/11/2006
+'Purpose:
+'Called From:
+'Description:   Type the description of the function here.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        What known errors does this routine cause that are NOT captured in error handling routine? If none, say: This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006      Initial creation
+'***************************************************************************
 Public Function GetSpecialInterests(pFeature As IFeature) As String
   On Error GoTo ErrorHandler
 
         Dim lTLSpecInterestFld As Long
         Dim sTLSpecVAl As String
-1580:         lTLSpecInterestFld = modUtils.LocateFields(pFeature.Class, g_pFldnames.TLSpecInterestFN)
-1581:         If lTLSpecInterestFld = -1 Then
-1582:             sTLSpecVAl = "00000"
-1583:         Else
-1584:             If Not IsNull(pFeature.Value(lTLSpecInterestFld)) Then
-1585:                 sTLSpecVAl = pFeature.Value(lTLSpecInterestFld)
-1586:             Else
-1587:                 sTLSpecVAl = "00000"
-1588:             End If
+        lTLSpecInterestFld = modUtils.LocateFields(pFeature.Class, g_pFldnames.TLSpecInterestFN)
+        If lTLSpecInterestFld = -1 Then
+            sTLSpecVAl = "00000"
+        Else
+            If Not IsNull(pFeature.Value(lTLSpecInterestFld)) Then
+                sTLSpecVAl = pFeature.Value(lTLSpecInterestFld)
+            Else
+                sTLSpecVAl = "00000"
+            End If
             'Verify that it is 5 digits
-1590:             If Len(sTLSpecVAl) < 5 Then
-1591:              Do Until Len(sTLSpecVAl) = 5
-1592:                 sTLSpecVAl = "0" & sTLSpecVAl
-1593:              Loop
-1594:             End If
-1595:         End If
-1596:         GetSpecialInterests = sTLSpecVAl
+            If Len(sTLSpecVAl) < 5 Then
+             Do Until Len(sTLSpecVAl) = 5
+                sTLSpecVAl = "0" & sTLSpecVAl
+             Loop
+            End If
+        End If
+        GetSpecialInterests = sTLSpecVAl
 
   Exit Function
 ErrorHandler:
   HandleError True, "GetSpecialInterests " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Function
 
-Public Function CalcOMTLNum(sExistOMNum As String, pFeat As IFeature, sTLVal As String) As String
+'***************************************************************************
+'Name:  GetMapSufType
+'Initial Author:        James Moore
+'Subsequent Author:     Type your name here.
+'Created:       10/11/2006
+'Purpose:
+'Called From:
+'Description:   Type the description of the function here.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        What known errors does this routine cause that are NOT captured in error handling routine? If none, say: This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006      Initial creation
+'***************************************************************************
+Public Function GetMapSufType(pFeature As IFeature) As String
   On Error GoTo ErrorHandler
 
-        'Calculate ORMAPtaxlot because one if its components may have changed
+        Dim lTLMapSufTypeFld As Long
+        Dim sTLMapSufTypeVAl As String
+        lTLMapSufTypeFld = modUtils.LocateFields(pFeature.Class, g_pFldnames.TLSufTypeFN)
+        If lTLMapSufTypeFld = -1 Then
+            sTLMapSufTypeVAl = "0"
+        Else
+            If Not IsNull(pFeature.Value(lTLMapSufTypeFld)) Then
+                sTLMapSufTypeVAl = pFeature.Value(lTLMapSufTypeFld)
+            Else
+                sTLMapSufTypeVAl = "0"
+            End If
+                'Verify that it is 1 digit
+                If Len(sTLMapSufTypeVAl) < 1 Then
+                    Do Until Len(sTLMapSufTypeVAl) = 1
+                       sTLMapSufTypeVAl = "0" & sTLMapSufTypeVAl
+                    Loop
+                End If
+
+                'Verify that it isn't more than 1 digit
+                If Len(sTLMapSufTypeVAl) > 1 Then
+                    sTLMapSufTypeVAl = Left(sTLMapSufTypeVAl, 1)
+                End If
+            End If
+
+
+        GetMapSufType = sTLMapSufTypeVAl
+
+  Exit Function
+ErrorHandler:
+  HandleError True, "GetMapSufType " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+End Function
+'++ END, Laura Gordon, November 29, 2005
+
+'***************************************************************************
+'Name:  GetMapSufNum
+'Initial Author:        Laura Gordon
+'Subsequent Author:     Type your name here.
+'Created:       November 29, 2005
+'Purpose:
+'Called From:
+'Description:   Type the description of the function here.
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        What known errors does this routine cause that are NOT captured in error handling routine? If none, say: This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
+Public Function GetMapSufNum(pFeature As IFeature) As String
+  On Error GoTo ErrorHandler
+
+        Dim lTLMapSufNumFld As Long
+        Dim sTLMapSufNumVAl As String
+        lTLMapSufNumFld = modUtils.LocateFields(pFeature.Class, g_pFldnames.TLSufNumFN)
+        If lTLMapSufNumFld = -1 Then
+            sTLMapSufNumVAl = "000"
+        Else
+            If Not IsNull(pFeature.Value(lTLMapSufNumFld)) Then
+                sTLMapSufNumVAl = pFeature.Value(lTLMapSufNumFld)
+            Else
+                sTLMapSufNumVAl = "000"
+            End If
+                'Verify that it is 3 digit
+                If Len(sTLMapSufNumVAl) < 3 Then
+                    Do Until Len(sTLMapSufNumVAl) = 3
+                       sTLMapSufNumVAl = "0" & sTLMapSufNumVAl
+                    Loop
+                End If
+
+                'Verify that it isn't more than 3 digits
+                If Len(sTLMapSufNumVAl) > 3 Then
+                    sTLMapSufNumVAl = Left(sTLMapSufNumVAl, 3)
+                End If
+            End If
+
+
+        GetMapSufNum = sTLMapSufNumVAl
+
+  Exit Function
+ErrorHandler:
+  HandleError True, "GetMapSufNum " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+End Function
+
+'***************************************************************************
+'Name:  CalcOMTLNum
+'Initial Author:
+'Subsequent Author:     Type your name here.
+'Created:
+'Purpose:   Calculate ORMAPtaxlot because one if its components may have changed
+'Called From:
+'Methods:       Describe any complex details.
+'Inputs:        What variables are brought into this routine?
+'Parameters:
+'Outputs:       What variables are changed in this routine?
+'Returns:
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
+Public Function CalcOMTLNum(ByRef sExistOMNum As String, ByRef pFeat As IFeature, ByRef sTLVal As String) As String
+  On Error GoTo ErrorHandler
+
         Dim sShortOMNum As String 'Remove suffixTYpe and suffixNum
-        Dim sTLSpecVAl As String
+        '++ BEGIN, Laura Gordon, November 29, 2005
+        '+Dim sTLSpecVAl As String
+        '++ END, Laura Gordon, November 29, 2005
         Dim sOMTLNval As String
-1610:         sShortOMNum = ShortenOMMapNum(sExistOMNum)
-1611:         sTLSpecVAl = GetSpecialInterests(pFeat)
-1612:         sOMTLNval = sShortOMNum & sTLVal & sTLSpecVAl
-1613:         CalcOMTLNum = sOMTLNval
+        '++ BEGIN, Laura Gordon, November 29, 2005
+        Dim sTLMapSufTypeVAl As String
+        Dim sTLMapSufNumVAl As String
+        '++ END, Laura Gordon, November 29, 2005
+
+        sShortOMNum = ShortenOMMapNum(sExistOMNum)
+              '++ BEGIN, Laura Gordon, Novemeber 29, 2005
+              '+sTLSpecVAl = GetSpecialInterests(pFeat)
+              '+sOMTLNval = sShortOMNum & sTLVal & sTLSpecVAl
+              sTLMapSufTypeVAl = GetMapSufType(pFeat)
+              sTLMapSufNumVAl = GetMapSufNum(pFeat)
+              sOMTLNval = sShortOMNum & sTLMapSufTypeVAl & sTLMapSufNumVAl & sTLVal
+              '++ END, Laura Gordon, Novemeber 29, 2005
+        CalcOMTLNum = sOMTLNval
 
   Exit Function
 ErrorHandler:
@@ -1622,7 +2476,7 @@ Public Function ShortenOMMapNum(sOMVal As String) As String
   On Error GoTo ErrorHandler
 
     'Remove two values from the ORMAPMap number for the purpose of populating ORMAPTaxlog
-1624:     ShortenOMMapNum = Left(sOMVal, 20)
+    ShortenOMMapNum = Left(sOMVal, 20)
 
   Exit Function
 ErrorHandler:
@@ -1634,10 +2488,10 @@ Public Sub ZoomToExtent(pEnv As IEnvelope, pMXDoc As IMxDocument)
     'Works for Layout and Data view
     Dim pMap As IMap
     Dim pActiveView As IActiveView
-1636:     Set pMap = pMXDoc.FocusMap
-1637:     Set pActiveView = pMap
+    Set pMap = pMXDoc.FocusMap
+    Set pActiveView = pMap
 
-1639:     pActiveView.Extent = pEnv
-1640:     pActiveView.Refresh
+    pActiveView.Extent = pEnv
+    pActiveView.Refresh
 End Sub
 

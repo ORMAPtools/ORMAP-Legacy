@@ -200,36 +200,111 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'FORM USED TO CAPTURE UNDERLYING MAPINDEX ATTRIBUTES FOR THE PURPOSE OF POPULATING TAXLOT
+'
+' File name:            frmTaxlotAssignment
+'
+' Initial Author:       Type your name here
+'
+' Date Created:
+'
+' Description: FORM USED TO CAPTURE UNDERLYING MAPINDEX ATTRIBUTES FOR THE PURPOSE OF POPULATING TAXLOT
+'
+'
+' Entry points:
+'       List the public variables and their purposes.
+'       List the properties and routines that the module exposes to the rest of the program.
+'
+' Dependencies:
+'       How does this file depend or relate to other files?
+'
+' Issues:
+'       What are unsolved bugs, bottlenecks,
+'       possible future enhancements, and
+'       descriptions of other issues.
+'
+' Method:
+'       Describe any complex details that make sense on the file level.  This includes explanations
+'       of complex algorithms, how different routines within the module interact, and a description
+'       of a data structure used in the module.
+'
+' Updates:
+'
+'JWM 10/11/2006 added this comment section
 
-' Variables used by the Error handler function - DO NOT REMOVE
-Const c_sModuleFileName As String = "C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\frmTaxlotAssignment.frm"
+Option Explicit
+'******************************
+' Global/Public Definitions
+'------------------------------
+' Public API Declarations
+'------------------------------
+
+'------------------------------
+' Public Enums and Constants
+'------------------------------
+
+'------------------------------
+' Public variables
+'------------------------------
+
+'------------------------------
+' Public Types
+'------------------------------
+
+'------------------------------
+' Public loop variables
+'------------------------------
+
+'******************************
+' Private Definitions
+'------------------------------
+' Private API declarations
+'------------------------------
+
+'------------------------------
+' Private Variables
+'------------------------------
 Private m_ParentHWND As Long          ' Set this to get correct parenting of Error handler forms
 Private m_pApp As IApplication
 Private m_pMxDoc As IMxDocument
 
+'------------------------------
+'Private Constants and Enums
+'------------------------------
+' Variables used by the Error handler function - DO NOT REMOVE
+Private Const c_sModuleFileName As String = "frmTaxlotAssignment.frm"
+
+'------------------------------
+' Private Types
+'------------------------------
+
+'------------------------------
+' Private loop variables
+'------------------------------
+
 Private Sub cmbTaxlotNum_Click()
     'If one of the generic taxlot numbers is chosen, disable the taxlot textbox
-11:     If Me.cmbTaxlotNum.Text <> "NUMBER" Then
-12:         Me.txtTaxlotNum.Enabled = False
-13:         Me.txtTaxlotNum.Text = ""
-14:     Else
-15:         Me.txtTaxlotNum.Enabled = True
-16:     End If
+    '++  JWM 10/11/2006 using strcomp function
+    If StrComp(Me.cmbTaxlotNum.Text, "NUMBER", vbTextCompare) <> 0 Then
+        Me.txtTaxlotNum.Enabled = False
+        Me.txtTaxlotNum.Text = ""
+    Else
+        Me.txtTaxlotNum.Enabled = True
+    End If
 End Sub
 
 Private Sub cmdAssign_Click()
   On Error GoTo ErrorHandler
   'Must be a number that is 5 characters long
-22:   If Me.cmbTaxlotNum.Text = "NUMBER" Then
-23:     If Not IsNumeric(Me.txtTaxlotNum.Text) Then
-24:       MsgBox "Invalid Start Value.  Please enter a valid number", vbOKOnly, "Error"
-25:       Me.txtTaxlotNum.SetFocus
+'++  JWM 10/11/2006 using strcomp function
+  If StrComp(Me.cmbTaxlotNum.Text, "NUMBER", vbTextCompare) = 0 Then
+    If Not IsNumeric(Me.txtTaxlotNum.Text) Then
+      MsgBox "Invalid Start Value.  Please enter a valid number", vbOKOnly, "Error"
+      Me.txtTaxlotNum.SetFocus
       Exit Sub
-27:     End If
-28:   End If
+    End If
+  End If
 
-30:   Me.Hide
+  Me.Hide
   
   Exit Sub
 ErrorHandler:
@@ -242,39 +317,40 @@ Private Sub cmdHelp_Click()
     'Open a custom help file in Internet Explorer
     'Requires a file called help.htm in the same dir as the application dll
     Dim sFilePath As String
-43:     sFilePath = app.Path & "\" & "Assignment_help.rtf"
-44:     If modUtils.FileExists(sFilePath) Then
-45:         If FileExists("C:\Program Files\Windows NT\Accessories\wordpad.exe") Then
-46:             Shell "C:\Program Files\Windows NT\Accessories\wordpad.exe " & sFilePath, 1
-47:         End If
-48:     Else
-49:         MsgBox "No help available"
-50:     End If
+    sFilePath = app.Path & "\" & "Assignment_help.rtf"
+    If modUtils.FileExists(sFilePath) Then
+    Debug.Assert True 'need a better way to open files
+        If FileExists("C:\Program Files\Windows NT\Accessories\wordpad.exe") Then
+            Shell "C:\Program Files\Windows NT\Accessories\wordpad.exe " & sFilePath, 1
+        End If
+    Else
+        MsgBox "No help available"
+    End If
 End Sub
 
 Private Sub cmdQuit_Click()
-54:     Me.Hide
+    Me.Hide
 End Sub
 
 Private Sub Form_Load()
   On Error GoTo ErrorHandler
     'Populate drop down combobox and set default settings
-60:     Set m_pApp = modUtils.GetAppRef    'New AppRef
-61:     Set m_pMxDoc = m_pApp.Document
+    Set m_pApp = modUtils.GetAppRef    'New AppRef
+    Set m_pMxDoc = m_pApp.Document
     'Populate with preset values
-63:     cmbTaxlotNum.AddItem "NUMBER"
-64:     cmbTaxlotNum.AddItem "0ROAD"
-65:     cmbTaxlotNum.AddItem "WATER"
-66:     cmbTaxlotNum.AddItem "0RLRD"
-67:     cmbTaxlotNum.AddItem "00GAP"
-68:     cmbTaxlotNum.AddItem "00LAP"
-69:     cmbTaxlotNum.Text = "NUMBER" 'By default
+    cmbTaxlotNum.AddItem "NUMBER"
+    cmbTaxlotNum.AddItem "0ROAD"
+    cmbTaxlotNum.AddItem "WATER"
+    cmbTaxlotNum.AddItem "0RLRD"
+    cmbTaxlotNum.AddItem "00GAP"
+    cmbTaxlotNum.AddItem "00LAP"
+    cmbTaxlotNum.Text = "NUMBER" 'By default
     
-71:     tglAutoYes.Value = False
-72:     tglAutoNo.Value = True
-73:     tglBy1.Value = False
-74:     tglBy10.Value = False
-75:     tglBy100.Value = True
+    tglAutoYes.Value = False
+    tglAutoNo.Value = True
+    tglBy1.Value = False
+    tglBy10.Value = False
+    tglBy100.Value = True
     
     
 
@@ -286,7 +362,7 @@ End Sub
 Private Sub tglAutoNo_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
   On Error GoTo ErrorHandler
 
-87:     tglAutoYes.Value = False
+    tglAutoYes.Value = False
 
   Exit Sub
 ErrorHandler:
@@ -296,7 +372,7 @@ End Sub
 Private Sub tglAutoYes_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
   On Error GoTo ErrorHandler
 
-97:     tglAutoNo.Value = False
+    tglAutoNo.Value = False
 
   Exit Sub
 ErrorHandler:
@@ -306,8 +382,8 @@ End Sub
 Private Sub tglBy1_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
   On Error GoTo ErrorHandler
 
-107:     tglBy10.Value = False
-108:     tglBy100.Value = False
+    tglBy10.Value = False
+    tglBy100.Value = False
 
   Exit Sub
 ErrorHandler:
@@ -318,8 +394,8 @@ End Sub
 Private Sub tglBy10_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
   On Error GoTo ErrorHandler
 
-119:     tglBy1.Value = False
-120:     tglBy100.Value = False
+    tglBy1.Value = False
+    tglBy100.Value = False
 
   Exit Sub
 ErrorHandler:
@@ -329,8 +405,8 @@ End Sub
 Private Sub tglBy100_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
   On Error GoTo ErrorHandler
 
-130:     tglBy1.Value = False
-131:     tglBy10.Value = False
+    tglBy1.Value = False
+    tglBy10.Value = False
 
   Exit Sub
 ErrorHandler:

@@ -11,61 +11,133 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-'CLASS MODULE FOR TAXLOTCOMBINE COMMAND
-'OPENS frmCombine
-Implements ICommand
+'
+' File name:            cmdTaxlotCombine
+'
+' Initial Author:       Type your name here
+'
+' Date Created:     10/11/2006
+'
+' Description: CLASS MODULE FOR TAXLOTCOMBINE COMMAND
+'               OPENS frmCombine
+'
+'
+' Entry points:
+'       List the public variables and their purposes.
+'       List the properties and routines that the module exposes to the rest of the program.
+'
+' Dependencies:
+'       How does this file depend or relate to other files?
+'
+' Issues:
+'       What are unsolved bugs, bottlenecks,
+'       possible future enhancements, and
+'       descriptions of other issues.
+'
+' Method:
+'       Describe any complex details that make sense on the file level.  This includes explanations
+'       of complex algorithms, how different routines within the module interact, and a description
+'       of a data structure used in the module.
+'
+' Updates:
+'               None
 
+Option Explicit
+'******************************
+' Global/Public Definitions
+'------------------------------
+' Public API Declarations
+'------------------------------
+
+'------------------------------
+' Public Enums and Constants
+'------------------------------
+
+'------------------------------
+' Public variables
+'------------------------------
+
+'------------------------------
+' Public Types
+'------------------------------
+
+'------------------------------
+' Public loop variables
+'------------------------------
+
+'******************************
+' Private Definitions
+'------------------------------
+' Private API declarations
+'------------------------------
+
+'------------------------------
+' Private Variables
+'------------------------------
 Private m_pApp As esriFramework.IApplication
 Private m_pDoc As esriArcMapUI.IMxDocument
 Private m_pMap As IMap
 Private m_pExt As IExtensionConfig
 Private m_bEnabled As Boolean
-' Variables used by the Error handler function - DO NOT REMOVE
-Const c_sModuleFileName As String = "C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\cmdTaxlotCombine.cls"
+'------------------------------
+'Private Constants and Enums
+'------------------------------
+Private Const c_sModuleFileName As String = "cmdTaxlotCombine.cls" ' Variables used by the Error handler function - DO NOT REMOVE
 
- 
+'------------------------------
+' Private Types
+'------------------------------
+
+'------------------------------
+' Private loop variables
+'------------------------------
+
+
+Implements ICommand
+
+
 Private Property Get ICommand_Enabled() As Boolean
   On Error GoTo ErrorHandler
 
     'Enable if editing and at least two taxlots selected
-18:     m_bEnabled = False
-19:     Set m_pDoc = m_pApp.Document
-20:     Set m_pMap = m_pDoc.FocusMap
+    m_bEnabled = False
+    Set m_pDoc = m_pApp.Document
+    Set m_pMap = m_pDoc.FocusMap
     'This is called before the mxd is open, so need to check if any layers present
-22:     If m_pMap.LayerCount > 0 Then
+    If m_pMap.LayerCount > 0 Then
         Dim pWorkspaceEdit As IWorkspaceEdit
         Dim pFeatureLayer As IFeatureLayer
         Dim pDataset As IDataset
-26:         Set pFeatureLayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
-27:         If pFeatureLayer Is Nothing Then
-28:             m_bEnabled = False
-            Exit Property
-30:         End If
-31:         Set pDataset = pFeatureLayer.FeatureClass
-        If pDataset Is Nothing Then Exit Property
-33:         Set pWorkspaceEdit = pDataset.Workspace
-34:         If pWorkspaceEdit.IsBeingEdited Then 'Check if being edited
+        Set pFeatureLayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
+        If pFeatureLayer Is Nothing Then
+            m_bEnabled = False
+            GoTo Process_Exit
+        End If
+        Set pDataset = pFeatureLayer.FeatureClass
+        If pDataset Is Nothing Then GoTo Process_Exit
+        Set pWorkspaceEdit = pDataset.Workspace
+        If pWorkspaceEdit.IsBeingEdited Then 'Check if being edited
             Dim pFeatCur As IFeatureCursor
-36:             Set pFeatCur = modUtils.GetSelectedFeatures(pFeatureLayer) 'Make sure more than one selected
-37:             If Not pFeatCur Is Nothing Then
+            Set pFeatCur = modUtils.GetSelectedFeatures(pFeatureLayer) 'Make sure more than one selected
+            If Not pFeatCur Is Nothing Then
                 Dim pFeat As IFeature
-39:                 Set pFeat = pFeatCur.NextFeature 'first feature
-40:                 If Not pFeat Is Nothing Then
-41:                     Set pFeat = pFeatCur.NextFeature 'second feature
-42:                     If Not pFeat Is Nothing Then
-43:                         m_bEnabled = True
-44:                     End If
-45:                 End If
-46:             End If
-47:         End If
-48:     End If
+                Set pFeat = pFeatCur.NextFeature 'first feature
+                If Not pFeat Is Nothing Then
+                    Set pFeat = pFeatCur.NextFeature 'second feature
+                    If Not pFeat Is Nothing Then
+                        m_bEnabled = True
+                    End If
+                End If
+            End If
+        End If
+    End If
     
     'If conditions are met, enable the command
-51:     If m_bEnabled = True Then
-52:         ICommand_Enabled = True
-53:     End If
+    If m_bEnabled = True Then
+        ICommand_Enabled = True
+    End If
     
-
+Process_Exit:
   Exit Property
 ErrorHandler:
   HandleError True, "ICommand_Enabled " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
@@ -75,7 +147,7 @@ Private Property Get ICommand_Checked() As Boolean
   On Error GoTo ErrorHandler
 
 
-65:      ICommand_Checked = False
+     ICommand_Checked = False
     
 
   Exit Property
@@ -87,7 +159,7 @@ Private Property Get ICommand_Name() As String
   On Error GoTo ErrorHandler
 
 
-77:      ICommand_Name = "Combine"
+     ICommand_Name = "Combine"
     
 
   Exit Property
@@ -99,7 +171,7 @@ Private Property Get ICommand_Caption() As String
   On Error GoTo ErrorHandler
 
 
-89:      ICommand_Caption = "Combine Selected Taxlots"
+     ICommand_Caption = "Combine Selected Taxlots"
     
 
   Exit Property
@@ -111,7 +183,7 @@ Private Property Get ICommand_Tooltip() As String
   On Error GoTo ErrorHandler
 
 
-101:      ICommand_Tooltip = "Taxlot Consolidation Tool"
+     ICommand_Tooltip = "Taxlot Consolidation Tool"
     
 
   Exit Property
@@ -175,7 +247,7 @@ Private Property Get ICommand_Category() As String
   On Error GoTo ErrorHandler
 
 
-165:      ICommand_Category = "ORMAP"
+     ICommand_Category = "ORMAP"
     
 
   Exit Property
@@ -187,12 +259,12 @@ Private Sub ICommand_OnCreate(ByVal hook As Object)
   On Error GoTo ErrorHandler
 
     
-177:   Set m_pApp = hook
-178:   If g_pApp Is Nothing Then
-179:     Set g_pApp = hook
-180:   End If
-181:   Set m_pDoc = m_pApp.Document
-182:   Set m_pMap = m_pDoc.FocusMap
+  Set m_pApp = hook
+  If g_pApp Is Nothing Then
+    Set g_pApp = hook
+  End If
+  Set m_pDoc = m_pApp.Document
+  Set m_pMap = m_pDoc.FocusMap
 
 
   Exit Sub
@@ -204,7 +276,7 @@ Private Sub ICommand_OnClick()
   On Error GoTo ErrorHandler
 
     
-194:     frmCombine.Show vbModal
+    frmCombine.Show vbModal
     
 
   Exit Sub

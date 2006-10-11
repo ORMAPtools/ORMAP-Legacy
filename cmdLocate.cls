@@ -25,31 +25,31 @@ Private m_pExt As IExtensionConfig
  
 Private Property Get ICommand_Enabled() As Boolean
 
-15:     ICommand_Enabled = True
+    ICommand_Enabled = True
     
 End Property
  
 Private Property Get ICommand_Checked() As Boolean
 
-21:     ICommand_Checked = False
+    ICommand_Checked = False
     
 End Property
  
 Private Property Get ICommand_Name() As String
 
-27:      ICommand_Name = "Locate"
+     ICommand_Name = "Locate"
     
 End Property
  
 Private Property Get ICommand_Caption() As String
 
-33:      ICommand_Caption = "Locate"
+     ICommand_Caption = "Locate"
     
 End Property
  
 Private Property Get ICommand_Tooltip() As String
 
-39:      ICommand_Tooltip = "Locate Tool"
+     ICommand_Tooltip = "Locate Tool"
     
 End Property
  
@@ -83,36 +83,36 @@ End Property
  
 Private Property Get ICommand_Category() As String
 
-73:      ICommand_Category = "ORMAP"
+     ICommand_Category = "ORMAP"
     
 End Property
  
 Private Sub ICommand_OnCreate(ByVal hook As Object)
-78:   Set m_pApp = hook
-79:   If g_pApp Is Nothing Then
-80:     Set g_pApp = hook
-81:   End If
-82:   Set m_pDoc = m_pApp.Document
-83:   Set m_pMap = m_pDoc.FocusMap
+  Set m_pApp = hook
+  If g_pApp Is Nothing Then
+    Set g_pApp = hook
+  End If
+  Set m_pDoc = m_pApp.Document
+  Set m_pMap = m_pDoc.FocusMap
 
 End Sub
  
 Private Sub ICommand_OnClick()
 
     'Get the MapIndex and taxlot feature layers
-90:     Set m_pTaxlotFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
-91:     If m_pTaxlotFlayer Is Nothing Then
-92:         MsgBox "Unable to locate Taxlot layer in Table of Contents.  " & _
+    Set m_pTaxlotFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
+    If m_pTaxlotFlayer Is Nothing Then
+        MsgBox "Unable to locate Taxlot layer in Table of Contents.  " & _
         "This process requires a feature class called " & g_pFldnames.FCTaxlot
         Exit Sub
-95:     End If
-96:     Set m_pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-97:     If m_pMIFlayer Is Nothing Then
-98:         MsgBox "Unable to locate Map Index layer in Table of Contents.  " & _
+    End If
+    Set m_pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+    If m_pMIFlayer Is Nothing Then
+        MsgBox "Unable to locate Map Index layer in Table of Contents.  " & _
         "This process requires a feature class called " & g_pFldnames.FCMapIndex
         Exit Sub
-101:     End If
+    End If
     'Initialize the Locate form
-103:     frmLocate.Show vbModal
+    frmLocate.Show vbModal
     
 End Sub

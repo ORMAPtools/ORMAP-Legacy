@@ -109,37 +109,110 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'FORM USED TO GENERATE HOOKS AND ARROWS
+'
+' File name:            frmArrows
+'
+' Initial Author:       Type your name here
+'
+' Date Created:     10/11/2006
+'
+' Description:  FORM USED TO GENERATE HOOKS AND ARROWS
+'
+'
+' Entry points:
+'       List the public variables and their purposes.
+'       List the properties and routines that the module exposes to the rest of the program.
+'
+' Dependencies:
+'       How does this file depend or relate to other files?
+'
+' Issues:
+'       What are unsolved bugs, bottlenecks,
+'       possible future enhancements, and
+'       descriptions of other issues.
+'
+' Method:
+'       Describe any complex details that make sense on the file level.  This includes explanations
+'       of complex algorithms, how different routines within the module interact, and a description
+'       of a data structure used in the module.
+'
+' Updates:
+'               None
+
+Option Explicit
+'******************************
+' Global/Public Definitions
+'------------------------------
+' Public API Declarations
+'------------------------------
+
+'------------------------------
+' Public Enums and Constants
+'------------------------------
+
+'------------------------------
+' Public variables
+'------------------------------
+
+'------------------------------
+' Public Types
+'------------------------------
+
+'------------------------------
+' Public loop variables
+'------------------------------
+
+'******************************
+' Private Definitions
+'------------------------------
+' Private API declarations
+'------------------------------
+
+'------------------------------
+' Private Variables
+'------------------------------
 Private m_pApp As IApplication
 Private m_pMxDoc As IMxDocument
+'------------------------------
+'Private Constants and Enums
+'------------------------------
+
+'------------------------------
+' Private Types
+'------------------------------
+
+'------------------------------
+' Private loop variables
+'------------------------------
 
 Private Sub cmdArrow_Click()
-6:     Me.lblCurrentTool.Caption = "arrow"
-7:     Me.Hide
+    Me.lblCurrentTool.Caption = "arrow"
+    Me.Hide
 End Sub
 
 Private Sub cmdDimension_Click()
-11:     Me.lblCurrentTool.Caption = "dimension"
-12:     Me.Hide
+    Me.lblCurrentTool.Caption = "dimension"
+    Me.Hide
 End Sub
 
 Private Sub cmdHelp_Click()
     'Open a custom help file in Internet Explorer
     'Requires a file called help.htm in the same dir as the application dll
     Dim sFilePath As String
-19:     sFilePath = app.Path & "\" & "Arrows_help.rtf"
-20:     If modUtils.FileExists(sFilePath) Then
-21:         If FileExists("C:\Program Files\Windows NT\Accessories\wordpad.exe") Then
-22:             Shell "C:\Program Files\Windows NT\Accessories\wordpad.exe " & sFilePath, 1
-23:         End If
-24:     Else
-25:         MsgBox "No help available"
-26:     End If
+    sFilePath = app.Path & "\" & "Arrows_help.rtf"
+    If modUtils.FileExists(sFilePath) Then
+    Debug.Assert True ' need a different way to open the help file
+        If FileExists("C:\Program Files\Windows NT\Accessories\wordpad.exe") Then
+            Shell "C:\Program Files\Windows NT\Accessories\wordpad.exe " & sFilePath, 1
+        End If
+    Else
+        MsgBox "No help available"
+    End If
 End Sub
 
 Private Sub cmdHook_Click()
-30:     Me.lblCurrentTool.Caption = "hook"
-31:     Me.Hide
+    Me.lblCurrentTool.Caption = "hook"
+    Me.Hide
     
 End Sub
 
