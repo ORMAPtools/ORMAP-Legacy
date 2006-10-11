@@ -11,10 +11,69 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-'CLASS MODULE FOR MAPINDEX COMMAND
-'OPENS frmMapIndex
-Implements ICommand
+'
+' File name:            cmdMapIndex
+'
+' Initial Author:       Type your name here
+'
+' Date Created:
+'
+' Description: CLASS MODULE FOR MAPINDEX COMMAND
+'
+'
+'
+' Entry points:
+'       List the public variables and their purposes.
+'       List the properties and routines that the module exposes to the rest of the program.
+'
+' Dependencies: OPENS frmMapIndex
+'       How does this file depend or relate to other files?
+'
+' Issues:
+'       What are unsolved bugs, bottlenecks,
+'       possible future enhancements, and
+'       descriptions of other issues.
+'
+' Method:
+'       Describe any complex details that make sense on the file level.  This includes explanations
+'       of complex algorithms, how different routines within the module interact, and a description
+'       of a data structure used in the module.
+'
+' Updates:
+'               None
 
+Option Explicit
+'******************************
+' Global/Public Definitions
+'------------------------------
+' Public API Declarations
+'------------------------------
+
+'------------------------------
+' Public Enums and Constants
+'------------------------------
+
+'------------------------------
+' Public variables
+'------------------------------
+
+'------------------------------
+' Public Types
+'------------------------------
+
+'------------------------------
+' Public loop variables
+'------------------------------
+
+'******************************
+' Private Definitions
+'------------------------------
+' Private API declarations
+'------------------------------
+
+'------------------------------
+' Private Variables
+'------------------------------
 Private m_pApp As esriFramework.IApplication
 Private m_pDoc As esriArcMapUI.IMxDocument
 Private m_pMap As IMap
@@ -23,14 +82,28 @@ Private m_bEnabled As Boolean
 Private WithEvents m_pEditorEvents As Editor
 Attribute m_pEditorEvents.VB_VarHelpID = -1
 Private m_pEditor As IEditor2
-Const c_sModuleFileName As String = "C:\active\ModelingWorkshop_01-05-05\CustomCode\ormap\clsMapIndex.cls"
 Private m_ParentHWND As Long          ' Set this to get correct parenting of Error handler forms
+'------------------------------
+'Private Constants and Enums
+'------------------------------
+Const c_sModuleFileName As String = "clsMapIndex.cls"
+
+'------------------------------
+' Private Types
+'------------------------------
+
+'------------------------------
+' Private loop variables
+'------------------------------
+
+'implements
+Implements ICommand
 
  
 Private Sub Class_Initialize()
   On Error GoTo ErrorHandler
 
-19:     m_bEnabled = False
+    m_bEnabled = False
 
   Exit Sub
 ErrorHandler:
@@ -40,9 +113,10 @@ End Sub
 Private Sub Class_Terminate()
   On Error GoTo ErrorHandler
 
-29:     Set m_pEditorEvents = Nothing
-30:     Set m_pEditor = Nothing
-
+    Set m_pEditorEvents = Nothing
+    Set m_pEditor = Nothing
+    Set g_pApp = Nothing
+    Set g_pFldnames = Nothing
   Exit Sub
 ErrorHandler:
   HandleError True, "Class_Terminate " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 1, m_ParentHWND
@@ -52,7 +126,7 @@ Private Property Get ICommand_Enabled() As Boolean
   On Error GoTo ErrorHandler
 
 
-41:      ICommand_Enabled = m_bEnabled
+     ICommand_Enabled = m_bEnabled
     
 
   Exit Property
@@ -64,7 +138,7 @@ Private Property Get ICommand_Checked() As Boolean
   On Error GoTo ErrorHandler
 
     
-53:      ICommand_Checked = False
+     ICommand_Checked = False
     
 
   Exit Property
@@ -76,7 +150,7 @@ Private Property Get ICommand_Name() As String
   On Error GoTo ErrorHandler
 
     
-65:      ICommand_Name = "MapIndex"
+     ICommand_Name = "MapIndex"
     
 
   Exit Property
@@ -88,7 +162,7 @@ Private Property Get ICommand_Caption() As String
   On Error GoTo ErrorHandler
 
     
-77:      ICommand_Caption = "Map Index"
+     ICommand_Caption = "Map Index"
     
 
   Exit Property
@@ -100,7 +174,7 @@ Private Property Get ICommand_Tooltip() As String
   On Error GoTo ErrorHandler
 
     
-89:      ICommand_Tooltip = "Map Index Tool"
+     ICommand_Tooltip = "Map Index Tool"
     
 
   Exit Property
@@ -112,7 +186,7 @@ Private Property Get ICommand_Message() As String
   On Error GoTo ErrorHandler
 
     
-101:      ICommand_Message = ""
+     ICommand_Message = ""
     
 
   Exit Property
@@ -124,7 +198,7 @@ Private Property Get ICommand_HelpFile() As String
   On Error GoTo ErrorHandler
 
     
-113:      ICommand_HelpFile = ""
+     ICommand_HelpFile = ""
     
 
   Exit Property
@@ -162,7 +236,7 @@ Private Property Get ICommand_Category() As String
   On Error GoTo ErrorHandler
 
     
-151:      ICommand_Category = "ORMAP"
+     ICommand_Category = "ORMAP"
     
 
   Exit Property
@@ -174,18 +248,18 @@ Private Sub ICommand_OnCreate(ByVal hook As Object)
   On Error GoTo ErrorHandler
 
     
-163:   Set m_pApp = hook
-164:   If g_pApp Is Nothing Then
-165:     Set g_pApp = hook
-166:   End If
-167:   Set m_pDoc = m_pApp.Document
-168:   Set m_pMap = m_pDoc.FocusMap
+  Set m_pApp = hook
+  If g_pApp Is Nothing Then
+    Set g_pApp = hook
+  End If
+  Set m_pDoc = m_pApp.Document
+  Set m_pMap = m_pDoc.FocusMap
 
   'Get a reference to the editor extension
   Dim pID As New UID
-172:   pID = "esriCore.Editor"
-173:   Set m_pEditor = m_pApp.FindExtensionByCLSID(pID)
-174:   Set m_pEditorEvents = m_pEditor
+  pID = "esriCore.Editor"
+  Set m_pEditor = m_pApp.FindExtensionByCLSID(pID)
+  Set m_pEditorEvents = m_pEditor
     
 
   Exit Sub
@@ -196,9 +270,9 @@ End Sub
 Private Sub ICommand_OnClick()
   On Error GoTo ErrorHandler
 
-185:     If frmMapIndex.InitForm Then
-186:         frmMapIndex.Show vbModal
-187:     End If
+    If frmMapIndex.InitForm Then
+        frmMapIndex.Show vbModal
+    End If
     
 
   Exit Sub
@@ -211,16 +285,16 @@ Private Sub m_pEditorEvents_OnSelectionChanged()
     'Determine if MapIndex command should be enabled
     Dim pMIFlayer As IFeatureLayer2
     Dim pMIFclass As IFeatureClass
-200:     Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-201:     If pMIFlayer Is Nothing Then
-202:         m_bEnabled = False
+    Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+    If pMIFlayer Is Nothing Then
+        m_bEnabled = False
         Exit Sub
-204:     End If
-205:     If modUtils.HasSelectedFeatures(pMIFlayer) Then
-206:         m_bEnabled = True
-207:     Else
-208:         m_bEnabled = False
-209:     End If
+    End If
+    If modUtils.HasSelectedFeatures(pMIFlayer) Then
+        m_bEnabled = True
+    Else
+        m_bEnabled = False
+    End If
 
   Exit Sub
 ErrorHandler:
