@@ -11,12 +11,87 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-'CLASS FOR THE TAXLOTEDITING TOOLBAR
+'
+' File name:            clsTaxLotEditingToolbar
+'
+' Initial Author:       Type your name here
+'
+' Date Created:     10/11/2006
+'
+' Description: CLASS FOR THE TAXLOTEDITING TOOLBAR
+'
+'
+' Entry points:
+'       List the public variables and their purposes.
+'       List the properties and routines that the module exposes to the rest of the program.
+'
+' Dependencies:
+'       How does this file depend or relate to other files?
+'
+' Issues:
+'       What are unsolved bugs, bottlenecks,
+'       possible future enhancements, and
+'       descriptions of other issues.
+'
+' Method:
+'       Describe any complex details that make sense on the file level.  This includes explanations
+'       of complex algorithms, how different routines within the module interact, and a description
+'       of a data structure used in the module.
+'
+' Updates:
+'++  JWM 10/11/2006 added this file header
+
+Option Explicit
+'******************************
+' Global/Public Definitions
+'------------------------------
+' Public API Declarations
+'------------------------------
+
+'------------------------------
+' Public Enums and Constants
+'------------------------------
+
+'------------------------------
+' Public variables
+'------------------------------
+
+'------------------------------
+' Public Types
+'------------------------------
+
+'------------------------------
+' Public loop variables
+'------------------------------
+
+'******************************
+' Private Definitions
+'------------------------------
+' Private API declarations
+'------------------------------
+
+'------------------------------
+' Private Variables
+'------------------------------
+
+'------------------------------
+'Private Constants and Enums
+'------------------------------
+
+'------------------------------
+' Private Types
+'------------------------------
+
+'------------------------------
+' Private loop variables
+'------------------------------
+
+
 Implements IToolBarDef
  
 Private Property Get IToolBarDef_ItemCount() As Long
 
-6:     IToolBarDef_ItemCount = 5
+    IToolBarDef_ItemCount = 5
     
 End Property
  
@@ -25,27 +100,27 @@ Private Sub IToolBarDef_GetItemInfo(ByVal pos As Long, ByVal itemDef As esriSyst
   Select Case pos
     Case 0
       'itemDef.Group = True
-15:       itemDef.ID = "TaxlotEditing.cmdTaxlotAssignment"
+      itemDef.ID = "TaxlotEditing.cmdTaxlotAssignment"
     Case 1
-17:       itemDef.ID = "TaxlotEditing.cmdLocate"
+      itemDef.ID = "TaxlotEditing.cmdLocate"
     Case 2
-19:       itemDef.ID = "TaxlotEditing.cmdTaxlotCombine"
+      itemDef.ID = "TaxlotEditing.cmdTaxlotCombine"
     Case 3
-21:       itemDef.ID = "TaxlotEditing.cmdArrows"
+      itemDef.ID = "TaxlotEditing.cmdArrows"
     Case 4
-23:       itemDef.ID = "TaxlotEditing.cmdMapIndex"
-24:   End Select
+      itemDef.ID = "TaxlotEditing.cmdMapIndex"
+  End Select
     
 End Sub
  
 Private Property Get IToolBarDef_Name() As String
     
-30:     IToolBarDef_Name = "ORMAP Taxlot Editor"
+    IToolBarDef_Name = "ORMAP Taxlot Editor"
     
 End Property
  
 Private Property Get IToolBarDef_Caption() As String
 
-36:     IToolBarDef_Caption = "ORMAP Taxlot Editor"
+    IToolBarDef_Caption = "ORMAP Taxlot Editor"
     
 End Property

@@ -11,14 +11,71 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-'MODULE FOR STANDARDIZING REFERENCES TO TABLES, FEATURE CLASSES, AND FIELD NAMES
-'ANY NEW ADDITIONS WILL REQUIRE ENTRIES IN THE INI FILE AND THREE LOCATIONS WITHIN
-'THIS MODULE.
+'
+' File name:            clsFieldNames
+'
+' Initial Author:       Type your name here
+'
+' Date Created:
+'
+' Description: MODULE FOR STANDARDIZING REFERENCES TO TABLES, FEATURE CLASSES, AND FIELD NAMES
+'
+'
+'
+' Entry points:
+'       List the public variables and their purposes.
+'       List the properties and routines that the module exposes to the rest of the program.
+'
+' Dependencies:
+'       How does this file depend or relate to other files?
+'
+' Issues:
+'       What are unsolved bugs, bottlenecks,
+'       possible future enhancements, and
+'       descriptions of other issues.
+'
+' Method:
+'       ANY NEW ADDITIONS WILL REQUIRE ENTRIES IN THE INI FILE AND THREE LOCATIONS WITHIN THIS MODULE.
+'
+'       Describe any complex details that make sense on the file level.  This includes explanations
+'       of complex algorithms, how different routines within the module interact, and a description
+'       of a data structure used in the module.
+'
+' Updates:
+'++  JWM 10/11/2006 added this header file
 
 Option Explicit
+'******************************
+' Global/Public Definitions
+'------------------------------
+' Public API Declarations
+'------------------------------
 
-Private Const INIFILE As String = "ormap.ini"
-Private Const m_sSection As String = "GENERAL"
+'------------------------------
+' Public Enums and Constants
+'------------------------------
+
+'------------------------------
+' Public variables
+'------------------------------
+
+'------------------------------
+' Public Types
+'------------------------------
+
+'------------------------------
+' Public loop variables
+'------------------------------
+
+'******************************
+' Private Definitions
+'------------------------------
+' Private API declarations
+'------------------------------
+
+'------------------------------
+' Private Variables
+'------------------------------
 'MAPINDEX FIELDS
 Private m_sMICountyFN As String           'County Name
 Private m_sMIMapNumberFN As String
@@ -97,28 +154,61 @@ Private m_sDefTownDir As String
 Private m_sDefRangeDir As String
 Private m_sDefQtr As String
 Private m_sDefQtrQtr As String
+Private m_sDefAnomaly As String
+'++ New coded added 10/21/05
+'ANNO TEXT SIZES
+Private m_dAnnoSizeTLAcr120 As Double
+Private m_dAnnoSizeTLAcr240 As Double
+Private m_dAnnoSizeTLAcr360 As Double
+Private m_dAnnoSizeTLAcr480 As Double
+Private m_dAnnoSizeTLAcr600 As Double
+Private m_dAnnoSizeTLAcr1200 As Double
+Private m_dAnnoSizeTLAcr2400 As Double
+Private m_dAnnoSizeTLAcr4800 As Double
+Private m_dAnnoSizeTLAcr9600 As Double
+Private m_dAnnoSizeTLAcr24000 As Double
+Private m_dAnnoSizeTLNum120 As Double
+Private m_dAnnoSizeTLNum240 As Double
+Private m_dAnnoSizeTLNum360 As Double
+Private m_dAnnoSizeTLNum480 As Double
+Private m_dAnnoSizeTLNum600 As Double
+Private m_dAnnoSizeTLNum1200 As Double
+Private m_dAnnoSizeTLNum2400 As Double
+Private m_dAnnoSizeTLNum4800 As Double
+Private m_dAnnoSizeTLNum9600 As Double
+Private m_dAnnoSizeTLNum24000 As Double
+'++ End new code
+'------------------------------
+'Private Constants and Enums
+'------------------------------
+Private Const INIFILE As String = "ormap.ini"
+Private Const m_sSection As String = "GENERAL"
+'------------------------------
+' Private Types
+'------------------------------
 
-
-
+'------------------------------
+' Private loop variables
+'------------------------------
 
 Private Sub Class_Initialize()
 
-93:   If Not TestIniFile(app.Path & "\" & INIFILE) Then
-94:     MsgBox "Unable to open Inifile at " & app.Path & "\" & INIFILE, vbExclamation
+  If Not TestIniFile(app.Path & "\" & INIFILE) Then
+    MsgBox "Unable to open Inifile at " & app.Path & "\" & INIFILE, vbExclamation
     Exit Sub
-96:   End If
+  End If
   
   'Read ini file and set references to field names
   
   'MAPINDEX FIELDS
-101:   m_sMICountyFN = ReadIniFile(m_sSection, "MI_COUNTY")
-102:   m_sMIMapNumberFN = ReadIniFile(m_sSection, "MI_MAPNUMBER")
-103:   m_sMIORMAPMapNumberFN = ReadIniFile(m_sSection, "MI_ORMAP_MAPNUMBER")
-104:   m_sMIMapScaleFN = ReadIniFile(m_sSection, "MI_MAPSCALE")
-105:   m_sMIMapSuffTypeFN = ReadIniFile(m_sSection, "MI_MAPSUFFIXTYPE")
-106:   m_sMIMapSuffNumFN = ReadIniFile(m_sSection, "MI_MAPSUFFIXNUM")
-107:   m_sMIPageFN = ReadIniFile(m_sSection, "MI_PAGE")
-108:   m_sMIReliabFN = ReadIniFile(m_sSection, "MI_RELIABILITYCODE")
+  m_sMICountyFN = ReadIniFile(m_sSection, "MI_COUNTY")
+  m_sMIMapNumberFN = ReadIniFile(m_sSection, "MI_MAPNUMBER")
+  m_sMIORMAPMapNumberFN = ReadIniFile(m_sSection, "MI_ORMAP_MAPNUMBER")
+  m_sMIMapScaleFN = ReadIniFile(m_sSection, "MI_MAPSCALE")
+  m_sMIMapSuffTypeFN = ReadIniFile(m_sSection, "MI_MAPSUFFIXTYPE")
+  m_sMIMapSuffNumFN = ReadIniFile(m_sSection, "MI_MAPSUFFIXNUM")
+  m_sMIPageFN = ReadIniFile(m_sSection, "MI_PAGE")
+  m_sMIReliabFN = ReadIniFile(m_sSection, "MI_RELIABILITYCODE")
 
 
   'TAXCODE FIELDS
@@ -126,117 +216,141 @@ Private Sub Class_Initialize()
  'TAXCODE LINES Fields
   
   'TAXLOT FIELDS
-116:   m_sTLCountyFN = ReadIniFile(m_sSection, "TL_COUNTY")
-117:   m_sTLTownFN = ReadIniFile(m_sSection, "TL_TOWN")
-118:   m_sTLTownPartFN = ReadIniFile(m_sSection, "TL_TOWNPART")
-119:   m_sTLTownDirFN = ReadIniFile(m_sSection, "TL_TOWNDIR")
-120:   m_sTLRangeFN = ReadIniFile(m_sSection, "TL_RANGE")
-121:   m_sTLRangePartFN = ReadIniFile(m_sSection, "TL_RANGEPART")
-122:   m_sTLRangeDirFN = ReadIniFile(m_sSection, "TL_RANGEDIR")
-123:   m_sTLSectNumberFN = ReadIniFile(m_sSection, "TL_SECTNUMBER")
-124:   m_sTLQtrFN = ReadIniFile(m_sSection, "TL_QTR")
-125:   m_sTLQtrQtrFN = ReadIniFile(m_sSection, "TL_QTRQTR")
-126:   m_sTLMapNumberFN = ReadIniFile(m_sSection, "TL_MAPNUMBER")
-127:   m_sTLOrmapMapNumberFN = ReadIniFile(m_sSection, "TL_ORMAP_MAPNUMBER")
-128:   m_sTLOrmapTaxlotFN = ReadIniFile(m_sSection, "TL_ORMAP_TAXLOT")
-129:   m_sTLTaxlotFN = ReadIniFile(m_sSection, "TL_TAXLOT")
-130:   m_sTLMapTaxlotFN = ReadIniFile(m_sSection, "TL_MAP_TAXLOT")
-131:   m_sTLSpecInterestFN = ReadIniFile(m_sSection, "TL_SPEC_INTEREST")
-132:   m_sTLSufNumFN = ReadIniFile(m_sSection, "TL_MAP_SUF_NUM")
-133:   m_sTLSufTypeFN = ReadIniFile(m_sSection, "TL_MAP_SUF_TYPE")
-134:   m_sTLMapAcresFN = ReadIniFile(m_sSection, "TL_MAPACRES")
-135:   m_sTLAnomalyFN = ReadIniFile(m_sSection, "TL_ANOMALY")
+  m_sTLCountyFN = ReadIniFile(m_sSection, "TL_COUNTY")
+  m_sTLTownFN = ReadIniFile(m_sSection, "TL_TOWN")
+  m_sTLTownPartFN = ReadIniFile(m_sSection, "TL_TOWNPART")
+  m_sTLTownDirFN = ReadIniFile(m_sSection, "TL_TOWNDIR")
+  m_sTLRangeFN = ReadIniFile(m_sSection, "TL_RANGE")
+  m_sTLRangePartFN = ReadIniFile(m_sSection, "TL_RANGEPART")
+  m_sTLRangeDirFN = ReadIniFile(m_sSection, "TL_RANGEDIR")
+  m_sTLSectNumberFN = ReadIniFile(m_sSection, "TL_SECTNUMBER")
+  m_sTLQtrFN = ReadIniFile(m_sSection, "TL_QTR")
+  m_sTLQtrQtrFN = ReadIniFile(m_sSection, "TL_QTRQTR")
+  m_sTLMapNumberFN = ReadIniFile(m_sSection, "TL_MAPNUMBER")
+  m_sTLOrmapMapNumberFN = ReadIniFile(m_sSection, "TL_ORMAP_MAPNUMBER")
+  m_sTLOrmapTaxlotFN = ReadIniFile(m_sSection, "TL_ORMAP_TAXLOT")
+  m_sTLTaxlotFN = ReadIniFile(m_sSection, "TL_TAXLOT")
+  m_sTLMapTaxlotFN = ReadIniFile(m_sSection, "TL_MAP_TAXLOT")
+  m_sTLSpecInterestFN = ReadIniFile(m_sSection, "TL_SPEC_INTEREST")
+  m_sTLSufNumFN = ReadIniFile(m_sSection, "TL_MAP_SUF_NUM")
+  m_sTLSufTypeFN = ReadIniFile(m_sSection, "TL_MAP_SUF_TYPE")
+  m_sTLMapAcresFN = ReadIniFile(m_sSection, "TL_MAPACRES")
+  m_sTLAnomalyFN = ReadIniFile(m_sSection, "TL_ANOMALY")
 
 
   'TAXLOT LINES FIELDS
-139:   m_sTLLinesLineTypeFN = ReadIniFile(m_sSection, "TLLINES_LINETYPE")
+  m_sTLLinesLineTypeFN = ReadIniFile(m_sSection, "TLLINES_LINETYPE")
   
   'CARTOGRAPHIC LINES FIELDS
-142:   m_sCLinesLineTypeFN = ReadIniFile(m_sSection, "CARTOLINES_LINETYPE")
+  m_sCLinesLineTypeFN = ReadIniFile(m_sSection, "CARTOLINES_LINETYPE")
 
 
   'TAXLOT POINTS FIELDS
   
   'FIELDS PRESENT IN ALL TABLES
-148:   m_sAutoDateFN = ReadIniFile(m_sSection, "AUTO_DATE")
-149:   m_sAutoMethodFN = ReadIniFile(m_sSection, "AUTO_METHOD")
-150:   m_sAutoWhoFN = ReadIniFile(m_sSection, "AUTO_WHO")
+  m_sAutoDateFN = ReadIniFile(m_sSection, "AUTO_DATE")
+  m_sAutoMethodFN = ReadIniFile(m_sSection, "AUTO_METHOD")
+  m_sAutoWhoFN = ReadIniFile(m_sSection, "AUTO_WHO")
   'TABLE NAMES
-152:   m_sFCMapIndex = ReadIniFile(m_sSection, "FC_MAPINDEX")
-153:   m_sFCTaxCode = ReadIniFile(m_sSection, "FC_TAXCODE")
-154:   m_sFCTaxlot = ReadIniFile(m_sSection, "FC_TAXLOT")
-155:   m_sFCTaxlotLines = ReadIniFile(m_sSection, "FC_TAXLOTLINES")
-156:   m_sFCPlats = ReadIniFile(m_sSection, "FC_PLATS")
-157:   m_sFCCartoLines = ReadIniFile(m_sSection, "FC_CARTOLINES")
-158:   m_sFCReferenceLines = ReadIniFile(m_sSection, "FC_REFERENCELINES")
-159:   m_sFCTaxCodeAnno = ReadIniFile(m_sSection, "FC_TAXCODEANNO")
-160:   m_sFCLotsAnno = ReadIniFile(m_sSection, "FC_LOTSANNO")
-161:   m_sFCTLAcrAnno = ReadIniFile(m_sSection, "FC_TAXLOTACREAGEANNO")
-162:   m_sFCTLNumAnno = ReadIniFile(m_sSection, "FC_TAXLOTNUMBERANNO")
-163:   m_sFCAnno10 = ReadIniFile(m_sSection, "FC_ANNO0010")
-164:   m_sFCAnno20 = ReadIniFile(m_sSection, "FC_ANNO0020")
-165:   m_sFCAnno30 = ReadIniFile(m_sSection, "FC_ANNO0030")
-166:   m_sFCAnno40 = ReadIniFile(m_sSection, "FC_ANNO0040")
-167:   m_sFCAnno50 = ReadIniFile(m_sSection, "FC_ANNO0050")
-168:   m_sFCAnno100 = ReadIniFile(m_sSection, "FC_ANNO0100")
-169:   m_sFCAnno200 = ReadIniFile(m_sSection, "FC_ANNO0200")
-170:   m_sFCAnno400 = ReadIniFile(m_sSection, "FC_ANNO0400")
-171:   m_sFCAnno800 = ReadIniFile(m_sSection, "FC_ANNO0800")
-172:   m_sFCAnno2000 = ReadIniFile(m_sSection, "FC_ANNO2000")
-173:   m_sTabCancelled = ReadIniFile(m_sSection, "TAB_Cancelled")
+  m_sFCMapIndex = ReadIniFile(m_sSection, "FC_MAPINDEX")
+  m_sFCTaxCode = ReadIniFile(m_sSection, "FC_TAXCODE")
+  m_sFCTaxlot = ReadIniFile(m_sSection, "FC_TAXLOT")
+  m_sFCTaxlotLines = ReadIniFile(m_sSection, "FC_TAXLOTLINES")
+  m_sFCPlats = ReadIniFile(m_sSection, "FC_PLATS")
+  m_sFCCartoLines = ReadIniFile(m_sSection, "FC_CARTOLINES")
+  m_sFCReferenceLines = ReadIniFile(m_sSection, "FC_REFERENCELINES")
+  m_sFCTaxCodeAnno = ReadIniFile(m_sSection, "FC_TAXCODEANNO")
+  m_sFCLotsAnno = ReadIniFile(m_sSection, "FC_LOTSANNO")
+  m_sFCTLAcrAnno = ReadIniFile(m_sSection, "FC_TAXLOTACREAGEANNO")
+  m_sFCTLNumAnno = ReadIniFile(m_sSection, "FC_TAXLOTNUMBERANNO")
+  m_sFCAnno10 = ReadIniFile(m_sSection, "FC_ANNO0010")
+  m_sFCAnno20 = ReadIniFile(m_sSection, "FC_ANNO0020")
+  m_sFCAnno30 = ReadIniFile(m_sSection, "FC_ANNO0030")
+  m_sFCAnno40 = ReadIniFile(m_sSection, "FC_ANNO0040")
+  m_sFCAnno50 = ReadIniFile(m_sSection, "FC_ANNO0050")
+  m_sFCAnno100 = ReadIniFile(m_sSection, "FC_ANNO0100")
+  m_sFCAnno200 = ReadIniFile(m_sSection, "FC_ANNO0200")
+  m_sFCAnno400 = ReadIniFile(m_sSection, "FC_ANNO0400")
+  m_sFCAnno800 = ReadIniFile(m_sSection, "FC_ANNO0800")
+  m_sFCAnno2000 = ReadIniFile(m_sSection, "FC_ANNO2000")
+  m_sTabCancelled = ReadIniFile(m_sSection, "TAB_Cancelled")
   
   'DEFAULT VALUES
-176:   m_sDefCounty = ReadIniFile(m_sSection, "DEFAULT_COUNTY")
-177:   m_sDefTownPart = ReadIniFile(m_sSection, "DEFAULT_TOWNPART")
-178:   m_sDefRangePart = ReadIniFile(m_sSection, "DEFAULT_RANGEPART")
-179:   m_sDefSuffType = ReadIniFile(m_sSection, "DEFAULT_SUFFTYPE")
-180:   m_sDefSuffNum = ReadIniFile(m_sSection, "DEFAULT_SUFFNUM")
-181:   m_sDefTownDir = ReadIniFile(m_sSection, "DEFAULT_TOWNDIR")
-182:   m_sDefRangeDir = ReadIniFile(m_sSection, "DEFAULT_RANGEDIR")
-183:   m_sDefQtr = ReadIniFile(m_sSection, "DEFAULT_QTR")
-184:   m_sDefQtrQtr = ReadIniFile(m_sSection, "DEFAULT_QTRQTR")
+  m_sDefCounty = ReadIniFile(m_sSection, "DEFAULT_COUNTY")
+  m_sDefTownPart = ReadIniFile(m_sSection, "DEFAULT_TOWNPART")
+  m_sDefRangePart = ReadIniFile(m_sSection, "DEFAULT_RANGEPART")
+  m_sDefSuffType = ReadIniFile(m_sSection, "DEFAULT_SUFFTYPE")
+  m_sDefSuffNum = ReadIniFile(m_sSection, "DEFAULT_SUFFNUM")
+  m_sDefTownDir = ReadIniFile(m_sSection, "DEFAULT_TOWNDIR")
+  m_sDefRangeDir = ReadIniFile(m_sSection, "DEFAULT_RANGEDIR")
+  m_sDefQtr = ReadIniFile(m_sSection, "DEFAULT_QTR")
+  m_sDefQtrQtr = ReadIniFile(m_sSection, "DEFAULT_QTRQTR")
+  m_sDefAnomaly = ReadIniFile(m_sSection, "DEFAULT_ANOMALY")
 
+  '++ New coded added 10/2/05
+  'ANNO TEXT SIZES
+  m_dAnnoSizeTLAcr120 = ReadIniFile(m_sSection, "ANNOSIZETLACR120")
+  m_dAnnoSizeTLAcr240 = ReadIniFile(m_sSection, "ANNOSIZETLACR240")
+  m_dAnnoSizeTLAcr360 = ReadIniFile(m_sSection, "ANNOSIZETLACR360")
+  m_dAnnoSizeTLAcr480 = ReadIniFile(m_sSection, "ANNOSIZETLACR480")
+  m_dAnnoSizeTLAcr600 = ReadIniFile(m_sSection, "ANNOSIZETLACR600")
+  m_dAnnoSizeTLAcr1200 = ReadIniFile(m_sSection, "ANNOSIZETLACR1200")
+  m_dAnnoSizeTLAcr2400 = ReadIniFile(m_sSection, "ANNOSIZETLACR2400")
+  m_dAnnoSizeTLAcr4800 = ReadIniFile(m_sSection, "ANNOSIZETLACR4800")
+  m_dAnnoSizeTLAcr9600 = ReadIniFile(m_sSection, "ANNOSIZETLACR9600")
+  m_dAnnoSizeTLAcr24000 = ReadIniFile(m_sSection, "ANNOSIZETLACR24000")
+  m_dAnnoSizeTLNum120 = ReadIniFile(m_sSection, "ANNOSIZETLNUM120")
+  m_dAnnoSizeTLNum240 = ReadIniFile(m_sSection, "ANNOSIZETLNUM240")
+  m_dAnnoSizeTLNum360 = ReadIniFile(m_sSection, "ANNOSIZETLNUM360")
+  m_dAnnoSizeTLNum480 = ReadIniFile(m_sSection, "ANNOSIZETLNUM480")
+  m_dAnnoSizeTLNum600 = ReadIniFile(m_sSection, "ANNOSIZETLNUM600")
+  m_dAnnoSizeTLNum1200 = ReadIniFile(m_sSection, "ANNOSIZETLNUM1200")
+  m_dAnnoSizeTLNum2400 = ReadIniFile(m_sSection, "ANNOSIZETLNUM2400")
+  m_dAnnoSizeTLNum4800 = ReadIniFile(m_sSection, "ANNOSIZETLNUM4800")
+  m_dAnnoSizeTLNum9600 = ReadIniFile(m_sSection, "ANNOSIZETLNUM9600")
+  m_dAnnoSizeTLNum24000 = ReadIniFile(m_sSection, "ANNOSIZETLNUM24000")
+  '++ End new code
 End Sub
 
 'MAPINDEX FIELDS
 Public Property Get MICountyFN() As String
 
-191:     MICountyFN = m_sMICountyFN
+    MICountyFN = m_sMICountyFN
 
 End Property
 Public Property Get MIMapNumberFN() As String
 
-196:     MIMapNumberFN = m_sMIMapNumberFN
+    MIMapNumberFN = m_sMIMapNumberFN
 
 End Property
 Public Property Get MIORMAPMapNumberFN() As String
 
-201:     MIORMAPMapNumberFN = m_sMIORMAPMapNumberFN
+    MIORMAPMapNumberFN = m_sMIORMAPMapNumberFN
 
 End Property
 Public Property Get MIMapScaleFN() As String
 
-206:     MIMapScaleFN = m_sMIMapScaleFN
+    MIMapScaleFN = m_sMIMapScaleFN
 
 End Property
 Public Property Get MIMapSuffTypeFN() As String
 
-211:     MIMapSuffTypeFN = m_sMIMapSuffTypeFN
+    MIMapSuffTypeFN = m_sMIMapSuffTypeFN
 
 End Property
 Public Property Get MIMapSuffNumFN() As String
 
-216:     MIMapSuffNumFN = m_sMIMapSuffNumFN
+    MIMapSuffNumFN = m_sMIMapSuffNumFN
 
 End Property
 Public Property Get MIPageFN() As String
 
-221:     MIPageFN = m_sMIPageFN
+    MIPageFN = m_sMIPageFN
 
 End Property
 Public Property Get MIReliabFN() As String
 
-226:     MIReliabFN = m_sMIReliabFN
+    MIReliabFN = m_sMIReliabFN
 
 End Property
 
@@ -249,243 +363,328 @@ End Property
 'TAXLOT FIELDS
 Public Property Get TLCountyFN() As String
 
-239:     TLCountyFN = m_sTLCountyFN
+    TLCountyFN = m_sTLCountyFN
 
 End Property
 Public Property Get TLTownFN() As String
 
-244:     TLTownFN = m_sTLTownFN
+    TLTownFN = m_sTLTownFN
 
 End Property
 Public Property Get TLTownPartFN() As String
 
-249:     TLTownPartFN = m_sTLTownPartFN
+    TLTownPartFN = m_sTLTownPartFN
 
 End Property
 Public Property Get TLTownDirFN() As String
 
-254:     TLTownDirFN = m_sTLTownDirFN
+    TLTownDirFN = m_sTLTownDirFN
 
 End Property
 Public Property Get TLRangeFN() As String
 
-259:     TLRangeFN = m_sTLRangeFN
+    TLRangeFN = m_sTLRangeFN
 
 End Property
 Public Property Get TLRangePartFN() As String
 
-264:     TLRangePartFN = m_sTLRangePartFN
+    TLRangePartFN = m_sTLRangePartFN
 
 End Property
 Public Property Get TLRangeDirFN() As String
 
-269:     TLRangeDirFN = m_sTLRangeDirFN
+    TLRangeDirFN = m_sTLRangeDirFN
 
 End Property
 Public Property Get TLSectNumberFN() As String
 
-274:     TLSectNumberFN = m_sTLSectNumberFN
+    TLSectNumberFN = m_sTLSectNumberFN
 
 End Property
 Public Property Get TLQtrFN() As String
 
-279:     TLQtrFN = m_sTLQtrFN
+    TLQtrFN = m_sTLQtrFN
 
 End Property
 Public Property Get TLQtrQtrFN() As String
 
-284:     TLQtrQtrFN = m_sTLQtrQtrFN
+    TLQtrQtrFN = m_sTLQtrQtrFN
 
 End Property
 Public Property Get TLMapNumberFN() As String
 
-289:     TLMapNumberFN = m_sTLMapNumberFN
+    TLMapNumberFN = m_sTLMapNumberFN
 
 End Property
 Public Property Get TLOrmapMapNumberFN() As String
 
-294:     TLOrmapMapNumberFN = m_sTLOrmapMapNumberFN
+    TLOrmapMapNumberFN = m_sTLOrmapMapNumberFN
 
 End Property
 Public Property Get TLOrmapTaxlotFN() As String
-298:     TLOrmapTaxlotFN = m_sTLOrmapTaxlotFN
+    TLOrmapTaxlotFN = m_sTLOrmapTaxlotFN
 End Property
 Public Property Get TLTaxlotFN() As String
-301:     TLTaxlotFN = m_sTLTaxlotFN
+    TLTaxlotFN = m_sTLTaxlotFN
 End Property
 
 Public Property Get TLMapTaxlotFN() As String
-305:     TLMapTaxlotFN = m_sTLMapTaxlotFN
+    TLMapTaxlotFN = m_sTLMapTaxlotFN
 End Property
 Public Property Get TLSpecInterestFN() As String
-308:     TLSpecInterestFN = m_sTLSpecInterestFN
+    TLSpecInterestFN = m_sTLSpecInterestFN
 End Property
 Public Property Get TLSufNumFN() As String
-311:     TLSufNumFN = m_sTLSufNumFN
+    TLSufNumFN = m_sTLSufNumFN
 End Property
 Public Property Get TLSufTypeFN() As String
-314:     TLSufTypeFN = m_sTLSufTypeFN
+    TLSufTypeFN = m_sTLSufTypeFN
 End Property
 Public Property Get TLMapAcresFN() As String
-317:     TLMapAcresFN = m_sTLMapAcresFN
+    TLMapAcresFN = m_sTLMapAcresFN
 End Property
 Public Property Get TLAnomalyFN() As String
-320:     TLAnomalyFN = m_sTLAnomalyFN
+    TLAnomalyFN = m_sTLAnomalyFN
 End Property
 'TAXLOT LINES FIELDS
 Public Property Get TLLinesLineTypeFN() As String
-324:     TLLinesLineTypeFN = m_sTLLinesLineTypeFN
+    TLLinesLineTypeFN = m_sTLLinesLineTypeFN
 End Property
 'CARTOGRAPHIC LINES FIELDS
 Public Property Get CLinesLineTypeFN() As String
-328:     CLinesLineTypeFN = m_sCLinesLineTypeFN
+    CLinesLineTypeFN = m_sCLinesLineTypeFN
 End Property
 'TAXLOT POINTS FIELDS
 
 'FIELDS PRESENT IN ALL TABLES
 Public Property Get AutoDateFN() As String
 
-335:     AutoDateFN = m_sAutoDateFN
+    AutoDateFN = m_sAutoDateFN
 
 End Property
 Public Property Get AutoMethodFN() As String
 
-340:     AutoMethodFN = m_sAutoMethodFN
+    AutoMethodFN = m_sAutoMethodFN
 
 End Property
 Public Property Get AutoWhoFN() As String
 
-345:     AutoWhoFN = m_sAutoWhoFN
+    AutoWhoFN = m_sAutoWhoFN
 
 End Property
 'TABLE NAMES
 Public Property Get FCMapIndex() As String
 
-351:     FCMapIndex = m_sFCMapIndex
+    FCMapIndex = m_sFCMapIndex
 
 End Property
 Public Property Get FCTaxCode() As String
 
-356:     FCTaxCode = m_sFCTaxCode
+    FCTaxCode = m_sFCTaxCode
 
 End Property
 Public Property Get FCTaxlot() As String
 
-361:     FCTaxlot = m_sFCTaxlot
+    FCTaxlot = m_sFCTaxlot
 
 End Property
 Public Property Get FCTaxlotLines() As String
 
-366:     FCTaxlotLines = m_sFCTaxlotLines
+    FCTaxlotLines = m_sFCTaxlotLines
 
 End Property
 Public Property Get FCPlats() As String
 
-371:     FCPlats = m_sFCPlats
+    FCPlats = m_sFCPlats
 
 End Property
 Public Property Get FCCartoLines() As String
 
-376:     FCCartoLines = m_sFCCartoLines
+    FCCartoLines = m_sFCCartoLines
 
 End Property
 Public Property Get FCReferenceLines() As String
-380:     FCReferenceLines = m_sFCReferenceLines
+    FCReferenceLines = m_sFCReferenceLines
 End Property
 Public Property Get FCTaxCodeAnno() As String
 
-384:     FCTaxCodeAnno = m_sFCTaxCodeAnno
+    FCTaxCodeAnno = m_sFCTaxCodeAnno
 
 End Property
 Public Property Get FCLotsAnno() As String
 
-389:     FCLotsAnno = m_sFCLotsAnno
+    FCLotsAnno = m_sFCLotsAnno
 
 End Property
 Public Property Get FCTLAcrAnno()
-393:     FCTLAcrAnno = m_sFCTLAcrAnno
+    FCTLAcrAnno = m_sFCTLAcrAnno
 End Property
 Public Property Get FCTLNumAnno()
-396:     FCTLNumAnno = m_sFCTLNumAnno
+    FCTLNumAnno = m_sFCTLNumAnno
 End Property
 Public Property Get FCAnno10() As String
 
-400:     FCAnno10 = m_sFCAnno10
+    FCAnno10 = m_sFCAnno10
 
 End Property
 Public Property Get FCAnno20() As String
 
-405:     FCAnno20 = m_sFCAnno20
+    FCAnno20 = m_sFCAnno20
 
 End Property
 Public Property Get FCAnno30() As String
 
-410:     FCAnno30 = m_sFCAnno30
+    FCAnno30 = m_sFCAnno30
 
 End Property
 Public Property Get FCAnno40() As String
 
-415:     FCAnno40 = m_sFCAnno40
+    FCAnno40 = m_sFCAnno40
 
 End Property
 Public Property Get FCAnno50() As String
 
-420:     FCAnno50 = m_sFCAnno50
+    FCAnno50 = m_sFCAnno50
 
 End Property
 Public Property Get FCAnno100() As String
 
-425:     FCAnno100 = m_sFCAnno100
+    FCAnno100 = m_sFCAnno100
 
 End Property
 Public Property Get FCAnno200() As String
 
-430:     FCAnno200 = m_sFCAnno200
+    FCAnno200 = m_sFCAnno200
 
 End Property
 Public Property Get FCAnno400() As String
 
-435:     FCAnno400 = m_sFCAnno400
+    FCAnno400 = m_sFCAnno400
 
 End Property
 Public Property Get FCAnno800() As String
 
-440:     FCAnno800 = m_sFCAnno800
+    FCAnno800 = m_sFCAnno800
 
 End Property
 Public Property Get FCAnno2000() As String
 
-445:     FCAnno2000 = m_sFCAnno2000
+    FCAnno2000 = m_sFCAnno2000
 End Property
 
 Public Property Get TabCancelled() As String
-449:     TabCancelled = m_sTabCancelled
+    TabCancelled = m_sTabCancelled
 End Property
 'DEFAULT VALUES
 Public Property Get DefCounty() As String
-453:     DefCounty = m_sDefCounty
+    DefCounty = m_sDefCounty
 End Property
 Public Property Get DefTownPart() As String
-456:     DefTownPart = m_sDefTownPart
+    DefTownPart = m_sDefTownPart
 End Property
 Public Property Get DefRangePart() As String
-459:     DefRangePart = m_sDefRangePart
+    DefRangePart = m_sDefRangePart
 End Property
 Public Property Get DefSuffType() As String
-462:     DefSuffType = m_sDefSuffType
+    DefSuffType = m_sDefSuffType
 End Property
 Public Property Get DefSuffNum() As String
-465:     DefSuffNum = m_sDefSuffNum
+    DefSuffNum = m_sDefSuffNum
 End Property
 Public Property Get DefTownDir() As String
-468:     DefTownDir = m_sDefTownDir
+    DefTownDir = m_sDefTownDir
 End Property
 Public Property Get DefRangeDir() As String
-471:     DefRangeDir = m_sDefRangeDir
+    DefRangeDir = m_sDefRangeDir
 End Property
 Public Property Get DefQtr() As String
-474:     DefQtr = m_sDefQtr
+    DefQtr = m_sDefQtr
 End Property
 Public Property Get DefQtrQtr() As String
-477:     DefQtrQtr = m_sDefQtrQtr
+    DefQtrQtr = m_sDefQtrQtr
 End Property
+Public Property Get DefAnomaly() As String
+    DefAnomaly = m_sDefAnomaly
+End Property
+'++ New coded added 10/2/05
+'ANNO TEXT SIZES
+Public Property Get AnnoSizeTLAcr120() As Double
+    AnnoSizeTLAcr120 = m_dAnnoSizeTLAcr120
+End Property
+
+Public Property Get AnnoSizeTLAcr240() As Double
+    AnnoSizeTLAcr240 = m_dAnnoSizeTLAcr240
+End Property
+
+Public Property Get AnnoSizeTLAcr360() As Double
+    AnnoSizeTLAcr360 = m_dAnnoSizeTLAcr360
+End Property
+
+Public Property Get AnnoSizeTLAcr480() As Double
+    AnnoSizeTLAcr480 = m_dAnnoSizeTLAcr480
+End Property
+
+Public Property Get AnnoSizeTLAcr600() As Double
+    AnnoSizeTLAcr600 = m_dAnnoSizeTLAcr600
+End Property
+
+Public Property Get AnnoSizeTLAcr1200() As Double
+    AnnoSizeTLAcr1200 = m_dAnnoSizeTLAcr1200
+End Property
+
+Public Property Get AnnoSizeTLAcr2400() As Double
+    AnnoSizeTLAcr2400 = m_dAnnoSizeTLAcr2400
+End Property
+
+Public Property Get AnnoSizeTLAcr4800() As Double
+    AnnoSizeTLAcr4800 = m_dAnnoSizeTLAcr4800
+End Property
+
+Public Property Get AnnoSizeTLAcr9600() As Double
+    AnnoSizeTLAcr9600 = m_dAnnoSizeTLAcr9600
+End Property
+
+Public Property Get AnnoSizeTLAcr24000() As Double
+    AnnoSizeTLAcr24000 = m_dAnnoSizeTLAcr24000
+End Property
+
+Public Property Get AnnoSizeTLNum120() As Double
+    AnnoSizeTLNum120 = m_dAnnoSizeTLNum120
+End Property
+
+Public Property Get AnnoSizeTLNum240() As Double
+    AnnoSizeTLNum240 = m_dAnnoSizeTLNum240
+End Property
+
+Public Property Get AnnoSizeTLNum360() As Double
+    AnnoSizeTLNum360 = m_dAnnoSizeTLNum360
+End Property
+
+Public Property Get AnnoSizeTLNum480() As Double
+    AnnoSizeTLNum480 = m_dAnnoSizeTLNum480
+End Property
+
+Public Property Get AnnoSizeTLNum600() As Double
+    AnnoSizeTLNum600 = m_dAnnoSizeTLNum600
+End Property
+
+Public Property Get AnnoSizeTLNum1200() As Double
+    AnnoSizeTLNum1200 = m_dAnnoSizeTLNum1200
+End Property
+
+Public Property Get AnnoSizeTLNum2400() As Double
+    AnnoSizeTLNum2400 = m_dAnnoSizeTLNum2400
+End Property
+
+Public Property Get AnnoSizeTLNum4800() As Double
+    AnnoSizeTLNum4800 = m_dAnnoSizeTLNum4800
+End Property
+
+Public Property Get AnnoSizeTLNum9600() As Double
+    AnnoSizeTLNum9600 = m_dAnnoSizeTLNum9600
+End Property
+
+Public Property Get AnnoSizeTLNum24000() As Double
+    AnnoSizeTLNum24000 = m_dAnnoSizeTLNum24000
+End Property
+'++ End new code
