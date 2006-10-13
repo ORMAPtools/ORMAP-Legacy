@@ -103,7 +103,7 @@ Implements ICommand
 Private Sub Class_Initialize()
   On Error GoTo ErrorHandler
 
-    m_bEnabled = False
+92:     m_bEnabled = False
 
   Exit Sub
 ErrorHandler:
@@ -113,10 +113,10 @@ End Sub
 Private Sub Class_Terminate()
   On Error GoTo ErrorHandler
 
-    Set m_pEditorEvents = Nothing
-    Set m_pEditor = Nothing
-    Set g_pApp = Nothing
-    Set g_pFldnames = Nothing
+102:     Set m_pEditorEvents = Nothing
+103:     Set m_pEditor = Nothing
+104:     Set g_pApp = Nothing
+105:     Set g_pFldnames = Nothing
   Exit Sub
 ErrorHandler:
   HandleError True, "Class_Terminate " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 1, m_ParentHWND
@@ -126,7 +126,7 @@ Private Property Get ICommand_Enabled() As Boolean
   On Error GoTo ErrorHandler
 
 
-     ICommand_Enabled = m_bEnabled
+115:      ICommand_Enabled = m_bEnabled
     
 
   Exit Property
@@ -138,7 +138,7 @@ Private Property Get ICommand_Checked() As Boolean
   On Error GoTo ErrorHandler
 
     
-     ICommand_Checked = False
+127:      ICommand_Checked = False
     
 
   Exit Property
@@ -150,7 +150,7 @@ Private Property Get ICommand_Name() As String
   On Error GoTo ErrorHandler
 
     
-     ICommand_Name = "MapIndex"
+139:      ICommand_Name = "MapIndex"
     
 
   Exit Property
@@ -162,7 +162,7 @@ Private Property Get ICommand_Caption() As String
   On Error GoTo ErrorHandler
 
     
-     ICommand_Caption = "Map Index"
+151:      ICommand_Caption = "Map Index"
     
 
   Exit Property
@@ -174,7 +174,7 @@ Private Property Get ICommand_Tooltip() As String
   On Error GoTo ErrorHandler
 
     
-     ICommand_Tooltip = "Map Index Tool"
+163:      ICommand_Tooltip = "Map Index Tool"
     
 
   Exit Property
@@ -186,7 +186,7 @@ Private Property Get ICommand_Message() As String
   On Error GoTo ErrorHandler
 
     
-     ICommand_Message = ""
+175:      ICommand_Message = ""
     
 
   Exit Property
@@ -198,7 +198,7 @@ Private Property Get ICommand_HelpFile() As String
   On Error GoTo ErrorHandler
 
     
-     ICommand_HelpFile = ""
+187:      ICommand_HelpFile = ""
     
 
   Exit Property
@@ -236,7 +236,7 @@ Private Property Get ICommand_Category() As String
   On Error GoTo ErrorHandler
 
     
-     ICommand_Category = "ORMAP"
+225:      ICommand_Category = "ORMAP"
     
 
   Exit Property
@@ -248,18 +248,18 @@ Private Sub ICommand_OnCreate(ByVal hook As Object)
   On Error GoTo ErrorHandler
 
     
-  Set m_pApp = hook
-  If g_pApp Is Nothing Then
-    Set g_pApp = hook
-  End If
-  Set m_pDoc = m_pApp.Document
-  Set m_pMap = m_pDoc.FocusMap
+237:   Set m_pApp = hook
+238:   If g_pApp Is Nothing Then
+239:     Set g_pApp = hook
+240:   End If
+241:   Set m_pDoc = m_pApp.Document
+242:   Set m_pMap = m_pDoc.FocusMap
 
   'Get a reference to the editor extension
   Dim pID As New UID
-  pID = "esriCore.Editor"
-  Set m_pEditor = m_pApp.FindExtensionByCLSID(pID)
-  Set m_pEditorEvents = m_pEditor
+246:   pID = "esriCore.Editor"
+247:   Set m_pEditor = m_pApp.FindExtensionByCLSID(pID)
+248:   Set m_pEditorEvents = m_pEditor
     
 
   Exit Sub
@@ -270,9 +270,9 @@ End Sub
 Private Sub ICommand_OnClick()
   On Error GoTo ErrorHandler
 
-    If frmMapIndex.InitForm Then
-        frmMapIndex.Show vbModal
-    End If
+259:     If frmMapIndex.InitForm Then
+260:         frmMapIndex.Show vbModal
+261:     End If
     
 
   Exit Sub
@@ -285,16 +285,16 @@ Private Sub m_pEditorEvents_OnSelectionChanged()
     'Determine if MapIndex command should be enabled
     Dim pMIFlayer As IFeatureLayer2
     Dim pMIFclass As IFeatureClass
-    Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-    If pMIFlayer Is Nothing Then
-        m_bEnabled = False
+274:     Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+275:     If pMIFlayer Is Nothing Then
+276:         m_bEnabled = False
         Exit Sub
-    End If
-    If modUtils.HasSelectedFeatures(pMIFlayer) Then
-        m_bEnabled = True
-    Else
-        m_bEnabled = False
-    End If
+278:     End If
+279:     If modUtils.HasSelectedFeatures(pMIFlayer) Then
+280:         m_bEnabled = True
+281:     Else
+282:         m_bEnabled = False
+283:     End If
 
   Exit Sub
 ErrorHandler:

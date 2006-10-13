@@ -78,32 +78,32 @@ Private mIniFile As String
 '------------------------------
 
 Public Function TestIniFile(FilePath As String) As Boolean
-  mIniFile = FilePath
-  TestIniFile = Len(Dir$(FilePath)) > 0
+79:   mIniFile = FilePath
+80:   TestIniFile = Len(Dir$(FilePath)) > 0
 End Function
 
 Public Function ReadIniFile(ByVal strSection As String, ByVal strKey As String) As String
   
   Dim strBuffer As String
   Dim intPos As Integer
-  strBuffer = Space$(255)
-  If GetPrivateProfileString(strSection, strKey, "", strBuffer, 255, mIniFile) > 0 Then
-    ReadIniFile = RTrim$(StripTerminator(strBuffer))
-  Else
-    ReadIniFile = ""
-  End If
-  strBuffer = ""
+87:   strBuffer = Space$(255)
+88:   If GetPrivateProfileString(strSection, strKey, "", strBuffer, 255, mIniFile) > 0 Then
+89:     ReadIniFile = RTrim$(StripTerminator(strBuffer))
+90:   Else
+91:     ReadIniFile = ""
+92:   End If
+93:   strBuffer = ""
 End Function
 
 Private Function StripTerminator(ByVal strString As String) As String
   'function to strip out chr$(0) from the ReadIniFile function
   Dim intZeroPos As Integer
-  intZeroPos = InStr(strString, vbNullChar)
-  If intZeroPos > 0 Then
-    StripTerminator = Left$(strString, intZeroPos - 1)
-  Else
-    StripTerminator = strString
-  End If
+99:   intZeroPos = InStr(strString, vbNullChar)
+100:   If intZeroPos > 0 Then
+101:     StripTerminator = Left$(strString, intZeroPos - 1)
+102:   Else
+103:     StripTerminator = strString
+104:   End If
 End Function
 
 

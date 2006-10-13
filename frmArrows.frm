@@ -186,33 +186,33 @@ Private m_pMxDoc As IMxDocument
 '------------------------------
 
 Private Sub cmdArrow_Click()
-    Me.lblCurrentTool.Caption = "arrow"
-    Me.Hide
+78:     Me.lblCurrentTool.Caption = "arrow"
+79:     Me.Hide
 End Sub
 
 Private Sub cmdDimension_Click()
-    Me.lblCurrentTool.Caption = "dimension"
-    Me.Hide
+83:     Me.lblCurrentTool.Caption = "dimension"
+84:     Me.Hide
 End Sub
 
 Private Sub cmdHelp_Click()
     'Open a custom help file in Internet Explorer
     'Requires a file called help.htm in the same dir as the application dll
     Dim sFilePath As String
-    sFilePath = app.Path & "\" & "Arrows_help.rtf"
-    If modUtils.FileExists(sFilePath) Then
-    Debug.Assert True ' need a different way to open the help file
-        If FileExists("C:\Program Files\Windows NT\Accessories\wordpad.exe") Then
-            Shell "C:\Program Files\Windows NT\Accessories\wordpad.exe " & sFilePath, 1
-        End If
-    Else
-        MsgBox "No help available"
-    End If
+91:     sFilePath = app.Path & "\" & "Arrows_help.rtf"
+92:     If modUtils.FileExists(sFilePath) Then
+93:     Debug.Assert True ' need a different way to open the help file
+94:         If FileExists("C:\Program Files\Windows NT\Accessories\wordpad.exe") Then
+95:             Shell "C:\Program Files\Windows NT\Accessories\wordpad.exe " & sFilePath, 1
+96:         End If
+97:     Else
+98:         MsgBox "No help available"
+99:     End If
 End Sub
 
 Private Sub cmdHook_Click()
-    Me.lblCurrentTool.Caption = "hook"
-    Me.Hide
+103:     Me.lblCurrentTool.Caption = "hook"
+104:     Me.Hide
     
 End Sub
 
