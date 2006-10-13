@@ -100,42 +100,42 @@ Private Property Get ICommand_Enabled() As Boolean
   On Error GoTo ErrorHandler
 
     'Enable if editing and at least two taxlots selected
-    m_bEnabled = False
-    Set m_pDoc = m_pApp.Document
-    Set m_pMap = m_pDoc.FocusMap
+90:     m_bEnabled = False
+91:     Set m_pDoc = m_pApp.Document
+92:     Set m_pMap = m_pDoc.FocusMap
     'This is called before the mxd is open, so need to check if any layers present
-    If m_pMap.LayerCount > 0 Then
+94:     If m_pMap.LayerCount > 0 Then
         Dim pWorkspaceEdit As IWorkspaceEdit
         Dim pFeatureLayer As IFeatureLayer
         Dim pDataset As IDataset
-        Set pFeatureLayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
-        If pFeatureLayer Is Nothing Then
-            m_bEnabled = False
-            GoTo Process_Exit
-        End If
-        Set pDataset = pFeatureLayer.FeatureClass
-        If pDataset Is Nothing Then GoTo Process_Exit
-        Set pWorkspaceEdit = pDataset.Workspace
-        If pWorkspaceEdit.IsBeingEdited Then 'Check if being edited
+98:         Set pFeatureLayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
+99:         If pFeatureLayer Is Nothing Then
+100:             m_bEnabled = False
+101:             GoTo Process_Exit
+102:         End If
+103:         Set pDataset = pFeatureLayer.FeatureClass
+104:         If pDataset Is Nothing Then GoTo Process_Exit
+105:         Set pWorkspaceEdit = pDataset.Workspace
+106:         If pWorkspaceEdit.IsBeingEdited Then 'Check if being edited
             Dim pFeatCur As IFeatureCursor
-            Set pFeatCur = modUtils.GetSelectedFeatures(pFeatureLayer) 'Make sure more than one selected
-            If Not pFeatCur Is Nothing Then
+108:             Set pFeatCur = modUtils.GetSelectedFeatures(pFeatureLayer) 'Make sure more than one selected
+109:             If Not pFeatCur Is Nothing Then
                 Dim pFeat As IFeature
-                Set pFeat = pFeatCur.NextFeature 'first feature
-                If Not pFeat Is Nothing Then
-                    Set pFeat = pFeatCur.NextFeature 'second feature
-                    If Not pFeat Is Nothing Then
-                        m_bEnabled = True
-                    End If
-                End If
-            End If
-        End If
-    End If
+111:                 Set pFeat = pFeatCur.NextFeature 'first feature
+112:                 If Not pFeat Is Nothing Then
+113:                     Set pFeat = pFeatCur.NextFeature 'second feature
+114:                     If Not pFeat Is Nothing Then
+115:                         m_bEnabled = True
+116:                     End If
+117:                 End If
+118:             End If
+119:         End If
+120:     End If
     
     'If conditions are met, enable the command
-    If m_bEnabled = True Then
-        ICommand_Enabled = True
-    End If
+123:     If m_bEnabled = True Then
+124:         ICommand_Enabled = True
+125:     End If
     
 Process_Exit:
   Exit Property
@@ -147,7 +147,7 @@ Private Property Get ICommand_Checked() As Boolean
   On Error GoTo ErrorHandler
 
 
-     ICommand_Checked = False
+137:      ICommand_Checked = False
     
 
   Exit Property
@@ -159,7 +159,7 @@ Private Property Get ICommand_Name() As String
   On Error GoTo ErrorHandler
 
 
-     ICommand_Name = "Combine"
+149:      ICommand_Name = "Combine"
     
 
   Exit Property
@@ -171,7 +171,7 @@ Private Property Get ICommand_Caption() As String
   On Error GoTo ErrorHandler
 
 
-     ICommand_Caption = "Combine Selected Taxlots"
+161:      ICommand_Caption = "Combine Selected Taxlots"
     
 
   Exit Property
@@ -183,7 +183,7 @@ Private Property Get ICommand_Tooltip() As String
   On Error GoTo ErrorHandler
 
 
-     ICommand_Tooltip = "Taxlot Consolidation Tool"
+173:      ICommand_Tooltip = "Taxlot Consolidation Tool"
     
 
   Exit Property
@@ -247,7 +247,7 @@ Private Property Get ICommand_Category() As String
   On Error GoTo ErrorHandler
 
 
-     ICommand_Category = "ORMAP"
+237:      ICommand_Category = "ORMAP"
     
 
   Exit Property
@@ -259,12 +259,12 @@ Private Sub ICommand_OnCreate(ByVal hook As Object)
   On Error GoTo ErrorHandler
 
     
-  Set m_pApp = hook
-  If g_pApp Is Nothing Then
-    Set g_pApp = hook
-  End If
-  Set m_pDoc = m_pApp.Document
-  Set m_pMap = m_pDoc.FocusMap
+249:   Set m_pApp = hook
+250:   If g_pApp Is Nothing Then
+251:     Set g_pApp = hook
+252:   End If
+253:   Set m_pDoc = m_pApp.Document
+254:   Set m_pMap = m_pDoc.FocusMap
 
 
   Exit Sub
@@ -276,7 +276,7 @@ Private Sub ICommand_OnClick()
   On Error GoTo ErrorHandler
 
     
-    frmCombine.Show vbModal
+266:     frmCombine.Show vbModal
     
 
   Exit Sub

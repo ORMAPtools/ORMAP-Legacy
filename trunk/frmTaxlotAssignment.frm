@@ -284,27 +284,27 @@ Private Const c_sModuleFileName As String = "frmTaxlotAssignment.frm"
 Private Sub cmbTaxlotNum_Click()
     'If one of the generic taxlot numbers is chosen, disable the taxlot textbox
     '++  JWM 10/11/2006 using strcomp function
-    If StrComp(Me.cmbTaxlotNum.Text, "NUMBER", vbTextCompare) <> 0 Then
-        Me.txtTaxlotNum.Enabled = False
-        Me.txtTaxlotNum.Text = ""
-    Else
-        Me.txtTaxlotNum.Enabled = True
-    End If
+85:     If StrComp(Me.cmbTaxlotNum.Text, "NUMBER", vbTextCompare) <> 0 Then
+86:         Me.txtTaxlotNum.Enabled = False
+87:         Me.txtTaxlotNum.Text = ""
+88:     Else
+89:         Me.txtTaxlotNum.Enabled = True
+90:     End If
 End Sub
 
 Private Sub cmdAssign_Click()
   On Error GoTo ErrorHandler
   'Must be a number that is 5 characters long
 '++  JWM 10/11/2006 using strcomp function
-  If StrComp(Me.cmbTaxlotNum.Text, "NUMBER", vbTextCompare) = 0 Then
-    If Not IsNumeric(Me.txtTaxlotNum.Text) Then
-      MsgBox "Invalid Start Value.  Please enter a valid number", vbOKOnly, "Error"
-      Me.txtTaxlotNum.SetFocus
+97:   If StrComp(Me.cmbTaxlotNum.Text, "NUMBER", vbTextCompare) = 0 Then
+98:     If Not IsNumeric(Me.txtTaxlotNum.Text) Then
+99:       MsgBox "Invalid Start Value.  Please enter a valid number", vbOKOnly, "Error"
+100:       Me.txtTaxlotNum.SetFocus
       Exit Sub
-    End If
-  End If
+102:     End If
+103:   End If
 
-  Me.Hide
+105:   Me.Hide
   
   Exit Sub
 ErrorHandler:
@@ -317,40 +317,40 @@ Private Sub cmdHelp_Click()
     'Open a custom help file in Internet Explorer
     'Requires a file called help.htm in the same dir as the application dll
     Dim sFilePath As String
-    sFilePath = app.Path & "\" & "Assignment_help.rtf"
-    If modUtils.FileExists(sFilePath) Then
-    Debug.Assert True 'need a better way to open files
-        If FileExists("C:\Program Files\Windows NT\Accessories\wordpad.exe") Then
-            Shell "C:\Program Files\Windows NT\Accessories\wordpad.exe " & sFilePath, 1
-        End If
-    Else
-        MsgBox "No help available"
-    End If
+118:     sFilePath = app.Path & "\" & "Assignment_help.rtf"
+119:     If modUtils.FileExists(sFilePath) Then
+120:     Debug.Assert True 'need a better way to open files
+121:         If FileExists("C:\Program Files\Windows NT\Accessories\wordpad.exe") Then
+122:             Shell "C:\Program Files\Windows NT\Accessories\wordpad.exe " & sFilePath, 1
+123:         End If
+124:     Else
+125:         MsgBox "No help available"
+126:     End If
 End Sub
 
 Private Sub cmdQuit_Click()
-    Me.Hide
+130:     Me.Hide
 End Sub
 
 Private Sub Form_Load()
   On Error GoTo ErrorHandler
     'Populate drop down combobox and set default settings
-    Set m_pApp = modUtils.GetAppRef    'New AppRef
-    Set m_pMxDoc = m_pApp.Document
+136:     Set m_pApp = modUtils.GetAppRef    'New AppRef
+137:     Set m_pMxDoc = m_pApp.Document
     'Populate with preset values
-    cmbTaxlotNum.AddItem "NUMBER"
-    cmbTaxlotNum.AddItem "0ROAD"
-    cmbTaxlotNum.AddItem "WATER"
-    cmbTaxlotNum.AddItem "0RLRD"
-    cmbTaxlotNum.AddItem "00GAP"
-    cmbTaxlotNum.AddItem "00LAP"
-    cmbTaxlotNum.Text = "NUMBER" 'By default
+139:     cmbTaxlotNum.AddItem "NUMBER"
+140:     cmbTaxlotNum.AddItem "0ROAD"
+141:     cmbTaxlotNum.AddItem "WATER"
+142:     cmbTaxlotNum.AddItem "0RLRD"
+143:     cmbTaxlotNum.AddItem "00GAP"
+144:     cmbTaxlotNum.AddItem "00LAP"
+145:     cmbTaxlotNum.Text = "NUMBER" 'By default
     
-    tglAutoYes.Value = False
-    tglAutoNo.Value = True
-    tglBy1.Value = False
-    tglBy10.Value = False
-    tglBy100.Value = True
+147:     tglAutoYes.Value = False
+148:     tglAutoNo.Value = True
+149:     tglBy1.Value = False
+150:     tglBy10.Value = False
+151:     tglBy100.Value = True
     
     
 
@@ -362,7 +362,7 @@ End Sub
 Private Sub tglAutoNo_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
   On Error GoTo ErrorHandler
 
-    tglAutoYes.Value = False
+163:     tglAutoYes.Value = False
 
   Exit Sub
 ErrorHandler:
@@ -372,7 +372,7 @@ End Sub
 Private Sub tglAutoYes_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
   On Error GoTo ErrorHandler
 
-    tglAutoNo.Value = False
+173:     tglAutoNo.Value = False
 
   Exit Sub
 ErrorHandler:
@@ -382,8 +382,8 @@ End Sub
 Private Sub tglBy1_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
   On Error GoTo ErrorHandler
 
-    tglBy10.Value = False
-    tglBy100.Value = False
+183:     tglBy10.Value = False
+184:     tglBy100.Value = False
 
   Exit Sub
 ErrorHandler:
@@ -394,8 +394,8 @@ End Sub
 Private Sub tglBy10_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
   On Error GoTo ErrorHandler
 
-    tglBy1.Value = False
-    tglBy100.Value = False
+195:     tglBy1.Value = False
+196:     tglBy100.Value = False
 
   Exit Sub
 ErrorHandler:
@@ -405,8 +405,8 @@ End Sub
 Private Sub tglBy100_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
   On Error GoTo ErrorHandler
 
-    tglBy1.Value = False
-    tglBy10.Value = False
+206:     tglBy1.Value = False
+207:     tglBy10.Value = False
 
   Exit Sub
 ErrorHandler:

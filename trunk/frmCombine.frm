@@ -192,40 +192,40 @@ Private Sub cmdApply_Click()
     'Code that combines taxlots
     Dim pMXDoc As IMxDocument
     Dim pMap As IMap
-    Set pMXDoc = g_pApp.Document
-    Set pMap = pMXDoc.FocusMap
+102:     Set pMXDoc = g_pApp.Document
+103:     Set pMap = pMXDoc.FocusMap
     'Validate new taxlot number entered and make sure it doesn't exist
-    If Not IsNumeric(Me.txtNewTaxlot.Text) Or Not (Len(Me.txtNewTaxlot.Text) = 5) Then
-      MsgBox "Invalid Start Value.  Please enter a 5-digit number", vbOKOnly, "Error"
-      Me.txtNewTaxlot.SetFocus
-      GoTo Process_Exit
-    End If
+105:     If Not IsNumeric(Me.txtNewTaxlot.Text) Or Not (Len(Me.txtNewTaxlot.Text) = 5) Then
+106:       MsgBox "Invalid Start Value.  Please enter a 5-digit number", vbOKOnly, "Error"
+107:       Me.txtNewTaxlot.SetFocus
+108:       GoTo Process_Exit
+109:     End If
 
     'Taxlots already selected and taxlot number known
     Dim pFeatcls As IFeatureClass
     Dim pWorkspaceEdit As IWorkspaceEdit
     Dim pFeatureLayer As IFeatureLayer
     Dim pDataset As IDataset
-    Set pFeatureLayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
-    Set pFeatcls = pFeatureLayer.FeatureClass
-    Set pDataset = pFeatureLayer.FeatureClass
-    If pDataset Is Nothing Then GoTo Process_Exit
-    Set pWorkspaceEdit = pDataset.Workspace
-    If pWorkspaceEdit.IsBeingEdited Then 'Check if being edited
+116:     Set pFeatureLayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
+117:     Set pFeatcls = pFeatureLayer.FeatureClass
+118:     Set pDataset = pFeatureLayer.FeatureClass
+119:     If pDataset Is Nothing Then GoTo Process_Exit
+120:     Set pWorkspaceEdit = pDataset.Workspace
+121:     If pWorkspaceEdit.IsBeingEdited Then 'Check if being edited
         Dim pFeatCur As IFeatureCursor
-        Set pFeatCur = modUtils.GetSelectedFeatures(pFeatureLayer) 'Make sure more than one selected
-        If Not pFeatCur Is Nothing Then
+123:         Set pFeatCur = modUtils.GetSelectedFeatures(pFeatureLayer) 'Make sure more than one selected
+124:         If Not pFeatCur Is Nothing Then
             'Combine taxlots
             ' code to merge the features, evaluate the merge rules and assign values to fields appropriatly
             
             ' start edit operation
-            m_pEditor.StartOperation
+129:             m_pEditor.StartOperation
             
             ' create a new feature to be the merge feature
             Dim pCurFeature As IFeature
             Dim pNewFeature As IFeature
             Dim lCount As Long
-            Set pNewFeature = pFeatcls.CreateFeature
+135:             Set pNewFeature = pFeatcls.CreateFeature
             
             ' create the new geometry.
             Dim pGeom As IGeometry
@@ -235,146 +235,146 @@ Private Sub cmdApply_Click()
               
             ' initialize the default values for the new feature
             Dim pOutRSType As IRowSubtypes
-            Set pOutRSType = pNewFeature
-            If lSCode <> 0 Then
-              pOutRSType.SubtypeCode = lSCode
-            End If
-            pOutRSType.InitDefaultValues
+145:             Set pOutRSType = pNewFeature
+146:             If lSCode <> 0 Then
+147:               pOutRSType.SubtypeCode = lSCode
+148:             End If
+149:             pOutRSType.InitDefaultValues
             
             ' get the first feature
-            Set pCurFeature = pFeatCur.NextFeature
+152:             Set pCurFeature = pFeatCur.NextFeature
             Dim pFlds As IFields
-            Set pFlds = pFeatcls.Fields
+154:             Set pFlds = pFeatcls.Fields
             
             Dim pArea As IArea
-            Set pArea = pCurFeature.Shape
+157:             Set pArea = pCurFeature.Shape
             'Now that we have a feature,
             'Verify that within this map index, this taxlot number is unique
             'If not unique, prompt user to enter a new value
-            If Not modUtils.ValidateTaxlotNum(frmCombine.txtNewTaxlot.Text, pArea.Centroid) Then
-                MsgBox "The current Taxlot value (" & frmTaxlotAssignment.txtTaxlotNum.Text & _
+161:             If Not modUtils.ValidateTaxlotNum(frmCombine.txtNewTaxlot.Text, pArea.Centroid) Then
+162:                 MsgBox "The current Taxlot value (" & frmTaxlotAssignment.txtTaxlotNum.Text & _
                 ") is not unique withing this MapIndex.  Please enter a new number"
-                m_pEditor.AbortOperation
-                GoTo Process_Exit
-            End If
+164:                 m_pEditor.AbortOperation
+165:                 GoTo Process_Exit
+166:             End If
     
-            lCount = 1
-            Do
+168:             lCount = 1
+169:             Do
               ' get the geometry
-              Set pGeom = pCurFeature.ShapeCopy
-              If lCount = 1 Then ' if its the first feature
-                Set pTmpGeom = pGeom
-              Else ' merge the geometry of the features
-                Set pTopoOperator = pTmpGeom
-                Set pOutputGeometry = pTopoOperator.Union(pGeom)
-                Set pTmpGeom = pOutputGeometry
-              End If
+171:               Set pGeom = pCurFeature.ShapeCopy
+172:               If lCount = 1 Then ' if its the first feature
+173:                 Set pTmpGeom = pGeom
+174:               Else ' merge the geometry of the features
+175:                 Set pTopoOperator = pTmpGeom
+176:                 Set pOutputGeometry = pTopoOperator.Union(pGeom)
+177:                 Set pTmpGeom = pOutputGeometry
+178:               End If
                   
               ' now go through each field, if it has a domain associated with it, then
               ' evaluate the merge policy...
               Dim pFld As IField
               Dim pDomain As IDomain
               Dim pSubtypes As ISubtypes
-              Set pSubtypes = pFeatcls
+185:               Set pSubtypes = pFeatcls
               Dim i As Long
-              For i = 0 To pFlds.FieldCount - 1
-                Set pFld = pFlds.Field(i)
-                Set pDomain = pSubtypes.Domain(lSCode, pFld.Name)
-                If Not pDomain Is Nothing Then
+187:               For i = 0 To pFlds.FieldCount - 1
+188:                 Set pFld = pFlds.Field(i)
+189:                 Set pDomain = pSubtypes.Domain(lSCode, pFld.Name)
+190:                 If Not pDomain Is Nothing Then
                   Select Case pDomain.MergePolicy
                     Case esriMPTSumValues 'Sum values
-                      If lCount = 1 Then
-                        pNewFeature.Value(i) = pCurFeature.Value(i)
-                      Else
-                        pNewFeature.Value(i) = pNewFeature.Value(i) + pCurFeature.Value(i)
-                      End If
+193:                       If lCount = 1 Then
+194:                         pNewFeature.Value(i) = pCurFeature.Value(i)
+195:                       Else
+196:                         pNewFeature.Value(i) = pNewFeature.Value(i) + pCurFeature.Value(i)
+197:                       End If
                     Case esriMPTAreaWeighted 'Area/length weighted average
-                      If lCount = 1 Then
-                        pNewFeature.Value(i) = pCurFeature.Value(i) * (getGeomVal(pCurFeature) / lGTotalVal)
-                      Else
-                        pNewFeature.Value(i) = pNewFeature.Value(i) + (pCurFeature.Value(i) * (getGeomVal(pCurFeature) / lGTotalVal))
-                      End If
+199:                       If lCount = 1 Then
+200:                         pNewFeature.Value(i) = pCurFeature.Value(i) * (getGeomVal(pCurFeature) / lGTotalVal)
+201:                       Else
+202:                         pNewFeature.Value(i) = pNewFeature.Value(i) + (pCurFeature.Value(i) * (getGeomVal(pCurFeature) / lGTotalVal))
+203:                       End If
                     Case Else 'If no merge policy, just take one of the existing values
-                        pNewFeature.Value(i) = pCurFeature.Value(i)
-                    End Select 'do not need a case for default value as it is set above
-                Else 'If not a domain, copy the existing value
-                    If pNewFeature.Fields.Field(i).Editable Then 'Don't attempt to copy objectid or other non-editable field
-                        pNewFeature.Value(i) = pCurFeature.Value(i)
-                    End If
-                End If
-              Next i
-              pCurFeature.Delete ' delete the feature
+205:                         pNewFeature.Value(i) = pCurFeature.Value(i)
+206:                     End Select 'do not need a case for default value as it is set above
+207:                 Else 'If not a domain, copy the existing value
+208:                     If pNewFeature.Fields.Field(i).Editable Then 'Don't attempt to copy objectid or other non-editable field
+209:                         pNewFeature.Value(i) = pCurFeature.Value(i)
+210:                     End If
+211:                 End If
+212:               Next i
+213:               pCurFeature.Delete ' delete the feature
               
-              Set pCurFeature = pFeatCur.NextFeature
-              lCount = lCount + 1
-            Loop Until pCurFeature Is Nothing
+215:               Set pCurFeature = pFeatCur.NextFeature
+216:               lCount = lCount + 1
+217:             Loop Until pCurFeature Is Nothing
             
-            Set pNewFeature.Shape = pOutputGeometry
+219:             Set pNewFeature.Shape = pOutputGeometry
             
             'Set taxlot number
             Dim lTLTaxlotFld As Long
-            lTLTaxlotFld = modUtils.LocateFields(pFeatureLayer.FeatureClass, g_pFldnames.TLTaxlotFN)
-            pNewFeature.Value(lTLTaxlotFld) = Me.txtNewTaxlot.Text
+223:             lTLTaxlotFld = modUtils.LocateFields(pFeatureLayer.FeatureClass, g_pFldnames.TLTaxlotFN)
+224:             pNewFeature.Value(lTLTaxlotFld) = Me.txtNewTaxlot.Text
             
-            pNewFeature.Store
+226:             pNewFeature.Store
             
             ' refresh features
             Dim pRefresh As IInvalidArea
-            Set pRefresh = New InvalidArea
-            Set pRefresh.Display = m_pEditor.Display
-            pRefresh.Add pNewFeature
-            pRefresh.Invalidate esriAllScreenCaches
+230:             Set pRefresh = New InvalidArea
+231:             Set pRefresh.Display = m_pEditor.Display
+232:             pRefresh.Add pNewFeature
+233:             pRefresh.Invalidate esriAllScreenCaches
 
             ' select new feature
-            pMap.ClearSelection
-            pMap.SelectFeature pFeatureLayer, pNewFeature
+236:             pMap.ClearSelection
+237:             pMap.SelectFeature pFeatureLayer, pNewFeature
             
             'Find the Reference Lines feature class to insert any deleted lines
             Dim pWorkspace As IWorkspace
             Dim pFWorkspace As IFeatureWorkspace
             Dim pRLFclass As IFeatureClass
-            Set pWorkspace = pDataset.Workspace
-            Set pFWorkspace = pWorkspace
-            Set pRLFclass = pFWorkspace.OpenFeatureClass(g_pFldnames.FCReferenceLines)
-            If pRLFclass Is Nothing Then
+243:             Set pWorkspace = pDataset.Workspace
+244:             Set pFWorkspace = pWorkspace
+245:             Set pRLFclass = pFWorkspace.OpenFeatureClass(g_pFldnames.FCReferenceLines)
+246:             If pRLFclass Is Nothing Then
                 'If feature class not present, don't move lines
-                MsgBox "Unable to locate Reference Lines feature class", vbCritical
-                GoTo Process_Exit
-            End If
+248:                 MsgBox "Unable to locate Reference Lines feature class", vbCritical
+249:                 GoTo Process_Exit
+250:             End If
             'Move historical taxlot lines to linetype 33
             Dim pTLLinesLayer As IFeatureLayer
             Dim pTLLinesFC As IFeatureClass
             Dim lLineTypeFld As Long
-            Set pTLLinesLayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCTaxlotLines)
-            If Not pTLLinesLayer Is Nothing Then
-                Set pTLLinesFC = pTLLinesLayer.FeatureClass
-                lLineTypeFld = modUtils.LocateFields(pRLFclass, g_pFldnames.TLLinesLineTypeFN)
+255:             Set pTLLinesLayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCTaxlotLines)
+256:             If Not pTLLinesLayer Is Nothing Then
+257:                 Set pTLLinesFC = pTLLinesLayer.FeatureClass
+258:                 lLineTypeFld = modUtils.LocateFields(pRLFclass, g_pFldnames.TLLinesLineTypeFN)
                 Dim pLineFCur As IFeatureCursor
                 Dim pMergedGeom As IGeometry
-                Set pMergedGeom = pNewFeature.Shape
-                Set pLineFCur = modUtils.SpatialQueryForEdit(pTLLinesFC, pMergedGeom, esriSpatialRelContains)
-                If Not pLineFCur Is Nothing Then
+261:                 Set pMergedGeom = pNewFeature.Shape
+262:                 Set pLineFCur = modUtils.SpatialQueryForEdit(pTLLinesFC, pMergedGeom, esriSpatialRelContains)
+263:                 If Not pLineFCur Is Nothing Then
                     Dim pLineFeat As IFeature
                     Dim pNewLineFeat As IFeature
-                    Set pLineFeat = pLineFCur.NextFeature
-                    Do While Not pLineFeat Is Nothing
-                        Set pNewLineFeat = pRLFclass.CreateFeature
-                        Set pNewLineFeat.Shape = pLineFeat.ShapeCopy
-                        pNewLineFeat.Value(lLineTypeFld) = 33
-                        pNewLineFeat.Store
-                        pLineFCur.DeleteFeature
+266:                     Set pLineFeat = pLineFCur.NextFeature
+267:                     Do While Not pLineFeat Is Nothing
+268:                         Set pNewLineFeat = pRLFclass.CreateFeature
+269:                         Set pNewLineFeat.Shape = pLineFeat.ShapeCopy
+270:                         pNewLineFeat.Value(lLineTypeFld) = 33
+271:                         pNewLineFeat.Store
+272:                         pLineFCur.DeleteFeature
                         'pLineFeat.Value(lLineTypeFld) = 33
                         'pLineFCur.UpdateFeature pLineFeat
-                        Set pLineFeat = pLineFCur.NextFeature
-                    Loop
-                End If
-            End If
+275:                         Set pLineFeat = pLineFCur.NextFeature
+276:                     Loop
+277:                 End If
+278:             End If
             ' finish edit operation
-            m_pEditor.StopOperation ("Features merged")
-        End If
-    End If
+280:             m_pEditor.StopOperation ("Features merged")
+281:         End If
+282:     End If
 
-    Unload Me
+284:     Unload Me
 Process_Exit:
   Exit Sub
 ErrorHandler:
@@ -404,25 +404,25 @@ Private Sub cmdHelp_Click()
     'Open a custom help file in Internet Explorer
     'Requires a file called help.htm in the same dir as the application dll
     Dim sFilePath As String
-    sFilePath = app.Path & "\" & "Combine_help.rtf"
-    If modUtils.FileExists(sFilePath) Then
-    Debug.Assert True 'need a different method to open rtf files
-        If FileExists("C:\Program Files\Windows NT\Accessories\wordpad.exe") Then
-            Shell "C:\Program Files\Windows NT\Accessories\wordpad.exe " & sFilePath, 1
-        End If
-    Else
-        MsgBox "No help available"
-    End If
+314:     sFilePath = app.Path & "\" & "Combine_help.rtf"
+315:     If modUtils.FileExists(sFilePath) Then
+316:     Debug.Assert True 'need a different method to open rtf files
+317:         If FileExists("C:\Program Files\Windows NT\Accessories\wordpad.exe") Then
+318:             Shell "C:\Program Files\Windows NT\Accessories\wordpad.exe " & sFilePath, 1
+319:         End If
+320:     Else
+321:         MsgBox "No help available"
+322:     End If
 End Sub
 
 Private Sub Form_Load()
   On Error GoTo ErrorHandler
-    Set m_pApp = New AppRef
-    Set m_pMxDoc = m_pApp.Document
+327:     Set m_pApp = New AppRef
+328:     Set m_pMxDoc = m_pApp.Document
     'Set a reference to the Editor
     Dim pUID As New UID
-    pUID = "esriEditor.editor"
-    Set m_pEditor = g_pApp.FindExtensionByCLSID(pUID)
+331:     pUID = "esriEditor.editor"
+332:     Set m_pEditor = g_pApp.FindExtensionByCLSID(pUID)
 
   Exit Sub
 ErrorHandler:
@@ -455,19 +455,19 @@ Public Function getGeomVal(ByRef pFeature As IFeature) As Double
   On Error GoTo ErrorHandler
 
   Dim pFC As IFeatureClass
-  Set pFC = pFeature.Class
+365:   Set pFC = pFeature.Class
   Dim pvFlds As IFields
-  Set pvFlds = pFC.Fields
+367:   Set pvFlds = pFC.Fields
   
 '++ START JWM 10/11/2006 us
 Select Case pFC.ShapeType
     Case esriGeometryMultipoint, esriGeometryNull
-        getGeomVal = 0
+372:         getGeomVal = 0
     Case esriGeometryPolygon
-        getGeomVal = pFeature.Value(pvFlds.FindField(pFC.AreaField.Name))
+374:         getGeomVal = pFeature.Value(pvFlds.FindField(pFC.AreaField.Name))
     Case Else
-        getGeomVal = pFeature.Value(pvFlds.FindField(pFC.LengthField.Name))
-End Select
+376:         getGeomVal = pFeature.Value(pvFlds.FindField(pFC.LengthField.Name))
+377: End Select
 
 '  If pFC.ShapeType = esriGeometryMultipoint Or pFC.ShapeType = esriGeometryMultipoint Or pFC.ShapeType = esriGeometryNull Then
 '    getGeomVal = 0

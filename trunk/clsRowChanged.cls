@@ -89,14 +89,14 @@ Private m_bRowChanged As Boolean 'During the compare and save process, set a fla
 
 Private Sub Class_Initialize()
 
-  m_bRowChanged = False
+79:   m_bRowChanged = False
   
 End Sub
 
 Public Property Let RowChanged(bRowChanged As Boolean)
-  m_bRowChanged = bRowChanged
+84:   m_bRowChanged = bRowChanged
 End Property
 
 Public Property Get RowChanged() As Boolean
-  RowChanged = m_bRowChanged
+88:   RowChanged = m_bRowChanged
 End Property

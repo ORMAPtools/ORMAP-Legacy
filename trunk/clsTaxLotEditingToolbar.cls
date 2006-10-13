@@ -91,7 +91,7 @@ Implements IToolBarDef
  
 Private Property Get IToolBarDef_ItemCount() As Long
 
-    IToolBarDef_ItemCount = 5
+81:     IToolBarDef_ItemCount = 5
     
 End Property
  
@@ -100,27 +100,27 @@ Private Sub IToolBarDef_GetItemInfo(ByVal pos As Long, ByVal itemDef As esriSyst
   Select Case pos
     Case 0
       'itemDef.Group = True
-      itemDef.ID = "TaxlotEditing.cmdTaxlotAssignment"
+90:       itemDef.ID = "TaxlotEditing.cmdTaxlotAssignment"
     Case 1
-      itemDef.ID = "TaxlotEditing.cmdLocate"
+92:       itemDef.ID = "TaxlotEditing.cmdLocate"
     Case 2
-      itemDef.ID = "TaxlotEditing.cmdTaxlotCombine"
+94:       itemDef.ID = "TaxlotEditing.cmdTaxlotCombine"
     Case 3
-      itemDef.ID = "TaxlotEditing.cmdArrows"
+96:       itemDef.ID = "TaxlotEditing.cmdArrows"
     Case 4
-      itemDef.ID = "TaxlotEditing.cmdMapIndex"
-  End Select
+98:       itemDef.ID = "TaxlotEditing.cmdMapIndex"
+99:   End Select
     
 End Sub
  
 Private Property Get IToolBarDef_Name() As String
     
-    IToolBarDef_Name = "ORMAP Taxlot Editor"
+105:     IToolBarDef_Name = "ORMAP Taxlot Editor"
     
 End Property
  
 Private Property Get IToolBarDef_Caption() As String
 
-    IToolBarDef_Caption = "ORMAP Taxlot Editor"
+111:     IToolBarDef_Caption = "ORMAP Taxlot Editor"
     
 End Property

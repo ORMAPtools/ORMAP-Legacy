@@ -118,8 +118,8 @@ Private Sub Class_Initialize()
   On Error GoTo ErrorHandler
 
 
-  Set m_pBitmap = LoadResPicture(101, 0)
-  Set m_pCursor = LoadResPicture(101, 2)
+107:   Set m_pBitmap = LoadResPicture(101, 0)
+108:   Set m_pCursor = LoadResPicture(101, 2)
 
 
   Exit Sub
@@ -131,21 +131,21 @@ Private Sub Class_Terminate()
   On Error GoTo ErrorHandler
 
   
-  Unload frmTaxlotAssignment
-  Set m_pBitmap = Nothing
-  Set m_pCursor = Nothing
-  Set m_pBitmap = Nothing
-  Set m_pCursor = Nothing
-  Set m_pApp = Nothing
-  Set m_pDoc = Nothing
-  Set m_pMap = Nothing
-  Set m_pTaxlotFlayer = Nothing
-  Set m_pTaxlotFClass = Nothing
-  Set m_pMIFlayer = Nothing
-  Set m_pMIFclass = Nothing
-  Set m_pExt = Nothing
-  Set m_pEditorEvents = Nothing
-  Set m_pEditor = Nothing
+120:   Unload frmTaxlotAssignment
+121:   Set m_pBitmap = Nothing
+122:   Set m_pCursor = Nothing
+123:   Set m_pBitmap = Nothing
+124:   Set m_pCursor = Nothing
+125:   Set m_pApp = Nothing
+126:   Set m_pDoc = Nothing
+127:   Set m_pMap = Nothing
+128:   Set m_pTaxlotFlayer = Nothing
+129:   Set m_pTaxlotFClass = Nothing
+130:   Set m_pMIFlayer = Nothing
+131:   Set m_pMIFclass = Nothing
+132:   Set m_pExt = Nothing
+133:   Set m_pEditorEvents = Nothing
+134:   Set m_pEditor = Nothing
 
 
   Exit Sub
@@ -167,9 +167,9 @@ Private Property Get ICommand_Enabled() As Boolean
   On Error GoTo ErrorHandler
 
 
-  If m_bEnabled = True Then
-    ICommand_Enabled = True
-  End If
+156:   If m_bEnabled = True Then
+157:     ICommand_Enabled = True
+158:   End If
 
 
   Exit Property
@@ -181,7 +181,7 @@ Private Property Get ICommand_Name() As String
   On Error GoTo ErrorHandler
 
 
-     ICommand_Name = "TaxlotAssignment"
+170:      ICommand_Name = "TaxlotAssignment"
 
 
   Exit Property
@@ -193,7 +193,7 @@ Private Property Get ICommand_Caption() As String
   On Error GoTo ErrorHandler
 
 
-     ICommand_Caption = "Taxlot Assignment"
+182:      ICommand_Caption = "Taxlot Assignment"
 
 
   Exit Property
@@ -205,7 +205,7 @@ Private Property Get ICommand_Tooltip() As String
   On Error GoTo ErrorHandler
 
 
-     ICommand_Tooltip = "Taxlot Assignment Tool"
+194:      ICommand_Tooltip = "Taxlot Assignment Tool"
 
 
   Exit Property
@@ -217,7 +217,7 @@ Private Property Get ICommand_Message() As String
   On Error GoTo ErrorHandler
 
     
-  ICommand_Message = "Set starting value and increment value to populate values in Taxlots"
+206:   ICommand_Message = "Set starting value and increment value to populate values in Taxlots"
 
 
   Exit Property
@@ -255,7 +255,7 @@ Private Property Get ICommand_Bitmap() As esriSystem.OLE_HANDLE
   On Error GoTo ErrorHandler
 
     
-   ICommand_Bitmap = m_pBitmap
+244:    ICommand_Bitmap = m_pBitmap
 
 
   Exit Property
@@ -267,7 +267,7 @@ Private Property Get ICommand_Category() As String
   On Error GoTo ErrorHandler
 
 
-     ICommand_Category = "ORMAP"
+256:      ICommand_Category = "ORMAP"
 
 
   Exit Property
@@ -279,19 +279,19 @@ Private Sub ICommand_OnCreate(ByVal hook As Object)
   On Error GoTo ErrorHandler
 
     
-  Set m_pApp = hook
-  If g_pApp Is Nothing Then
-    Set g_pApp = hook
-  End If
-  Set m_pDoc = m_pApp.Document
-  Set m_pMap = m_pDoc.FocusMap
+268:   Set m_pApp = hook
+269:   If g_pApp Is Nothing Then
+270:     Set g_pApp = hook
+271:   End If
+272:   Set m_pDoc = m_pApp.Document
+273:   Set m_pMap = m_pDoc.FocusMap
   
   'Get a reference to the editor extension
   Dim pID As New UID
-  pID = "esriCore.Editor"
-  Set m_pApp = hook
-  Set m_pEditor = m_pApp.FindExtensionByCLSID(pID)
-  Set m_pEditorEvents = m_pEditor
+277:   pID = "esriCore.Editor"
+278:   Set m_pApp = hook
+279:   Set m_pEditor = m_pApp.FindExtensionByCLSID(pID)
+280:   Set m_pEditorEvents = m_pEditor
 
 
   Exit Sub
@@ -324,39 +324,39 @@ Private Sub ICommand_OnClick()
   On Error GoTo ErrorHandler
 
     'Find Taxlot
-    Set m_pTaxlotFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
-    If m_pTaxlotFlayer Is Nothing Then
-        MsgBox "Unable to locate Taxlot layer in Table of Contents.  " & _
+313:     Set m_pTaxlotFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
+314:     If m_pTaxlotFlayer Is Nothing Then
+315:         MsgBox "Unable to locate Taxlot layer in Table of Contents.  " & _
         "This process requires a feature class called " & g_pFldnames.FCTaxlot
-        GoTo Process_Exit
-    End If
-    Set m_pTaxlotFClass = m_pTaxlotFlayer.FeatureClass
+317:         GoTo Process_Exit
+318:     End If
+319:     Set m_pTaxlotFClass = m_pTaxlotFlayer.FeatureClass
     'Find MapIndex
-    Set m_pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-    If m_pMIFlayer Is Nothing Then
-        response = MsgBox("Unable to locate Map Index layer in Table of Contents.  " & _
+321:     Set m_pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+322:     If m_pMIFlayer Is Nothing Then
+323:         response = MsgBox("Unable to locate Map Index layer in Table of Contents.  " & _
         "This process requires a feature class called " & g_pFldnames.FCMapIndex & ".  " & _
         "Load " & g_pFldnames.FCMapIndex & " automatically?", vbYesNo)
-        If response <> vbYes Then GoTo Process_Exit
-        modUtils.LoadFCIntoMap g_pFldnames.FCMapIndex, m_pTaxlotFClass
-        Set m_pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-        If m_pMIFlayer Is Nothing Then GoTo Process_Exit
-    End If
-    Set m_pMIFclass = m_pMIFlayer.FeatureClass
-    m_lOMTLNumFld = m_pTaxlotFClass.FindField(g_pFldnames.TLOrmapTaxlotFN)
-    If m_lOMTLNumFld = -1 Then
-        MsgBox "Unable to locate ORMAPTaxlot field.  Check ini file"
-        GoTo Process_Exit
-    End If
-    m_lOMNumFld = m_pTaxlotFClass.FindField(g_pFldnames.TLOrmapMapNumberFN)
-    If m_lOMNumFld = -1 Then
-        MsgBox "Unable to locate ORMAPMapnumber field.  Check ini file"
-        GoTo Process_Exit
-    End If
-    m_lTLTaxlotFld = LocateFields(m_pTaxlotFClass, g_pFldnames.TLTaxlotFN)
-    m_lTLAnomalyFld = LocateFields(m_pTaxlotFClass, g_pFldnames.TLAnomalyFN)
+326:         If response <> vbYes Then GoTo Process_Exit
+327:         modUtils.LoadFCIntoMap g_pFldnames.FCMapIndex, m_pTaxlotFClass
+328:         Set m_pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+329:         If m_pMIFlayer Is Nothing Then GoTo Process_Exit
+330:     End If
+331:     Set m_pMIFclass = m_pMIFlayer.FeatureClass
+332:     m_lOMTLNumFld = m_pTaxlotFClass.FindField(g_pFldnames.TLOrmapTaxlotFN)
+333:     If m_lOMTLNumFld = -1 Then
+334:         MsgBox "Unable to locate ORMAPTaxlot field.  Check ini file"
+335:         GoTo Process_Exit
+336:     End If
+337:     m_lOMNumFld = m_pTaxlotFClass.FindField(g_pFldnames.TLOrmapMapNumberFN)
+338:     If m_lOMNumFld = -1 Then
+339:         MsgBox "Unable to locate ORMAPMapnumber field.  Check ini file"
+340:         GoTo Process_Exit
+341:     End If
+342:     m_lTLTaxlotFld = LocateFields(m_pTaxlotFClass, g_pFldnames.TLTaxlotFN)
+343:     m_lTLAnomalyFld = LocateFields(m_pTaxlotFClass, g_pFldnames.TLAnomalyFN)
     'Initialize the TaxlotAssignment form
-    frmTaxlotAssignment.Show vbModal
+345:     frmTaxlotAssignment.Show vbModal
 
 Process_Exit:
   Exit Sub
@@ -368,7 +368,7 @@ Private Property Get ITool_Cursor() As esriSystem.OLE_HANDLE
   On Error GoTo ErrorHandler
 
     
-    ITool_Cursor = m_pCursor
+357:     ITool_Cursor = m_pCursor
     
 
   Exit Property
@@ -401,7 +401,7 @@ End Property
 Private Sub ITool_OnMouseDown(ByVal Button As Long, ByVal Shift As Long, ByVal X As Long, ByVal Y As Long)
   On Error GoTo ErrorHandler
     
-  If Button = vbLeftButton Then
+390:   If Button = vbLeftButton Then
     'Save values from Form to variables and increment value in form
     Dim lvalue As Long
     Dim lincrement As Long
@@ -409,19 +409,19 @@ Private Sub ITool_OnMouseDown(ByVal Button As Long, ByVal Shift As Long, ByVal X
     Dim sFieldName As String
 
     'If "NUMBER" selected, then make sure value is numeric
-    If StrComp(frmTaxlotAssignment.cmbTaxlotNum.Text, "NUMBER", vbTextCompare) = 0 Then
-        lvalue = frmTaxlotAssignment.txtTaxlotNum.Text
-        If frmTaxlotAssignment.tglBy1.Value = True Then
-            lincrement = 1
-        ElseIf frmTaxlotAssignment.tglBy10.Value = True Then
-            lincrement = 10
-        Else
-            lincrement = 100
-        End If
-    Else 'If one of the non-numeric categories is selected
+398:     If StrComp(frmTaxlotAssignment.cmbTaxlotNum.Text, "NUMBER", vbTextCompare) = 0 Then
+399:         lvalue = frmTaxlotAssignment.txtTaxlotNum.Text
+400:         If frmTaxlotAssignment.tglBy1.Value = True Then
+401:             lincrement = 1
+402:         ElseIf frmTaxlotAssignment.tglBy10.Value = True Then
+403:             lincrement = 10
+404:         Else
+405:             lincrement = 100
+406:         End If
+407:     Else 'If one of the non-numeric categories is selected
         ' dont have a else if there is nothing to do
 
-    End If
+410:     End If
 
     'Select the target layer feature where user clicked
     Dim pMap As IMap
@@ -434,71 +434,71 @@ Private Sub ITool_OnMouseDown(ByVal Button As Long, ByVal Shift As Long, ByVal X
     Dim pFeature As IFeature
     Dim pActiveView As IActiveView
 
-    Set pMap = m_pEditor.Map
-    Set pPoint = m_pEditor.Display.DisplayTransformation.ToMapPoint(X, Y)
-    Set pGeometry = m_pEditor.CreateSearchShape(pPoint)
-    If frmTaxlotAssignment.cmbTaxlotNum.Text = "NUMBER" Then
+423:     Set pMap = m_pEditor.Map
+424:     Set pPoint = m_pEditor.Display.DisplayTransformation.ToMapPoint(X, Y)
+425:     Set pGeometry = m_pEditor.CreateSearchShape(pPoint)
+426:     If frmTaxlotAssignment.cmbTaxlotNum.Text = "NUMBER" Then
         'Verify that within this map index, this taxlot number is unique
         'If not unique, prompt user to enter a new value
-        If Not modUtils.ValidateTaxlotNum(frmTaxlotAssignment.txtTaxlotNum.Text, pGeometry) Then
-            MsgBox "The current Taxlot value (" & frmTaxlotAssignment.txtTaxlotNum.Text & _
+429:         If Not modUtils.ValidateTaxlotNum(frmTaxlotAssignment.txtTaxlotNum.Text, pGeometry) Then
+430:             MsgBox "The current Taxlot value (" & frmTaxlotAssignment.txtTaxlotNum.Text & _
             ") is not unique withing this MapIndex.  Please enter a new number"
-            frmTaxlotAssignment.Show vbModal
-            GoTo Process_Exit
-        End If
-    End If
-    Set pEnv = pGeometry 'QI
-    Set pSpatialFilter = New SpatialFilter
-    Set pSpatialFilter.Geometry = pGeometry
-    strShapeFieldName = m_pTaxlotFClass.ShapeFieldName
-    Set pSpatialFilter.OutputSpatialReference(strShapeFieldName) = pMap.SpatialReference
-    pSpatialFilter.GeometryField = m_pTaxlotFClass.ShapeFieldName
-    pSpatialFilter.SpatialRel = esriSpatialRelIntersects
-    Set pFCursor = m_pTaxlotFClass.Search(pSpatialFilter, False)
-    If pFCursor Is Nothing Then GoTo Process_Exit 'If no taxlots selected
-    Set pFeature = pFCursor.NextFeature
-    If Not pFeature Is Nothing Then
+432:             frmTaxlotAssignment.Show vbModal
+433:             GoTo Process_Exit
+434:         End If
+435:     End If
+436:     Set pEnv = pGeometry 'QI
+437:     Set pSpatialFilter = New SpatialFilter
+438:     Set pSpatialFilter.Geometry = pGeometry
+439:     strShapeFieldName = m_pTaxlotFClass.ShapeFieldName
+440:     Set pSpatialFilter.OutputSpatialReference(strShapeFieldName) = pMap.SpatialReference
+441:     pSpatialFilter.GeometryField = m_pTaxlotFClass.ShapeFieldName
+442:     pSpatialFilter.SpatialRel = esriSpatialRelIntersects
+443:     Set pFCursor = m_pTaxlotFClass.Search(pSpatialFilter, False)
+444:     If pFCursor Is Nothing Then GoTo Process_Exit 'If no taxlots selected
+445:     Set pFeature = pFCursor.NextFeature
+446:     If Not pFeature Is Nothing Then
       'Update the feature
-        m_pEditor.StartOperation
+448:         m_pEditor.StartOperation
         Dim sOMTLNval As String
         Dim sExistOMNum As String
-        sExistOMNum = IIf(IsNull(pFeature.Value(m_lOMNumFld)), "", pFeature.Value(m_lOMNumFld))
-        If sExistOMNum = "" Then 'Obtain it from MapIndex polygon
-            modUtils.CalcTaxlotValues pFeature, m_pMIFlayer
-            sExistOMNum = IIf(IsNull(pFeature.Value(m_lOMNumFld)), "", pFeature.Value(m_lOMNumFld))
-            If sExistOMNum = "" Then
-                MsgBox "ORMAPMapNumber not present in this taxlot or MapIndex.  Use the MapIndex tool to create one"
-                GoTo Process_Exit
-            End If
-        End If
+451:         sExistOMNum = IIf(IsNull(pFeature.Value(m_lOMNumFld)), "", pFeature.Value(m_lOMNumFld))
+452:         If sExistOMNum = "" Then 'Obtain it from MapIndex polygon
+453:             modUtils.CalcTaxlotValues pFeature, m_pMIFlayer
+454:             sExistOMNum = IIf(IsNull(pFeature.Value(m_lOMNumFld)), "", pFeature.Value(m_lOMNumFld))
+455:             If sExistOMNum = "" Then
+456:                 MsgBox "ORMAPMapNumber not present in this taxlot or MapIndex.  Use the MapIndex tool to create one"
+457:                 GoTo Process_Exit
+458:             End If
+459:         End If
         'Assign Taxlot value
         Dim sExistTLNumVal As String
-        sExistTLNumVal = IIf(IsNull(pFeature.Value(m_lTLTaxlotFld)), "", pFeature.Value(m_lTLTaxlotFld))
-        If Not sExistTLNumVal = "" Then
+462:         sExistTLNumVal = IIf(IsNull(pFeature.Value(m_lTLTaxlotFld)), "", pFeature.Value(m_lTLTaxlotFld))
+463:         If Not sExistTLNumVal = "" Then
             Dim response As Integer
-            response = MsgBox("Taxlot currently has a Taxlot value (" & sExistTLNumVal & ").  Update it?", vbYesNo)
-            If response = vbNo Then GoTo Process_Exit
-        End If
+465:             response = MsgBox("Taxlot currently has a Taxlot value (" & sExistTLNumVal & ").  Update it?", vbYesNo)
+466:             If response = vbNo Then GoTo Process_Exit
+467:         End If
         'Taxlot can be less than 5-digits
         'The Taxlot value in OrMapMapNum must be 5 digits.
         'Two versions of the taxlot number will be used for these purposes.
         Dim sNewTLNum As String
         Dim sNewTLNum_5digit As String
-        If StrComp(frmTaxlotAssignment.cmbTaxlotNum.Text, "NUMBER", vbTextCompare) = 0 Then
-            sNewTLNum = frmTaxlotAssignment.txtTaxlotNum.Text 'User entered number
-            sNewTLNum_5digit = sNewTLNum
+473:         If StrComp(frmTaxlotAssignment.cmbTaxlotNum.Text, "NUMBER", vbTextCompare) = 0 Then
+474:             sNewTLNum = frmTaxlotAssignment.txtTaxlotNum.Text 'User entered number
+475:             sNewTLNum_5digit = sNewTLNum
             'Make sure number is 5 characters
-            If Len(sNewTLNum_5digit) < 5 Then
-             Do Until Len(sNewTLNum_5digit) = 5
-                sNewTLNum_5digit = "0" & sNewTLNum_5digit
-             Loop
-            End If
-        Else
+477:             If Len(sNewTLNum_5digit) < 5 Then
+478:              Do Until Len(sNewTLNum_5digit) = 5
+479:                 sNewTLNum_5digit = "0" & sNewTLNum_5digit
+480:              Loop
+481:             End If
+482:         Else
             'Remove leading Zeros for taxlot number if any exist
-            sNewTLNum_5digit = frmTaxlotAssignment.cmbTaxlotNum.Text 'Predefined selection
+484:             sNewTLNum_5digit = frmTaxlotAssignment.cmbTaxlotNum.Text 'Predefined selection
             'sNewTLNum_5digit = sNewTLNum
-            sNewTLNum = Replace(sNewTLNum_5digit, "0", "")
-        End If
+486:             sNewTLNum = Replace(sNewTLNum_5digit, "0", "")
+487:         End If
         '++ BEGIN, Laura Gordon, November 29, 2005
         'Determine if Special Interests field is something other than default
         'If so, include it in ORMAPtaxlot
@@ -507,53 +507,53 @@ Private Sub ITool_OnMouseDown(ByVal Button As Long, ByVal Shift As Long, ByVal X
         '+If IsNull(sTLSpecVAl) Then sTLSpecVAl = "00000"
         Dim sTLMapSufTypeVAl As String
         Dim sTLMapSufNumVAl As String
-        sTLMapSufTypeVAl = GetMapSufType(pFeature)
-        sTLMapSufNumVAl = GetMapSufNum(pFeature)
-        If IsNull(sTLMapSufTypeVAl) Then sTLMapSufTypeVAl = "0"
-        If IsNull(sTLMapSufNumVAl) Then sTLMapSufNumVAl = "000"
+496:         sTLMapSufTypeVAl = GetMapSufType(pFeature)
+497:         sTLMapSufNumVAl = GetMapSufNum(pFeature)
+498:         If IsNull(sTLMapSufTypeVAl) Then sTLMapSufTypeVAl = "0"
+499:         If IsNull(sTLMapSufNumVAl) Then sTLMapSufNumVAl = "000"
         '++ END, Laura Gordon, November 29, 2005
 
-        pFeature.Value(m_lTLTaxlotFld) = sNewTLNum
+502:         pFeature.Value(m_lTLTaxlotFld) = sNewTLNum
         Dim sShortOMNum As String 'Remove suffixTYpe and suffixNum
-        sShortOMNum = ShortenOMMapNum(sExistOMNum)
+504:         sShortOMNum = ShortenOMMapNum(sExistOMNum)
         '++ BEGIN, Laura Gordon, November 29, 2005
         '+sOMTLNval = sShortOMNum & sNewTLNum_5digit & sTLSpecVAl '"00000"
-        sOMTLNval = sShortOMNum & sTLMapSufTypeVAl & sTLMapSufNumVAl & sNewTLNum_5digit
+507:         sOMTLNval = sShortOMNum & sTLMapSufTypeVAl & sTLMapSufNumVAl & sNewTLNum_5digit
         '++ END, Laura Gordon, November 29, 2005
 
         'Copy Anomaly from MapIndex
         Dim sAnom As String
-        sAnom = ParseOMMapNum(sExistOMNum, "anomaly")
-        pFeature.Value(m_lTLAnomalyFld) = sAnom
+512:         sAnom = ParseOMMapNum(sExistOMNum, "anomaly")
+513:         pFeature.Value(m_lTLAnomalyFld) = sAnom
         'Assign OrmapTaxlot value
-        pFeature.Value(m_lOMTLNumFld) = sOMTLNval
-        pFeature.Store
+515:         pFeature.Value(m_lOMTLNumFld) = sOMTLNval
+516:         pFeature.Store
         'AutoIncrement if necessary
-        If frmTaxlotAssignment.tglAutoYes.Value = True And StrComp(frmTaxlotAssignment.cmbTaxlotNum.Text, "NUMBER", vbTextCompare) = 0 Then
-            lNextValue = lvalue + lincrement
+518:         If frmTaxlotAssignment.tglAutoYes.Value = True And StrComp(frmTaxlotAssignment.cmbTaxlotNum.Text, "NUMBER", vbTextCompare) = 0 Then
+519:             lNextValue = lvalue + lincrement
             'Add leading zeros if necessary
             Dim sNextValue As String
-            sNextValue = CStr(lNextValue)
+522:             sNextValue = CStr(lNextValue)
             'If Len(sNextValue) < 5 Then
              'Do Until Len(sNextValue) = 5
             ''    sNextValue = "0" & sNextValue
              'Loop
            ' End If
-            frmTaxlotAssignment.txtTaxlotNum.Text = lNextValue
-        End If
-      m_pEditor.StopOperation "AutoIncrement Attribute"
-    If frmTaxlotAssignment.tglAutoYes.Value = False Then
+528:             frmTaxlotAssignment.txtTaxlotNum.Text = lNextValue
+529:         End If
+530:       m_pEditor.StopOperation "AutoIncrement Attribute"
+531:     If frmTaxlotAssignment.tglAutoYes.Value = False Then
         'Deactivate the tool
-        Set m_pApp.CurrentTool = Nothing
-    End If
-    Else
+533:         Set m_pApp.CurrentTool = Nothing
+534:     End If
+535:     Else
         'Deactivate the tool
-        Set m_pApp.CurrentTool = Nothing
-        GoTo Process_Exit 'Don't do anything if no feature
-    End If
-    Set pActiveView = pMap
-    pActiveView.PartialRefresh esriViewGeography, m_pTaxlotFlayer, pFeature.Extent.Envelope
-  End If
+537:         Set m_pApp.CurrentTool = Nothing
+538:         GoTo Process_Exit 'Don't do anything if no feature
+539:     End If
+540:     Set pActiveView = pMap
+541:     pActiveView.PartialRefresh esriViewGeography, m_pTaxlotFlayer, pFeature.Extent.Envelope
+542:   End If
     
 Process_Exit:
   Exit Sub
@@ -601,9 +601,9 @@ Private Sub ITool_OnKeyDown(ByVal keyCode As Long, ByVal Shift As Long)
   On Error GoTo ErrorHandler
 
     
-  If keyCode = vbKeyO Then
-    frmTaxlotAssignment.Show vbModal
-  End If
+590:   If keyCode = vbKeyO Then
+591:     frmTaxlotAssignment.Show vbModal
+592:   End If
 
   Exit Sub
 ErrorHandler:
@@ -639,7 +639,7 @@ Private Function ITool_Deactivate() As Boolean
   On Error GoTo ErrorHandler
 
     
-    ITool_Deactivate = True
+628:     ITool_Deactivate = True
 
 
   Exit Function
@@ -682,34 +682,34 @@ Private Sub m_pEditorEvents_OnChangeFeature(ByVal obj As esriGeoDatabase.IObject
 
     '
     'These are the autocalculated fields
-    UpdateAutoFields obj
+671:     UpdateAutoFields obj
         
     If Not modUtils.IsOrMapFeature(obj) Then Exit Sub
     Dim u As New UID
     Dim pFeat As IFeature
     
-    If modUtils.IsTaxlot(obj) Then
+677:     If modUtils.IsTaxlot(obj) Then
         'Obtain ORMAPMapnum via overlay and calculate other field values
-        modUtils.CalcTaxlotValues obj, m_pMIFlayer
-    ElseIf modUtils.IsAnno(obj) Then
+679:         modUtils.CalcTaxlotValues obj, m_pMIFlayer
+680:     ElseIf modUtils.IsAnno(obj) Then
         Dim pAnnotationFeature As IAnnotationFeature
-        Set pAnnotationFeature = obj
+682:         Set pAnnotationFeature = obj
         
         'Get the parent feature so mapnumber can be obtained
         Dim lParentID As Long
-        lParentID = pAnnotationFeature.LinkedFeatureID
-        If lParentID > -1 Then 'Feature linked
-            Set pFeat = GetRelatedObjects(obj)
+686:         lParentID = pAnnotationFeature.LinkedFeatureID
+687:         If lParentID > -1 Then 'Feature linked
+688:             Set pFeat = GetRelatedObjects(obj)
             If pFeat Is Nothing Then Exit Sub
-        Else
+690:         Else
             'Not feature linked anno, so we can use the feature as is
-            Set pFeat = obj
-        End If
+692:             Set pFeat = obj
+693:         End If
     
         'Set anno size
-        SetAnnoSize obj, pFeat
+696:         SetAnnoSize obj, pFeat
 
-    End If
+698:     End If
 
   Exit Sub
 ErrorHandler:
@@ -740,7 +740,7 @@ Private Sub m_pEditorEvents_OnCreateFeature(ByVal obj As esriGeoDatabase.IObject
   On Error GoTo ErrorHandler
 
     'These are the autocalculated fields
-    UpdateAutoFields obj
+729:     UpdateAutoFields obj
         
     Dim sMapNum As String
     Dim pMIFlayer As IFeatureLayer
@@ -757,69 +757,69 @@ Private Sub m_pEditorEvents_OnCreateFeature(ByVal obj As esriGeoDatabase.IObject
     Dim vMapScaleVal As Variant
     Dim vMapNumVal As Variant
 
-    lMapNumFld = obj.Fields.FindField(g_pFldnames.MIMapNumberFN)
-    lMapScaleFld = obj.Fields.FindField(g_pFldnames.MIMapScaleFN)
-    If modUtils.IsTaxlot(obj) Then
+746:     lMapNumFld = obj.Fields.FindField(g_pFldnames.MIMapNumberFN)
+747:     lMapScaleFld = obj.Fields.FindField(g_pFldnames.MIMapScaleFN)
+748:     If modUtils.IsTaxlot(obj) Then
         'Obtain ORMAPMapnum via overlay and calculate other field values
-        modUtils.CalcTaxlotValues obj, m_pMIFlayer
+750:         modUtils.CalcTaxlotValues obj, m_pMIFlayer
         
-    ElseIf modUtils.IsAnno(obj) Then
+752:     ElseIf modUtils.IsAnno(obj) Then
         'Capture MapNumber for each anno feature created
-        lAnnoMapNumFld = LocateFields(obj.Class, g_pFldnames.MIMapNumberFN)
-        If lAnnoMapNumFld = -1 Then GoTo Process_Exit
-        Set pAnnotationFeature = obj
+754:         lAnnoMapNumFld = LocateFields(obj.Class, g_pFldnames.MIMapNumberFN)
+755:         If lAnnoMapNumFld = -1 Then GoTo Process_Exit
+756:         Set pAnnotationFeature = obj
         
         'Get the parent feature so mapnumber can be obtained
-        lParentID = pAnnotationFeature.LinkedFeatureID
-        If lParentID > -1 Then 'Feature linked
-            Set pFeat = GetRelatedObjects(obj)
-            If pFeat Is Nothing Then GoTo Process_Exit
-        Else
+759:         lParentID = pAnnotationFeature.LinkedFeatureID
+760:         If lParentID > -1 Then 'Feature linked
+761:             Set pFeat = GetRelatedObjects(obj)
+762:             If pFeat Is Nothing Then GoTo Process_Exit
+763:         Else
             'Not feature linked anno, so we can use the feature as is
-            Set pFeat = obj
-        End If
+765:             Set pFeat = obj
+766:         End If
 
-        Set pGeometry = pFeat.Shape
-        If pGeometry.IsEmpty Then GoTo Process_Exit
-        Set pEnv = pGeometry.Envelope
-        Set pCenter = CT_GetCenterOfEnvelope(pEnv)
-        Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-        If pMIFlayer Is Nothing Then GoTo Process_Exit
-        Set pMIFclass = pMIFlayer.FeatureClass
-        sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
-        obj.Value(lAnnoMapNumFld) = sMapNum
-        If lMapScaleFld > -1 Then
-            vMapScaleVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
-            If Not IsNull(vMapScaleVal) Then
-                obj.Value(lMapScaleFld) = vMapScaleVal
-            End If
-        End If
+768:         Set pGeometry = pFeat.Shape
+769:         If pGeometry.IsEmpty Then GoTo Process_Exit
+770:         Set pEnv = pGeometry.Envelope
+771:         Set pCenter = CT_GetCenterOfEnvelope(pEnv)
+772:         Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+773:         If pMIFlayer Is Nothing Then GoTo Process_Exit
+774:         Set pMIFclass = pMIFlayer.FeatureClass
+775:         sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
+776:         obj.Value(lAnnoMapNumFld) = sMapNum
+777:         If lMapScaleFld > -1 Then
+778:             vMapScaleVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
+779:             If Not IsNull(vMapScaleVal) Then
+780:                 obj.Value(lMapScaleFld) = vMapScaleVal
+781:             End If
+782:         End If
         'Set size based on mapscale
-        SetAnnoSize obj, pFeat
-    Else
+784:         SetAnnoSize obj, pFeat
+785:     Else
         'Update MapScale for all features with a MapScale field (except MapIndex)
-        If lMapScaleFld > -1 And Not modUtils.IsMapIndex(obj) Then
-            Set pFeat = obj
-            Set pGeometry = pFeat.Shape
-            If pGeometry.IsEmpty Then GoTo Process_Exit
-            Set pEnv = pGeometry.Envelope
-            Set pCenter = CT_GetCenterOfEnvelope(pEnv)
-            Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-            If pMIFlayer Is Nothing Then GoTo Process_Exit
-            Set pMIFclass = pMIFlayer.FeatureClass
-            vMapScaleVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
-            If Not IsNull(vMapScaleVal) Then
-                obj.Value(lMapScaleFld) = vMapScaleVal
-            End If
+787:         If lMapScaleFld > -1 And Not modUtils.IsMapIndex(obj) Then
+788:             Set pFeat = obj
+789:             Set pGeometry = pFeat.Shape
+790:             If pGeometry.IsEmpty Then GoTo Process_Exit
+791:             Set pEnv = pGeometry.Envelope
+792:             Set pCenter = CT_GetCenterOfEnvelope(pEnv)
+793:             Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+794:             If pMIFlayer Is Nothing Then GoTo Process_Exit
+795:             Set pMIFclass = pMIFlayer.FeatureClass
+796:             vMapScaleVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
+797:             If Not IsNull(vMapScaleVal) Then
+798:                 obj.Value(lMapScaleFld) = vMapScaleVal
+799:             End If
             'If a dataset with MapNumber, populate it
-            If lMapNumFld > -1 Then
-                vMapNumVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
-                If Not IsNull(vMapNumVal) Then
-                    obj.Value(lMapNumFld) = vMapNumVal
-                End If
-            End If
-        End If
-    End If
+801:             If lMapNumFld > -1 Then
+802:                 vMapNumVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
+803:                 If Not IsNull(vMapNumVal) Then
+804:                     obj.Value(lMapNumFld) = vMapNumVal
+805:                 End If
+806:             End If
+807:         End If
+808:     End If
 Process_Exit:
   Exit Sub
 ErrorHandler:
@@ -852,39 +852,39 @@ Private Sub m_pEditorEvents_OnDeleteFeature(ByVal obj As esriGeoDatabase.IObject
   On Error GoTo ErrorHandler
     'This code listens for deletes
     'If deleting taxlots, capture the mapnumber and taxlot and record in CancelledNumbers
-    If Not IsOrMapFeature(obj) Then GoTo Process_Exit
-    If modUtils.IsTaxlot(obj) Then
+841:     If Not IsOrMapFeature(obj) Then GoTo Process_Exit
+842:     If modUtils.IsTaxlot(obj) Then
             Dim pDSet As IDataset
             Dim pCNTable As ITable
             Dim pWSpace As IWorkspace
             Dim pFWSpace As IFeatureWorkspace
             Dim pFeat As IFeature
             Dim pRow As IRow
-            Set pFeat = obj
-            Set m_pTaxlotFClass = pFeat.Class
-            Set pDSet = m_pTaxlotFClass
-            Set pWSpace = pDSet.Workspace
-            Set pFWSpace = pWSpace
-            Set pCNTable = pFWSpace.OpenTable(g_pFldnames.TabCancelled)
-            If pCNTable Is Nothing Then
+849:             Set pFeat = obj
+850:             Set m_pTaxlotFClass = pFeat.Class
+851:             Set pDSet = m_pTaxlotFClass
+852:             Set pWSpace = pDSet.Workspace
+853:             Set pFWSpace = pWSpace
+854:             Set pCNTable = pFWSpace.OpenTable(g_pFldnames.TabCancelled)
+855:             If pCNTable Is Nothing Then
                 'Could privide warning that table is missing, but could get annoying
-                GoTo Process_Exit
-            End If
-            m_lTLTaxlotFld = m_pTaxlotFClass.FindField(g_pFldnames.TLTaxlotFN)
-            m_lTLMNFld = m_pTaxlotFClass.FindField(g_pFldnames.TLMapNumberFN)
-            m_lCNTaxlotFld = pCNTable.FindField(g_pFldnames.TLTaxlotFN)
-            m_lCNMNumFld = pCNTable.FindField(g_pFldnames.TLMapNumberFN)
-            If m_lCNTaxlotFld = -1 Or m_lCNMNumFld = -1 Then GoTo Process_Exit
+857:                 GoTo Process_Exit
+858:             End If
+859:             m_lTLTaxlotFld = m_pTaxlotFClass.FindField(g_pFldnames.TLTaxlotFN)
+860:             m_lTLMNFld = m_pTaxlotFClass.FindField(g_pFldnames.TLMapNumberFN)
+861:             m_lCNTaxlotFld = pCNTable.FindField(g_pFldnames.TLTaxlotFN)
+862:             m_lCNMNumFld = pCNTable.FindField(g_pFldnames.TLMapNumberFN)
+863:             If m_lCNTaxlotFld = -1 Or m_lCNMNumFld = -1 Then GoTo Process_Exit
             'If no null values, copy them to Cancelled numbers
-            If Not IsNull(obj.Value(m_lTLTaxlotFld)) And Not IsNull(obj.Value(m_lTLMNFld)) Then
-                Set pRow = pCNTable.CreateRow
-                If pRow Is Nothing Then GoTo Process_Exit
-                pRow.Value(m_lCNTaxlotFld) = obj.Value(m_lTLTaxlotFld)
-                pRow.Value(m_lCNMNumFld) = obj.Value(m_lTLMNFld)
-                pRow.Store
-                Set pRow = Nothing
-            End If
-        End If
+865:             If Not IsNull(obj.Value(m_lTLTaxlotFld)) And Not IsNull(obj.Value(m_lTLMNFld)) Then
+866:                 Set pRow = pCNTable.CreateRow
+867:                 If pRow Is Nothing Then GoTo Process_Exit
+868:                 pRow.Value(m_lCNTaxlotFld) = obj.Value(m_lTLTaxlotFld)
+869:                 pRow.Value(m_lCNMNumFld) = obj.Value(m_lTLMNFld)
+870:                 pRow.Store
+871:                 Set pRow = Nothing
+872:             End If
+873:         End If
 Process_Exit:
   Exit Sub
 ErrorHandler:
@@ -895,7 +895,7 @@ Private Sub m_pEditorEvents_OnStartEditing()
   On Error GoTo ErrorHandler
 
     
-  m_bEnabled = True
+884:   m_bEnabled = True
 
 
   Exit Sub
@@ -907,7 +907,7 @@ Private Sub m_pEditorEvents_OnStopEditing(ByVal save As Boolean)
   On Error GoTo ErrorHandler
 
 
-  m_bEnabled = False
+896:   m_bEnabled = False
 
 
   Exit Sub
