@@ -11,6 +11,27 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
+'    Copyright (C) 2006  opet developers opet-developers@lists.sourceforge.net
+'
+'    This program is free software; you can redistribute it and/or modify
+'    it under the terms of the GNU General Public License as published by
+'    the Free Software Foundation; either version 2 of the License, or
+'    (at your option) any later version.
+'
+'    This program is distributed in the hope that it will be useful,
+'    but WITHOUT ANY WARRANTY; without even the implied warranty of
+'    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'    GNU General Public License for more details located in AppSpecs.bas file.
+'
+'    You should have received a copy of the GNU General Public License along
+'    with this program; if not, write to the Free Software Foundation, Inc.,
+'    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+'
+' Keyword expansion for source code control
+' Tag for this file : $Name$
+' SCC Revision number: $Revision$
+' Date of last change: $Date$
+'
 '
 ' File name:            clsRowChanged
 '
@@ -89,14 +110,14 @@ Private m_bRowChanged As Boolean 'During the compare and save process, set a fla
 
 Private Sub Class_Initialize()
 
-79:   m_bRowChanged = False
+  m_bRowChanged = False
   
 End Sub
 
 Public Property Let RowChanged(bRowChanged As Boolean)
-84:   m_bRowChanged = bRowChanged
+  m_bRowChanged = bRowChanged
 End Property
 
 Public Property Get RowChanged() As Boolean
-88:   RowChanged = m_bRowChanged
+  RowChanged = m_bRowChanged
 End Property
