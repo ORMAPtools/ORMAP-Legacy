@@ -1,5 +1,26 @@
 Attribute VB_Name = "IniFiles"
 Attribute VB_Description = "Set of function to read and extract values from INI files"
+'    Copyright (C) 2006  opet developers opet-developers@lists.sourceforge.net
+'
+'    This program is free software; you can redistribute it and/or modify
+'    it under the terms of the GNU General Public License as published by
+'    the Free Software Foundation; either version 2 of the License, or
+'    (at your option) any later version.
+'
+'    This program is distributed in the hope that it will be useful,
+'    but WITHOUT ANY WARRANTY; without even the implied warranty of
+'    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'    GNU General Public License for more details located in AppSpecs.bas file.
+'
+'    You should have received a copy of the GNU General Public License along
+'    with this program; if not, write to the Free Software Foundation, Inc.,
+'    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+'
+' Keyword expansion for source code control
+' Tag for this file : $Name$
+' SCC Revision number: $Revision$
+' Date of last change: $Date$
+'
 '
 ' File name:            IniFiles
 '
@@ -78,32 +99,32 @@ Private mIniFile As String
 '------------------------------
 
 Public Function TestIniFile(FilePath As String) As Boolean
-79:   mIniFile = FilePath
-80:   TestIniFile = Len(Dir$(FilePath)) > 0
+  mIniFile = FilePath
+  TestIniFile = Len(Dir$(FilePath)) > 0
 End Function
 
 Public Function ReadIniFile(ByVal strSection As String, ByVal strKey As String) As String
   
   Dim strBuffer As String
   Dim intPos As Integer
-87:   strBuffer = Space$(255)
-88:   If GetPrivateProfileString(strSection, strKey, "", strBuffer, 255, mIniFile) > 0 Then
-89:     ReadIniFile = RTrim$(StripTerminator(strBuffer))
-90:   Else
-91:     ReadIniFile = ""
-92:   End If
-93:   strBuffer = ""
+  strBuffer = Space$(255)
+  If GetPrivateProfileString(strSection, strKey, "", strBuffer, 255, mIniFile) > 0 Then
+    ReadIniFile = RTrim$(StripTerminator(strBuffer))
+  Else
+    ReadIniFile = ""
+  End If
+  strBuffer = ""
 End Function
 
 Private Function StripTerminator(ByVal strString As String) As String
   'function to strip out chr$(0) from the ReadIniFile function
   Dim intZeroPos As Integer
-99:   intZeroPos = InStr(strString, vbNullChar)
-100:   If intZeroPos > 0 Then
-101:     StripTerminator = Left$(strString, intZeroPos - 1)
-102:   Else
-103:     StripTerminator = strString
-104:   End If
+  intZeroPos = InStr(strString, vbNullChar)
+  If intZeroPos > 0 Then
+    StripTerminator = Left$(strString, intZeroPos - 1)
+  Else
+    StripTerminator = strString
+  End If
 End Function
 
 
