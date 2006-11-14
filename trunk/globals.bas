@@ -1,4 +1,25 @@
 Attribute VB_Name = "globals"
+'    Copyright (C) 2006  opet developers opet-developers@lists.sourceforge.net
+'
+'    This program is free software; you can redistribute it and/or modify
+'    it under the terms of the GNU General Public License as published by
+'    the Free Software Foundation; either version 2 of the License, or
+'    (at your option) any later version.
+'
+'    This program is distributed in the hope that it will be useful,
+'    but WITHOUT ANY WARRANTY; without even the implied warranty of
+'    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'    GNU General Public License for more details located in AppSpecs.bas file.
+'
+'    You should have received a copy of the GNU General Public License along
+'    with this program; if not, write to the Free Software Foundation, Inc.,
+'    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+'
+' Keyword expansion for source code control
+' Tag for this file : $Name$
+' SCC Revision number: $Revision$
+' Date of last change: $Date$
+'
 '
 ' File name:            globals
 '
@@ -28,7 +49,7 @@ Attribute VB_Name = "globals"
 '
 ' Updates:
 'JWM 10/11/2006 added this file header
-
+'jwm added the constants for field lengths
 Option Explicit
 '******************************
 ' Global/Public Definitions
@@ -39,7 +60,9 @@ Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 '------------------------------
 ' Public Enums and Constants
 '------------------------------
-
+Public Const ORMAP_TAXLOT_FIELD_LENGTH As Integer = 5
+Public Const ORMAP_MAPNUM_FIELD_LENGTH As Integer = 24
+Public Const ORMAP_ORTAXLOT_FIELD_LENGTH = ORMAP_MAPNUM_FIELD_LENGTH + ORMAP_TAXLOT_FIELD_LENGTH
 '------------------------------
 ' Public variables
 '------------------------------
@@ -66,9 +89,7 @@ Private m_ParentHWND As Long          ' Set this to get correct parenting of Err
 '------------------------------
 'Private Constants and Enums
 '------------------------------
-' Variables used by the Error handler function - DO NOT REMOVE
-Const c_sModuleFileName As String = "globals.bas"
-
+'
 '------------------------------
 ' Private Types
 '------------------------------
@@ -76,9 +97,5 @@ Const c_sModuleFileName As String = "globals.bas"
 '------------------------------
 ' Private loop variables
 '------------------------------
-
-
-
-
 
 
