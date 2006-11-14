@@ -2,13 +2,13 @@ VERSION 5.00
 Begin VB.Form frmMapIndex 
    Caption         =   "Map Index"
    ClientHeight    =   3720
-   ClientLeft      =   60
-   ClientTop       =   345
+   ClientLeft      =   1545
+   ClientTop       =   4605
    ClientWidth     =   9555
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    ScaleHeight     =   3720
    ScaleWidth      =   9555
-   StartUpPosition =   3  'Windows Default
    Begin VB.ComboBox cmbSufftype 
       Height          =   315
       Left            =   1440
@@ -515,6 +515,27 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+'    Copyright (C) 2006  opet developers opet-developers@lists.sourceforge.net
+'
+'    This program is free software; you can redistribute it and/or modify
+'    it under the terms of the GNU General Public License as published by
+'    the Free Software Foundation; either version 2 of the License, or
+'    (at your option) any later version.
+'
+'    This program is distributed in the hope that it will be useful,
+'    but WITHOUT ANY WARRANTY; without even the implied warranty of
+'    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'    GNU General Public License for more details located in AppSpecs.bas file.
+'
+'    You should have received a copy of the GNU General Public License along
+'    with this program; if not, write to the Free Software Foundation, Inc.,
+'    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+'
+' Keyword expansion for source code control
+' Tag for this file : $Name$
+' SCC Revision number: $Revision$
+' Date of last change: $Date$
+'
 '
 ' File name:            frmMapIndex
 '
@@ -533,7 +554,7 @@ Attribute VB_Exposed = False
 ' Dependencies:
 '       How does this file depend or relate to other files?
 '
-' Issues:
+' Issues: 
 '       What are unsolved bugs, bottlenecks,
 '       possible future enhancements, and
 '       descriptions of other issues.
@@ -615,7 +636,7 @@ Private Const c_sModuleFileName As String = "frmMapIndex.frm"
 Private Sub cmbCounty_Click()
   On Error GoTo ErrorHandler
 
-101:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
@@ -625,7 +646,7 @@ End Sub
 Private Sub cmbQtr_Click()
   On Error GoTo ErrorHandler
 
-111:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
@@ -635,7 +656,7 @@ End Sub
 Private Sub cmbQtrQtr_Click()
   On Error GoTo ErrorHandler
 
-121:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
@@ -645,7 +666,7 @@ End Sub
 Private Sub cmbRange_Click()
   On Error GoTo ErrorHandler
 
-131:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
@@ -655,7 +676,7 @@ End Sub
 Private Sub cmbRangeDir_Click()
   On Error GoTo ErrorHandler
 
-141:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
@@ -665,7 +686,7 @@ End Sub
 Private Sub cmbRangePart_Click()
   On Error GoTo ErrorHandler
 
-151:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
@@ -675,7 +696,7 @@ End Sub
 Private Sub cmbReliability_Click()
   On Error GoTo ErrorHandler
 
-161:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
@@ -685,7 +706,7 @@ End Sub
 Private Sub cmbScale_Click()
   On Error GoTo ErrorHandler
 
-171:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
@@ -695,36 +716,27 @@ End Sub
 Private Sub cmbSection_Click()
   On Error GoTo ErrorHandler
 
-181:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
   HandleError True, "cmbSection_Click " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 1, m_ParentHWND
 End Sub
-Private Sub cmbSufNum_Click()
+
+Private Sub cmbSuffType_Click()
   On Error GoTo ErrorHandler
 
-190:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
-  HandleError True, "cmbSufNum_Click " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 1, m_ParentHWND
-End Sub
-
-Private Sub cmbSufType_Click()
-  On Error GoTo ErrorHandler
-
-200:     m_bPossiblyChanged = True
-
-  Exit Sub
-ErrorHandler:
-  HandleError True, "cmbSufType_Click " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 1, m_ParentHWND
+  HandleError True, "cmbSuffType_Click " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 1, m_ParentHWND
 End Sub
 
 Private Sub cmbTown_Click()
   On Error GoTo ErrorHandler
 
-210:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
@@ -733,7 +745,7 @@ End Sub
 Private Sub cmbTownDir_Click()
   On Error GoTo ErrorHandler
 
-219:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
@@ -743,7 +755,7 @@ End Sub
 Private Sub cmbTownPart_Click()
   On Error GoTo ErrorHandler
 
-229:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
@@ -764,52 +776,51 @@ End Sub
 'Parameters:
 'Outputs:       What variables are changed in this routine?
 'Returns:
-'Errors:        What known errors does this routine cause that are NOT captured in error handling routine? If none, say: This routine raises no known errors.
+'Errors:        This routine raises no known errors.
 'Assumptions:   What parameters or variable values are assumed to be true?
 'Updates:
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
-'James Moore    10/11/2006      Initial creation
+'James Moore    10/11/2006  Initial creation of this comment section
 '***************************************************************************
 Private Sub cmdAssign_Click()
   On Error GoTo ErrorHandler
     
     Dim bValuesPresent As Boolean
-262:     bValuesPresent = True
+    bValuesPresent = True
     Dim ctl As Control
-264:     For Each ctl In Me.Controls
-265:         If TypeOf ctl Is TextBox Then
+    For Each ctl In Me.Controls
+        If TypeOf ctl Is TextBox Then
             Dim pTxtBox As TextBox
-267:             Set pTxtBox = ctl
-268:             If Len(pTxtBox.Text) = 0 Then
-269:                 If StrComp(pTxtBox.Name, "txtORMAPMapNum", vbTextCompare) <> 0 And StrComp(pTxtBox.Name, "txtPage", vbTextCompare) <> 0 Then
+            Set pTxtBox = ctl
+            If Len(pTxtBox.Text) = 0 Then
+                If StrComp(pTxtBox.Name, "txtORMAPMapNum", vbTextCompare) <> 0 And StrComp(pTxtBox.Name, "txtPage", vbTextCompare) <> 0 Then
 '                If Not pTxtBox.Name = "txtORMAPMapNum" And Not pTxtBox.Name = "txtPage" Then
-271:                     bValuesPresent = False
-272:                 End If
-273:             End If
-274:         ElseIf TypeOf ctl Is ComboBox Then
+                    bValuesPresent = False
+                End If
+            End If
+        ElseIf TypeOf ctl Is ComboBox Then
             Dim pCmb As ComboBox
-276:             Set pCmb = ctl
-277:             If Len(pCmb.Text) = 0 Then
-278:                bValuesPresent = False
-279:             End If
-280:         ElseIf TypeOf ctl Is ListBox Then
-'++  JWM 10/11/2006 why is this elseif here
-282:             Debug.Assert True
-283:             MsgBox "listbox"
-284:         End If
-285:     Next ctl
+            Set pCmb = ctl
+            If Len(pCmb.Text) = 0 Then
+               bValuesPresent = False
+            End If
+        ElseIf TypeOf ctl Is ListBox Then
+            Debug.Assert True
+            MsgBox "listbox"
+        End If
+    Next ctl
     
-287:     If Not bValuesPresent Then
-288:        MsgBox "All fields must be filled in before assigning", vbOKOnly
-289:        GoTo Process_Exit
-290:     End If
+    If Not bValuesPresent Then
+       MsgBox "All fields must be filled in before assigning", vbOKOnly
+       GoTo Process_Exit
+    End If
 
     'Otherwise, save values
     
     'Save values if necessary
-295:     If Not m_bPossiblyChanged Then GoTo Process_Exit
+    If Not m_bPossiblyChanged Then GoTo Process_Exit
     Dim sExistOMMapNum As String
     Dim sCurOMMapNum As String
     Dim sCurMapNum As String
@@ -831,121 +842,124 @@ Private Sub cmdAssign_Click()
     Dim sCurAnomaly As String
     Dim pWSEdit As IWorkspaceEdit
     Dim pDataset As IDataset
-317:     Set pDataset = m_pMIFclass
-318:     Set pWSEdit = pDataset.Workspace
-319:     pWSEdit.StartEditOperation
+    
+    Set pDataset = m_pMIFclass
+    Set pWSEdit = pDataset.Workspace
+    pWSEdit.StartEditOperation
     
     'Get a Taxlot feature, so its domains can be referenced
     Dim pFeatCur As IFeatureCursor
-323:     Set pFeatCur = m_pTaxlotFlayer.Search(Nothing, True)
+    Set pFeatCur = m_pTaxlotFlayer.Search(Nothing, True)
     Dim pTLFeat As IFeature
-325:     Set pTLFeat = pFeatCur.NextFeature
+    Set pTLFeat = pFeatCur.NextFeature
     'This functionality was originally set up to work with the MapIndex feature
     'currently being edited.  The db design changed, but the structure of the code
     'has not been changed.  To obtain the domains necessary to display and save
     'values in MapIndex, taxlots are used.  This requires that at least one taxlot
     'feature exist.
-331:     If pTLFeat Is Nothing Then
-332:         MsgBox "No taxlot features present.  Please create at least one taxlot", vbOKOnly
-333:         GoTo Process_Exit
-334:     End If
+    If pTLFeat Is Nothing Then
+        MsgBox "No taxlot features present.  Please create at least one taxlot", vbOKOnly
+        GoTo Process_Exit
+    End If
     
     'MapNumber
-337:     sCurMapNum = Me.txtMapNum.Text
-338:     m_pMIFeat.Value(m_lMapNumFld) = sCurMapNum
+    sCurMapNum = Me.txtMapNum.Text
+    m_pMIFeat.Value(m_lMapNumFld) = sCurMapNum
 
     'Reliability
-341:     sCurReliabil = ConvertCode(m_pMIFeat, g_pFldnames.MIReliabFN, Me.cmbReliability)
-342:     m_pMIFeat.Value(m_lReliabFld) = CInt(sCurReliabil)
+    sCurReliabil = ConvertCode(m_pMIFeat, g_pFldnames.MIReliabFN, Me.cmbReliability)
+    m_pMIFeat.Value(m_lReliabFld) = CInt(sCurReliabil)
     
     'Scale
-345:     sCurScale = ConvertCode(m_pMIFeat, g_pFldnames.MIMapScaleFN, Me.cmbScale.Text)
-346:     m_pMIFeat.Value(m_lScaleFld) = CLng(sCurScale)
+    sCurScale = ConvertCode(m_pMIFeat, g_pFldnames.MIMapScaleFN, Me.cmbScale.Text)
+    m_pMIFeat.Value(m_lScaleFld) = CLng(sCurScale)
 
     'Page
-349:     sCurPage = Me.txtPage.Text
-350:     If IsNumeric(sCurPage) Then
+    sCurPage = Me.txtPage.Text
+    If IsNumeric(sCurPage) Then
         Dim lCurPage As Long
-352:         lCurPage = CLng(sCurPage)
-353:         m_pMIFeat.Value(m_lPageFld) = lCurPage
-354:     Else
+        lCurPage = CLng(sCurPage)
+        m_pMIFeat.Value(m_lPageFld) = lCurPage
+    Else
         'If null, enter a null value
         Dim nullVal As Variant
-357:         m_pMIFeat.Value(m_lPageFld) = nullVal
-358:     End If
+        m_pMIFeat.Value(m_lPageFld) = nullVal
+    End If
 
     'Compile values below into the OrMAPMapNumber value
     'County
-362:     sCurCounty = ConvertCode(pTLFeat, g_pFldnames.TLCountyFN, Me.cmbCounty.Text)
-363:     sCurCounty = FormatOMMapNum(sCurCounty, "county")
+    sCurCounty = ConvertCode(pTLFeat, g_pFldnames.TLCountyFN, Me.cmbCounty.Text)
+    sCurCounty = FormatOMMapNum(sCurCounty, "county")
     
     'Town
-366:     sCurTown = Me.cmbTown.Text  'ConvertCode(pTLFeat, g_pFldnames.TLTownFN, Me.cmbTown.Text)
-367:     sCurTown = FormatOMMapNum(sCurTown, "town")
+    sCurTown = Me.cmbTown.Text  'ConvertCode(pTLFeat, g_pFldnames.TLTownFN, Me.cmbTown.Text)
+    sCurTown = FormatOMMapNum(sCurTown, "town")
 
     'TownPart
-370:     sCurTownPart = Me.cmbTownPart.Text 'ConvertCode(pTLFeat, g_pFldnames.TLTownPartFN, Me.cmbTownPart.Text)
-371:     sCurTownPart = FormatOMMapNum(sCurTownPart, "townpart")
+    sCurTownPart = Me.cmbTownPart.Text 'ConvertCode(pTLFeat, g_pFldnames.TLTownPartFN, Me.cmbTownPart.Text)
+    sCurTownPart = FormatOMMapNum(sCurTownPart, "townpart")
     'If Len(sCurTownPart) = 3 Then
         'sCurTownPart = Replace(sCurTownPart, ".", "")
         'sCurTownPart = Left(sCurTownPart, 1) & "." & Right(sCurTownPart, 2)
     'End If
     'TownDir
-377:     sCurTownDir = Me.cmbTownDir.Text
-378:     sCurTownDir = FormatOMMapNum(sCurTownDir, "towndir")
+    sCurTownDir = Me.cmbTownDir.Text
+    sCurTownDir = FormatOMMapNum(sCurTownDir, "towndir")
 
     'Range
-381:     sCurRange = Me.cmbRange.Text
-382:     sCurRange = FormatOMMapNum(sCurRange, "range")
+    sCurRange = Me.cmbRange.Text
+    sCurRange = FormatOMMapNum(sCurRange, "range")
 
     'RangePart
-385:     sCurRangePart = Me.cmbRangePart.Text
-386:     sCurRangePart = FormatOMMapNum(sCurRangePart, "rangepart")
+    sCurRangePart = Me.cmbRangePart.Text
+    sCurRangePart = FormatOMMapNum(sCurRangePart, "rangepart")
     'If Len(sCurRangePart) = 3 Then
     'sCurRangePart = Replace(sCurRangePart, ".", "")
         'sCurRangePart = Left(sCurRangePart, 1) & "." & Right(sCurRangePart, 2)
     'End If
     'RangeDir
-392:     sCurRangeDir = Me.cmbRangeDir.Text
-393:     sCurRangeDir = FormatOMMapNum(sCurRangeDir, "rangedir")
+    sCurRangeDir = Me.cmbRangeDir.Text
+    sCurRangeDir = FormatOMMapNum(sCurRangeDir, "rangedir")
 
     'Section
-396:     sCurSection = Me.cmbSection.Text
-397:     sCurSection = FormatOMMapNum(sCurSection, "section")
+    sCurSection = Me.cmbSection.Text
+    sCurSection = FormatOMMapNum(sCurSection, "section")
  
     'Qtr
-400:     sCurQtr = Me.cmbQtr.Text
-401:     sCurQtr = FormatOMMapNum(sCurQtr, "qtr")
+    sCurQtr = Me.cmbQtr.Text
+    sCurQtr = FormatOMMapNum(sCurQtr, "qtr")
 
     'QtrQtr
-404:     sCurQtrQtr = Me.cmbQtrQtr.Text
-405:     sCurQtrQtr = FormatOMMapNum(sCurQtrQtr, "qtrqtr")
+    sCurQtrQtr = Me.cmbQtrQtr.Text
+    sCurQtrQtr = FormatOMMapNum(sCurQtrQtr, "qtrqtr")
 
     'MapSuffixType
-408:     sCurSuffixType = ConvertCode(pTLFeat, g_pFldnames.TLSufTypeFN, cmbSufftype.Text)
-409:     sCurSuffixType = FormatOMMapNum(sCurSuffixType, "suffixtype")
+    sCurSuffixType = ConvertCode(pTLFeat, g_pFldnames.TLSufTypeFN, cmbSufftype.Text)
+    sCurSuffixType = FormatOMMapNum(sCurSuffixType, "suffixtype")
     
     'MapSuffixNum
-412:     sCurSuffixNum = Me.txtSuffNum.Text
-413:     sCurSuffixNum = FormatOMMapNum(sCurSuffixNum, "suffixnum")
+    sCurSuffixNum = Me.txtSuffNum.Text
+    sCurSuffixNum = FormatOMMapNum(sCurSuffixNum, "suffixnum")
 
     'Anomaly
-416:     sCurAnomaly = Me.txtAnomaly.Text
-417:     sCurAnomaly = FormatOMMapNum(sCurAnomaly, "anomaly")
+    sCurAnomaly = Me.txtAnomaly.Text
+    sCurAnomaly = FormatOMMapNum(sCurAnomaly, "anomaly")
     
     'Concatenate everything and compare to existing ORMAPMapNumber
     'ORMAPMapNumber
-421:     sCurOMMapNum = sCurCounty & sCurTown & sCurTownPart & sCurTownDir & _
+    sCurOMMapNum = sCurCounty & sCurTown & sCurTownPart & sCurTownDir & _
         sCurRange & sCurRangePart & sCurRangeDir & sCurSection & sCurQtr & _
         sCurQtrQtr & sCurAnomaly & sCurSuffixType & sCurSuffixNum
         
-425:     Me.txtORMAPMapNum.Text = sCurOMMapNum
-426:     m_pMIFeat.Value(m_lOMMapNumFld) = sCurOMMapNum
+    Me.txtORMAPMapNum.Text = sCurOMMapNum
+
+
+    m_pMIFeat.Value(m_lOMMapNumFld) = sCurOMMapNum
     
-428:     Set pTLFeat = Nothing
-429:     Set pFeatCur = Nothing
-430:     m_pMIFeat.Store
-431:     pWSEdit.StopEditOperation
+    Set pTLFeat = Nothing
+    Set pFeatCur = Nothing
+    m_pMIFeat.Store
+    pWSEdit.StopEditOperation
 Process_Exit:
   Exit Sub
 ErrorHandler:
@@ -953,18 +967,15 @@ ErrorHandler:
 End Sub
 
 Private Sub cmdHelp_Click()
-    'Open a custom help file in Internet Explorer
-    'Requires a file called help.htm in the same dir as the application dll
     Dim sFilePath As String
-442:     sFilePath = app.Path & "\" & "MapIndex_help.rtf"
-443:     If modUtils.FileExists(sFilePath) Then
-444:     Debug.Assert True 'Need a better way to open files
-445:         If FileExists("C:\Program Files\Windows NT\Accessories\wordpad.exe") Then
-446:             Shell "C:\Program Files\Windows NT\Accessories\wordpad.exe " & sFilePath, 1
-447:         End If
-448:     Else
-449:         MsgBox "No help available"
-450:     End If
+    sFilePath = app.Path & "\" & "MapIndex_help.rtf"
+    If FileExists(sFilePath) Then
+'++ START JWM 10/16/2006 using new method to open help file
+        gsb_StartDoc Me.hwnd, sFilePath
+'++ START/END JWM 10/16/2006
+    Else
+        MsgBox "No help file available in current directory.", vbOKOnly + vbInformation
+    End If
 End Sub
 
 Private Sub cmdQuit_Click()
@@ -972,7 +983,7 @@ Private Sub cmdQuit_Click()
 
     'Prompt for save if necessary
     
-458:     Unload frmMapIndex
+    Unload frmMapIndex
 
   Exit Sub
 ErrorHandler:
@@ -988,19 +999,20 @@ ErrorHandler:
   HandleError True, "Form_Load " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 1, m_ParentHWND
 End Sub
 
-Private Function LocateFields(pFldName As String, pFClass As IFeatureClass) As Long
+Private Function ffn_l_LocateFields(ByRef pFldName As String, ByRef pFClass As IFeatureClass) As Long
   On Error GoTo ErrorHandler
+'++ This function appears to be reproduced in modutils with a different parameter list JWM 10/30/2006
 
     'Generic function to locate a field and warn user if it can't be found
     Dim lFld As Long
-479:     lFld = pFClass.Fields.FindField(pFldName)
-480:     If lFld > -1 Then
-481:       LocateFields = lFld
-482:     Else
-483:         MsgBox "Unable to locate " & g_pFldnames.MICountyFN & " field in " & _
+    lFld = pFClass.Fields.FindField(pFldName)
+    If lFld > -1 Then
+      ffn_l_LocateFields = lFld
+    Else
+        MsgBox "Unable to locate " & g_pFldnames.MICountyFN & " field in " & _
         g_pFldnames.FCMapIndex & " feature class"
-485:         m_bContinue = False
-486:     End If
+        m_bContinue = False
+    End If
 
 
   Exit Function
@@ -1014,7 +1026,7 @@ Private Sub txtAnomaly_Change()
     'If Not IsNumeric(txtAnomaly.Text) Then txtAnomaly.Text = ""
   On Error GoTo ErrorHandler
 
-500:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 
   Exit Sub
 ErrorHandler:
@@ -1023,13 +1035,13 @@ ErrorHandler:
 End Sub
 
 Private Sub txtMapNum_Change()
-509:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 End Sub
 
 Private Sub txtSuffNum_Change()
-513:     If Not IsNumeric(txtSuffNum.Text) Then txtSuffNum.Text = ""
+    If Not IsNumeric(txtSuffNum.Text) Then txtSuffNum.Text = ""
     
-515:     m_bPossiblyChanged = True
+    m_bPossiblyChanged = True
 End Sub
 
 '***************************************************************************
@@ -1056,157 +1068,157 @@ End Sub
 Public Function InitForm() As Boolean
 
   'Get a reference to the MXDocument
-542:   Set m_pMxDoc = modUtils.GetMXDocRef
+  Set m_pMxDoc = GetMXDocRef
 
     Dim bOpenForm As Boolean
-545:     Me.Refresh
+    Me.Refresh
     Dim response As Variant
-547:     Set m_pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-548:     If m_pMIFlayer Is Nothing Then
-549:         MsgBox "Unable to locate Map Index layer in Table of Contents.  " & _
+    Set m_pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+    If m_pMIFlayer Is Nothing Then
+        MsgBox "Unable to locate Map Index layer in Table of Contents.  " & _
         "This process requires a feature class called " & g_pFldnames.FCMapIndex
-551:     End If
-552:     Set m_pMIFclass = m_pMIFlayer.FeatureClass
+    End If
+    Set m_pMIFclass = m_pMIFlayer.FeatureClass
     'Get the MapIndex feature layer and fclass
-554:     Set m_pTaxlotFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
-555:     If m_pTaxlotFlayer Is Nothing Then
-556:         response = MsgBox("Unable to locate Taxlot layer in Table of Contents.  " & _
+    Set m_pTaxlotFlayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
+    If m_pTaxlotFlayer Is Nothing Then
+        response = MsgBox("Unable to locate Taxlot layer in Table of Contents.  " & _
         "This process requires a feature class called " & g_pFldnames.FCTaxlot & ".  " & _
         "Load " & g_pFldnames.FCMapIndex & " automatically?", vbYesNo)
-559:         If response <> vbYes Then
-560:             InitForm = False
-561:             GoTo Process_Exit
-562:         Else
-563:             modUtils.LoadFCIntoMap g_pFldnames.FCTaxlot, m_pMIFclass
-564:             Set m_pTaxlotFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
-565:         End If
-566:     End If
-567:     Set m_pTaxlotFClass = m_pTaxlotFlayer.FeatureClass
+        If response <> vbYes Then
+            InitForm = False
+            GoTo Process_Exit
+        Else
+            LoadFCIntoMap g_pFldnames.FCTaxlot, m_pMIFclass
+            Set m_pTaxlotFlayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
+        End If
+    End If
+    Set m_pTaxlotFClass = m_pTaxlotFlayer.FeatureClass
 
     'Get fields needed to populate the form
-570:     Set m_pMIFields = m_pMIFclass.Fields
-571:     m_bContinue = True
-572:     m_lOMMapNumFld = modUtils.LocateFields(m_pMIFclass, g_pFldnames.MIORMAPMapNumberFN)
-573:     m_lReliabFld = modUtils.LocateFields(m_pMIFclass, g_pFldnames.MIReliabFN)
-574:     m_lScaleFld = modUtils.LocateFields(m_pMIFclass, g_pFldnames.MIMapScaleFN)
-575:     m_lMapNumFld = modUtils.LocateFields(m_pMIFclass, g_pFldnames.MIMapNumberFN)
-576:     m_lPageFld = modUtils.LocateFields(m_pMIFclass, g_pFldnames.MIPageFN)
-577:     If Not m_bContinue Then
-578:         InitForm = False
-579:         GoTo Process_Exit 'If any fields not found
-580:     End If
+    Set m_pMIFields = m_pMIFclass.Fields
+    m_bContinue = True
+    m_lOMMapNumFld = LocateFields(m_pMIFclass, g_pFldnames.MIORMAPMapNumberFN)
+    m_lReliabFld = LocateFields(m_pMIFclass, g_pFldnames.MIReliabFN)
+    m_lScaleFld = LocateFields(m_pMIFclass, g_pFldnames.MIMapScaleFN)
+    m_lMapNumFld = LocateFields(m_pMIFclass, g_pFldnames.MIMapNumberFN)
+    m_lPageFld = LocateFields(m_pMIFclass, g_pFldnames.MIPageFN)
+    If Not m_bContinue Then
+        InitForm = False
+        GoTo Process_Exit 'If any fields not found
+    End If
     
     'Get the selected feature and its attributes
     Dim sExistOMMapNum As String
     Dim sExistVal As String
     Dim pFeatCur As IFeatureCursor
-586:     Set pFeatCur = modUtils.GetSelectedFeatures(m_pMIFlayer)
-587:     If pFeatCur Is Nothing Then
-588:         InitForm = False
-589:         GoTo Process_Exit
-590:     End If
-591:     Set m_pMIFeat = pFeatCur.NextFeature
+    Set pFeatCur = modUtils.GetSelectedFeatures(m_pMIFlayer)
+    If pFeatCur Is Nothing Then
+        InitForm = False
+        GoTo Process_Exit
+    End If
+    Set m_pMIFeat = pFeatCur.NextFeature
     
     'Get a Taxlot feature, so its domains can be referenced
     Dim pTLFeatCur As IFeatureCursor
-595:     Set pTLFeatCur = m_pTaxlotFlayer.Search(Nothing, True)
+    Set pTLFeatCur = m_pTaxlotFlayer.Search(Nothing, True)
     Dim pTLFeat As IFeature
-597:     Set pTLFeat = pTLFeatCur.NextFeature
+    Set pTLFeat = pTLFeatCur.NextFeature
     
     'Populate the form with domain values
     'ORMAPMapNumber
-601:     sExistOMMapNum = ReadValue(m_pMIFeat, g_pFldnames.MIORMAPMapNumberFN)
+    sExistOMMapNum = ReadValue(m_pMIFeat, g_pFldnames.MIORMAPMapNumberFN)
     'Verify that the number is the right length.  If not, load default values
     'into the fields below
-604:     If Not Len(sExistOMMapNum) = 24 Then
-605:         Me.txtORMAPMapNum.Text = ""
-606:         m_bSuccess = AddCodesToCmb(g_pFldnames.MIReliabFN, m_pMIFields, Me.cmbReliability, "", True)
-607:         m_bSuccess = AddCodesToCmb(g_pFldnames.MIMapScaleFN, m_pMIFields, Me.cmbScale, "", True)
-608:         Me.txtPage.Text = ""
+    If Not Len(sExistOMMapNum) = ORMAP_MAPNUM_FIELD_LENGTH Then
+        Me.txtORMAPMapNum.Text = ""
+        m_bSuccess = AddCodesToCmb(g_pFldnames.MIReliabFN, m_pMIFields, Me.cmbReliability, "", True)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.MIMapScaleFN, m_pMIFields, Me.cmbScale, "", True)
+        Me.txtPage.Text = ""
         'Convert default county to description
         Dim sDefCntyDesc As String
-611:         sDefCntyDesc = modUtils.ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.TLCountyFN, CLng(g_pFldnames.DefCounty))
+        sDefCntyDesc = modUtils.ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.TLCountyFN, CLng(g_pFldnames.DefCounty))
         
-613:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLCountyFN, m_pTaxlotFClass.Fields, Me.cmbCounty, sDefCntyDesc, True)
-614:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLTownFN, m_pTaxlotFClass.Fields, Me.cmbTown, "", True)
-615:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLTownPartFN, m_pTaxlotFClass.Fields, Me.cmbTownPart, modUtils.ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.TLTownPartFN, CDbl(g_pFldnames.DefTownPart)), True)
-616:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLTownDirFN, m_pTaxlotFClass.Fields, Me.cmbTownDir, g_pFldnames.DefTownDir, True)
-617:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLRangeFN, m_pTaxlotFClass.Fields, Me.cmbRange, "", True)
-618:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLRangePartFN, m_pTaxlotFClass.Fields, Me.cmbRangePart, modUtils.ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.TLRangePartFN, CDbl(g_pFldnames.DefRangePart)), True)
-619:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLRangeDirFN, m_pTaxlotFClass.Fields, Me.cmbRangeDir, g_pFldnames.DefRangeDir, True)
-620:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLSectNumberFN, m_pTaxlotFClass.Fields, Me.cmbSection, "", True)
-621:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLQtrFN, m_pTaxlotFClass.Fields, Me.cmbQtr, g_pFldnames.DefQtr, True)
-622:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLQtrQtrFN, m_pTaxlotFClass.Fields, Me.cmbQtrQtr, g_pFldnames.DefQtrQtr, True)
-623:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLSufTypeFN, m_pTaxlotFClass.Fields, Me.cmbSufftype, modUtils.ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.MIMapSuffNumFN, g_pFldnames.DefSuffType))
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLCountyFN, m_pTaxlotFClass.Fields, Me.cmbCounty, sDefCntyDesc, True)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLTownFN, m_pTaxlotFClass.Fields, Me.cmbTown, "", True)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLTownPartFN, m_pTaxlotFClass.Fields, Me.cmbTownPart, modUtils.ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.TLTownPartFN, CDbl(g_pFldnames.DefTownPart)), True)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLTownDirFN, m_pTaxlotFClass.Fields, Me.cmbTownDir, g_pFldnames.DefTownDir, True)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLRangeFN, m_pTaxlotFClass.Fields, Me.cmbRange, "", True)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLRangePartFN, m_pTaxlotFClass.Fields, Me.cmbRangePart, modUtils.ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.TLRangePartFN, CDbl(g_pFldnames.DefRangePart)), True)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLRangeDirFN, m_pTaxlotFClass.Fields, Me.cmbRangeDir, g_pFldnames.DefRangeDir, True)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLSectNumberFN, m_pTaxlotFClass.Fields, Me.cmbSection, "", True)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLQtrFN, m_pTaxlotFClass.Fields, Me.cmbQtr, g_pFldnames.DefQtr, True)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLQtrQtrFN, m_pTaxlotFClass.Fields, Me.cmbQtrQtr, g_pFldnames.DefQtrQtr, True)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLSufTypeFN, m_pTaxlotFClass.Fields, Me.cmbSufftype, modUtils.ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.MIMapSuffNumFN, g_pFldnames.DefSuffType))
         
-625:         Me.txtSuffNum.Text = g_pFldnames.DefSuffNum
-626:         Me.txtAnomaly.Text = g_pFldnames.DefAnomaly
+        Me.txtSuffNum.Text = g_pFldnames.DefSuffNum
+        Me.txtAnomaly.Text = g_pFldnames.DefAnomaly
         'txtAnomaly.Text = ""
-628:     Else
-629:         Me.txtORMAPMapNum.Text = sExistOMMapNum
+    Else
+        Me.txtORMAPMapNum.Text = sExistOMMapNum
         'm_bSuccess = AddCodesToCmb(g_pFldnames.MICountyFN, m_pMIFields, Me.cmbCounty, sExistVal)
-631:         sExistVal = ReadValue(m_pMIFeat, g_pFldnames.MIMapNumberFN)
-632:         Me.txtMapNum.Text = sExistVal
+        sExistVal = ReadValue(m_pMIFeat, g_pFldnames.MIMapNumberFN)
+        Me.txtMapNum.Text = sExistVal
         'Reliability
-634:         sExistVal = ReadValue(m_pMIFeat, g_pFldnames.MIReliabFN)
-635:         m_bSuccess = AddCodesToCmb(g_pFldnames.MIReliabFN, m_pMIFields, Me.cmbReliability, sExistVal, True)
+        sExistVal = ReadValue(m_pMIFeat, g_pFldnames.MIReliabFN)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.MIReliabFN, m_pMIFields, Me.cmbReliability, sExistVal, True)
         'Scale
-637:         sExistVal = ReadValue(m_pMIFeat, g_pFldnames.MIMapScaleFN)
-638:         m_bSuccess = AddCodesToCmb(g_pFldnames.MIMapScaleFN, m_pMIFields, Me.cmbScale, sExistVal, True)
+        sExistVal = ReadValue(m_pMIFeat, g_pFldnames.MIMapScaleFN)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.MIMapScaleFN, m_pMIFields, Me.cmbScale, sExistVal, True)
         'Page
-640:         sExistVal = ReadValue(m_pMIFeat, g_pFldnames.MIPageFN)
-641:         Me.txtPage.Text = sExistVal
+        sExistVal = ReadValue(m_pMIFeat, g_pFldnames.MIPageFN)
+        Me.txtPage.Text = sExistVal
         'County
-643:         sExistVal = ParseOMMapNum(sExistOMMapNum, "county")
-644:         sExistVal = ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.TLCountyFN, Int(sExistVal))
-645:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLCountyFN, m_pTaxlotFClass.Fields, Me.cmbCounty, sExistVal, True)
+        sExistVal = ParseOMMapNum(sExistOMMapNum, "county")
+        sExistVal = ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.TLCountyFN, Int(sExistVal))
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLCountyFN, m_pTaxlotFClass.Fields, Me.cmbCounty, sExistVal, True)
         'Town
-647:         sExistVal = ParseOMMapNum(sExistOMMapNum, "town")
+        sExistVal = ParseOMMapNum(sExistOMMapNum, "town")
         'sExistVal = ReadValue(pTLFeat, g_pFldnames.TLTownFN)
-649:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLTownFN, m_pTaxlotFClass.Fields, Me.cmbTown, sExistVal, True)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLTownFN, m_pTaxlotFClass.Fields, Me.cmbTown, sExistVal, True)
         'TownPart
-651:         sExistVal = ParseOMMapNum(sExistOMMapNum, "townpart")
+        sExistVal = ParseOMMapNum(sExistOMMapNum, "townpart")
         'sExistVal = ReadValue(pTLFeat, g_pFldnames.TLTownPartFN)
         'If Len(sExistVal) = 3 Then sExistVal = Left(sExistVal, 1) & "." & Right(sExistVal, 2)
-654:         If Len(sExistVal) = 3 And Left(sExistVal, 1) = "." Then sExistVal = "0" & sExistVal
-655:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLTownPartFN, m_pTaxlotFClass.Fields, Me.cmbTownPart, sExistVal, True)
+        If Len(sExistVal) = 3 And Left(sExistVal, 1) = "." Then sExistVal = "0" & sExistVal
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLTownPartFN, m_pTaxlotFClass.Fields, Me.cmbTownPart, sExistVal, True)
         'TownDir
-657:         sExistVal = ParseOMMapNum(sExistOMMapNum, "towndir")
-658:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLTownDirFN, m_pTaxlotFClass.Fields, Me.cmbTownDir, sExistVal, True)
+        sExistVal = ParseOMMapNum(sExistOMMapNum, "towndir")
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLTownDirFN, m_pTaxlotFClass.Fields, Me.cmbTownDir, sExistVal, True)
         'Range
-660:         sExistVal = ParseOMMapNum(sExistOMMapNum, "range")
-661:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLRangeFN, m_pTaxlotFClass.Fields, Me.cmbRange, sExistVal, True)
+        sExistVal = ParseOMMapNum(sExistOMMapNum, "range")
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLRangeFN, m_pTaxlotFClass.Fields, Me.cmbRange, sExistVal, True)
         'RangePart
-663:         sExistVal = ParseOMMapNum(sExistOMMapNum, "rangepart")
+        sExistVal = ParseOMMapNum(sExistOMMapNum, "rangepart")
         'sExistVal = ReadValue(pTLFeat, g_pFldnames.TLRangePartFN)
         'If Len(sExistVal) = 3 Then sExistVal = Left(sExistVal, 1) & "." & Right(sExistVal, 2)
-666:         If Len(sExistVal) = 3 And Left(sExistVal, 1) = "." Then sExistVal = "0" & sExistVal
-667:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLRangePartFN, m_pTaxlotFClass.Fields, Me.cmbRangePart, sExistVal, True)
+        If Len(sExistVal) = 3 And Left(sExistVal, 1) = "." Then sExistVal = "0" & sExistVal
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLRangePartFN, m_pTaxlotFClass.Fields, Me.cmbRangePart, sExistVal, True)
         'RangeDir
-669:         sExistVal = ParseOMMapNum(sExistOMMapNum, "rangedir")
-670:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLRangeDirFN, m_pTaxlotFClass.Fields, Me.cmbRangeDir, sExistVal, True)
+        sExistVal = ParseOMMapNum(sExistOMMapNum, "rangedir")
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLRangeDirFN, m_pTaxlotFClass.Fields, Me.cmbRangeDir, sExistVal, True)
         'Section
-672:         sExistVal = ParseOMMapNum(sExistOMMapNum, "section")
+        sExistVal = ParseOMMapNum(sExistOMMapNum, "section")
         'sExistVal = ReadValue(pTLFeat, g_pFldnames.TLSectNumberFN)
-674:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLSectNumberFN, m_pTaxlotFClass.Fields, Me.cmbSection, sExistVal, True)
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLSectNumberFN, m_pTaxlotFClass.Fields, Me.cmbSection, sExistVal, True)
         'Qtr
-676:         sExistVal = ParseOMMapNum(sExistOMMapNum, "qtr")
-677:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLQtrFN, m_pTaxlotFClass.Fields, Me.cmbQtr, sExistVal, True)
+        sExistVal = ParseOMMapNum(sExistOMMapNum, "qtr")
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLQtrFN, m_pTaxlotFClass.Fields, Me.cmbQtr, sExistVal, True)
         'QtrQtr
-679:         sExistVal = ParseOMMapNum(sExistOMMapNum, "qtrqtr")
-680:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLQtrQtrFN, m_pTaxlotFClass.Fields, Me.cmbQtrQtr, sExistVal, True)
+        sExistVal = ParseOMMapNum(sExistOMMapNum, "qtrqtr")
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLQtrQtrFN, m_pTaxlotFClass.Fields, Me.cmbQtrQtr, sExistVal, True)
         'MapSuffixType
-682:         sExistVal = modUtils.ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.TLSufTypeFN, ParseOMMapNum(sExistOMMapNum, "suffixtype"))
-683:         m_bSuccess = AddCodesToCmb(g_pFldnames.TLSufTypeFN, m_pTaxlotFClass.Fields, Me.cmbSufftype, sExistVal, True)
+        sExistVal = ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.TLSufTypeFN, ParseOMMapNum(sExistOMMapNum, "suffixtype"))
+        m_bSuccess = AddCodesToCmb(g_pFldnames.TLSufTypeFN, m_pTaxlotFClass.Fields, Me.cmbSufftype, sExistVal, True)
         'MapSuffixNum
-685:         sExistVal = ParseOMMapNum(sExistOMMapNum, "suffixnum")
-686:         Me.txtSuffNum.Text = sExistVal
+        sExistVal = ParseOMMapNum(sExistOMMapNum, "suffixnum")
+        Me.txtSuffNum.Text = sExistVal
         'Anomaly
-688:         sExistVal = ParseOMMapNum(sExistOMMapNum, "anomaly")
-689:         txtAnomaly.Text = sExistVal
-690:     End If
-691:     m_bPossiblyChanged = False
-692:     InitForm = True
+        sExistVal = ParseOMMapNum(sExistOMMapNum, "anomaly")
+        txtAnomaly.Text = sExistVal
+    End If
+    m_bPossiblyChanged = False
+    InitForm = True
 Process_Exit:
 Exit Function
 
