@@ -2,20 +2,20 @@ VERSION 5.00
 Begin VB.Form frmArrows 
    Caption         =   "Add"
    ClientHeight    =   3135
-   ClientLeft      =   60
-   ClientTop       =   450
+   ClientLeft      =   930
+   ClientTop       =   2355
    ClientWidth     =   2925
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    ScaleHeight     =   3135
    ScaleWidth      =   2925
-   StartUpPosition =   3  'Windows Default
    Begin VB.CommandButton cmdQuit 
       Caption         =   "Quit"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   9.75
          Charset         =   0
-         Weight          =   700
+         Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
@@ -32,7 +32,7 @@ Begin VB.Form frmArrows
          Name            =   "MS Sans Serif"
          Size            =   9.75
          Charset         =   0
-         Weight          =   700
+         Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
@@ -49,7 +49,7 @@ Begin VB.Form frmArrows
          Name            =   "MS Sans Serif"
          Size            =   9.75
          Charset         =   0
-         Weight          =   700
+         Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
@@ -66,7 +66,7 @@ Begin VB.Form frmArrows
          Name            =   "MS Sans Serif"
          Size            =   9.75
          Charset         =   0
-         Weight          =   700
+         Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
@@ -83,7 +83,7 @@ Begin VB.Form frmArrows
          Name            =   "MS Sans Serif"
          Size            =   9.75
          Charset         =   0
-         Weight          =   700
+         Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
@@ -109,10 +109,27 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+'    Copyright (C) 2006  opet developers opet-developers@lists.sourceforge.net
+'
+'    This program is free software; you can redistribute it and/or modify
+'    it under the terms of the GNU General Public License as published by
+'    the Free Software Foundation; either version 2 of the License, or
+'    (at your option) any later version.
+'
+'    This program is distributed in the hope that it will be useful,
+'    but WITHOUT ANY WARRANTY; without even the implied warranty of
+'    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'    GNU General Public License for more details located in AppSpecs.bas file
+' Keyword expansion for source code control
+' Tag for this file : $Name$
+' SCC Revision number: $Revision$
+' Date of last change: $Date$
+'
+'
 '
 ' File name:            frmArrows
 '
-' Initial Author:       Type your name here
+' Initial Author:
 '
 ' Date Created:     10/11/2006
 '
@@ -126,7 +143,7 @@ Attribute VB_Exposed = False
 ' Dependencies:
 '       How does this file depend or relate to other files?
 '
-' Issues:
+' Issues: 
 '       What are unsolved bugs, bottlenecks,
 '       possible future enhancements, and
 '       descriptions of other issues.
@@ -137,7 +154,7 @@ Attribute VB_Exposed = False
 '       of a data structure used in the module.
 '
 ' Updates:
-'               None
+'               Jim Moore added this header comment section on 10/11/06
 
 Option Explicit
 '******************************
@@ -171,8 +188,8 @@ Option Explicit
 '------------------------------
 ' Private Variables
 '------------------------------
-Private m_pApp As IApplication
-Private m_pMxDoc As IMxDocument
+'jwm dead variable Private m_pApp As IApplication
+'jwm dead variable Private m_pMxDoc As IMxDocument
 '------------------------------
 'Private Constants and Enums
 '------------------------------
@@ -186,33 +203,32 @@ Private m_pMxDoc As IMxDocument
 '------------------------------
 
 Private Sub cmdArrow_Click()
-78:     Me.lblCurrentTool.Caption = "arrow"
-79:     Me.Hide
+    Me.lblCurrentTool.Caption = "arrow"
+    Me.Hide
 End Sub
 
 Private Sub cmdDimension_Click()
-83:     Me.lblCurrentTool.Caption = "dimension"
-84:     Me.Hide
+    Me.lblCurrentTool.Caption = "dimension"
+    Me.Hide
 End Sub
 
 Private Sub cmdHelp_Click()
-    'Open a custom help file in Internet Explorer
-    'Requires a file called help.htm in the same dir as the application dll
     Dim sFilePath As String
-91:     sFilePath = app.Path & "\" & "Arrows_help.rtf"
-92:     If modUtils.FileExists(sFilePath) Then
-93:     Debug.Assert True ' need a different way to open the help file
-94:         If FileExists("C:\Program Files\Windows NT\Accessories\wordpad.exe") Then
-95:             Shell "C:\Program Files\Windows NT\Accessories\wordpad.exe " & sFilePath, 1
-96:         End If
-97:     Else
-98:         MsgBox "No help available"
-99:     End If
+    sFilePath = app.Path & "\" & "Arrows_help.rtf"
+    If modUtils.FileExists(sFilePath) Then
+'++ START JWM 10/16/2006 using new method to open help file
+            gsb_StartDoc Me.hwnd, sFilePath
+'++ START/END JWM 10/16/2006
+    Else
+        MsgBox "No help file available in current directory.", vbOKOnly + vbInformation
+    End If
 End Sub
 
 Private Sub cmdHook_Click()
-103:     Me.lblCurrentTool.Caption = "hook"
-104:     Me.Hide
-    
+    Me.lblCurrentTool.Caption = "hook"
+    Me.Hide
 End Sub
 
+Private Sub cmdQuit_Click()
+    Unload frmArrows
+End Sub

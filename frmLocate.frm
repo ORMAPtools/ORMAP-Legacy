@@ -2,20 +2,20 @@ VERSION 5.00
 Begin VB.Form frmLocate 
    Caption         =   "Locate"
    ClientHeight    =   2235
-   ClientLeft      =   60
-   ClientTop       =   345
+   ClientLeft      =   3270
+   ClientTop       =   4605
    ClientWidth     =   4335
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    ScaleHeight     =   2235
    ScaleWidth      =   4335
-   StartUpPosition =   3  'Windows Default
    Begin VB.CommandButton cmdCancel 
       Caption         =   "Cancel"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   9.75
          Charset         =   0
-         Weight          =   700
+         Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
@@ -32,7 +32,7 @@ Begin VB.Form frmLocate
          Name            =   "MS Sans Serif"
          Size            =   9.75
          Charset         =   0
-         Weight          =   700
+         Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
@@ -49,7 +49,7 @@ Begin VB.Form frmLocate
          Name            =   "MS Sans Serif"
          Size            =   9.75
          Charset         =   0
-         Weight          =   700
+         Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
@@ -114,6 +114,27 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+'    Copyright (C) 2006  opet developers opet-developers@lists.sourceforge.net
+'
+'    This program is free software; you can redistribute it and/or modify
+'    it under the terms of the GNU General Public License as published by
+'    the Free Software Foundation; either version 2 of the License, or
+'    (at your option) any later version.
+'
+'    This program is distributed in the hope that it will be useful,
+'    but WITHOUT ANY WARRANTY; without even the implied warranty of
+'    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'    GNU General Public License for more details located in AppSpecs.bas file.
+'
+'    You should have received a copy of the GNU General Public License along
+'    with this program; if not, write to the Free Software Foundation, Inc.,
+'    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+'
+' Keyword expansion for source code control
+' Tag for this file : $Name$
+' SCC Revision number: $Revision$
+' Date of last change: $Date$
+'
 '
 ' File name:            frmLocate
 '
@@ -228,61 +249,61 @@ Private Sub cmdApply_Click()
   Dim sMNum As String
   Dim sMsg As String
   Dim pQueryFilter As IQueryFilter
-115:   Set pQueryFilter = New QueryFilter
+  Set pQueryFilter = New QueryFilter
   
-117:   sMsg = "Please enter a Map Number and optionally, a Taxlot number"
+  sMsg = "Please enter a Map Number and optionally, a Taxlot number"
   
 '++ START JWM 10/11/2006 trim and then test for length
-120:   sTLNum = Trim$(frmLocate.txtTaxlot)
-121:   sMNum = Trim$(frmLocate.cmbMapNumber.Text)
+  sTLNum = Trim$(frmLocate.txtTaxlot)
+  sMNum = Trim$(frmLocate.cmbMapNumber.Text)
   
-123: If Len(sTLNum) = 0 Then 'Just Query MapIndex
+If Len(sTLNum) = 0 Then 'Just Query MapIndex
 '  If sTLNum = "" Then
-125:     If Len(sMNum) = 0 Then 'If both empty
+    If Len(sMNum) = 0 Then 'If both empty
 '    If sMNum = "" Then
-127:         MsgBox sMsg, vbOKOnly
-128:         GoTo Process_Exit
-129:     Else 'MapNumber entered with no Taxlot
-130:         Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-131:         If pMIFlayer Is Nothing Then
-132:               MsgBox "Unable to locate Map Index layer in Table of Contents.  " & _
+        MsgBox sMsg, vbOKOnly
+        GoTo Process_Exit
+    Else 'MapNumber entered with no Taxlot
+        Set pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+        If pMIFlayer Is Nothing Then
+              MsgBox "Unable to locate Map Index layer in Table of Contents.  " & _
               "This process requires a feature class called " & g_pFldnames.FCMapIndex
-134:               GoTo Process_Exit
-135:         End If
-136:         Set pMIFclass = pMIFlayer.FeatureClass
-137:         pQueryFilter.whereClause = "[" & g_pFldnames.MIMapNumberFN & "] = '" & frmLocate.cmbMapNumber.Text & "'"
-138:         Set pFeatureCursor = pMIFclass.Search(pQueryFilter, False)
-139:     End If
-140:   ElseIf Len(sTLNum) > 0 And Len(sMNum) > 0 Then 'Both values entered
-141:         pQueryFilter.whereClause = "[" & g_pFldnames.TLMapNumberFN & "] = '" & frmLocate.cmbMapNumber.Text & "' and [" & g_pFldnames.TLTaxlotFN & "]= '" & frmLocate.txtTaxlot & "'"
-142:         Set pFeatureCursor = m_pTaxlotFClass.Search(pQueryFilter, False)
-143:   Else 'Only a taxlot entered
-144:         MsgBox sMsg, vbOKOnly
-145:         GoTo Process_Exit
-146:     End If
-147:   If pFeatureCursor Is Nothing Then GoTo Process_Exit
-148:   Set pFeature = pFeatureCursor.NextFeature
+              GoTo Process_Exit
+        End If
+        Set pMIFclass = pMIFlayer.FeatureClass
+        pQueryFilter.whereClause = "[" & g_pFldnames.MIMapNumberFN & "] = '" & frmLocate.cmbMapNumber.Text & "'"
+        Set pFeatureCursor = pMIFclass.Search(pQueryFilter, False)
+    End If
+  ElseIf Len(sTLNum) > 0 And Len(sMNum) > 0 Then 'Both values entered
+        pQueryFilter.whereClause = "[" & g_pFldnames.TLMapNumberFN & "] = '" & frmLocate.cmbMapNumber.Text & "' and [" & g_pFldnames.TLTaxlotFN & "]= '" & frmLocate.txtTaxlot & "'"
+        Set pFeatureCursor = m_pTaxlotFClass.Search(pQueryFilter, False)
+  Else 'Only a taxlot entered
+        MsgBox sMsg, vbOKOnly
+        GoTo Process_Exit
+    End If
+  If pFeatureCursor Is Nothing Then GoTo Process_Exit
+  Set pFeature = pFeatureCursor.NextFeature
 
-150:   If pFeature Is Nothing Then
-151:     If Len(sTLNum) = 0 Then
-152:         MsgBox "Map Index could not be found.", vbInformation, "Try Again"
-153:     Else
-154:         MsgBox "Taxlot could not be found.", vbInformation, "Try Again"
-155:     End If
+  If pFeature Is Nothing Then
+    If Len(sTLNum) = 0 Then
+        MsgBox "Map Index could not be found.", vbInformation, "Try Again"
+    Else
+        MsgBox "Taxlot could not be found.", vbInformation, "Try Again"
+    End If
     '++ END JWM 10/11/2006
-157:     frmLocate.txtTaxlot = ""
-158:     frmLocate.txtTaxlot.SetFocus
-159:     GoTo Process_Exit
-160:   Else
+    frmLocate.txtTaxlot = ""
+    frmLocate.txtTaxlot.SetFocus
+    GoTo Process_Exit
+  Else
     'Zoom to selected feature
     Dim pEnvelope As IEnvelope
-163:     Set pEnvelope = pFeature.Shape.Envelope
+    Set pEnvelope = pFeature.Shape.Envelope
     
-165:     modUtils.ZoomToExtent pEnvelope, m_pMxDoc
+    ZoomToExtent pEnvelope, m_pMxDoc
 
-167:   End If
+  End If
   
-169:   Unload Me
+  Unload Me
 Process_Exit:
   Exit Sub
 ErrorHandler:
@@ -292,7 +313,7 @@ End Sub
 Private Sub cmdCancel_Click()
   On Error GoTo ErrorHandler
 
-179:     Unload Me
+    Unload Me
 
   Exit Sub
 ErrorHandler:
@@ -300,18 +321,15 @@ ErrorHandler:
 End Sub
 
 Private Sub cmdHelp_Click()
-    'Open a custom help file in Internet Explorer
-    'Requires a file called help.htm in the same dir as the application dll
     Dim sFilePath As String
-190:     sFilePath = app.Path & "\" & "Locate_help.rtf"
-191:     If modUtils.FileExists(sFilePath) Then
-192:     Debug.Assert True 'need a better method to open rtf files
-193:         If FileExists("C:\Program Files\Windows NT\Accessories\wordpad.exe") Then
-194:             Shell "C:\Program Files\Windows NT\Accessories\wordpad.exe " & sFilePath, 1
-195:         End If
-196:     Else
-197:         MsgBox "No help available"
-198:     End If
+    sFilePath = app.Path & "\" & "Locate_help.rtf"
+    If FileExists(sFilePath) Then
+'++ START JWM 10/16/2006 using new method to open help file
+        gsb_StartDoc Me.hwnd, sFilePath
+'++ START/END JWM 10/16/2006
+    Else
+        MsgBox "No help file available in current directory.", vbOKOnly + vbInformation
+    End If
 End Sub
 
 Private Sub Form_Initialize()
@@ -347,54 +365,54 @@ Private Sub Form_Load()
 On Error GoTo Err_Handler
     '
     Dim pApp As IApplication
-234:     Set pApp = modUtils.GetAppRef ' AppRef
-235:     Set m_pMxDoc = pApp.Document
+    Set pApp = GetAppRef ' AppRef
+    Set m_pMxDoc = pApp.Document
     'Get the MapIndex feature layer and fclass
-237:     Set m_pTaxlotFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
-238:     If m_pTaxlotFlayer Is Nothing Then
-239:         MsgBox "Unable to locate Taxlot layer in Table of Contents.  " & _
+    Set m_pTaxlotFlayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
+    If m_pTaxlotFlayer Is Nothing Then
+        MsgBox "Unable to locate Taxlot layer in Table of Contents.  " & _
         "This process requires a feature class called " & g_pFldnames.FCTaxlot
-241:         GoTo Process_Exit
-242:     End If
-243:     Set m_pTaxlotFClass = m_pTaxlotFlayer.FeatureClass
-244:     Set m_pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-245:     If m_pMIFlayer Is Nothing Then
-246:         MsgBox "Unable to locate Map Index layer in Table of Contents.  " & _
+        GoTo Proc_Exit
+    End If
+    Set m_pTaxlotFClass = m_pTaxlotFlayer.FeatureClass
+    Set m_pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+    If m_pMIFlayer Is Nothing Then
+        MsgBox "Unable to locate Map Index layer in Table of Contents.  " & _
         "This process requires a feature class called " & g_pFldnames.FCMapIndex
-248:         Process_Exit
-249:     End If
-250:     Set m_pMIFclass = m_pMIFlayer.FeatureClass
+       GoTo Proc_Exit
+    End If
+    Set m_pMIFclass = m_pMIFlayer.FeatureClass
     'Get fields needed to populate the form
-252:     Set m_pMIFields = m_pMIFclass.Fields
-253:     m_bContinue = True
-254:     m_lMapNumFld = modUtils.LocateFields(m_pMIFclass, g_pFldnames.MIMapNumberFN)
+    Set m_pMIFields = m_pMIFclass.Fields
+
+    m_lMapNumFld = LocateFields(m_pMIFclass, g_pFldnames.MIMapNumberFN)
   Dim pQueryDef As IQueryDef
   Dim pRow As IRow
   Dim pCursor As ICursor
   Dim pFeatureWorkspace As IFeatureWorkspace
   Dim pDataset As IDataset
   
-261:   Set pDataset = m_pMIFlayer 'm_pTaxlotFlayer
+  Set pDataset = m_pMIFlayer 'm_pTaxlotFlayer
   
   Dim sFieldName As String
-264:   sFieldName = g_pFldnames.TLMapNumberFN
+  sFieldName = g_pFldnames.TLMapNumberFN
   
-266:   Set pFeatureWorkspace = pDataset.Workspace
-267:   Set pQueryDef = pFeatureWorkspace.CreateQueryDef
-268:   With pQueryDef
-269:     .Tables = pDataset.Name ' Fully qualified table name
+  Set pFeatureWorkspace = pDataset.Workspace
+  Set pQueryDef = pFeatureWorkspace.CreateQueryDef
+  With pQueryDef
+    .Tables = pDataset.Name ' Fully qualified table name
          'Problems with some values -- prevents the form from loading
-271:     .SubFields = "DISTINCT(" & sFieldName & ")"
-272:     Set pCursor = .Evaluate
-273:   End With
+    .SubFields = "DISTINCT(" & sFieldName & ")"
+    Set pCursor = .Evaluate
+  End With
   
-275:   Set pRow = pCursor.NextRow
-276:   Do Until pRow Is Nothing
-277:     If Not IsNull(pRow.Value(0)) Then
-278:         frmLocate.cmbMapNumber.AddItem pRow.Value(0) ' Note only one field in the cursor
-279:     End If
-280:     Set pRow = pCursor.NextRow
-281:   Loop
+  Set pRow = pCursor.NextRow
+  Do Until pRow Is Nothing
+    If Not IsNull(pRow.Value(0)) Then
+        frmLocate.cmbMapNumber.AddItem pRow.Value(0) ' Note only one field in the cursor
+    End If
+    Set pRow = pCursor.NextRow
+  Loop
   
 Proc_Exit:
 Exit Sub
