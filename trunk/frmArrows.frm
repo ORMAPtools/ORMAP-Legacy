@@ -143,7 +143,7 @@ Attribute VB_Exposed = False
 ' Dependencies:
 '       How does this file depend or relate to other files?
 '
-' Issues: 
+' Issues:
 '       What are unsolved bugs, bottlenecks,
 '       possible future enhancements, and
 '       descriptions of other issues.
