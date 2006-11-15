@@ -554,7 +554,7 @@ Attribute VB_Exposed = False
 ' Dependencies:
 '       How does this file depend or relate to other files?
 '
-' Issues: 
+' Issues:
 '       What are unsolved bugs, bottlenecks,
 '       possible future enhancements, and
 '       descriptions of other issues.
@@ -807,7 +807,7 @@ Private Sub cmdAssign_Click()
                bValuesPresent = False
             End If
         ElseIf TypeOf ctl Is ListBox Then
-            Debug.Assert True
+            'this comment is here to poke us in the eye and ask WHY is this here
             MsgBox "listbox"
         End If
     Next ctl
