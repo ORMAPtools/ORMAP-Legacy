@@ -104,27 +104,37 @@ Public Function TestIniFile(FilePath As String) As Boolean
 End Function
 
 Public Function ReadIniFile(ByVal strSection As String, ByVal strKey As String) As String
-  
-  Dim strBuffer As String
-  Dim intPos As Integer
-  strBuffer = Space$(255)
-  If GetPrivateProfileString(strSection, strKey, "", strBuffer, 255, mIniFile) > 0 Then
-    ReadIniFile = RTrim$(StripTerminator(strBuffer))
-  Else
-    ReadIniFile = ""
-  End If
-  strBuffer = ""
-End Function
-
-Private Function StripTerminator(ByVal strString As String) As String
-  'function to strip out chr$(0) from the ReadIniFile function
-  Dim intZeroPos As Integer
-  intZeroPos = InStr(strString, vbNullChar)
-  If intZeroPos > 0 Then
-    StripTerminator = Left$(strString, intZeroPos - 1)
-  Else
-    StripTerminator = strString
-  End If
+  '************************************************************
+'Author:        James Moore
+'Created:       01-24-2001
+'Purpose: Retrieves a value from an ini file corresponding
+'           to the section and key name passed.
+'
+'Method:  Call the API with the parameters passed.
+  'The lResult value is the length of the string in sReturn, not including the terminating null. If a
+  'default value was passed, and the section or key name are not in the file, that value is
+  'returned. If no default value was passed (""), then lResult will = 0 if not found.
+'Inputs:    ini section name and the key name within that section
+'Outputs:  INI file entry
+'Errors:    This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'               Type any updates here.
+' Developer     Date        Comments
+'James Moore    12-18-06    This new code does not rely on outside functions
+'************************************************************
+Dim lResult As Long
+Dim nSize As Long
+Dim sReturn As String
+  'Pad a string large enough to hold the data.
+     sReturn = String$(256, vbNullChar)
+     nSize = Len(sReturn)
+     lResult = GetPrivateProfileString(strSection, strKey, "", sReturn, nSize, mIniFile)
+     If lResult Then
+         ReadIniFile = Left$(sReturn, lResult)
+     Else
+         ReadIniFile = ""
+     End If
 End Function
 
 
