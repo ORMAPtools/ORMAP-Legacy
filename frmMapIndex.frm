@@ -615,7 +615,8 @@ Dim m_lReliabFld As Long
 Dim m_lScaleFld As Long
 Dim m_lMapNumFld As Long
 Dim m_lPageFld As Long
-Dim m_bContinue As Boolean
+
+'Dim m_bContinue As Boolean'++ JWM 12/19/2006 not used see InitForm function
 Dim m_bSuccess As Boolean
 Dim m_bPossiblyChanged As Boolean
 Private m_ParentHWND As Long ' Set this to get correct parenting of Error handler forms
@@ -999,28 +1000,6 @@ ErrorHandler:
   HandleError True, "Form_Load " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 1, m_ParentHWND
 End Sub
 
-Private Function ffn_l_LocateFields(ByRef pFldName As String, ByRef pFClass As IFeatureClass) As Long
-  On Error GoTo ErrorHandler
-'++ This function appears to be reproduced in modutils with a different parameter list JWM 10/30/2006
-
-    'Generic function to locate a field and warn user if it can't be found
-    Dim lFld As Long
-    lFld = pFClass.Fields.FindField(pFldName)
-    If lFld > -1 Then
-      ffn_l_LocateFields = lFld
-    Else
-        MsgBox "Unable to locate " & g_pFldnames.MICountyFN & " field in " & _
-        g_pFldnames.FCMapIndex & " feature class"
-        m_bContinue = False
-    End If
-
-
-  Exit Function
-ErrorHandler:
-  HandleError False, "FindField " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 1, m_ParentHWND
-End Function
-
-
 Private Sub txtAnomaly_Change()
     'This is now able to contain non numeric values
     'If Not IsNumeric(txtAnomaly.Text) Then txtAnomaly.Text = ""
@@ -1063,7 +1042,7 @@ End Sub
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
-'
+'James Moore    12-19-06    Implemented implied logic when getting field indexes
 '***************************************************************************
 Public Function InitForm() As Boolean
 
@@ -1097,22 +1076,44 @@ Public Function InitForm() As Boolean
 
     'Get fields needed to populate the form
     Set m_pMIFields = m_pMIFclass.Fields
-    m_bContinue = True
+'++ START JWM 12/19/2006 The boolean variable does not get modified in any way so I will implement the implied logic
+'    m_bContinue = True
     m_lOMMapNumFld = LocateFields(m_pMIFclass, g_pFldnames.MIORMAPMapNumberFN)
-    m_lReliabFld = LocateFields(m_pMIFclass, g_pFldnames.MIReliabFN)
-    m_lScaleFld = LocateFields(m_pMIFclass, g_pFldnames.MIMapScaleFN)
-    m_lMapNumFld = LocateFields(m_pMIFclass, g_pFldnames.MIMapNumberFN)
-    m_lPageFld = LocateFields(m_pMIFclass, g_pFldnames.MIPageFN)
-    If Not m_bContinue Then
+    If m_lOMMapNumFld = -1 Then
         InitForm = False
-        GoTo Process_Exit 'If any fields not found
+        GoTo Process_Exit
     End If
+    m_lReliabFld = LocateFields(m_pMIFclass, g_pFldnames.MIReliabFN)
+    If m_lReliabFld = -1 Then
+        InitForm = False
+        GoTo Process_Exit
+    End If
+    m_lScaleFld = LocateFields(m_pMIFclass, g_pFldnames.MIMapScaleFN)
+    If m_lScaleFld = -1 Then
+        InitForm = False
+        GoTo Process_Exit
+    End If
+    m_lMapNumFld = LocateFields(m_pMIFclass, g_pFldnames.MIMapNumberFN)
+    If m_lMapNumFld = -1 Then
+        InitForm = False
+        GoTo Process_Exit
+    End If
+    m_lPageFld = LocateFields(m_pMIFclass, g_pFldnames.MIPageFN)
+    If m_lPageFld = -1 Then
+        InitForm = False
+        GoTo Process_Exit
+    End If
+'    If Not m_bContinue Then
+'        InitForm = False
+'        GoTo Process_Exit 'If any fields not found
+'    End If
+'++ END JWM 12/19/2006
     
     'Get the selected feature and its attributes
     Dim sExistOMMapNum As String
     Dim sExistVal As String
     Dim pFeatCur As IFeatureCursor
-    Set pFeatCur = modUtils.GetSelectedFeatures(m_pMIFlayer)
+    Set pFeatCur = GetSelectedFeatures(m_pMIFlayer)
     If pFeatCur Is Nothing Then
         InitForm = False
         GoTo Process_Exit
@@ -1137,7 +1138,7 @@ Public Function InitForm() As Boolean
         Me.txtPage.Text = ""
         'Convert default county to description
         Dim sDefCntyDesc As String
-        sDefCntyDesc = modUtils.ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.TLCountyFN, CLng(g_pFldnames.DefCounty))
+        sDefCntyDesc = ConvertToDescription(m_pTaxlotFClass.Fields, g_pFldnames.TLCountyFN, CLng(g_pFldnames.DefCounty))
         
         m_bSuccess = AddCodesToCmb(g_pFldnames.TLCountyFN, m_pTaxlotFClass.Fields, Me.cmbCounty, sDefCntyDesc, True)
         m_bSuccess = AddCodesToCmb(g_pFldnames.TLTownFN, m_pTaxlotFClass.Fields, Me.cmbTown, "", True)
