@@ -818,8 +818,8 @@ ErrorHandler:
 End Function
 '***************************************************************************
 'Name:  AttributeQuery
-'Initial Author:        James Moore
-'Subsequent Author:     Type your name here.
+'Initial Author:
+'Subsequent Author:
 'Created:       10/11/2006
 'Purpose:
 'Called From:
@@ -1289,7 +1289,7 @@ End Function
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
-'
+'James Moore    12-18-2006  Using StrComp to compare strings
 '***************************************************************************
 Public Function IsMapIndex(obj As IObject) As Boolean
   On Error GoTo ErrorHandler
@@ -1298,7 +1298,8 @@ Public Function IsMapIndex(obj As IObject) As Boolean
     Dim pDS As IDataset
     Set pOC = obj.Class
     Set pDS = pOC
-    If LCase(pDS.Name) = LCase(g_pFldnames.FCMapIndex) Then
+'    If LCase(pDS.Name) = LCase(g_pFldnames.FCMapIndex) Then
+    If StrComp(pDS.Name, g_pFldnames.FCMapIndex, vbTextCompare) = 0 Then
         IsMapIndex = True
     Else
         IsMapIndex = False
@@ -1440,7 +1441,7 @@ End Function
 'Initial Author:
 'Subsequent Author:     Type your name here.
 'Created:
-'Purpose:   Calculates Taxlot vaules from ORMAPMapnum
+'Purpose:   Calculates Taxlot values from ORMAPMapnum
 'Called From:cmdTaxlotAssignment.ITool_OnMouseDown, cmdTaxlotAssignment.m_pEditorEvents_OnChangeFeature,
 '   cmdTaxlotAssignment.m_pEditorEvents_OnCreateFeature
 'Methods:       Describe any complex details.
@@ -1457,8 +1458,10 @@ End Function
 'James Moore    10/11/2006  single exit point using goto
 'James Moore    11-1-06     removed dead variables
 'James Moore    11/01/2006  Assigning the map taxlot field
+'james Moore    12-19-06    changed names of this subroutines arguments and implemented
+'                           the logic implied for finding fields
 '***************************************************************************
-Public Sub CalcTaxlotValues(ByRef pFeat As IFeature, ByRef pMIFlayer As IFeatureLayer)
+Public Sub CalcTaxlotValues(ByRef a_pFeat As IFeature, ByRef a_pMIFlayer As IFeatureLayer)
   On Error GoTo ErrorHandler
 
     Dim pTaxlotFclass As IFeatureClass
@@ -1480,15 +1483,14 @@ Public Sub CalcTaxlotValues(ByRef pFeat As IFeature, ByRef pMIFlayer As IFeature
     Dim lTLMapSufNumFld As Long
     Dim lTLSpecInterestFld As Long
     Dim lTLMapTaxlotFld As Long
-    Dim lTLMapNumberFld As Long
     Dim lTLAnomalyFld As Long
     Dim lTaxlotMapAcres As Long
     Dim iResponse As Integer
     
-    Set pTaxlotFclass = pFeat.Class
+    Set pTaxlotFclass = a_pFeat.Class
     'Find MapIndex
-    Set pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-    If pMIFlayer Is Nothing Then
+    Set a_pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+    If a_pMIFlayer Is Nothing Then
         iResponse = MsgBox("Unable to locate Map Index layer in Table of Contents. " & _
         "This process requires a feature class called " & g_pFldnames.FCMapIndex & ". " & _
         "Load " & g_pFldnames.FCMapIndex & " automatically?", vbYesNo)
@@ -1497,35 +1499,76 @@ Public Sub CalcTaxlotValues(ByRef pFeat As IFeature, ByRef pMIFlayer As IFeature
         
         LoadFCIntoMap g_pFldnames.FCMapIndex, pTaxlotFclass
         
-        If pMIFlayer Is Nothing Then GoTo Process_Exit
+        If a_pMIFlayer Is Nothing Then GoTo Process_Exit
     End If
 
     'Find all fields needed
-    m_bContinue = True
+'++ START JWM 12/19/2006 the module level boolean was not being modified any where so
+' to implement the logic implied here I am checking the variables value from each call
+' the return value of -1 means the field was not found but it also means True in Visual Basic
+' when assigned to a Boolean value.
+'    m_bContinue = True
     lOMTLNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLOrmapTaxlotFN)
+    If lOMTLNumFld = -1 Then GoTo Proc_Exit
+    
     lOMNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLOrmapMapNumberFN)
+    If lOMNumFld = -1 Then GoTo Proc_Exit
+    
     lMNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLMapNumberFN)
+    If lMNumFld = -1 Then GoTo Proc_Exit
+    
     lTLCntyFld = LocateFields(pTaxlotFclass, g_pFldnames.TLCountyFN)
+    If lTLCntyFld = -1 Then GoTo Proc_Exit
+    
     lTaxlotFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTaxlotFN)
+    If lTaxlotFld = -1 Then GoTo Proc_Exit
+    
     lTLTownFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTownFN)
+    If lTLTownFld = -1 Then GoTo Proc_Exit
+    
     lTLTownPartFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTownPartFN)
+    If lTLTownPartFld = -1 Then GoTo Proc_Exit
+    
     lTLTownDirFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTownDirFN)
+    If lTLTownDirFld = -1 Then GoTo Proc_Exit
+    
     lTLRangeFld = LocateFields(pTaxlotFclass, g_pFldnames.TLRangeFN)
+    If lTLRangeFld = -1 Then GoTo Proc_Exit
+    
     lTLRangePartFld = LocateFields(pTaxlotFclass, g_pFldnames.TLRangePartFN)
+    If lTLRangePartFld = -1 Then GoTo Proc_Exit
+    
     lTLRangeDirFld = LocateFields(pTaxlotFclass, g_pFldnames.TLRangeDirFN)
+    If lTLRangeDirFld = -1 Then GoTo Proc_Exit
+    
     lTLSectNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSectNumberFN)
+    If lTLSectNumFld = -1 Then GoTo Proc_Exit
+    
     lTLQtrFld = LocateFields(pTaxlotFclass, g_pFldnames.TLQtrFN)
+    If lTLQtrFld = -1 Then GoTo Proc_Exit
+    
     lTLQQFld = LocateFields(pTaxlotFclass, g_pFldnames.TLQtrQtrFN)
+    If lTLQQFld = -1 Then GoTo Proc_Exit
+    
     lTLMapSufTypeFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSufTypeFN)
+    If lTLMapSufTypeFld = -1 Then GoTo Proc_Exit
+    
     lTLMapSufNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSufNumFN)
+    If lTLMapSufNumFld = -1 Then GoTo Proc_Exit
+    
     lTLSpecInterestFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSpecInterestFN)
-'   JWM where is lTLMapTaxlotFld value used?
+    If lTLSpecInterestFld = -1 Then GoTo Proc_Exit
+    
     lTLMapTaxlotFld = LocateFields(pTaxlotFclass, g_pFldnames.TLMapTaxlotFN)
-'   where is lTLMapNumberFld value used?
-    lTLMapNumberFld = LocateFields(pTaxlotFclass, g_pFldnames.TLMapNumberFN)
+    If lTLMapTaxlotFld = -1 Then GoTo Proc_Exit
+    
     lTaxlotMapAcres = LocateFields(pTaxlotFclass, g_pFldnames.TLMapAcresFN)
+    If lTaxlotMapAcres = -1 Then GoTo Proc_Exit
+    
     lTLAnomalyFld = LocateFields(pTaxlotFclass, g_pFldnames.TLAnomalyFN)
-    If Not m_bContinue Then GoTo Process_Exit 'If any fields not found
+    If lTLAnomalyFld = -1 Then GoTo Proc_Exit
+'++ END JWM 12/19/2006
+'    If Not m_bContinue Then GoTo Process_Exit 'If any fields not found
 
     'Obtain the map index poly via overlay
     Dim sExistVal As String
@@ -1537,111 +1580,111 @@ Public Sub CalcTaxlotValues(ByRef pFeat As IFeature, ByRef pMIFlayer As IFeature
     Dim sMapTaxlotID As String
 '++ END JWM 10/31/2006
 
-    Set pArea = pFeat.Shape
+    Set pArea = a_pFeat.Shape
     Set pCenter = pArea.Centroid
     
     'Update Acreage
-    pFeat.Value(lTaxlotMapAcres) = pArea.Area / 43560  '(pFeat.Value(lTaxlotShapeArea) / 43560)
+    a_pFeat.Value(lTaxlotMapAcres) = pArea.Area / 43560  '(a_pFeat.Value(lTaxlotShapeArea) / 43560)
     
     'Return the OMMapNum and MapNum and insert values into Taxlot
-    sExistOMMapNum = GetValueViaOverlay(pCenter, pMIFlayer.FeatureClass, g_pFldnames.MIORMAPMapNumberFN)
+    sExistOMMapNum = GetValueViaOverlay(pCenter, a_pMIFlayer.FeatureClass, g_pFldnames.MIORMAPMapNumberFN)
     If Len(sExistOMMapNum) = 0 Then GoTo Process_Exit 'If no value for whatever reason, don't continue
     
-    sExistMapNum = GetValueViaOverlay(pCenter, pMIFlayer.FeatureClass, g_pFldnames.MIMapNumberFN)
+    sExistMapNum = GetValueViaOverlay(pCenter, a_pMIFlayer.FeatureClass, g_pFldnames.MIMapNumberFN)
     If Len(sExistMapNum) = 0 Then GoTo Process_Exit 'If no value for whatever reason, don't continue
     
     
     'Store individual components of map number in taxlot
-    pFeat.Value(lOMNumFld) = sExistOMMapNum
-    pFeat.Value(lMNumFld) = sExistMapNum
+    a_pFeat.Value(lOMNumFld) = sExistOMMapNum
+    a_pFeat.Value(lMNumFld) = sExistMapNum
     sMapTaxlotID = sExistOMMapNum 'stor for later use
     
     'County
     sExistVal = ParseOMMapNum(sExistOMMapNum, "county")
-    sExistVal = ConvertCode(pFeat, g_pFldnames.TLCountyFN, sExistVal)
-    pFeat.Value(lTLCntyFld) = CInt(sExistVal) 'Store county in county field
+    sExistVal = ConvertCode(a_pFeat, g_pFldnames.TLCountyFN, sExistVal)
+    a_pFeat.Value(lTLCntyFld) = CInt(sExistVal) 'Store county in county field
     
     'Town
     sExistVal = ParseOMMapNum(sExistOMMapNum, "town")
-    pFeat.Value(lTLTownFld) = CInt(sExistVal)
+    a_pFeat.Value(lTLTownFld) = CInt(sExistVal)
 
     'TownPart
     sExistVal = ParseOMMapNum(sExistOMMapNum, "townpart")
-    pFeat.Value(lTLTownPartFld) = CDbl(sExistVal)
+    a_pFeat.Value(lTLTownPartFld) = CDbl(sExistVal)
 
     'TownDir
     sExistVal = ParseOMMapNum(sExistOMMapNum, "towndir")
-    pFeat.Value(lTLTownDirFld) = sExistVal
+    a_pFeat.Value(lTLTownDirFld) = sExistVal
     
     'Range
     sExistVal = ParseOMMapNum(sExistOMMapNum, "range")
-    pFeat.Value(lTLRangeFld) = CInt(sExistVal)
+    a_pFeat.Value(lTLRangeFld) = CInt(sExistVal)
 
     'RangePart
     sExistVal = ParseOMMapNum(sExistOMMapNum, "rangepart")
-    pFeat.Value(lTLRangePartFld) = CDbl(sExistVal)
+    a_pFeat.Value(lTLRangePartFld) = CDbl(sExistVal)
     
     'RangeDir
     sExistVal = ParseOMMapNum(sExistOMMapNum, "rangedir")
-    pFeat.Value(lTLRangeDirFld) = sExistVal
+    a_pFeat.Value(lTLRangeDirFld) = sExistVal
     
     'Section
     sExistVal = ParseOMMapNum(sExistOMMapNum, "section")
-    pFeat.Value(lTLSectNumFld) = CInt(sExistVal)
+    a_pFeat.Value(lTLSectNumFld) = CInt(sExistVal)
     
     'Qtr
     sExistVal = ParseOMMapNum(sExistOMMapNum, "qtr")
-    pFeat.Value(lTLQtrFld) = sExistVal
+    a_pFeat.Value(lTLQtrFld) = sExistVal
     
     'QtrQtr
     sExistVal = ParseOMMapNum(sExistOMMapNum, "qtrqtr")
-    pFeat.Value(lTLQQFld) = sExistVal
+    a_pFeat.Value(lTLQQFld) = sExistVal
     
 
     'MapSuffixType
     sExistVal = ParseOMMapNum(sExistOMMapNum, "suffixtype")
-    sExistVal = ConvertCode(pFeat, g_pFldnames.TLSufTypeFN, sExistVal)
-    pFeat.Value(lTLMapSufTypeFld) = sExistVal
+    sExistVal = ConvertCode(a_pFeat, g_pFldnames.TLSufTypeFN, sExistVal)
+    a_pFeat.Value(lTLMapSufTypeFld) = sExistVal
     
     'MapSuffixNum
     sExistVal = ParseOMMapNum(sExistOMMapNum, "suffixnum")
-    pFeat.Value(lTLMapSufNumFld) = sExistVal
+    a_pFeat.Value(lTLMapSufNumFld) = sExistVal
     
     'Anomaly
     sExistVal = ParseOMMapNum(sExistOMMapNum, "anomaly")
-    pFeat.Value(lTLAnomalyFld) = sExistVal
+    a_pFeat.Value(lTLAnomalyFld) = sExistVal
     
     'SpecialInterest
-    sExistVal = IIf(IsNull(pFeat.Value(lTLSpecInterestFld)), "00000", pFeat.Value(lTLSpecInterestFld))
+    sExistVal = IIf(IsNull(a_pFeat.Value(lTLSpecInterestFld)), "00000", a_pFeat.Value(lTLSpecInterestFld))
     If Len(sExistVal) < 5 Then
      Do Until Len(sExistVal) = 5
         sExistVal = "0" & sExistVal
      Loop
     End If
-    pFeat.Value(lTLSpecInterestFld) = sExistVal
+    a_pFeat.Value(lTLSpecInterestFld) = sExistVal
     
     'Recalculate OMTaxlot
-    If IsNull(pFeat.Value(lTaxlotFld)) Then GoTo Process_Exit
+    If IsNull(a_pFeat.Value(lTaxlotFld)) Then GoTo Process_Exit
     Dim sTaxlotVal As String
     'Taxlot has actual taxlot number.  ORMAPTaxlot requires a 5-digit number, so leading zeros have to be added
-    sTaxlotVal = pFeat.Value(lTaxlotFld)
+    sTaxlotVal = a_pFeat.Value(lTaxlotFld)
     sTaxlotVal = AddLeadingZeros(sTaxlotVal, ORMAP_TAXLOT_FIELD_LENGTH)
     
 '++ START JWM 10/31/2006 assigning Maptaxlot field
     sMapTaxlotID = sMapTaxlotID & sTaxlotVal
-    pFeat.Value(lTLMapTaxlotFld) = gfn_s_CreateMapTaxlotValue(sMapTaxlotID, g_pFldnames.MapTaxlotFormatString)
+    a_pFeat.Value(lTLMapTaxlotFld) = gfn_s_CreateMapTaxlotValue(sMapTaxlotID, g_pFldnames.MapTaxlotFormatString)
 '++ END JWM 10/31/2006
 
     Dim sNewOMTLNum As String
     Dim sExistOMTLNum As String
     
-    If IsNull(pFeat.Value(lOMTLNumFld)) Then GoTo Process_Exit
+    If IsNull(a_pFeat.Value(lOMTLNumFld)) Then GoTo Process_Exit
     
-    sExistOMTLNum = pFeat.Value(lOMTLNumFld)
-    sNewOMTLNum = CalcOMTLNum(sExistOMTLNum, pFeat, sTaxlotVal)
+    sExistOMTLNum = a_pFeat.Value(lOMTLNumFld)
+    sNewOMTLNum = CalcOMTLNum(sExistOMTLNum, a_pFeat, sTaxlotVal)
     'If no changes, don't save value
     If StrComp(sExistOMTLNum, sNewOMTLNum, vbTextCompare) <> 0 Then
-        pFeat.Value(lOMTLNumFld) = sNewOMTLNum
+        a_pFeat.Value(lOMTLNumFld) = sNewOMTLNum
     End If
 Process_Exit:
   Exit Sub
@@ -2207,32 +2250,33 @@ End Sub
 'Initial Author:
 'Created:
 'Called From:
-'Description:   Returns the index (location) of a field within a feature class.
-'Methods:       Describe any complex details.
-'Inputs:        What variables are brought into this routine?
-'Parameters:
+'Description:   Returns the index (location) of a field within a feature class. If not found will return -1.
+'Methods:       This function may return zero because that is a valid index, but -1 is not.
+' The return value of -1 means the field was not found but it also means True in Visual Basic
+' when the value assigned to a Boolean value. Always check the return value in decision structures.
+'Inputs:        A feature class object and the name of a field that may or may not be within that feature class.
+'Parameters:    IFeatureClass and a String
 'Outputs:       What variables are changed in this routine?
-'Returns:       Index of field within feature class
+'Returns:       Index of field or -1
 'Errors:        This routine raises no known errors.
 'Assumptions:   What parameters or variable values are assumed to be true?
 'Updates:
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
-'
+'james moore    12-19-06    Will now return the result of the FindField call so that the user
+'                           can make a decision base on the result.
 '***************************************************************************
 Public Function LocateFields(pFClass As IFeatureClass, pFldName As String) As Long
   On Error GoTo ErrorHandler
 
     Dim lFld As Long
     lFld = pFClass.Fields.FindField(pFldName)
-    If lFld > -1 Then
-      LocateFields = lFld
-    Else
+    If lFld = -1 Then
         MsgBox "Unable to locate " & pFldName & " field in " & _
         pFClass.AliasName & " feature class"
     End If
-
+    LocateFields = lFld
 
   Exit Function
 ErrorHandler:
@@ -2282,7 +2326,7 @@ End Sub
 
 '***************************************************************************
 'Name:  Validate5Digits
-'Initial Author:        James Moore
+'Initial Author:
 'Subsequent Author:     Type your name here.
 'Created:       10/11/2006
 'Purpose:
@@ -2319,7 +2363,7 @@ End Function
 
 '***************************************************************************
 'Name:  GetSpecialInterests
-'Initial Author:        James Moore
+'Initial Author:
 'Subsequent Author:     Type your name here.
 'Created:       10/11/2006
 'Purpose:
@@ -2343,7 +2387,7 @@ Public Function GetSpecialInterests(pFeature As IFeature) As String
 
         Dim lTLSpecInterestFld As Long
         Dim sTLSpecVAl As String
-        lTLSpecInterestFld = modUtils.LocateFields(pFeature.Class, g_pFldnames.TLSpecInterestFN)
+        lTLSpecInterestFld = LocateFields(pFeature.Class, g_pFldnames.TLSpecInterestFN)
         If lTLSpecInterestFld = -1 Then
             sTLSpecVAl = "00000"
         Else
@@ -2368,7 +2412,7 @@ End Function
 
 '***************************************************************************
 'Name:  GetMapSufType
-'Initial Author:        James Moore
+'Initial Author:
 'Subsequent Author:     Type your name here.
 'Created:       10/11/2006
 'Purpose:
@@ -2392,7 +2436,7 @@ Public Function GetMapSufType(pFeature As IFeature) As String
 
         Dim lTLMapSufTypeFld As Long
         Dim sTLMapSufTypeVAl As String
-        lTLMapSufTypeFld = modUtils.LocateFields(pFeature.Class, g_pFldnames.TLSufTypeFN)
+        lTLMapSufTypeFld = LocateFields(pFeature.Class, g_pFldnames.TLSufTypeFN)
         If lTLMapSufTypeFld = -1 Then
             sTLMapSufTypeVAl = "0"
         Else
@@ -2449,7 +2493,7 @@ Public Function GetMapSufNum(pFeature As IFeature) As String
 
         Dim lTLMapSufNumFld As Long
         Dim sTLMapSufNumVAl As String
-        lTLMapSufNumFld = modUtils.LocateFields(pFeature.Class, g_pFldnames.TLSufNumFN)
+        lTLMapSufNumFld = LocateFields(pFeature.Class, g_pFldnames.TLSufNumFN)
         If lTLMapSufNumFld = -1 Then
             sTLMapSufNumVAl = "000"
         Else
@@ -2610,7 +2654,7 @@ Dim sMsg As String
             Case SE_ERR_PNF
                sMsg = "Path not found"
             Case SE_ERR_ACCESSDENIED
-            sMsg = "Access denied"
+                sMsg = "Access denied"
             Case SE_ERR_OOM
                 sMsg = "Out of memory"
             Case SE_ERR_DLLNOTFOUND
@@ -2649,9 +2693,9 @@ End Sub
 '   Extensive use of the Mid function causes heavy reliance on the position of values in the string
 '           Need to find a better way to handle half townships and ranges
 'May want to change this function to use Regular Expressions
-'Inputs:        as_ORMapTaxlotString: The ORTaxlot value
+'Inputs:        as_ORMapTaxlotString: The ORTaxlot value, as_MaskFormatString: the formatting string
 '
-'Returns:       A formatted string that can be used in as parcel ID or/and as the MAPTAXLOT value
+'Returns:       A formatted string that can be used as parcel ID or/and as the MAPTAXLOT value
 'Errors:        This routine raises no known errors.
 'Assumptions:   A valid ORTaxlot string and Mask value is passed in.
 'Updates:
