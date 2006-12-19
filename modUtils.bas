@@ -1551,10 +1551,10 @@ Public Sub CalcTaxlotValues(ByRef a_pFeat As IFeature, ByRef a_pMIFlayer As IFea
     If lTLQQFld = -1 Then GoTo Process_Exit
     
     lTLMapSufTypeFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSufTypeFN)
-    If lTLMapSufTypeFld = -1 Then GoTo Proc_Exit
+    If lTLMapSufTypeFld = -1 Then GoTo Process_Exit
     
     lTLMapSufNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSufNumFN)
-    If lTLMapSufNumFld = -1 Then GoTo Proc_Exit
+    If lTLMapSufNumFld = -1 Then GoTo Process_Exit
     
     lTLSpecInterestFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSpecInterestFN)
     If lTLSpecInterestFld = -1 Then GoTo Process_Exit
