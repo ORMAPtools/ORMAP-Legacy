@@ -1509,46 +1509,46 @@ Public Sub CalcTaxlotValues(ByRef a_pFeat As IFeature, ByRef a_pMIFlayer As IFea
 ' when assigned to a Boolean value.
 '    m_bContinue = True
     lOMTLNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLOrmapTaxlotFN)
-    If lOMTLNumFld = -1 Then GoTo Proc_Exit
+    If lOMTLNumFld = -1 Then GoTo Process_Exit
     
     lOMNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLOrmapMapNumberFN)
-    If lOMNumFld = -1 Then GoTo Proc_Exit
+    If lOMNumFld = -1 Then GoTo Process_Exit
     
     lMNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLMapNumberFN)
-    If lMNumFld = -1 Then GoTo Proc_Exit
+    If lMNumFld = -1 Then GoTo Process_Exit
     
     lTLCntyFld = LocateFields(pTaxlotFclass, g_pFldnames.TLCountyFN)
-    If lTLCntyFld = -1 Then GoTo Proc_Exit
+    If lTLCntyFld = -1 Then GoTo Process_Exit
     
     lTaxlotFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTaxlotFN)
-    If lTaxlotFld = -1 Then GoTo Proc_Exit
+    If lTaxlotFld = -1 Then GoTo Process_Exit
     
     lTLTownFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTownFN)
-    If lTLTownFld = -1 Then GoTo Proc_Exit
+    If lTLTownFld = -1 Then GoTo Process_Exit
     
     lTLTownPartFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTownPartFN)
-    If lTLTownPartFld = -1 Then GoTo Proc_Exit
+    If lTLTownPartFld = -1 Then GoTo Process_Exit
     
     lTLTownDirFld = LocateFields(pTaxlotFclass, g_pFldnames.TLTownDirFN)
-    If lTLTownDirFld = -1 Then GoTo Proc_Exit
+    If lTLTownDirFld = -1 Then GoTo Process_Exit
     
     lTLRangeFld = LocateFields(pTaxlotFclass, g_pFldnames.TLRangeFN)
-    If lTLRangeFld = -1 Then GoTo Proc_Exit
+    If lTLRangeFld = -1 Then GoTo Process_Exit
     
     lTLRangePartFld = LocateFields(pTaxlotFclass, g_pFldnames.TLRangePartFN)
-    If lTLRangePartFld = -1 Then GoTo Proc_Exit
+    If lTLRangePartFld = -1 Then GoTo Process_Exit
     
     lTLRangeDirFld = LocateFields(pTaxlotFclass, g_pFldnames.TLRangeDirFN)
-    If lTLRangeDirFld = -1 Then GoTo Proc_Exit
+    If lTLRangeDirFld = -1 Then GoTo Process_Exit
     
     lTLSectNumFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSectNumberFN)
-    If lTLSectNumFld = -1 Then GoTo Proc_Exit
+    If lTLSectNumFld = -1 Then GoTo Process_Exit
     
     lTLQtrFld = LocateFields(pTaxlotFclass, g_pFldnames.TLQtrFN)
-    If lTLQtrFld = -1 Then GoTo Proc_Exit
+    If lTLQtrFld = -1 Then GoTo Process_Exit
     
     lTLQQFld = LocateFields(pTaxlotFclass, g_pFldnames.TLQtrQtrFN)
-    If lTLQQFld = -1 Then GoTo Proc_Exit
+    If lTLQQFld = -1 Then GoTo Process_Exit
     
     lTLMapSufTypeFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSufTypeFN)
     If lTLMapSufTypeFld = -1 Then GoTo Proc_Exit
@@ -1557,16 +1557,16 @@ Public Sub CalcTaxlotValues(ByRef a_pFeat As IFeature, ByRef a_pMIFlayer As IFea
     If lTLMapSufNumFld = -1 Then GoTo Proc_Exit
     
     lTLSpecInterestFld = LocateFields(pTaxlotFclass, g_pFldnames.TLSpecInterestFN)
-    If lTLSpecInterestFld = -1 Then GoTo Proc_Exit
+    If lTLSpecInterestFld = -1 Then GoTo Process_Exit
     
     lTLMapTaxlotFld = LocateFields(pTaxlotFclass, g_pFldnames.TLMapTaxlotFN)
-    If lTLMapTaxlotFld = -1 Then GoTo Proc_Exit
+    If lTLMapTaxlotFld = -1 Then GoTo Process_Exit
     
     lTaxlotMapAcres = LocateFields(pTaxlotFclass, g_pFldnames.TLMapAcresFN)
-    If lTaxlotMapAcres = -1 Then GoTo Proc_Exit
+    If lTaxlotMapAcres = -1 Then GoTo Process_Exit
     
     lTLAnomalyFld = LocateFields(pTaxlotFclass, g_pFldnames.TLAnomalyFN)
-    If lTLAnomalyFld = -1 Then GoTo Proc_Exit
+    If lTLAnomalyFld = -1 Then GoTo Process_Exit
 '++ END JWM 12/19/2006
 '    If Not m_bContinue Then GoTo Process_Exit 'If any fields not found
 
