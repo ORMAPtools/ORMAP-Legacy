@@ -477,7 +477,7 @@ Private Sub ITool_OnMouseDown(ByVal Button As Long, ByVal Shift As Long, ByVal X
     Set pMap = m_pEditor.Map
     Set pPoint = m_pEditor.Display.DisplayTransformation.ToMapPoint(X, Y)
     Set pGeometry = m_pEditor.CreateSearchShape(pPoint)
-    If frmTaxlotAssignment.cmbTaxlotNum.Text = "NUMBER" Then
+    If StrComp(frmTaxlotAssignment.cmbTaxlotNum.Text, "NUMBER", vbTextCompare) = 0 Then
         'Verify that within this map index, this taxlot number is unique
         'If not unique, prompt user to enter a new value
         If Not ValidateTaxlotNum(frmTaxlotAssignment.txtTaxlotNum.Text, pGeometry) Then
@@ -506,12 +506,13 @@ Private Sub ITool_OnMouseDown(ByVal Button As Long, ByVal Shift As Long, ByVal X
         Dim sOMTLNval As String
         Dim sExistOMNum As String
         Dim sOMMapTaxlot As String 'added by jwm 11-9-06
-        
-        sExistOMNum = IIf(IsNull(pFeature.Value(m_lOMNumFld)), vbNullString, pFeature.Value(m_lOMNumFld))
+
+        sExistOMNum = IIf(IsNull(pFeature.Value(m_lOMNumFld)), "", pFeature.Value(m_lOMNumFld))
         
         If Len(sExistOMNum) = 0 Then 'Obtain it from MapIndex polygon
-            CalcTaxlotValues pFeature, m_pMIFlayer
-            sExistOMNum = IIf(IsNull(pFeature.Value(m_lOMNumFld)), vbNullString, pFeature.Value(m_lOMNumFld))
+            CalcTaxlotValues pFeature, m_pMIFlayer 'this call will point m_pMIFlayer to the MapIndex feature class
+            sExistOMNum = IIf(IsNull(pFeature.Value(m_lOMNumFld)), "", pFeature.Value(m_lOMNumFld))
+            
             If Len(sExistOMNum) = 0 Then
                 MsgBox "ORMAPMapNumber not present in this taxlot or MapIndex.  Use the MapIndex tool to create one"
                 GoTo Process_Exit
@@ -521,6 +522,7 @@ Private Sub ITool_OnMouseDown(ByVal Button As Long, ByVal Shift As Long, ByVal X
         'Assign Taxlot value
         Dim sExistTLNumVal As String
         sExistTLNumVal = IIf(IsNull(pFeature.Value(m_lTLTaxlotFld)), "", pFeature.Value(m_lTLTaxlotFld))
+        
         If Len(sExistTLNumVal) > 0 Then
             Dim response As Integer
             response = MsgBox("Taxlot currently has a Taxlot value (" & sExistTLNumVal & ").  Update it?", vbYesNo)
@@ -730,16 +732,17 @@ End Sub
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
-'
+'James Moore    12-19-06    Moved the IsOrmapFeature call to occur first. UpdateAutoFields was occurring before this call. This move prompted by Sourceforge Bug 1596687
+'                                       Created one exit point for routine
 '***************************************************************************
 Private Sub m_pEditorEvents_OnChangeFeature(ByVal obj As esriGeoDatabase.IObject)
   On Error GoTo ErrorHandler
+'++ START JWM 12/19/2006
+    If Not IsOrMapFeature(obj) Then GoTo OnChangeFeature_Proc_Exit
+'++ END JWM 12/19/2006
 
-    '
     'These are the autocalculated fields
     UpdateAutoFields obj
-        
-    If Not IsOrMapFeature(obj) Then Exit Sub
     Dim u As New UID
     Dim pFeat As IFeature
     
@@ -755,17 +758,16 @@ Private Sub m_pEditorEvents_OnChangeFeature(ByVal obj As esriGeoDatabase.IObject
         lParentID = pAnnotationFeature.LinkedFeatureID
         If lParentID > -1 Then 'Feature linked
             Set pFeat = GetRelatedObjects(obj)
-            If pFeat Is Nothing Then Exit Sub
+            If pFeat Is Nothing Then GoTo OnChangeFeature_Proc_Exit
         Else
             'Not feature linked anno, so we can use the feature as is
             Set pFeat = obj
         End If
-    
         'Set anno size
         SetAnnoSize obj, pFeat
-
     End If
-
+    
+OnChangeFeature_Proc_Exit:
   Exit Sub
 ErrorHandler:
   HandleError False, "m_pEditorEvents_OnChangeFeature " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
@@ -790,13 +792,15 @@ End Sub
 'Developer:     Date:       Comments:
 '----------     ------      ---------
 'James Moore    10/11/2006  defined single exit point
+'james moore    12-19-06    Added IsOrMapFeature call and moved the UpdateAutoFields function to occur after this call.
+'                           This move prompted by Sourceforge Bug 1596687
 '***************************************************************************
 Private Sub m_pEditorEvents_OnCreateFeature(ByVal obj As esriGeoDatabase.IObject)
   On Error GoTo ErrorHandler
-
-    'These are the autocalculated fields
-    UpdateAutoFields obj
-        
+'++ START JWM 12/19/2006
+  If Not IsOrMapFeature(obj) Then GoTo OnCreateFeature_Process_Exit
+'++ END JWM 12/19/2006
+  
     Dim sMapNum As String
     Dim pMIFlayer As IFeatureLayer
     Dim pMIFclass As IFeatureClass
@@ -811,35 +815,39 @@ Private Sub m_pEditorEvents_OnCreateFeature(ByVal obj As esriGeoDatabase.IObject
     Dim lMapNumFld As Long
     Dim vMapScaleVal As Variant
     Dim vMapNumVal As Variant
+    
+    'These are the autocalculated fields
+    UpdateAutoFields obj
 
     lMapNumFld = obj.Fields.FindField(g_pFldnames.MIMapNumberFN)
     lMapScaleFld = obj.Fields.FindField(g_pFldnames.MIMapScaleFN)
+    
     If IsTaxlot(obj) Then
         'Obtain ORMAPMapnum via overlay and calculate other field values
-        modUtils.CalcTaxlotValues obj, m_pMIFlayer
+        CalcTaxlotValues obj, m_pMIFlayer
         
     ElseIf IsAnno(obj) Then
         'Capture MapNumber for each anno feature created
         lAnnoMapNumFld = LocateFields(obj.Class, g_pFldnames.MIMapNumberFN)
-        If lAnnoMapNumFld = -1 Then GoTo Process_Exit
+        If lAnnoMapNumFld = -1 Then GoTo OnCreateFeature_Process_Exit
         Set pAnnotationFeature = obj
         
         'Get the parent feature so mapnumber can be obtained
         lParentID = pAnnotationFeature.LinkedFeatureID
         If lParentID > -1 Then 'Feature linked
             Set pFeat = GetRelatedObjects(obj)
-            If pFeat Is Nothing Then GoTo Process_Exit
+            If pFeat Is Nothing Then GoTo OnCreateFeature_Process_Exit
         Else
             'Not feature linked anno, so we can use the feature as is
             Set pFeat = obj
         End If
 
         Set pGeometry = pFeat.Shape
-        If pGeometry.IsEmpty Then GoTo Process_Exit
+        If pGeometry.IsEmpty Then GoTo OnCreateFeature_Process_Exit
         Set pEnv = pGeometry.Envelope
         Set pCenter = CT_GetCenterOfEnvelope(pEnv)
-        Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-        If pMIFlayer Is Nothing Then GoTo Process_Exit
+        Set pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+        If pMIFlayer Is Nothing Then GoTo OnCreateFeature_Process_Exit
         Set pMIFclass = pMIFlayer.FeatureClass
         sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
         obj.Value(lAnnoMapNumFld) = sMapNum
@@ -853,14 +861,14 @@ Private Sub m_pEditorEvents_OnCreateFeature(ByVal obj As esriGeoDatabase.IObject
         SetAnnoSize obj, pFeat
     Else
         'Update MapScale for all features with a MapScale field (except MapIndex)
-        If lMapScaleFld > -1 And Not modUtils.IsMapIndex(obj) Then
+        If lMapScaleFld > -1 And Not IsMapIndex(obj) Then
             Set pFeat = obj
             Set pGeometry = pFeat.Shape
-            If pGeometry.IsEmpty Then GoTo Process_Exit
+            If pGeometry.IsEmpty Then GoTo OnCreateFeature_Process_Exit
             Set pEnv = pGeometry.Envelope
             Set pCenter = CT_GetCenterOfEnvelope(pEnv)
-            Set pMIFlayer = modUtils.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-            If pMIFlayer Is Nothing Then GoTo Process_Exit
+            Set pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+            If pMIFlayer Is Nothing Then GoTo OnCreateFeature_Process_Exit
             Set pMIFclass = pMIFlayer.FeatureClass
             vMapScaleVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
             If Not IsNull(vMapScaleVal) Then
@@ -875,7 +883,7 @@ Private Sub m_pEditorEvents_OnCreateFeature(ByVal obj As esriGeoDatabase.IObject
             End If
         End If
     End If
-Process_Exit:
+OnCreateFeature_Process_Exit:
   Exit Sub
 ErrorHandler:
   HandleError False, "m_pEditorEvents_OnCreateFeature " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
