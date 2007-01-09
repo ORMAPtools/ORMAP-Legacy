@@ -202,7 +202,7 @@ Private m_pTaxlotFClass As IFeatureClass
 Private m_pMIFlayer As IFeatureLayer
 Private m_pMIFclass As IFeatureClass
 Private m_pMIFields As IFields
-Private m_lMapNumFld As Long
+'jwm not used Private m_lMapNumFld As Long
 Private m_pApp As IApplication
 Private m_pMxDoc As IMxDocument
 '------------------------------
@@ -359,7 +359,7 @@ End Sub
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
-'
+'James Moore    01-09-07    moved code to load cmbMapNumber combobox to a subroutine.commented dead variables
 '***************************************************************************
 Private Sub Form_Load()
 On Error GoTo Err_Handler
@@ -382,30 +382,70 @@ On Error GoTo Err_Handler
        GoTo Proc_Exit
     End If
     Set m_pMIFclass = m_pMIFlayer.FeatureClass
+'++ var below is not used in this form JWM 01/09/2007
     'Get fields needed to populate the form
-    Set m_pMIFields = m_pMIFclass.Fields
+'    Set m_pMIFields = m_pMIFclass.Fields
 
-    m_lMapNumFld = LocateFields(m_pMIFclass, g_pFldnames.MIMapNumberFN)
+'++ var below is not used in this form JWM 01/09/2007
+'    m_lMapNumFld = LocateFields(m_pMIFclass, g_pFldnames.MIMapNumberFN)
+
+    fsb_LoadMapNumCombo
+     
+Proc_Exit:
+Exit Sub
+Err_Handler:
+  HandleError True, "Form_Load " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+End Sub
+
+'***************************************************************************
+'Name:  fsb_LoadMapNumCombo
+'Initial Author:        James Moore
+'Subsequent Author:     Type your name here.
+'Created:       01/09/2007
+'Called From:   Form_Load
+'Description:   Loads cmbMapNumber combo box with values from Mapindex data
+'Methods:       Describe any complex details.
+'Inputs:        None
+'Parameters:    none
+'Outputs:       What variables are changed in this routine? None
+'Returns:       Nothing
+'Errors:        This routine raises no known errors.
+'Assumptions:   What parameters or variable values are assumed to be true?
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    01/09/2007  Initial creation.
+'jwm            01-09-07    It appears the Name method of a IDataset object will only return a Fully Qualified table Name
+'                           if you have not changed the display value in the TOC
+'                           So I have modified the assignment to the Tables property of the querydef object
+'***************************************************************************
+Private Sub fsb_LoadMapNumCombo()
+On Error GoTo fsb_LoadMapNumCombo_Error
+  
   Dim pQueryDef As IQueryDef
   Dim pRow As IRow
   Dim pCursor As ICursor
   Dim pFeatureWorkspace As IFeatureWorkspace
   Dim pDataset As IDataset
-  
-  Set pDataset = m_pMIFlayer 'm_pTaxlotFlayer
-  
+
+  Set pDataset = m_pMIFlayer
+
   Dim sFieldName As String
   sFieldName = g_pFldnames.TLMapNumberFN
-  
+
   Set pFeatureWorkspace = pDataset.Workspace
   Set pQueryDef = pFeatureWorkspace.CreateQueryDef
   With pQueryDef
-    .Tables = pDataset.Name ' Fully qualified table name
+'++ START The pDataset.Name method may or may not return a fully qualified name JWM 01/09/2007
+'    .Tables = pDataset.Name ' Fully qualified table name
+    .Tables = g_pFldnames.FCMapIndex 'This gives us the Fully qualified table name JWM
+'++ END JWM 01/09/2007
          'Problems with some values -- prevents the form from loading
     .SubFields = "DISTINCT(" & sFieldName & ")"
     Set pCursor = .Evaluate
   End With
-  
+
   Set pRow = pCursor.NextRow
   Do Until pRow Is Nothing
     If Not IsNull(pRow.Value(0)) Then
@@ -413,9 +453,10 @@ On Error GoTo Err_Handler
     End If
     Set pRow = pCursor.NextRow
   Loop
-  
-Proc_Exit:
-Exit Sub
-Err_Handler:
-  HandleError True, "Form_Load " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+
+fsb_LoadMapNumCombo_Exit:
+    Exit Sub
+    
+fsb_LoadMapNumCombo_Error:
+    HandleError True, "fsb_LoadMapNumCombo " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
 End Sub
