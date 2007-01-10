@@ -2090,23 +2090,25 @@ End Sub
 '***************************************************************************
 'Name:  IsOrMapFeature
 'Initial Author:
-'Subsequent Author:     Type your name here.
+'Subsequent Author:     James Moore
 'Created:
 'Called From:
 'Description:   Determines if a feature class part of the ORMAP design,
 '               If not, it will not be used by any code in this project
 'Methods:       Describe any complex details.
 'Inputs:        What variables are brought into this routine?
-'Parameters:
+'Parameters:    a generic geodatabase object or any object derived from it
 'Outputs:       What variables are changed in this routine?
-'Returns:
+'Returns:       True if the feature is part of ORMAP feature class or False if not
 'Errors:        This routine raises no known errors.
-'Assumptions:   What parameters or variable values are assumed to be true?
+'Assumptions:   obj is a initialized geodatabase object
 'Updates:
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
-'
+'James Moore    1/10/2007   This function would never return true,
+'							because a return value of true had never been assigned to the function.
+'                           Modified to use StrComp function instead of LCase and Trim
 '***************************************************************************
 Public Function IsOrMapFeature(obj As esriGeoDatabase.IObject) As Boolean
   On Error GoTo ErrorHandler
@@ -2117,18 +2119,35 @@ Public Function IsOrMapFeature(obj As esriGeoDatabase.IObject) As Boolean
     Dim pName As String
     Set pOC = obj.Class
     Set pDSet = pOC
-    pName = LCase(Trim(pDSet.Name))
-    If pName = LCase(Trim(g_pFldnames.FCAnno10)) Or pName = LCase(Trim(g_pFldnames.FCAnno100)) Or pName = LCase(Trim(g_pFldnames.FCAnno20)) Or _
-        pName = LCase(Trim(g_pFldnames.FCAnno200)) Or pName = LCase(Trim(g_pFldnames.FCAnno2000)) Or pName = LCase(Trim(g_pFldnames.FCAnno30)) Or _
-        pName = LCase(Trim(g_pFldnames.FCAnno40)) Or pName = LCase(Trim(g_pFldnames.FCAnno400)) Or pName = LCase(Trim(g_pFldnames.FCAnno50)) Or _
-        pName = LCase(Trim(g_pFldnames.FCAnno800)) Or pName = LCase(Trim(g_pFldnames.FCCartoLines)) Or pName = LCase(Trim(g_pFldnames.FCLotsAnno)) Or _
-        pName = LCase(Trim(g_pFldnames.FCMapIndex)) Or pName = LCase(Trim(g_pFldnames.FCPlats)) Or pName = LCase(Trim(g_pFldnames.FCReferenceLines)) Or _
-        pName = LCase(Trim(g_pFldnames.FCTaxCode)) Or pName = LCase(Trim(g_pFldnames.FCTaxCode)) Or pName = LCase(Trim(g_pFldnames.FCTaxCodeAnno)) Or _
-        pName = LCase(Trim(g_pFldnames.FCTaxlot)) Or pName = LCase(Trim(g_pFldnames.FCTaxlotLines)) Or pName = LCase(Trim(g_pFldnames.FCTLAcrAnno)) Or _
-        pName = LCase(Trim(g_pFldnames.FCTLNumAnno)) Then
-    Else
-        IsOrMapFeature = False
+'++ START JWM 01/10/2007
+'    pName = LCase$(Trim$(pDSet.Name))
+    pName = pDSet.Name
+    IsOrMapFeature = False
+    
+    If StrComp(pName, g_pFldnames.FCAnno10, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCAnno100, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCAnno20, vbTextCompare) = 0 Or _
+        StrComp(pName, g_pFldnames.FCAnno200, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCAnno2000, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCAnno30, vbTextCompare) = 0 Or _
+        StrComp(pName, g_pFldnames.FCAnno40, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCAnno400, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCAnno50, vbTextCompare) = 0 Or _
+        StrComp(pName, g_pFldnames.FCAnno800, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCCartoLines, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCLotsAnno, vbTextCompare) = 0 Or _
+        StrComp(pName, g_pFldnames.FCMapIndex, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCPlats, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCReferenceLines, vbTextCompare) = 0 Or _
+        StrComp(pName, g_pFldnames.FCTaxCode, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCTaxCodeAnno, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCTaxlot, vbTextCompare) = 0 Or _
+        StrComp(pName, g_pFldnames.FCTaxlotLines, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCTLAcrAnno, vbTextCompare) = 0 Or StrComp(pName, g_pFldnames.FCTLNumAnno, vbTextCompare) = 0 Then
+        IsOrMapFeature = True
     End If
+    
+        'jwm 1-10-07 Taxcode is listed twice in this code block
+'    If pName = LCase$(Trim$(g_pFldnames.FCAnno10)) Or pName = LCase$(Trim$(g_pFldnames.FCAnno100)) Or pName = LCase$(Trim$(g_pFldnames.FCAnno20)) Or _
+'        pName = LCase$(Trim$(g_pFldnames.FCAnno200)) Or pName = LCase$(Trim$(g_pFldnames.FCAnno2000)) Or pName = LCase$(Trim$(g_pFldnames.FCAnno30)) Or _
+'        pName = LCase$(Trim$(g_pFldnames.FCAnno40)) Or pName = LCase$(Trim$(g_pFldnames.FCAnno400)) Or pName = LCase$(Trim$(g_pFldnames.FCAnno50)) Or _
+'        pName = LCase$(Trim$(g_pFldnames.FCAnno800)) Or pName = LCase$(Trim$(g_pFldnames.FCCartoLines)) Or pName = LCase$(Trim$(g_pFldnames.FCLotsAnno)) Or _
+'        pName = LCase$(Trim$(g_pFldnames.FCMapIndex)) Or pName = LCase$(Trim$(g_pFldnames.FCPlats)) Or pName = LCase$(Trim$(g_pFldnames.FCReferenceLines)) Or _
+'        pName = LCase$(Trim$(g_pFldnames.FCTaxCode)) Or pName = LCase$(Trim$(g_pFldnames.FCTaxCode)) Or pName = LCase$(Trim$(g_pFldnames.FCTaxCodeAnno)) Or _
+'        pName = LCase$(Trim$(g_pFldnames.FCTaxlot)) Or pName = LCase$(Trim$(g_pFldnames.FCTaxlotLines)) Or pName = LCase$(Trim$(g_pFldnames.FCTLAcrAnno)) Or _
+'        pName = LCase$(Trim$(g_pFldnames.FCTLNumAnno)) Then
+'        IsOrMapFeature = True 'jwm 1-10-07 added this assignment
+'    Else
+'        IsOrMapFeature = False
+'    End If
+'++ END JWM 01/10/2007
 
 
   Exit Function
@@ -2687,7 +2706,7 @@ End Sub
 'Subsequent Author:     Type your name here.
 'Created:       9-23-2005
 'Purpose:   Use the ORMapTaxlot value to create a MapTaxlot value based on the mask from the ini file.
-'Called From:
+'Called From: CalcTaxlotValues, cmdTaxlotAssignment.ITool_OnMouseDown
 'Methods:       The string parsing procedures depends on a valid ORTaxlot string 29 characters long
 '               as defined in version 1.3 of the ORMAP data structure.
 '   Extensive use of the Mid function causes heavy reliance on the position of values in the string
