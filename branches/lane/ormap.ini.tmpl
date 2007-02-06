@@ -1,0 +1,110 @@
+[GENERAL]
+;		MAPINDEX FIELDS
+MI_COUNTY=County
+MI_MAPNUMBER=MapNumber
+MI_ORMAP_MAPNUMBER=ORMAPNum
+MI_MAPSCALE=MapScale
+MI_MAPSUFFIXTYPE=MapSuffixType
+MI_MAPSUFFIXNUM=MapSuffixNum
+MI_PAGE=PageNumber
+MI_RELIABILITYCODE=ReliaCode
+;		TAXLOT FIELDS
+TL_COUNTY=County
+TL_TOWN=Town
+TL_TOWNPART=TownPart
+TL_TOWNDIR=TownDir
+TL_RANGE=Range
+TL_RANGEPART=RangePart
+TL_RANGEDIR=RangeDir
+TL_SECTNUMBER=SecNumber
+TL_QTR=Qtr
+TL_QTRQTR=QtrQtr
+TL_MAPNUMBER=MapNumber
+TL_ORMAP_MAPNUMBER=ORMapNum
+TL_ORMAP_TAXLOT=ORTaxlot
+TL_TAXLOT=Taxlot
+TL_MAP_TAXLOT=MapTaxlot
+;------------------------------
+; THIS key value contains the formatting mask for MAPTAXLOT
+; The masking values are outlined below
+; TT for Township
+; PPP for fractional part of township or range depending on if it occurs
+; after a T or R
+; RR for Range
+; D for direction depending on if it occurs after a T or R
+; SS for Section, 
+; QQ for section breakdown ie. AA, CD 
+; II for map suffix number, 
+; @ for the parcel ID with leading zeros, 
+; & for the parcel ID without leading zeros
+; ^ is special notation for Clackamas County because they store a Q to designate half townships
+TL_MAP_TAXLOT_MASK=TR^DSSQQ@@@@@
+;-------------------------------
+TL_SPEC_INTEREST=SpecialInt
+TL_MAP_SUF_NUM=MapSufNum
+TL_MAP_SUF_TYPE=MapSufType
+TL_MAPACRES=MapAcres
+TL_ANOMALY=Anomaly
+;		TAXLOT LINES
+TLLINES_LINETYPE=LINETYPE
+;		CARTO_LINES
+CARTOLINES_LINETYPE=LineType
+;		FIELDS PRESENT IN ALL TABLES
+AUTO_DATE=AutoDate
+AUTO_METHOD=AutoMethod
+AUTO_WHO=AutoWho
+;		TABLE NAMES
+FC_MAPINDEX=sdedevtest.JONMCD.MapIndex
+FC_TAXCODE=sdedevtest.JONMCD.Taxcode
+FC_TAXLOT=sdedevtest.JONMCD.TaxLot
+FC_TAXLOTLINES=sdedevtest.JONMCD.TaxLotLines
+FC_PLATS=sdedevtest.JONMCD.Plats
+FC_CARTOLINES=sdedevtest.JONMCD.CartographicLines
+FC_REFERENCELINES=sdedevtest.JONMCD.ReferenceLines
+FC_TAXCODEANNO=sdedevtest.JONMCD.TaxCodeAnno
+FC_LOTSANNO=sdedevtest.JONMCD.LotsAnno
+FC_TAXLOTNUMBERANNO=sdedevtest.JONMCD.TaxlotNumberAnno
+FC_TAXLOTACREAGEANNO=sdedevtest.JONMCD.TaxlotAcreageAnno
+FC_ANNO0010=sdedevtest.JONMCD.Anno0010scale
+FC_ANNO0020=sdedevtest.JONMCD.Anno0020scale
+FC_ANNO0030=sdedevtest.JONMCD.Anno0030scale
+FC_ANNO0040=sdedevtest.JONMCD.Anno0040scale
+FC_ANNO0050=sdedevtest.JONMCD.Anno0050scale
+FC_ANNO0100=sdedevtest.JONMCD.Anno0100scale
+FC_ANNO0200=sdedevtest.JONMCD.Anno0200scale
+FC_ANNO0400=sdedevtest.JONMCD.Anno0400scale
+FC_ANNO0800=sdedevtest.JONMCD.Anno0800scale
+FC_ANNO2000=sdedevtest.JONMCD.Anno2000scale
+TAB_Cancelled=sdedevtest.JONMCD.CancelledNumbers
+;		DEFAULT VALUES
+DEFAULT_COUNTY=3
+DEFAULT_TOWNPART=0
+DEFAULT_TOWNDIR=S
+DEFAULT_RANGEPART=0
+DEFAULT_RANGEDIR=E
+DEFAULT_SUFFTYPE=0
+DEFAULT_SUFFNUM=000
+DEFAULT_QTR=0
+DEFAULT_QTRQTR=0
+DEFAULT_ANOMALY=--
+;		ANNOTATION TEXT SIZES
+ANNOSIZETLACR120=0.8
+ANNOSIZETLACR240=1.6
+ANNOSIZETLACR360=2
+ANNOSIZETLACR480=3.2
+ANNOSIZETLACR600=4
+ANNOSIZETLACR1200=8
+ANNOSIZETLACR2400=16
+ANNOSIZETLACR4800=32
+ANNOSIZETLACR9600=48
+ANNOSIZETLACR24000=160
+ANNOSIZETLNUM120=1
+ANNOSIZETLNUM240=2
+ANNOSIZETLNUM360=3
+ANNOSIZETLNUM480=4
+ANNOSIZETLNUM600=5
+ANNOSIZETLNUM1200=10
+ANNOSIZETLNUM2400=20
+ANNOSIZETLNUM4800=40
+ANNOSIZETLNUM9600=64
+ANNOSIZETLNUM24000=200
