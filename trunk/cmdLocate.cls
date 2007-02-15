@@ -34,23 +34,29 @@ Attribute VB_Exposed = True
 '
 ' File name:            cmdLocate
 '
-' Initial Author:       Type your name here
+' Initial Author:       <<Unknown>>
 '
-' Date Created:
+' Date Created:         <<Unknown>>
 '
-' Description: CLASS MODULE FOR THE LOCATE COMMAND OPENS frmLocate
+' Description:
+'       Programmatic description for Locate Assignment tool
 '
 ' Entry points:
-'       List the public variables and their purposes.
-'       List the properties and routines that the module exposes to the rest of the program.
+'       The tool that this class describes is exposed on the toolbar defined by
+'       clsTaxlotEditingToolbar.
 '
 ' Dependencies:
-'       How does this file depend or relate to other files?
+'       File References
+'           esriArcMapUI
+'           esriCarto
+'           esriFramework
+'           esriSystemUI
+'       File Dependencies
+'           frmLocate
+'           Globals
 '
 ' Issues:
-'       What are unsolved bugs, bottlenecks,
-'       possible future enhancements, and
-'       descriptions of other issues.
+'       None are known at this time (2/8/2007 JWalton)
 '
 ' Method:
 '       Describe any complex details that make sense on the file level.  This includes explanations
@@ -58,138 +64,224 @@ Attribute VB_Exposed = True
 '       of a data structure used in the module.
 '
 ' Updates:
-'               None
+'       2/6/2007 -- All inline documentation reviewed/revised (JWalton)
 
 Option Explicit
-Implements ICommand
-'******************************
-' Global/Public Definitions
-'------------------------------
-' Public API Declarations
-'------------------------------
-
-'------------------------------
-' Public Enums and Constants
-'------------------------------
-
-'------------------------------
-' Public variables
-'------------------------------
-
-'------------------------------
-' Public Types
-'------------------------------
-
-'------------------------------
-' Public loop variables
-'------------------------------
-
 '******************************
 ' Private Definitions
 '------------------------------
-Private m_pApp As esriFramework.IApplication
-Private m_pDoc As esriArcMapUI.IMxDocument
-Private m_pMap As IMap
-' Private API declarations
-'------------------------------
-
-'------------------------------
 ' Private Variables
 '------------------------------
+Private m_pDoc As esriArcMapUI.IMxDocument
+Private WithEvents m_pDocEvents As esriArcMapUI.DocumentEvents
+Attribute m_pDocEvents.VB_VarHelpID = -1
+Private m_pMap As esriCarto.IMap
+Private WithEvents m_pViewEvents As esriCarto.Map
+Attribute m_pViewEvents.VB_VarHelpID = -1
+Private m_pFrmLocate As frmLocate
+Private m_pToolIcon As IPictureDisp
+'++ START JWalton 2/12/2007
+'   Added Variable Declarations
+'       m_pDocEvents, m_pViewEvents, m_pFrmLocate, m_pToolIcon
+'++ END JWalton 2/12/2007
 
 '------------------------------
 'Private Constants and Enums
 '------------------------------
+Private Const c_sModuleFileName = "cmdLocate"
 
 '------------------------------
-' Private Types
+' Interface Implementations
 '------------------------------
+Implements esriSystemUI.ICommand
 
-'------------------------------
-' Private loop variables
-'------------------------------
+'***************************************************************************
+'Name:                  Class_Initialize
+'Initial Author:        <<Unknown>>
+'Subsequent Author:     <<Type your name here>>
+'Created:               <<Unknown>>
+'Purpose:       Initialize the toolbar icon
+'Called From:   Class Object
+'Description:   Initialize the toolbar icon
+'Methods:       None
+'Inputs:        None
+'Parameters:    None
+'Outputs:       m_pToolIcon - The IPictureDisp object that represents the
+'                             bitmap.
+'Returns:       Nothing
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
 
+'++ START JWalton 1/29/2007
+Private Sub Class_Initialize()
+    Set m_pToolIcon = LoadResPicture("Locate_Icon", vbResBitmap)
+End Sub
+
+'***************************************************************************
+'Name:                  Class_Terminate
+'Initial Author:        <<Unknown>>
+'Subsequent Author:     <<Type your name here>>
+'Created:               <<Unknown>>
+'Purpose:       Clean up class level variables
+'Called From:   Class Object
+'Description:   Insures that if the form that represents the user interface
+'               if open, that it closes, and that the variable that
+'               references it is nullified
+'Methods:       None
+'Inputs:        None
+'Parameters:    None
+'Outputs:       m_pFormLocate - Variable that refers to the user interface
+'                               form
+'Returns:       Nothing
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+
+Private Sub Class_Terminate()
+    If g_pForms.IsFormOpen("frmLocate") Then Unload m_pFrmLocate
+    Set m_pFrmLocate = Nothing
+End Sub
+'++ END JWalton 1/29/2007
  
 Private Property Get ICommand_Enabled() As Boolean
+'++ START JWalton 1/29/2007
+    ' Variable declarations
+    Dim pTaxlots As esriCarto.IFeatureLayer
+    Dim pMapIndex As esriCarto.IFeatureLayer
+    Static lCounter As Long
 
-    ICommand_Enabled = True
-    
+    ' Initialize objects every fifth iteration
+    If lCounter Mod 5 = 0 Then
+        Set pTaxlots = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
+        Set pMapIndex = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
+    End If
+
+    ' Determines if the command is available
+    ICommand_Enabled = ((Not pTaxlots Is Nothing) And (Not pMapIndex Is Nothing)) And g_bDLLEnabled
+'++ END JWalton 1/29/2007
 End Property
  
 Private Property Get ICommand_Checked() As Boolean
-
     ICommand_Checked = False
-    
 End Property
  
 Private Property Get ICommand_Name() As String
-
      ICommand_Name = "Locate"
-    
 End Property
  
 Private Property Get ICommand_Caption() As String
-
      ICommand_Caption = "Locate"
-    
 End Property
  
 Private Property Get ICommand_Tooltip() As String
-
      ICommand_Tooltip = "Locate Tool"
-    
 End Property
  
 Private Property Get ICommand_Message() As String
-    
-    ' TODO: Add your implementation here
-    ' ICommand_Message =
-    
+    ' Not Implemented
 End Property
  
 Private Property Get ICommand_HelpFile() As String
-    
-    ' TODO: Add your implementation here
-    ' ICommand_HelpFile =
-    
+    ' Not Implemented
 End Property
  
 Private Property Get ICommand_HelpContextID() As Long
-    
-    ' TODO: Add your implementation here
-    ' ICommand_HelpContextID =
-    
+    ' Not Implemented
 End Property
  
 Private Property Get ICommand_Bitmap() As esriSystem.OLE_HANDLE
-    
-    ' TODO: Add your implementation here
-    ' ICommand_Bitmap =
-    
+    '++ START JWalton 2/5/2007 Implemention of ICommand_Bitmap
+    ICommand_Bitmap = m_pToolIcon
+    '++ END JWalton 2/5/2007
 End Property
  
 Private Property Get ICommand_Category() As String
-
      ICommand_Category = "ORMAP"
-    
 End Property
- 
-Private Sub ICommand_OnCreate(ByVal hook As Object)
-  Set m_pApp = hook
-  If g_pApp Is Nothing Then
-    Set g_pApp = hook
-  End If
-  Set m_pDoc = m_pApp.Document
-  Set m_pMap = m_pDoc.FocusMap
 
+'***************************************************************************
+'Name:                  ICommand_OnCreate
+'Initial Author:        <<Unknown>>
+'Subsequent Author:     <<Type your name here>>
+'Created:               <<Unknown>>
+'Purpose:       Initialize the command
+'Called From:   Class Object
+'Description:   Verify the calling application and the set the enabled state
+'               of the DLL itself according to whether or not the calling
+'               application is ArcMap.
+'Methods:       None
+'Inputs:        hook - An ArcGIS application that is calling this DLL
+'Parameters:    None
+'Outputs:       g_pApp - Global reference to ArcMap
+'               g_bDLLEnabled - Global flag that indicates enabled state of
+'                               the DLL
+'Returns:       Nothing
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+
+Private Sub ICommand_OnCreate(ByVal hook As Object)
+    '++ START JWalton 2/6/2007
+    ' Saves a reference to the application if it is ArcMap
+    If TypeOf hook Is esriArcMapUI.IMxApplication Then
+        Set g_pApp = hook
+        g_bDLLEnabled = True
+      Else
+        Set g_pApp = Nothing
+        g_bDLLEnabled = False
+        Exit Sub
+    End If
+    
+    ' Removed object initialization for m_pDoc and m_pMap for ICommand_OnClick
+    '++ END JWalton 2/6/2007
 End Sub
  
+'***************************************************************************
+'Name:                  ICommand_OnClick
+'Initial Author:        <<Unknown>>
+'Subsequent Author:     <<Type your name here>>
+'Created:               <<Unknown>>
+'Purpose:       Show the locate form
+'Called From:   Class Object
+'Description:   Verifies the existence of a Map Index and Taxlot feature
+'               classes, and then shows the locate form.
+'Methods:       None
+'Inputs:        None
+'Parameters:    None
+'Outputs:       m_pDoc - The current document in ArcMap
+'               m_pMap - The current map in the current document in ArcMap
+'               m_pFrmLocate - The locate form
+'Returns:       Nothing
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+
 Private Sub ICommand_OnClick()
-Dim pTaxlotFlayer As IFeatureLayer
-Dim pMIFlayer As IFeatureLayer
+On Error GoTo Err_Handler
+    ' Variable declarations
+    Dim pTaxlotFLayer As esriCarto.IFeatureLayer
+    Dim pMIFlayer As esriCarto.IFeatureLayer
+
     'Get the MapIndex and taxlot feature layers
-    Set pTaxlotFlayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
-    If pTaxlotFlayer Is Nothing Then
+    Set pTaxlotFLayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
+    If pTaxlotFLayer Is Nothing Then
         MsgBox "Unable to locate Taxlot layer in Table of Contents.  " & _
         "This process requires a feature class called " & g_pFldnames.FCTaxlot
         GoTo OnClick_Proc_Exit
@@ -200,14 +292,171 @@ Dim pMIFlayer As IFeatureLayer
         "This process requires a feature class called " & g_pFldnames.FCMapIndex
         GoTo OnClick_Proc_Exit
     End If
-Set pTaxlotFlayer = Nothing
-Set pMIFlayer = Nothing
-    'Initialize the Locate form
-    frmLocate.Show vbModal
+
+    '++ START JWalton 2/6/2007
+    ' Initialize objects
+    Set m_pDoc = g_pApp.Document
+    Set m_pMap = m_pDoc.FocusMap
+    Set m_pDocEvents = m_pDoc
+    Set m_pViewEvents = m_pMap
+    '++ END JWalton 2/6/2007
+
+    '++ START JWalton 1/29/2007
+    'Initialize and show the Locate form
+    If Not g_pForms.IsFormOpen("frmLocate") Then
+        Set m_pFrmLocate = New frmLocate
+    End If
+    m_pFrmLocate.Frame.Visible = True
+    '++ END JWalton 1/29/2007
+    
+    ' Clean up
+    Set pTaxlotFLayer = Nothing
+    Set pMIFlayer = Nothing
     
 OnClick_Proc_Exit:
+    Exit Sub
+    
+Err_Handler:
+    HandleError True, _
+                "ICommand_OnClick " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
+End Sub
 
-Exit Sub
+'***************************************************************************
+'Name:                  m_pDocEvents_CloseDocument
+'Initial Author:        John Walton
+'Subsequent Author:     <<Type your name here>>
+'Created:               2/12/2007
+'Purpose:       Insure proper disablement of the control when a map document
+'               is changed
+'Called From:   m_pDocEvents
+'Description:   Resets the current tool and all current class level
+'               variables
+'Methods:       None
+'Inputs:        None
+'Parameters:    None
+'Outputs:       None
+'Returns:       None
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
 
+Private Sub m_pDocEvents_CloseDocument()
+    Reset
+End Sub
+
+'***************************************************************************
+'Name:                  m_pViewEvents_ItemAdded
+'Initial Author:        John Walton
+'Subsequent Author:     <<Type your name here>>
+'Created:               2/12/2007
+'Purpose:       Insure proper disablement of the control when a map document
+'               is changed
+'Called From:   m_pDocEvents
+'Description:   Resets the current tool and all current class level
+'               variables
+'Methods:       None
+'Inputs:        Item - A valid map layer object
+'Parameters:    None
+'Outputs:       None
+'Returns:       None
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+
+Private Sub m_pViewEvents_ItemAdded(ByVal Item As Variant)
+    ' Variable declarations
+    Dim sName As String
+    
+    ' Determines if this class is either the Map Index or Taxlot feature class
+    If TypeOf Item Is esriCarto.IFeatureLayer Then
+        sName = Item.Name
+        If sName = g_pFldnames.FCMapIndex Or sName = g_pFldnames.FCTaxlot Then
+            Reset
+        End If
+    End If
+End Sub
+
+'***************************************************************************
+'Name:                  m_pViewEvents_ItemAdded
+'Initial Author:        John Walton
+'Subsequent Author:     <<Type your name here>>
+'Created:               2/12/2007
+'Purpose:       Insure proper disablement of the control when a map document
+'               is changed
+'Called From:   m_pDocEvents
+'Description:   Resets the current tool and all current class level
+'               variables
+'Methods:       None
+'Inputs:        Item - A valid map layer object
+'Parameters:    None
+'Outputs:       None
+'Returns:       None
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+
+Private Sub m_pViewEvents_ItemDeleted(ByVal Item As Variant)
+    ' Variable declarations
+    Dim pFeatClass As esriCarto.IFeatureLayer
+    Dim sName As String
+    
+    ' Determines if this class is either the Map Index or Taxlot feature class
+    If TypeOf Item Is esriCarto.IFeatureLayer Then
+        sName = Item.Name
+        If sName = g_pFldnames.FCMapIndex Or sName = g_pFldnames.FCTaxlot Then
+            Reset
+        End If
+    End If
+End Sub
+
+'***************************************************************************
+'Name:                  Reset
+'Initial Author:        John Walton
+'Subsequent Author:     <<Type your name here>>
+'Created:               2/12/2007
+'Purpose:       Common reset procedure for class
+'Called From:
+'Description:   Resets the current tool and all current class level
+'               variables
+'Methods:       None
+'Inputs:        None
+'Parameters:    None
+'Outputs:       None
+'Returns:       None
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+
+Private Sub Reset()
+On Error Resume Next
+    ' Hide the taxlot assignment form
+    If g_pForms.IsFormOpen("frmLocate") Then m_pFrmLocate.Frame.Visible = False
+    Unload m_pFrmLocate
+    
+    ' Reset all class level variables
+    Set m_pViewEvents = Nothing
+    Set m_pDocEvents = Nothing
+    Set m_pMap = Nothing
+    Set m_pDoc = Nothing
 End Sub
 
