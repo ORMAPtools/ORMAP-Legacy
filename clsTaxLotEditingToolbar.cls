@@ -35,113 +35,79 @@ Attribute VB_Exposed = True
 '
 ' File name:            clsTaxLotEditingToolbar
 '
-' Initial Author:       Type your name here
+' Initial Author:       <<Unknown>>
 '
-' Date Created:     10/11/2006
+' Date Created:         10/11/2006
 '
-' Description: CLASS FOR THE TAXLOTEDITING TOOLBAR
+' Description:
+'       Programmatic description of the ORMAP Taxlot Editor Toolbar for ArcMap
 '
 '
 ' Entry points:
-'       List the public variables and their purposes.
-'       List the properties and routines that the module exposes to the rest of the program.
+'       <<None>>
 '
 ' Dependencies:
-'       How does this file depend or relate to other files?
+'       This class creates a toolbar, ORMAP Taxlot Editor, in ArcMap that exposes the
+'       following classes to user control as tools:
+'           cmdArrows
+'           cmdAutoUpdate
+'           cmdLocate
+'           cmdMapIndex
+'           cmdTaxlotAssignment
+'           cmdTaxlotCombine
 '
 ' Issues:
-'       What are unsolved bugs, bottlenecks,
-'       possible future enhancements, and
-'       descriptions of other issues.
+'       None are known at this time (2/8/2007 JWalton)
 '
 ' Method:
-'       Describe any complex details that make sense on the file level.  This includes explanations
-'       of complex algorithms, how different routines within the module interact, and a description
-'       of a data structure used in the module.
+'       Standard implementation of IToolbarDef
 '
 ' Updates:
-'++  JWM 10/11/2006 added this file header
+'       10/11/2006 -- Added this file header (JWM)
+'       2/6/2007 -- All inline documentation reviewed/revised (JWalton)
+
 
 Option Explicit
-'******************************
-' Global/Public Definitions
-'------------------------------
-' Public API Declarations
-'------------------------------
 
-'------------------------------
-' Public Enums and Constants
-'------------------------------
-
-'------------------------------
-' Public variables
-'------------------------------
-
-'------------------------------
-' Public Types
-'------------------------------
-
-'------------------------------
-' Public loop variables
-'------------------------------
-
-'******************************
-' Private Definitions
-'------------------------------
-' Private API declarations
-'------------------------------
-
-'------------------------------
-' Private Variables
-'------------------------------
-
-'------------------------------
-'Private Constants and Enums
-'------------------------------
-
-'------------------------------
-' Private Types
-'------------------------------
-
-'------------------------------
-' Private loop variables
-'------------------------------
-
-
-Implements IToolBarDef
+' Interface implementations
+Implements esriSystemUI.IToolBarDef
  
 Private Property Get IToolBarDef_ItemCount() As Long
-
-    IToolBarDef_ItemCount = 5
-    
+    ' START JWalton 2/5/2007 Changed count from 5 to 6
+    IToolBarDef_ItemCount = 6
+    ' END JWalton 2/5/2007
 End Property
  
-Private Sub IToolBarDef_GetItemInfo(ByVal pos As Long, ByVal itemDef As esriSystemUI.IItemDef)
-    
-  Select Case pos
-    Case 0
-      'itemDef.Group = True
-      itemDef.ID = "TaxlotEditing.cmdTaxlotAssignment"
-    Case 1
-      itemDef.ID = "TaxlotEditing.cmdLocate"
-    Case 2
-      itemDef.ID = "TaxlotEditing.cmdTaxlotCombine"
-    Case 3
-      itemDef.ID = "TaxlotEditing.cmdArrows"
-    Case 4
-      itemDef.ID = "TaxlotEditing.cmdMapIndex"
-  End Select
-    
+Private Sub IToolBarDef_GetItemInfo( _
+  ByVal pos As Long, _
+  ByVal itemDef As esriSystemUI.IItemDef)
+    ' START JWalton 2/5/2007 Changed order, added auto update, and added groups
+    Select Case pos
+      Case 0
+        itemDef.Group = True
+        itemDef.ID = "TaxlotEditing.cmdAutoUpdate"
+      Case 1
+        itemDef.Group = True
+        itemDef.ID = "TaxlotEditing.cmdTaxlotAssignment"
+      Case 2
+        itemDef.ID = "TaxlotEditing.cmdLocate"
+      Case 3
+        itemDef.Group = True
+        itemDef.ID = "TaxlotEditing.cmdMapIndex"
+      Case 4
+        itemDef.ID = "TaxlotEditing.cmdTaxlotCombine"
+      Case 5
+        itemDef.ID = "TaxlotEditing.cmdArrows"
+    End Select
+    ' END JWalton 2/5/2007
 End Sub
  
 Private Property Get IToolBarDef_Name() As String
-    
+    ' Name to be shown in the Customize...Toolbars dialog list
     IToolBarDef_Name = "ORMAP Taxlot Editor"
-    
 End Property
  
 Private Property Get IToolBarDef_Caption() As String
-
+    ' Name to be shown in the caption area of the toolbar
     IToolBarDef_Caption = "ORMAP Taxlot Editor"
-    
 End Property
