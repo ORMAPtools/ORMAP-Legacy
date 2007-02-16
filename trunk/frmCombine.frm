@@ -98,7 +98,7 @@ Attribute VB_Exposed = False
 '           basGlobals
 '           basUtilities
 '
-' Issues:
+' Issues: Cannot use New AppRef when debugging must use GetAppRef function
 '       None known at this time (2/6/2007 JWalton)
 '
 ' Method:
@@ -118,7 +118,9 @@ Private m_pEditor As esriEditor.IEditor
     ' Removed declaration for m_pMxDoc as it is no longer used
     ' Removed declaration for m_pApp in favor of g_pApp
 '++ END JWalton 2/6/2007
-
+Private m_LSCode As Long
+Private m_pEnumFeature As IEnumFeature
+Private m_lGTotalVal As Double
 '------------------------------
 'Private Constants and Enums
 '------------------------------
@@ -142,8 +144,8 @@ Private Const c_sModuleFileName As String = "frmCombine.frm"
 'Developer:     Date:       Comments:
 '----------     ------      ---------
 'James Moore    10/11/2006  Initial creation
-'James Moore    10-30-2006  Some of this code was copied from a developer
-'                           sample and not fully fleshed out.
+'James Moore    10-30-2006  Some of this code was copied from a developer sample and not fully fleshed out.
+'James Moore    01/11/2007  I have fleshed out the code mentioned at beginning of this file and implemented it
 '***************************************************************************
 
 Private Sub cmdApply_Click()
@@ -217,7 +219,10 @@ On Error GoTo ErrorHandler
             ' Start edit operation
             m_pEditor.StartOperation
             
-            ' Create a new feature to be the merge feature
+            ' create a new feature to be the merge feature
+            Dim pCurFeature As IFeature
+            Dim pNewFeature As IFeature
+            Dim lCount As Long
             Set pNewFeature = pFeatcls.CreateFeature
               
             '++ START JWalton 2/14/2007 Extract the default subtype from the feature's class
@@ -228,20 +233,43 @@ On Error GoTo ErrorHandler
             
             '++ START JWM 10/30/2006 Since lSCode is not declared anywhere I must assume it is an artifact.
             Set pOutRSType = pNewFeature
-            pOutRSType.SubtypeCode = lDefaultSubType
+            
+'++ START merge policy revisited JWM 01/11/2007 I have removed previous my previous code and
+'have implemented the code from the developer sample clsMergeRules.cls as best as I am able
+'++ START JWM 10/30/2006 Since lSCode is not declared anywhere I must assume it is an artifact.
+'           I will remove the test from the code and modify the assignment for a feature class
+'           with subtypes defined
+'            Dim lpSubTypes As ISubtypes
+'            Dim lDefaultSubtype As Long
+'            Dim pEnumFeat As IEnumFeature 'for merge policy
+'            Dim pChkFeature As IFeature 'for merge policy
+'            Dim pRowSubtypes As IRowSubtypes 'for merge policy
+'
+'            Set pEnumFeat = pCurFeature
+'            Set lpSubTypes = pOutRSType
+'            Set pChkFeature = pEnumFeat.Next
+            
+'            lDefaultSubtype = lpSubTypes.DefaultSubtypeCode
+            If m_LSCode <> 0 Then
+              pOutRSType.SubtypeCode = m_LSCode
+'            pOutRSType.SubtypeCode = lDefaultSubtype
+            End If
             pOutRSType.InitDefaultValues
             '++ END JWM 10/30/2006
             
-            '++ START JWM 10/30/2006 get values for merge policy: area weighted
-            Set pChkFeature = pFeatCur.NextFeature
-            Do
-                Set pRowSubTypes = pChkFeature
-                l_GTotalVal = l_GTotalVal + Me.GetGeomVal(pChkFeature)
-                Set pChkFeature = pFeatCur.NextFeature
-            Loop Until pChkFeature Is Nothing
-            Set pRowSubTypes = Nothing
-            Set pChkFeature = Nothing
-            '++ END JWM 10/30/2006
+'            Set lpSubTypes = Nothing
+'++ END JWM 10/30/2006
+'++ START JWM 10/30/2006 get values for merge policy: area weighted
+'            Do
+'                Set pRowSubtypes = pChkFeature
+'                l_GTotalVal = l_GTotalVal + getGeomVal(pChkFeature)
+'                Set pChkFeature = pEnumFeat.Next
+'            Loop Until pChkFeature Is Nothing
+'            Set pRowSubtypes = Nothing
+'            Set pChkFeature = Nothing
+'            Set pEnumFeat = Nothing
+'++ END JWM 10/30/2006
+'++ END merge policy revisted JWM 01/11/2007
 
             ' get the first feature
             Set pFeatCur = basUtilities.GetSelectedFeatures(pFeatureLayer)
@@ -254,7 +282,7 @@ On Error GoTo ErrorHandler
             ' If not unique, prompt user to enter a new value
             If Not basUtilities.ValidateTaxlotNum(Me.txtNewTaxlot.Text, pArea.Centroid) Then
                 MsgBox "The current Taxlot value (" & Me.txtNewTaxlot.Text & _
-                ") is not unique withing this MapIndex.  Please enter a new number"
+                ") is not unique within this MapIndex.  Please enter a new number"
                 m_pEditor.AbortOperation
                 GoTo Process_Exit
             End If
@@ -275,8 +303,7 @@ On Error GoTo ErrorHandler
                 Set pSubtypes = pFeatcls
                 For i = 0 To pFlds.FieldCount - 1
                     Set pFld = pFlds.Field(i)
-                    '++  JWM 10/30/2006 line below modified to use default subtype variable set in code above
-                    Set pDomain = pSubtypes.Domain(lDefaultSubType, pFld.Name)
+                    Set pDomain = pSubtypes.Domain(m_LSCode, pFld.Name)
                     If Not pDomain Is Nothing Then
                       Select Case pDomain.MergePolicy
                             Case esriGeoDatabase.esriMergePolicyType.esriMPTSumValues 'Sum values
@@ -287,9 +314,9 @@ On Error GoTo ErrorHandler
                                 End If
                             Case esriGeoDatabase.esriMergePolicyType.esriMPTAreaWeighted 'Area/length weighted average
                                 If lCount = 1 Then
-                                    pNewFeature.Value(i) = pCurFeature.Value(i) * (GetGeomVal(pCurFeature) / l_GTotalVal)
+                                    pNewFeature.Value(i) = pCurFeature.Value(i) * (getGeomVal(pCurFeature) / m_lGTotalVal)
                                 Else
-                                    pNewFeature.Value(i) = pNewFeature.Value(i) + (pCurFeature.Value(i) * (GetGeomVal(pCurFeature) / l_GTotalVal))
+                                    pNewFeature.Value(i) = pNewFeature.Value(i) + (pCurFeature.Value(i) * (getGeomVal(pCurFeature) / m_lGTotalVal))
                                 End If
                             Case Else 'If no merge policy, just take one of the existing values
                                 pNewFeature.Value(i) = pCurFeature.Value(i)
@@ -452,6 +479,26 @@ On Error GoTo ErrorHandler
     g_pForms.SetFormStatus Me.Name, True
     '++ END JWalton 1/29/2007
 
+'++ START merge policy  JWM 01/11/2007
+    If m_pEditor.SelectionCount > 1 Then
+        Dim pChkFeature As IFeature
+        Dim pRowSubtypes As IRowSubtypes
+        
+        Set m_pEnumFeature = m_pEditor.EditSelection
+        Set pChkFeature = m_pEnumFeature.Next
+        Set pRowSubtypes = pChkFeature
+        m_LSCode = pRowSubtypes.SubtypeCode
+        Do
+            Set pRowSubtypes = pChkFeature
+            If pRowSubtypes.SubtypeCode = m_LSCode Then
+                m_lGTotalVal = m_lGTotalVal + getGeomVal(pChkFeature)
+            End If
+            Set pChkFeature = m_pEnumFeature.Next
+        Loop Until pChkFeature Is Nothing
+        Set pRowSubtypes = Nothing
+        Set pChkFeature = Nothing
+    End If
+'++ END JWM 01/11/2007
   Exit Sub
 ErrorHandler:
   HandleError True, _
