@@ -118,7 +118,7 @@ Private m_pEditor As esriEditor.IEditor
     ' Removed declaration for m_pMxDoc as it is no longer used
     ' Removed declaration for m_pApp in favor of g_pApp
 '++ END JWalton 2/6/2007
-Private m_LSCode As Long
+Private ml_SubtypeCode As Long
 Private m_pEnumFeature As IEnumFeature
 Private m_lGTotalVal As Double
 '------------------------------
@@ -155,8 +155,6 @@ On Error GoTo ErrorHandler
     Dim pMap As esriCarto.IMap
     Dim pDataset As esriGeoDatabase.IDataset
     Dim pDomain As esriGeoDatabase.IDomain
-    Dim pEnumFeat As esriGeoDatabase.IEnumFeature
-    Dim pChkFeature As esriGeoDatabase.IFeature
     Dim pCurFeature As esriGeoDatabase.IFeature
     Dim pLineFeat As esriGeoDatabase.IFeature
     Dim pNewFeature As esriGeoDatabase.IFeature
@@ -173,8 +171,6 @@ On Error GoTo ErrorHandler
     Dim pFlds As esriGeoDatabase.IFields
     Dim pRefresh As esriGeoDatabase.IInvalidArea
     Dim pOutRSType As esriGeoDatabase.IRowSubtypes
-    Dim pRowSubTypes As esriGeoDatabase.IRowSubtypes
-    Dim lpSubTypes As esriGeoDatabase.ISubtypes
     Dim pSubtypes As esriGeoDatabase.ISubtypes
     Dim pWorkspace As esriGeoDatabase.IWorkspace
     Dim pWorkspaceEdit As esriGeoDatabase.IWorkspaceEdit
@@ -184,7 +180,6 @@ On Error GoTo ErrorHandler
     Dim pOutputGeometry As esriGeometry.IGeometry
     Dim pTmpGeom As esriGeometry.IGeometry
     Dim pTopoOperator As esriGeometry.ITopologicalOperator
-    Dim l_GTotalVal As Double
     Dim i As Long
     Dim lCount As Long
     Dim lDefaultSubType As Long
@@ -231,44 +226,14 @@ On Error GoTo ErrorHandler
             lDefaultSubType = pSubtypes.DefaultSubtypeCode
             '++ END JWalton 2/14/2007
             
-            '++ START JWM 10/30/2006 Since lSCode is not declared anywhere I must assume it is an artifact.
             Set pOutRSType = pNewFeature
             
 '++ START merge policy revisited JWM 01/11/2007 I have removed previous my previous code and
 'have implemented the code from the developer sample clsMergeRules.cls as best as I am able
-'++ START JWM 10/30/2006 Since lSCode is not declared anywhere I must assume it is an artifact.
-'           I will remove the test from the code and modify the assignment for a feature class
-'           with subtypes defined
-'            Dim lpSubTypes As ISubtypes
-'            Dim lDefaultSubtype As Long
-'            Dim pEnumFeat As IEnumFeature 'for merge policy
-'            Dim pChkFeature As IFeature 'for merge policy
-'            Dim pRowSubtypes As IRowSubtypes 'for merge policy
-'
-'            Set pEnumFeat = pCurFeature
-'            Set lpSubTypes = pOutRSType
-'            Set pChkFeature = pEnumFeat.Next
-            
-'            lDefaultSubtype = lpSubTypes.DefaultSubtypeCode
-            If m_LSCode <> 0 Then
-              pOutRSType.SubtypeCode = m_LSCode
-'            pOutRSType.SubtypeCode = lDefaultSubtype
+            If ml_SubtypeCode <> 0 Then
+              pOutRSType.SubtypeCode = ml_SubtypeCode
             End If
             pOutRSType.InitDefaultValues
-            '++ END JWM 10/30/2006
-            
-'            Set lpSubTypes = Nothing
-'++ END JWM 10/30/2006
-'++ START JWM 10/30/2006 get values for merge policy: area weighted
-'            Do
-'                Set pRowSubtypes = pChkFeature
-'                l_GTotalVal = l_GTotalVal + getGeomVal(pChkFeature)
-'                Set pChkFeature = pEnumFeat.Next
-'            Loop Until pChkFeature Is Nothing
-'            Set pRowSubtypes = Nothing
-'            Set pChkFeature = Nothing
-'            Set pEnumFeat = Nothing
-'++ END JWM 10/30/2006
 '++ END merge policy revisted JWM 01/11/2007
 
             ' get the first feature
@@ -303,7 +268,7 @@ On Error GoTo ErrorHandler
                 Set pSubtypes = pFeatcls
                 For i = 0 To pFlds.FieldCount - 1
                     Set pFld = pFlds.Field(i)
-                    Set pDomain = pSubtypes.Domain(m_LSCode, pFld.Name)
+                    Set pDomain = pSubtypes.Domain(ml_SubtypeCode, pFld.Name)
                     If Not pDomain Is Nothing Then
                       Select Case pDomain.MergePolicy
                             Case esriGeoDatabase.esriMergePolicyType.esriMPTSumValues 'Sum values
@@ -314,9 +279,9 @@ On Error GoTo ErrorHandler
                                 End If
                             Case esriGeoDatabase.esriMergePolicyType.esriMPTAreaWeighted 'Area/length weighted average
                                 If lCount = 1 Then
-                                    pNewFeature.Value(i) = pCurFeature.Value(i) * (getGeomVal(pCurFeature) / m_lGTotalVal)
+                                    pNewFeature.Value(i) = pCurFeature.Value(i) * (GetGeomVal(pCurFeature) / m_lGTotalVal)
                                 Else
-                                    pNewFeature.Value(i) = pNewFeature.Value(i) + (pCurFeature.Value(i) * (getGeomVal(pCurFeature) / m_lGTotalVal))
+                                    pNewFeature.Value(i) = pNewFeature.Value(i) + (pCurFeature.Value(i) * (GetGeomVal(pCurFeature) / m_lGTotalVal))
                                 End If
                             Case Else 'If no merge policy, just take one of the existing values
                                 pNewFeature.Value(i) = pCurFeature.Value(i)
@@ -433,7 +398,7 @@ Private Sub cmdHelp_Click()
     sFilePath = app.Path & "\" & "Combine_help.rtf"
     If basUtilities.FileExists(sFilePath) Then
         '++ START JWM 10/16/2006 using new method to open help file
-        basUtilities.gsb_StartDoc Me.hwnd, sFilePath
+        basUtilities.gsb_StartDoc Me.hWnd, sFilePath
         '++ START/END JWM 10/16/2006
       Else
         MsgBox "No help file available in current directory", vbOKOnly + vbInformation
@@ -487,11 +452,11 @@ On Error GoTo ErrorHandler
         Set m_pEnumFeature = m_pEditor.EditSelection
         Set pChkFeature = m_pEnumFeature.Next
         Set pRowSubtypes = pChkFeature
-        m_LSCode = pRowSubtypes.SubtypeCode
+        ml_SubtypeCode = pRowSubtypes.SubtypeCode
         Do
             Set pRowSubtypes = pChkFeature
-            If pRowSubtypes.SubtypeCode = m_LSCode Then
-                m_lGTotalVal = m_lGTotalVal + getGeomVal(pChkFeature)
+            If pRowSubtypes.SubtypeCode = ml_SubtypeCode Then
+                m_lGTotalVal = m_lGTotalVal + GetGeomVal(pChkFeature)
             End If
             Set pChkFeature = m_pEnumFeature.Next
         Loop Until pChkFeature Is Nothing
