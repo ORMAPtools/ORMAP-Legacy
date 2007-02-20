@@ -1,4 +1,10 @@
 Attribute VB_Name = "basWin32API"
+
+' Keyword expansion for source code control
+' Tag for this file : $Name$
+' SCC Revision number: $Revision:$
+' Date of last change: $Date:$
+
 ' File name:            basWin32API.bas
 '
 ' Initial Author:       John Walton
