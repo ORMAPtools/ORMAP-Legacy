@@ -180,6 +180,7 @@ On Error GoTo ErrorHandler
     Dim pOutputGeometry As esriGeometry.IGeometry
     Dim pTmpGeom As esriGeometry.IGeometry
     Dim pTopoOperator As esriGeometry.ITopologicalOperator
+'    Dim l_GTotalVal As Double
     Dim i As Long
     Dim lCount As Long
     Dim lDefaultSubType As Long
@@ -215,9 +216,9 @@ On Error GoTo ErrorHandler
             m_pEditor.StartOperation
             
             ' create a new feature to be the merge feature
-            Dim pCurFeature As IFeature
-            Dim pNewFeature As IFeature
-            Dim lCount As Long
+'            Dim pCurFeature As IFeature
+'            Dim pNewFeature As IFeature
+'            Dim lCount As Long
             Set pNewFeature = pFeatcls.CreateFeature
               
             '++ START JWalton 2/14/2007 Extract the default subtype from the feature's class
@@ -398,7 +399,7 @@ Private Sub cmdHelp_Click()
     sFilePath = app.Path & "\" & "Combine_help.rtf"
     If basUtilities.FileExists(sFilePath) Then
         '++ START JWM 10/16/2006 using new method to open help file
-        basUtilities.gsb_StartDoc Me.hWnd, sFilePath
+        basUtilities.gsb_StartDoc Me.hwnd, sFilePath
         '++ START/END JWM 10/16/2006
       Else
         MsgBox "No help file available in current directory", vbOKOnly + vbInformation
