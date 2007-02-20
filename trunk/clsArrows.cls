@@ -60,7 +60,7 @@ Attribute VB_Exposed = True
 '           Globals
 '
 ' Issues:
-'   Cannot use Option Explicit when compiling this class because of reference to m_pEditor object
+'
 '
 '       What are unsolved bugs, bottlenecks,
 '       possible future enhancements, and
@@ -580,7 +580,7 @@ On Error GoTo ErrorHandler
                 lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.CLinesLineTypeFN)
                 
                 ' Insure that the feature's fields are found
-                If lLineTypeFld = -1 Or lLineTypeFld = -1 Then GoTo Process_Exit
+                If lLineTypeFld = -1 Then GoTo Process_Exit
                 
                 ' Populate field values in the feature
                 sCurMapNum = GetValueViaOverlay(pFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN)
@@ -868,7 +868,8 @@ On Error GoTo ErrorHandler
     If (m_pLineSymbol Is Nothing) Then GoTo Process_Exit
     
     '++ START JWalton 2/9/2007 m_pApp to g_pApp
-    Set pMXDoc = m_pApp.Document
+'    Set pMXDoc = m_pApp.Document Commented out by jwm on behalf of JWalton 2-20-07
+    Set pMXDoc = g_pApp.Document
     '++ END JWalton 2/9/2007
     Set pActiveView = pMXDoc.FocusMap
     
@@ -1082,7 +1083,7 @@ On Error GoTo ErrorHandler
         GoTo Process_Exit
     End If
     If vMapScale1 <> vMapScale2 Then
-        MsgBox "Hook can not span Mapindex polygons with differenc scale", vbCritical
+        MsgBox "Hook can not span Mapindex polygons with different scale", vbCritical
         GoTo Process_Exit
     End If
     
@@ -1391,7 +1392,9 @@ On Error GoTo ErrorHandler
     '++ END JWalton 2/9/2007
 
     ' Initialize references to the current document and map
-    Set pMXDoc = m_pApp.Document
+'++ START line below commented out on behalf of JWalton END JWM 02/20/2007++++++++++
+'    Set pMXDoc = m_pApp.Document
+    Set pMXDoc = g_pApp.Document
     Set pActiveView = pMXDoc.FocusMap
     
     'Set up line symbol to display temporary line
