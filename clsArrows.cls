@@ -523,7 +523,7 @@ On Error GoTo ErrorHandler
     sToolCaption = UCase$(frmArrows.ArrowType)
     '++ END JWalton 2/9/2007
     Select Case sToolCaption
-        Case "Hook"  'If drawing hooks
+        Case "HOOK"  'If drawing hooks
             ' Get point to measure distance from
             Set m_pStartPoint = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
             m_bDoOnce = False 'testing
@@ -532,7 +532,7 @@ On Error GoTo ErrorHandler
             ' Get the scale of the current mapindex
             sScale = GetValueViaOverlay(m_pStartPoint, pMIFC, g_pFldnames.MIMapScaleFN)
             sScale = ConvertToDescription(pMIFC.Fields, g_pFldnames.MIMapScaleFN, sScale)
-        Case "Arrow" 'If drawing annotation arrows
+        Case "ARROW" 'If drawing annotation arrows
             If m_pArrowPt1 Is Nothing Then
                 ' Save the first point
                 Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
