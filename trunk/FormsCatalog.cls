@@ -29,8 +29,8 @@ Attribute VB_Exposed = False
 '
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision: 21 $
-' Date of last change: $Date: 2006-11-14 13:24:03 -0800 (Tue, 14 Nov 2006) $
+' SCC Revision number: $Revision$
+' Date of last change: $Date$
 '
 ' File name:            FormsCatalot
 '
