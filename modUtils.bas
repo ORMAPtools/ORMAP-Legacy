@@ -201,7 +201,7 @@ On Error GoTo Err_Handler
         Set pFeatureLayer = pLayer
         Set pDataset = pFeatureLayer.FeatureClass
         If Not pDataset Is Nothing Then
-            If StrComp(pFeatureLayer.Name, asDatasetName, vbTextCompare) = 0 Then
+            If StrComp(pDataset.Name, asDatasetName, vbTextCompare) = 0 Then
                 Set FindFeatureLayerByDS = pLayer
                 Exit Function
             End If
@@ -394,13 +394,13 @@ On Error GoTo ErrorHandler
                 If Not bAllowSpace Then
                     With cboValues
                         If .ListCount > 0 Then
-                            If (.List(0) = "") Or (.List(0) = "") Then
+                            If (.List(0) = "") Then
                                 .RemoveItem (0)
                             End If
                         End If
                         If .ListCount > 0 Then
                             '++ JWM 10/11/2006 Is this if statement comparing against the same thing ?
-                            If (.List(.ListCount - 1) = "") Or (.List(.ListCount - 1) = "") Then
+                            If (.List(.ListCount - 1) = "") Then
                                 .RemoveItem (.ListCount - 1)
                             End If
                         End If
