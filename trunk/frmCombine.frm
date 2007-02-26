@@ -98,7 +98,7 @@ Attribute VB_Exposed = False
 '           basGlobals
 '           basUtilities
 '
-' Issues: Cannot use New AppRef when debugging must use GetAppRef function
+' Issues:
 '       None known at this time (2/6/2007 JWalton)
 '
 ' Method:
@@ -180,7 +180,6 @@ On Error GoTo ErrorHandler
     Dim pOutputGeometry As esriGeometry.IGeometry
     Dim pTmpGeom As esriGeometry.IGeometry
     Dim pTopoOperator As esriGeometry.ITopologicalOperator
-'    Dim l_GTotalVal As Double
     Dim i As Long
     Dim lCount As Long
     Dim lDefaultSubType As Long
@@ -216,9 +215,6 @@ On Error GoTo ErrorHandler
             m_pEditor.StartOperation
             
             ' create a new feature to be the merge feature
-'            Dim pCurFeature As IFeature
-'            Dim pNewFeature As IFeature
-'            Dim lCount As Long
             Set pNewFeature = pFeatcls.CreateFeature
               
             '++ START JWalton 2/14/2007 Extract the default subtype from the feature's class
