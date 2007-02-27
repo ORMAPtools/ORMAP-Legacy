@@ -11,6 +11,23 @@ Begin VB.Form frmArrows
    ScaleHeight     =   2475
    ScaleWidth      =   2925
    ShowInTaskbar   =   0   'False
+   Begin VB.CommandButton cmdQuit 
+      Caption         =   "Quit"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   495
+      Left            =   120
+      TabIndex        =   5
+      Top             =   1920
+      Width           =   855
+   End
    Begin VB.CommandButton cmdHelp 
       Caption         =   "Help"
       BeginProperty Font 
@@ -202,3 +219,32 @@ Private Sub Form_QueryUnload( _
     g_pForms.SetFormStatus Me.Name, False
 End Sub
 '++ END JWalton 1/29/2007
+
+'++ START Added by Laura Gordon, 02/20/2007
+'***************************************************************************
+'Name:                  cmdQuit
+'Initial Author:        Laura Gordon
+'Subsequent Author:     <<Unknown>>
+'Created:               02/20/2007
+'Purpose:       Quit the form
+'Called From:   cmdQuit Control
+'Description:   Unloads the form (note added a quit button to the form - match other forms)
+'Methods:       None
+'Inputs:        None
+'Parameters:    None
+'Outputs:       None
+'Returns:       None
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+
+Private Sub cmdQuit_Click()
+  
+    Unload Me
+
+End Sub
+'++ END Added by Laura Gordon, 02/20/2007
