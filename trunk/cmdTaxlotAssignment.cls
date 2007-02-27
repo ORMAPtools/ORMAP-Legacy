@@ -772,20 +772,20 @@ On Error GoTo ErrorHandler
         sNewTLNum = Replace(sNewTLNum_5digit, "0", "")
     End If
     
-    '++ BEGIN, Laura Gordon, November 29, 2005
+    '++ START Laura Gordon, November 29, 2005
     'Determine if Special Interests field is something other than default
     'If so, include it in ORMAPtaxlot
     sTLMapSufTypeVal = GetMapSufType(pFeature)
     sTLMapSufNumVal = GetMapSufNum(pFeature)
     If IsNull(sTLMapSufTypeVal) Then sTLMapSufTypeVal = "0"
     If IsNull(sTLMapSufNumVal) Then sTLMapSufNumVal = "000"
-    '++ END, Laura Gordon, November 29, 2005
+    '++ END Laura Gordon, November 29, 2005
     pFeature.Value(m_lTLTaxlotFld) = sNewTLNum
     
     sShortOMNum = ShortenOMMapNum(sExistOMNum)
-    '++ BEGIN, Laura Gordon, November 29, 2005
+    '++ START Laura Gordon, November 29, 2005
     sOMTLNval = sShortOMNum & sTLMapSufTypeVal & sTLMapSufNumVal & sNewTLNum_5digit
-    '++ END, Laura Gordon, November 29, 2005
+    '++ END Laura Gordon, November 29, 2005
     '++ START JWM 11/09/2006 create  masked value from a combination of ORMapNum and the new taxlot
     sOMMapTaxlot = gfn_s_CreateMapTaxlotValue(sExistOMNum & sNewTLNum_5digit, g_pFldnames.MapTaxlotFormatString)
     pFeature.Value(m_lOMMapTaxlotFld) = sOMMapTaxlot
