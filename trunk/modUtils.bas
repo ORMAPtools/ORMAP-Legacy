@@ -2736,16 +2736,18 @@ Public Function CalcOMTLNum( _
 On Error GoTo ErrorHandler
     '++ START JWalton 2/7/2007 Centralized Variable Declarations
     Dim sShortOMNum As String
+    '++ END JWalton 2/7/2007
+    
     '++ START Laura Gordon, November 29, 2005
     Dim sTLMapSufNumVal As String
     Dim sTLMapSufTypeVal As String
-    '++ END, Laura Gordon, November 29, 2005
-    '++ END JWalton 2/7/2007
+    '++ END Laura Gordon, November 29, 2005
+    
 
     ' Gets the Ormap number with the map suffix type or number
     sShortOMNum = ShortenOMMapNum(sExistOMNum)
     
-    '++ BEGIN Laura Gordon, November 29, 2005
+    '++ START Laura Gordon, November 29, 2005
     ' Gets the new map suffix type and number
     sTLMapSufTypeVal = GetMapSufType(pFeat)
     sTLMapSufNumVal = GetMapSufNum(pFeat)
