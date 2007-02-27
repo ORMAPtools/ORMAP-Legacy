@@ -105,6 +105,22 @@ Private m_dHookAngle As Double
 Private m_bDoOnce As Boolean                            ' testing
 Private m_bInUse As Boolean
 
+'++ START Added by Laura Gordon, 02/20/2007
+Private m_pArrowPtTemp As IPoint
+Private m_pArrowPtTemp2 As IPoint
+Private m_pPt As IPoint
+Private m_pSnapAgent As IFeatureSnapAgent
+Private m_bMouseHasMoved As Boolean
+Private m_bInTol As Boolean
+Private m_pMxApp As IMxApplication
+Private m_pMxDoc As IMxDocument
+Private m_pActive As IActiveView
+Private WithEvents m_pEditorEvents As Editor
+Attribute m_pEditorEvents.VB_VarHelpID = -1
+Private m_pEditor As IEditor2
+Private m_bToolJustCompletedTask As Boolean
+'++ END Added by Laura Gordon, 02/20/2007
+
 '------------------------------
 'Private Constants and Enums
 '------------------------------
@@ -388,7 +404,36 @@ Private Sub ITool_OnDblClick()
 End Sub
  
 Private Sub ITool_OnKeyDown(ByVal keyCode As Long, ByVal Shift As Long)
-    ' Not Implemented
+  On Error GoTo ErrorHandler
+    
+    '++ START Added by Laura Gordon 02/20/2007
+    'End the dimension arrow tool if the "q" key is pressed
+    If keyCode = vbKeyQ Then
+        If frmArrows.ArrowType = "Dimension" Then
+            'Deactivate the tool
+            Set m_pArrowPt1 = Nothing
+            Set m_pArrowPt2 = Nothing
+            Set m_pArrowPt3 = Nothing
+            Set m_pArrowPt4 = Nothing
+            Set m_pPt = Nothing
+            Set m_pArrowPtTemp = Nothing
+            Set m_pArrowPtTemp2 = Nothing
+            Set g_pApp.CurrentTool = Nothing
+            g_pApp.RefreshWindow
+            m_bToolJustCompletedTask = True
+        Else 'Hooks & Arrows
+            'Deactivate the tool
+            Set g_pApp.CurrentTool = Nothing
+            g_pApp.RefreshWindow
+            m_bToolJustCompletedTask = True
+        End If
+        
+    End If
+
+  Exit Sub
+ErrorHandler:
+  HandleError True, "ITool_OnKeyDown " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+'++ END Added by Laura Gordon 02/20/2007
 End Sub
  
 Private Sub ITool_OnKeyUp(ByVal keyCode As Long, ByVal Shift As Long)
@@ -478,6 +523,7 @@ End Function
 '----------     ------      ---------
 'James Moore    10/11/2006  single exit point
 'JWM            10/16/2006  Using case instead of if
+'Laura Gordon   02/20/2007  Adding dimension arrows
 '***************************************************************************
 
 Private Sub ITool_OnMouseDown( _
@@ -505,7 +551,12 @@ On Error GoTo ErrorHandler
     Dim sScale As String
     Dim sToolCaption As String
     '++ END JWalton 2/8/2007
-        
+    '++ START Laura Gordon 02/20/2007
+    Dim sCurrentMapScale As String
+    Dim sSide As String
+    Dim iChange As Integer
+    '++ END Laura Gordon 02/20/2007
+    
     ' Set the in use flag
     m_bInUse = True
     
@@ -523,7 +574,9 @@ On Error GoTo ErrorHandler
     sToolCaption = UCase$(frmArrows.ArrowType)
     '++ END JWalton 2/9/2007
     Select Case sToolCaption
-        Case "HOOK"  'If drawing hooks
+        '++ Start Laura Gordon 02/20/2007, Had to UCase HOOK because it wasn't matching
+        Case "HOOK"  '"Hook" 'If drawing hooks
+        '++ End Laura Gordon, 02/20/2007
             ' Get point to measure distance from
             Set m_pStartPoint = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
             m_bDoOnce = False 'testing
@@ -621,6 +674,219 @@ On Error GoTo ErrorHandler
                 '++ END JWalton 2/8/2007
             End If
         Case "DIMENSION"
+            '++ START Added by Laura Gordon, 02/20/2007
+                'Get the 3 input points
+                If m_pArrowPt1 Is Nothing Then
+                    Set m_pArrowPt1 = m_pPt
+                ElseIf m_pArrowPt2 Is Nothing Then
+                    Set m_pArrowPt2 = m_pPt
+                    DrawArrows
+                ElseIf m_pArrowPt3 Is Nothing Then
+                    Set m_pArrowPt3 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+                    DrawArrows
+                    
+                    
+                    'Check to be sure the 2 points are not equal
+                    If (m_pArrowPt1.X = m_pArrowPt2.X) And (m_pArrowPt1.Y = m_pArrowPt2.Y) Then
+                        Call MsgBox("Two input points can't be equal, dimension arrows terminated.", vbInformation, "Invalid Input")
+                        m_pEditor.AbortOperation
+                    End If
+            
+                    'Get the mapscale
+                    sCurrentMapScale = GetCurrentMapScale(pMIFC)
+                    
+                    'Get the side the dimension arrows should be on based upon the 3rd input point
+                    sSide = GetDimensionArrowSide
+                    
+                    'Create two dimension arrows, one on the left and one on the right
+                    Dim lngIndex As Long
+                    For lngIndex = 1 To 2
+                        
+                        Dim pDimensionLine As IPolyline4
+                        Dim pDimensionPoints As IPointCollection4
+                        Set pDimensionPoints = New Polyline
+                        
+                        'Add starting point
+                        pDimensionPoints.AddPoint m_pArrowPt1
+                        
+                        'Instanciate the temp points
+                        Set m_pArrowPtTemp = New Point
+                        Set m_pArrowPtTemp2 = New Point
+                        
+                        'Set the distance of change for the dimension arrows based upon the mapscale
+                        iChange = GetChange(sCurrentMapScale, Shift)
+                        
+                        'Get 3 calculated points for a hook
+                            'Create the line from input
+                            pDimensionPoints.AddPoint m_pArrowPt1
+                            pDimensionPoints.AddPoint m_pArrowPt2
+                            Set pDimensionLine = pDimensionPoints
+                            
+                            'Create a line iChange from the beginning
+                            Dim pLine As ILine
+                            Set pLine = New esriGeometry.Line
+                            If lngIndex = 1 Then
+                                If Shift = 0 Then 'shift not pressed
+                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, (iChange / 1.22), pLine
+                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, -(iChange / 1.22), pLine
+                                    End If
+                                ElseIf Shift = 1 Then 'shift pressed
+                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, ((iChange * 2) / 1.22), pLine
+                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, -((iChange * 2) / 1.22), pLine
+                                    End If
+                                End If
+                            ElseIf lngIndex = 2 Then
+                                If Shift = 0 Then 'shift not pressed
+                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, (iChange / 1.22), pLine
+                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, -(iChange / 1.22), pLine
+                                    End If
+                                ElseIf Shift = 1 Then 'shift pressed
+                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, ((iChange * 2) / 1.22), pLine
+                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, -((iChange * 2) / 1.22), pLine
+                                    End If
+                                End If
+                            End If
+                            
+                            'Save the to and from points of the line
+                            m_pArrowPtTemp.X = pLine.ToPoint.X
+                            m_pArrowPtTemp.Y = pLine.ToPoint.Y
+                            Set pLine = Nothing
+                            
+                            
+                            'Create a line (iChange/.25) from the beginning
+                            Set pLine = New esriGeometry.Line
+                            If lngIndex = 1 Then
+                                If Shift = 0 Then 'shift not pressed
+                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / 1.5), False, (iChange / 1.22), pLine
+                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / 1.5), False, -(iChange / 1.22), pLine
+                                    End If
+                                ElseIf Shift = 1 Then 'shift pressed
+                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / 1.5), False, ((iChange * 2) / 1.22), pLine
+                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / 1.5), False, -((iChange * 2) / 1.22), pLine
+                                    End If
+                                End If
+                            ElseIf lngIndex = 2 Then
+                                If Shift = 0 Then 'shift not pressed
+                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / 1.5)), False, (iChange / 1.22), pLine
+                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / 1.5)), False, -(iChange / 1.22), pLine
+                                    End If
+                                ElseIf Shift = 1 Then 'shift pressed
+                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / 1.5)), False, ((iChange * 2) / 1.22), pLine
+                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / 1.5)), False, -((iChange * 2) / 1.22), pLine
+                                    End If
+                                End If
+                            End If
+                            
+                            'Save the to and from points of the line
+                            m_pArrowPtTemp2.X = pLine.ToPoint.X
+                            m_pArrowPtTemp2.Y = pLine.ToPoint.Y
+                            Set pLine = Nothing
+                            
+                            Set pDimensionPoints = Nothing
+                            Set pDimensionPoints = New Polyline
+                            
+                            'Add the points to the line/hook to be created
+                            If lngIndex = 1 Then
+                                pDimensionPoints.AddPoint m_pArrowPt1
+                            ElseIf lngIndex = 2 Then
+                                pDimensionPoints.AddPoint m_pArrowPt2
+                            End If
+                            pDimensionPoints.AddPoint m_pArrowPtTemp2
+                            pDimensionPoints.AddPoint m_pArrowPtTemp
+                            
+            
+                        
+                        'Create the dimension arrow from the collection of 3 points (1 input, 2 calculated)
+                        Set pDimensionLine = pDimensionPoints
+                        
+                        'Reverse the line to = from and from = to so arrow points the correct way
+                        pDimensionLine.ReverseOrientation
+                        
+                        pDimensionLine.Smooth pDimensionLine.Length / 10
+                
+                        Dim pDimensionFeature As IFeature
+                        Dim pDimensionWSEdit As IWorkspaceEdit
+                        Dim pDimensionDSet As IDataset
+                        Dim pDimensionArrowLayer As IFeatureLayer
+                        Dim pDimensionArrowFC As IFeatureClass
+                        Set pDimensionArrowLayer = FindFeatureLayerByDS(g_pFldnames.FCCartoLines)
+                        If pDimensionArrowLayer Is Nothing Then
+                          MsgBox "The layer, " & g_pFldnames.FCCartoLines & ", is not in the map.", vbExclamation, "Layer not found"
+                          m_pEditor.AbortOperation
+                          Exit Sub
+                        End If
+                        Set pDimensionArrowFC = pDimensionArrowLayer.FeatureClass
+                        Set pDimensionDSet = pDimensionArrowFC
+                        Set pDimensionWSEdit = pDimensionDSet.Workspace
+                        
+                        'create the arrow feature
+                        pDimensionWSEdit.StartEditOperation
+                        Set pDimensionFeature = pDimensionArrowFC.CreateFeature
+                        Set pDimensionFeature.Shape = pDimensionLine
+                        lLineTypeFld = LocateFields(pDimensionArrowFC, g_pFldnames.CLinesLineTypeFN)
+                        If lLineTypeFld = -1 Then Exit Sub
+                        pDimensionFeature.Value(lLineTypeFld) = 134 'Bearing Distance Arrow
+                        
+                        'Get the current MapNumber
+                        Dim sCurrentMapNums As String
+                        sCurrentMapNums = GetValueViaOverlay(pDimensionFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN)
+                        Dim lCLMNSfld As Long
+                        lCLMNSfld = LocateFields(pDimensionArrowFC, g_pFldnames.MIMapNumberFN)
+                        pDimensionFeature.Value(lCLMNSfld) = sCurrentMapNums
+            
+                        pDimensionFeature.Store
+                        pDimensionWSEdit.StopEditOperation
+                        
+                        'Refresh the display
+                        pActiveView.PartialRefresh esriViewBackground, Nothing, pDimensionFeature.Extent.Envelope
+                                                
+                        Set pDimensionLine = Nothing
+                        Set m_pArrowPtTemp = Nothing
+                        Set m_pArrowPtTemp2 = Nothing
+                        
+                        Set m_pTextSymbol = Nothing
+                        Set m_pTextPoint = Nothing
+                        Set m_pLinePolyline = Nothing
+                        Set m_pLineSymbol = Nothing
+                        
+                    Next
+                    
+                    Set m_pArrowPt1 = Nothing
+                    Set m_pArrowPt2 = Nothing
+                    Set m_pArrowPt3 = Nothing
+                    Set m_pArrowPt4 = Nothing
+                    
+        Else 'Reset everything
+            Set m_pArrowPt1 = Nothing
+            Set m_pArrowPt2 = Nothing
+            Set m_pArrowPt3 = Nothing
+            Set m_pArrowPt4 = Nothing
+            Set m_pArrowPtTemp = Nothing
+            Set m_pArrowPtTemp2 = Nothing
+            Set m_pSnapAgent = Nothing
+            m_bToolJustCompletedTask = True
+            
+            'Deactivate the tool
+            Set g_pApp.CurrentTool = Nothing
+            
+        End If
+        '++ END Added by Laura Gordon, 02/20/2007
     End Select
   
 Process_Exit:
@@ -663,6 +929,7 @@ End Sub
 '----------     ------      ---------
 'James Moore    10/11/2006  single exit point created
 'James Moore    11-1-06     commented out dead variables and assignments
+'Laura Gordon   02/20/2007  added point for dimension arrows
 '***************************************************************************
 
 Private Sub ITool_OnMouseMove( _
@@ -712,6 +979,11 @@ On Error GoTo ErrorHandler
         ' Get current point
         Set pPoint = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
         Set m_pToBreakPoint = pPoint 'the unextended to point used to break the hooks
+        
+        '++ START Added by Laura Gordon, 02/20/2007
+        'Check to be sure there is a start point for the hook to prevent an error
+        If m_pStartPoint Is Nothing Then Exit Sub
+        '++ END Added by Laura Gordon, 02/20/2007
         
         ' Draw a virtual line that represents the extended line
         Set pPLine = New esriGeometry.Polyline
@@ -811,6 +1083,71 @@ On Error GoTo ErrorHandler
           pActiveView.ScreenDisplay.DrawPolyline m_pLinePolyline
         pActiveView.ScreenDisplay.FinishDrawing
     End If
+    
+    '++ START Added by Laura Gordon, 02/20/2007
+    If frmArrows.ArrowType = "Dimension" Then
+    
+        'Set variables
+        Dim pId As New esriSystem.UID
+        pId = "esriEditor.Editor"
+        Set m_pEditor = g_pApp.FindExtensionByCLSID(pId)
+        Set m_pEditorEvents = m_pEditor
+        
+        Set m_pMxApp = g_pApp
+        'Set m_pDisp = m_pMxApp.Display
+        Set m_pDoc = g_pApp.Document
+        Set m_pMxDoc = m_pDoc
+        Set m_pActive = m_pMxDoc.ActiveView
+        
+        'Set m_pMapEvents = m_pMxDoc.FocusMap
+    
+    
+      If m_bToolJustCompletedTask Then 'gets rid of a stray editor agent
+        m_pActive.Refresh
+        m_bToolJustCompletedTask = False
+        Exit Sub
+      End If
+      
+      If m_bMouseHasMoved Then
+        'Check to be sure m_pPt has a value, prevents an error if called after other tools
+        If m_pPt Is Nothing Then
+          m_bMouseHasMoved = False
+          Exit Sub
+        End If
+        'erase the old agent
+        m_pEditor.InvertAgent m_pPt, 0
+        'get the new point
+        GetMousePoint X, Y
+      Else
+        Set m_pPt = m_pActive.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+      End If
+      m_bMouseHasMoved = True
+    
+      If Not m_pSnapAgent Is Nothing Then
+        Dim pSnapenv As ISnapEnvironment
+        Set pSnapenv = m_pEditor
+        Dim pTmpPt As IPoint
+        Set pTmpPt = New Point
+        pTmpPt.PutCoords m_pPt.X, m_pPt.Y
+        Dim dTol As Double
+        dTol = pSnapenv.SnapTolerance
+        m_bInTol = pSnapenv.SnapPoint(m_pPt)
+        If Not m_bInTol Then
+          Set m_pPt = New Point
+          m_pPt.PutCoords pTmpPt.X, pTmpPt.Y  '+++ set the point back b/c it was not in the snap tol
+        End If
+      Else
+        m_bInTol = False
+      End If
+      
+      'If m_lCtr = 0 Then
+        m_pEditor.InvertAgent m_pPt, 0 'draw the agent
+        Exit Sub
+      'End If
+      Exit Sub
+    
+    End If
+    '++ END Added by Laura Gordon, 02/20/2007
 
 Process_Exit:
     Exit Sub
@@ -845,6 +1182,7 @@ End Sub
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
+'Laura Gordon   02/20/2007  Added if statement back in so only hooks do the following
 '***************************************************************************
 
 Private Sub ITool_OnMouseUp( _
@@ -863,41 +1201,49 @@ On Error GoTo ErrorHandler
         ' Removed If...Then Block (If frmArrows.lblDisplay.Caption="hook")
         ' Inner block code is now obigatory
     '++ END JWalton 2/9/2007
-    If (Not m_bInUse) Then GoTo Process_Exit
     
-    If (m_pLineSymbol Is Nothing) Then GoTo Process_Exit
-    
-    '++ START JWalton 2/9/2007 m_pApp to g_pApp
-'    Set pMXDoc = m_pApp.Document Commented out by jwm on behalf of JWalton 2-20-07
-    Set pMXDoc = g_pApp.Document
-    '++ END JWalton 2/9/2007
-    Set pActiveView = pMXDoc.FocusMap
-    
-    ' Draws a temporary line on the screen
-    pActiveView.ScreenDisplay.StartDrawing pActiveView.ScreenDisplay.hdc, -1
-    pActiveView.ScreenDisplay.SetSymbol m_pTextSymbol
-    pActiveView.ScreenDisplay.DrawText m_pTextPoint, m_pTextSymbol.Text
-    pActiveView.ScreenDisplay.SetSymbol m_pLineSymbol
-    If (m_pLinePolyline.Length > 0) Then pActiveView.ScreenDisplay.DrawPolyline m_pLinePolyline
-    pActiveView.ScreenDisplay.FinishDrawing
-    
-    '++ START JWalton 2/9/2007 Form control to Form property
+    '++ START Laura Gordon 02/20/2007 'Adding if block back in
     If frmArrows.ArrowType = "Hook" Then
-        ' Generate hooks based on the graphic polyline
-        GenerateHooks m_pLinePolyline
-      Else
-        ' Do Nothing / Store nothing
+    '++ END Laura Gordon 02/20/2007
+    
+        If (Not m_bInUse) Then GoTo Process_Exit
+            
+        If (m_pLineSymbol Is Nothing) Then GoTo Process_Exit
+        
+        '++ START JWalton 2/9/2007 m_pApp to g_pApp
+    '    Set pMXDoc = m_pApp.Document Commented out by jwm on behalf of JWalton 2-20-07
+        Set pMXDoc = g_pApp.Document
+        '++ END JWalton 2/9/2007
+        Set pActiveView = pMXDoc.FocusMap
+        
+        ' Draws a temporary line on the screen
+        pActiveView.ScreenDisplay.StartDrawing pActiveView.ScreenDisplay.hdc, -1
+        pActiveView.ScreenDisplay.SetSymbol m_pTextSymbol
+        pActiveView.ScreenDisplay.DrawText m_pTextPoint, m_pTextSymbol.Text
+        pActiveView.ScreenDisplay.SetSymbol m_pLineSymbol
+        If (m_pLinePolyline.Length > 0) Then pActiveView.ScreenDisplay.DrawPolyline m_pLinePolyline
+        pActiveView.ScreenDisplay.FinishDrawing
+        
+        '++ START JWalton 2/9/2007 Form control to Form property
+        If frmArrows.ArrowType = "Hook" Then
+            ' Generate hooks based on the graphic polyline
+            GenerateHooks m_pLinePolyline
+          Else
+            ' Do Nothing / Store nothing
+        End If
+        '++ END JWalton 2/9/2007
+        
+        ' Records that the tool is no longer in use
+        m_bInUse = False
+        
+        ' Clean up
+        Set m_pTextSymbol = Nothing
+        Set m_pTextPoint = Nothing
+        Set m_pLinePolyline = Nothing
+        Set m_pLineSymbol = Nothing
+    '++ START Laura Gordon 02/20/2007 ending if statement
     End If
-    '++ END JWalton 2/9/2007
-    
-    ' Records that the tool is no longer in use
-    m_bInUse = False
-    
-    ' Clean up
-    Set m_pTextSymbol = Nothing
-    Set m_pTextPoint = Nothing
-    Set m_pLinePolyline = Nothing
-    Set m_pLineSymbol = Nothing
+    '++ END Laura Gordon 02/20/2007
 
 Process_Exit:
     Exit Sub
@@ -1377,6 +1723,7 @@ End Function
 'Developer:     Date:       Comments:
 '----------     ------      ---------
 'James Moore    11-1-06     removed dead variable
+'Laura Gordon   02/20/2007  change m_pApp to g_pApp as JWalton hadn't changed it.
 '***************************************************************************
 
 Private Sub DrawArrows()
@@ -1392,9 +1739,9 @@ On Error GoTo ErrorHandler
     '++ END JWalton 2/9/2007
 
     ' Initialize references to the current document and map
-'++ START line below commented out on behalf of JWalton END JWM 02/20/2007++++++++++
-'    Set pMXDoc = m_pApp.Document
-    Set pMXDoc = g_pApp.Document
+    '++ START Laura Gordon 02/20/2007
+    Set pMXDoc = g_pApp.Document 'm_pApp.Document
+    '++ STOP Laura Gordon 02/20/2007
     Set pActiveView = pMXDoc.FocusMap
     
     'Set up line symbol to display temporary line
@@ -1437,3 +1784,271 @@ ErrorHandler:
                 Err.Description, _
                 4
 End Sub
+
+'++ START Added by Laura Gordon, 02/20/2007
+'***************************************************************************
+'Name:                  GetMousePoint
+'Initial Author:        Laura Gordon
+'Subsequent Author:     <<Type your name here>>
+'Created:               02/20/2007
+'Purpose:       Get the mousepoint using ISnapAgent
+'Called From:   ITool_OnMouseDown
+'Description:   Get the mousepoint using ISnapAgent
+'Methods:       None
+'Inputs:        None
+'Parameters:    X As Long, Y As Long
+'Outputs:       None
+'Returns:       None
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+Private Sub GetMousePoint(X As Long, Y As Long)
+
+On Error GoTo ErrorHandler
+
+  '+++ Get the current map point (and invert the agent at that location)
+  Set m_pPt = m_pActive.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+  
+  '+++ get the snap agent, if it is being used
+  Set m_pSnapAgent = Nothing
+  Dim pSnapAgent As ISnapAgent
+  Dim pSnapenv As ISnapEnvironment
+  Set pSnapenv = m_pEditor
+  Dim i As Long
+  For i = 0 To pSnapenv.SnapAgentCount - 1
+    Set pSnapAgent = pSnapenv.SnapAgent(i)
+    If TypeOf pSnapAgent Is IFeatureSnapAgent Then
+        Dim pFSnapAgent As IFeatureSnapAgent
+        Dim pEdLyrs As IEditLayers
+        Dim pLayer As ILayer
+        Set pFSnapAgent = pSnapAgent
+        Set pEdLyrs = m_pEditor
+        Set pLayer = pEdLyrs.CurrentLayer
+        Dim ht As esriGeometryHitPartType
+        ht = pFSnapAgent.HitType
+        If ht <> 0 Then
+            Set m_pSnapAgent = pFSnapAgent
+            Exit For
+        End If
+        Set pLayer = Nothing
+        Set pEdLyrs = Nothing
+        Set pFSnapAgent = Nothing
+    End If
+  Next i
+  
+  Set pSnapAgent = Nothing
+  Set pSnapenv = Nothing
+Exit Sub
+
+ErrorHandler:
+    HandleError False, "ReturnExtended " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+    Set pLayer = Nothing
+    Set pEdLyrs = Nothing
+    Set pFSnapAgent = Nothing
+    Set pSnapAgent = Nothing
+    Set pSnapenv = Nothing
+End Sub
+'***************************************************************************
+'Name:                  GetCurrentMapScale
+'Initial Author:        Laura Gordon
+'Subsequent Author:     <<Type your name here>>
+'Created:               02/20/2007
+'Purpose:       Get the mapscale of a temp feature
+'Called From:   ITool_OnMouseDown
+'Description:   Get the mapscale of a temp feature
+'Methods:       None
+'Inputs:        None
+'Parameters:    pMIFC As IFeatureClass
+'Outputs:       None
+'Returns:       String
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+Private Function GetCurrentMapScale(pMIFC As IFeatureClass) As String
+
+On Error GoTo ErrorHandler
+
+      Dim pDimensionFeatureTemp As IFeature
+      Dim pDimensionWSEditTemp As IWorkspaceEdit
+      Dim pDimensionDSetTemp As IDataset
+      Dim pDimensionArrowLayerTemp As IFeatureLayer
+      Dim pDimensionArrowFCTemp As IFeatureClass
+
+      Set pDimensionArrowLayerTemp = FindFeatureLayerByDS(g_pFldnames.FCCartoLines)
+      If pDimensionArrowLayerTemp Is Nothing Then
+        MsgBox "The layer, " & g_pFldnames.FCCartoLines & ", is not in the map.", vbExclamation, "Layer not found"
+        m_pEditor.AbortOperation
+        Exit Function
+      End If
+      Set pDimensionArrowFCTemp = pDimensionArrowLayerTemp.FeatureClass
+      Set pDimensionDSetTemp = pDimensionArrowFCTemp
+      Set pDimensionWSEditTemp = pDimensionDSetTemp.Workspace
+
+      'create the arrow feature
+      pDimensionWSEditTemp.StartEditOperation
+      Set pDimensionFeatureTemp = pDimensionArrowFCTemp.CreateFeature
+      Dim pDimensionpointsTemp As IPointCollection4
+      Set pDimensionpointsTemp = New Polyline
+      pDimensionpointsTemp.AddPoint m_pArrowPt1
+      pDimensionpointsTemp.AddPoint m_pArrowPt2
+    
+      Dim pDimensionLineTemp As IPolyline
+      Set pDimensionLineTemp = pDimensionpointsTemp
+
+      Set pDimensionFeatureTemp.Shape = pDimensionLineTemp
+    
+      
+      'Get the current MapNumber
+      Dim sCurrentMapScale As String
+      GetCurrentMapScale = GetValueViaOverlay(pDimensionFeatureTemp.Shape, pMIFC, g_pFldnames.MIMapScaleFN)
+      GetCurrentMapScale = GetCurrentMapScale / 12
+      pDimensionWSEditTemp.StopEditOperation
+              
+      Set pDimensionpointsTemp = Nothing
+      Set pDimensionLineTemp = Nothing
+      Set pDimensionArrowFCTemp = Nothing
+      Set pDimensionArrowLayerTemp = Nothing
+      Set pDimensionDSetTemp = Nothing
+      Set pDimensionWSEditTemp = Nothing
+      Set pDimensionFeatureTemp = Nothing
+Exit Function
+
+ErrorHandler:
+  HandleError False, "ReturnExtended " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+  Set pDimensionpointsTemp = Nothing
+  Set pDimensionLineTemp = Nothing
+  Set pDimensionArrowFCTemp = Nothing
+  Set pDimensionArrowLayerTemp = Nothing
+  Set pDimensionDSetTemp = Nothing
+  Set pDimensionWSEditTemp = Nothing
+  Set pDimensionFeatureTemp = Nothing
+End Function
+
+'***************************************************************************
+'Name:                  GetDimensionArrowSide
+'Initial Author:        Laura Gordon
+'Subsequent Author:     <<Type your name here>>
+'Created:               02/20/2007
+'Purpose:       Get the side of the line the dimension arrows will be placed on; right or left
+'Called From:   ITool_OnMouseDown
+'Description:   Get the side of the line the dimension arrows will be placed on; right or left
+'Methods:       None
+'Inputs:        None
+'Parameters:    None
+'Outputs:       None
+'Returns:       String
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+Private Function GetDimensionArrowSide() As String
+
+On Error GoTo ErrorHandler
+
+    'Determine point location is on the left or right by Dean Anderson, help of Nate Anderson
+    Dim r1              As String
+    Dim slope           As Double
+    Dim yint            As Double
+    Dim mess            As String
+    Dim z               As Double
+
+    slope = 0
+    If m_pArrowPt2.Y <> m_pArrowPt1.Y Then
+        slope = (m_pArrowPt1.Y - m_pArrowPt2.Y) / (m_pArrowPt1.X - m_pArrowPt2.X)
+    End If
+    
+    yint = m_pArrowPt1.Y - (slope * m_pArrowPt1.X)
+    
+    z = (slope * m_pArrowPt3.X) + yint - m_pArrowPt3.Y
+    
+    If m_pArrowPt1.X = m_pArrowPt2.X Then           'vertical
+        If m_pArrowPt3.X = m_pArrowPt1.X Then z = 0
+        If m_pArrowPt1.Y < m_pArrowPt2.Y Then       'going up
+            If m_pArrowPt3.X > m_pArrowPt1.X Then z = 1
+            If m_pArrowPt3.X < m_pArrowPt1.X Then z = -1
+        End If
+        If m_pArrowPt1.Y > m_pArrowPt2.Y Then       'going down
+            If m_pArrowPt3.X < m_pArrowPt1.X Then z = 1
+            If m_pArrowPt3.X > m_pArrowPt1.X Then z = -1
+        End If
+    End If
+    If m_pArrowPt1.Y = m_pArrowPt2.Y Then           'horizontal
+        If m_pArrowPt3.Y = m_pArrowPt1.Y Then z = 0
+        If m_pArrowPt1.X < m_pArrowPt2.X Then       'going right
+            If m_pArrowPt3.Y > m_pArrowPt1.Y Then z = -1
+            If m_pArrowPt3.Y < m_pArrowPt1.Y Then z = 1
+        End If
+        If m_pArrowPt1.X > m_pArrowPt2.X Then       'going left
+            If m_pArrowPt3.Y < m_pArrowPt1.Y Then z = -1
+            If m_pArrowPt3.Y > m_pArrowPt1.Y Then z = 1
+        End If
+    End If
+    
+    If z < 0 Then GetDimensionArrowSide = "left"
+    If z > 0 Then GetDimensionArrowSide = "right"
+    If z = 0 Then GetDimensionArrowSide = "left" '"online"
+    
+    If (m_pArrowPt1.X > m_pArrowPt2.X And m_pArrowPt1.Y > m_pArrowPt2.Y) Or (m_pArrowPt1.X > m_pArrowPt2.X And m_pArrowPt2.Y > m_pArrowPt1.Y) Then
+     If z > 0 Then GetDimensionArrowSide = "left"
+     If z < 0 Then GetDimensionArrowSide = "right"
+     If z = 0 Then GetDimensionArrowSide = "left" '"online"
+    End If
+
+Exit Function
+
+ErrorHandler:
+  HandleError False, "ReturnExtended " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+End Function
+
+'***************************************************************************
+'Name:                  GetChange
+'Initial Author:        Laura Gordon
+'Subsequent Author:     <<Type your name here>>
+'Created:               02/20/2007
+'Purpose:       Get the size of the dimension arrows so that all are standard
+'Called From:   ITool_OnMouseDown
+'Description:   Get the size of the dimension arrows so that all are standard right or left
+'Methods:       None
+'Inputs:        None
+'Parameters:    sCurrentMapScale, ByVal Shift As Long
+'Outputs:       None
+'Returns:       Integer
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+Private Function GetChange(sCurrentMapScale, ByVal Shift As Long) As Integer
+
+On Error GoTo ErrorHandler
+
+    If sCurrentMapScale = "100" Then
+        GetChange = 15
+    ElseIf sCurrentMapScale = "200" Then
+        GetChange = 30
+    ElseIf sCurrentMapScale = "400" Then
+        GetChange = 60
+    ElseIf sCurrentMapScale = "2000" Then
+        GetChange = 300
+    End If
+    
+Exit Function
+
+ErrorHandler:
+  HandleError False, "ReturnExtended " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+End Function
+'++ END Added by Laura Gordon, 02/20/2007
+
