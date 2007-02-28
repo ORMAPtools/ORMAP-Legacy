@@ -3379,6 +3379,33 @@ Public Function UserName() As String
     End If
 End Function
 
+Public Function gfn_s_GetWindowsTempPath() As String
+'************************************************************
+'Name: gfn_s_GetWindowsTempPath
+'Purpose: returns the string value for the windoze temp path
+'Method: Some users may define their temp directory in the environment variable.
+'In WinXP each user has their own temp directory to write to because they may
+'not have permission to write to C:\temp or c:\windoze\temp.
+'i.e. C:\Documents and Settings\[USERNAME]\Local Settings\Temp.
+'This function DOES NOT add a slash at the end of the string
+'Inputs: None
+'Outputs: The windows temp path as a string
+'Assumptions: Every system has a temp directory
+'Errors:None known
+'Developer: James Moore
+'Date: 02/08/2000
+'Revisions:
+'************************************************************
+    Dim lStrLen     As Long
+    Dim sOutPath  As String
+    
+    sOutPath = String$(UNLEN, vbNullChar)
+    
+    lStrLen = GetTempPath(UNLEN, sOutPath)
+    
+    gfn_s_GetWindowsTempPath = Left$(sOutPath, lStrLen)
+    
+End Function
 '#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
 '#                                                                         #
 '# All functions after this point are not used in the DLL; that is nothing #
@@ -4005,5 +4032,3 @@ ErrorHandler:
                 Err.Description, _
                 4
 End Function
-
-
