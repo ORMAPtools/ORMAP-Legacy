@@ -2,8 +2,8 @@ Attribute VB_Name = "basWin32API"
 
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision:$
-' Date of last change: $Date:$
+' SCC Revision number: $Revision$
+' Date of last change: $Date$
 
 ' File name:            basWin32API.bas
 '
@@ -86,6 +86,10 @@ Public Declare Function ShellExecute& _
 Public Declare Sub Sleep _
                Lib "kernel32" _
                (ByVal dwMilliseconds As Long)
+Public Declare Function GetTempPath Lib "kernel32" _
+                            Alias "GetTempPathA" _
+                            (ByVal nBufferLength As Long, _
+                            ByVal lpBuffer As String) As Long
 
 '------------------------------
 ' Public Enums and Constants
