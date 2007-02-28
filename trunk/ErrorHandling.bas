@@ -84,7 +84,7 @@ Private Sub DisplayVersion4Dialog( _
     Dim objFile As Scripting.TextStream
     
     Set objFileSys = New Scripting.FileSystemObject
-    Set objFile = objFileSys.OpenTextFile("C:\Temp\Errors.log", ForAppending, True)
+    Set objFile = objFileSys.OpenTextFile(gfn_s_GetWindowsTempPath & "/Errors.log", ForAppending, True)
     objFile.WriteBlankLines 2
     objFile.WriteLine "Record Call Stack Sequence - Bottom line is error line." & vbCrLf & _
                               vbCrLf & _
