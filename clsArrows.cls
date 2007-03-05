@@ -689,7 +689,11 @@ On Error GoTo ErrorHandler
                     'Check to be sure the 2 points are not equal
                     If (m_pArrowPt1.X = m_pArrowPt2.X) And (m_pArrowPt1.Y = m_pArrowPt2.Y) Then
                         Call MsgBox("Two input points can't be equal, dimension arrows terminated.", vbInformation, "Invalid Input")
-                        m_pEditor.AbortOperation
+                        '++ START Laura Gordon 03/05/07, Prevent error.
+                        Call ITool_OnKeyDown(vbKeyQ, 1)
+                        Exit Sub
+                        'm_pEditor.AbortOperation
+                        '++ END Laura Gordon 03/05/07
                     End If
             
                     'Get the mapscale
