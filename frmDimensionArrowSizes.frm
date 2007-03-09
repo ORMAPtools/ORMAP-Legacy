@@ -129,7 +129,7 @@ Public Property Get RatioCurve() As Double
 End Property
 
 Private Sub cmdApply_Click()
-    'Check to be sure value is numeric, if so set variable to user input
+    'Checks to be sure value is numeric, if so set variable to user input
     If IsNumeric(txtRatioLine.Text) Then
         m_sRatioLine = txtRatioLine.Text
     Else
