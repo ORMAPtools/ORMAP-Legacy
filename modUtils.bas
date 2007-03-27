@@ -1762,7 +1762,26 @@ On Error GoTo ErrorHandler
     
     '++ START JWM 10/31/2006 assigning Maptaxlot field
     sMapTaxlotID = pORMAPNumber.ORMAPNumber & sTaxlotVal
-    a_pFeat.Value(lTLMapTaxlotFld) = gfn_s_CreateMapTaxlotValue(sMapTaxlotID, g_pFldnames.MapTaxlotFormatString)
+    '@@ START NIS(LCOG) 02/5/2007
+    '@@ DESCR: Add special code for Lane County (see comment below).
+    Dim iCountyCode As Integer
+    iCountyCode = CInt(Left$(sMapTaxlotID, 2))
+    Select Case iCountyCode
+    Case 1 To 19, 21 To 36
+        a_pFeat.Value(lTLMapTaxlotFld) = gfn_s_CreateMapTaxlotValue(sMapTaxlotID, g_pFldnames.MapTaxlotFormatString)
+    Case 20
+        ' 1.  Lane County uses a 2-digit numeric identifier for ranges.
+        '     Special handling is required for east ranges, where 02E is
+        '     stored as 25, 03E as 35, etc.
+        ' 2.  ORMAP standards (OCDES (pg 13); Taxmap Data Model (pg 11)) assert that
+        '     this field should be equal to MAPNUMBER + TAXLOT. In this case, MAPNUMBER
+        '     is already in the right format, thus removing the need for the
+        '     gfn_s_CreateMapTaxlotValue function. Also, in this case, TAXLOT is padded
+        '     on the left with zeros to make it always a 5-digit number (see comment
+        '     above).
+        a_pFeat.Value(lTLMapTaxlotFld) = sExistMapNum & sTaxlotVal
+    End Select
+    '@@ END NIS(LCOG) 02/5/2007
     '++ END JWM 10/31/2006
     
     ' Recalculate ORMAP Taxlot Number
