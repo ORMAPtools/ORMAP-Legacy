@@ -29,8 +29,8 @@ Attribute VB_Exposed = True
 '
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision$
-' Date of last change: $Date$
+' SCC Revision number: $Revision: 107 $
+' Date of last change: $Date: 2007-03-09 13:03:37 -0800 (Fri, 09 Mar 2007) $
 '
 '
 ' File name:            cmdArrows

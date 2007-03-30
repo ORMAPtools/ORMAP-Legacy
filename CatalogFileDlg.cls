@@ -29,8 +29,8 @@ Attribute VB_Exposed = True
 '
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision$
-' Date of last change: $Date$
+' SCC Revision number: $Revision: 88 $
+' Date of last change: $Date: 2007-02-21 09:27:42 -0800 (Wed, 21 Feb 2007) $
 '
 '
 ' File name:            clsCatalogFileDlg

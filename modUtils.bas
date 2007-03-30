@@ -17,8 +17,8 @@ Attribute VB_Name = "basUtilities"
 '
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision$
-' Date of last change: $Date$
+' SCC Revision number: $Revision: 112 $
+' Date of last change: $Date: 2007-03-27 16:12:39 -0700 (Tue, 27 Mar 2007) $
 '
 '
 ' File name:            basUtilities
