@@ -1,14 +1,16 @@
 VERSION 5.00
 Begin VB.Form frmArrows 
    Caption         =   "Add"
-   ClientHeight    =   3135
+   ClientHeight    =   2475
    ClientLeft      =   930
    ClientTop       =   2355
    ClientWidth     =   2925
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
-   ScaleHeight     =   3135
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   2475
    ScaleWidth      =   2925
+   ShowInTaskbar   =   0   'False
    Begin VB.CommandButton cmdQuit 
       Caption         =   "Quit"
       BeginProperty Font 
@@ -22,8 +24,8 @@ Begin VB.Form frmArrows
       EndProperty
       Height          =   495
       Left            =   120
-      TabIndex        =   4
-      Top             =   2400
+      TabIndex        =   5
+      Top             =   1920
       Width           =   855
    End
    Begin VB.CommandButton cmdHelp 
@@ -38,9 +40,9 @@ Begin VB.Form frmArrows
          Strikethrough   =   0   'False
       EndProperty
       Height          =   495
-      Left            =   1440
+      Left            =   1320
       TabIndex        =   3
-      Top             =   2400
+      Top             =   1920
       Width           =   855
    End
    Begin VB.CommandButton cmdHook 
@@ -98,7 +100,7 @@ Begin VB.Form frmArrows
       Caption         =   "none"
       Height          =   375
       Left            =   1200
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   360
       Visible         =   0   'False
       Width           =   1575
@@ -122,100 +124,80 @@ Attribute VB_Exposed = False
 '    GNU General Public License for more details located in AppSpecs.bas file
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision: 31 $
-' Date of last change: $Date: 2006-11-15 12:05:08 -0800 (Wed, 15 Nov 2006) $
+' SCC Revision number: $Revision: 94 $
+' Date of last change: $Date: 2007-02-27 09:21:17 -0800 (Tue, 27 Feb 2007) $
 '
 '
 '
-' File name:            frmArrows
+' File name:        frmArrows
 '
-' Initial Author:
+' Initial Author:   <<Unknown>>
 '
 ' Date Created:     10/11/2006
 '
-' Description:  FORM USED TO GENERATE HOOKS AND ARROWS
-'
+' Description:
+'       Form used to generate hooks and arrows
 '
 ' Entry points:
-'       List the public variables and their purposes.
-'       List the properties and routines that the module exposes to the rest of the program.
+'       Form Object
+'       Properties
+'           Arrows
+'               The type of arrow that is currently active
 '
 ' Dependencies:
-'       How does this file depend or relate to other files?
+'       File Dependencies
+'           basGlobals
+'           basUtilities
 '
 ' Issues:
-'       What are unsolved bugs, bottlenecks,
-'       possible future enhancements, and
-'       descriptions of other issues.
+'       None known at this time (2/6/2007 JWalton)
 '
 ' Method:
-'       Describe any complex details that make sense on the file level.  This includes explanations
-'       of complex algorithms, how different routines within the module interact, and a description
-'       of a data structure used in the module.
+'       None
 '
 ' Updates:
-'               Jim Moore added this header comment section on 10/11/06
+'       10/11/06 -- Jim Moore added this header comment section
+'       2/6/2007 -- All inline documentation reviewed/revised (JWalton)
 
 Option Explicit
 '******************************
-' Global/Public Definitions
-'------------------------------
-' Public API Declarations
-'------------------------------
-
-'------------------------------
-' Public Enums and Constants
-'------------------------------
-
-'------------------------------
-' Public variables
-'------------------------------
-
-'------------------------------
-' Public Types
-'------------------------------
-
-'------------------------------
-' Public loop variables
-'------------------------------
-
-'******************************
 ' Private Definitions
-'------------------------------
-' Private API declarations
-'------------------------------
-
 '------------------------------
 ' Private Variables
 '------------------------------
-'jwm dead variable Private m_pApp As IApplication
-'jwm dead variable Private m_pMxDoc As IMxDocument
-'------------------------------
-'Private Constants and Enums
-'------------------------------
+Private m_sArrowType As String
 
-'------------------------------
-' Private Types
-'------------------------------
-
-'------------------------------
-' Private loop variables
-'------------------------------
+Public Property Get ArrowType() As String
+    ArrowType = m_sArrowType
+End Property
 
 Private Sub cmdArrow_Click()
-    Me.lblCurrentTool.Caption = "arrow"
+    m_sArrowType = "Arrow"
+    Me.Caption = "Arrows (Arrow)"
     Me.Hide
 End Sub
 
 Private Sub cmdDimension_Click()
-    Me.lblCurrentTool.Caption = "dimension"
+    m_sArrowType = "Dimension"
+    Me.Caption = "Arrows (Dimension)"
+    Me.Hide
+End Sub
+
+Private Sub cmdHook_Click()
+    m_sArrowType = "Hook"
+    Me.Caption = "Arrows (Hook)"
     Me.Hide
 End Sub
 
 Private Sub cmdHelp_Click()
+    '++ START JWalton 2/7/2006 Centralized Variable Declarations
+    ' Variable declarations
     Dim sFilePath As String
+    '++ END JWalton
+    
+    
     sFilePath = app.Path & "\" & "Arrows_help.rtf"
-    If modUtils.FileExists(sFilePath) Then
+    If basUtilities.FileExists(sFilePath) Then
 '++ START JWM 10/16/2006 using new method to open help file
             gsb_StartDoc Me.hwnd, sFilePath
 '++ START/END JWM 10/16/2006
@@ -224,11 +206,45 @@ Private Sub cmdHelp_Click()
     End If
 End Sub
 
-Private Sub cmdHook_Click()
-    Me.lblCurrentTool.Caption = "hook"
-    Me.Hide
+'++ START JWalton 1/29/2007
+Private Sub Form_Load()
+    ' Sets the form status to open
+    g_pForms.SetFormStatus Me.Name, True
 End Sub
 
-Private Sub cmdQuit_Click()
-    Unload frmArrows
+Private Sub Form_QueryUnload( _
+  Cancel As Integer, _
+  UnloadMode As Integer)
+    ' Sets the form status to not open
+    g_pForms.SetFormStatus Me.Name, False
 End Sub
+'++ END JWalton 1/29/2007
+
+'++ START Added by Laura Gordon, 02/20/2007
+'***************************************************************************
+'Name:                  cmdQuit
+'Initial Author:        Laura Gordon
+'Subsequent Author:     <<Unknown>>
+'Created:               02/20/2007
+'Purpose:       Quit the form
+'Called From:   cmdQuit Control
+'Description:   Unloads the form (note added a quit button to the form - match other forms)
+'Methods:       None
+'Inputs:        None
+'Parameters:    None
+'Outputs:       None
+'Returns:       None
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+
+Private Sub cmdQuit_Click()
+  
+    Unload Me
+
+End Sub
+'++ END Added by Laura Gordon, 02/20/2007

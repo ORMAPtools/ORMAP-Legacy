@@ -1,8 +1,8 @@
 Attribute VB_Name = "AppSpecs"
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision: 14 $
-' Date of last change: $Date: 2006-11-14 13:07:13 -0800 (Tue, 14 Nov 2006) $
+' SCC Revision number: $Revision: 77 $
+' Date of last change: $Date: 2007-02-15 10:24:03 -0800 (Thu, 15 Feb 2007) $
 '
 '
 'Project Name: ORMap Parcel Editing Tool
@@ -294,25 +294,32 @@ Attribute VB_Name = "AppSpecs"
 'Description:
 '
 'Components in Project:
-'   cmdTaxlotAssignment
-'   clsFieldNames
-'   cmdLocate
-'   cmdTaxlotCombine
-'   cmdArrows
-'   cmdMapIndex
-'   clsTaxLotEditingToolbar
-'   globals
-'   IniFiles
-'   frmTaxlotAssignment
-'   frmMapIndex
-'   frmLocate
-'   frmCombine
-'   modUtils
-'   clsRowChanged
-'   ErrorHandling
-'   frmArrows
-'
-'   AppSpecs
+'   Forms
+'       frmArrows
+'       frmCombine
+'       frmLocate
+'       frmMapIndex
+'       frmTaxlotAssignment
+'   Code Modules
+'       AppSpecs
+'       basErrorHandling
+'       basGlobals
+'       basIniFiles
+'       basUtilities
+'       basWin32API
+'   Class Modules
+'       clsCatalogFileDlg
+'       clsFieldNames
+'       clsFormsCatalog
+'       clsRowChanged
+'       clsTaxLotEditingToolbar
+'       cmdArrows
+'       cmdAutoUpdate
+'       cmdLocate
+'       cmdMapIndex
+'       cmdTaxlotAssignment
+'       cmdTaxlotCombine
+'       ORMAPNumber
 '
 'References:
 '   Visual Basic For Applications
@@ -332,6 +339,7 @@ Attribute VB_Name = "AppSpecs"
 '   ESRI DisplayUI Object Library
 '   ESRI Editor Object Library
 '   ESRI EditorExt Object Library
+'   ESRI Error Handler v1.0
 '   ESRI Error Handler Remover
 '   ESRI Framework Object Library
 '   ESRI GeoDatabase Object Library
@@ -339,8 +347,7 @@ Attribute VB_Name = "AppSpecs"
 '   ESRI Geometry Object Library
 '   ESRI System Object Library
 '   ESRI SystemUI Object Library
-'   Microsoft ActiveX Data Objects 2.8 Library
-'   Microsoft Forms 2.0 Object Library
 '   ErrorHandlerUI 1.0 Type Library
+'   Microsoft Scripting Runtime
 
 
