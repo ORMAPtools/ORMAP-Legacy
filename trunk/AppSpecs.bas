@@ -297,6 +297,7 @@ Attribute VB_Name = "AppSpecs"
 '   Forms
 '       frmArrows
 '       frmCombine
+'       frmDimensionArrowSizes
 '       frmLocate
 '       frmMapIndex
 '       frmTaxlotAssignment
@@ -308,6 +309,8 @@ Attribute VB_Name = "AppSpecs"
 '       basUtilities
 '       basWin32API
 '   Class Modules
+'       CategoryIDs
+'       CategoryInstall
 '       clsCatalogFileDlg
 '       clsFieldNames
 '       clsFormsCatalog

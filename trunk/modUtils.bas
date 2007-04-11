@@ -1538,6 +1538,12 @@ End Function
 '                           ORMAPNumber object
 '                           Removed variable sExistOMMAPNum as it is no
 '                           longer necessary
+'JWalton        4/11/2007   Changed the spatial search from the center of
+'                           the feature a_pFeat to the geometry of a_pFeat
+'                           This fixes a bug that is caused by the eventu-
+'                           lity that a centroid is not contained by the
+'                           enclosing polygon, and, possibly the enclosing
+'                           map index.
 '***************************************************************************
 
 Public Sub CalcTaxlotValues( _
@@ -1682,17 +1688,22 @@ On Error GoTo ErrorHandler
     
     ' Return and evaluate the ORMAP Number from the Map index
     Set pORMAPNumber = New ORMAPNumber
-    If Not pORMAPNumber.ParseNumber(GetValueViaOverlay(pCenter, _
+'++ START JWalton 4/11/2007 -- Replaced pCenter with a_pFeat.ShapeCopy
+    If Not pORMAPNumber.ParseNumber(GetValueViaOverlay(a_pFeat.ShapeCopy, _
                                                        a_pMIFLayer.FeatureClass, _
                                                        g_pFldnames.MIORMAPMapNumberFN)) Then
+'++ END JWalton 4/11/2007
+    
+    
         ' Exits if there is no value, or an invalid value
         GoTo Process_Exit
     End If
     
     ' Return and evaluate the Map Number from the Map Index
-    sExistMapNum = GetValueViaOverlay(pCenter, a_pMIFLayer.FeatureClass, g_pFldnames.MIMapNumberFN)
+'++ START JWalton 4/11/2007 -- Replaced pCenter with a_pFeat.ShapeCopy
+    sExistMapNum = GetValueViaOverlay(a_pFeat.ShapeCopy, a_pMIFLayer.FeatureClass, g_pFldnames.MIMapNumberFN)
+'++ END JWalton 4/11/2007
     If Len(sExistMapNum) = 0 Then GoTo Process_Exit 'If no value for whatever reason, don't continue
-    
     
     ' Store individual components of the map number in taxlot
     a_pFeat.Value(lOMNumFld) = pORMAPNumber.ORMAPNumber
