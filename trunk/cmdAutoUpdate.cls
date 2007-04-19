@@ -543,7 +543,9 @@ End Sub
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
-
+'JWalton        4/19/2007   Fixed a bug produced when attempting to get a 
+'                           reference to a nonexistent object class repre-
+'                           senting Cancelled Records.
 '***************************************************************************
 
 Private Sub m_pEditorEvents_OnDeleteFeature( _
@@ -568,12 +570,16 @@ On Error GoTo ErrorHandler
         Set pDSet = m_pTaxlotFClass
         Set pWSpace = pDSet.Workspace
         Set pFWSpace = pWSpace
-        Set pCNTable = pFWSpace.OpenTable(g_pFldnames.TabCancelled)
         
-        ' Handles the event that Cancelled Numbers does not exist
+#START JWalton 4/19/2007
+        ' Attempts to get a reference to the Cancelled Number table
+        On Error Resume Next
+        Set pCNTable = pFWSpace.OpenTable(g_pFldnames.TabCancelled)
         If pCNTable Is Nothing Then
             GoTo Process_Exit
         End If
+        On Error GoTo ErrorHandler
+#End JWalton 4/19/2007
         
         ' Retrieve field positions
         m_lTLTaxlotFld = m_pTaxlotFClass.FindField(g_pFldnames.TLTaxlotFN)
