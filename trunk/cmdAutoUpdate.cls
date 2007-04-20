@@ -571,7 +571,7 @@ On Error GoTo ErrorHandler
         Set pWSpace = pDSet.Workspace
         Set pFWSpace = pWSpace
         
-#START JWalton 4/19/2007
+'#START JWalton 4/19/2007
         ' Attempts to get a reference to the Cancelled Number table
         On Error Resume Next
         Set pCNTable = pFWSpace.OpenTable(g_pFldnames.TabCancelled)
@@ -579,7 +579,7 @@ On Error GoTo ErrorHandler
             GoTo Process_Exit
         End If
         On Error GoTo ErrorHandler
-#End JWalton 4/19/2007
+'#End JWalton 4/19/2007
         
         ' Retrieve field positions
         m_lTLTaxlotFld = m_pTaxlotFClass.FindField(g_pFldnames.TLTaxlotFN)
