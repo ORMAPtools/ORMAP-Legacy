@@ -914,8 +914,10 @@ On Error GoTo ErrorHandler
                         'Create the dimension arrow from the collection of 3 points (1 input, 2 calculated)
                         Set pDimensionLine = pDimensionPoints
                         
+                        'START Laura Gordon 04/23/07, changed the direction fo the line, per Lane Co. request.
                         'Reverse the line to = from and from = to so arrow points the correct way
-                        pDimensionLine.ReverseOrientation
+                        'pDimensionLine.ReverseOrientation
+                        'END Laura Gordon 04/23/07
                         
                         pDimensionLine.Smooth pDimensionLine.Length / 10
                 
