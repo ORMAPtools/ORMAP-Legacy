@@ -465,7 +465,9 @@ On Error GoTo ErrorHandler
         obj.Value(lAnnoMapNumFld) = sMapNum
         If lMapScaleFld > -1 Then
             vMapScaleVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
-            If Not IsNull(vMapScaleVal) Then
+            '++ START JWalton 5/7/2007
+            If vMapScaleVal = "" Then
+            '++ END JWalton 5/7/2007
                 obj.Value(lMapScaleFld) = vMapScaleVal
             End If
         End If
@@ -485,7 +487,9 @@ On Error GoTo ErrorHandler
             If pMIFlayer Is Nothing Then GoTo OnCreateFeature_Process_Exit
             Set pMIFclass = pMIFlayer.FeatureClass
             vMapScaleVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
-            If Not IsNull(vMapScaleVal) Then
+            '++ START JWalton 5/7/2007
+            If vMapScaleVal = "" Then
+            '++ STOP JWalton 5/7/2007
             '++ START JWalton 1/29/2007 Corrects a data incompatibility error in value assignment to the field
                 If vMapScaleVal = "" Then
                     obj.Value(lMapScaleFld) = Null
@@ -497,7 +501,9 @@ On Error GoTo ErrorHandler
             ' If a dataset with MapNumber, populate it
             If lMapNumFld > -1 Then
                 vMapNumVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
-                If Not IsNull(vMapNumVal) Then
+                '++ START JWalton 5/7/2007
+                If vMapNumVal = "" Then
+                '++ END JWalton 5/7/2007
                 '++ START JWalton 1/29/2007 Corrects a data incompatibility error in value assignment to the field
                     If vMapNumVal = "" Then
                         obj.Value(lMapNumFld) = Null
@@ -543,7 +549,7 @@ End Sub
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
-'JWalton        4/19/2007   Fixed a bug produced when attempting to get a 
+'JWalton        4/19/2007   Fixed a bug produced when attempting to get a
 '                           reference to a nonexistent object class repre-
 '                           senting Cancelled Records.
 '***************************************************************************
