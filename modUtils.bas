@@ -107,6 +107,7 @@ Attribute VB_Name = "basUtilities"
 ' Updates:
 '       10/11/2006 -- Added comment header to each function (JWM)
 '       2/8/2007 -- All inline documentation reviewed/revised (JWalton)
+'       5/7/2007 -- Modified return type of function GetValueViaOverlay from Variant to String.
 
 Option Explicit
 '******************************
@@ -662,12 +663,17 @@ End Function
 '----------     ------      ---------
 'JWM            10-30-06    Checking the length of sFldName in 'if'
 '                           statement instead of checking for a empty string
+'JWalton        5/7/2007    Modified the return type of the function from
+'                           Variant to String.
+'                           All calls to this function were also modified
+'                           to deal with the potential of the zero-length
+'                           string versus Null.
 '***************************************************************************
 
 Public Function GetValueViaOverlay( _
   ByRef pGeom As esriGeometry.IGeometry, _
   ByRef pOverlayFC As esriGeoDatabase.IFeatureClass, _
-  ByVal sFldName As String) As Variant
+  ByVal sFldName As String) As String
 On Error GoTo ErrorHandler
     '++ START JWalton 2/7/2007 Centralized Variable Declarations
     Dim pFeat As esriGeoDatabase.IFeature
@@ -684,17 +690,17 @@ On Error GoTo ErrorHandler
                 lFld = pFeat.Fields.FindField(sFldName)
                 If lFld > -1 Then
                     'Get the  value
-                    GetValueViaOverlay = IIf(IsNull(pFeat.Value(lFld)), Null, pFeat.Value(lFld))
+                    GetValueViaOverlay = IIf(IsNull(pFeat.Value(lFld)), "", pFeat.Value(lFld))
                   Else
                     '++ START JWalton 2/1/2007 Added Else Clause
-                    GetValueViaOverlay = Null
+                    GetValueViaOverlay = ""
                     '++ END JWalton 2/1/2007
                 End If
             End If
         End If
       Else
         '++ START JWalton 2/7/2007 Added Else Clause
-        GetValueViaOverlay = Null
+        GetValueViaOverlay = ""
         '++ END JWalton 2/7/2007
     End If
 
@@ -704,7 +710,7 @@ Process_Exit:
 ErrorHandler:
     '++ START JWalton 2/7/2007
     ' Return Null in the case of an error
-    GetValueViaOverlay = Null
+    GetValueViaOverlay = ""
     '++END JWalton 2/7/2007
 End Function
 
@@ -2428,7 +2434,9 @@ On Error GoTo ErrorHandler
     
         ' Update the size to reflect current mapscale
         sMapScale = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
-        If IsNull(sMapScale) Then GoTo Process_Exit
+        '++ START JWalton 5/7/2006
+        If sMapScale = "" Then GoTo Process_Exit
+        '++ STOP JWalton 5/7/2007
         
         ' Determine which annotation class this is
         Set pAnnoClass = pObj.Class
