@@ -1,8 +1,8 @@
 Attribute VB_Name = "AppSpecs"
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision$
-' Date of last change: $Date$
+' SCC Revision number: $Revision: 123 $
+' Date of last change: $Date: 2007-04-11 11:47:48 -0700 (Wed, 11 Apr 2007) $
 '
 '
 'Project Name: ORMap Parcel Editing Tool

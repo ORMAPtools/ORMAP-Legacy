@@ -29,8 +29,8 @@ Attribute VB_Exposed = True
 '
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision$
-' Date of last change: $Date$
+' SCC Revision number: $Revision: 144 $
+' Date of last change: $Date: 2007-05-11 11:14:13 -0700 (Fri, 11 May 2007) $
 '
 ' File name:            cmdLocate
 '

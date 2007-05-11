@@ -82,8 +82,8 @@ Attribute VB_Exposed = False
 '
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision$
-' Date of last change: $Date$
+' SCC Revision number: $Revision: 77 $
+' Date of last change: $Date: 2007-02-15 10:24:03 -0800 (Thu, 15 Feb 2007) $
 '
 '
 ' File name:            frmLocate

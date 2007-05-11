@@ -29,8 +29,8 @@ Attribute VB_Exposed = True
 '
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision$
-' Date of last change: $Date$
+' SCC Revision number: $Revision: 95 $
+' Date of last change: $Date: 2007-02-27 09:21:30 -0800 (Tue, 27 Feb 2007) $
 '
 '
 ' File name:            cmdTaxlotAssignment

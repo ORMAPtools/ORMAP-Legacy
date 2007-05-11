@@ -124,8 +124,8 @@ Attribute VB_Exposed = False
 '    GNU General Public License for more details located in AppSpecs.bas file
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision$
-' Date of last change: $Date$
+' SCC Revision number: $Revision: 94 $
+' Date of last change: $Date: 2007-02-27 09:21:17 -0800 (Tue, 27 Feb 2007) $
 '
 '
 '
