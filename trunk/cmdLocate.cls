@@ -355,7 +355,7 @@ End Sub
 '***************************************************************************
 'Name:                  m_pViewEvents_ItemAdded
 'Initial Author:        John Walton
-'Subsequent Author:     <<Type your name here>>
+'Subsequent Author:     James Moore
 'Created:               2/12/2007
 'Purpose:       Insure proper disablement of the control when a map document
 '               is changed
@@ -367,15 +367,18 @@ End Sub
 'Parameters:    None
 'Outputs:       None
 'Returns:       None
-'Errors:        This routine raises no known errors.
+'Errors:        This routine will raise an error if another unrelated feature class is added
+'                   to the TOC and it does not have a Name property.
 'Assumptions:   None
 'Updates:
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
+'jim moore      5-10-07     Added error handling to trap the error and exit if the Item variant does not have a name property. Tracker number 1710184
 '***************************************************************************
 
 Private Sub m_pViewEvents_ItemAdded(ByVal Item As Variant)
+On Error GoTo ItemAdded_Error
     ' Variable declarations
     Dim sName As String
     
@@ -386,12 +389,27 @@ Private Sub m_pViewEvents_ItemAdded(ByVal Item As Variant)
             Reset
         End If
     End If
+ItemAdded_Exit:
+Exit Sub
+
+ItemAdded_Error:
+Select Case Err.Number
+Case 424 'Object required
+    Resume ItemAdded_Exit
+Case Else
+HandleError True, _
+                "m_pViewEvents_ItemAdded " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
+End Select
 End Sub
 
 '***************************************************************************
-'Name:                  m_pViewEvents_ItemAdded
+'Name:                  m_pViewEvents_ItemDeleted
 'Initial Author:        John Walton
-'Subsequent Author:     <<Type your name here>>
+'Subsequent Author:     James Moore
 'Created:               2/12/2007
 'Purpose:       Insure proper disablement of the control when a map document
 '               is changed
@@ -403,26 +421,43 @@ End Sub
 'Parameters:    None
 'Outputs:       None
 'Returns:       None
-'Errors:        This routine raises no known errors.
+'Errors:        This routine will raise an error if another unrelated feature class is
+'                   added to the TOC and it does not have a Name property.
 'Assumptions:   None
 'Updates:
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
+'jim moore      5-10-07     Added error handling to trap the error and exit if the Item variant does not have a name property. Tracker number 1710184
 '***************************************************************************
 
 Private Sub m_pViewEvents_ItemDeleted(ByVal Item As Variant)
+On Error GoTo ItemDeleted_Error
     ' Variable declarations
-    Dim pFeatClass As esriCarto.IFeatureLayer
     Dim sName As String
     
     ' Determines if this class is either the Map Index or Taxlot feature class
     If TypeOf Item Is esriCarto.IFeatureLayer Then
-        sName = Item.Name
-        If sName = g_pFldnames.FCMapIndex Or sName = g_pFldnames.FCTaxlot Then
-            Reset
-        End If
+            sName = Item.Name
+            If sName = g_pFldnames.FCMapIndex Or sName = g_pFldnames.FCTaxlot Then
+                Reset
+            End If
     End If
+ItemDeleted_Exit:
+Exit Sub
+
+ItemDeleted_Error:
+Select Case Err.Number
+    Case 424 ' Object required
+        Resume ItemDeleted_Exit
+    Case Else
+        HandleError True, _
+                    "m_pViewEvents_ItemDeleted " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                    Err.Number, _
+                    Err.Source, _
+                    Err.Description, _
+                    4
+End Select
 End Sub
 
 '***************************************************************************
