@@ -6,7 +6,6 @@ Begin VB.Form frmTaxlotAssignment
    ClientLeft      =   1170
    ClientTop       =   2340
    ClientWidth     =   4200
-   ControlBox      =   0   'False
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
