@@ -3043,8 +3043,12 @@ On Error GoTo gfn_s_CreateMapTaxlotValue_Error
     'set flags for section qtrs
     Select Case iCountyCode
         Case 1 To 19, 21 To 36
-            bHasAlphaQtr = Not IsNumeric(Mid$(as_ORMapTaxlotString, 17, 1))
-            bHasAlphaQtrQtr = Not IsNumeric(Mid$(as_ORMapTaxlotString, 18, 1))
+            If Not Not IsNumeric(Mid$(as_ORMapTaxlotString, 17, 1)) Then
+                bHasAlphaQtr = True
+            End If
+            If Not IsNumeric(Mid$(as_ORMapTaxlotString, 18, 1)) Then
+                bHasAlphaQtrQtr = True
+            End If
         Case 20 'lane county uses a totally numeric identifier for qtrs of sections with zeros as placeholders
             bHasAlphaQtr = False
             bHasAlphaQtrQtr = False
