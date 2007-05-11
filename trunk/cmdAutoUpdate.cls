@@ -389,25 +389,25 @@ End Sub
 'Purpose:       Automatically populate fields in a feature created within a
 '               Map Index feature
 'Called From:   m_pEditorEvents
-'Description:   Given an object, obj.
-'               Update obj with all the ORMAP Elements that can be derived
+'Description:   Given an object, a_Obj.
+'               Update a_Obj with all the ORMAP Elements that can be derived
 '               from an overlaying feature in Map Index.
 'Methods:       None
-'Inputs:        obj - A newly created feature
+'Inputs:        a_Obj - A newly created feature
 'Parameters:    None
 'Outputs:       None
 'Returns:       Nothing
-'Errors:        This procedure produces no known errors
+'Errors:        If the a_Obj parameter does not contain a reference to a IFeature object the UpdateAutoFields will throw an error
 'Assumptions:   None
 'Updates:
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
-'
+'Jim Moore      5-9-07      Checking to see if the object passed to this event is a member of ORMap features. If it's not a member the
+'                                   procedure just falls through.
 '***************************************************************************
-
 Private Sub m_pEditorEvents_OnCreateFeature( _
-  ByVal obj As esriGeoDatabase.IObject)
+  ByVal a_Obj As esriGeoDatabase.IObject)
 On Error GoTo ErrorHandler
     ' Variable declarations
     Dim sMapNum As String
@@ -425,30 +425,31 @@ On Error GoTo ErrorHandler
     Dim vMapScaleVal As Variant
     Dim vMapNumVal As Variant
     
+    If Not IsOrMapFeature(a_Obj) Then GoTo OnCreateFeature_Process_Exit '++ START/END JWM 05/09/2007 Tracker item 1703333++++++
     'These are the autocalculated fields
-    UpdateAutoFields obj
-
-    lMapNumFld = obj.Fields.FindField(g_pFldnames.MIMapNumberFN)
-    lMapScaleFld = obj.Fields.FindField(g_pFldnames.MIMapScaleFN)
+    UpdateAutoFields a_Obj
+  
+    lMapNumFld = a_Obj.Fields.FindField(g_pFldnames.MIMapNumberFN)
+    lMapScaleFld = a_Obj.Fields.FindField(g_pFldnames.MIMapScaleFN)
     
-    If IsTaxlot(obj) Then
+    If IsTaxlot(a_Obj) Then
         'Obtain ORMAPMapnum via overlay and calculate other field values
-        CalcTaxlotValues obj, m_pMIFlayer
+        CalcTaxlotValues a_Obj, m_pMIFlayer
         
-    ElseIf IsAnno(obj) Then
+    ElseIf IsAnno(a_Obj) Then
         'Capture MapNumber for each anno feature created
-        lAnnoMapNumFld = LocateFields(obj.Class, g_pFldnames.MIMapNumberFN)
+        lAnnoMapNumFld = LocateFields(a_Obj.Class, g_pFldnames.MIMapNumberFN)
         If lAnnoMapNumFld = -1 Then GoTo OnCreateFeature_Process_Exit
-        Set pAnnotationFeature = obj
+        Set pAnnotationFeature = a_Obj
         
         'Get the parent feature so mapnumber can be obtained
         lParentID = pAnnotationFeature.LinkedFeatureID
         If lParentID > -1 Then 'Feature linked
-            Set pFeat = GetRelatedObjects(obj)
+            Set pFeat = GetRelatedObjects(a_Obj)
             If pFeat Is Nothing Then GoTo OnCreateFeature_Process_Exit
         Else
             'Not feature linked anno, so we can use the feature as is
-            Set pFeat = obj
+            Set pFeat = a_Obj
         End If
 
         ' Retrieve the map number and scale from the overlaying map index polygon
@@ -462,23 +463,23 @@ On Error GoTo ErrorHandler
         If pMIFlayer Is Nothing Then GoTo OnCreateFeature_Process_Exit
         Set pMIFclass = pMIFlayer.FeatureClass
         sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
-        obj.Value(lAnnoMapNumFld) = sMapNum
+        a_Obj.Value(lAnnoMapNumFld) = sMapNum
         If lMapScaleFld > -1 Then
             vMapScaleVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
             '++ START JWalton 5/7/2007
             If vMapScaleVal = "" Then
             '++ END JWalton 5/7/2007
-                obj.Value(lMapScaleFld) = vMapScaleVal
+                a_Obj.Value(lMapScaleFld) = vMapScaleVal
             End If
         End If
         
         ' Set size based on mapscale
-        SetAnnoSize obj, pFeat
+        SetAnnoSize a_Obj, pFeat
     Else
         ' Update MapScale for all features with a MapScale field (except MapIndex)
-        If lMapScaleFld > -1 And Not IsMapIndex(obj) Then
+        If lMapScaleFld > -1 And Not IsMapIndex(a_Obj) Then
             Set pCenter = New Point
-            Set pFeat = obj
+            Set pFeat = a_Obj
             Set pGeometry = pFeat.Shape
             If pGeometry.IsEmpty Then GoTo OnCreateFeature_Process_Exit
             Set pEnv = pGeometry.Envelope
@@ -492,9 +493,9 @@ On Error GoTo ErrorHandler
             '++ STOP JWalton 5/7/2007
             '++ START JWalton 1/29/2007 Corrects a data incompatibility error in value assignment to the field
                 If vMapScaleVal = "" Then
-                    obj.Value(lMapScaleFld) = Null
+                    a_Obj.Value(lMapScaleFld) = Null
                   Else
-                    obj.Value(lMapScaleFld) = vMapScaleVal
+                    a_Obj.Value(lMapScaleFld) = vMapScaleVal
                 End If
             '++ END JWalton 1/29/2007
             End If
@@ -506,16 +507,16 @@ On Error GoTo ErrorHandler
                 '++ END JWalton 5/7/2007
                 '++ START JWalton 1/29/2007 Corrects a data incompatibility error in value assignment to the field
                     If vMapNumVal = "" Then
-                        obj.Value(lMapNumFld) = Null
+                        a_Obj.Value(lMapNumFld) = Null
                       Else
-                        obj.Value(lMapNumFld) = vMapNumVal
+                        a_Obj.Value(lMapNumFld) = vMapNumVal
                     End If
                 '++ END JWalton 1/29/2007
                 End If
             End If
         End If
     End If
-    
+
 OnCreateFeature_Process_Exit:
     Exit Sub
   
@@ -649,7 +650,7 @@ End Sub
 '***************************************************************************
 'Name:                  m_pViewEvents_ItemAdded
 'Initial Author:        John Walton
-'Subsequent Author:     <<Type your name here>>
+'Subsequent Author:     James Moore
 'Created:               2/12/2007
 'Purpose:       Insure proper disablement of the control when a map document
 '               is changed
@@ -661,31 +662,49 @@ End Sub
 'Parameters:    None
 'Outputs:       None
 'Returns:       None
-'Errors:        This routine raises no known errors.
+'Errors:        This routine will raise an error if another unrelated feature class is
+'                   added to the TOC and it does not have a Name property.
 'Assumptions:   None
 'Updates:
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
+'jim moore      5-10-07     Added error handling to trap the error and exit if the Item variant does not have a Name property. Tracker number 1710184
 '***************************************************************************
 
 Private Sub m_pViewEvents_ItemAdded(ByVal Item As Variant)
+On Error GoTo ItemAdded_Error
     ' Variable declarations
     Dim sName As String
     
     ' Determines if this class is either the Map Index or Taxlot feature class
     If TypeOf Item Is esriCarto.IFeatureLayer Then
-        sName = Item.Name
-        If sName = g_pFldnames.FCMapIndex Or sName = g_pFldnames.FCTaxlot Then
-            Reset
-        End If
+            sName = Item.Name
+            If sName = g_pFldnames.FCMapIndex Or sName = g_pFldnames.FCTaxlot Then
+                Reset
+            End If
     End If
+ItemAdded_Exit:
+Exit Sub
+
+ItemAdded_Error:
+Select Case Err.Number
+    Case 424 'Object required
+        Resume ItemAdded_Exit
+    Case Else
+        HandleError True, _
+                    "m_pViewEvents_ItemAdded " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                    Err.Number, _
+                    Err.Source, _
+                    Err.Description, _
+                    4
+End Select
 End Sub
 
 '***************************************************************************
 'Name:                  m_pViewEvents_ItemAdded
 'Initial Author:        John Walton
-'Subsequent Author:     <<Type your name here>>
+'Subsequent Author:     James Moore
 'Created:               2/12/2007
 'Purpose:       Insure proper disablement of the control when a map document
 '               is changed
@@ -697,17 +716,19 @@ End Sub
 'Parameters:    None
 'Outputs:       None
 'Returns:       None
-'Errors:        This routine raises no known errors.
+'Errors:        This routine will raise an error if another unrelated feature class
+'               is added to the TOC and it does not have a Name property.
 'Assumptions:   None
 'Updates:
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
+'jim moore      5-10-07    Added error handling to trap the error and exit if the Item variant does not have a Name property. Tracker number 1710184
 '***************************************************************************
 
 Private Sub m_pViewEvents_ItemDeleted(ByVal Item As Variant)
+On Error GoTo ItemDeleted_Error
     ' Variable declarations
-    Dim pFeatClass As esriCarto.IFeatureLayer
     Dim sName As String
     
     ' Determines if this class is either the Map Index or Taxlot feature class
@@ -717,6 +738,21 @@ Private Sub m_pViewEvents_ItemDeleted(ByVal Item As Variant)
             Reset
         End If
     End If
+ItemDeleted_Exit:
+Exit Sub
+
+ItemDeleted_Error:
+Select Case Err.Number
+    Case 424 'Object required
+        Resume ItemDeleted_Exit
+    Case Else
+        HandleError True, _
+                    "m_pViewEvents_ItemDeleted " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                    Err.Number, _
+                    Err.Source, _
+                    Err.Description, _
+                    4
+End Select
 End Sub
 
 '***************************************************************************
