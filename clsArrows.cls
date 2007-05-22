@@ -574,6 +574,10 @@ On Error GoTo ErrorHandler
     Dim dRatioCurve As Double
     '++ END Laura Gordon
     
+    '++ START Laura Gordon 05/21/07, adding user input smooth option
+    Dim dSmoothRatio As Double
+    '++ END Laura Gordon
+    
     ' Set the in use flag
     m_bInUse = True
     
@@ -728,272 +732,315 @@ On Error GoTo ErrorHandler
                     Set m_pArrowPt3 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
                     DrawArrows
                     
-                    
-                    'Check to be sure the 2 points are not equal
-                    If (m_pArrowPt1.X = m_pArrowPt2.X) And (m_pArrowPt1.Y = m_pArrowPt2.Y) Then
-                        Call MsgBox("Two input points can't be equal, dimension arrows terminated.", vbInformation, "Invalid Input")
-                        '++ START Laura Gordon 03/05/07, Prevent error.
-                        Call ITool_OnKeyDown(vbKeyQ, 1)
-                        Exit Sub
-                        'm_pEditor.AbortOperation
-                        '++ END Laura Gordon 03/05/07
-                    End If
-            
-                    'Get the mapscale
-                    sCurrentMapScale = GetCurrentMapScale(pMIFC)
-                    
-                    'Get the side the dimension arrows should be on based upon the 3rd input point
-                    sSide = GetDimensionArrowSide
-                    
-                    'Create two dimension arrows, one on the left and one on the right
-                    Dim lngIndex As Long
-                    For lngIndex = 1 To 2
+                        'Check to be sure the 2 points are not equal
+                        If (m_pArrowPt1.X = m_pArrowPt2.X) And (m_pArrowPt1.Y = m_pArrowPt2.Y) Then
+                            Call MsgBox("Two input points can't be equal, dimension arrows terminated.", vbInformation, "Invalid Input")
+                            '++ START Laura Gordon 03/05/07, Prevent error.
+                            Call ITool_OnKeyDown(vbKeyQ, 1)
+                            Exit Sub
+                            'm_pEditor.AbortOperation
+                            '++ END Laura Gordon 03/05/07
+                        End If
+                
+                        'Get the mapscale
+                        sCurrentMapScale = GetCurrentMapScale(pMIFC)
                         
-                        Dim pDimensionLine As IPolyline4
-                        Dim pDimensionPoints As IPointCollection4
-                        Set pDimensionPoints = New Polyline
+                        'Get the side the dimension arrows should be on based upon the 3rd input point
+                        sSide = GetDimensionArrowSide
                         
-                        'Add starting point
-                        pDimensionPoints.AddPoint m_pArrowPt1
+                        'Create two dimension arrows, one on the left and one on the right
+                        Dim lngIndex As Long
+                        For lngIndex = 1 To 2
                         
-                        'Instanciate the temp points
-                        Set m_pArrowPtTemp = New Point
-                        Set m_pArrowPtTemp2 = New Point
-                        
-                        'Set the distance of change for the dimension arrows based upon the mapscale
-                        iChange = GetChange(sCurrentMapScale, Shift)
-                        
-                        'Get 3 calculated points for a hook
-                            'Create the line from input
-                            pDimensionPoints.AddPoint m_pArrowPt1
-                            pDimensionPoints.AddPoint m_pArrowPt2
-                            Set pDimensionLine = pDimensionPoints
-                        
-                            '++ START Laura Gordon 03/08/07, get user sizes
-                            'Check the ratio changes
-                            If m_bolDimensionChanged = True Then
-                                If frmDimensionArrowSizes.RatioLine > 0 Then
-                                    dRatioLine = frmDimensionArrowSizes.RatioLine
-                                Else
-                                    dRatioLine = 1.75
-                                End If
-                                
-                                If frmDimensionArrowSizes.RatioCurve > 0 Then
-                                    dRatioCurve = frmDimensionArrowSizes.RatioCurve
-                                Else
-                                    dRatioCurve = 1.35
-                                End If
-                            Else
-                                dRatioLine = 1.75
-                                dRatioCurve = 1.35
-                            End If
-                            '++ END Laura Gordon
-                            
-                            'Create a line iChange from the beginning
-                            Dim pLine As ILine
-                            Set pLine = New esriGeometry.Line
-                            If lngIndex = 1 Then
-                                If Shift = 0 Then 'shift not pressed
-                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, (iChange / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, -(iChange / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    End If
-                                ElseIf Shift = 1 Then 'shift pressed
-                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, ((iChange * 2) / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, -((iChange * 2) / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    End If
-                                End If
-                            ElseIf lngIndex = 2 Then
-                                If Shift = 0 Then 'shift not pressed
-                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, (iChange / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, -(iChange / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    End If
-                                ElseIf Shift = 1 Then 'shift pressed
-                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, ((iChange * 2) / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, -((iChange * 2) / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    End If
-                                End If
-                            End If
-                            
-                            'Save the to and from points of the line
-                            m_pArrowPtTemp.X = pLine.ToPoint.X
-                            m_pArrowPtTemp.Y = pLine.ToPoint.Y
-                            Set pLine = Nothing
-                            
-                            
-                            'Create a line (iChange/.25) from the beginning
-                            Set pLine = New esriGeometry.Line
-                            If lngIndex = 1 Then
-                                If Shift = 0 Then 'shift not pressed
-                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / dRatioCurve), False, (iChange / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / dRatioCurve), False, -(iChange / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    End If
-                                ElseIf Shift = 1 Then 'shift pressed
-                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / dRatioCurve), False, ((iChange * 2) / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / dRatioCurve), False, -((iChange * 2) / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    End If
-                                End If
-                            ElseIf lngIndex = 2 Then
-                                If Shift = 0 Then 'shift not pressed
-                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, (iChange / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, -(iChange / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    End If
-                                ElseIf Shift = 1 Then 'shift pressed
-                                    If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, ((iChange * 2) / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                        '++ START Laura Gordon 03/08/07, shape change per groups suggestions
-                                        pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, -((iChange * 2) / dRatioLine), pLine
-                                        '++ END Laura Gordon
-                                    End If
-                                End If
-                            End If
-                            
-                            'Save the to and from points of the line
-                            m_pArrowPtTemp2.X = pLine.ToPoint.X
-                            m_pArrowPtTemp2.Y = pLine.ToPoint.Y
-                            Set pLine = Nothing
-                            
-                            Set pDimensionPoints = Nothing
+                            Dim pDimensionLine As IPolyline4
+                            Dim pDimensionPoints As IPointCollection4
                             Set pDimensionPoints = New Polyline
                             
-                            'Add the points to the line/hook to be created
-                            If lngIndex = 1 Then
-                                pDimensionPoints.AddPoint m_pArrowPt1
-                            ElseIf lngIndex = 2 Then
-                                pDimensionPoints.AddPoint m_pArrowPt2
-                            End If
-                            pDimensionPoints.AddPoint m_pArrowPtTemp2
-                            pDimensionPoints.AddPoint m_pArrowPtTemp
+                            'START Laura Gordon 05/21/07, manually add dimension arrow
+                            If frmDimensionArrowSizes.chkAddManually = False Then
+                            'END Laura Gordon 05/21/07
                             
-            
-                        
-                        'Create the dimension arrow from the collection of 3 points (1 input, 2 calculated)
-                        Set pDimensionLine = pDimensionPoints
-                        
-                        'START Laura Gordon 04/23/07, changed the direction fo the line, per Lane Co. request.
-                        'Reverse the line to = from and from = to so arrow points the correct way
-                        'pDimensionLine.ReverseOrientation
-                        'END Laura Gordon 04/23/07
-                        
-                        pDimensionLine.Smooth pDimensionLine.Length / 10
-                
-                        Dim pDimensionFeature As IFeature
-                        Dim pDimensionWSEdit As IWorkspaceEdit
-                        Dim pDimensionDSet As IDataset
-                        Dim pDimensionArrowLayer As IFeatureLayer
-                        Dim pDimensionArrowFC As IFeatureClass
-                        Set pDimensionArrowLayer = FindFeatureLayerByDS(g_pFldnames.FCCartoLines)
-                        If pDimensionArrowLayer Is Nothing Then
-                          MsgBox "The layer, " & g_pFldnames.FCCartoLines & ", is not in the map.", vbExclamation, "Layer not found"
-                          m_pEditor.AbortOperation
-                          Exit Sub
-                        End If
-                        Set pDimensionArrowFC = pDimensionArrowLayer.FeatureClass
-                        Set pDimensionDSet = pDimensionArrowFC
-                        Set pDimensionWSEdit = pDimensionDSet.Workspace
-                        
-                        'create the arrow feature
-                        pDimensionWSEdit.StartEditOperation
-                        Set pDimensionFeature = pDimensionArrowFC.CreateFeature
-                        Set pDimensionFeature.Shape = pDimensionLine
-                        lLineTypeFld = LocateFields(pDimensionArrowFC, g_pFldnames.CLinesLineTypeFN)
-                        If lLineTypeFld = -1 Then Exit Sub
-                        pDimensionFeature.Value(lLineTypeFld) = 134 'Bearing Distance Arrow
-                        
-                        'Get the current MapNumber
-                        Dim sCurrentMapNums As String
-                        sCurrentMapNums = GetValueViaOverlay(pDimensionFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN)
-                        Dim lCLMNSfld As Long
-                        lCLMNSfld = LocateFields(pDimensionArrowFC, g_pFldnames.MIMapNumberFN)
-                        pDimensionFeature.Value(lCLMNSfld) = sCurrentMapNums
-            
-                        '++ START Laura 03/08/07, calc additional fields
-                        'Set the AutoMethod Field
-                        lLineTypeFld = LocateFields(pDimensionArrowFC, g_pFldnames.AutoMethodFN)
-                        If lLineTypeFld = -1 Then Exit Sub
-                        pDimensionFeature.Value(lLineTypeFld) = "UNK"
-                        
-                        'Set the AutoWho Field
-                        lLineTypeFld = LocateFields(pDimensionArrowFC, g_pFldnames.AutoWhoFN)
-                        If lLineTypeFld = -1 Then Exit Sub
-                        pDimensionFeature.Value(lLineTypeFld) = UserName
-                        
-                        'Set the AutoDate Field
-                        lLineTypeFld = LocateFields(pDimensionArrowFC, g_pFldnames.AutoDateFN)
-                        If lLineTypeFld = -1 Then Exit Sub
-                        pDimensionFeature.Value(lLineTypeFld) = Format(Now, "MM/DD/YYYY")
-                        
-                        'Set the MapScale Field
-                        lLineTypeFld = LocateFields(pDimensionArrowFC, g_pFldnames.MIMapScaleFN)
-                        If lLineTypeFld = -1 Then Exit Sub
-                        pDimensionFeature.Value(lLineTypeFld) = sCurrentMapScale * 12
-                        '++  End Laura Gordon
-            
-                        pDimensionFeature.Store
-                        pDimensionWSEdit.StopEditOperation
-                        
-                        'Refresh the display
-                        pActiveView.PartialRefresh esriViewBackground, Nothing, pDimensionFeature.Extent.Envelope
+                                'Add starting point
+                                pDimensionPoints.AddPoint m_pArrowPt1
+                                
+                                'Instanciate the temp points
+                                Set m_pArrowPtTemp = New Point
+                                Set m_pArrowPtTemp2 = New Point
+                                
+                                'Set the distance of change for the dimension arrows based upon the mapscale
+                                iChange = GetChange(sCurrentMapScale, Shift)
+                                
+                                'Get 3 calculated points for a hook
+                                    'Create the line from input
+                                    pDimensionPoints.AddPoint m_pArrowPt1
+                                    pDimensionPoints.AddPoint m_pArrowPt2
+                                    Set pDimensionLine = pDimensionPoints
+                                
+                                    '++ START Laura Gordon 03/08/07, get user sizes
+                                    'Check the ratio changes
+                                    If m_bolDimensionChanged = True Then
+                                        If frmDimensionArrowSizes.RatioLine > 0 Then
+                                            dRatioLine = frmDimensionArrowSizes.RatioLine
+                                        Else
+                                            dRatioLine = 1.75
+                                        End If
+                                        
+                                        If frmDimensionArrowSizes.RatioCurve > 0 Then
+                                            dRatioCurve = frmDimensionArrowSizes.RatioCurve
+                                        Else
+                                            dRatioCurve = 1.35
+                                        End If
+                                        
+                                        '++ START Laura Gordon 05/21/07, adding user input smooth option
+                                        If frmDimensionArrowSizes.SmoothRatio >= 0 Then
+                                            dSmoothRatio = frmDimensionArrowSizes.SmoothRatio
+                                        Else
+                                            dSmoothRatio = 10
+                                        End If
+                                    Else
+                                        dRatioLine = 1.75
+                                        dRatioCurve = 1.35
+                                        dSmoothRatio = 10
+                                    End If
+                                    '++ END Laura Gordon
+                                    
+                                    'Create a line iChange from the beginning
+                                    Dim pLine As ILine
+                                    Set pLine = New esriGeometry.Line
+                                    If lngIndex = 1 Then
+                                        If Shift = 0 Then 'shift not pressed
+                                            If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, (iChange / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, ((iChange / dRatioLine) / 2), pLine
+                                                '++ END Laura Gordon
+                                            ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, -(iChange / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, -((iChange / dRatioLine) / 2), pLine
+                                                '++ END Laura Gordon
+                                            End If
+                                        ElseIf Shift = 1 Then 'shift pressed
+                                            If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, ((iChange * 2) / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, (((iChange * 2) / dRatioLine) / 2), pLine
+                                                '++ END Laura Gordon
+                                            ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, -((iChange * 2) / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, iChange, False, -(((iChange * 2) / dRatioLine) / 2), pLine
+                                                '++ END Laura Gordon
+                                            End If
+                                        End If
+                                    ElseIf lngIndex = 2 Then
+                                        If Shift = 0 Then 'shift not pressed
+                                            If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, (iChange / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, ((iChange / dRatioLine) / 2), pLine
+                                                '++ END Laura Gordon
+                                            ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, -(iChange / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, -((iChange / dRatioLine) / 2), pLine
+                                                '++ END Laura Gordon
+                                            End If
+                                        ElseIf Shift = 1 Then 'shift pressed
+                                            If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, ((iChange * 2) / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, (((iChange * 2) / dRatioLine) / 2), pLine
+                                                '++ END Laura Gordon
+                                            ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, -((iChange * 2) / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - iChange), False, -(((iChange * 2) / dRatioLine) / 2), pLine
+                                                '++ END Laura Gordon
+                                            End If
+                                        End If
+                                    End If
+                                    
+                                    'Save the to and from points of the line
+                                    m_pArrowPtTemp.X = pLine.ToPoint.X
+                                    m_pArrowPtTemp.Y = pLine.ToPoint.Y
+                                    Set pLine = Nothing
+                                    
+                                    
+                                    'Create a line (iChange/.25) from the beginning
+                                    Set pLine = New esriGeometry.Line
+                                    If lngIndex = 1 Then
+                                        If Shift = 0 Then 'shift not pressed
+                                            If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / dRatioCurve), False, ((iChange / dRatioLine) / 1.75), pLine
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / dRatioCurve), False, (iChange / dRatioLine), pLine
                                                 
-                        Set pDimensionLine = Nothing
-                        Set m_pArrowPtTemp = Nothing
-                        Set m_pArrowPtTemp2 = Nothing
+                                                '++ END Laura Gordon
+                                            ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / dRatioCurve), False, -((iChange / dRatioLine) / 1.75), pLine
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / dRatioCurve), False, -(iChange / dRatioLine), pLine
+                                                '++ END Laura Gordon
+                                            End If
+                                        ElseIf Shift = 1 Then 'shift pressed
+                                            If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / dRatioCurve), False, ((iChange * 2) / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / dRatioCurve), False, (((iChange * 2) / dRatioLine) / 1.75), pLine
+                                                '++ END Laura Gordon
+                                            ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / dRatioCurve), False, -((iChange * 2) / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, (iChange / dRatioCurve), False, -(((iChange * 2) / dRatioLine) / 1.75), pLine
+                                                '++ END Laura Gordon
+                                            End If
+                                        End If
+                                    ElseIf lngIndex = 2 Then
+                                        If Shift = 0 Then 'shift not pressed
+                                            If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, (iChange / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, ((iChange / dRatioLine) / 1.75), pLine
+                                                '++ END Laura Gordon
+                                            ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, -(iChange / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, -((iChange / dRatioLine) / 1.75), pLine
+                                                '++ END Laura Gordon
+                                            End If
+                                        ElseIf Shift = 1 Then 'shift pressed
+                                            If Trim$(UCase$(sSide)) = "RIGHT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, ((iChange * 2) / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, (((iChange * 2) / dRatioLine) / 1.75), pLine
+                                                '++ END Laura Gordon
+                                            ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
+                                                '++ START Laura Gordon 05/21/07, shape change per groups suggestions
+                                                'pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, -((iChange * 2) / dRatioLine), pLine
+                                                pDimensionLine.QueryNormal esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, -(((iChange * 2) / dRatioLine) / 1.75), pLine
+                                                '++ END Laura Gordon
+                                            End If
+                                        End If
+                                    End If
+                                    
+                                    'Save the to and from points of the line
+                                    m_pArrowPtTemp2.X = pLine.ToPoint.X
+                                    m_pArrowPtTemp2.Y = pLine.ToPoint.Y
+                                    Set pLine = Nothing
+                                    
+                                    Set pDimensionPoints = Nothing
+                                    Set pDimensionPoints = New Polyline
+                                    
+                                    'Add the points to the line/hook to be created
+                                    If lngIndex = 1 Then
+                                        pDimensionPoints.AddPoint m_pArrowPt1
+                                    ElseIf lngIndex = 2 Then
+                                        pDimensionPoints.AddPoint m_pArrowPt2
+                                    End If
+                                    pDimensionPoints.AddPoint m_pArrowPtTemp2
+                                    pDimensionPoints.AddPoint m_pArrowPtTemp
+                               
+                               'START Laura Gordon 05/21/07, manually add dimension arrow
+                               Else 'Adding dimension arrow manually
+                                    lngIndex = 3
+                                    pDimensionPoints.AddPoint m_pArrowPt1
+                                    pDimensionPoints.AddPoint m_pArrowPt2
+                                    pDimensionPoints.AddPoint m_pArrowPt3
+                               End If
+                               'END Laura Gordon 05/21/07
+                               
+                            'Create the dimension arrow from the collection of 3 points (1 input, 2 calculated)
+                            Set pDimensionLine = pDimensionPoints
+                
+                
+                            'START Laura Gordon 04/23/07, changed the direction fo the line, per Lane Co. request.
+                            'Reverse the line to = from and from = to so arrow points the correct way
+                            'pDimensionLine.ReverseOrientation
+                            'END Laura Gordon 04/23/07
                         
-                        Set m_pTextSymbol = Nothing
-                        Set m_pTextPoint = Nothing
-                        Set m_pLinePolyline = Nothing
-                        Set m_pLineSymbol = Nothing
+                            
+                            'START Laura Gordon 05/21/07, add user input smooth option
+                            'pDimensionLine.Smooth pDimensionLine.Length / 10
+                            
+                            If dSmoothRatio > 0 Then
+                                pDimensionLine.Smooth pDimensionLine.Length / dSmoothRatio
+                            End If
+                            'END Laura Gordon
+                            
+                            Dim pDimensionFeature As IFeature
+                            Dim pDimensionWSEdit As IWorkspaceEdit
+                            Dim pDimensionDSet As IDataset
+                            Dim pDimensionArrowLayer As IFeatureLayer
+                            Dim pDimensionArrowFC As IFeatureClass
+                            Set pDimensionArrowLayer = FindFeatureLayerByDS(g_pFldnames.FCCartoLines)
+                            If pDimensionArrowLayer Is Nothing Then
+                              MsgBox "The layer, " & g_pFldnames.FCCartoLines & ", is not in the map.", vbExclamation, "Layer not found"
+                              m_pEditor.AbortOperation
+                              Exit Sub
+                            End If
+                            Set pDimensionArrowFC = pDimensionArrowLayer.FeatureClass
+                            Set pDimensionDSet = pDimensionArrowFC
+                            Set pDimensionWSEdit = pDimensionDSet.Workspace
+                            
+                            'create the arrow feature
+                            pDimensionWSEdit.StartEditOperation
+                            Set pDimensionFeature = pDimensionArrowFC.CreateFeature
+                            Set pDimensionFeature.Shape = pDimensionLine
+                            lLineTypeFld = LocateFields(pDimensionArrowFC, g_pFldnames.CLinesLineTypeFN)
+                            If lLineTypeFld = -1 Then Exit Sub
+                            pDimensionFeature.Value(lLineTypeFld) = 134 'Bearing Distance Arrow
+                            
+                            'Get the current MapNumber
+                            Dim sCurrentMapNums As String
+                            sCurrentMapNums = GetValueViaOverlay(pDimensionFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN)
+                            Dim lCLMNSfld As Long
+                            lCLMNSfld = LocateFields(pDimensionArrowFC, g_pFldnames.MIMapNumberFN)
+                            pDimensionFeature.Value(lCLMNSfld) = sCurrentMapNums
+                
+                            '++ START Laura 03/08/07, calc additional fields
+                            'Set the AutoMethod Field
+                            lLineTypeFld = LocateFields(pDimensionArrowFC, g_pFldnames.AutoMethodFN)
+                            If lLineTypeFld = -1 Then Exit Sub
+                            pDimensionFeature.Value(lLineTypeFld) = "UNK"
+                            
+                            'Set the AutoWho Field
+                            lLineTypeFld = LocateFields(pDimensionArrowFC, g_pFldnames.AutoWhoFN)
+                            If lLineTypeFld = -1 Then Exit Sub
+                            pDimensionFeature.Value(lLineTypeFld) = UserName
+                            
+                            'Set the AutoDate Field
+                            lLineTypeFld = LocateFields(pDimensionArrowFC, g_pFldnames.AutoDateFN)
+                            If lLineTypeFld = -1 Then Exit Sub
+                            pDimensionFeature.Value(lLineTypeFld) = Format(Now, "MM/DD/YYYY")
+                            
+                            'Set the MapScale Field
+                            lLineTypeFld = LocateFields(pDimensionArrowFC, g_pFldnames.MIMapScaleFN)
+                            If lLineTypeFld = -1 Then Exit Sub
+                            pDimensionFeature.Value(lLineTypeFld) = sCurrentMapScale * 12
+                            '++  End Laura Gordon
+                
+                            pDimensionFeature.Store
+                            pDimensionWSEdit.StopEditOperation
+                            
+                            'Refresh the display
+                            pActiveView.PartialRefresh esriViewBackground, Nothing, pDimensionFeature.Extent.Envelope
+                                                    
+                            Set pDimensionLine = Nothing
+                            Set m_pArrowPtTemp = Nothing
+                            Set m_pArrowPtTemp2 = Nothing
+                            
+                            Set m_pTextSymbol = Nothing
+                            Set m_pTextPoint = Nothing
+                            Set m_pLinePolyline = Nothing
+                            Set m_pLineSymbol = Nothing
+                            
+                        Next
                         
-                    Next
-                    
-                    Set m_pArrowPt1 = Nothing
-                    Set m_pArrowPt2 = Nothing
-                    Set m_pArrowPt3 = Nothing
-                    Set m_pArrowPt4 = Nothing
+                        Set m_pArrowPt1 = Nothing
+                        Set m_pArrowPt2 = Nothing
+                        Set m_pArrowPt3 = Nothing
+                        Set m_pArrowPt4 = Nothing
                     
         Else 'Reset everything
             Set m_pArrowPt1 = Nothing
