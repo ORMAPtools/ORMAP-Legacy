@@ -125,6 +125,10 @@ Private m_bToolJustCompletedTask As Boolean
 Private m_bolDimensionChanged As Boolean
 '++  END Laura Gordon
 
+'++ START Laura Gordon 05/23/07, changing arrow draw to allow for more arrow types
+    Dim colArrowPoints As Collection
+'++ END Laura Gordon
+
 '------------------------------
 'Private Constants and Enums
 '------------------------------
@@ -180,8 +184,11 @@ End Property
 Private Property Get ICommand_Caption() As String
 On Error GoTo ErrorHandler
 
-    ICommand_Caption = "Add Arrows/Hooks"
-
+    '++ START Laura Gordon 05/23/07, Adding additional arrow types, name change no longer hooks all combined in one button
+    ICommand_Caption = "Add Arrows"
+    'ICommand_Caption = "Add Arrows/Hooks"
+    '++ END Laura Gordon
+    
     Exit Property
 ErrorHandler:
     HandleError True, _
@@ -384,6 +391,10 @@ On Error GoTo ErrorHandler
         GoTo Process_Exit
     End If
     
+    '++ START Laura Gordon 05/23/07, changing arrow draw to allow for more arrow types
+    Set colArrowPoints = New Collection
+    '++ END Laura Gordon
+    
     ' Shows the options form
     frmArrows.Show vbModal
 
@@ -425,7 +436,20 @@ Private Sub ITool_OnKeyDown(ByVal keyCode As Long, ByVal Shift As Long)
             Set g_pApp.CurrentTool = Nothing
             g_pApp.RefreshWindow
             m_bToolJustCompletedTask = True
-        Else 'Hooks & Arrows
+            
+        '++ START Laura Gordon 05/23/07, adding additional arrow options types
+        ElseIf frmArrows.ArrowType = "Arrow" Then
+            'Deactivate the tool
+            Set m_pArrowPt1 = Nothing
+            Set m_pArrowPt2 = Nothing
+            Set m_pArrowPt3 = Nothing
+            Set m_pArrowPt4 = Nothing
+            Set colArrowPoints = Nothing
+            Set g_pApp.CurrentTool = Nothing
+            g_pApp.RefreshWindow
+            m_bToolJustCompletedTask = True
+        '++ END Laura Gordon
+        Else 'Hooks
             'Deactivate the tool
             Set g_pApp.CurrentTool = Nothing
             g_pApp.RefreshWindow
@@ -486,6 +510,10 @@ On Error GoTo ErrorHandler
     Set m_pLineSymbol = Nothing
     m_bInUse = False
 
+    '++ START Laura Gordon 05/23/07, changing arrow draw to allow for more arrow types
+    Set colArrowPoints = Nothing
+    '++ END Laura Gordon
+
     ' Allow the tool to deactivate
     ITool_Deactivate = True
 
@@ -536,6 +564,7 @@ End Function
 'JWM            10/16/2006  Using case instead of if
 'Laura Gordon   02/20/2007  Adding dimension arrows
 'Laura Gordon   3/8/2007    Added required field calc (automethod, autowho, autodate, mapnumber, mapscale) and dimension arrow size changes
+'Laura Gordon   05/23/07    Adding additional arrow type options
 '***************************************************************************
 
 Private Sub ITool_OnMouseDown( _
@@ -578,6 +607,12 @@ On Error GoTo ErrorHandler
     Dim dSmoothRatio As Double
     '++ END Laura Gordon
     
+    '++ START Laura Gordon 05/23/07, changing arrow draw to allow for more arrow types
+    'Dim colArrowPoints As Collection
+    Dim bolFinish As Boolean
+    Dim lngIndex As Long
+    '++ END Laura Gordon
+    
     ' Set the in use flag
     m_bInUse = True
     
@@ -609,117 +644,182 @@ On Error GoTo ErrorHandler
         
             
         Case "ARROW" 'If drawing annotation arrows
-            If m_pArrowPt1 Is Nothing Then
-                ' Save the first point
-                Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
-            ElseIf m_pArrowPt2 Is Nothing Then
-                ' Saves the second point and draws the arrow
-                Set m_pArrowPt2 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
-                DrawArrows
-            ElseIf m_pArrowPt3 Is Nothing Then
-                ' Saves the third point and draws the arrow
-                Set m_pArrowPt3 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
-                DrawArrows
-            ElseIf m_pArrowPt4 Is Nothing Then
-                ' Saves the fourth point and draws the arrow
-                Set m_pArrowPt4 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
-                DrawArrows
-                
-                ' Creates a new polygon from the points and smoothes it
-                Set pArrowPoints = New esriGeometry.Polyline
-                pArrowPoints.AddPoint m_pArrowPt1
-                pArrowPoints.AddPoint m_pArrowPt2
-                pArrowPoints.AddPoint m_pArrowPt3
-                pArrowPoints.AddPoint m_pArrowPt4
-                Set pArrowLine = pArrowPoints
-                pArrowLine.Smooth pArrowLine.Length / 10
-        
-                ' Get a reference to the Cartographic Lines feature class
-                Set pArrowLayer = FindFeatureLayerByDS(g_pFldnames.FCCartoLines)
-                If pArrowLayer Is Nothing Then
-                    MsgBox "The layer, " & g_pFldnames.FCCartoLines & ", is not in the map.", vbExclamation, "Layer not found"
-                    GoTo Process_Exit
-                End If
-                Set pArrowFC = pArrowLayer.FeatureClass
-                Set pDSet = pArrowFC
-                Set pWSEdit = pDSet.Workspace
-                
-                ' Start an edit operation to encompass the creation of the feature
-                pWSEdit.StartEditOperation
-                
-                ' Create the arrow feature
-                Set pFeature = pArrowFC.CreateFeature
-                Set pFeature.Shape = pArrowLine
-                
-                ' Locates fields in the feature's dataset
-                lCLMNfld = LocateFields(pArrowFC, g_pFldnames.MIMapNumberFN)
-                lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.CLinesLineTypeFN)
-                
-                ' Insure that the feature's fields are found
-                If lLineTypeFld = -1 Then GoTo Process_Exit
-                
-                ' Populate field values in the feature
-                sCurMapNum = GetValueViaOverlay(pFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN)
-                pFeature.Value(lCLMNfld) = sCurMapNum
-                pFeature.Value(lLineTypeFld) = 100
-                pFeature.Store
-                
-                '++ START Laura 03/08/07, calc additional fields
-                'Set the AutoMethod Field
-                lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.AutoMethodFN)
-                If lLineTypeFld = -1 Then Exit Sub
-                pFeature.Value(lLineTypeFld) = "UNK"
-                
-                'Set the AutoWho Field
-                lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.AutoWhoFN)
-                If lLineTypeFld = -1 Then Exit Sub
-                pFeature.Value(lLineTypeFld) = UserName
-                
-                'Set the AutoDate Field
-                lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.AutoDateFN)
-                If lLineTypeFld = -1 Then Exit Sub
-                pFeature.Value(lLineTypeFld) = Format(Now, "MM/DD/YYYY")
-                
-                'Set the MapScale Field
-                sCurrentMapScale = GetValueViaOverlay(pFeature.Shape, pMIFC, g_pFldnames.MIMapScaleFN)
-                lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.MIMapScaleFN)
-                If lLineTypeFld = -1 Then Exit Sub
-                pFeature.Value(lLineTypeFld) = sCurrentMapScale
-                '++  End Laura Gordon
+            'If m_bToolJustCompletedTask = False Then
+                If bolFinish = False Then
+                    'Right mouse click
+                    If Button = 1 And Shift = 1 Then
+                        'Save the first point
+                        If colArrowPoints.Count = 0 Then
+                            If m_pArrowPt1 Is Nothing Then
+                                Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+                                colArrowPoints.Add m_pArrowPt1
+                                
+                                'Clear existing point
+                                Set m_pArrowPt1 = Nothing
+                            End If
+                            
+                        'Save the last point
+                        Else
+                            If m_pArrowPt1 Is Nothing Then
+                                Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+                                colArrowPoints.Add m_pArrowPt1
+                                DrawArrows
+                                
+                                'Clear existing point
+                                Set m_pArrowPt1 = Nothing
+                                bolFinish = True
+                            End If
+                        End If
                         
+                    'Left mouse click
+                    ElseIf Button = 1 And Shift = 0 Then
+                        'Add vertex
+                        If m_pArrowPt1 Is Nothing Then
+                            Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+                            colArrowPoints.Add m_pArrowPt1
+                            
+                            'Clear existing point
+                            Set m_pArrowPt1 = Nothing
+                        End If
+                    End If
+                End If
+    '            If m_pArrowPt1 Is Nothing Then
+    '                ' Save the first point
+    '                Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+    '            ElseIf m_pArrowPt2 Is Nothing Then
+    '                ' Saves the second point and draws the arrow
+    '                Set m_pArrowPt2 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+    '                DrawArrows
+    '            ElseIf m_pArrowPt3 Is Nothing Then
+    '                ' Saves the third point and draws the arrow
+    '                Set m_pArrowPt3 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+    '                DrawArrows
+    '            ElseIf m_pArrowPt4 Is Nothing Then
+    '                ' Saves the fourth point and draws the arrow
+    '                Set m_pArrowPt4 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+    '                DrawArrows
                 
-                ' Finalize the edit operation
-                pWSEdit.StopEditOperation
+                If colArrowPoints.Count > 1 And bolFinish = True Then
+                    
+                    ' Creates a new polygon from the points and smoothes it
+                    Set pArrowPoints = New esriGeometry.Polyline
+                    
+                    For lngIndex = 1 To colArrowPoints.Count
+                        pArrowPoints.AddPoint colArrowPoints.Item(lngIndex)
+                    Next
+                    
+                    Set pArrowLine = pArrowPoints
+                    pArrowLine.Smooth pArrowLine.Length / 10
+                    
+    '                ' Creates a new polygon from the points and smoothes it
+    '                Set pArrowPoints = New esriGeometry.Polyline
+    '                pArrowPoints.AddPoint m_pArrowPt1
+    '                pArrowPoints.AddPoint m_pArrowPt2
+    '                pArrowPoints.AddPoint m_pArrowPt3
+    '                pArrowPoints.AddPoint m_pArrowPt4
+    '                Set pArrowLine = pArrowPoints
+    '                pArrowLine.Smooth pArrowLine.Length / 10
+            
+                    ' Get a reference to the Cartographic Lines feature class
+                    Set pArrowLayer = FindFeatureLayerByDS(g_pFldnames.FCCartoLines)
+                    If pArrowLayer Is Nothing Then
+                        MsgBox "The layer, " & g_pFldnames.FCCartoLines & ", is not in the map.", vbExclamation, "Layer not found"
+                        GoTo Process_Exit
+                    End If
+                    Set pArrowFC = pArrowLayer.FeatureClass
+                    Set pDSet = pArrowFC
+                    Set pWSEdit = pDSet.Workspace
+                    
+                    ' Start an edit operation to encompass the creation of the feature
+                    pWSEdit.StartEditOperation
+                    
+                    ' Create the arrow feature
+                    Set pFeature = pArrowFC.CreateFeature
+                    Set pFeature.Shape = pArrowLine
+                    
+                    ' Locates fields in the feature's dataset
+                    lCLMNfld = LocateFields(pArrowFC, g_pFldnames.MIMapNumberFN)
+                    lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.CLinesLineTypeFN)
+                    
+                    ' Insure that the feature's fields are found
+                    If lLineTypeFld = -1 Then GoTo Process_Exit
+                    
+                    ' Populate field values in the feature
+                    sCurMapNum = GetValueViaOverlay(pFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN)
+                    pFeature.Value(lCLMNfld) = sCurMapNum
+                    '++ START Laura Gordon 05/23/07, adding additional arrow types
+                    'pFeature.Value(lLineTypeFld) = 100
+                    pFeature.Value(lLineTypeFld) = Left(frmArrows.cmbArrow.Text, 3) '100
+                    '++  END Laura Gordon
+                    pFeature.Store
+                    
+                    '++ START Laura 03/08/07, calc additional fields
+                    'Set the AutoMethod Field
+                    lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.AutoMethodFN)
+                    If lLineTypeFld = -1 Then Exit Sub
+                    pFeature.Value(lLineTypeFld) = "UNK"
+                    
+                    'Set the AutoWho Field
+                    lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.AutoWhoFN)
+                    If lLineTypeFld = -1 Then Exit Sub
+                    pFeature.Value(lLineTypeFld) = UserName
+                    
+                    'Set the AutoDate Field
+                    lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.AutoDateFN)
+                    If lLineTypeFld = -1 Then Exit Sub
+                    pFeature.Value(lLineTypeFld) = Format(Now, "MM/DD/YYYY")
+                    
+                    'Set the MapScale Field
+                    sCurrentMapScale = GetValueViaOverlay(pFeature.Shape, pMIFC, g_pFldnames.MIMapScaleFN)
+                    lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.MIMapScaleFN)
+                    If lLineTypeFld = -1 Then Exit Sub
+                    pFeature.Value(lLineTypeFld) = sCurrentMapScale
+                    '++  End Laura Gordon
+                            
+                    
+                    ' Finalize the edit operation
+                    pWSEdit.StopEditOperation
+                    
+                    ' Refresh the display
+                    pActiveView.PartialRefresh esriViewBackground, Nothing, pFeature.Extent.Envelope
+                    
+                    ' Clean up
+                    Set pArrowLine = Nothing
+                    Set m_pArrowPt1 = Nothing
+                    Set m_pArrowPt2 = Nothing
+                    Set m_pArrowPt3 = Nothing
+                    Set m_pArrowPt4 = Nothing
+                    Set m_pTextSymbol = Nothing
+                    Set m_pTextPoint = Nothing
+                    Set m_pLinePolyline = Nothing
+                    Set m_pLineSymbol = Nothing
+                    
+                    'START Laura Gordon 05/23/07, adding arrow options
+                    Set colArrowPoints = Nothing
+                    Set colArrowPoints = New Collection
+                    'END Laura Gordon
                 
-                ' Refresh the display
-                pActiveView.PartialRefresh esriViewBackground, Nothing, pFeature.Extent.Envelope
-                
-                ' Clean up
-                Set pArrowLine = Nothing
-                Set m_pArrowPt1 = Nothing
-                Set m_pArrowPt2 = Nothing
-                Set m_pArrowPt3 = Nothing
-                Set m_pArrowPt4 = Nothing
-                Set m_pTextSymbol = Nothing
-                Set m_pTextPoint = Nothing
-                Set m_pLinePolyline = Nothing
-                Set m_pLineSymbol = Nothing
-                
-                ' Deactivate the tool
-                '++ START JWalton 2/8/2007 m_pApp to g_pApp
-                Set g_pApp.CurrentTool = Nothing
-                '++ END JWalton 2/8/2007
-            Else ' Reset everything
-                Set m_pArrowPt1 = Nothing
-                Set m_pArrowPt2 = Nothing
-                Set m_pArrowPt3 = Nothing
-                Set m_pArrowPt4 = Nothing
-                
-                ' Deactivate the tool
-                '++ START JWalton 2/8/2007 m_pApp to g_pApp
-                Set g_pApp.CurrentTool = Nothing
-                '++ END JWalton 2/8/2007
-            End If
+                    ' Deactivate the tool
+                    '++ START JWalton 2/8/2007 m_pApp to g_pApp
+                    'Set g_pApp.CurrentTool = Nothing
+                    '++ END JWalton 2/8/2007
+                End If
+'            Else ' Reset everything
+'
+'
+'                Set m_pArrowPt1 = Nothing
+'                Set m_pArrowPt2 = Nothing
+'                Set m_pArrowPt3 = Nothing
+'                Set m_pArrowPt4 = Nothing
+'                Set colArrowPoints = Nothing
+'                m_bToolJustCompletedTask = True
+'
+'                ' Deactivate the tool
+'                '++ START JWalton 2/8/2007 m_pApp to g_pApp
+'                Set g_pApp.CurrentTool = Nothing
+'                '++ END JWalton 2/8/2007
+'
+'            End If
         Case "DIMENSION"
             '++ START Added by Laura Gordon, 02/20/2007
                 'Get the 3 input points
@@ -749,7 +849,7 @@ On Error GoTo ErrorHandler
                         sSide = GetDimensionArrowSide
                         
                         'Create two dimension arrows, one on the left and one on the right
-                        Dim lngIndex As Long
+                        'Dim lngIndex As Long
                         For lngIndex = 1 To 2
                         
                             Dim pDimensionLine As IPolyline4
@@ -947,6 +1047,12 @@ On Error GoTo ErrorHandler
                                     pDimensionPoints.AddPoint m_pArrowPt1
                                     pDimensionPoints.AddPoint m_pArrowPt2
                                     pDimensionPoints.AddPoint m_pArrowPt3
+                                    
+                                    If frmDimensionArrowSizes.SmoothRatio >= 0 Then
+                                        dSmoothRatio = frmDimensionArrowSizes.SmoothRatio
+                                    Else
+                                        dSmoothRatio = 10
+                                    End If
                                End If
                                'END Laura Gordon 05/21/07
                                
@@ -1928,6 +2034,7 @@ End Function
 '----------     ------      ---------
 'James Moore    11-1-06     removed dead variable
 'Laura Gordon   02/20/2007  change m_pApp to g_pApp as JWalton hadn't changed it.
+'Laura Gordon   05/23/07    adding additional arrow types
 '***************************************************************************
 
 Private Sub DrawArrows()
@@ -1948,6 +2055,10 @@ On Error GoTo ErrorHandler
     '++ STOP Laura Gordon 02/20/2007
     Set pActiveView = pMXDoc.FocusMap
     
+    '++ START Laura Gordon 05/23/07, adding additional arrow types
+    Dim lngIndex As Long
+    '++ END Laura Gordon
+    
     'Set up line symbol to display temporary line
     Set m_pLineSymbol = New esriDisplay.SimpleLineSymbol
     m_pLineSymbol.Width = 2
@@ -1963,10 +2074,27 @@ On Error GoTo ErrorHandler
     
     ' Create the polyline from a point collection
     Set pArrowLine = New esriGeometry.Polyline
-    If Not m_pArrowPt1 Is Nothing Then pArrowLine.AddPoint m_pArrowPt1
-    If Not m_pArrowPt2 Is Nothing Then pArrowLine.AddPoint m_pArrowPt2
-    If Not m_pArrowPt3 Is Nothing Then pArrowLine.AddPoint m_pArrowPt3
-    If Not m_pArrowPt4 Is Nothing Then pArrowLine.AddPoint m_pArrowPt4
+    
+    '++ START Laura Gordon 05/23/07, adding additional arrow types
+    If UCase$(frmArrows.ArrowType) = "ARROW" Then
+        If colArrowPoints.Count > 1 Then
+            For lngIndex = 1 To colArrowPoints.Count
+                pArrowLine.AddPoint colArrowPoints.Item(lngIndex)
+            Next
+        End If
+    Else
+        If Not m_pArrowPt1 Is Nothing Then pArrowLine.AddPoint m_pArrowPt1
+        If Not m_pArrowPt2 Is Nothing Then pArrowLine.AddPoint m_pArrowPt2
+        If Not m_pArrowPt3 Is Nothing Then pArrowLine.AddPoint m_pArrowPt3
+        If Not m_pArrowPt4 Is Nothing Then pArrowLine.AddPoint m_pArrowPt4
+    End If
+    
+'    If Not m_pArrowPt1 Is Nothing Then pArrowLine.AddPoint m_pArrowPt1
+'    If Not m_pArrowPt2 Is Nothing Then pArrowLine.AddPoint m_pArrowPt2
+'    If Not m_pArrowPt3 Is Nothing Then pArrowLine.AddPoint m_pArrowPt3
+'    If Not m_pArrowPt4 Is Nothing Then pArrowLine.AddPoint m_pArrowPt4
+    '++ END Laura Gordon 05/23/07
+    
     Set pArrowLine2 = pArrowLine
     
     '''''''''''''''''''''''''''''''''''''''''''''''''''''
