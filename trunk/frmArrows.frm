@@ -1,16 +1,25 @@
 VERSION 5.00
 Begin VB.Form frmArrows 
    Caption         =   "Add"
-   ClientHeight    =   2475
+   ClientHeight    =   3195
    ClientLeft      =   930
    ClientTop       =   2355
-   ClientWidth     =   2925
+   ClientWidth     =   2325
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   2475
-   ScaleWidth      =   2925
+   ScaleHeight     =   3195
+   ScaleWidth      =   2325
    ShowInTaskbar   =   0   'False
+   Visible         =   0   'False
+   Begin VB.ComboBox cmbArrow 
+      Height          =   315
+      Left            =   120
+      TabIndex        =   6
+      Text            =   "100 - Anno Arrow"
+      Top             =   120
+      Width           =   2055
+   End
    Begin VB.CommandButton cmdQuit 
       Caption         =   "Quit"
       BeginProperty Font 
@@ -25,7 +34,7 @@ Begin VB.Form frmArrows
       Height          =   495
       Left            =   120
       TabIndex        =   5
-      Top             =   1920
+      Top             =   2400
       Width           =   855
    End
    Begin VB.CommandButton cmdHelp 
@@ -42,7 +51,7 @@ Begin VB.Form frmArrows
       Height          =   495
       Left            =   1320
       TabIndex        =   3
-      Top             =   1920
+      Top             =   2400
       Width           =   855
    End
    Begin VB.CommandButton cmdHook 
@@ -60,7 +69,8 @@ Begin VB.Form frmArrows
       Left            =   120
       TabIndex        =   2
       Top             =   120
-      Width           =   855
+      Visible         =   0   'False
+      Width           =   2055
    End
    Begin VB.CommandButton cmdDimension 
       Caption         =   "Dimension Arrow"
@@ -76,11 +86,11 @@ Begin VB.Form frmArrows
       Height          =   495
       Left            =   120
       TabIndex        =   1
-      Top             =   1320
+      Top             =   1440
       Width           =   2055
    End
    Begin VB.CommandButton cmdArrow 
-      Caption         =   "Arrow"
+      Caption         =   "Add Arrow"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   9.75
@@ -93,15 +103,27 @@ Begin VB.Form frmArrows
       Height          =   495
       Left            =   120
       TabIndex        =   0
-      Top             =   720
-      Width           =   855
+      Top             =   480
+      Width           =   2055
+   End
+   Begin VB.Line Line2 
+      X1              =   0
+      X2              =   2280
+      Y1              =   2160
+      Y2              =   2160
+   End
+   Begin VB.Line Line1 
+      X1              =   0
+      X2              =   2280
+      Y1              =   1200
+      Y2              =   1200
    End
    Begin VB.Label lblCurrentTool 
       Caption         =   "none"
-      Height          =   375
-      Left            =   1200
+      Height          =   255
+      Left            =   240
       TabIndex        =   4
-      Top             =   360
+      Top             =   2880
       Visible         =   0   'False
       Width           =   1575
    End
@@ -210,6 +232,23 @@ End Sub
 Private Sub Form_Load()
     ' Sets the form status to open
     g_pForms.SetFormStatus Me.Name, True
+    
+    'START Laura Gordon 05/23/07, add additional arrow types
+    'Load arrow combo box
+    cmbArrow.AddItem "100 - Anno Arrow"
+    cmbArrow.AddItem "101 - Hooks"
+    cmbArrow.AddItem "102 - Radius Line"
+    cmbArrow.AddItem "120 - Station Reference"
+    cmbArrow.AddItem "125 - River Arrow"
+    cmbArrow.AddItem "134 - Bearing/Distance Arrow"
+    cmbArrow.AddItem "136 - Reference Notes"
+    cmbArrow.AddItem "137 - Taxlot Arrow"
+    cmbArrow.AddItem "141 - Subdivision Arrow"
+    cmbArrow.AddItem "147 - DLC Arrow"
+    cmbArrow.AddItem "154 - Code Arrow"
+    cmbArrow.AddItem "162 - See Map Arrow"
+    'END Laura Gordon
+    
 End Sub
 
 Private Sub Form_QueryUnload( _
