@@ -385,7 +385,7 @@ On Error GoTo ItemAdded_Error
     ' Determines if this class is either the Map Index or Taxlot feature class
     If TypeOf Item Is esriCarto.IFeatureLayer Then
         sName = Item.Name
-        If sName = g_pFldnames.FCMapIndex Or sName = g_pFldnames.FCTaxlot Then
+        If StrComp(sName, g_pFldnames.FCMapIndex, vbTextCompare) = 0 Or StrComp(sName, g_pFldnames.FCTaxlot, vbTextCompare) = 0 Then
             Reset
         End If
     End If
@@ -438,10 +438,10 @@ On Error GoTo ItemDeleted_Error
     
     ' Determines if this class is either the Map Index or Taxlot feature class
     If TypeOf Item Is esriCarto.IFeatureLayer Then
-            sName = Item.Name
-            If sName = g_pFldnames.FCMapIndex Or sName = g_pFldnames.FCTaxlot Then
-                Reset
-            End If
+        sName = Item.Name
+        If StrComp(sName, g_pFldnames.FCMapIndex, vbTextCompare) = 0 Or StrComp(sName, g_pFldnames.FCTaxlot, vbTextCompare) = 0 Then
+            Reset
+        End If
     End If
 ItemDeleted_Exit:
 Exit Sub
