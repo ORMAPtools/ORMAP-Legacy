@@ -668,6 +668,7 @@ End Function
 '                           All calls to this function were also modified
 '                           to deal with the potential of the zero-length
 '                           string versus Null.
+'James Moore 7-5-07 Changed the spatial query to use Within instead of Intersects Tracker 1725128
 '***************************************************************************
 
 Public Function GetValueViaOverlay( _
@@ -682,7 +683,7 @@ On Error GoTo ErrorHandler
     '++ END JWalton 2/7/2007
     
     If Not pGeom Is Nothing And Not pOverlayFC Is Nothing And Len(sFldName) > 0 Then
-        Set pFeatCur = SpatialQuery(pOverlayFC, pGeom, esriSpatialRelIntersects)
+        Set pFeatCur = SpatialQuery(pOverlayFC, pGeom, esriSpatialRelWithin)
         If Not pFeatCur Is Nothing Then
             'Get the first feature.  if more than one, let the user decide
             Set pFeat = pFeatCur.NextFeature
