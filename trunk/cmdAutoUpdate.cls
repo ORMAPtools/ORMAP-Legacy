@@ -405,12 +405,15 @@ End Sub
 '----------     ------      ---------
 'Jim Moore      5-9-07      Checking to see if the object passed to this event is a member of ORMap features. If it's not a member the
 '                                   procedure just falls through.
+'Jim Moore      7-2-07      Based upon communication with JWalton made corrections to this code in response to Tracker 1725102
+'                                   Replaced Mapscale and MapNum variant variables with string
 '***************************************************************************
 Private Sub m_pEditorEvents_OnCreateFeature( _
   ByVal a_Obj As esriGeoDatabase.IObject)
 On Error GoTo ErrorHandler
     ' Variable declarations
     Dim sMapNum As String
+    Dim sMapScale As String
     Dim pMIFlayer As esriCarto.IFeatureLayer
     Dim pMIFclass As esriGeoDatabase.IFeatureClass
     Dim pFeat As esriGeoDatabase.IFeature
@@ -422,8 +425,6 @@ On Error GoTo ErrorHandler
     Dim pCenter As esriGeometry.IPoint
     Dim lMapScaleFld As Long
     Dim lMapNumFld As Long
-    Dim vMapScaleVal As Variant
-    Dim vMapNumVal As Variant
     
     If Not IsOrMapFeature(a_Obj) Then GoTo OnCreateFeature_Process_Exit '++ START/END JWM 05/09/2007 Tracker item 1703333++++++
     'These are the autocalculated fields
@@ -465,18 +466,19 @@ On Error GoTo ErrorHandler
         sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
         a_Obj.Value(lAnnoMapNumFld) = sMapNum
         If lMapScaleFld > -1 Then
-            vMapScaleVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
-            '++ START JWalton 5/7/2007
-            If vMapScaleVal = "" Then
-            '++ END JWalton 5/7/2007
-                a_Obj.Value(lMapScaleFld) = vMapScaleVal
+'++ START JWM 07/02/2007 changed from variant to string++++++++++
+            sMapScale = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
+            If Len(sMapScale) > 0 Then
+                a_Obj.Value(lMapScaleFld) = sMapScale
+            Else
+                a_Obj.Value(lMapScaleFld) = Null
             End If
         End If
-        
+'++ END JWM 07/02/2007++++++++++
         ' Set size based on mapscale
         SetAnnoSize a_Obj, pFeat
     Else
-        ' Update MapScale for all features with a MapScale field (except MapIndex)
+        ' Update MapScale and mapnumber for all features with a MapScale field (except MapIndex)
         If lMapScaleFld > -1 And Not IsMapIndex(a_Obj) Then
             Set pCenter = New Point
             Set pFeat = a_Obj
@@ -487,32 +489,25 @@ On Error GoTo ErrorHandler
             Set pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
             If pMIFlayer Is Nothing Then GoTo OnCreateFeature_Process_Exit
             Set pMIFclass = pMIFlayer.FeatureClass
-            vMapScaleVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
-            '++ START JWalton 5/7/2007
-            If vMapScaleVal = "" Then
-            '++ STOP JWalton 5/7/2007
-            '++ START JWalton 1/29/2007 Corrects a data incompatibility error in value assignment to the field
-                If vMapScaleVal = "" Then
+            sMapScale = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
+            '++ START JWM 07/02/2007 changed variant to string++++++++++
+                If Len(sMapScale) > 0 Then
+                    a_Obj.Value(lMapScaleFld) = sMapScale
+                Else
                     a_Obj.Value(lMapScaleFld) = Null
-                  Else
-                    a_Obj.Value(lMapScaleFld) = vMapScaleVal
                 End If
-            '++ END JWalton 1/29/2007
-            End If
+'           ++ END JWM 07/02/2007++++++++++
             ' If a dataset with MapNumber, populate it
             If lMapNumFld > -1 Then
-                vMapNumVal = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
+                sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
                 '++ START JWalton 5/7/2007
-                If vMapNumVal = "" Then
-                '++ END JWalton 5/7/2007
-                '++ START JWalton 1/29/2007 Corrects a data incompatibility error in value assignment to the field
-                    If vMapNumVal = "" Then
-                        a_Obj.Value(lMapNumFld) = Null
-                      Else
-                        a_Obj.Value(lMapNumFld) = vMapNumVal
-                    End If
-                '++ END JWalton 1/29/2007
+'           ++ START JWM 07/02/2007 changed variant to string++++++++++
+                If Len(sMapNum) > 0 Then
+                    a_Obj.Value(lMapNumFld) = sMapNum
+                Else
+                    a_Obj.Value(lMapNumFld) = Null
                 End If
+'           ++ END JWM 07/02/2007++++++++++
             End If
         End If
     End If
