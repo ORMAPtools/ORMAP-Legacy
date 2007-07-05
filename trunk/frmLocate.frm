@@ -326,7 +326,7 @@ Private Sub cmdHelp_Click()
     Dim sFilePath As String
     '++ END JWalton 2/6/2007    Dim sFilePath As String
     
-    sFilePath = app.Path & "\" & "Locate_help.rtf"
+    sFilePath = app.Path & "\Locate_help.rtf"
     If FileExists(sFilePath) Then
         '++ START JWM 10/16/2006 using new method to open help file
         gsb_StartDoc Me.hwnd, sFilePath
