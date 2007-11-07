@@ -127,9 +127,7 @@ Private m_bContinue As Boolean
 'Private Constants and Enums
 '------------------------------
 ' Variables used by the Error handler function - DO NOT REMOVE
-'++ JWM 10/11/2006 Reomved the path to this module as it will not always be in the same place
 Private Const c_sModuleFileName As String = "basUtilities.bas"
-'++ START JWM 10/16/2006 constants for gsb_StartDoc
 
 '++ START JWalton 2/6/2007
     ' Removed Win32API Constant definitions to basWin32API
@@ -400,7 +398,6 @@ On Error GoTo ErrorHandler
                             End If
                         End If
                         If .ListCount > 0 Then
-                            '++ JWM 10/11/2006 Is this if statement comparing against the same thing ?
                             If (.List(.ListCount - 1) = "") Then
                                 .RemoveItem (.ListCount - 1)
                             End If
@@ -3003,6 +3000,8 @@ End Sub
 '                           store half ranges
 'John Walton    2/7/2007    Renamed variables to conform to variable naming
 '                           conventions
+'James Moore    11-1-07 Changed the behaviour for Clackamas County. If the Quarter sections were zeros in the ORMAP Taxlot string zeroes are in the output. For Clackamas County they should be
+'replaced with spaces (character 32)
 '***************************************************************************
 
 Public Function gfn_s_CreateMapTaxlotValue( _
@@ -3125,7 +3124,9 @@ On Error GoTo gfn_s_CreateMapTaxlotValue_Error
                         If sCurrORMapNumValue Like "[A-D]" Then
                             Mid$(sFormattedString, iPosCharMaskForward, 1) = Switch(sCurrORMapNumValue = "A", 1, sCurrORMapNumValue = "B", 2, sCurrORMapNumValue = "C", 3, sCurrORMapNumValue = "D", 4)
                         Else
-                            Mid$(sFormattedString, iPosCharMaskForward, 1) = Chr$(48) 'ZERO
+                            If iCountyCode <> 3 Then '++ START JWM 11/01/2007 Clackamas County wants the space/blank value left in the string NO ZEROES PLEASE++++++++++
+                                Mid$(sFormattedString, iPosCharMaskForward, 1) = Chr$(48) 'ZERO
+                            End If
                         End If
                     End If
                 Else ' Quarter
@@ -3136,7 +3137,9 @@ On Error GoTo gfn_s_CreateMapTaxlotValue_Error
                         If sCurrORMapNumValue Like "[A-D]" Then
                             Mid$(sFormattedString, iPosCharMaskForward, 1) = Switch(sCurrORMapNumValue = "A", 1, sCurrORMapNumValue = "B", 2, sCurrORMapNumValue = "C", 3, sCurrORMapNumValue = "D", 4)
                         Else
-                            Mid$(sFormattedString, iPosCharMaskForward, 1) = Chr$(48) 'ZERO
+                            If iCountyCode <> 3 Then '++ END JWM 11/01/2007++++++++++
+                                Mid$(sFormattedString, iPosCharMaskForward, 1) = Chr$(48) 'ZERO
+                            End If
                         End If
                     End If
                 End If
