@@ -294,25 +294,35 @@ Attribute VB_Name = "AppSpecs"
 'Description:
 '
 'Components in Project:
-'   cmdTaxlotAssignment
-'   clsFieldNames
-'   cmdLocate
-'   cmdTaxlotCombine
-'   cmdArrows
-'   cmdMapIndex
-'   clsTaxLotEditingToolbar
-'   globals
-'   IniFiles
-'   frmTaxlotAssignment
-'   frmMapIndex
-'   frmLocate
-'   frmCombine
-'   modUtils
-'   clsRowChanged
-'   ErrorHandling
-'   frmArrows
-'
-'   AppSpecs
+'   Forms
+'       frmArrows
+'       frmCombine
+'       frmDimensionArrowSizes
+'       frmLocate
+'       frmMapIndex
+'       frmTaxlotAssignment
+'   Code Modules
+'       AppSpecs
+'       basErrorHandling
+'       basGlobals
+'       basIniFiles
+'       basUtilities
+'       basWin32API
+'   Class Modules
+'       CategoryIDs
+'       CategoryInstall
+'       clsCatalogFileDlg
+'       clsFieldNames
+'       clsFormsCatalog
+'       clsRowChanged
+'       clsTaxLotEditingToolbar
+'       cmdArrows
+'       cmdAutoUpdate
+'       cmdLocate
+'       cmdMapIndex
+'       cmdTaxlotAssignment
+'       cmdTaxlotCombine
+'       ORMAPNumber
 '
 'References:
 '   Visual Basic For Applications
@@ -332,6 +342,7 @@ Attribute VB_Name = "AppSpecs"
 '   ESRI DisplayUI Object Library
 '   ESRI Editor Object Library
 '   ESRI EditorExt Object Library
+'   ESRI Error Handler v1.0
 '   ESRI Error Handler Remover
 '   ESRI Framework Object Library
 '   ESRI GeoDatabase Object Library
@@ -339,8 +350,7 @@ Attribute VB_Name = "AppSpecs"
 '   ESRI Geometry Object Library
 '   ESRI System Object Library
 '   ESRI SystemUI Object Library
-'   Microsoft ActiveX Data Objects 2.8 Library
-'   Microsoft Forms 2.0 Object Library
 '   ErrorHandlerUI 1.0 Type Library
+'   Microsoft Scripting Runtime
 
 

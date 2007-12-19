@@ -1,4 +1,4 @@
-Attribute VB_Name = "IniFiles"
+Attribute VB_Name = "basIniFiles"
 Attribute VB_Description = "Set of function to read and extract values from INI files"
 '    Copyright (C) 2006  opet developers opet-developers@lists.sourceforge.net
 '
@@ -24,120 +24,140 @@ Attribute VB_Description = "Set of function to read and extract values from INI 
 '
 ' File name:            IniFiles
 '
-' Initial Author:       Type your name here
+' Initial Author:       <<Unknown>>
 '
-' Date Created:     10/11/2006
+' Date Created:         10/11/2006
 '
-' Description: MODULE THAT PROCESSES INI FILE
-'
+' Description:
+'       Common initialization file routines
 '
 ' Entry points:
-'       List the public variables and their purposes.
-'       List the properties and routines that the module exposes to the rest of the program.
-'
+'       Methods
+'           TestIniFile
+'               Returns the state of existence of a given file
+'           ReadIniFile
+'               Returns the value of a key in a section of an
+'               initialization file
 ' Dependencies:
-'       How does this file depend or relate to other files?
+'       File Dependencies
+'           basWin32API
 '
 ' Issues:
-'       What are unsolved bugs, bottlenecks,
-'       possible future enhancements, and
-'       descriptions of other issues.
-'
+'       None are known at this time (2/7/2007 JWalton)
+
 ' Method:
-'       Describe any complex details that make sense on the file level.  This includes explanations
-'       of complex algorithms, how different routines within the module interact, and a description
-'       of a data structure used in the module.
+'       The ReadIniFile is dependent on the variable m_sIniFile. The
+'       function TestIniFile must be called first, or a file must be
+'       specified with the ReadIniFile call in order for the function to
+'       succeed.
 '
 ' Updates:
-'   JWM 10/11/2006 Added this file header
+'       10/11/2006 -- Added this file header (JWM)
+'       2/6/2007 -- All inline documentation reviewed/revised (JWalton)
 
 Option Explicit
-'******************************
-' Global/Public Definitions
-'------------------------------
-' Public API Declarations
-'------------------------------
-
-'------------------------------
-' Public Enums and Constants
-'------------------------------
-
-'------------------------------
-' Public variables
-'------------------------------
-
-'------------------------------
-' Public Types
-'------------------------------
-
-'------------------------------
-' Public loop variables
-'------------------------------
-
 '******************************
 ' Private Definitions
 '------------------------------
 ' Private API declarations
 '------------------------------
-Private Declare Function GetPrivateProfileString Lib "kernel32" Alias "GetPrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nSize As Long, ByVal lpFileName As String) As Long
+'++ START JWalton 2/7/2007
+    ' Removed Win32API function GetPrivateProfileString to basWin32API
+'++ END JWalton 2/7/2007
 '++ Removed api declaration to write to INI file JWM 10/09/2006
 '------------------------------
 ' Private Variables
 '------------------------------
-Private mIniFile As String
+Private m_sIniFile As String
 
-'------------------------------
-'Private Constants and Enums
-'------------------------------
+'***************************************************************************
+'Name:                  TestIniFile
+'Initial Author:        James Moore
+'Subsequent Author:     <<Type your name here>>
+'Created:               1/24/2001
+'Purpose:       Determine if an initialization file is valid
+'Called From:   Multiple Locations
+'Description:   Checks for a given file one disk, and returns a boolean
+'               value indicating the existence.
+'Methods:       None
+'Inputs:        FilePath
+'Parameters:    None
+'Outputs:       None
+'Returns:       A boolean the represents the existence of the file
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    12-18-06    This new code does not rely on outside functions
+'***************************************************************************
 
-'------------------------------
-' Private Types
-'------------------------------
-
-'------------------------------
-' Private loop variables
-'------------------------------
-
-Public Function TestIniFile(FilePath As String) As Boolean
-  mIniFile = FilePath
-  TestIniFile = Len(Dir$(FilePath)) > 0
+Public Function TestIniFile( _
+  FilePath As String) As Boolean
+    ' Saves the file for later use
+    m_sIniFile = FilePath
+    
+    ' Determines if the file exists
+    TestIniFile = Len(Dir$(FilePath)) > 0
 End Function
 
-Public Function ReadIniFile(ByVal strSection As String, ByVal strKey As String) As String
-  '************************************************************
-'Author:        James Moore
-'Created:       01-24-2001
-'Purpose: Retrieves a value from an ini file corresponding
-'           to the section and key name passed.
-'
-'Method:  Call the API with the parameters passed.
-  'The lResult value is the length of the string in sReturn, not including the terminating null. If a
-  'default value was passed, and the section or key name are not in the file, that value is
-  'returned. If no default value was passed (""), then lResult will = 0 if not found.
-'Inputs:    ini section name and the key name within that section
-'Outputs:  INI file entry
-'Errors:    This routine raises no known errors.
-'Assumptions:   What parameters or variable values are assumed to be true?
+'***************************************************************************
+'Name:                  TestIniFile
+'Initial Author:        James Moore
+'Subsequent Author:     <<Type your name here>>
+'Created:               1/24/2001
+'Purpose:       Retrieves a value from an ini file corresponding to the
+'               section and key name passed.
+'Called From:   Multiple Locations
+'Description:   File the reads settings in an initialization file.
+'Methods:       Call the API with the parameters passed.
+'               The lResult value is the length of the string in sReturn,
+'               not including the terminating null. If a default value
+'               was passed, and the section or key name are not in the file,
+'               that value is returned. If no default value was passed (""),
+'               then lResult will = 0 if not found.
+'Inputs:        FilePath
+'Parameters:    None
+'Outputs:       None
+'Returns:       A string the represents the value of the setting in the
+'               initialization file.
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
 'Updates:
-'               Type any updates here.
-' Developer     Date        Comments
-'James Moore    12-18-06    This new code does not rely on outside functions
-'************************************************************
-Dim lResult As Long
-Dim nSize As Long
-Dim sReturn As String
-  'Pad a string large enough to hold the data.
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    12/18/06    This new code does not rely on outside functions
+'John Walton    2/7/2007    Added optional argument for a file
+'***************************************************************************
+
+Public Function ReadIniFile( _
+  ByVal strSection As String, _
+  ByVal strKey As String, _
+  Optional ByVal strFile As String = "") As String
+    ' Variable declarations
+    Dim lResult As Long
+    Dim lSize As Long
+    Dim sReturn As String
+    
+    '++ START JWalton 2/7/2007
+    If Len(strFile) > 0 Then
+        m_sIniFile = strFile
+    End If
+    '++ END JWalton 2/7/2007
+    
+    ' Pad a string large enough to hold the data
      sReturn = String$(256, vbNullChar)
-     nSize = Len(sReturn)
-     lResult = GetPrivateProfileString(strSection, strKey, "", sReturn, nSize, mIniFile)
+     lSize = Len(sReturn)
+     
+     ' Look up the value in the specified file
+     lResult = GetPrivateProfileString(strSection, strKey, "", sReturn, lSize, m_sIniFile)
+     
+     ' Translate the result to the function
      If lResult Then
          ReadIniFile = Left$(sReturn, lResult)
      Else
          ReadIniFile = ""
      End If
 End Function
-
-
-
-
-
