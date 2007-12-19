@@ -1,5 +1,5 @@
 REM ======================================
-REM  Unregister ORMAP TaxlotEditing Tools
+REM  Unregister TaxlotEditing Tool
 REM ======================================
 
 REM --------Unregister Main DLL--------

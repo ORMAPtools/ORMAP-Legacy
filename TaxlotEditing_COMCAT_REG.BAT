@@ -1,5 +1,5 @@
 REM =======================================
-REM  Register ORMAP TaxlotEditing Tools in
+REM  Register TaxlotEditing Tool in
 REM  ESRI COM Categories (Step 2)
 REM =======================================
 

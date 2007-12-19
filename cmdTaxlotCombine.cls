@@ -11,7 +11,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-
 '    Copyright (C) 2006  opet developers opet-developers@lists.sourceforge.net
 '
 '    This program is free software; you can redistribute it and/or modify
@@ -35,100 +34,86 @@ Attribute VB_Exposed = True
 '
 ' File name:            cmdTaxlotCombine
 '
-' Initial Author:       Type your name here
+' Initial Author:       <<Unknown>>
 '
-' Date Created:     10/11/2006
+' Date Created:         10/11/2006
 '
-' Description: CLASS MODULE FOR TAXLOTCOMBINE COMMAND
-'               OPENS frmCombine
-'
+' Description:
+'       Programmatic description for Taxlot Assignment tool
 '
 ' Entry points:
-'       List the public variables and their purposes.
-'       List the properties and routines that the module exposes to the rest of the program.
+'       The tool that this class describes is exposed on the toolbar defined by
+'       clsTaxlotEditingToolbar.
 '
 ' Dependencies:
-'       How does this file depend or relate to other files?
+'       File References
+'           esriArcMapUI
+'           esriCarto
+'           esriFramework
+'           esriGeoDatabase
+'           esriSystemUI
+'       File Dependencies
+'           frmCombine
+'           basGlobals
 '
 ' Issues:
-'       What are unsolved bugs, bottlenecks,
-'       possible future enhancements, and
-'       descriptions of other issues.
+'       None are known at this time (2/8/2007 JWalton)
 '
 ' Method:
-'       Describe any complex details that make sense on the file level.  This includes explanations
-'       of complex algorithms, how different routines within the module interact, and a description
-'       of a data structure used in the module.
+'       None
 '
 ' Updates:
-'               None
+'       2/6/2007 -- All inline documentation reviewed/revised (JWalton)
 
 Option Explicit
 '******************************
-' Global/Public Definitions
-'------------------------------
-' Public API Declarations
-'------------------------------
-
-'------------------------------
-' Public Enums and Constants
-'------------------------------
-
-'------------------------------
-' Public variables
-'------------------------------
-
-'------------------------------
-' Public Types
-'------------------------------
-
-'------------------------------
-' Public loop variables
-'------------------------------
-
-'******************************
 ' Private Definitions
-'------------------------------
-' Private API declarations
-'------------------------------
-
 '------------------------------
 ' Private Variables
 '------------------------------
-Private m_pApp As esriFramework.IApplication
 Private m_pDoc As esriArcMapUI.IMxDocument
-Private m_pMap As IMap
+Private m_pMap As esriCarto.IMap
 Private m_bEnabled As Boolean
+
 '------------------------------
 'Private Constants and Enums
 '------------------------------
-Private Const c_sModuleFileName As String = "cmdTaxlotCombine.cls" ' Variables used by the Error handler function - DO NOT REMOVE
+Private Const c_sModuleFileName As String = "cmdTaxlotCombine.cls"
 
 '------------------------------
-' Private Types
+' Interface Implementations
 '------------------------------
-
-'------------------------------
-' Private loop variables
-'------------------------------
-
-
-Implements ICommand
-
+Implements esriSystemUI.ICommand
 
 Private Property Get ICommand_Enabled() As Boolean
-  On Error GoTo ErrorHandler
+On Error GoTo ErrorHandler
+    '++ START JWalton 2/8/2007 Centralized Variable Declarations
+    ' Variable declarations
+    Dim pFeatureLayer As esriCarto.IFeatureLayer
+    Dim pDataset As esriGeoDatabase.IDataset
+    Dim pFeat As esriGeoDatabase.IFeature
+    Dim pFeatCur As esriGeoDatabase.IFeatureCursor
+    Dim pWorkspaceEdit As esriGeoDatabase.IWorkspaceEdit
+    '++ END JWalton 2/8/2007
+
+    '++ START JWalton 2/6/2007 Link status of command to enabled status of DLL
+    ' Checks the status of the DLL before proceding
+    If Not g_bDLLEnabled Then
+        ICommand_Enabled = False
+        Exit Property
+    End If
+    '++ END JWalton 2/6/2007
 
     'Enable if editing and at least two taxlots selected
     m_bEnabled = False
-    Set m_pDoc = m_pApp.Document
+    '++ START JWalton 2/8/2007 m_pApp to g_pApp
+    Set m_pDoc = g_pApp.Document
+    '++ END JWalton 2/8/2007
     Set m_pMap = m_pDoc.FocusMap
+    
     'This is called before the mxd is open, so need to check if any layers present
     If m_pMap.LayerCount > 0 Then
-        Dim pWorkspaceEdit As IWorkspaceEdit
-        Dim pFeatureLayer As IFeatureLayer
-        Dim pDataset As IDataset
-        Set pFeatureLayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
+        Set pFeatureLayer = basUtilities.FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
         If pFeatureLayer Is Nothing Then
             m_bEnabled = False
             GoTo Process_Exit
@@ -137,10 +122,8 @@ Private Property Get ICommand_Enabled() As Boolean
         If pDataset Is Nothing Then GoTo Process_Exit
         Set pWorkspaceEdit = pDataset.Workspace
         If pWorkspaceEdit.IsBeingEdited Then 'Check if being edited
-            Dim pFeatCur As IFeatureCursor
-            Set pFeatCur = GetSelectedFeatures(pFeatureLayer) 'Make sure more than one selected
+            Set pFeatCur = basUtilities.GetSelectedFeatures(pFeatureLayer) 'Make sure more than one selected
             If Not pFeatCur Is Nothing Then
-                Dim pFeat As IFeature
                 Set pFeat = pFeatCur.NextFeature 'first feature
                 If Not pFeat Is Nothing Then
                     Set pFeat = pFeatCur.NextFeature 'second feature
@@ -160,146 +143,196 @@ Private Property Get ICommand_Enabled() As Boolean
 Process_Exit:
   Exit Property
 ErrorHandler:
-  HandleError True, "ICommand_Enabled " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+    HandleError True, _
+                "ICommand_Enabled " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
 End Property
  
 Private Property Get ICommand_Checked() As Boolean
-  On Error GoTo ErrorHandler
-
+On Error GoTo ErrorHandler
 
      ICommand_Checked = False
-    
 
-  Exit Property
+    Exit Property
 ErrorHandler:
-  HandleError True, "ICommand_Checked " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+    HandleError True, _
+                "ICommand_Checked " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
 End Property
  
 Private Property Get ICommand_Name() As String
-  On Error GoTo ErrorHandler
-
+On Error GoTo ErrorHandler
 
      ICommand_Name = "Combine"
-    
 
-  Exit Property
+    Exit Property
 ErrorHandler:
-  HandleError True, "ICommand_Name " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+    HandleError True, _
+                "ICommand_Name " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
 End Property
  
 Private Property Get ICommand_Caption() As String
-  On Error GoTo ErrorHandler
-
+On Error GoTo ErrorHandler
 
      ICommand_Caption = "Combine Selected Taxlots"
-    
 
-  Exit Property
+    Exit Property
 ErrorHandler:
-  HandleError True, "ICommand_Caption " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+    HandleError True, _
+                "ICommand_Caption " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
 End Property
  
 Private Property Get ICommand_Tooltip() As String
-  On Error GoTo ErrorHandler
-
+On Error GoTo ErrorHandler
 
      ICommand_Tooltip = "Taxlot Consolidation Tool"
-    
 
-  Exit Property
+    Exit Property
 ErrorHandler:
-  HandleError True, "ICommand_Tooltip " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+    HandleError True, _
+                "ICommand_Tooltip " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
 End Property
  
 Private Property Get ICommand_Message() As String
-  On Error GoTo ErrorHandler
-
-    
-    ' TODO: Add your implementation here
-    ' ICommand_Message =
-    
-
-  Exit Property
-ErrorHandler:
-  HandleError True, "ICommand_Message " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+    '++ START JWalton 2/6/2007
+    ' Not Implemented
+    '++ END JWalton 2/6/2007
 End Property
  
 Private Property Get ICommand_HelpFile() As String
-  On Error GoTo ErrorHandler
-
-    
-    ' TODO: Add your implementation here
-    ' ICommand_HelpFile =
-    
-
-  Exit Property
-ErrorHandler:
-  HandleError True, "ICommand_HelpFile " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+    '++ START JWalton 2/6/2007
+    ' Not Implemented
+    '++ END JWalton 2/6/2007
 End Property
  
 Private Property Get ICommand_HelpContextID() As Long
-  On Error GoTo ErrorHandler
-
-    
-    ' TODO: Add your implementation here
-    ' ICommand_HelpContextID =
-    
-
-  Exit Property
-ErrorHandler:
-  HandleError True, "ICommand_HelpContextID " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+    '++ START JWalton 2/6/2007
+    ' Not Implemented
+    '++ END JWalton 2/6/2007
 End Property
  
 Private Property Get ICommand_Bitmap() As esriSystem.OLE_HANDLE
-  On Error GoTo ErrorHandler
-
-    
-    ' TODO: Add your implementation here
-    ' ICommand_Bitmap =
-    
-
-  Exit Property
-ErrorHandler:
-  HandleError True, "ICommand_Bitmap " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+    '++ START JWalton 2/6/2007
+    ' Not Implemented
+    '++ END JWalton 2/6/2007
 End Property
  
 Private Property Get ICommand_Category() As String
-  On Error GoTo ErrorHandler
-
+On Error GoTo ErrorHandler
 
      ICommand_Category = "ORMAP"
-    
 
-  Exit Property
+    Exit Property
 ErrorHandler:
-  HandleError True, "ICommand_Category " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+    HandleError True, _
+                "ICommand_Category " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
 End Property
- 
-Private Sub ICommand_OnCreate(ByVal hook As Object)
-  On Error GoTo ErrorHandler
 
-    
-  Set m_pApp = hook
-  If g_pApp Is Nothing Then
-    Set g_pApp = hook
-  End If
-  Set m_pDoc = m_pApp.Document
-  Set m_pMap = m_pDoc.FocusMap
+'***************************************************************************
+'Name:                  ICommand_OnCreate
+'Initial Author:        <<Unknown>>
+'Subsequent Author:     <<Type your name here>>
+'Created:               <<Unknown>>
+'Purpose:       Initialize the command
+'Called From:   Class Object
+'Description:   Verify the calling application and the set the enabled state
+'               of the DLL itself according to whether or not the calling
+'               application is ArcMap.
+'               Initialize the Editor if the calling application is ArcMap
+'Methods:       None
+'Inputs:        hook - An ArcGIS application that is calling this DLL
+'Parameters:    None
+'Outputs:       g_pApp - Global reference to ArcMap
+'               g_bDLLEnabled -
+'Returns:       Nothing
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
 
+Private Sub ICommand_OnCreate( _
+  ByVal hook As Object)
+On Error GoTo ErrorHandler
+'++ START JWalton 1/26/2007 Only continue for ArcMap
+    If TypeOf hook Is esriArcMapUI.IMxApplication Then
+        If g_pApp Is Nothing Then
+          Set g_pApp = hook
+        End If
+        g_bDLLEnabled = True
+      Else
+        g_bDLLEnabled = False
+    End If
+'++ END JWalton 1/26/2007
 
-  Exit Sub
+    Exit Sub
 ErrorHandler:
-  HandleError True, "ICommand_OnCreate " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+    HandleError True, _
+                "ICommand_OnCreate " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
 End Sub
  
-Private Sub ICommand_OnClick()
-  On Error GoTo ErrorHandler
 
+'***************************************************************************
+'Name:                  ICommand_OnClick
+'Initial Author:        <<Unknown>>
+'Subsequent Author:     <<Type your name here>>
+'Created:               <<Unknown>>
+'Purpose:       Show the Combine Taxlots form
+'Called From:   Class Object
+'Description:   Shows the Combine Taxlots form modally
+'Methods:       None
+'Inputs:        None
+'Parameters:    None
+'Outputs:       None
+'Returns:       None
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
+
+Private Sub ICommand_OnClick()
+On Error GoTo ErrorHandler
     
     frmCombine.Show vbModal
-    
 
-  Exit Sub
+    Exit Sub
 ErrorHandler:
-  HandleError True, "ICommand_OnClick " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+    HandleError True, _
+                "ICommand_OnClick " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
 End Sub

@@ -35,84 +35,36 @@ Attribute VB_Exposed = True
 '
 ' File name:            clsRowChanged
 '
-' Initial Author:       Type your name here
+' Initial Author:       <<Unknown>>
 '
-' Date Created:
+' Date Created:         <<Unknown>>
 '
 ' Description:
-'       Short description of the file's overall purpose.
+'       Public object that can be passed around with a row to indicate
+'       if the row has been changed at all
 '
 ' Entry points:
-'       List the public variables and their purposes.
-'       List the properties and routines that the module exposes to the rest of the program.
-'
+'       Properties
+'           RowChanged (Boolean R/W)
+'               Flag that is used to determine whether or not  a row
+'               has been changed
 ' Dependencies:
-'       How does this file depend or relate to other files?
-'
+'       None
+
 ' Issues:
-'       What are unsolved bugs, bottlenecks,
-'       possible future enhancements, and
-'       descriptions of other issues.
-'
-' Method:
-'       Describe any complex details that make sense on the file level.  This includes explanations
-'       of complex algorithms, how different routines within the module interact, and a description
-'       of a data structure used in the module.
+'       None are known at this time (2/8/2007 JWalton)
 '
 ' Updates:
-'++  JWM 10/11/2006 added this header to the file
+'       10/11/2006 -- Added this header to the file (JWM)
+'       2/6/2007 -- All inline documentation reviewed/revised (JWalton)
 
 Option Explicit
 '******************************
-' Global/Public Definitions
-'------------------------------
-' Public API Declarations
-'------------------------------
-
-'------------------------------
-' Public Enums and Constants
-'------------------------------
-
-'------------------------------
-' Public variables
-'------------------------------
-
-'------------------------------
-' Public Types
-'------------------------------
-
-'------------------------------
-' Public loop variables
-'------------------------------
-
-'******************************
 ' Private Definitions
-'------------------------------
-' Private API declarations
-'------------------------------
-
 '------------------------------
 ' Private Variables
 '------------------------------
-Private m_bRowChanged As Boolean 'During the compare and save process, set a flag so the app
-' knows whether to store the row when done comparing
-'------------------------------
-'Private Constants and Enums
-'------------------------------
-
-'------------------------------
-' Private Types
-'------------------------------
-
-'------------------------------
-' Private loop variables
-'------------------------------
-
-Private Sub Class_Initialize()
-
-  m_bRowChanged = False
-  
-End Sub
+Private m_bRowChanged As Boolean    ' Flag the indicate the Changed status of a row
 
 Public Property Let RowChanged(bRowChanged As Boolean)
   m_bRowChanged = bRowChanged

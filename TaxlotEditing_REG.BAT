@@ -1,5 +1,5 @@
 REM ====================================
-REM  Register ORMAP TaxlotEditing Tools
+REM  Register TaxlotEditing Tools
 REM  (Step 1)
 REM ====================================
 

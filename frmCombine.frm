@@ -1,89 +1,47 @@
 VERSION 5.00
 Begin VB.Form frmCombine 
    Caption         =   "Taxlot Combine"
-   ClientHeight    =   1845
+   ClientHeight    =   1215
    ClientLeft      =   4770
    ClientTop       =   4575
-   ClientWidth     =   4470
+   ClientWidth     =   3105
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
-   ScaleHeight     =   1845
-   ScaleWidth      =   4470
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   1215
+   ScaleWidth      =   3105
+   ShowInTaskbar   =   0   'False
    Begin VB.TextBox txtNewTaxlot 
-      Height          =   375
-      Left            =   1800
+      Height          =   315
+      Left            =   1170
       MaxLength       =   5
-      TabIndex        =   4
-      Top             =   360
-      Width           =   2175
+      TabIndex        =   3
+      Top             =   150
+      Width           =   1725
    End
    Begin VB.CommandButton cmdHelp 
       Caption         =   "Help"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   9.75
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   495
-      Left            =   1680
-      TabIndex        =   2
-      Top             =   960
-      Width           =   855
-   End
-   Begin VB.CommandButton cmdCancel 
-      Caption         =   "Cancel"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   9.75
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   495
-      Left            =   3000
+      Height          =   375
+      Left            =   2160
       TabIndex        =   1
-      Top             =   960
-      Width           =   855
+      Top             =   690
+      Width           =   800
    End
    Begin VB.CommandButton cmdApply 
       Caption         =   "Apply"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   9.75
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   495
-      Left            =   480
+      Height          =   375
+      Left            =   1320
       TabIndex        =   0
-      Top             =   960
-      Width           =   855
+      Top             =   690
+      Width           =   800
    End
    Begin VB.Label Label1 
       Caption         =   "New Taxlot:"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   12
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   375
-      Left            =   120
-      TabIndex        =   3
-      Top             =   360
-      Width           =   1455
+      Height          =   255
+      Left            =   150
+      TabIndex        =   2
+      Top             =   180
+      Width           =   975
    End
 End
 Attribute VB_Name = "frmCombine"
@@ -115,200 +73,178 @@ Attribute VB_Exposed = False
 '
 ' File name:            frmCombine
 '
-' Initial Author:       Type your name here
+' Initial Author:       <<Unknown>>
 '
-' Date Created:     10/11/2006
+' Date Created:         10/11/2006
 '
 ' Description: FORM USED TO COMBINE SELECTED TAXLOTS.
-'   Portions of this code may have come from the clsMergeRules.cls
-' or clsMergeNetFeats.cls located in ArcGIS Developer help
+'       Form used by the Combine Taxlot tools for its user interface
+'       Portions of this code may have come from the clsMergeRules.cls located in ArcGIS _
+'       Developer help
 '
 ' Entry points:
-'       List the public variables and their purposes.
-'       List the properties and routines that the module exposes to the rest of the program.
+'       Form Object
 '
 ' Dependencies:
-'       How does this file depend or relate to other files?
+'       File References:
+'           esriArcMapUI
+'           esriCarto
+'           esriEditor
+'           esriFramework
+'           esriGeoDatabase
+'           esriGeometry
+'           esriSystem
+'       File Dependencies
+'           basGlobals
+'           basUtilities
 '
 ' Issues:
-'       What are unsolved bugs, bottlenecks,
-'       possible future enhancements, and
-'       descriptions of other issues.
+'       None known at this time (2/6/2007 JWalton)
 '
 ' Method:
-'       Describe any complex details that make sense on the file level.  This includes explanations
-'       of complex algorithms, how different routines within the module interact, and a description
-'       of a data structure used in the module.
+'       None
 '
 ' Updates:
-'               None
+'       2/6/2007 -- All inline documentation reviewed/revised (JWalton)
 
 Option Explicit
 '******************************
-' Global/Public Definitions
-'------------------------------
-' Public API Declarations
-'------------------------------
-
-'------------------------------
-' Public Enums and Constants
-'------------------------------
-
-'------------------------------
-' Public variables
-'------------------------------
-
-'------------------------------
-' Public Types
-'------------------------------
-
-'------------------------------
-' Public loop variables
-'------------------------------
-
-'******************************
 ' Private Definitions
-'------------------------------
-' Private API declarations
-'------------------------------
-
 '------------------------------
 ' Private Variables
 '------------------------------
-Private m_pEditor As IEditor
-Private m_pApp As IApplication
-Private m_pMxDoc As IMxDocument
-
+Private m_pEditor As esriEditor.IEditor
+'++ START JWalton 2/6/2007
+    ' Removed declaration for m_pMxDoc as it is no longer used
+    ' Removed declaration for m_pApp in favor of g_pApp
+'++ END JWalton 2/6/2007
+Private ml_SubtypeCode As Long
+Private m_pEnumFeature As IEnumFeature
+Private m_lGTotalVal As Double
 '------------------------------
 'Private Constants and Enums
 '------------------------------
-' Variables used by the Error handler function - DO NOT REMOVE
 Private Const c_sModuleFileName As String = "frmCombine.frm"
-'------------------------------
-' Private Types
-'------------------------------
-
-'------------------------------
-' Private loop variables
-'------------------------------
 
 '***************************************************************************
 'Name:  cmdApply_Click
-'Initial Author:
-'Subsequent Author:     Type your name here.
-'Created:
+'Initial Author:        <<Unknown>>
+'Subsequent Author:     <<Type your name here>>
+'Created:               <<Unknown>>
 'Description:   Combines taxlot polygons
-'Methods:       Describe any complex details.
-'Inputs:        What variables are brought into this routine?
+'Methods:       None
+'Inputs:        None
 'Parameters:    None
-'Outputs:       What variables are changed in this routine?
+'Outputs:       None
 'Returns:       Nothing
 'Errors:        This routine raises no known errors.
-'Assumptions:   What parameters or variable values are assumed to be true?
+'Assumptions:   None
 'Updates:
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
 'James Moore    10/11/2006  Initial creation
 'James Moore    10-30-2006  Some of this code was copied from a developer sample and not fully fleshed out.
-'
+'James Moore    01/11/2007  I have fleshed out the code mentioned at beginning of this file and implemented it
 '***************************************************************************
+
 Private Sub cmdApply_Click()
-  On Error GoTo ErrorHandler
-    'Code that combines taxlots
-    Dim pMXDoc As IMxDocument
-    Dim pMap As IMap
+On Error GoTo ErrorHandler
+    '++ START JWalton 2/6/2007 Centralized Variable Declarations
+    Dim pMXDoc As esriArcMapUI.IMxDocument
+    Dim pMap As esriCarto.IMap
+    Dim pDataset As esriGeoDatabase.IDataset
+    Dim pDomain As esriGeoDatabase.IDomain
+    Dim pCurFeature As esriGeoDatabase.IFeature
+    Dim pLineFeat As esriGeoDatabase.IFeature
+    Dim pNewFeature As esriGeoDatabase.IFeature
+    Dim pNewLineFeat As esriGeoDatabase.IFeature
+    Dim pFWorkspace As esriGeoDatabase.IFeatureWorkspace
+    Dim pFeatcls As esriGeoDatabase.IFeatureClass
+    Dim pRLFclass As esriGeoDatabase.IFeatureClass
+    Dim pTLLinesFC As esriGeoDatabase.IFeatureClass
+    Dim pFeatCur As esriGeoDatabase.IFeatureCursor
+    Dim pLineFCur As esriGeoDatabase.IFeatureCursor
+    Dim pFeatureLayer As esriCarto.IFeatureLayer
+    Dim pTLLinesLayer As esriCarto.IFeatureLayer
+    Dim pFld As esriGeoDatabase.IField
+    Dim pFlds As esriGeoDatabase.IFields
+    Dim pRefresh As esriGeoDatabase.IInvalidArea
+    Dim pOutRSType As esriGeoDatabase.IRowSubtypes
+    Dim pSubtypes As esriGeoDatabase.ISubtypes
+    Dim pWorkspace As esriGeoDatabase.IWorkspace
+    Dim pWorkspaceEdit As esriGeoDatabase.IWorkspaceEdit
+    Dim pArea As esriGeometry.IArea
+    Dim pMergedGeom As esriGeometry.IGeometry
+    Dim pGeom As esriGeometry.IGeometry
+    Dim pOutputGeometry As esriGeometry.IGeometry
+    Dim pTmpGeom As esriGeometry.IGeometry
+    Dim pTopoOperator As esriGeometry.ITopologicalOperator
+    Dim i As Long
+    Dim lCount As Long
+    Dim lDefaultSubType As Long
+    Dim lLineTypeFld As Long
+    Dim lTLTaxlotFld As Long
+    '++ END JWalton 2/6/2007
+    
+    ' Initialize objects
     Set pMXDoc = g_pApp.Document
     Set pMap = pMXDoc.FocusMap
+    
     'Validate new taxlot number entered and make sure it doesn't exist
-    If Not IsNumeric(Me.txtNewTaxlot.Text) Or Not (Len(Me.txtNewTaxlot.Text) = ORMAP_TAXLOT_FIELD_LENGTH) Then
-      MsgBox "Invalid Start Value.  Please enter a 5-digit number", vbOKOnly, "Error"
-      Me.txtNewTaxlot.SetFocus
-      GoTo Process_Exit
+    If (Len(Me.txtNewTaxlot.Text) = 0 Or (Len(Me.txtNewTaxlot.Text) > ORMAP_TAXLOT_FIELD_LENGTH)) Or _
+       Not IsNumeric(Me.txtNewTaxlot.Text) Then
+        MsgBox "Invalid Start Value.  Please enter a 5-digit number", vbOKOnly, "Error"
+        Me.txtNewTaxlot.SetFocus
+        GoTo Process_Exit
     End If
 
     'Taxlots already selected and taxlot number known
-    Dim pFeatcls As IFeatureClass
-    Dim pWorkspaceEdit As IWorkspaceEdit
-    Dim pFeatureLayer As IFeatureLayer
-    Dim pDataset As IDataset
-    Set pFeatureLayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
+    Set pFeatureLayer = basUtilities.FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
     Set pFeatcls = pFeatureLayer.FeatureClass
     Set pDataset = pFeatureLayer.FeatureClass
     If pDataset Is Nothing Then GoTo Process_Exit
     Set pWorkspaceEdit = pDataset.Workspace
     If pWorkspaceEdit.IsBeingEdited Then 'Check if being edited
-        Dim pFeatCur As IFeatureCursor
-        Set pFeatCur = GetSelectedFeatures(pFeatureLayer) 'Make sure more than one selected
+        Set pFeatCur = basUtilities.GetSelectedFeatures(pFeatureLayer) 'Make sure more than one selected
         If Not pFeatCur Is Nothing Then
-            'Combine taxlots
-            ' code to merge the features, evaluate the merge rules and assign values to fields appropriatly
+            ' Combine taxlots
+            ' Code to merge the features, evaluate the merge rules and assign values to fields appropriatly
             
-            ' start edit operation
+            ' Start edit operation
             m_pEditor.StartOperation
             
             ' create a new feature to be the merge feature
-            Dim pCurFeature As IFeature
-            Dim pNewFeature As IFeature
-            Dim lCount As Long
-            Dim l_GTotalVal As Double '++  JWM 10/30/2006
             Set pNewFeature = pFeatcls.CreateFeature
-            
-            ' create the new geometry.
-            Dim pGeom As IGeometry
-            Dim pTmpGeom As IGeometry
-            Dim pOutputGeometry As IGeometry
-            Dim pTopoOperator As ITopologicalOperator
               
-            ' initialize the default values for the new feature
-            Dim pOutRSType As IRowSubtypes
+            '++ START JWalton 2/14/2007 Extract the default subtype from the feature's class
+            ' Initialize the default values for the new feature
+            Set pSubtypes = pNewFeature.Class
+            lDefaultSubType = pSubtypes.DefaultSubtypeCode
+            '++ END JWalton 2/14/2007
+            
             Set pOutRSType = pNewFeature
-'++ START JWM 10/30/2006 Since lSCode is not declared anywhere I must assume it is an artifact.
-'           I will remove the test from the code and modify the assignment for a feature class
-'           with subtypes defined
-            Dim lpSubTypes As ISubtypes
-            Dim lDefaultSubtype As Long
-            Dim pEnumFeat As IEnumFeature 'for merge policy
-            Dim pChkFeature As IFeature 'for merge policy
-            Dim pRowSubTypes As IRowSubtypes 'for merge policy
             
-            Set pEnumFeat = pCurFeature
-            Set lpSubTypes = pOutRSType
-            Set pChkFeature = pEnumFeat.Next
-            
-            lDefaultSubtype = lpSubTypes.DefaultSubtypeCode
-'            If lSCode <> 0 Then
-'              pOutRSType.SubtypeCode = lSCode
-            pOutRSType.SubtypeCode = lDefaultSubtype
-'            End If
+'++ START merge policy revisited JWM 01/11/2007 I have removed previous my previous code and
+'have implemented the code from the developer sample clsMergeRules.cls as best as I am able
+            If ml_SubtypeCode <> 0 Then
+              pOutRSType.SubtypeCode = ml_SubtypeCode
+            End If
             pOutRSType.InitDefaultValues
-            
-            Set lpSubTypes = Nothing
-'++ END JWM 10/30/2006
-'++ START JWM 10/30/2006 get values for merge policy: area weighted
-            Do
-                Set pRowSubTypes = pChkFeature
-                l_GTotalVal = l_GTotalVal + getGeomVal(pChkFeature)
-                Set pChkFeature = pEnumFeat.Next
-            Loop Until pChkFeature Is Nothing
-            Set pRowSubTypes = Nothing
-            Set pChkFeature = Nothing
-            Set pEnumFeat = Nothing
-'++ END JWM 10/30/2006
+'++ END merge policy revisted JWM 01/11/2007
 
             ' get the first feature
+            Set pFeatCur = basUtilities.GetSelectedFeatures(pFeatureLayer)
             Set pCurFeature = pFeatCur.NextFeature
-            Dim pFlds As IFields
             Set pFlds = pFeatcls.Fields
             
-            Dim pArea As IArea
             Set pArea = pCurFeature.Shape
-            'Now that we have a feature,
-            'Verify that within this map index, this taxlot number is unique
-            'If not unique, prompt user to enter a new value
-            If Not ValidateTaxlotNum(frmCombine.txtNewTaxlot.Text, pArea.Centroid) Then
-                MsgBox "The current Taxlot value (" & frmTaxlotAssignment.txtTaxlotNum.Text & _
-                ") is not unique withing this MapIndex.  Please enter a new number"
+            ' Now that we have a feature,
+            ' Verify that within this map index, this taxlot number is unique
+            ' If not unique, prompt user to enter a new value
+            If Not basUtilities.ValidateTaxlotNum(Me.txtNewTaxlot.Text, pArea.Centroid) Then
+                MsgBox "The current Taxlot value (" & Me.txtNewTaxlot.Text & _
+                ") is not unique within this MapIndex.  Please enter a new number"
                 m_pEditor.AbortOperation
                 GoTo Process_Exit
             End If
@@ -326,29 +262,23 @@ Private Sub cmdApply_Click()
                     
                 ' now go through each field, if it has a domain associated with it, then
                 ' evaluate the merge policy...
-                Dim pFld As IField
-                Dim pDomain As IDomain
-                Dim pSubtypes As ISubtypes
                 Set pSubtypes = pFeatcls
-                Dim i As Long
                 For i = 0 To pFlds.FieldCount - 1
                     Set pFld = pFlds.Field(i)
-'++  JWM 10/30/2006 line below modified to use default subtype variable set in code above
-'                    Set pDomain = pSubtypes.Domain(lSCode, pFld.Name)
-                    Set pDomain = pSubtypes.Domain(lDefaultSubtype, pFld.Name)
+                    Set pDomain = pSubtypes.Domain(ml_SubtypeCode, pFld.Name)
                     If Not pDomain Is Nothing Then
                       Select Case pDomain.MergePolicy
-                            Case esriMPTSumValues 'Sum values
+                            Case esriGeoDatabase.esriMergePolicyType.esriMPTSumValues 'Sum values
                                 If lCount = 1 Then
                                     pNewFeature.Value(i) = pCurFeature.Value(i)
                                 Else
                                     pNewFeature.Value(i) = pNewFeature.Value(i) + pCurFeature.Value(i)
                                 End If
-                            Case esriMPTAreaWeighted 'Area/length weighted average
+                            Case esriGeoDatabase.esriMergePolicyType.esriMPTAreaWeighted 'Area/length weighted average
                                 If lCount = 1 Then
-                                    pNewFeature.Value(i) = pCurFeature.Value(i) * (getGeomVal(pCurFeature) / l_GTotalVal)
+                                    pNewFeature.Value(i) = pCurFeature.Value(i) * (GetGeomVal(pCurFeature) / m_lGTotalVal)
                                 Else
-                                    pNewFeature.Value(i) = pNewFeature.Value(i) + (pCurFeature.Value(i) * (getGeomVal(pCurFeature) / l_GTotalVal))
+                                    pNewFeature.Value(i) = pNewFeature.Value(i) + (pCurFeature.Value(i) * (GetGeomVal(pCurFeature) / m_lGTotalVal))
                                 End If
                             Case Else 'If no merge policy, just take one of the existing values
                                 pNewFeature.Value(i) = pCurFeature.Value(i)
@@ -368,27 +298,22 @@ Private Sub cmdApply_Click()
             Set pNewFeature.Shape = pOutputGeometry
             
             'Set taxlot number
-            Dim lTLTaxlotFld As Long
-            lTLTaxlotFld = LocateFields(pFeatureLayer.FeatureClass, g_pFldnames.TLTaxlotFN)
+            lTLTaxlotFld = basUtilities.LocateFields(pFeatureLayer.FeatureClass, g_pFldnames.TLTaxlotFN)
             pNewFeature.Value(lTLTaxlotFld) = Me.txtNewTaxlot.Text
             
             pNewFeature.Store
             
             ' refresh features
-            Dim pRefresh As IInvalidArea
-            Set pRefresh = New InvalidArea
+            Set pRefresh = New esriCarto.InvalidArea
             Set pRefresh.Display = m_pEditor.Display
             pRefresh.Add pNewFeature
-            pRefresh.Invalidate esriAllScreenCaches
+            pRefresh.Invalidate esriDisplay.esriScreenCache.esriAllScreenCaches
 
             ' select new feature
             pMap.ClearSelection
             pMap.SelectFeature pFeatureLayer, pNewFeature
             
             'Find the Reference Lines feature class to insert any deleted lines
-            Dim pWorkspace As IWorkspace
-            Dim pFWorkspace As IFeatureWorkspace
-            Dim pRLFclass As IFeatureClass
             Set pWorkspace = pDataset.Workspace
             Set pFWorkspace = pWorkspace
             Set pRLFclass = pFWorkspace.OpenFeatureClass(g_pFldnames.FCReferenceLines)
@@ -398,20 +323,13 @@ Private Sub cmdApply_Click()
                 GoTo Process_Exit
             End If
             'Move historical taxlot lines to linetype 33
-            Dim pTLLinesLayer As IFeatureLayer
-            Dim pTLLinesFC As IFeatureClass
-            Dim lLineTypeFld As Long
-            Set pTLLinesLayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlotLines)
+            Set pTLLinesLayer = basUtilities.FindFeatureLayerByDS(g_pFldnames.FCTaxlotLines)
             If Not pTLLinesLayer Is Nothing Then
                 Set pTLLinesFC = pTLLinesLayer.FeatureClass
-                lLineTypeFld = LocateFields(pRLFclass, g_pFldnames.TLLinesLineTypeFN)
-                Dim pLineFCur As IFeatureCursor
-                Dim pMergedGeom As IGeometry
+                lLineTypeFld = basUtilities.LocateFields(pRLFclass, g_pFldnames.TLLinesLineTypeFN)
                 Set pMergedGeom = pNewFeature.Shape
-                Set pLineFCur = SpatialQueryForEdit(pTLLinesFC, pMergedGeom, esriSpatialRelContains)
+                Set pLineFCur = basUtilities.SpatialQueryForEdit(pTLLinesFC, pMergedGeom, esriSpatialRelContains)
                 If Not pLineFCur Is Nothing Then
-                    Dim pLineFeat As IFeature
-                    Dim pNewLineFeat As IFeature
                     Set pLineFeat = pLineFCur.NextFeature
                     Do While Not pLineFeat Is Nothing
                         Set pNewLineFeat = pRLFclass.CreateFeature
@@ -419,8 +337,6 @@ Private Sub cmdApply_Click()
                         pNewLineFeat.Value(lLineTypeFld) = 33
                         pNewLineFeat.Store
                         pLineFCur.DeleteFeature
-                        'pLineFeat.Value(lLineTypeFld) = 33
-                        'pLineFCur.UpdateFeature pLineFeat
                         Set pLineFeat = pLineFCur.NextFeature
                     Loop
                 End If
@@ -434,12 +350,19 @@ Private Sub cmdApply_Click()
 Process_Exit:
   Exit Sub
 ErrorHandler:
-  HandleError True, "cmdApply_Click " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+  HandleError True, _
+              "cmdApply_Click " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+              Err.Number, _
+              Err.Source, _
+              Err.Description, _
+              4
+    Stop
+    Resume
 End Sub
 
-Private Sub cmdCancel_Click()
-    Unload frmCombine
-End Sub
+'++ START JWalton 1/29/2007
+    ' Removed cmdCancel_Click() Routine - No longer necessary
+'++ END JWalton 1/29/2007
 
 '***************************************************************************
 'Name:  cmdHelp_Click
@@ -461,77 +384,179 @@ End Sub
 'James Moore    10/11/2006      Initial creation
 'JWM            10/16/2006      using new method to open help file
 '***************************************************************************
+
 Private Sub cmdHelp_Click()
-    'Open a custom help file in Internet Explorer
-    'Requires a file called help.htm in the same dir as the application dll
+    '++ START JWalton 2/6/2007 Centralized Variable Declarations
+    ' Variable declarations
     Dim sFilePath As String
+    '++ END JWalton 2/6/2007
+     
+    ' Opens a custom help file if it exists
     sFilePath = app.Path & "\" & "Combine_help.rtf"
-    If FileExists(sFilePath) Then
-'++ START JWM 10/16/2006 using new method to open help file
-        gsb_StartDoc Me.hwnd, sFilePath
-'++ START/END JWM 10/16/2006
-    Else
+    If basUtilities.FileExists(sFilePath) Then
+        '++ START JWM 10/16/2006 using new method to open help file
+        basUtilities.gsb_StartDoc Me.hwnd, sFilePath
+        '++ START/END JWM 10/16/2006
+      Else
         MsgBox "No help file available in current directory", vbOKOnly + vbInformation
     End If
 End Sub
 
+'***************************************************************************
+'Name:                  Form_Load
+'Initial Author:        John Walton
+'Subsequent Author:     <Type your name here>
+'Created:       2/5/2007
+'Purpose:       Event Handler
+'Called From:   System when form is loaded
+'Description:   OnLoad even handler
+'Methods:       Registers the status of the form with the class collection
+'               g_pForms.
+'Inputs:        None
+'Parameters:    None
+'Outputs:       m_pEditor as IEditor
+'               g_pForms as clsFormsCatalog
+'Returns:       Nothing
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'John Walton    2/5/2007    Initial creation
+'**************************************************************************
+
 Private Sub Form_Load()
-  On Error GoTo ErrorHandler
-    Set m_pApp = New AppRef
-    Set m_pMxDoc = m_pApp.Document
+On Error GoTo ErrorHandler
+    '++ START JWalton 2/6/2007 Centralized Variable Declarations
+    Dim pUID As New esriSystem.UID
+    '++ END JWalton 2/6/2007
+    
     'Set a reference to the Editor
-    Dim pUID As New UID
     pUID = "esriEditor.editor"
     Set m_pEditor = g_pApp.FindExtensionByCLSID(pUID)
+    
+    '++ START JWalton 1/29/2007
+    ' Sets the form status to open
+    g_pForms.SetFormStatus Me.Name, True
+    '++ END JWalton 1/29/2007
 
+'++ START merge policy  JWM 01/11/2007
+    If m_pEditor.SelectionCount > 1 Then
+        Dim pChkFeature As IFeature
+        Dim pRowSubtypes As IRowSubtypes
+        
+        Set m_pEnumFeature = m_pEditor.EditSelection
+        Set pChkFeature = m_pEnumFeature.Next
+        Set pRowSubtypes = pChkFeature
+        ml_SubtypeCode = pRowSubtypes.SubtypeCode
+        Do
+            Set pRowSubtypes = pChkFeature
+            If pRowSubtypes.SubtypeCode = ml_SubtypeCode Then
+                m_lGTotalVal = m_lGTotalVal + GetGeomVal(pChkFeature)
+            End If
+            Set pChkFeature = m_pEnumFeature.Next
+        Loop Until pChkFeature Is Nothing
+        Set pRowSubtypes = Nothing
+        Set pChkFeature = Nothing
+    End If
+'++ END JWM 01/11/2007
   Exit Sub
 ErrorHandler:
-  HandleError True, "Form_Load " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+  HandleError True, _
+              "Form_Load " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+              Err.Number, _
+              Err.Source, _
+              Err.Description, _
+              4
 End Sub
 
 '***************************************************************************
-'Name:  getGeomVal
-'Initial Author:
-'Subsequent Author:     Type your name here.
-'Created:
-'Purpose:   helper function to get the area/length/perimeter of a feature
+'Name:                  Query_Unload
+'Initial Author:        John Walton
+'Subsequent Author:     <Type your name here>
+'Created:       2/5/2007
+'Purpose:       Event Handler
+'Called From:   System when the form is unloaded
+'Description:   OnQueryOnload event handler
+'Methods:       Registers the status of the form with the class collection
+'               g_pForms.
+'Inputs:        None
+'Parameters:    None
+'Outputs:       None
+'Returns:       Nothing
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'John Walton    2/5/2007    Initial creation
+'***************************************************************************
+
+'++ START JWalton 1/29/2007
+Private Sub Form_QueryUnload( _
+  Cancel As Integer, _
+  UnloadMode As Integer)
+    ' Sets the form status to not open
+    g_pForms.SetFormStatus Me.Name, False
+End Sub
+'++ END JWalton 1/29/2007
+
+'***************************************************************************
+'Name:  GetGeomVal
+'Initial Author:        <<Unknown>>
+'Subsequent Author:     <<Type your name here>>
+'Created:               <<Unknown>>
+'Purpose:       Helper function to get the area/length/perimeter of a feature
 'Called From:   cmb_Apply_Click()
 'Description:   Type the description of the function here.
 'Methods:       Describe any complex details.
 'Inputs:        What variables are brought into this routine?
-'Parameters:
+'Parameters:    None
 'Outputs:       What variables are changed in this routine?
-'Returns:       The area or length or perimeter of the feature or zero if not a valid feature type
+'Returns:       The area or length or perimeter of the feature or zero if
+'               not a valid feature type
 'Errors:        This routine raises no known errors.
 'Assumptions:   What parameters or variable values are assumed to be true?
 'Updates:
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
-'JWM            10/11/2006  Replaced if statement with select case to improve readability
-'                           also the if statement was checking for multipoints types twice
+'JWM            10/11/2006  Replaced if statement with select case to improve
+'                           readability also the if statement was checking
+'                           for multipoints types twice
 '***************************************************************************
-Public Function getGeomVal(ByRef pFeature As IFeature) As Double
-  On Error GoTo ErrorHandler
 
-  Dim pFC As IFeatureClass
-  Set pFC = pFeature.Class
-  Dim pvFlds As IFields
-  Set pvFlds = pFC.Fields
-  
-'++ START JWM 10/11/2006
-Select Case pFC.ShapeType
-    Case esriGeometryMultipoint, esriGeometryNull
-        getGeomVal = 0
-    Case esriGeometryPolygon
-        getGeomVal = pFeature.Value(pvFlds.FindField(pFC.AreaField.Name))
-    Case Else
-        getGeomVal = pFeature.Value(pvFlds.FindField(pFC.LengthField.Name))
-End Select
-'++ END JWM 10/11/2006
+Public Function GetGeomVal( _
+  ByRef pFeature As esriGeoDatabase.IFeature) As Double
+On Error GoTo ErrorHandler
+    '++ START JWalton 2/6/2007 Centralized Variable Declarations
+    Dim pFC As esriGeoDatabase.IFeatureClass
+    Dim pvFlds As esriGeoDatabase.IFields
+    '++ END JWalton 2/6/2007
+    
+    ' Initialize objects
+    Set pFC = pFeature.Class
+    Set pvFlds = pFC.Fields
+    
+    '++ START JWM 10/11/2006
+    Select Case pFC.ShapeType
+      Case esriGeometryMultipoint, esriGeometryNull
+        GetGeomVal = 0
+      Case esriGeometryPolygon
+        GetGeomVal = pFeature.Value(pvFlds.FindField(pFC.AreaField.Name))
+      Case Else
+        GetGeomVal = pFeature.Value(pvFlds.FindField(pFC.LengthField.Name))
+    End Select
+    '++ END JWM 10/11/2006
 
   Exit Function
 ErrorHandler:
-  HandleError True, "getGeomVal " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), Err.Number, Err.Source, Err.Description, 4
+  HandleError True, _
+              "getGeomVal " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+              Err.Number, _
+              Err.Source, _
+              Err.Description, _
+              4
 End Function
-
