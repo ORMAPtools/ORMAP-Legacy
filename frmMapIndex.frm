@@ -2281,7 +2281,7 @@ On Error Resume Next
             sSpecialInt = "00000"
         End If
         
-        '@@ START NIS(LCOG) 11/19/2007
+        '++ START NIS(LCOG) 11/19/2007
         ' Gets the map number value
         Dim sMapNumber As String
         If Not IsNull(pFeature.Value(m_pMapIndexFields.MapNumber)) Then
@@ -2289,16 +2289,15 @@ On Error Resume Next
         Else
             sMapNumber = ""
         End If
-        '@@ END NIS(LCOG) 11/19/2007
+        '++ END NIS(LCOG) 11/19/2007
         
         ' Copy new attributes to the taxlot table
-        '@@ START NIS(LCOG) 11/19/2007
-        '@@ DESCR: Add special code for Lane County (see comment below).
+        '++ START NIS(LCOG) 11/19/2007
+        '++ DESCR: Add special code for Lane County (see comment below).
         Dim sMapTaxlotID As String
         sMapTaxlotID = m_pORMAPNumber.ORMAPNumber & sTaxlot
         Dim sTLMapTaxlot As String
         Dim iCountyCode As Integer
-        'iCountyCode = CInt(Left$(sMapTaxlotID, 2))
         iCountyCode = CInt(g_pFldnames.DefCounty)
         Select Case iCountyCode
         Case 1 To 19, 21 To 36
@@ -2334,13 +2333,11 @@ On Error Resume Next
             .Value(m_pTaxlotFields.OrmapMapNumber) = m_pORMAPNumber.ORMAPNumber
             .Value(m_pTaxlotFields.Taxlot) = CLng(sTaxlot)
             .Value(m_pTaxlotFields.SpecialInterest) = sSpecialInt
-            '.Value(m_pTaxlotFields.MapTaxlotNumber) = basUtilities.gfn_s_CreateMapTaxlotValue(m_pORMAPNumber.ORMAPNumber & sTaxlot, _
-            '                                                                                  g_pFldnames.MapTaxlotFormatString)
             .Value(m_pTaxlotFields.MapTaxlotNumber) = sTLMapTaxlot
             .Value(m_pTaxlotFields.OrmapTaxlotNumber) = m_pORMAPNumber.OrmapTaxlotNumber & sTaxlot
             .Store
         End With
-        '@@ END NIS(LCOG) 11/19/2007
+        '++ END NIS(LCOG) 11/19/2007
         
         ' Get the next feature
         Set pTaxlotFeature = pFeatSel.NextFeature

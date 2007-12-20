@@ -672,40 +672,17 @@ Public Function GetValueViaOverlay( _
   ByRef pGeom As esriGeometry.IGeometry, _
   ByRef pOverlayFC As esriGeoDatabase.IFeatureClass, _
   ByVal sFldName As String) As String
+
 On Error GoTo ErrorHandler
+    
     '++ START JWalton 2/7/2007 Centralized Variable Declarations
     Dim pFeat As esriGeoDatabase.IFeature
     Dim pFeatCur As esriGeoDatabase.IFeatureCursor
     Dim lFld As Long
     '++ END JWalton 2/7/2007
     
-    '@@ START NIS(LCOG) 12/19/2007
-    '@@ DESCR: Fix for cases where the search feature (polygon, polyline or point) intersects more than one target feature (polygon).
-    
-    'OLD CODE
-    'If Not pGeom Is Nothing And Not pOverlayFC Is Nothing And Len(sFldName) > 0 Then
-    '    Set pFeatCur = SpatialQuery(pOverlayFC, pGeom, esriSpatialRelWithin)
-    '    If Not pFeatCur Is Nothing Then
-    '        'Get the first feature.  if more than one, let the user decide
-    '        Set pFeat = pFeatCur.NextFeature
-    '        If Not pFeat Is Nothing Then
-    '            lFld = pFeat.Fields.FindField(sFldName)
-    '            If lFld > -1 Then
-    '                'Get the  value
-    '                GetValueViaOverlay = IIf(IsNull(pFeat.Value(lFld)), "", pFeat.Value(lFld))
-    '              Else
-    '                '++ START JWalton 2/1/2007 Added Else Clause
-    '                GetValueViaOverlay = ""
-    '                '++ END JWalton 2/1/2007
-    '            End If
-    '        End If
-    '    End If
-    '  Else
-    '    '++ START JWalton 2/7/2007 Added Else Clause
-    '    GetValueViaOverlay = ""
-    '    '++ END JWalton 2/7/2007
-    'End If
-    'END OLD CODE
+    '++ START NIS(LCOG) 12/19/2007
+    '++ DESCR: Fix for cases where the search feature (polygon, polyline or point) intersects more than one target feature (polygon).
     
     Dim bGetValueViaOverlay As Boolean
     
@@ -742,7 +719,7 @@ On Error GoTo ErrorHandler
     Dim pPoint As IPoint
     Dim dFuzzFactor As Double
     
-    Const cFuzzDivisor As Double = 10000
+    Const cFuzzDivisor As Double = 1000
     
     sValue = "" 'initialize
     dLargestArea = 0 'initalize
@@ -826,7 +803,7 @@ On Error GoTo ErrorHandler
     
     GetValueViaOverlay = sValue
     
-    '@@ END NIS(LCOG) 12/19/2007
+    '++ END NIS(LCOG) 12/19/2007
     
 Process_Exit:
   Exit Function
@@ -1903,13 +1880,12 @@ On Error GoTo ErrorHandler
     
     '++ START JWM 10/31/2006 assigning Maptaxlot field
     sMapTaxlotID = pORMAPNumber.ORMAPNumber & sTaxlotVal
-    '@@ START NIS(LCOG) 02/5/2007
-    '@@ DESCR: Add special code for Lane County (see comment below).
+    '++ START NIS(LCOG) 02/5/2007
+    '++ DESCR: Add special code for Lane County (see comment below).
     Dim iCountyCode As Integer
-    '@@ START NIS(LCOG) 11/19/2007
-    'iCountyCode = CInt(Left$(sMapTaxlotID, 2))
+    '++ START NIS(LCOG) 11/19/2007
     iCountyCode = CInt(g_pFldnames.DefCounty)
-    '@@ END NIS(LCOG) 11/19/2007
+    '++ END NIS(LCOG) 11/19/2007
     Select Case iCountyCode
     Case 1 To 19, 21 To 36
         a_pFeat.Value(lTLMapTaxlotFld) = gfn_s_CreateMapTaxlotValue(sMapTaxlotID, g_pFldnames.MapTaxlotFormatString)
@@ -1923,13 +1899,12 @@ On Error GoTo ErrorHandler
         '     gfn_s_CreateMapTaxlotValue function. Also, in this case, TAXLOT is padded
         '     on the left with zeros to make it always a 5-digit number (see comment
         '     above).
-        '@@ START NIS(LCOG) 11/19/2007
+        '++ START NIS(LCOG) 11/19/2007
         ' Trim the map number to only the left 8 characters (no spaces)
-        'a_pFeat.Value(lTLMapTaxlotFld) = sExistMapNum & sTaxlotVal
         a_pFeat.Value(lTLMapTaxlotFld) = Trim$(Left$(sExistMapNum, 8)) & sTaxlotVal
-        '@@ END NIS(LCOG) 11/19/2007
+        '++ END NIS(LCOG) 11/19/2007
     End Select
-    '@@ END NIS(LCOG) 02/5/2007
+    '++ END NIS(LCOG) 02/5/2007
     '++ END JWM 10/31/2006
     
     ' Recalculate ORMAP Taxlot Number
