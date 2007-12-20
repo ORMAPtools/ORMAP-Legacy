@@ -786,10 +786,9 @@ On Error GoTo ErrorHandler
     '++ START Laura Gordon, November 29, 2005
     sOMTLNval = sShortOMNum & sTLMapSufTypeVal & sTLMapSufNumVal & sNewTLNum_5digit
     '++ END Laura Gordon, November 29, 2005
-    '@@ START NIS(LCOG) 11/19/2007
-    '@@ DESCR: Add special code for Lane County (see comment below).
+    '++ START NIS(LCOG) 11/19/2007
+    '++ DESCR: Add special code for Lane County (see comment below).
     '++ START JWM 11/09/2006 create  masked value from a combination of ORMapNum and the new taxlot
-    'sOMMapTaxlot = gfn_s_CreateMapTaxlotValue(sExistOMNum & sNewTLNum_5digit, g_pFldnames.MapTaxlotFormatString)
     Dim iCountyCode As Integer
     iCountyCode = CInt(g_pFldnames.DefCounty)
     Select Case iCountyCode
