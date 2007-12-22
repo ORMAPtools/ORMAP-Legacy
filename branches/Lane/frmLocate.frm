@@ -374,6 +374,7 @@ Private Sub Form_Initialize()
     
     ' Makes the form the topmost form
     SetWindowPos Me.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
+    
 End Sub
 
 '***************************************************************************

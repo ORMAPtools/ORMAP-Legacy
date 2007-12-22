@@ -129,10 +129,54 @@ Private m_bolDimensionChanged As Boolean
     Dim colArrowPoints As Collection
 '++ END Laura Gordon
 
+'++ START Nick Seigal (LCOG) 12/20/2007 - Support for bitmap
+Private m_pBitmap As IPictureDisp
+'++ END Nick Seigal (LCOG) 12/20/2007
+
 '------------------------------
 'Private Constants and Enums
 '------------------------------
 Private Const c_sModuleFileName As String = "clsArrows.cls"
+
+'++ START Nick Seigal (LCOG) 12/20/2007 - Added event handler, bitmap
+'***************************************************************************
+'Name:                  ClassInitialize
+'Initial Author:        <<Unknown>>
+'Subsequent Author:     <<Type your name here>>
+'Created:               <<Unknown>>
+'Purpose:       Initialize class level variables
+'Called From:   Class Object
+'Description:   Loads the bitmap that describes the tool on the toolbar
+'               from the resource file.
+'Methods:       None
+'Inputs:        None
+'Parameters:    None
+'Outputs:       m_pBitmap - The toolbar icon that describes the tool
+'Returns:       None
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
+
+Private Sub Class_Initialize()
+  On Error GoTo ErrorHandler
+    
+    Set m_pBitmap = LoadResPicture("ARROWS_BITMAP", vbResBitmap)
+    
+    Exit Sub
+ErrorHandler:
+    HandleError True, _
+                "Class_Initialize " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
+End Sub
+'++ END Nick Seigal (LCOG) 12/20/2007
 
 Private Property Get ICommand_Enabled() As Boolean
 On Error GoTo ErrorHandler
@@ -260,7 +304,20 @@ ErrorHandler:
 End Property
  
 Private Property Get ICommand_Bitmap() As esriSystem.OLE_HANDLE
-    ' Not Implemented
+On Error GoTo ErrorHandler
+  
+    '++ START Nick Seigal (LCOG) 12/20/2007 - Implemented ICommand_Bitmap
+    ICommand_Bitmap = m_pBitmap
+    '++ END Nick Seigal (LCOG) 12/20/2007
+    
+    Exit Property
+ErrorHandler:
+    HandleError True, _
+                "ICommand_Bitmap " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
 End Property
  
 Private Property Get ICommand_Category() As String

@@ -720,6 +720,8 @@ Private Type TaxlotFieldMap
 End Type
 
 
+
+
 '----------------------------------------------------------------------------
 'Name:                  cmdAssign_Click                                     '
 'Initial Author:        <<Unknown>>                                         '
@@ -963,6 +965,7 @@ Private Sub Form_Initialize()
     
     ' Makes the form the topmost form
     SetWindowPos Me.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
+    
 End Sub
 
 '***************************************************************************
@@ -2281,7 +2284,7 @@ On Error Resume Next
             sSpecialInt = "00000"
         End If
         
-        '++ START NIS(LCOG) 11/19/2007
+        '++ START Nick Seigal (LCOG) 11/19/2007
         ' Gets the map number value
         Dim sMapNumber As String
         If Not IsNull(pFeature.Value(m_pMapIndexFields.MapNumber)) Then
@@ -2289,10 +2292,10 @@ On Error Resume Next
         Else
             sMapNumber = ""
         End If
-        '++ END NIS(LCOG) 11/19/2007
+        '++ END Nick Seigal (LCOG) 11/19/2007
         
         ' Copy new attributes to the taxlot table
-        '++ START NIS(LCOG) 11/19/2007
+        '++ START Nick Seigal (LCOG) 11/19/2007
         '++ DESCR: Add special code for Lane County (see comment below).
         Dim sMapTaxlotID As String
         sMapTaxlotID = m_pORMAPNumber.ORMAPNumber & sTaxlot
@@ -2337,7 +2340,7 @@ On Error Resume Next
             .Value(m_pTaxlotFields.OrmapTaxlotNumber) = m_pORMAPNumber.OrmapTaxlotNumber & sTaxlot
             .Store
         End With
-        '++ END NIS(LCOG) 11/19/2007
+        '++ END Nick Seigal (LCOG) 11/19/2007
         
         ' Get the next feature
         Set pTaxlotFeature = pFeatSel.NextFeature

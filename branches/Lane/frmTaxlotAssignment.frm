@@ -468,6 +468,7 @@ Private Sub Form_Initialize()
     
     ' Makes the form the topmost form
     SetWindowPos Me.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
+    
 End Sub
 
 '***************************************************************************
@@ -564,6 +565,19 @@ Private Sub Form_Unload( _
     ' Saves the position of the form
     SaveSetting "ArcGIS.ArcMap.ORMAP.Tools", "FrmTaxlotAssignment", "Top", pWindowPos.Top
     SaveSetting "ArcGIS.ArcMap.ORMAP.Tools", "FrmTaxlotAssignment", "Left", pWindowPos.Left
+    
+    '++ START Nick Seigal (LCOG) 12/20/2007
+    ' Set the selected tool to the default tool
+    Dim pUID As New UID
+    Dim pDoc As IDocument
+    Dim pCmdItem As ICommandItem
+    ' Use the PROGID of the Select command
+    pUID.Value = "esriArcMapUI.SelectTool"
+    Set pDoc = m_pMxDoc 'QI
+    Set pCmdItem = pDoc.CommandBars.Find(pUID)
+    pCmdItem.Execute
+    '++ END Nick Seigal (LCOG) 12/20/2007
+    
 End Sub
 
 '***************************************************************************
@@ -589,8 +603,10 @@ End Sub
 '***************************************************************************
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    
     ' Sets the form status to not open
     g_pForms.SetFormStatus Me.Name, False
+    
 End Sub
 
 
