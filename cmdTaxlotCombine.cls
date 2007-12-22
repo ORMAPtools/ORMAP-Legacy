@@ -75,6 +75,10 @@ Private m_pDoc As esriArcMapUI.IMxDocument
 Private m_pMap As esriCarto.IMap
 Private m_bEnabled As Boolean
 
+'++ START Nick Seigal (LCOG) 12/20/2007 - Support for bitmap
+Private m_pBitmap As IPictureDisp
+'++ END Nick Seigal (LCOG) 12/20/2007
+
 '------------------------------
 'Private Constants and Enums
 '------------------------------
@@ -84,6 +88,46 @@ Private Const c_sModuleFileName As String = "cmdTaxlotCombine.cls"
 ' Interface Implementations
 '------------------------------
 Implements esriSystemUI.ICommand
+
+'++ START Nick Seigal (LCOG) 12/20/2007 - Added event handler, bitmap
+'***************************************************************************
+'Name:                  ClassInitialize
+'Initial Author:        <<Unknown>>
+'Subsequent Author:     <<Type your name here>>
+'Created:               <<Unknown>>
+'Purpose:       Initialize class level variables
+'Called From:   Class Object
+'Description:   Loads the bitmap that describes the command on the toolbar
+'               from the resource file.
+'Methods:       None
+'Inputs:        None
+'Parameters:    None
+'Outputs:       m_pBitmap - The toolbar icon that describes the tool
+'Returns:       None
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
+
+Private Sub Class_Initialize()
+  On Error GoTo ErrorHandler
+    
+    Set m_pBitmap = LoadResPicture("COMBINE_BITMAP", vbResBitmap)
+    
+    Exit Sub
+ErrorHandler:
+    HandleError True, _
+                "Class_Initialize " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
+End Sub
+'++ END Nick Seigal (LCOG) 12/20/2007
 
 Private Property Get ICommand_Enabled() As Boolean
 On Error GoTo ErrorHandler
@@ -230,9 +274,20 @@ Private Property Get ICommand_HelpContextID() As Long
 End Property
  
 Private Property Get ICommand_Bitmap() As esriSystem.OLE_HANDLE
-    '++ START JWalton 2/6/2007
-    ' Not Implemented
-    '++ END JWalton 2/6/2007
+On Error GoTo ErrorHandler
+  
+    '++ START Nick Seigal (LCOG) 12/20/2007 - Implemented ICommand_Bitmap
+    ICommand_Bitmap = m_pBitmap
+    '++ END Nick Seigal (LCOG) 12/20/2007
+    
+    Exit Property
+ErrorHandler:
+    HandleError True, _
+                "ICommand_Bitmap " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
 End Property
  
 Private Property Get ICommand_Category() As String

@@ -98,6 +98,10 @@ Private m_lCNMNumFld As Long
 Private m_bAutoUpdate As Boolean
 Private m_pBmp As IPictureDisp
 
+'++ START Nick Seigal (LCOG) 02/5/2007 - Support for avoiding rentrancy
+Private m_bDuringAutoUpdate As Boolean
+'++ END Nick Seigal (LCOG) 02/5/2007
+
 '------------------------------
 'Private Constants and Enums
 '------------------------------
@@ -132,7 +136,7 @@ Implements ICommand
 
 Private Sub Class_Initialize()
     ' Gets a reference to the command bitmap
-    Set m_pBmp = LoadResPicture("AutoUpdate_Icon", vbResBitmap)
+    Set m_pBmp = LoadResPicture("AUTOUPDATE_BITMAP", vbResBitmap)
 End Sub
  
 Private Property Get ICommand_Enabled() As Boolean
@@ -339,19 +343,29 @@ End Sub
 
 Private Sub m_pEditorEvents_OnChangeFeature( _
   ByVal obj As esriGeoDatabase.IObject)
+
 On Error GoTo ErrorHandler
+    
+    '++ START Nick Seigal (LCOG) 02/5/2007 - Avoid rentrancy
+    If m_bDuringAutoUpdate = False Then
+        m_bDuringAutoUpdate = True
+    Else
+        GoTo OnChangeFeature_Proc_Exit
+    End If
+    '++ END Nick Seigal (LCOG) 02/5/2007
+    
     ' Variable declarations
     Dim u As New esriSystem.UID
     Dim pFeat As esriGeoDatabase.IFeature
     Dim pAnnotationFeature As esriCarto.IAnnotationFeature
-
+    
     'These are the autocalculated fields
     UpdateAutoFields obj
     
     If IsTaxlot(obj) Then
         'Obtain ORMAPMapnum via overlay and calculate other field values
         CalcTaxlotValues obj, m_pMIFlayer
-      ElseIf IsAnno(obj) Then
+    ElseIf IsAnno(obj) Then
         Set pAnnotationFeature = obj
         
         'Get the parent feature so mapnumber can be obtained
@@ -369,10 +383,13 @@ On Error GoTo ErrorHandler
         SetAnnoSize obj, pFeat
     End If
     
+    m_bDuringAutoUpdate = False
+    
 OnChangeFeature_Proc_Exit:
     Exit Sub
     
 ErrorHandler:
+    m_bDuringAutoUpdate = False
     HandleError False, _
                 "m_pEditorEvents_OnChangeFeature " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
                 Err.Number, _
@@ -454,20 +471,21 @@ On Error GoTo ErrorHandler
         End If
 
         ' Retrieve the map number and scale from the overlaying map index polygon
-        Set pCenter = New esriGeometry.Point
         Set pGeometry = pFeat.Shape
         If pGeometry.IsEmpty Then GoTo OnCreateFeature_Process_Exit
         Set pEnv = pGeometry.Envelope
-        pCenter.PutCoords pEnv.XMin + (pEnv.XMax - pEnv.XMin) / 2, _
-                          pEnv.YMin + (pEnv.YMax - pEnv.YMin) / 2
+        '++ START Nick Seigal (LCOG) 12/21/2007 - Used shared function instead of in line code to get pCenter
+        Set pCenter = CT_GetCenterOfEnvelope(pEnv)
+        Set pGeometry = pCenter 'QI
+        '++ END Nick Seigal (LCOG) 12/21/2007
         Set pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
         If pMIFlayer Is Nothing Then GoTo OnCreateFeature_Process_Exit
         Set pMIFclass = pMIFlayer.FeatureClass
-        sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
+        sMapNum = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapNumberFN)
         a_Obj.Value(lAnnoMapNumFld) = sMapNum
         If lMapScaleFld > -1 Then
 '++ START JWM 07/02/2007 changed from variant to string++++++++++
-            sMapScale = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
+            sMapScale = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapScaleFN)
             If Len(sMapScale) > 0 Then
                 a_Obj.Value(lMapScaleFld) = sMapScale
             Else
@@ -480,16 +498,29 @@ On Error GoTo ErrorHandler
     Else
         ' Update MapScale and mapnumber for all features with a MapScale field (except MapIndex)
         If lMapScaleFld > -1 And Not IsMapIndex(a_Obj) Then
-            Set pCenter = New Point
             Set pFeat = a_Obj
             Set pGeometry = pFeat.Shape
             If pGeometry.IsEmpty Then GoTo OnCreateFeature_Process_Exit
             Set pEnv = pGeometry.Envelope
-            pCenter.PutCoords pEnv.XMin + (pEnv.XMax - pEnv.XMin) / 2, pEnv.YMin + (pEnv.YMax - pEnv.YMin) / 2
+            '++ START Nick Seigal (LCOG) 12/21/2007 - Used shared function instead of in line code to get pCenter
+            If pGeometry.GeometryType <> esriGeometryBezier3Curve And _
+               pGeometry.GeometryType <> esriGeometryCircularArc And _
+               pGeometry.GeometryType <> esriGeometryEllipticArc And _
+               pGeometry.GeometryType <> esriGeometryLine And _
+               pGeometry.GeometryType <> esriGeometryPath And _
+               pGeometry.GeometryType <> esriGeometryPolygon And _
+               pGeometry.GeometryType <> esriGeometryPolyline Then
+               ' Convert the geometry to a point
+                Set pCenter = CT_GetCenterOfEnvelope(pEnv)
+                Set pGeometry = pCenter 'QI
+            Else
+                ' Use the geometry as-is
+            End If
+            '++ END Nick Seigal (LCOG) 12/21/2007
             Set pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
             If pMIFlayer Is Nothing Then GoTo OnCreateFeature_Process_Exit
             Set pMIFclass = pMIFlayer.FeatureClass
-            sMapScale = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
+            sMapScale = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapScaleFN)
             '++ START JWM 07/02/2007 changed variant to string++++++++++
                 If Len(sMapScale) > 0 Then
                     a_Obj.Value(lMapScaleFld) = sMapScale
@@ -499,7 +530,7 @@ On Error GoTo ErrorHandler
 '           ++ END JWM 07/02/2007++++++++++
             ' If a dataset with MapNumber, populate it
             If lMapNumFld > -1 Then
-                sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
+                sMapNum = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapNumberFN)
                 '++ START JWalton 5/7/2007
 '           ++ START JWM 07/02/2007 changed variant to string++++++++++
                 If Len(sMapNum) > 0 Then

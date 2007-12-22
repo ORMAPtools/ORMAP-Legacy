@@ -79,10 +79,10 @@ Private m_pMap As esriCarto.IMap
 Private WithEvents m_pViewEvents As esriCarto.Map
 Attribute m_pViewEvents.VB_VarHelpID = -1
 Private m_pFrmLocate As frmLocate
-Private m_pToolIcon As IPictureDisp
+Private m_pBitmap As IPictureDisp
 '++ START JWalton 2/12/2007
 '   Added Variable Declarations
-'       m_pDocEvents, m_pViewEvents, m_pFrmLocate, m_pToolIcon
+'       m_pDocEvents, m_pViewEvents, m_pFrmLocate, m_pBitmap
 '++ END JWalton 2/12/2007
 
 '------------------------------
@@ -106,7 +106,7 @@ Implements esriSystemUI.ICommand
 'Methods:       None
 'Inputs:        None
 'Parameters:    None
-'Outputs:       m_pToolIcon - The IPictureDisp object that represents the
+'Outputs:       m_pBitmap - The IPictureDisp object that represents the
 '                             bitmap.
 'Returns:       Nothing
 'Errors:        This routine raises no known errors.
@@ -119,7 +119,7 @@ Implements esriSystemUI.ICommand
 
 '++ START JWalton 1/29/2007
 Private Sub Class_Initialize()
-    Set m_pToolIcon = LoadResPicture("Locate_Icon", vbResBitmap)
+    Set m_pBitmap = LoadResPicture("LOCATE_BITMAP", vbResBitmap)
 End Sub
 
 '***************************************************************************
@@ -200,7 +200,7 @@ End Property
  
 Private Property Get ICommand_Bitmap() As esriSystem.OLE_HANDLE
     '++ START JWalton 2/5/2007 Implemention of ICommand_Bitmap
-    ICommand_Bitmap = m_pToolIcon
+    ICommand_Bitmap = m_pBitmap
     '++ END JWalton 2/5/2007
 End Property
  

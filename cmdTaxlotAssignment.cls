@@ -153,9 +153,9 @@ Private Sub Class_Initialize()
 On Error GoTo ErrorHandler
 
     '++ START JWalton 1/31/2007
-    Set m_pBitmap = LoadResPicture("Taxlot_Icon", vbResBitmap)
-    Set m_pDisabledCursor = LoadResPicture(102, vbResCursor)
-    Set m_pEnabledCursor = LoadResPicture(101, vbResCursor)
+    Set m_pBitmap = LoadResPicture("TAXLOT_BITMAP", vbResBitmap)
+    Set m_pDisabledCursor = LoadResPicture("NO_CURSOR", vbResCursor)
+    Set m_pEnabledCursor = LoadResPicture("PLUS_CURSOR", vbResCursor)
     '++ END JWalton 1/31/2007
     
     Exit Sub
@@ -233,7 +233,7 @@ End Property
 Private Property Get ICommand_Enabled() As Boolean
     On Error GoTo ErrorHandler
     
-'++START JWalton 1/25/2007 ICommand_Enabled state linked directly to the editor and the DLL
+    '++START JWalton 1/25/2007 ICommand_Enabled state linked directly to the editor and the DLL
     If g_bDLLEnabled Then
         If m_pEditor Is Nothing Then
             ICommand_Enabled = False
@@ -243,7 +243,7 @@ Private Property Get ICommand_Enabled() As Boolean
       Else
         ICommand_Enabled = False
     End If
-'++STOP JWalton 1/25/2007
+    '++STOP JWalton 1/25/2007
 
     Exit Property
 ErrorHandler:
@@ -610,7 +610,9 @@ Private Sub ITool_OnMouseDown( _
   ByVal Shift As Long, _
   ByVal X As Long, _
   ByVal Y As Long)
+
 On Error GoTo ErrorHandler
+
 '++ START JWalton 1/31/2007 Centralized variable declarations
     Dim pActiveView As esriCarto.IActiveView
     Dim pMap As esriCarto.IMap
@@ -644,13 +646,21 @@ On Error GoTo ErrorHandler
 '++ END JWalton 1/31/2007
     
     '++ START JWalton 2/8/2007
-    If Button <> vbLeftButton Then Exit Sub
+    If Button <> vbLeftButton Then
+        Exit Sub
+    End If
     '++ END JWalton 2/8/2007
-
+    
+    'MsgBox "1", , "DEBUG"
+    
     '++ START JWalton 1/31/2007
     ' Insure that it is the tool has the proper data to continue
-    If Not m_bEditStatus Then Exit Sub
+    If Not m_bEditStatus Then
+        Exit Sub
+    End If
     '++ END JWalton 1/31/2007
+    
+    'MsgBox "2", , "DEBUG"
     
     'If "NUMBER" selected, then make sure value is numeric
     If StrComp(m_pFrmTaxlots.PolygonType, "NUMBER", vbTextCompare) = 0 Then
@@ -664,10 +674,14 @@ On Error GoTo ErrorHandler
         '++ END JWalton 2/8/2007
     End If
     
+    'MsgBox "3", , "DEBUG"
+    
     ' Create a search shape out of the point that the user clicked
     Set pMap = m_pEditor.Map
     Set pPoint = m_pEditor.Display.DisplayTransformation.ToMapPoint(X, Y)
     Set pGeometry = m_pEditor.CreateSearchShape(pPoint)
+    
+    'MsgBox "4", , "DEBUG"
     
     ' Verify the validity of the specified taxlot number, and uniqueness of
     ' numeric taxlot numbers
@@ -675,13 +689,15 @@ On Error GoTo ErrorHandler
         If Not ValidateTaxlotNum(m_pFrmTaxlots.CurrentValue, pGeometry) Then
             '++ START JWalton 1/31/2007 Added choice to the duplicate value problem
             If MsgBox("The current Taxlot value (" & m_pFrmTaxlots.CurrentValue & _
-               ") is not unique withing this MapIndex.  " & vbCrLf & _
+               ") is not unique within this MapIndex.  " & vbCrLf & _
                "Attribute feature with value anyways?", vbYesNo Or vbQuestion) = vbNo Then
                 GoTo Process_Exit
             End If
             '++ END JWalton 1/31/2007
         End If
     End If
+    
+    'MsgBox "5", , "DEBUG"
     
     ' Insures the validity of the underlying map index polygon
     Set pEnv = pGeometry 'QI
@@ -698,6 +714,8 @@ On Error GoTo ErrorHandler
         GoTo Process_Exit
     End If
     
+    'MsgBox "6", , "DEBUG"
+    
     ' Select any feature under the given point in the target layer
     Set pEnv = pGeometry 'QI
     Set pSpatialFilter = New esriGeoDatabase.SpatialFilter
@@ -708,8 +726,14 @@ On Error GoTo ErrorHandler
     pSpatialFilter.SpatialRel = esriSpatialRelIntersects
     Set pFCursor = m_pTaxlotFClass.Search(pSpatialFilter, False)
     
+    'MsgBox "7", , "DEBUG"
+    
     ' Exit if no taxlots are selected
-    If pFCursor Is Nothing Then GoTo Process_Exit
+    If pFCursor Is Nothing Then
+        GoTo Process_Exit
+    End If
+    
+    'MsgBox "8", , "DEBUG"
     
     Set pFeature = pFCursor.NextFeature
     If Not pFeature Is Nothing Then
@@ -739,8 +763,12 @@ On Error GoTo ErrorHandler
         End If
     End If
     
+    'MsgBox "9", , "DEBUG"
+    
     'Assign Taxlot value
     sExistTLNumVal = IIf(IsNull(pFeature.Value(m_lTLTaxlotFld)), "", pFeature.Value(m_lTLTaxlotFld))
+    
+    'MsgBox "10", , "DEBUG"
     
     '++ START JWalton 12/14/2007 Added test for not 0 in conditional
     ' Optionally updates the taxlot number field
@@ -749,6 +777,8 @@ On Error GoTo ErrorHandler
         If iResponse = vbNo Then GoTo Process_Exit
     End If
     '++ END JWalton 12/14/2007
+    
+    'MsgBox "11", , "DEBUG"
     
     'Taxlot can be less than 5-digits
     'The Taxlot value in OrMapMapNum must be 5 digits.
@@ -772,6 +802,8 @@ On Error GoTo ErrorHandler
         sNewTLNum = Replace(sNewTLNum_5digit, "0", "")
     End If
     
+    'MsgBox "12", , "DEBUG"
+    
     '++ START Laura Gordon, November 29, 2005
     'Determine if Special Interests field is something other than default
     'If so, include it in ORMAPtaxlot
@@ -786,7 +818,7 @@ On Error GoTo ErrorHandler
     '++ START Laura Gordon, November 29, 2005
     sOMTLNval = sShortOMNum & sTLMapSufTypeVal & sTLMapSufNumVal & sNewTLNum_5digit
     '++ END Laura Gordon, November 29, 2005
-    '++ START NIS(LCOG) 11/19/2007
+    '++ START Nick Seigal (LCOG) 11/19/2007
     '++ DESCR: Add special code for Lane County (see comment below).
     '++ START JWM 11/09/2006 create  masked value from a combination of ORMapNum and the new taxlot
     Dim iCountyCode As Integer
@@ -809,13 +841,19 @@ On Error GoTo ErrorHandler
     pFeature.Value(m_lOMMapTaxlotFld) = sOMMapTaxlot
     '++ END JWM 11/09/2006
     
+    'MsgBox "13", , "DEBUG"
+    
     'Copy Anomaly from MapIndex
     sAnom = ParseOMMapNum(sExistOMNum, "anomaly")
     pFeature.Value(m_lTLAnomalyFld) = sAnom
     
+    'MsgBox "14", , "DEBUG"
+    
     'Assign OrmapTaxlot value
     pFeature.Value(m_lOMTLNumFld) = sOMTLNval
     pFeature.Store
+    
+    'MsgBox "15", , "DEBUG"
     
     'AutoIncrement if necessary
     '++ START JWalton 1/31/2007 Removed form control references in favor of Form Properties
@@ -824,13 +862,19 @@ On Error GoTo ErrorHandler
     End If
     '++ END JWalton 1/31/2007
     
+    'MsgBox "16", , "DEBUG"
+    
     ' End the edit operation
     m_pEditor.StopOperation "AutoIncrement Attribute"
+    
+    'MsgBox "17", , "DEBUG"
     
     '++ START JWalton 2/14/2007
     ' Select the feature
     pMap.ClearSelection
     pMap.SelectFeature m_pTaxlotFLayer, pFeature
+    
+    'MsgBox "18", , "DEBUG"
     
     ' Insures that this tool keeps the focus
     m_bToolStatus = True
@@ -841,13 +885,16 @@ On Error GoTo ErrorHandler
     m_bToolStatus = False
     '++ END JWalton 2/14/2007
     
+    'MsgBox "19", , "DEBUG"
+    
     ' Update the view
     Set pActiveView = pMap
     pActiveView.PartialRefresh esriCarto.esriViewDrawPhase.esriViewGeoSelection Or _
                                esriCarto.esriViewDrawPhase.esriViewGraphics, _
                                Nothing, _
                                Nothing
-
+    'MsgBox "20", , "DEBUG"
+    
 Process_Exit:
     Exit Sub
     

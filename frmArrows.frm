@@ -1,6 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmArrows 
-   Caption         =   "Add"
+   Caption         =   "Add Arrows"
    ClientHeight    =   3195
    ClientLeft      =   930
    ClientTop       =   2355
@@ -15,7 +15,7 @@ Begin VB.Form frmArrows
    Begin VB.ComboBox cmbArrow 
       Height          =   315
       Left            =   120
-      TabIndex        =   6
+      TabIndex        =   5
       Text            =   "100 - Anno Arrow"
       Top             =   120
       Width           =   2055
@@ -33,7 +33,7 @@ Begin VB.Form frmArrows
       EndProperty
       Height          =   495
       Left            =   120
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   2400
       Width           =   855
    End
@@ -50,27 +50,9 @@ Begin VB.Form frmArrows
       EndProperty
       Height          =   495
       Left            =   1320
-      TabIndex        =   3
+      TabIndex        =   2
       Top             =   2400
       Width           =   855
-   End
-   Begin VB.CommandButton cmdHook 
-      Caption         =   "Hook"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   9.75
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   495
-      Left            =   120
-      TabIndex        =   2
-      Top             =   120
-      Visible         =   0   'False
-      Width           =   2055
    End
    Begin VB.CommandButton cmdDimension 
       Caption         =   "Dimension Arrow"
@@ -107,14 +89,16 @@ Begin VB.Form frmArrows
       Width           =   2055
    End
    Begin VB.Line Line2 
-      X1              =   0
-      X2              =   2280
-      Y1              =   2160
-      Y2              =   2160
+      BorderColor     =   &H80000010&
+      X1              =   45
+      X2              =   2300
+      Y1              =   2175
+      Y2              =   2175
    End
    Begin VB.Line Line1 
-      X1              =   0
-      X2              =   2280
+      BorderColor     =   &H80000010&
+      X1              =   45
+      X2              =   2270
       Y1              =   1200
       Y2              =   1200
    End
@@ -122,7 +106,7 @@ Begin VB.Form frmArrows
       Caption         =   "none"
       Height          =   255
       Left            =   240
-      TabIndex        =   4
+      TabIndex        =   3
       Top             =   2880
       Visible         =   0   'False
       Width           =   1575
@@ -202,12 +186,6 @@ End Sub
 Private Sub cmdDimension_Click()
     m_sArrowType = "Dimension"
     Me.Caption = "Arrows (Dimension)"
-    Me.Hide
-End Sub
-
-Private Sub cmdHook_Click()
-    m_sArrowType = "Hook"
-    Me.Caption = "Arrows (Hook)"
     Me.Hide
 End Sub
 
