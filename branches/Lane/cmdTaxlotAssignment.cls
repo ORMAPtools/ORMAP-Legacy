@@ -608,7 +608,7 @@ End Property
 Private Sub ITool_OnMouseDown( _
   ByVal Button As Long, _
   ByVal Shift As Long, _
-  ByVal X As Long, _
+  ByVal x As Long, _
   ByVal Y As Long)
 
 On Error GoTo ErrorHandler
@@ -651,16 +651,12 @@ On Error GoTo ErrorHandler
     End If
     '++ END JWalton 2/8/2007
     
-    'MsgBox "1", , "DEBUG"
-    
     '++ START JWalton 1/31/2007
     ' Insure that it is the tool has the proper data to continue
     If Not m_bEditStatus Then
         Exit Sub
     End If
     '++ END JWalton 1/31/2007
-    
-    'MsgBox "2", , "DEBUG"
     
     'If "NUMBER" selected, then make sure value is numeric
     If StrComp(m_pFrmTaxlots.PolygonType, "NUMBER", vbTextCompare) = 0 Then
@@ -674,14 +670,10 @@ On Error GoTo ErrorHandler
         '++ END JWalton 2/8/2007
     End If
     
-    'MsgBox "3", , "DEBUG"
-    
     ' Create a search shape out of the point that the user clicked
     Set pMap = m_pEditor.Map
-    Set pPoint = m_pEditor.Display.DisplayTransformation.ToMapPoint(X, Y)
+    Set pPoint = m_pEditor.Display.DisplayTransformation.ToMapPoint(x, Y)
     Set pGeometry = m_pEditor.CreateSearchShape(pPoint)
-    
-    'MsgBox "4", , "DEBUG"
     
     ' Verify the validity of the specified taxlot number, and uniqueness of
     ' numeric taxlot numbers
@@ -696,8 +688,6 @@ On Error GoTo ErrorHandler
             '++ END JWalton 1/31/2007
         End If
     End If
-    
-    'MsgBox "5", , "DEBUG"
     
     ' Insures the validity of the underlying map index polygon
     Set pEnv = pGeometry 'QI
@@ -714,8 +704,6 @@ On Error GoTo ErrorHandler
         GoTo Process_Exit
     End If
     
-    'MsgBox "6", , "DEBUG"
-    
     ' Select any feature under the given point in the target layer
     Set pEnv = pGeometry 'QI
     Set pSpatialFilter = New esriGeoDatabase.SpatialFilter
@@ -726,14 +714,10 @@ On Error GoTo ErrorHandler
     pSpatialFilter.SpatialRel = esriSpatialRelIntersects
     Set pFCursor = m_pTaxlotFClass.Search(pSpatialFilter, False)
     
-    'MsgBox "7", , "DEBUG"
-    
     ' Exit if no taxlots are selected
     If pFCursor Is Nothing Then
         GoTo Process_Exit
     End If
-    
-    'MsgBox "8", , "DEBUG"
     
     Set pFeature = pFCursor.NextFeature
     If Not pFeature Is Nothing Then
@@ -763,12 +747,8 @@ On Error GoTo ErrorHandler
         End If
     End If
     
-    'MsgBox "9", , "DEBUG"
-    
     'Assign Taxlot value
     sExistTLNumVal = IIf(IsNull(pFeature.Value(m_lTLTaxlotFld)), "", pFeature.Value(m_lTLTaxlotFld))
-    
-    'MsgBox "10", , "DEBUG"
     
     '++ START JWalton 12/14/2007 Added test for not 0 in conditional
     ' Optionally updates the taxlot number field
@@ -777,8 +757,6 @@ On Error GoTo ErrorHandler
         If iResponse = vbNo Then GoTo Process_Exit
     End If
     '++ END JWalton 12/14/2007
-    
-    'MsgBox "11", , "DEBUG"
     
     'Taxlot can be less than 5-digits
     'The Taxlot value in OrMapMapNum must be 5 digits.
@@ -801,8 +779,6 @@ On Error GoTo ErrorHandler
         '++ END JWalton 2/1/2007
         sNewTLNum = Replace(sNewTLNum_5digit, "0", "")
     End If
-    
-    'MsgBox "12", , "DEBUG"
     
     '++ START Laura Gordon, November 29, 2005
     'Determine if Special Interests field is something other than default
@@ -841,19 +817,13 @@ On Error GoTo ErrorHandler
     pFeature.Value(m_lOMMapTaxlotFld) = sOMMapTaxlot
     '++ END JWM 11/09/2006
     
-    'MsgBox "13", , "DEBUG"
-    
     'Copy Anomaly from MapIndex
     sAnom = ParseOMMapNum(sExistOMNum, "anomaly")
     pFeature.Value(m_lTLAnomalyFld) = sAnom
     
-    'MsgBox "14", , "DEBUG"
-    
     'Assign OrmapTaxlot value
     pFeature.Value(m_lOMTLNumFld) = sOMTLNval
     pFeature.Store
-    
-    'MsgBox "15", , "DEBUG"
     
     'AutoIncrement if necessary
     '++ START JWalton 1/31/2007 Removed form control references in favor of Form Properties
@@ -862,19 +832,13 @@ On Error GoTo ErrorHandler
     End If
     '++ END JWalton 1/31/2007
     
-    'MsgBox "16", , "DEBUG"
-    
     ' End the edit operation
     m_pEditor.StopOperation "AutoIncrement Attribute"
-    
-    'MsgBox "17", , "DEBUG"
     
     '++ START JWalton 2/14/2007
     ' Select the feature
     pMap.ClearSelection
     pMap.SelectFeature m_pTaxlotFLayer, pFeature
-    
-    'MsgBox "18", , "DEBUG"
     
     ' Insures that this tool keeps the focus
     m_bToolStatus = True
@@ -885,15 +849,18 @@ On Error GoTo ErrorHandler
     m_bToolStatus = False
     '++ END JWalton 2/14/2007
     
-    'MsgBox "19", , "DEBUG"
-    
     ' Update the view
     Set pActiveView = pMap
-    pActiveView.PartialRefresh esriCarto.esriViewDrawPhase.esriViewGeoSelection Or _
-                               esriCarto.esriViewDrawPhase.esriViewGraphics, _
-                               Nothing, _
-                               Nothing
-    'MsgBox "20", , "DEBUG"
+
+    '++ START Nick Seigal (LCOG) 12/20/2007 - Better refresh
+    'Partially refresh the display
+    pActiveView.PartialRefresh _
+            esriCarto.esriViewDrawPhase.esriViewBackground Or _
+            esriCarto.esriViewDrawPhase.esriViewGeography Or _
+            esriCarto.esriViewDrawPhase.esriViewGraphics Or _
+            esriCarto.esriViewDrawPhase.esriViewGraphicSelection, Nothing, Nothing
+    '++ END Nick Seigal (LCOG) 12/20/2007
+    
     
 Process_Exit:
     Exit Sub
@@ -916,7 +883,7 @@ End Sub
 Private Sub ITool_OnMouseMove( _
   ByVal Button As Long, _
   ByVal Shift As Long, _
-  ByVal X As Long, _
+  ByVal x As Long, _
   ByVal Y As Long)
 '++START 1/26/2007 JWalton
     ' Not Implemented
@@ -926,7 +893,7 @@ End Sub
 Private Sub ITool_OnMouseUp( _
   ByVal Button As Long, _
   ByVal Shift As Long, _
-  ByVal X As Long, _
+  ByVal x As Long, _
   ByVal Y As Long)
 '++START 1/26/2007 JWalton
     ' Not Implemented
@@ -956,7 +923,7 @@ Private Sub ITool_OnKeyUp( _
 End Sub
  
 Private Function ITool_OnContextMenu( _
-  ByVal X As Long, _
+  ByVal x As Long, _
   ByVal Y As Long) As Boolean
 '++START 1/26/2007 JWalton
     ' Not Implemented

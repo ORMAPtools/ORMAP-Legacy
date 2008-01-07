@@ -177,7 +177,7 @@ Public Function FindFeatureLayerByDS( _
 On Error GoTo Err_Handler
     
     ' Variable declarations
-    Dim pMXDoc As esriArcMapUI.IMxDocument
+    Dim pMxDoc As esriArcMapUI.IMxDocument
     Dim pMap As esriCarto.IMap
     Dim pFeatureLayer As esriCarto.IFeatureLayer
     Dim pDataset As esriGeoDatabase.IDataset
@@ -187,8 +187,8 @@ On Error GoTo Err_Handler
     Dim i As Integer
     
     ' Initialize objects
-    Set pMXDoc = g_pApp.Document
-    Set pMap = pMXDoc.FocusMap
+    Set pMxDoc = g_pApp.Document
+    Set pMap = pMxDoc.FocusMap
     Set pId = New esriSystem.UID
     
     ' Gets a reference to the feature layers collection of the document
@@ -214,7 +214,7 @@ Err_Handler_Resume:
     ' Clean up
     Set pId = Nothing
     Set pMap = Nothing
-    Set pMXDoc = Nothing
+    Set pMxDoc = Nothing
     Exit Function
     
 Err_Handler:
@@ -692,10 +692,7 @@ Public Function GetValueViaOverlay( _
   ByVal sFldName As String, _
   Optional ByVal sOrderBestByFldName As String) As String
 
-On Error GoTo ErrorHandler
-    
-    '++ START Nick Seigal (LCOG) 12/19/2007
-    '++ DESCR: Fix for cases where the search feature (polygon, polyline or point) intersects more than one target feature (polygon).
+    On Error GoTo ErrorHandler
     
     Dim bGetValueViaOverlay As Boolean
     
@@ -748,61 +745,57 @@ On Error GoTo ErrorHandler
         End If
     End If
     
+    Dim pPolygon As IPolygon
+    Dim pArea As IArea
+    Dim pCurve As ICurve
+    Dim dFuzzAmount As Double
+    
     Dim pFeat As esriGeoDatabase.IFeature
     Dim pFeatCur As esriGeoDatabase.IFeatureCursor
     Dim pTopo As ITopologicalOperator
     Dim pIntGeom As IGeometry
-    Dim nSelFeatureCount As Long
-    Dim sValue As String
-    Dim sBestValue As String
-    Dim bGetValue As Boolean
-    Dim bGetBestValue As Boolean
+    
     Dim dLargestIntArea As Double
     Dim dIntArea As Double
     Dim dLongestIntLength As Double
     Dim dIntLength As Double
-    Dim pPolygon As IPolygon
-    Dim pArea As IArea
-    Dim pCurve As ICurve
-    Dim pPoint As IPoint
-    Dim dFuzzFactor As Double
+    Dim dictCandidates As New Scripting.Dictionary '(key::value) OID::area/length
+    
+    Dim sWhereClause As String
+    Dim sValue As String
+    Dim sBestValue As String
     Dim sOrderByValue As String
     Dim sBestOrderByValue As String
-        
-    Const cFuzzDivisor As Double = 1000
+    
+    Const cFuzzFactor As Double = 0.05  'i.e. 5% difference
     
     If bGetValueViaOverlay Then
             
-        nSelFeatureCount = 0 'initialize
-        sValue = "" 'initialize
-        sBestValue = sValue 'initialize
-        bGetBestValue = False
-        bGetValue = False
-        dLargestIntArea = 0 'initalize
-        dLongestIntLength = 0 'initalize
-        
         Select Case pGeom.GeometryType
         Case esriGeometryPolygon
             Set pPolygon = pGeom 'QI
             Set pArea = pPolygon 'QI
-            dFuzzFactor = pArea.Area / cFuzzDivisor
+            dFuzzAmount = pArea.Area * cFuzzFactor
         Case esriGeometryLine, esriGeometryPolyline, esriGeometryBezier3Curve, _
                 esriGeometryCircularArc, esriGeometryEllipticArc, esriGeometryPath
             Set pCurve = pGeom 'QI
-            dFuzzFactor = pCurve.Length / cFuzzDivisor
+            dFuzzAmount = pCurve.Length * cFuzzFactor
         Case esriGeometryPoint
             '[no fuzz factor]
         Case Else
             GoTo ErrorHandler
         End Select
                     
+        dLargestIntArea = 0 'initalize
+        dLongestIntLength = 0 'initalize
+        
         Set pFeatCur = SpatialQuery(pOverlayFC, pGeom, esriSpatialRelIntersects)
         If Not pFeatCur Is Nothing Then
             
             Set pFeat = pFeatCur.NextFeature
             While Not pFeat Is Nothing
                 
-                ' Get the intersection of search and target features
+                ' Get the intersection of source (overlay) and target (edited) features
                 
                 Set pTopo = pFeat.Shape
                 If Not pTopo.IsSimple Then
@@ -812,79 +805,107 @@ On Error GoTo ErrorHandler
                 Select Case pGeom.GeometryType
                 
                 Case esriGeometryPolygon
-                    ' Get the feature with the largest area of intersection,
-                    ' or, if tied (unikely but possible), then get the best
-                    ' (lowest) value.
+                    ' Determine if the target feature has the largest area of intersection with the
+                    ' current source feature. Set flags used below.
                     Set pIntGeom = pTopo.Intersect(pGeom, esriGeometry2Dimension)
                     If Not pIntGeom.IsEmpty Then
                         Set pPolygon = pIntGeom 'QI
                         Set pArea = pPolygon
                         dIntArea = pArea.Area
-                        If Abs(dIntArea - dLargestIntArea) > dFuzzFactor Then
-                            '[Not a "fuzzy tie"...]
-                            ' Take the value from the feature with the largest area
-                            If dIntArea >= dLargestIntArea Then
+                        If Abs(dIntArea - dLargestIntArea) > dFuzzAmount Then
+                            '[Difference greater than fuzz amount, so not a "fuzzy tie"...]
+                            
+                            ' Determine if this is the feature with the largest area of intersection
+                            If dIntArea > dLargestIntArea Then
                                 dLargestIntArea = dIntArea
-                                bGetValue = True
-                                bGetBestValue = False
+                                '[New largest intersection...]
+                                ' Get the value only for this feature
+                                dictCandidates.RemoveAll
+                                dictCandidates.Add pFeat.OID, dLargestIntArea
                             Else
-                                bGetValue = False
-                                bGetBestValue = False
+                                '[Smaller intersection...]
+                                ' Don't get the value for this feature
                             End If
+                            
                         Else
-                            '[A "fuzzy tie"...]
-                            bGetValue = True
-                            bGetBestValue = True
+                            '[Difference not greater than fuzz amount, so a "fuzzy tie"...]
+                            
+                            ' Evaluate this feature against other tied candidates
+                            dictCandidates.Add pFeat.OID, dLargestIntArea
+                            
                         End If
                     Else
-                        bGetValue = False
-                        bGetBestValue = False
+                        '[Empty intersection geometry...]
+                        ' Don't get the value for this feature
                     End If
                 
                 Case esriGeometryPolyline, esriGeometryLine
-                    ' Get the feature with the largest length of intersection,
-                    ' or, if tied (unikely but possible), then get the best
-                    ' (lowest) value.
-                    Set pIntGeom = pTopo.Intersect(pGeom, esriGeometry2Dimension)
+                    ' Determine if the target feature has the longest length of intersection with the
+                    ' current source feature. Set flags used below.
+                    Set pIntGeom = pTopo.Intersect(pGeom, esriGeometry1Dimension)
                     If Not pIntGeom.IsEmpty Then
                         Set pCurve = pIntGeom 'QI
                         dIntLength = pCurve.Length
-                        If Abs(dIntLength - dLongestIntLength) > dFuzzFactor Then
-                            '[Not a "fuzzy tie"...]
-                            ' Take the value from the feature with the longest length
-                            If dIntLength >= dLongestIntLength Then
+                        If Abs(dIntLength - dLongestIntLength) > dFuzzAmount Then
+                            '[Difference greater than fuzz amount, so not a "fuzzy tie"...]
+                            
+                            ' Determine if this is the feature with the longest length of intersection
+                            If dIntLength > dLongestIntLength Then
                                 dLongestIntLength = dIntLength
-                                bGetValue = True
-                                bGetBestValue = False
+                                '[New longest intersection...]
+                                ' Get the value only for this feature
+                                dictCandidates.RemoveAll
+                                dictCandidates.Add pFeat.OID, dLongestIntLength
                             Else
-                                bGetValue = False
-                                bGetBestValue = False
+                                '[Smaller intersection...]
+                                ' Don't get the value for this feature
                             End If
+                            
                         Else
-                            '[A "fuzzy tie"...]
-                            bGetValue = True
-                            bGetBestValue = True
+                            '[Difference not greater than fuzz amount, so a "fuzzy tie"...]
+                            
+                            ' Evaluate this feature against other tied candidates
+                            dictCandidates.Add pFeat.OID, dLongestIntLength
+                            
                         End If
                     Else
-                        bGetValue = False
-                        bGetBestValue = False
+                        '[Empty intersection geometry...]
+                        ' Don't get the value for this feature
                     End If
                 
                 Case esriGeometryPoint
-                    ' Get the best (lowest) value.
-                    bGetValue = True
-                    bGetBestValue = True
-                
+                    '[Tied by definition (0-dimension = zero area & length = tie)...]
+                    ' Evaluate this feature against other tied candidates
+                    dictCandidates.Add pFeat.OID, 0
+                    
                 Case Else
-                    ' Don't get a value at all
-                    bGetValue = False
-                    bGetBestValue = False
+                    GoTo ErrorHandler
                     
                 End Select
                 
-                If bGetValue Then
-                    If bGetBestValue Then
-                        ' Get the best value (corresponding to the lowest order-by value)
+                Set pFeat = pFeatCur.NextFeature
+            Wend
+            
+        End If
+        
+        If dictCandidates.Count > 0 Then
+            
+            sValue = "" 'initialize
+            sBestValue = "" 'initialize
+            sBestOrderByValue = "" 'initialize
+            
+            sWhereClause = pOverlayFC.OIDFieldName & " IN (" & Join(dictCandidates.Keys, ",") & ")"
+            
+            Set pFeatCur = SpatialQuery(pOverlayFC, pGeom, esriSpatialRelIntersects, sWhereClause)
+            If Not pFeatCur Is Nothing Then
+                
+                Set pFeat = pFeatCur.NextFeature
+                While Not pFeat Is Nothing
+                    
+                    If dictCandidates.Count > 1 Then
+                        '[Candidates tied for area/length of intersection (unikely but possible)...]
+                        ' Get the value only if the candidate source feature has the best (lowest)
+                        ' order-by value
                         sOrderByValue = pFeat.Value(lOrderBestByFld)
                         If (sBestOrderByValue = "") Or (sOrderByValue < sBestOrderByValue) Then
                             sBestOrderByValue = sOrderByValue
@@ -892,38 +913,57 @@ On Error GoTo ErrorHandler
                                 sValue = pFeat.Value(lFld)
                                 sBestValue = sValue
                             Else
-                                sBestValue = ""
+                                MsgBox "The field " & pFeat.Fields.Field(lFld).Name & " contains a Null" & _
+                                        "for the feature with OID=" & pFeat.OID & ".", _
+                                        vbCritical, "Error: GetValueViaOverlay"
+                                ' Keep the current value if any
                             End If
+                        Else
+                            ' Keep the current value if any
                         End If
                     Else
-                        ' Get the current value
+                        '[Candidates not tied (only one)...]
+                        ' Get the value for the only candidate feature
                         If Not (IsNull(pFeat.Value(lFld))) Then
                             sValue = pFeat.Value(lFld)
                             sBestValue = sValue
                         Else
-                            sBestValue = ""
+                            MsgBox "The field " & pFeat.Fields.Field(lFld).Name & " contains a Null" & vbNewLine & _
+                                    "for the feature with OID=" & pFeat.OID & ".", _
+                                    vbCritical, "Error: GetValueViaOverlay"
+                            ' Keep the current value if any
                         End If
                     End If
-                End If
+                    
+                    Set pFeat = pFeatCur.NextFeature
+                Wend
                 
-                Set pFeat = pFeatCur.NextFeature
-            Wend
-            
+            End If
+        
+        Else
+            MsgBox "No " & pOverlayFC.AliasName & " features found" & vbNewLine & _
+                    "which intersect this feature.", _
+                    vbCritical, "Error: GetValueViaOverlay"
+            GoTo ErrorHandler
         End If
+        
     End If
     
     GetValueViaOverlay = sBestValue
-    
-    '++ END Nick Seigal (LCOG) 12/19/2007
-    
+       
+
 Process_Exit:
   Exit Function
 
 ErrorHandler:
-    '++ START JWalton 2/7/2007
-    ' Return Null in the case of an error
+  HandleError True, _
+              "GetValueViaOverlay " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+              Err.Number, _
+              Err.Source, _
+              Err.Description, _
+              4
+    ' Return empty string in the case of an error
     GetValueViaOverlay = ""
-    '++END JWalton 2/7/2007
 End Function
 
 '***************************************************************************
@@ -2140,7 +2180,7 @@ On Error GoTo ErrorHandler
     Set pCenter = New esriGeometry.Point
     
     ' Set the coordinates of the center of the envelope in the point
-    pCenter.X = pEnv.XMin + (pEnv.XMax - pEnv.XMin) / 2
+    pCenter.x = pEnv.XMin + (pEnv.XMax - pEnv.XMin) / 2
     pCenter.Y = pEnv.YMin + (pEnv.YMax - pEnv.YMin) / 2
     
     ' Returns the center of the envelope to the function
@@ -2430,7 +2470,7 @@ On Error GoTo ErrorHandler
     '++ START JWalton 1/31/2007 Additional variable declarations
     Dim pFileDlg As clsCatalogFileDlg
     '++ END JWalton 1/31/2007
-    Dim pMXDoc As esriArcMapUI.IMxDocument
+    Dim pMxDoc As esriArcMapUI.IMxDocument
     Dim pFeatLayer As esriCarto.IFeatureLayer
     Dim pMap As esriCarto.IMap
     Dim pDataset As esriGeoDatabase.IDataset
@@ -2472,10 +2512,10 @@ On Error GoTo ErrorHandler
     Set pFeatLayer.FeatureClass = pFC
     Set pDataset = pFC
     pFeatLayer.Name = pDataset.Name
-    Set pMXDoc = g_pApp.Document
-    Set pMap = pMXDoc.FocusMap
+    Set pMxDoc = g_pApp.Document
+    Set pMap = pMxDoc.FocusMap
     pMap.AddLayer pFeatLayer
-    pMXDoc.CurrentContentsView.Refresh 0
+    pMxDoc.CurrentContentsView.Refresh 0
     
 '++ START JWalton 1/31/2007
     ' Returns the value of the function and exits
@@ -3108,14 +3148,14 @@ End Function
 
 Public Sub ZoomToExtent( _
   ByRef pEnv As IEnvelope, _
-  ByRef pMXDoc As IMxDocument)
+  ByRef pMxDoc As IMxDocument)
      '++ START JWalton 2/7/2007 Centralized Variable Declarations
     Dim pMap As esriCarto.IMap
     Dim pActiveView As esriCarto.IActiveView
     '++ END JWalton 2/7/2007
     
     ' Gets a reference to the current view window
-    Set pMap = pMXDoc.FocusMap
+    Set pMap = pMxDoc.FocusMap
     Set pActiveView = pMap
 
     ' Updates the view's extent
@@ -4175,7 +4215,7 @@ End Function
 Public Function GetMXDocRef() As esriArcMapUI.IMxDocument
 On Error GoTo ErrorHandler
     '++ START JWalton 2/7/2007 Centralized Variable Declarations
-    Dim pMXDoc As esriArcMapUI.IMxDocument
+    Dim pMxDoc As esriArcMapUI.IMxDocument
     Dim rot As esriFramework.AppROT
     Dim app As esriFramework.IApplication
     Dim pobjectFactory As esriFramework.IObjectFactory
@@ -4189,10 +4229,10 @@ On Error GoTo ErrorHandler
         Set app = rot.Item(1) 'ArcMap
     End If
     Set pobjectFactory = app
-    Set pMXDoc = app.Document
+    Set pMxDoc = app.Document
     
     ' Returns the function's value
-    Set GetMXDocRef = pMXDoc
+    Set GetMXDocRef = pMxDoc
 
 
     Exit Function
@@ -4266,48 +4306,99 @@ ErrorHandler:
 End Function
 
 
+''***************************************************************************
+''Name:                  Validate5Digits
+''Initial Author:        <<Unknown>>
+''Subsequent Author:     Type your name here.
+''Created:               10/11/2006
+''Purpose:       String formatting
+''Called From:   No calls are made to this function
+''Description:   Accepts a string and pads it to the left with zeros up to
+''               five characters
+''Methods:       None
+''Inputs:        sString - The string to pad
+''Parameters:    None
+''Outputs:       None
+''Returns:       A properly formatted string
+''Errors:        This routine raises no known errors.
+''Assumptions:   None
+''Updates:
+''       Type any updates here.
+''Developer:     Date:       Comments:
+''----------     ------      ---------
+''James Moore    10/11/2006  THIS FUNCTION IS DEAD. IT IS NOT CALLED BY ANY _
+'                            OTHER PROCESS.
+''***************************************************************************
+'
+'Public Function Validate5Digits( _
+'  ByVal sString As String) As String
+'On Error GoTo ErrorHandler
+'
+'    'Make sure taxlot number is 5 characters
+'    If Len(sString) < 5 Then
+'        Do Until Len(sString) = 5
+'            sString = "0" & sString
+'        Loop
+'    End If
+'    Validate5Digits = sString
+'
+'    Exit Function
+'ErrorHandler:
+'    HandleError True, _
+'                "Validate5Digits " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+'                Err.Number, _
+'                Err.Source, _
+'                Err.Description, _
+'4
+'End Function
+
 '***************************************************************************
-'Name:                  Validate5Digits
-'Initial Author:        <<Unknown>>
-'Subsequent Author:     Type your name here.
-'Created:               10/11/2006
-'Purpose:       String formatting
-'Called From:   No calls are made to this function
-'Description:   Accepts a string and pads it to the left with zeros up to
-'               five characters
+'Name:                  SetCurrentCommand
+'Initial Author:        Nick Seigal (LCOG)
+'Subsequent Author:     <Type your name here.>
+'Created:               12/20/2007
+'Purpose:       ArcMap UI Configuration
+'Called From:   frmTaxlotAssignment
+'Description:   Sets the current command to the command passed in the argument.
 'Methods:       None
-'Inputs:        sString - The string to pad
+'Inputs:        sFullCommandName - The string to pad
 'Parameters:    None
 'Outputs:       None
-'Returns:       A properly formatted string
+'Returns:       Nothing
 'Errors:        This routine raises no known errors.
 'Assumptions:   None
 'Updates:
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
-'James Moore    10/11/2006  THIS FUNCTION IS DEAD. IT IS NOT CALLED BY ANY _
-                            OTHER PROCESS.
+'
 '***************************************************************************
 
-Public Function Validate5Digits( _
-  ByVal sString As String) As String
-On Error GoTo ErrorHandler
+Public Sub SetCurrentCommand(pMxDoc As IMxDocument, ByVal sFullCommandName As String)
 
-    'Make sure taxlot number is 5 characters
-    If Len(sString) < 5 Then
-        Do Until Len(sString) = 5
-            sString = "0" & sString
-        Loop
+    ' Set the current command to passed command
+    Dim pUID As New UID
+    Dim pDoc As IDocument
+    Dim pCmdItem As ICommandItem
+    
+    On Error Resume Next
+    
+    ' Use the PROGID of the passed command
+    pUID.Value = sFullCommandName
+    If Err.Number = 0 Then
+        Set pDoc = pMxDoc 'QI
+        Set pCmdItem = pDoc.CommandBars.Find(pUID)
+    Else
+        '[Error...]
+        MsgBox "Tool or command " & sFullCommandName & " not found!", vbCritical
     End If
-    Validate5Digits = sString
+    
+    If Not pCmdItem Is Nothing Then
+        pCmdItem.Execute
+    Else
+        '[Error...]
+        MsgBox "Tool or command " & sFullCommandName & " not found!", vbCritical
+    End If
+    
+End Sub
 
-    Exit Function
-ErrorHandler:
-    HandleError True, _
-                "Validate5Digits " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
-                Err.Number, _
-                Err.Source, _
-                Err.Description, _
-4
-End Function
