@@ -346,13 +346,13 @@ Private Sub m_pEditorEvents_OnChangeFeature( _
 
 On Error GoTo ErrorHandler
     
-    '++ START Nick Seigal (LCOG) 02/5/2007 - Avoid rentrancy
+    '++ START Nick Seigal (LCOG) 02/05/2007 - Avoid rentrancy
     If m_bDuringAutoUpdate = False Then
         m_bDuringAutoUpdate = True
     Else
-        GoTo OnChangeFeature_Proc_Exit
+        GoTo Process_Exit
     End If
-    '++ END Nick Seigal (LCOG) 02/5/2007
+    '++ END Nick Seigal (LCOG) 02/05/2007
     
     ' Variable declarations
     Dim u As New esriSystem.UID
@@ -365,6 +365,7 @@ On Error GoTo ErrorHandler
     If IsTaxlot(obj) Then
         'Obtain ORMAPMapnum via overlay and calculate other field values
         CalcTaxlotValues obj, m_pMIFlayer
+    
     ElseIf IsAnno(obj) Then
         Set pAnnotationFeature = obj
         
@@ -373,7 +374,7 @@ On Error GoTo ErrorHandler
         lParentID = pAnnotationFeature.LinkedFeatureID
         If lParentID > -1 Then 'Feature linked
             Set pFeat = GetRelatedObjects(obj)
-            If pFeat Is Nothing Then GoTo OnChangeFeature_Proc_Exit
+            If pFeat Is Nothing Then GoTo Process_Exit
         Else
             'Not feature linked anno, so we can use the feature as is
             Set pFeat = obj
@@ -381,11 +382,12 @@ On Error GoTo ErrorHandler
         
         'Set anno size
         SetAnnoSize obj, pFeat
+        
     End If
     
     m_bDuringAutoUpdate = False
     
-OnChangeFeature_Proc_Exit:
+Process_Exit:
     Exit Sub
     
 ErrorHandler:
@@ -406,15 +408,15 @@ End Sub
 'Purpose:       Automatically populate fields in a feature created within a
 '               Map Index feature
 'Called From:   m_pEditorEvents
-'Description:   Given an object, a_Obj.
-'               Update a_Obj with all the ORMAP Elements that can be derived
+'Description:   Given an object, obj.
+'               Update obj with all the ORMAP Elements that can be derived
 '               from an overlaying feature in Map Index.
 'Methods:       None
-'Inputs:        a_Obj - A newly created feature
+'Inputs:        obj - A newly created feature
 'Parameters:    None
 'Outputs:       None
 'Returns:       Nothing
-'Errors:        If the a_Obj parameter does not contain a reference to a IFeature object the UpdateAutoFields will throw an error
+'Errors:        If the obj parameter does not contain a reference to a IFeature object the UpdateAutoFields will throw an error
 'Assumptions:   None
 'Updates:
 '       Type any updates here.
@@ -424,9 +426,10 @@ End Sub
 '                                   procedure just falls through.
 'Jim Moore      7-2-07      Based upon communication with JWalton made corrections to this code in response to Tracker 1725102
 '                                   Replaced Mapscale and MapNum variant variables with string
+'Nick Seigal    1-6-08      Changed variable from a_Obj to obj to be consistent with other event handlers
 '***************************************************************************
 Private Sub m_pEditorEvents_OnCreateFeature( _
-  ByVal a_Obj As esriGeoDatabase.IObject)
+  ByVal obj As esriGeoDatabase.IObject)
 On Error GoTo ErrorHandler
     ' Variable declarations
     Dim sMapNum As String
@@ -443,64 +446,66 @@ On Error GoTo ErrorHandler
     Dim lMapScaleFld As Long
     Dim lMapNumFld As Long
     
-    If Not IsOrMapFeature(a_Obj) Then GoTo OnCreateFeature_Process_Exit '++ START/END JWM 05/09/2007 Tracker item 1703333++++++
+    If Not IsOrMapFeature(obj) Then GoTo Process_Exit '++ START/END JWM 05/09/2007 Tracker item 1703333++++++
     'These are the autocalculated fields
-    UpdateAutoFields a_Obj
+    UpdateAutoFields obj
   
-    lMapNumFld = a_Obj.Fields.FindField(g_pFldnames.MIMapNumberFN)
-    lMapScaleFld = a_Obj.Fields.FindField(g_pFldnames.MIMapScaleFN)
+    lMapNumFld = obj.Fields.FindField(g_pFldnames.MIMapNumberFN)
+    lMapScaleFld = obj.Fields.FindField(g_pFldnames.MIMapScaleFN)
     
-    If IsTaxlot(a_Obj) Then
+    If IsTaxlot(obj) Then
         'Obtain ORMAPMapnum via overlay and calculate other field values
-        CalcTaxlotValues a_Obj, m_pMIFlayer
+        CalcTaxlotValues obj, m_pMIFlayer
         
-    ElseIf IsAnno(a_Obj) Then
+    ElseIf IsAnno(obj) Then
         'Capture MapNumber for each anno feature created
-        lAnnoMapNumFld = LocateFields(a_Obj.Class, g_pFldnames.MIMapNumberFN)
-        If lAnnoMapNumFld = -1 Then GoTo OnCreateFeature_Process_Exit
-        Set pAnnotationFeature = a_Obj
+        lAnnoMapNumFld = LocateFields(obj.Class, g_pFldnames.MIMapNumberFN)
+        If lAnnoMapNumFld = -1 Then GoTo Process_Exit
+        Set pAnnotationFeature = obj
         
         'Get the parent feature so mapnumber can be obtained
         lParentID = pAnnotationFeature.LinkedFeatureID
         If lParentID > -1 Then 'Feature linked
-            Set pFeat = GetRelatedObjects(a_Obj)
-            If pFeat Is Nothing Then GoTo OnCreateFeature_Process_Exit
+            Set pFeat = GetRelatedObjects(obj)
+            If pFeat Is Nothing Then GoTo Process_Exit
         Else
             'Not feature linked anno, so we can use the feature as is
-            Set pFeat = a_Obj
+            Set pFeat = obj
         End If
 
         ' Retrieve the map number and scale from the overlaying map index polygon
         Set pGeometry = pFeat.Shape
-        If pGeometry.IsEmpty Then GoTo OnCreateFeature_Process_Exit
+        If pGeometry.IsEmpty Then GoTo Process_Exit
         Set pEnv = pGeometry.Envelope
         '++ START Nick Seigal (LCOG) 12/21/2007 - Used shared function instead of in line code to get pCenter
         Set pCenter = CT_GetCenterOfEnvelope(pEnv)
         Set pGeometry = pCenter 'QI
         '++ END Nick Seigal (LCOG) 12/21/2007
         Set pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-        If pMIFlayer Is Nothing Then GoTo OnCreateFeature_Process_Exit
+        If pMIFlayer Is Nothing Then GoTo Process_Exit
         Set pMIFclass = pMIFlayer.FeatureClass
         sMapNum = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapNumberFN)
-        a_Obj.Value(lAnnoMapNumFld) = sMapNum
+        obj.Value(lAnnoMapNumFld) = sMapNum
         If lMapScaleFld > -1 Then
-'++ START JWM 07/02/2007 changed from variant to string++++++++++
+            '++ START JWM 07/02/2007 changed from variant to string++++++++++
             sMapScale = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapScaleFN)
             If Len(sMapScale) > 0 Then
-                a_Obj.Value(lMapScaleFld) = sMapScale
+                obj.Value(lMapScaleFld) = sMapScale
             Else
-                a_Obj.Value(lMapScaleFld) = Null
+                obj.Value(lMapScaleFld) = Null
             End If
+            '++ END JWM 07/02/2007++++++++++
         End If
-'++ END JWM 07/02/2007++++++++++
+        
         ' Set size based on mapscale
-        SetAnnoSize a_Obj, pFeat
+        SetAnnoSize obj, pFeat
+    
     Else
         ' Update MapScale and mapnumber for all features with a MapScale field (except MapIndex)
-        If lMapScaleFld > -1 And Not IsMapIndex(a_Obj) Then
-            Set pFeat = a_Obj
+        If lMapScaleFld > -1 And Not IsMapIndex(obj) Then
+            Set pFeat = obj
             Set pGeometry = pFeat.Shape
-            If pGeometry.IsEmpty Then GoTo OnCreateFeature_Process_Exit
+            If pGeometry.IsEmpty Then GoTo Process_Exit
             Set pEnv = pGeometry.Envelope
             '++ START Nick Seigal (LCOG) 12/21/2007 - Used shared function instead of in line code to get pCenter
             If pGeometry.GeometryType <> esriGeometryBezier3Curve And _
@@ -518,32 +523,31 @@ On Error GoTo ErrorHandler
             End If
             '++ END Nick Seigal (LCOG) 12/21/2007
             Set pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
-            If pMIFlayer Is Nothing Then GoTo OnCreateFeature_Process_Exit
+            If pMIFlayer Is Nothing Then GoTo Process_Exit
             Set pMIFclass = pMIFlayer.FeatureClass
             sMapScale = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapScaleFN)
             '++ START JWM 07/02/2007 changed variant to string++++++++++
-                If Len(sMapScale) > 0 Then
-                    a_Obj.Value(lMapScaleFld) = sMapScale
-                Else
-                    a_Obj.Value(lMapScaleFld) = Null
-                End If
-'           ++ END JWM 07/02/2007++++++++++
+            If Len(sMapScale) > 0 Then
+                obj.Value(lMapScaleFld) = sMapScale
+            Else
+                obj.Value(lMapScaleFld) = Null
+            End If
+            '++ END JWM 07/02/2007++++++++++
             ' If a dataset with MapNumber, populate it
             If lMapNumFld > -1 Then
                 sMapNum = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapNumberFN)
-                '++ START JWalton 5/7/2007
-'           ++ START JWM 07/02/2007 changed variant to string++++++++++
+                '++ START JWM 07/02/2007 changed variant to string++++++++++
                 If Len(sMapNum) > 0 Then
-                    a_Obj.Value(lMapNumFld) = sMapNum
+                    obj.Value(lMapNumFld) = sMapNum
                 Else
-                    a_Obj.Value(lMapNumFld) = Null
+                    obj.Value(lMapNumFld) = Null
                 End If
-'           ++ END JWM 07/02/2007++++++++++
+                '++ END JWM 07/02/2007++++++++++
             End If
         End If
     End If
 
-OnCreateFeature_Process_Exit:
+Process_Exit:
     Exit Sub
   
 ErrorHandler:

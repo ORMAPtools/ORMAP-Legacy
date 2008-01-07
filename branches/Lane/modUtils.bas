@@ -722,13 +722,15 @@ Public Function GetValueViaOverlay( _
     
     If sOrderBestByFldName = "" Then
         '[Optional parameter not set...]
-        ' Try to use the OID field instead
-        If pOverlayFC.HasOID Then
-            ' Use the OID field
-            lOrderBestByFld = pOverlayFC.Fields.FindField(pOverlayFC.OIDFieldName)
-        Else
-            bGetValueViaOverlay = False
-        End If
+        ' Use the value field as the order-by field
+        lOrderBestByFld = lFld
+        '' Try to use the OID field instead
+        'If pOverlayFC.HasOID Then
+        '    ' Use the OID field
+        '    lOrderBestByFld = pOverlayFC.Fields.FindField(pOverlayFC.OIDFieldName)
+        'Else
+        '    bGetValueViaOverlay = False
+        'End If
     Else
         '[Optional parameter set...]
         lOrderBestByFld = pOverlayFC.Fields.FindField(sOrderBestByFldName)
