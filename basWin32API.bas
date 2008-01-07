@@ -62,7 +62,7 @@ Public Declare Function SetWindowPos _
                Lib "user32" _
                (ByVal hwnd As Long, _
                 ByVal hWndInsertAfter As Long, _
-                ByVal X As Long, _
+                ByVal x As Long, _
                 ByVal Y As Long, _
                 ByVal cx As Long, _
                 ByVal cy As Long, _

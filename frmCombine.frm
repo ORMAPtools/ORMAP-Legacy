@@ -151,7 +151,7 @@ Private Const c_sModuleFileName As String = "frmCombine.frm"
 Private Sub cmdApply_Click()
 On Error GoTo ErrorHandler
     '++ START JWalton 2/6/2007 Centralized Variable Declarations
-    Dim pMXDoc As esriArcMapUI.IMxDocument
+    Dim pMxDoc As esriArcMapUI.IMxDocument
     Dim pMap As esriCarto.IMap
     Dim pDataset As esriGeoDatabase.IDataset
     Dim pDomain As esriGeoDatabase.IDomain
@@ -188,8 +188,8 @@ On Error GoTo ErrorHandler
     '++ END JWalton 2/6/2007
     
     ' Initialize objects
-    Set pMXDoc = g_pApp.Document
-    Set pMap = pMXDoc.FocusMap
+    Set pMxDoc = g_pApp.Document
+    Set pMap = pMxDoc.FocusMap
     
     'Validate new taxlot number entered and make sure it doesn't exist
     If (Len(Me.txtNewTaxlot.Text) = 0 Or (Len(Me.txtNewTaxlot.Text) > ORMAP_TAXLOT_FIELD_LENGTH)) Or _
