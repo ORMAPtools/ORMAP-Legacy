@@ -1,8 +1,8 @@
-cmdTaxlotAssignment = 108, 197, 850, 730, 
+cmdTaxlotAssignment = 146, 127, 888, 660, 
 clsFieldNames = 66, 87, 808, 620, 
 cmdLocate = 0, 0, 742, 533, 
 cmdTaxlotCombine = 66, 87, 808, 620, 
-cmdArrows = 188, 85, 930, 618, 
+cmdArrows = 99, 99, 841, 632, 
 cmdMapIndex = 22, 29, 764, 562, 
 clsTaxLotEditingToolbar = 132, 174, 874, 707, C
 basGlobals = 44, 58, 786, 591, C

@@ -610,7 +610,7 @@ Private Sub ITool_OnMouseDown( _
   ByVal Shift As Long, _
   ByVal x As Long, _
   ByVal Y As Long)
-
+1
 On Error GoTo ErrorHandler
 
 '++ START JWalton 1/31/2007 Centralized variable declarations
@@ -673,7 +673,10 @@ On Error GoTo ErrorHandler
     ' Create a search shape out of the point that the user clicked
     Set pMap = m_pEditor.Map
     Set pPoint = m_pEditor.Display.DisplayTransformation.ToMapPoint(x, Y)
-    Set pGeometry = m_pEditor.CreateSearchShape(pPoint)
+    '++ START Nick Seigal (LCOG) 01/08/2008 - Change geometry from an envelope to a point
+    'Set pGeometry = m_pEditor.CreateSearchShape(pPoint) 'Returns an IEnvelope
+    Set pGeometry = pPoint 'QI
+    '++ END Nick Seigal (LCOG) 01/08/2008
     
     ' Verify the validity of the specified taxlot number, and uniqueness of
     ' numeric taxlot numbers
@@ -690,7 +693,9 @@ On Error GoTo ErrorHandler
     End If
     
     ' Insures the validity of the underlying map index polygon
-    Set pEnv = pGeometry 'QI
+    '++ START Nick Seigal (LCOG) 01/08/2008 - Change geometry from an envelope to a point
+    'Set pEnv = pGeometry 'QI
+    '++ END Nick Seigal (LCOG) 01/08/2008
     Set pSpatialFilter = New esriGeoDatabase.SpatialFilter
     Set pSpatialFilter.Geometry = pGeometry
     sShapeFieldName = m_pMIFclass.ShapeFieldName
@@ -705,7 +710,9 @@ On Error GoTo ErrorHandler
     End If
     
     ' Select any feature under the given point in the target layer
-    Set pEnv = pGeometry 'QI
+    '++ START Nick Seigal (LCOG) 01/08/2008 - Change geometry from an envelope to a point
+    'Set pEnv = pGeometry 'QI
+    '++ END Nick Seigal (LCOG) 01/08/2008
     Set pSpatialFilter = New esriGeoDatabase.SpatialFilter
     Set pSpatialFilter.Geometry = pGeometry
     sShapeFieldName = m_pTaxlotFClass.ShapeFieldName

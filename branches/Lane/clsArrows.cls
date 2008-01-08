@@ -793,7 +793,8 @@ On Error GoTo ErrorHandler
                     Set pWSEdit = pDSet.Workspace
                     
                     ' Start an edit operation to encompass the creation of the feature
-                    pWSEdit.StartEditOperation
+                    'pWSEdit.StartEditOperation
+                    m_pEditor.StartOperation
                     
                     ' Create the arrow feature
                     Set pFeature = pArrowFC.CreateFeature
@@ -843,7 +844,8 @@ On Error GoTo ErrorHandler
                     '++ END Nick Seigal (LCOG) 12/20/2007
                     
                     ' Finalize the edit operation
-                    pWSEdit.StopEditOperation
+                    'pWSEdit.StopEditOperation
+                    m_pEditor.StopOperation "Create Arrow"
                     
                     '++ START Nick Seigal (LCOG) 12/20/2007 - Better refresh
                     'Partially refresh the display
