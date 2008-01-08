@@ -655,15 +655,15 @@ End Function
 '                   - to get MapScale
 '               cmdArrows.GetCurrentMapScale
 '                   - to get MapScale
-'Description:   Given a search geometry, pGeom, and feature class that
+'Description:   Given a search geometry, pGeometry, and feature class that
 '               overlays the search geometry, pOverlayFC, and a field
 '               name, sFldName, to find the value of.
 '               Get the target feature with the largest area of intersection
-'               with pGeom and get its value from the field, or, if tied
+'               with pGeometry and get its value from the field, or, if tied
 '               (unikely but possible), then get the best (lowest) value
 '               from the field.
 'Methods:       None
-'Inputs:        pGeom - Search geometry
+'Inputs:        pGeometry - Search geometry
 '               pOverlayFC - Overlying feature class
 '               sFldName - Name of field to return value for
 'Parameters:    None
@@ -687,7 +687,7 @@ End Function
 '***************************************************************************
 
 Public Function GetValueViaOverlay( _
-  ByRef pGeom As esriGeometry.IGeometry, _
+  ByRef pGeometry As esriGeometry.IGeometry, _
   ByRef pOverlayFC As esriGeoDatabase.IFeatureClass, _
   ByVal sFldName As String, _
   Optional ByVal sOrderBestByFldName As String) As String
@@ -698,7 +698,7 @@ Public Function GetValueViaOverlay( _
     
     bGetValueViaOverlay = True 'initialize
     
-    If pGeom Is Nothing Then
+    If pGeometry Is Nothing Then
         bGetValueViaOverlay = False
     End If
     
@@ -750,6 +750,8 @@ Public Function GetValueViaOverlay( _
     Dim pPolygon As IPolygon
     Dim pArea As IArea
     Dim pCurve As ICurve
+    Dim pEnvelope As IEnvelope
+    Dim pPtCol As IPointCollection
     Dim dFuzzAmount As Double
     
     Dim pFeat As esriGeoDatabase.IFeature
@@ -773,17 +775,21 @@ Public Function GetValueViaOverlay( _
     
     If bGetValueViaOverlay Then
             
-        Select Case pGeom.GeometryType
+        Select Case pGeometry.GeometryType
         Case esriGeometryPolygon
-            Set pPolygon = pGeom 'QI
+            Set pPolygon = pGeometry 'QI
             Set pArea = pPolygon 'QI
             dFuzzAmount = pArea.Area * cFuzzFactor
         Case esriGeometryLine, esriGeometryPolyline, esriGeometryBezier3Curve, _
                 esriGeometryCircularArc, esriGeometryEllipticArc, esriGeometryPath
-            Set pCurve = pGeom 'QI
+            Set pCurve = pGeometry 'QI
             dFuzzAmount = pCurve.Length * cFuzzFactor
         Case esriGeometryPoint
             '[no fuzz factor]
+        Case esriGeometryEnvelope
+            ' Copy envelope to polygon
+            Set pEnvelope = pGeometry 'QI
+            Set pPolygon = EnvelopeToPolygon(pEnvelope)
         Case Else
             GoTo ErrorHandler
         End Select
@@ -791,7 +797,7 @@ Public Function GetValueViaOverlay( _
         dLargestIntArea = 0 'initalize
         dLongestIntLength = 0 'initalize
         
-        Set pFeatCur = SpatialQuery(pOverlayFC, pGeom, esriSpatialRelIntersects)
+        Set pFeatCur = SpatialQuery(pOverlayFC, pGeometry, esriSpatialRelIntersects)
         If Not pFeatCur Is Nothing Then
             
             Set pFeat = pFeatCur.NextFeature
@@ -804,12 +810,12 @@ Public Function GetValueViaOverlay( _
                     pTopo.Simplify
                 End If
                 
-                Select Case pGeom.GeometryType
+                Select Case pGeometry.GeometryType
                 
-                Case esriGeometryPolygon
+                Case esriGeometryPolygon, esriGeometryEnvelope
                     ' Determine if the target feature has the largest area of intersection with the
                     ' current source feature. Set flags used below.
-                    Set pIntGeom = pTopo.Intersect(pGeom, esriGeometry2Dimension)
+                    Set pIntGeom = pTopo.Intersect(pGeometry, esriGeometry2Dimension)
                     If Not pIntGeom.IsEmpty Then
                         Set pPolygon = pIntGeom 'QI
                         Set pArea = pPolygon
@@ -844,7 +850,7 @@ Public Function GetValueViaOverlay( _
                 Case esriGeometryPolyline, esriGeometryLine
                     ' Determine if the target feature has the longest length of intersection with the
                     ' current source feature. Set flags used below.
-                    Set pIntGeom = pTopo.Intersect(pGeom, esriGeometry1Dimension)
+                    Set pIntGeom = pTopo.Intersect(pGeometry, esriGeometry1Dimension)
                     If Not pIntGeom.IsEmpty Then
                         Set pCurve = pIntGeom 'QI
                         dIntLength = pCurve.Length
@@ -898,7 +904,7 @@ Public Function GetValueViaOverlay( _
             
             sWhereClause = pOverlayFC.OIDFieldName & " IN (" & Join(dictCandidates.Keys, ",") & ")"
             
-            Set pFeatCur = SpatialQuery(pOverlayFC, pGeom, esriSpatialRelIntersects, sWhereClause)
+            Set pFeatCur = SpatialQuery(pOverlayFC, pGeometry, esriSpatialRelIntersects, sWhereClause)
             If Not pFeatCur Is Nothing Then
                 
                 Set pFeat = pFeatCur.NextFeature
@@ -966,6 +972,44 @@ ErrorHandler:
               4
     ' Return empty string in the case of an error
     GetValueViaOverlay = ""
+End Function
+
+'***************************************************************************
+'Name:                  EnvelopeToPolygon
+'Initial Author:        Nick Seigal (LCOG)
+'Subsequent Author:     <<Type your name here>>
+'Created:               <<Unknown>>
+'Purpose:       Convert an envelope into a polygon.
+'Called From:   (Various)
+'Description:   Convert an envelope into a polygon.
+'Methods:       Puts envelope corners into a new polygon.
+'Inputs:        pEnvelope - An envelope
+'Parameters:    None
+'Outputs:       None
+'Returns:       A polygon.
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+
+Private Function EnvelopeToPolygon(pEnvelope As IEnvelope) As IPolygon
+' Copy envelope points to polygon
+    
+    Dim pPolygon As IPolygon
+    Dim pPtCol As IPointCollection
+    
+    Set pPolygon = New Polygon
+    Set pPtCol = pPolygon 'QI
+    pPtCol.AddPoint pEnvelope.UpperRight
+    pPtCol.AddPoint pEnvelope.LowerRight
+    pPtCol.AddPoint pEnvelope.LowerLeft
+    pPtCol.AddPoint pEnvelope.UpperLeft
+    
+    Set EnvelopeToPolygon = pPolygon
+    
 End Function
 
 '***************************************************************************
