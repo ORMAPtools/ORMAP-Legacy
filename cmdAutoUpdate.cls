@@ -484,11 +484,15 @@ On Error GoTo ErrorHandler
         Set pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
         If pMIFlayer Is Nothing Then GoTo Process_Exit
         Set pMIFclass = pMIFlayer.FeatureClass
-        sMapNum = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapNumberFN)
+        '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+        sMapNum = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
+        '++ END Nick Seigal (LCOG) 01/25/2008
         obj.Value(lAnnoMapNumFld) = sMapNum
         If lMapScaleFld > -1 Then
             '++ START JWM 07/02/2007 changed from variant to string++++++++++
-            sMapScale = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapScaleFN)
+            '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+            sMapScale = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+            '++ END Nick Seigal (LCOG) 01/25/2008
             If Len(sMapScale) > 0 Then
                 obj.Value(lMapScaleFld) = sMapScale
             Else
@@ -525,7 +529,9 @@ On Error GoTo ErrorHandler
             Set pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
             If pMIFlayer Is Nothing Then GoTo Process_Exit
             Set pMIFclass = pMIFlayer.FeatureClass
-            sMapScale = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapScaleFN)
+            '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+            sMapScale = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+            '++ END Nick Seigal (LCOG) 01/25/2008
             '++ START JWM 07/02/2007 changed variant to string++++++++++
             If Len(sMapScale) > 0 Then
                 obj.Value(lMapScaleFld) = sMapScale
@@ -535,7 +541,9 @@ On Error GoTo ErrorHandler
             '++ END JWM 07/02/2007++++++++++
             ' If a dataset with MapNumber, populate it
             If lMapNumFld > -1 Then
-                sMapNum = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapNumberFN)
+                '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+                sMapNum = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
+                '++ END Nick Seigal (LCOG) 01/25/2008
                 '++ START JWM 07/02/2007 changed variant to string++++++++++
                 If Len(sMapNum) > 0 Then
                     obj.Value(lMapNumFld) = sMapNum
