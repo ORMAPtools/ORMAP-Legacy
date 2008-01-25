@@ -697,7 +697,9 @@ On Error GoTo ErrorHandler
             Set m_pFromBreakPoint = m_pStartPoint
             
             ' Get the scale of the current mapindex
-            sScale = GetValueViaOverlay(m_pStartPoint, pMIFC, g_pFldnames.MIMapScaleFN)
+            '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+            sScale = GetValueViaOverlay(m_pStartPoint, pMIFC, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+            '++ END Nick Seigal (LCOG) 01/25/2008
             sScale = ConvertToDescription(pMIFC.Fields, g_pFldnames.MIMapScaleFN, sScale)
         
             
@@ -808,7 +810,9 @@ On Error GoTo ErrorHandler
                     If lLineTypeFld = -1 Then GoTo Process_Exit
                     
                     ' Populate field values in the feature
-                    sCurMapNum = GetValueViaOverlay(pFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN)
+                    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+                    sCurMapNum = GetValueViaOverlay(pFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
+                    '++ END Nick Seigal (LCOG) 01/25/2008
                     pFeature.Value(lCLMNfld) = sCurMapNum
                     '++ START Laura Gordon 05/23/07, adding additional arrow types
                     'pFeature.Value(lLineTypeFld) = 100
@@ -831,7 +835,9 @@ On Error GoTo ErrorHandler
                     pFeature.Value(lLineTypeFld) = Format(Now, "MM/DD/YYYY")
                     
                     'Set the MapScale Field
-                    sCurrentMapScale = GetValueViaOverlay(pFeature.Shape, pMIFC, g_pFldnames.MIMapScaleFN)
+                    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+                    sCurrentMapScale = GetValueViaOverlay(pFeature.Shape, pMIFC, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+                    '++ END Nick Seigal (LCOG) 01/25/2008
                     lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.MIMapScaleFN)
                     If lLineTypeFld = -1 Then Exit Sub
                     '++ START Nick Seigal (LCOG) 12/20/2007 - Fixed data type
@@ -1171,7 +1177,9 @@ On Error GoTo ErrorHandler
                             
                             'Get the current MapNumber
                             Dim sCurrentMapNums As String
-                            sCurrentMapNums = GetValueViaOverlay(pDimensionFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN)
+                            '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+                            sCurrentMapNums = GetValueViaOverlay(pDimensionFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
+                            '++ END Nick Seigal (LCOG) 01/25/2008
                             Dim lCLMNSfld As Long
                             lCLMNSfld = LocateFields(pDimensionArrowFC, g_pFldnames.MIMapNumberFN)
                             pDimensionFeature.Value(lCLMNSfld) = sCurrentMapNums
@@ -1780,8 +1788,10 @@ On Error GoTo ErrorHandler
     Set pMIFclass = pMIFlayer.FeatureClass
     
     ' Retrieve the map scale from the overlaying Map Index layer
-    vMapScale1 = GetValueViaOverlay(pCurve.FromPoint, pMIFclass, g_pFldnames.MIMapScaleFN)
-    vMapScale2 = GetValueViaOverlay(pCurve.ToPoint, pMIFclass, g_pFldnames.MIMapScaleFN)
+    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+    vMapScale1 = GetValueViaOverlay(pCurve.FromPoint, pMIFclass, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+    vMapScale2 = GetValueViaOverlay(pCurve.ToPoint, pMIFclass, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+    '++ END Nick Seigal (LCOG) 01/25/2008
     
     ' Insure that the map scales exist and that they are equal
     If IsNull(vMapScale1) Or IsNull(vMapScale2) Then
@@ -1943,7 +1953,9 @@ On Error GoTo ErrorHandler
     '++ END Nick Seigal (LCOG) 12/20/2007
     
     'Set the MapNumber Field
-    sCurMapNum = GetValueViaOverlay(pFeature.Shape, pMIFclass, g_pFldnames.MIMapNumberFN)
+    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+    sCurMapNum = GetValueViaOverlay(pFeature.Shape, pMIFclass, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
+    '++ END Nick Seigal (LCOG) 01/25/2008
     lLineTypeFld = LocateFields(pHookFC, g_pFldnames.MIMapNumberFN)
     If lLineTypeFld = -1 Then Exit Sub
     pFeature.Value(lLineTypeFld) = sCurMapNum
@@ -2329,7 +2341,9 @@ On Error GoTo ErrorHandler
       
       'Get the current MapScale
       Dim sCurrentMapScale As String
-      GetCurrentMapScale = GetValueViaOverlay(pDimensionFeatureTemp.Shape, pMIFC, g_pFldnames.MIMapScaleFN)
+      '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+      GetCurrentMapScale = GetValueViaOverlay(pDimensionFeatureTemp.Shape, pMIFC, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+      '++ END Nick Seigal (LCOG) 01/25/2008
       GetCurrentMapScale = GetCurrentMapScale / 12
       pDimensionWSEditTemp.AbortEditOperation
       pDimensionWSEditTemp.StopEditOperation

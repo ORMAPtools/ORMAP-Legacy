@@ -666,6 +666,7 @@ End Function
 'Inputs:        pGeometry - Search geometry
 '               pOverlayFC - Overlying feature class
 '               sFldName - Name of field to return value for
+'               sOrderBestByFldName - Name of field to order by in the case of a tie in area/length of intersection
 'Parameters:    None
 'Outputs:       None
 'Returns:       Returns the value from the specified field as a variant
@@ -1777,7 +1778,9 @@ On Error GoTo ErrorHandler
     
 
     ' Checks for the existence of a current ORMAP Number and Taxlot number
-    sMIOMval = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIORMAPMapNumberFN)
+    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+    sMIOMval = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIORMAPMapNumberFN, g_pFldnames.MIMapNumberFN)
+    '++ END Nick Seigal (LCOG) 01/25/2008
     If sMIOMval = "" Then
         ValidateTaxlotNum = True
         GoTo Process_Exit
@@ -2001,8 +2004,10 @@ On Error GoTo ErrorHandler
     '++ START JWalton 4/11/2007 -- Replaced pCenter with a_pFeat.ShapeCopy
     '++ START Nick Seigal (LCOG) 12/20/2007 - Simplified long line of code
     'Set pCenter = pArea.Centroid
+    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
     sExistORMAPNumber = GetValueViaOverlay(a_pFeat.ShapeCopy, a_pMIFLayer.FeatureClass, _
-            g_pFldnames.MIORMAPMapNumberFN)
+            g_pFldnames.MIORMAPMapNumberFN, g_pFldnames.MIMapNumberFN)
+    '++ END Nick Seigal (LCOG) 01/25/2008
     If Not pORMAPNumber.ParseNumber(sExistORMAPNumber) Then
         ' Exits if there is no value, or an invalid value
         GoTo Process_Exit
@@ -2012,7 +2017,9 @@ On Error GoTo ErrorHandler
     
     ' Return and evaluate the Map Number from the Map Index
     '++ START JWalton 4/11/2007 -- Replaced pCenter with a_pFeat.ShapeCopy
-    sExistMapNum = GetValueViaOverlay(a_pFeat.ShapeCopy, a_pMIFLayer.FeatureClass, g_pFldnames.MIMapNumberFN)
+    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+    sExistMapNum = GetValueViaOverlay(a_pFeat.ShapeCopy, a_pMIFLayer.FeatureClass, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
+    '++ END Nick Seigal (LCOG) 01/25/2008
     '++ END JWalton 4/11/2007
     If Len(sExistMapNum) = 0 Then
         'If no value for whatever reason, don't continue
@@ -2741,7 +2748,9 @@ On Error GoTo ErrorHandler
     Set pMIFlayer = basUtilities.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
     If pMIFlayer Is Nothing Then GoTo Process_Exit
     Set pMIFclass = pMIFlayer.FeatureClass
-    sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
+    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+    sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
+    '++ END Nick Seigal (LCOG) 01/25/2008
     
     ' Allow existing anno to be moved without changing MapNumber
     ' Some anno will reside in another Taxlot, but labels the neighboring taxlot
@@ -2750,7 +2759,9 @@ On Error GoTo ErrorHandler
         pObj.Value(lAnnoMapNumFld) = sMapNum
     
         ' Update the size to reflect current mapscale
-        sMapScale = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
+        '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+        sMapScale = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+        '++ END Nick Seigal (LCOG) 01/25/2008
         '++ START JWalton 5/7/2006
         If sMapScale = "" Then GoTo Process_Exit
         '++ STOP JWalton 5/7/2007
