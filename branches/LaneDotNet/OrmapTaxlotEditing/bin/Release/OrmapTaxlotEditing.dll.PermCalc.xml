@@ -1,0 +1,270 @@
+﻿<?xml version="1.0"?>
+<Assembly>
+  <Namespace Name="OrmapTaxlotEditing">
+    <Type Name="AddArrows">
+      <Method Sig="void RegisterFunction(class Type )" />
+      <Method Sig="void UnregisterFunction(class Type )" />
+      <Method Sig="instance void .ctor()" />
+      <Method Sig="instance bool get_Enabled()" />
+      <Method Sig="instance void OnCreate(object )" />
+      <Method Sig="instance void OnClick()" />
+    </Type>
+    <Type Name="CombineTaxlots">
+      <Method Sig="void RegisterFunction(class Type )" />
+      <Method Sig="void UnregisterFunction(class Type )" />
+      <Method Sig="instance void .ctor()" />
+      <Method Sig="instance bool get_Enabled()" />
+      <Method Sig="instance void OnCreate(object )" />
+      <Method Sig="instance void OnClick()" />
+    </Type>
+    <Type Name="EditMapIndex">
+      <Method Sig="void RegisterFunction(class Type )" />
+      <Method Sig="void UnregisterFunction(class Type )" />
+      <Method Sig="instance void .ctor()" />
+      <Method Sig="instance bool get_Enabled()" />
+      <Method Sig="instance void OnCreate(object )" />
+      <Method Sig="instance void OnClick()" />
+    </Type>
+    <Type Name="EditorExtension">
+      <Method Sig="void .cctor()" />
+      <Method Sig="void RegisterFunction(class Type )" />
+      <Method Sig="void UnregisterFunction(class Type )" />
+      <Method Sig="instance void .ctor()" />
+      <Method Sig="class IEditor get_Editor()" />
+      <Method Sig="bool get_HasValidLicense()" />
+      <Method Sig="void set_HasValidLicense(bool )" />
+      <Method Sig="bool get_IsValidWorkspace()" />
+      <Method Sig="void set_IsValidWorkspace(bool )" />
+      <Method Sig="bool get_CanEditTaxlots()" />
+      <Method Sig="void set_CanEditTaxlots(bool )" />
+      <Method Sig="bool get_CanAutoUpdate()" />
+      <Method Sig="void set_CanAutoUpdate(bool )" />
+      <Method Sig="instance string get_Name()" />
+      <Method Sig="instance void Shutdown()" />
+      <Method Sig="instance void Startup(&amp; object )" />
+      <Method Sig="instance void CreateAccelerators()" />
+      <Method Sig="instance class UID get_ID()" />
+      <Method Sig="instance void Load(class IVariantStream )">
+        <Demand>
+          <PermissionSet version="1" class="System.Security.PermissionSet">
+            <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode" />
+          </PermissionSet>
+        </Demand>
+        <Sandbox>
+          <PermissionSet version="1" class="System.Security.PermissionSet">
+            <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode" />
+          </PermissionSet>
+        </Sandbox>
+        <Stacks>
+          <CallStack>
+            <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode" />
+            <Method Type="Microsoft.VisualBasic.CompilerServices.Conversions" Sig="bool ToBoolean(object )" Asm="Microsoft.VisualBasic" />
+            <Method Type="OrmapTaxlotEditing.EditorExtension" Sig="instance void Load(class IVariantStream )" Asm="OrmapTaxlotEditing" />
+          </CallStack>
+        </Stacks>
+      </Method>
+      <Method Sig="instance void Save(class IVariantStream )" />
+      <Method Sig="bool ValidateLicense(struct esriLicenseProductCode )" />
+    </Type>
+    <Type Name="LocateFeature">
+      <Method Sig="void RegisterFunction(class Type )" />
+      <Method Sig="void UnregisterFunction(class Type )" />
+      <Method Sig="instance void .ctor()" />
+      <Method Sig="instance bool get_Enabled()" />
+      <Method Sig="instance void OnCreate(object )" />
+      <Method Sig="instance void OnClick()" />
+    </Type>
+    <Type Name="OrmapToolbar">
+      <Method Sig="void RegisterFunction(class Type )" />
+      <Method Sig="void UnregisterFunction(class Type )" />
+      <Method Sig="instance void .ctor()" />
+      <Method Sig="instance string get_Caption()" />
+      <Method Sig="instance string get_Name()" />
+    </Type>
+    <Type Name="PropertyPage">
+      <Method Sig="void .cctor()" />
+      <Method Sig="instance void .ctor()" />
+      <Method Sig="instance int get_Height()" />
+      <Method Sig="instance string get_HelpFile()" />
+      <Method Sig="instance int get_HelpContextID(int )" />
+      <Method Sig="instance bool get_IsPageDirty()" />
+      <Method Sig="instance void set_PageSite(class IComPropertyPageSite )" />
+      <Method Sig="instance int get_Priority()" />
+      <Method Sig="instance void set_Priority(int )" />
+      <Method Sig="instance string get_Title()" />
+      <Method Sig="instance void set_Title(string )" />
+      <Method Sig="instance int get_Width()" />
+      <Method Sig="instance int Activate()">
+        <Demand>
+          <PermissionSet version="1" class="System.Security.PermissionSet">
+            <IPermission version="1" class="System.Security.Permissions.ReflectionPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode, ControlEvidence" />
+            <IPermission version="1" class="System.Security.Permissions.KeyContainerPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+          </PermissionSet>
+        </Demand>
+        <Sandbox>
+          <PermissionSet version="1" class="System.Security.PermissionSet">
+            <IPermission version="1" class="System.Security.Permissions.ReflectionPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode, ControlEvidence" />
+            <IPermission version="1" class="System.Security.Permissions.KeyContainerPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+          </PermissionSet>
+        </Sandbox>
+        <Stacks>
+          <CallStack>
+            <PermissionSet version="1" class="System.Security.PermissionSet">
+              <IPermission version="1" class="System.Security.Permissions.ReflectionPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+              <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode, ControlEvidence" />
+              <IPermission version="1" class="System.Security.Permissions.KeyContainerPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            </PermissionSet>
+            <Method Type="System.Windows.Forms.Control" Sig="instance intptr get_Handle()" Asm="System.Windows.Forms" />
+            <Method Type="OrmapTaxlotEditing.PropertyPage" Sig="instance int Activate()" Asm="OrmapTaxlotEditing" />
+          </CallStack>
+        </Stacks>
+      </Method>
+      <Method Sig="instance bool Applies(class ISet )" />
+      <Method Sig="instance void Apply()" />
+      <Method Sig="instance void Cancel()" />
+      <Method Sig="instance void Deactivate()" />
+      <Method Sig="instance void Hide()">
+        <Demand>
+          <PermissionSet version="1" class="System.Security.PermissionSet">
+            <IPermission version="1" class="System.Security.Permissions.ReflectionPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode, ControlEvidence" />
+            <IPermission version="1" class="System.Security.Permissions.KeyContainerPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+          </PermissionSet>
+        </Demand>
+        <Sandbox>
+          <PermissionSet version="1" class="System.Security.PermissionSet">
+            <IPermission version="1" class="System.Security.Permissions.ReflectionPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode, ControlEvidence" />
+            <IPermission version="1" class="System.Security.Permissions.KeyContainerPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+          </PermissionSet>
+        </Sandbox>
+        <Stacks>
+          <CallStack>
+            <PermissionSet version="1" class="System.Security.PermissionSet">
+              <IPermission version="1" class="System.Security.Permissions.ReflectionPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+              <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode, ControlEvidence" />
+              <IPermission version="1" class="System.Security.Permissions.KeyContainerPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            </PermissionSet>
+            <Method Type="System.Windows.Forms.Control" Sig="instance void Hide()" Asm="System.Windows.Forms" />
+            <Method Type="OrmapTaxlotEditing.PropertyPage" Sig="instance void Hide()" Asm="OrmapTaxlotEditing" />
+          </CallStack>
+        </Stacks>
+      </Method>
+      <Method Sig="instance void SetObjects(class ISet )">
+        <Demand>
+          <PermissionSet version="1" class="System.Security.PermissionSet">
+            <IPermission version="1" class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            <IPermission version="1" class="System.Security.Permissions.ReflectionPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            <IPermission version="1" class="System.Security.Permissions.RegistryPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode, ControlEvidence" />
+            <IPermission Window="AllWindows" version="1" class="System.Security.Permissions.UIPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+            <IPermission version="1" class="System.Security.Permissions.KeyContainerPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+          </PermissionSet>
+        </Demand>
+        <Sandbox>
+          <PermissionSet version="1" class="System.Security.PermissionSet">
+            <IPermission version="1" class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            <IPermission version="1" class="System.Security.Permissions.ReflectionPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            <IPermission version="1" class="System.Security.Permissions.RegistryPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode, ControlEvidence" />
+            <IPermission Window="AllWindows" version="1" class="System.Security.Permissions.UIPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+            <IPermission version="1" class="System.Security.Permissions.KeyContainerPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+          </PermissionSet>
+        </Sandbox>
+        <Stacks>
+          <CallStack>
+            <PermissionSet version="1" class="System.Security.PermissionSet">
+              <IPermission version="1" class="System.Security.Permissions.ReflectionPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+              <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode, ControlEvidence" />
+              <IPermission Window="AllWindows" version="1" class="System.Security.Permissions.UIPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+              <IPermission version="1" class="System.Security.Permissions.KeyContainerPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            </PermissionSet>
+            <Method Type="System.Windows.Forms.Form" Sig="instance void .ctor()" Asm="System.Windows.Forms" />
+            <Method Type="OrmapTaxlotEditing.PropertiesForm" Sig="instance void .ctor()" Asm="OrmapTaxlotEditing" />
+            <Method Type="OrmapTaxlotEditing.PropertyPage" Sig="instance void SetObjects(class ISet )" Asm="OrmapTaxlotEditing" />
+          </CallStack>
+          <CallStack>
+            <PermissionSet version="1" class="System.Security.PermissionSet">
+              <IPermission version="1" class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Read="*AllFiles*" PathDiscovery="*AllFiles*" />
+              <IPermission version="1" class="System.Security.Permissions.RegistryPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            </PermissionSet>
+            <Method Type="System.Configuration.ApplicationSettingsBase" Sig="instance object get_Item(string )" Asm="System" />
+            <Method Type="OrmapTaxlotEditing.My.MySettings" Sig="instance bool get_EnableAutoUpdate()" Asm="OrmapTaxlotEditing" />
+            <Method Type="OrmapTaxlotEditing.PropertiesForm" Sig="instance void InitializeComponent()" Asm="OrmapTaxlotEditing" />
+            <Method Type="OrmapTaxlotEditing.PropertiesForm" Sig="instance void .ctor()" Asm="OrmapTaxlotEditing" />
+            <Method Type="OrmapTaxlotEditing.PropertyPage" Sig="instance void SetObjects(class ISet )" Asm="OrmapTaxlotEditing" />
+          </CallStack>
+          <CallStack>
+            <IPermission version="1" class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            <Method Type="System.Configuration.ConfigurationFileMap" Sig="instance string get_MachineConfigFilename()" Asm="System.Configuration" />
+            <Method Type="System.Configuration.ClientConfigurationHost" Sig="instance string GetStreamName(string )" Asm="System.Configuration" />
+            <Method Type="System.Configuration.ClientConfigurationHost" Sig="instance bool get_IsAppConfigHttp()" Asm="System.Configuration" />
+            <Method Type="System.Configuration.ClientConfigurationSystem" Sig="instance void .ctor()" Asm="System.Configuration" />
+            <Method Type="System.Configuration.ConfigurationManager" Sig="void EnsureConfigurationSystem()" Asm="System.Configuration" />
+            <Method Type="System.Configuration.ConfigurationManager" Sig="void PrepareConfigSystem()" Asm="System.Configuration" />
+            <Method Type="System.Configuration.ConfigurationManager" Sig="object GetSection(string )" Asm="System.Configuration" />
+            <Method Type="System.Configuration.PrivilegedConfigurationManager" Sig="object GetSection(string )" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.WindowsFormsSection" Sig="class WindowsFormsSection GetSection()" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.NativeWindow" Sig="int AdjustWndProcFlagsFromConfig(int )" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.NativeWindow" Sig="int get_WndProcFlags()" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.NativeWindow" Sig="bool get_WndProcShouldBeDebuggable()" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.Control" Sig="instance bool PerformControlValidation(bool )" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.ContainerControl" Sig="instance bool ValidateThroughAncestor(class Control , bool )" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.ContainerControl" Sig="instance void EnterValidation(class Control )" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.ContainerControl" Sig="instance void UpdateFocusedControl()" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.ContainerControl" Sig="instance bool AssignActiveControlInternal(class Control )" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.ContainerControl" Sig="instance bool ActivateControlInternal(class Control , bool )" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.ContainerControl" Sig="instance void SetActiveControlInternal(class Control )" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.Control" Sig="instance bool FocusInternal()" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.Control" Sig="instance void RecreateHandleCore()" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.Control" Sig="instance void RecreateHandle()" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.Form" Sig="instance void UpdateMenuHandles(class MainMenu , bool )" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.Form" Sig="instance void UpdateMenuHandles()" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.Form" Sig="instance void MenuChanged(int , class Menu )" Asm="System.Windows.Forms" />
+            <Method Type="System.Windows.Forms.Form" Sig="instance void Dispose(bool )" Asm="System.Windows.Forms" />
+            <Method Type="OrmapTaxlotEditing.PropertiesForm" Sig="instance void Dispose(bool )" Asm="OrmapTaxlotEditing" />
+            <Method Type="OrmapTaxlotEditing.PropertiesForm" Sig="instance void .ctor()" Asm="OrmapTaxlotEditing" />
+            <Method Type="OrmapTaxlotEditing.PropertyPage" Sig="instance void SetObjects(class ISet )" Asm="OrmapTaxlotEditing" />
+          </CallStack>
+        </Stacks>
+      </Method>
+      <Method Sig="instance void Show()">
+        <Demand>
+          <PermissionSet version="1" class="System.Security.PermissionSet">
+            <IPermission version="1" class="System.Security.Permissions.ReflectionPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode, ControlEvidence" />
+            <IPermission version="1" class="System.Security.Permissions.KeyContainerPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+          </PermissionSet>
+        </Demand>
+        <Sandbox>
+          <PermissionSet version="1" class="System.Security.PermissionSet">
+            <IPermission version="1" class="System.Security.Permissions.ReflectionPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode, ControlEvidence" />
+            <IPermission version="1" class="System.Security.Permissions.KeyContainerPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+          </PermissionSet>
+        </Sandbox>
+        <Stacks>
+          <CallStack>
+            <PermissionSet version="1" class="System.Security.PermissionSet">
+              <IPermission version="1" class="System.Security.Permissions.ReflectionPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+              <IPermission version="1" class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Flags="UnmanagedCode, ControlEvidence" />
+              <IPermission version="1" class="System.Security.Permissions.KeyContainerPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Unrestricted="true" />
+            </PermissionSet>
+            <Method Type="System.Windows.Forms.Control" Sig="instance void Show()" Asm="System.Windows.Forms" />
+            <Method Type="OrmapTaxlotEditing.PropertyPage" Sig="instance void Show()" Asm="OrmapTaxlotEditing" />
+          </CallStack>
+        </Stacks>
+      </Method>
+    </Type>
+    <Type Name="TaxlotAssignment">
+      <Method Sig="void RegisterFunction(class Type )" />
+      <Method Sig="void UnregisterFunction(class Type )" />
+      <Method Sig="instance void .ctor()" />
+      <Method Sig="instance bool get_Enabled()" />
+      <Method Sig="instance void OnCreate(object )" />
+      <Method Sig="instance void OnClick()" />
+    </Type>
+  </Namespace>
+</Assembly>
