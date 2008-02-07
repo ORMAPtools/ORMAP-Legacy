@@ -1,10 +1,23 @@
+#Region "Copyright 2008 ORMAP Tech Group"
+
+' File: EditMapIndex.vb
+
+' Author: .NET Migration Team (Shad Campbell, James Moore, Nick Seigal)
+' Created: January 8, 2008
+
+' All rights reserved. Reproduction or transmission of this file, or a portion thereof,
+' is forbidden without prior written permission of the ORMAP Tech Group.
+
+#End Region
+
 Imports System
 Imports System.Drawing
 Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
-Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.ArcMapUI
+Imports ESRI.ArcGIS.Editor
+Imports ESRI.ArcGIS.Framework
 
 <ComVisible(True)> _
 <ComClass(EditMapIndex.ClassId, EditMapIndex.InterfaceId, EditMapIndex.EventsId), _
@@ -83,8 +96,8 @@ Public NotInheritable Class EditMapIndex
 
         ' Define protected instance field values for the public properties
         MyBase.m_category = "OrmapToolbar"  'localizable text 
-        MyBase.m_caption = "Edit MapIndex"   'localizable text 
-        MyBase.m_message = "This tool edits the selected MapIndex polygon and underlying Taxlot polygons."   'localizable text 
+        MyBase.m_caption = "EditMapIndex"   'localizable text 
+        MyBase.m_message = "Edit the selected MapIndex polygon and underlying Taxlot polygons."   'localizable text 
         MyBase.m_toolTip = "Edit MapIndex" 'localizable text 
         MyBase.m_name = MyBase.m_category & "_EditMapIndex"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
 
@@ -105,6 +118,8 @@ Public NotInheritable Class EditMapIndex
     Public Overrides ReadOnly Property Enabled() As Boolean
         Get
             Return MyBase.Enabled AndAlso _
+                EditorExtension.Editor IsNot Nothing AndAlso _
+                EditorExtension.Editor.EditState = esriEditState.esriStateEditing AndAlso _
                 EditorExtension.IsValidWorkspace AndAlso _
                 EditorExtension.HasValidLicense AndAlso _
                 EditorExtension.CanEditTaxlots
@@ -128,6 +143,7 @@ Public NotInheritable Class EditMapIndex
 
     Public Overrides Sub OnClick()
         'TODO: Add EditMapIndex.OnClick implementation
+        System.Windows.Forms.MessageBox.Show("Add EditMapIndex.OnClick implementation")
     End Sub
 
 #End Region

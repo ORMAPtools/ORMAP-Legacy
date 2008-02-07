@@ -1,3 +1,15 @@
+#Region "Copyright 2008 ORMAP Tech Group"
+
+' File: PropertyPage.vb
+
+' Author: .NET Migration Team (Shad Campbell, James Moore, Nick Seigal)
+' Created: January 8, 2008
+
+' All rights reserved. Reproduction or transmission of this file, or a portion thereof,
+' is forbidden without prior written permission of the ORMAP Tech Group.
+
+#End Region
+
 Imports System
 Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.Framework
@@ -87,6 +99,11 @@ Public NotInheritable Class PropertyPage
         End Get
     End Property
 
+    Private Sub SetPageDirty(ByVal value As Boolean)
+        ' TODO: Add validation code?
+        _pageDirty = value
+    End Sub
+
     Private _propertiesPageSite As IComPropertyPageSite
 
     Friend ReadOnly Property PropertiesPageSite() As IComPropertyPageSite
@@ -94,6 +111,11 @@ Public NotInheritable Class PropertyPage
             Return _propertiesPageSite
         End Get
     End Property
+
+    Private Sub SetPropertiesPageSite(ByVal value As IComPropertyPageSite)
+        ' TODO: Add validation code?
+        _propertiesPageSite = value
+    End Sub
 
     Private WithEvents _propertiesForm As PropertiesForm
 
@@ -103,13 +125,18 @@ Public NotInheritable Class PropertyPage
         End Get
     End Property
 
+    Private Sub SetPropertiesForm(ByVal value As PropertiesForm)
+        ' TODO: Add validation code?
+        _propertiesForm = value
+    End Sub
+
 #End Region
 
 #Region "IComPropertyPage Implementations"
 
     Public ReadOnly Property Height() As Integer Implements IComPropertyPage.Height
         Get
-            Return _propertiesForm.Height
+            Return PropertiesForm.Height
         End Get
     End Property
 
@@ -127,13 +154,13 @@ Public NotInheritable Class PropertyPage
 
     Public ReadOnly Property IsPageDirty() As Boolean Implements IComPropertyPage.IsPageDirty
         Get
-            Return _pageDirty
+            Return PageDirty
         End Get
     End Property
 
     Public WriteOnly Property PageSite() As ESRI.ArcGIS.Framework.IComPropertyPageSite Implements IComPropertyPage.PageSite
         Set(ByVal value As ESRI.ArcGIS.Framework.IComPropertyPageSite)
-            _propertiesPageSite = value
+            SetPropertiesPageSite(value)
         End Set
     End Property
 
@@ -142,6 +169,7 @@ Public NotInheritable Class PropertyPage
             Return 0  'Lowest number = last/rightmost tab position in the Properties window.
         End Get
         Set(ByVal value As Integer)
+            ' Do not set anything
         End Set
     End Property
 
@@ -150,17 +178,18 @@ Public NotInheritable Class PropertyPage
             Return "ORMAP Taxlot Editor"
         End Get
         Set(ByVal value As String)
+            ' Do not set anything
         End Set
     End Property
 
     Public ReadOnly Property Width() As Integer Implements IComPropertyPage.Width
         Get
-            Return _propertiesForm.Width
+            Return PropertiesForm.Width
         End Get
     End Property
 
     Public Function Activate() As Integer Implements IComPropertyPage.Activate
-        Return _propertiesForm.Handle.ToInt32()
+        Return PropertiesForm.Handle.ToInt32()
     End Function
 
     Public Function Applies(ByVal objects As ESRI.ArcGIS.esriSystem.ISet) As Boolean Implements IComPropertyPage.Applies
@@ -195,11 +224,10 @@ Public NotInheritable Class PropertyPage
 
     Public Sub Apply() Implements IComPropertyPage.Apply
         ' Write to the EditorExtension.CanEdit shared (i.e. by all class objects) property
-        EditorExtension.CanEditTaxlots = _propertiesForm.uxEnableTools.Checked
-        EditorExtension.CanAutoUpdate = _propertiesForm.uxEnableAutoUpdate.Checked
-        EditorExtension.CanAutoUpdateAllFields = Not _propertiesForm.uxAllFieldsOption.Checked
-        EditorExtension.CanAutoUpdateAllFields = _propertiesForm.uxAllFieldsOption.Checked
-        _pageDirty = False
+        EditorExtension.CanEditTaxlots = PropertiesForm.uxEnableTools.Checked
+        EditorExtension.CanAutoUpdate = PropertiesForm.uxEnableAutoUpdate.Checked
+        EditorExtension.CanAutoUpdateAllFields = Not PropertiesForm.uxAllFieldsOption.Checked
+        SetPageDirty(False)
     End Sub
 
     Public Sub Cancel() Implements IComPropertyPage.Cancel
@@ -208,14 +236,14 @@ Public NotInheritable Class PropertyPage
 
     Public Sub Deactivate() Implements IComPropertyPage.Deactivate
         If Not _propertiesForm Is Nothing Then
-            _propertiesForm.Dispose()
+            PropertiesForm.Dispose()
         End If
-        _propertiesForm = Nothing
-        _propertiesPageSite = Nothing
+        SetPropertiesForm(Nothing)
+        SetPropertiesPageSite(Nothing)
     End Sub
 
     Public Sub Hide() Implements IComPropertyPage.Hide
-        _propertiesForm.Hide()
+        PropertiesForm.Hide()
     End Sub
 
     Public Sub SetObjects(ByVal objects As ESRI.ArcGIS.esriSystem.ISet) Implements IComPropertyPage.SetObjects
@@ -223,20 +251,20 @@ Public NotInheritable Class PropertyPage
         ' editor states before this method is called.
 
         ' TODO: Move (to where)?
-        _propertiesForm = New PropertiesForm()
-        _propertiesForm.uxEnableTools.Checked = EditorExtension.CanEditTaxlots
-        _propertiesForm.uxEnableAutoUpdate.Checked = EditorExtension.CanAutoUpdate
-        _propertiesForm.uxMinimumFieldsOption.Checked = Not EditorExtension.CanAutoUpdateAllFields
-        _propertiesForm.uxAllFieldsOption.Checked = EditorExtension.CanAutoUpdateAllFields
+        SetPropertiesForm(New PropertiesForm())
+        PropertiesForm.uxEnableTools.Checked = EditorExtension.CanEditTaxlots
+        PropertiesForm.uxEnableAutoUpdate.Checked = EditorExtension.CanAutoUpdate
+        PropertiesForm.uxMinimumFieldsOption.Checked = Not EditorExtension.CanAutoUpdateAllFields
+        PropertiesForm.uxAllFieldsOption.Checked = EditorExtension.CanAutoUpdateAllFields
 
         ' Wire up form events.
-        AddHandler _propertiesForm.uxEnableTools.CheckedChanged, AddressOf uxEnableTools_CheckedChanged
-        AddHandler _propertiesForm.uxEnableAutoUpdate.CheckedChanged, AddressOf uxEnableAutoUpdate_CheckedChanged
+        AddHandler PropertiesForm.uxEnableTools.CheckedChanged, AddressOf uxEnableTools_CheckedChanged
+        AddHandler PropertiesForm.uxEnableAutoUpdate.CheckedChanged, AddressOf uxEnableAutoUpdate_CheckedChanged
 
     End Sub
 
     Public Sub Show() Implements IComPropertyPage.Show
-        _propertiesForm.Show()
+        PropertiesForm.Show()
     End Sub
 
 #End Region
@@ -245,29 +273,29 @@ Public NotInheritable Class PropertyPage
 
     Private Sub uxEnableTools_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
 
-        _propertiesForm.uxEnableAutoUpdate.Enabled = _propertiesForm.uxEnableTools.Checked
-        _propertiesForm.uxMinimumFieldsOption.Enabled = _propertiesForm.uxEnableTools.Checked
-        _propertiesForm.uxAllFieldsOption.Enabled = _propertiesForm.uxEnableTools.Checked
+        PropertiesForm.uxEnableAutoUpdate.Enabled = PropertiesForm.uxEnableTools.Checked
+        PropertiesForm.uxMinimumFieldsOption.Enabled = PropertiesForm.uxEnableTools.Checked
+        PropertiesForm.uxAllFieldsOption.Enabled = PropertiesForm.uxEnableTools.Checked
 
         ' Set dirty flag.
-        _pageDirty = True
+        SetPageDirty(True)
 
-        If Not _propertiesPageSite Is Nothing Then
-            _propertiesPageSite.PageChanged()
+        If Not PropertiesPageSite Is Nothing Then
+            PropertiesPageSite.PageChanged()
         End If
 
     End Sub
 
     Private Sub uxEnableAutoUpdate_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
 
-        _propertiesForm.uxMinimumFieldsOption.Enabled = _propertiesForm.uxEnableAutoUpdate.Checked
-        _propertiesForm.uxAllFieldsOption.Enabled = _propertiesForm.uxEnableAutoUpdate.Checked
+        PropertiesForm.uxMinimumFieldsOption.Enabled = PropertiesForm.uxEnableAutoUpdate.Checked
+        PropertiesForm.uxAllFieldsOption.Enabled = PropertiesForm.uxEnableAutoUpdate.Checked
 
         ' Set dirty flag.
-        _pageDirty = True
+        SetPageDirty(True)
 
-        If Not _propertiesPageSite Is Nothing Then
-            _propertiesPageSite.PageChanged()
+        If Not PropertiesPageSite Is Nothing Then
+            PropertiesPageSite.PageChanged()
         End If
         
     End Sub

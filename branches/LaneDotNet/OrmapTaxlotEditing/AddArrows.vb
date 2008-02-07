@@ -1,10 +1,23 @@
+#Region "Copyright 2008 ORMAP Tech Group"
+
+' File: AddArrows.vb
+
+' Author: .NET Migration Team (Shad Campbell, James Moore, Nick Seigal)
+' Created: January 8, 2008
+
+' All rights reserved. Reproduction or transmission of this file, or a portion thereof,
+' is forbidden without prior written permission of the ORMAP Tech Group.
+
+#End Region
+
 Imports System.Drawing
 Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
-Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.ArcMapUI
+Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.esriSystem
+Imports ESRI.ArcGIS.Framework
 
 <ComVisible(True)> _
 <ComClass(AddArrows.ClassId, AddArrows.InterfaceId, AddArrows.EventsId), _
@@ -81,8 +94,8 @@ Public NotInheritable Class AddArrows
 
         ' Define protected instance field values for the public properties
         MyBase.m_category = "OrmapToolbar"  'localizable text 
-        MyBase.m_caption = "Add Arrows"   'localizable text 
-        MyBase.m_message = "This tool adds arrow features to the cartographic lines feature class."   'localizable text 
+        MyBase.m_caption = "AddArrows"   'localizable text 
+        MyBase.m_message = "Add arrow features to the cartographic lines feature class."   'localizable text 
         MyBase.m_toolTip = "Add Arrows" 'localizable text 
         MyBase.m_name = MyBase.m_category & "_AddArrows"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
 
@@ -103,6 +116,8 @@ Public NotInheritable Class AddArrows
     Public Overrides ReadOnly Property Enabled() As Boolean
         Get
             Return MyBase.Enabled AndAlso _
+                EditorExtension.Editor IsNot Nothing AndAlso _
+                EditorExtension.Editor.EditState = esriEditState.esriStateEditing AndAlso _
                 EditorExtension.IsValidWorkspace AndAlso _
                 EditorExtension.HasValidLicense AndAlso _
                 EditorExtension.CanEditTaxlots
@@ -126,6 +141,7 @@ Public NotInheritable Class AddArrows
 
     Public Overrides Sub OnClick()
         'TODO: Add AddArrows.OnClick implementation
+        System.Windows.Forms.MessageBox.Show("Add AddArrows.OnClick implementation")
     End Sub
 
 #End Region

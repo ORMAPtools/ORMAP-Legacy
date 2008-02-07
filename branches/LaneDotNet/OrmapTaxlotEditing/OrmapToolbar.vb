@@ -1,6 +1,18 @@
 Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ADF.BaseClasses
+#Region "Copyright 2008 ORMAP Tech Group"
+
+' File: OrmapToolbar.vb
+
+' Author: .NET Migration Team (Shad Campbell, James Moore, Nick Seigal)
+' Created: January 8, 2008
+
+' All rights reserved. Reproduction or transmission of this file, or a portion thereof,
+' is forbidden without prior written permission of the ORMAP Tech Group.
+
+#End Region
+
 Imports ESRI.ArcGIS.esriSystem
 
 <ComVisible(True)> _
@@ -69,11 +81,10 @@ Public NotInheritable Class OrmapToolbar
     Public Sub New()
 
         ' Define the toolbar by adding items.
-        AddItem("ORMAPTaxlotEditing.TaxlotAssignment")
         AddItem("ORMAPTaxlotEditing.LocateFeature")
         BeginGroup() 'Separator
+        AddItem("ORMAPTaxlotEditing.TaxlotAssignment")
         AddItem("ORMAPTaxlotEditing.EditMapIndex")
-        BeginGroup() 'Separator
         AddItem("ORMAPTaxlotEditing.CombineTaxlots")
         BeginGroup() 'Separator
         AddItem("ORMAPTaxlotEditing.AddArrows")
@@ -95,7 +106,7 @@ Public NotInheritable Class OrmapToolbar
 
     Public Overrides ReadOnly Property Name() As String
         Get
-            'TODO: Confirm choice of name will work well
+            'TODO: Confirm that this choice of name will work well
             Return "OrmapToolbar"
         End Get
     End Property

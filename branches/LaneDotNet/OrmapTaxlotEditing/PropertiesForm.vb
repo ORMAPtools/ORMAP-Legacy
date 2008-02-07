@@ -1,5 +1,5 @@
-' Copyright 2006 ESRI
-'
+#Region "Copyright 2006 ESRI"
+
 ' All rights reserved under the copyright laws of the United States
 ' and applicable international laws, treaties, and conventions.
 '
@@ -8,6 +8,20 @@
 ' notice and use restrictions.
 '
 ' See use restrictions at /arcgis/developerkit/userestrictions.
+
+#End Region
+
+#Region "Copyright 2008 ORMAP Tech Group"
+
+' File: PropertiesForm.vb
+
+' Author: .NET Migration Team (Shad Campbell, James Moore, Nick Seigal)
+' Created: January 8, 2008
+
+' All rights reserved. Reproduction or transmission of this file, or a portion thereof,
+' is forbidden without prior written permission of the ORMAP Tech Group.
+
+#End Region
 
 Imports System
 Imports System.Drawing

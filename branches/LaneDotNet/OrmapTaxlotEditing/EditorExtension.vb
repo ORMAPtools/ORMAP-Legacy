@@ -1,3 +1,16 @@
+
+#Region "Copyright 2008 ORMAP Tech Group"
+
+' File: EditorExtension.vb
+
+' Author: .NET Migration Team (Shad Campbell, James Moore, Nick Seigal)
+' Created: January 8, 2008
+
+' All rights reserved. Reproduction or transmission of this file, or a portion thereof,
+' is forbidden without prior written permission of the ORMAP Tech Group.
+
+#End Region
+
 Imports System
 Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.esriSystem
@@ -13,6 +26,31 @@ Public NotInheritable Class EditorExtension
     Implements ESRI.ArcGIS.esriSystem.IExtension
     Implements ESRI.ArcGIS.esriSystem.IExtensionAccelerators
     Implements ESRI.ArcGIS.esriSystem.IPersistVariant
+
+#Region "Class-Level Constants And Enumerations"
+
+#End Region
+
+#Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
+
+#End Region
+
+#Region "Custom Class Members"
+
+#End Region
+
+#Region "Inherited Class Members"
+
+#End Region
+
+#Region "Implemented Interface Members"
+
+#End Region
+
+#Region "Other Members"
+
+#End Region
+
 
 #Region "COM GUIDs"
     ' These  GUIDs provide the COM identity for this class 
@@ -65,12 +103,6 @@ Public NotInheritable Class EditorExtension
 #End Region
 #End Region
 
-#Region "Private Fields"
-
-    Private _EditEvents As IEditEvents_Event
-
-#End Region
-
 #Region "Constructors"
 
     ' A creatable COM class must have a Public Sub New() 
@@ -84,66 +116,84 @@ Public NotInheritable Class EditorExtension
 
 #Region "Friend Properties"
 
-    Private Shared _Editor As IEditor
+    Private Shared _editor As IEditor
 
     Friend Shared ReadOnly Property Editor() As IEditor
         Get
-            Return _Editor
+            Return _editor
         End Get
     End Property
 
-    Private Shared _HasValidLicense As Boolean '= False
+    Private Sub SetEditor(ByVal value As IEditor)
+        ' TODO: Add validation code?
+        _editor = value
+    End Sub
+
+    Private Shared _editEvents As IEditEvents_Event
+
+    Friend Shared ReadOnly Property EditEvents() As IEditEvents_Event
+        Get
+            Return _editEvents
+        End Get
+    End Property
+
+    Private Sub SetEditEvents(ByVal value As IEditEvents_Event)
+        ' TODO: Add validation code?
+        _editEvents = value
+    End Sub
+
+    Private Shared _hasValidLicense As Boolean '= False
 
     Friend Shared Property HasValidLicense() As Boolean
         Get
-            Return _HasValidLicense
+            Return _hasValidLicense
         End Get
         Set(ByVal value As Boolean)
-            _HasValidLicense = value
+            _hasValidLicense = value
         End Set
     End Property
 
-    Private Shared _IsValidWorkspace As Boolean '= False
+    Private Shared _isValidWorkspace As Boolean '= False
 
     Friend Shared Property IsValidWorkspace() As Boolean
         Get
-            Return _IsValidWorkspace
+            Return _isValidWorkspace
         End Get
         Set(ByVal value As Boolean)
-            _IsValidWorkspace = value
+            _isValidWorkspace = value
         End Set
     End Property
 
-    Private Shared _CanEditTaxlots As Boolean = True
+    Private Shared _canEditTaxlots As Boolean = True
 
     Friend Shared Property CanEditTaxlots() As Boolean
         Get
-            Return _CanEditTaxlots
+            Return _canEditTaxlots
         End Get
         Set(ByVal value As Boolean)
-            _CanEditTaxlots = value
+            _canEditTaxlots = value
         End Set
     End Property
 
-    Private Shared _CanAutoUpdate As Boolean = True
+    Private Shared _canAutoUpdate As Boolean = True
 
     Friend Shared Property CanAutoUpdate() As Boolean
         Get
-            Return _CanAutoUpdate
+            Return _canAutoUpdate
         End Get
         Set(ByVal value As Boolean)
-            _CanAutoUpdate = value
+            _canAutoUpdate = value
         End Set
     End Property
 
-    Private Shared _CanAutoUpdateAllFields As Boolean = True
+    Private Shared _canAutoUpdateAllFields As Boolean = True
 
     Friend Shared Property CanAutoUpdateAllFields() As Boolean
         Get
-            Return _CanAutoUpdateAllFields
+            Return _canAutoUpdateAllFields
         End Get
         Set(ByVal value As Boolean)
-            _CanAutoUpdateAllFields = value
+            _canAutoUpdateAllFields = value
         End Set
     End Property
 
@@ -158,17 +208,18 @@ Public NotInheritable Class EditorExtension
     End Property
 
     Public Sub Shutdown() Implements ESRI.ArcGIS.esriSystem.IExtension.Shutdown
-        _Editor = Nothing
-        _EditEvents = Nothing
+        SetEditor(Nothing)
+        SetEditEvents(Nothing)
     End Sub
 
     Public Sub Startup(ByRef initializationData As Object) Implements ESRI.ArcGIS.esriSystem.IExtension.Startup
         If Not initializationData Is Nothing AndAlso TypeOf initializationData Is IEditor Then
-            _Editor = CType(initializationData, IEditor)
+            SetEditor(CType(initializationData, IEditor))
 
-            'Wire up editor events.
-            _EditEvents = CType(_Editor, IEditEvents_Event)
-            AddHandler _EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
+            ' Subscribe to editor events.
+            SetEditEvents(CType(EditorExtension.Editor, IEditEvents_Event))
+            AddHandler _editEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
+            AddHandler _editEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
         End If
     End Sub
 
@@ -187,43 +238,43 @@ Public NotInheritable Class EditorExtension
         Dim doc As IDocument = EditorExtension.Editor.Parent.Document
         Dim acceleratorTable As IAcceleratorTable = doc.Accelerators
 
-        ' Set TaxlotAssignment accelerator keys to Ctrl + Shift + T
-        key = Convert.ToInt32(System.Windows.Forms.Keys.T)
-        usesCtrl = True
-        usesAlt = False
-        usesShift = True
-        uid.Value = "{" & OrmapTaxlotEditing.TaxlotAssignment.ClassId & "}"
-        SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
-
-        ' Set LocateFeature accelerator keys to Ctrl + Shift + L
+        ' Set LocateFeature accelerator keys to Ctrl + Alt + L
         key = Convert.ToInt32(System.Windows.Forms.Keys.L)
         usesCtrl = True
-        usesAlt = False
-        usesShift = True
+        usesAlt = True
+        usesShift = False
         uid.Value = "{" & OrmapTaxlotEditing.LocateFeature.ClassId & "}"
         SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
-        ' Set EditMapIndex accelerator keys to Ctrl + Shift + E
+        ' Set TaxlotAssignment accelerator keys to Ctrl + Alt + T
+        key = Convert.ToInt32(System.Windows.Forms.Keys.T)
+        usesCtrl = True
+        usesAlt = True
+        usesShift = False
+        uid.Value = "{" & OrmapTaxlotEditing.TaxlotAssignment.ClassId & "}"
+        SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+
+        ' Set EditMapIndex accelerator keys to Ctrl + Alt + E
         key = Convert.ToInt32(System.Windows.Forms.Keys.E)
         usesCtrl = True
-        usesAlt = False
-        usesShift = True
+        usesAlt = True
+        usesShift = False
         uid.Value = "{" & OrmapTaxlotEditing.EditMapIndex.ClassId & "}"
         SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
-        ' Set CombineTaxlots accelerator keys to Ctrl + Shift + C
+        ' Set CombineTaxlots accelerator keys to Ctrl + Alt + C
         key = Convert.ToInt32(System.Windows.Forms.Keys.C)
         usesCtrl = True
-        usesAlt = False
-        usesShift = True
+        usesAlt = True
+        usesShift = False
         uid.Value = "{" & OrmapTaxlotEditing.CombineTaxlots.ClassId & "}"
         SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
-        ' Set AddArrows accelerator keys to Ctrl + Shift + A
+        ' Set AddArrows accelerator keys to Ctrl + Alt + A
         key = Convert.ToInt32(System.Windows.Forms.Keys.A)
         usesCtrl = True
-        usesAlt = False
-        usesShift = True
+        usesAlt = True
+        usesShift = False
         uid.Value = "{" & OrmapTaxlotEditing.AddArrows.ClassId & "}"
         SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
@@ -235,7 +286,7 @@ Public NotInheritable Class EditorExtension
 
     Public ReadOnly Property ID() As ESRI.ArcGIS.esriSystem.UID Implements ESRI.ArcGIS.esriSystem.IPersistVariant.ID
         Get
-            Dim uid As UID = New UIDClass()
+            Dim uid As New UIDClass()
             uid.Value = "{" & OrmapTaxlotEditing.EditorExtension.ClassId & "}"
             Return uid
         End Get
@@ -247,9 +298,9 @@ Public NotInheritable Class EditorExtension
             Throw New ArgumentNullException("Stream")
         End If
 
-        _CanEditTaxlots = CBool(Stream.Read())
-        _CanAutoUpdate = CBool(Stream.Read())
-        _CanAutoUpdateAllFields = CBool(Stream.Read())
+        CanEditTaxlots = CBool(Stream.Read())
+        CanAutoUpdate = CBool(Stream.Read())
+        CanAutoUpdateAllFields = CBool(Stream.Read())
 
     End Sub
 
@@ -259,9 +310,9 @@ Public NotInheritable Class EditorExtension
             Throw New ArgumentNullException("Stream")
         End If
 
-        Stream.Write(_CanEditTaxlots)
-        Stream.Write(_CanAutoUpdate)
-        Stream.Write(_CanAutoUpdateAllFields)
+        Stream.Write(CanEditTaxlots)
+        Stream.Write(CanAutoUpdate)
+        Stream.Write(CanAutoUpdateAllFields)
 
     End Sub
 
@@ -269,26 +320,35 @@ Public NotInheritable Class EditorExtension
 
 #Region "Editor Event Handlers"
 
-    Private Sub EditEvents_OnStartEditing()
-        ' Test for valid workspace and license
-        If _Editor.EditWorkspace.Type = esriWorkspaceType.esriFileSystemWorkspace Then
-            _IsValidWorkspace = False
-        Else
-            _IsValidWorkspace = True
-            'Wire up editor events.
-            AddHandler _EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
-            AddHandler _EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
-        End If
-        _HasValidLicense = (ValidateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
-                ValidateLicense(esriLicenseProductCode.esriLicenseProductCodeArcInfo))
-    End Sub
-
     Private Sub EditEvents_OnChangeFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject)
         ' TODO: Connect to field AutoUpdate, etc. (see VB6 code)
     End Sub
 
     Private Sub EditEvents_OnCreateFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject)
         ' TODO: Connect to field AutoUpdate, etc. (see VB6 code)
+    End Sub
+
+    Private Sub EditEvents_OnStartEditing()
+        ' Test for valid workspace and license
+        If EditorExtension.Editor.EditWorkspace.Type = esriWorkspaceType.esriFileSystemWorkspace Then
+            IsValidWorkspace = False
+        Else
+            IsValidWorkspace = True
+            ' Subscribe to editor events.
+            AddHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
+            AddHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
+
+            ' Set up document keyboard accelerators for extension commands.
+            CreateAccelerators()
+        End If
+        _hasValidLicense = (ValidateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
+                ValidateLicense(esriLicenseProductCode.esriLicenseProductCodeArcInfo))
+    End Sub
+
+    Private Sub EditEvents_OnStopEditing(ByVal save As Boolean)
+        ' Unsubscribe to editor events.
+        RemoveHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
+        RemoveHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
     End Sub
 
 #End Region
@@ -315,15 +375,10 @@ Public NotInheritable Class EditorExtension
     Private Shared Function ValidateLicense(ByVal requiredProductCode As esriLicenseProductCode) As Boolean
         ' Validate the license (e.g. ArcEditor or ArcInfo).
 
-        Dim aoInitTestProduct As IAoInitialize = New AoInitializeClass()
+        Dim aoInitTestProduct As New AoInitializeClass()
         Dim productCode As esriLicenseProductCode = aoInitTestProduct.InitializedProduct()
 
-        If productCode = requiredProductCode Then
-            Return True
-        Else
-            Return False
-        End If
-
+        Return (productCode = requiredProductCode)
     End Function
 
 #End Region

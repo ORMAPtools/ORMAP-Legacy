@@ -40,3 +40,5 @@ obj\Debug\OrmapTaxlotEditing.vbproj.GenerateResource.Cache
 obj\Debug\OrmapTaxlotEditing.dll
 obj\Debug\OrmapTaxlotEditing.xml
 obj\Debug\OrmapTaxlotEditing.pdb
+G:\projects\OPET\branches\LaneDotNet\OrmapTaxlotEditing\bin\Release\OrmapTaxlotEditing.tlb
+G:\projects\OPET\branches\LaneDotNet\OrmapTaxlotEditing\bin\Debug\OrmapTaxlotEditing.tlb

@@ -1,9 +1,22 @@
-Imports System.Runtime.InteropServices
+#Region "Copyright 2008 ORMAP Tech Group"
+
+' File: TaxlotAssignment.vb
+
+' Author: .NET Migration Team (Shad Campbell, James Moore, Nick Seigal)
+' Created: January 8, 2008
+
+' All rights reserved. Reproduction or transmission of this file, or a portion thereof,
+' is forbidden without prior written permission of the ORMAP Tech Group.
+
+#End Region
+
 Imports System.Drawing
+Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
-Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.ArcMapUI
+Imports ESRI.ArcGIS.Editor
+Imports ESRI.ArcGIS.Framework
 
 <ComVisible(True)> _
 <ComClass(TaxlotAssignment.ClassId, TaxlotAssignment.InterfaceId, TaxlotAssignment.EventsId), _
@@ -80,8 +93,8 @@ Public NotInheritable Class TaxlotAssignment
 
         ' Define protected instance field values for the public properties.
         MyBase.m_category = "OrmapToolbar"  'localizable text 
-        MyBase.m_caption = "Taxlot Assignment"   'localizable text 
-        MyBase.m_message = "Set starting value and increment value to populate values in Taxlots"   'localizable text 
+        MyBase.m_caption = "TaxlotAssignment"   'localizable text 
+        MyBase.m_message = "Populate values in the Taxlots feature class based on a starting value and an increment value."   'localizable text 
         MyBase.m_toolTip = "Assign Taxlots" 'localizable text 
         MyBase.m_name = MyBase.m_category & "_TaxlotAssignment"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
 
@@ -102,6 +115,8 @@ Public NotInheritable Class TaxlotAssignment
     Public Overrides ReadOnly Property Enabled() As Boolean
         Get
             Return MyBase.Enabled AndAlso _
+                EditorExtension.Editor IsNot Nothing AndAlso _
+                EditorExtension.Editor.EditState = esriEditState.esriStateEditing AndAlso _
                 EditorExtension.IsValidWorkspace AndAlso _
                 EditorExtension.HasValidLicense AndAlso _
                 EditorExtension.CanEditTaxlots
@@ -125,6 +140,7 @@ Public NotInheritable Class TaxlotAssignment
 
     Public Overrides Sub OnClick()
         'TODO: Add TaxlotAssignment.OnClick implementation
+        System.Windows.Forms.MessageBox.Show("Add TaxlotAssignment.OnClick implementation")
     End Sub
 
 #End Region

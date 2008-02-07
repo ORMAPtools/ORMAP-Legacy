@@ -1,9 +1,23 @@
+#Region "Copyright 2008 ORMAP Tech Group"
+
+' File: LocateFeature.vb
+
+' Author: .NET Migration Team (Shad Campbell, James Moore, Nick Seigal)
+' Created: January 8, 2008
+
+' All rights reserved. Reproduction or transmission of this file, or a portion thereof,
+' is forbidden without prior written permission of the ORMAP Tech Group.
+
+#End Region
+
 Imports System.Drawing
 Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
-Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.ArcMapUI
+Imports ESRI.ArcGIS.Editor
+Imports ESRI.ArcGIS.Framework
+
 
 <ComVisible(True)> _
 <ComClass(LocateFeature.ClassId, LocateFeature.InterfaceId, LocateFeature.EventsId), _
@@ -80,9 +94,9 @@ Public NotInheritable Class LocateFeature
 
         ' Define protected instance field values for the public properties
         MyBase.m_category = "OrmapToolbar"  'localizable text 
-        MyBase.m_caption = "Locate Taxlot/Mapindex"   'localizable text 
-        MyBase.m_message = "Use this tool to locate a Taxlot/Mapindex"   'localizable text 
-        MyBase.m_toolTip = "Locate Taxlot/Mapindex" 'localizable text 
+        MyBase.m_caption = "LocateFeature"   'localizable text 
+        MyBase.m_message = "Locate a Taxlot or Mapindex"   'localizable text 
+        MyBase.m_toolTip = "Locate Taxlot or Mapindex" 'localizable text 
         MyBase.m_name = MyBase.m_category & "_LocateFeature"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
 
         Try
@@ -102,6 +116,8 @@ Public NotInheritable Class LocateFeature
     Public Overrides ReadOnly Property Enabled() As Boolean
         Get
             Return MyBase.Enabled AndAlso _
+                EditorExtension.Editor IsNot Nothing AndAlso _
+                EditorExtension.Editor.EditState = esriEditState.esriStateEditing AndAlso _
                 EditorExtension.IsValidWorkspace AndAlso _
                 EditorExtension.HasValidLicense AndAlso _
                 EditorExtension.CanEditTaxlots
@@ -125,6 +141,7 @@ Public NotInheritable Class LocateFeature
 
     Public Overrides Sub OnClick()
         'TODO: Add LocateFeature.OnClick implementation
+        System.Windows.Forms.MessageBox.Show("Add LocateFeature.OnClick implementation")
     End Sub
 
 #End Region
