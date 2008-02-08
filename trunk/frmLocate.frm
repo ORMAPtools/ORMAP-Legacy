@@ -258,6 +258,12 @@ On Error GoTo ErrorHandler
         Set pEnvelope = pFeature.Shape.Envelope
         ZoomToExtent pEnvelope, m_pMxDoc
         
+        '++ START Nick Seigal (LCOG) 12/20/2007 - Better refresh
+        ' Updates the selection inside the envelope
+        ' [must do before and after selection]
+        pDoc.ActiveView.PartialRefresh esriViewGeoSelection, Nothing, pEnvelope
+        '++ END Nick Seigal (LCOG) 12/20/2007
+        
         ' Select the feature on the map
         pMap.ClearSelection
         If bMapIndexOnly Then
@@ -267,7 +273,9 @@ On Error GoTo ErrorHandler
         End If
         
         ' Updates the selection inside the envelope
+        ' [must do before and after selection]
         pDoc.ActiveView.PartialRefresh esriViewGeoSelection, Nothing, pEnvelope
+        
     End If
   
     '++ START JWalton 1/29/2007
@@ -374,6 +382,7 @@ Private Sub Form_Initialize()
     
     ' Makes the form the topmost form
     SetWindowPos Me.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
+    
 End Sub
 
 '***************************************************************************

@@ -153,9 +153,9 @@ Private Sub Class_Initialize()
 On Error GoTo ErrorHandler
 
     '++ START JWalton 1/31/2007
-    Set m_pBitmap = LoadResPicture("Taxlot_Icon", vbResBitmap)
-    Set m_pDisabledCursor = LoadResPicture(102, vbResCursor)
-    Set m_pEnabledCursor = LoadResPicture(101, vbResCursor)
+    Set m_pBitmap = LoadResPicture("TAXLOT_BITMAP", vbResBitmap)
+    Set m_pDisabledCursor = LoadResPicture("NO_CURSOR", vbResCursor)
+    Set m_pEnabledCursor = LoadResPicture("PLUS_CURSOR", vbResCursor)
     '++ END JWalton 1/31/2007
     
     Exit Sub
@@ -233,7 +233,7 @@ End Property
 Private Property Get ICommand_Enabled() As Boolean
     On Error GoTo ErrorHandler
     
-'++START JWalton 1/25/2007 ICommand_Enabled state linked directly to the editor and the DLL
+    '++START JWalton 1/25/2007 ICommand_Enabled state linked directly to the editor and the DLL
     If g_bDLLEnabled Then
         If m_pEditor Is Nothing Then
             ICommand_Enabled = False
@@ -243,7 +243,7 @@ Private Property Get ICommand_Enabled() As Boolean
       Else
         ICommand_Enabled = False
     End If
-'++STOP JWalton 1/25/2007
+    '++STOP JWalton 1/25/2007
 
     Exit Property
 ErrorHandler:
@@ -608,9 +608,11 @@ End Property
 Private Sub ITool_OnMouseDown( _
   ByVal Button As Long, _
   ByVal Shift As Long, _
-  ByVal X As Long, _
+  ByVal x As Long, _
   ByVal Y As Long)
+1
 On Error GoTo ErrorHandler
+
 '++ START JWalton 1/31/2007 Centralized variable declarations
     Dim pActiveView As esriCarto.IActiveView
     Dim pMap As esriCarto.IMap
@@ -644,12 +646,16 @@ On Error GoTo ErrorHandler
 '++ END JWalton 1/31/2007
     
     '++ START JWalton 2/8/2007
-    If Button <> vbLeftButton Then Exit Sub
+    If Button <> vbLeftButton Then
+        Exit Sub
+    End If
     '++ END JWalton 2/8/2007
-
+    
     '++ START JWalton 1/31/2007
     ' Insure that it is the tool has the proper data to continue
-    If Not m_bEditStatus Then Exit Sub
+    If Not m_bEditStatus Then
+        Exit Sub
+    End If
     '++ END JWalton 1/31/2007
     
     'If "NUMBER" selected, then make sure value is numeric
@@ -666,8 +672,11 @@ On Error GoTo ErrorHandler
     
     ' Create a search shape out of the point that the user clicked
     Set pMap = m_pEditor.Map
-    Set pPoint = m_pEditor.Display.DisplayTransformation.ToMapPoint(X, Y)
-    Set pGeometry = m_pEditor.CreateSearchShape(pPoint)
+    Set pPoint = m_pEditor.Display.DisplayTransformation.ToMapPoint(x, Y)
+    '++ START Nick Seigal (LCOG) 01/08/2008 - Change geometry from an envelope to a point
+    'Set pGeometry = m_pEditor.CreateSearchShape(pPoint) 'Returns an IEnvelope
+    Set pGeometry = pPoint 'QI
+    '++ END Nick Seigal (LCOG) 01/08/2008
     
     ' Verify the validity of the specified taxlot number, and uniqueness of
     ' numeric taxlot numbers
@@ -675,7 +684,7 @@ On Error GoTo ErrorHandler
         If Not ValidateTaxlotNum(m_pFrmTaxlots.CurrentValue, pGeometry) Then
             '++ START JWalton 1/31/2007 Added choice to the duplicate value problem
             If MsgBox("The current Taxlot value (" & m_pFrmTaxlots.CurrentValue & _
-               ") is not unique withing this MapIndex.  " & vbCrLf & _
+               ") is not unique within this MapIndex.  " & vbCrLf & _
                "Attribute feature with value anyways?", vbYesNo Or vbQuestion) = vbNo Then
                 GoTo Process_Exit
             End If
@@ -684,7 +693,9 @@ On Error GoTo ErrorHandler
     End If
     
     ' Insures the validity of the underlying map index polygon
-    Set pEnv = pGeometry 'QI
+    '++ START Nick Seigal (LCOG) 01/08/2008 - Change geometry from an envelope to a point
+    'Set pEnv = pGeometry 'QI
+    '++ END Nick Seigal (LCOG) 01/08/2008
     Set pSpatialFilter = New esriGeoDatabase.SpatialFilter
     Set pSpatialFilter.Geometry = pGeometry
     sShapeFieldName = m_pMIFclass.ShapeFieldName
@@ -699,7 +710,9 @@ On Error GoTo ErrorHandler
     End If
     
     ' Select any feature under the given point in the target layer
-    Set pEnv = pGeometry 'QI
+    '++ START Nick Seigal (LCOG) 01/08/2008 - Change geometry from an envelope to a point
+    'Set pEnv = pGeometry 'QI
+    '++ END Nick Seigal (LCOG) 01/08/2008
     Set pSpatialFilter = New esriGeoDatabase.SpatialFilter
     Set pSpatialFilter.Geometry = pGeometry
     sShapeFieldName = m_pTaxlotFClass.ShapeFieldName
@@ -709,7 +722,9 @@ On Error GoTo ErrorHandler
     Set pFCursor = m_pTaxlotFClass.Search(pSpatialFilter, False)
     
     ' Exit if no taxlots are selected
-    If pFCursor Is Nothing Then GoTo Process_Exit
+    If pFCursor Is Nothing Then
+        GoTo Process_Exit
+    End If
     
     Set pFeature = pFCursor.NextFeature
     If Not pFeature Is Nothing Then
@@ -719,7 +734,7 @@ On Error GoTo ErrorHandler
         ' The current ORMAP Number
         sExistOMNum = IIf(IsNull(pFeature.Value(m_lOMNumFld)), "", pFeature.Value(m_lOMNumFld))
         
-        ' Obtain it the ORMAP Number from a MapIndex polygon if it is not present
+        ' Obtain the ORMAP Number from a MapIndex polygon if it is not present
         If Len(sExistOMNum) = 0 Then
             ' This call will point m_pMIFlayer to the MapIndex feature class
             CalcTaxlotValues pFeature, m_pMIFlayer
@@ -786,8 +801,26 @@ On Error GoTo ErrorHandler
     '++ START Laura Gordon, November 29, 2005
     sOMTLNval = sShortOMNum & sTLMapSufTypeVal & sTLMapSufNumVal & sNewTLNum_5digit
     '++ END Laura Gordon, November 29, 2005
+    '++ START Nick Seigal (LCOG) 11/19/2007
+    '++ DESCR: Add special code for Lane County (see comment below).
     '++ START JWM 11/09/2006 create  masked value from a combination of ORMapNum and the new taxlot
-    sOMMapTaxlot = gfn_s_CreateMapTaxlotValue(sExistOMNum & sNewTLNum_5digit, g_pFldnames.MapTaxlotFormatString)
+    Dim iCountyCode As Integer
+    iCountyCode = CInt(g_pFldnames.DefCounty)
+    Select Case iCountyCode
+    Case 1 To 19, 21 To 36
+        sOMMapTaxlot = gfn_s_CreateMapTaxlotValue(sExistOMNum & sNewTLNum_5digit, g_pFldnames.MapTaxlotFormatString)
+    Case 20
+        ' 1.  Lane County uses a 2-digit numeric identifier for ranges.
+        '     Special handling is required for east ranges, where 02E is
+        '     stored as 25, 03E as 35, etc.
+        ' 2.  ORMAP standards (OCDES (pg 13); Taxmap Data Model (pg 11)) assert that
+        '     this field should be equal to MAPNUMBER + TAXLOT. In this case, MAPNUMBER
+        '     is already in the right format, thus removing the need for the
+        '     gfn_s_CreateMapTaxlotValue function. Also, in this case, TAXLOT is padded
+        '     on the left with zeros to make it always a 5-digit number (see comment
+        '     above).
+        sOMMapTaxlot = Trim$(Left$(sExistOMNum, 8)) & sNewTLNum_5digit
+    End Select
     pFeature.Value(m_lOMMapTaxlotFld) = sOMMapTaxlot
     '++ END JWM 11/09/2006
     
@@ -825,11 +858,17 @@ On Error GoTo ErrorHandler
     
     ' Update the view
     Set pActiveView = pMap
-    pActiveView.PartialRefresh esriCarto.esriViewDrawPhase.esriViewGeoSelection Or _
-                               esriCarto.esriViewDrawPhase.esriViewGraphics, _
-                               Nothing, _
-                               Nothing
 
+    '++ START Nick Seigal (LCOG) 12/20/2007 - Better refresh
+    'Partially refresh the display
+    pActiveView.PartialRefresh _
+            esriCarto.esriViewDrawPhase.esriViewBackground Or _
+            esriCarto.esriViewDrawPhase.esriViewGeography Or _
+            esriCarto.esriViewDrawPhase.esriViewGraphics Or _
+            esriCarto.esriViewDrawPhase.esriViewGraphicSelection, Nothing, Nothing
+    '++ END Nick Seigal (LCOG) 12/20/2007
+    
+    
 Process_Exit:
     Exit Sub
     
@@ -851,7 +890,7 @@ End Sub
 Private Sub ITool_OnMouseMove( _
   ByVal Button As Long, _
   ByVal Shift As Long, _
-  ByVal X As Long, _
+  ByVal x As Long, _
   ByVal Y As Long)
 '++START 1/26/2007 JWalton
     ' Not Implemented
@@ -861,7 +900,7 @@ End Sub
 Private Sub ITool_OnMouseUp( _
   ByVal Button As Long, _
   ByVal Shift As Long, _
-  ByVal X As Long, _
+  ByVal x As Long, _
   ByVal Y As Long)
 '++START 1/26/2007 JWalton
     ' Not Implemented
@@ -891,7 +930,7 @@ Private Sub ITool_OnKeyUp( _
 End Sub
  
 Private Function ITool_OnContextMenu( _
-  ByVal X As Long, _
+  ByVal x As Long, _
   ByVal Y As Long) As Boolean
 '++START 1/26/2007 JWalton
     ' Not Implemented

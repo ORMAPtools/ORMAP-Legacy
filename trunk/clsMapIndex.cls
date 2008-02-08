@@ -87,13 +87,13 @@ Attribute m_pEditorEvents.VB_VarHelpID = -1
 Private m_pEditor As esriEditor.IEditor2
 Private m_pApp As esriFramework.IApplication
 Private m_pFrmMapIndex As frmMapIndex
-Private m_pToolIcon As IPictureDisp
+Private m_pBitmap As IPictureDisp
 Private m_bEnabled As Boolean
 Private m_ParentHWND As Long          ' Set this to get correct parenting of Error handler forms
 '++ START JWalton 2/12/2007
 '   Added Variable Declarations
 '       m_pDocEvents, m_pViewEvents, m_pFrmMapIndex
-'       m_pToolIcon
+'       m_pBitmap
 '++ END JWalton 2/12/2007
 
 '------------------------------
@@ -117,7 +117,7 @@ Implements esriSystemUI.ICommand
 'Methods:       None
 'Inputs:        None
 'Parameters:    None
-'Outputs:       m_pToolIcon - The IPictureDisp object that represents the
+'Outputs:       m_pBitmap - The IPictureDisp object that represents the
 '                             bitmap.
 'Returns:       Nothing
 'Errors:        This routine raises no known errors.
@@ -131,7 +131,7 @@ Implements esriSystemUI.ICommand
 Private Sub Class_Initialize()
   On Error GoTo ErrorHandler
     '++ START JWalton 2/5/2007
-    Set m_pToolIcon = LoadResPicture("MapIndex_Icon", vbResBitmap)
+    Set m_pBitmap = LoadResPicture("MAPINDEX_BITMAP", vbResBitmap)
     '++ END JWalton
     
     m_bEnabled = False
@@ -307,7 +307,7 @@ Private Property Get ICommand_Bitmap() As esriSystem.OLE_HANDLE
 On Error GoTo ErrorHandler
   
     '++ START JWalton 2/5/2007 Implemented ICommand_Bitmap
-    ICommand_Bitmap = m_pToolIcon
+    ICommand_Bitmap = m_pBitmap
     '++ END JWalton 2/5/2007
     
     Exit Property
@@ -612,7 +612,9 @@ Private Sub Reset()
 On Error Resume Next
     ' Hide the taxlot assignment form
     If g_pForms.IsFormOpen("frmMapIndex") Then m_pFrmMapIndex.Frame.Visible = False
-    Unload m_pFrmMapIndex
+    If Not m_pFrmMapIndex Is Nothing Then
+        Unload m_pFrmMapIndex
+    End If
     
     ' Reset all class level variables
     Set m_pViewEvents = Nothing
@@ -623,4 +625,5 @@ On Error Resume Next
     ' Reflects the enabled state of the tool
     m_bEnabled = False
 End Sub
+
 

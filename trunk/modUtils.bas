@@ -173,9 +173,11 @@ Private Const c_sModuleFileName As String = "basUtilities.bas"
 
 Public Function FindFeatureLayerByDS( _
   ByRef asDatasetName As String) As IFeatureLayer
+
 On Error GoTo Err_Handler
+    
     ' Variable declarations
-    Dim pMXDoc As esriArcMapUI.IMxDocument
+    Dim pMxDoc As esriArcMapUI.IMxDocument
     Dim pMap As esriCarto.IMap
     Dim pFeatureLayer As esriCarto.IFeatureLayer
     Dim pDataset As esriGeoDatabase.IDataset
@@ -185,8 +187,8 @@ On Error GoTo Err_Handler
     Dim i As Integer
     
     ' Initialize objects
-    Set pMXDoc = g_pApp.Document
-    Set pMap = pMXDoc.FocusMap
+    Set pMxDoc = g_pApp.Document
+    Set pMap = pMxDoc.FocusMap
     Set pId = New esriSystem.UID
     
     ' Gets a reference to the feature layers collection of the document
@@ -212,7 +214,7 @@ Err_Handler_Resume:
     ' Clean up
     Set pId = Nothing
     Set pMap = Nothing
-    Set pMXDoc = Nothing
+    Set pMxDoc = Nothing
     Exit Function
     
 Err_Handler:
@@ -631,24 +633,40 @@ End Function
 '***************************************************************************
 'Name:                  GetValueViaOverlay
 'Initial Author:        <<Unknown>>
-'Subsequent Author:     <<Type your name here>>
+'Subsequent Author:     Nick Seigal
 'Created:               <<Unknown>>
 'Purpose:       Overlay the passed in feature with a feature class
-'Called From:   basUtilities.CalcTaxlotValues
+'Called From:   basUtilities.ValidateTaxlotNum
+'                   - to get ORMAPMapNumber
+'               basUtilities.CalcTaxlotValues
+'                   - to get ORMAPMapNumber
+'                   - to get MapNumber
 '               basUtilities.SetAnnoSize
-'               basUtilities.ValidateTaxlotNum
-'               cmdArrows.GenerateHook
-'               cmdArrows.ITool_OnMouseDown
+'                   - to get MapNumber
+'                   - to get MapScale
 '               cmdAutoUpdate.m_pEditorEvents_OnCreateFeature
-'Description:   Given a search geometry, pGeom, and feature class that
+'                   - to get MapNumber
+'                   - to get MapScale
+'               cmdArrows.ITool_OnMouseDown
+'                   - to get MapNumber
+'                   - to get MapScale
+'               cmdArrow.GenerateHooks
+'                   - to get MapNumber
+'                   - to get MapScale
+'               cmdArrows.GetCurrentMapScale
+'                   - to get MapScale
+'Description:   Given a search geometry, pGeometry, and feature class that
 '               overlays the search geometry, pOverlayFC, and a field
 '               name, sFldName, to find the value of.
-'               Find the first feature in pOverlayFC that intersects pGeom
-'               and return the value of the field in that feature
+'               Get the target feature with the largest area of intersection
+'               with pGeometry and get its value from the field, or, if tied
+'               (unikely but possible), then get the best (lowest) value
+'               from the field.
 'Methods:       None
-'Inputs:        pGeom - Search geometry
+'Inputs:        pGeometry - Search geometry
 '               pOverlayFC - Overlying feature class
 '               sFldName - Name of field to return value for
+'               sOrderBestByFldName - Name of field to order by in the case of a tie in area/length of intersection
 'Parameters:    None
 'Outputs:       None
 'Returns:       Returns the value from the specified field as a variant
@@ -656,8 +674,8 @@ End Function
 'Assumptions:   None
 'Updates:
 '       Type any updates here.
-'Developer:     Date:       Comments:
-'----------     ------      ---------
+'Developer:        Date:    Comments:
+'----------        -----    ---------
 'JWM            10-30-06    Checking the length of sFldName in 'if'
 '                           statement instead of checking for a empty string
 'JWalton        5/7/2007    Modified the return type of the function from
@@ -665,51 +683,334 @@ End Function
 '                           All calls to this function were also modified
 '                           to deal with the potential of the zero-length
 '                           string versus Null.
-'James Moore 7-5-07 Changed the spatial query to use Within instead of Intersects Tracker 1725128
+'James Moore      7-5-07    Changed the spatial query to use Within instead of Intersects. Tracker 1725128
+'Nick Seigal  12/19/2007    Completely rewritten. Tracker: [ 1725128 ] AutoPopulate Taxlots from Mapindex
 '***************************************************************************
 
 Public Function GetValueViaOverlay( _
-  ByRef pGeom As esriGeometry.IGeometry, _
+  ByRef pGeometry As esriGeometry.IGeometry, _
   ByRef pOverlayFC As esriGeoDatabase.IFeatureClass, _
-  ByVal sFldName As String) As String
-On Error GoTo ErrorHandler
-    '++ START JWalton 2/7/2007 Centralized Variable Declarations
-    Dim pFeat As esriGeoDatabase.IFeature
-    Dim pFeatCur As esriGeoDatabase.IFeatureCursor
-    Dim lFld As Long
-    '++ END JWalton 2/7/2007
+  ByVal sFldName As String, _
+  Optional ByVal sOrderBestByFldName As String) As String
+
+    On Error GoTo ErrorHandler
     
-    If Not pGeom Is Nothing And Not pOverlayFC Is Nothing And Len(sFldName) > 0 Then
-        Set pFeatCur = SpatialQuery(pOverlayFC, pGeom, esriSpatialRelWithin)
-        If Not pFeatCur Is Nothing Then
-            'Get the first feature.  if more than one, let the user decide
-            Set pFeat = pFeatCur.NextFeature
-            If Not pFeat Is Nothing Then
-                lFld = pFeat.Fields.FindField(sFldName)
-                If lFld > -1 Then
-                    'Get the  value
-                    GetValueViaOverlay = IIf(IsNull(pFeat.Value(lFld)), "", pFeat.Value(lFld))
-                  Else
-                    '++ START JWalton 2/1/2007 Added Else Clause
-                    GetValueViaOverlay = ""
-                    '++ END JWalton 2/1/2007
-                End If
+    Dim bGetValueViaOverlay As Boolean
+    
+    bGetValueViaOverlay = True 'initialize
+    
+    If pGeometry Is Nothing Then
+        bGetValueViaOverlay = False
+    End If
+    
+    If pOverlayFC Is Nothing Then
+        bGetValueViaOverlay = False
+    End If
+    
+    If Len(sFldName) <= 0 Then
+        bGetValueViaOverlay = False
+    End If
+    
+    Dim lFld As Long
+    
+    lFld = pOverlayFC.Fields.FindField(sFldName)
+    If lFld < 0 Then
+        '[Field not found...]
+        bGetValueViaOverlay = False
+    End If
+    
+    Dim lOrderBestByFld As Long
+    
+    If sOrderBestByFldName = "" Then
+        '[Optional parameter not set...]
+        ' Use the value field as the order-by field
+        lOrderBestByFld = lFld
+        '' Try to use the OID field instead
+        'If pOverlayFC.HasOID Then
+        '    ' Use the OID field
+        '    lOrderBestByFld = pOverlayFC.Fields.FindField(pOverlayFC.OIDFieldName)
+        'Else
+        '    bGetValueViaOverlay = False
+        'End If
+    Else
+        '[Optional parameter set...]
+        lOrderBestByFld = pOverlayFC.Fields.FindField(sOrderBestByFldName)
+        If lOrderBestByFld < 0 Then
+            '[Field not found...]
+            ' Try to use the OID field instead
+            If pOverlayFC.HasOID Then
+                ' Use the OID field and warn user
+                lOrderBestByFld = pOverlayFC.Fields.FindField(pOverlayFC.OIDFieldName)
+                MsgBox "Field " & sOrderBestByFldName & " not found in " & pOverlayFC.AliasName & ". Using " & pOverlayFC.OIDFieldName, vbExclamation, "Taxlot Editing - Get Value Via Overlay"
+            Else
+                bGetValueViaOverlay = False
             End If
         End If
-      Else
-        '++ START JWalton 2/7/2007 Added Else Clause
-        GetValueViaOverlay = ""
-        '++ END JWalton 2/7/2007
     End If
+    
+    Dim pPolygon As IPolygon
+    Dim pArea As IArea
+    Dim pCurve As ICurve
+    Dim pEnvelope As IEnvelope
+    Dim pPtCol As IPointCollection
+    Dim dFuzzAmount As Double
+    
+    Dim pFeat As esriGeoDatabase.IFeature
+    Dim pFeatCur As esriGeoDatabase.IFeatureCursor
+    Dim pTopo As ITopologicalOperator
+    Dim pIntGeom As IGeometry
+    
+    Dim dLargestIntArea As Double
+    Dim dIntArea As Double
+    Dim dLongestIntLength As Double
+    Dim dIntLength As Double
+    Dim dictCandidates As New Scripting.Dictionary '(key::value) OID::area/length
+    
+    Dim sWhereClause As String
+    Dim sValue As String
+    Dim sBestValue As String
+    Dim sOrderByValue As String
+    Dim sBestOrderByValue As String
+    
+    Const cFuzzFactor As Double = 0.05  'i.e. 5% difference
+    
+    If bGetValueViaOverlay Then
+            
+        Select Case pGeometry.GeometryType
+        Case esriGeometryPolygon
+            Set pPolygon = pGeometry 'QI
+            Set pArea = pPolygon 'QI
+            dFuzzAmount = pArea.Area * cFuzzFactor
+        Case esriGeometryLine, esriGeometryPolyline, esriGeometryBezier3Curve, _
+                esriGeometryCircularArc, esriGeometryEllipticArc, esriGeometryPath
+            Set pCurve = pGeometry 'QI
+            dFuzzAmount = pCurve.Length * cFuzzFactor
+        Case esriGeometryPoint
+            '[no fuzz factor]
+        Case esriGeometryEnvelope
+            ' Copy envelope to polygon
+            Set pEnvelope = pGeometry 'QI
+            Set pPolygon = EnvelopeToPolygon(pEnvelope)
+        Case Else
+            GoTo ErrorHandler
+        End Select
+                    
+        dLargestIntArea = 0 'initalize
+        dLongestIntLength = 0 'initalize
+        
+        Set pFeatCur = SpatialQuery(pOverlayFC, pGeometry, esriSpatialRelIntersects)
+        If Not pFeatCur Is Nothing Then
+            
+            Set pFeat = pFeatCur.NextFeature
+            While Not pFeat Is Nothing
+                
+                ' Get the intersection of source (overlay) and target (edited) features
+                
+                Set pTopo = pFeat.Shape
+                If Not pTopo.IsSimple Then
+                    pTopo.Simplify
+                End If
+                
+                Select Case pGeometry.GeometryType
+                
+                Case esriGeometryPolygon, esriGeometryEnvelope
+                    ' Determine if the target feature has the largest area of intersection with the
+                    ' current source feature. Set flags used below.
+                    Set pIntGeom = pTopo.Intersect(pGeometry, esriGeometry2Dimension)
+                    If Not pIntGeom.IsEmpty Then
+                        Set pPolygon = pIntGeom 'QI
+                        Set pArea = pPolygon
+                        dIntArea = pArea.Area
+                        If Abs(dIntArea - dLargestIntArea) > dFuzzAmount Then
+                            '[Difference greater than fuzz amount, so not a "fuzzy tie"...]
+                            
+                            ' Determine if this is the feature with the largest area of intersection
+                            If dIntArea > dLargestIntArea Then
+                                dLargestIntArea = dIntArea
+                                '[New largest intersection...]
+                                ' Get the value only for this feature
+                                dictCandidates.RemoveAll
+                                dictCandidates.Add pFeat.OID, dLargestIntArea
+                            Else
+                                '[Smaller intersection...]
+                                ' Don't get the value for this feature
+                            End If
+                            
+                        Else
+                            '[Difference not greater than fuzz amount, so a "fuzzy tie"...]
+                            
+                            ' Evaluate this feature against other tied candidates
+                            dictCandidates.Add pFeat.OID, dLargestIntArea
+                            
+                        End If
+                    Else
+                        '[Empty intersection geometry...]
+                        ' Don't get the value for this feature
+                    End If
+                
+                Case esriGeometryPolyline, esriGeometryLine
+                    ' Determine if the target feature has the longest length of intersection with the
+                    ' current source feature. Set flags used below.
+                    Set pIntGeom = pTopo.Intersect(pGeometry, esriGeometry1Dimension)
+                    If Not pIntGeom.IsEmpty Then
+                        Set pCurve = pIntGeom 'QI
+                        dIntLength = pCurve.Length
+                        If Abs(dIntLength - dLongestIntLength) > dFuzzAmount Then
+                            '[Difference greater than fuzz amount, so not a "fuzzy tie"...]
+                            
+                            ' Determine if this is the feature with the longest length of intersection
+                            If dIntLength > dLongestIntLength Then
+                                dLongestIntLength = dIntLength
+                                '[New longest intersection...]
+                                ' Get the value only for this feature
+                                dictCandidates.RemoveAll
+                                dictCandidates.Add pFeat.OID, dLongestIntLength
+                            Else
+                                '[Smaller intersection...]
+                                ' Don't get the value for this feature
+                            End If
+                            
+                        Else
+                            '[Difference not greater than fuzz amount, so a "fuzzy tie"...]
+                            
+                            ' Evaluate this feature against other tied candidates
+                            dictCandidates.Add pFeat.OID, dLongestIntLength
+                            
+                        End If
+                    Else
+                        '[Empty intersection geometry...]
+                        ' Don't get the value for this feature
+                    End If
+                
+                Case esriGeometryPoint
+                    '[Tied by definition (0-dimension = zero area & length = tie)...]
+                    ' Evaluate this feature against other tied candidates
+                    dictCandidates.Add pFeat.OID, 0
+                    
+                Case Else
+                    GoTo ErrorHandler
+                    
+                End Select
+                
+                Set pFeat = pFeatCur.NextFeature
+            Wend
+            
+        End If
+        
+        If dictCandidates.Count > 0 Then
+            
+            sValue = "" 'initialize
+            sBestValue = "" 'initialize
+            sBestOrderByValue = "" 'initialize
+            
+            sWhereClause = pOverlayFC.OIDFieldName & " IN (" & Join(dictCandidates.Keys, ",") & ")"
+            
+            Set pFeatCur = SpatialQuery(pOverlayFC, pGeometry, esriSpatialRelIntersects, sWhereClause)
+            If Not pFeatCur Is Nothing Then
+                
+                Set pFeat = pFeatCur.NextFeature
+                While Not pFeat Is Nothing
+                    
+                    If dictCandidates.Count > 1 Then
+                        '[Candidates tied for area/length of intersection (unikely but possible)...]
+                        ' Get the value only if the candidate source feature has the best (lowest)
+                        ' order-by value
+                        sOrderByValue = pFeat.Value(lOrderBestByFld)
+                        If (sBestOrderByValue = "") Or (sOrderByValue < sBestOrderByValue) Then
+                            sBestOrderByValue = sOrderByValue
+                            If Not (IsNull(pFeat.Value(lFld))) Then
+                                sValue = pFeat.Value(lFld)
+                                sBestValue = sValue
+                            Else
+                                MsgBox "The field " & pFeat.Fields.Field(lFld).Name & " contains a Null" & _
+                                        "for the feature with OID=" & pFeat.OID & ".", _
+                                        vbCritical, "Error: GetValueViaOverlay"
+                                ' Keep the current value if any
+                            End If
+                        Else
+                            ' Keep the current value if any
+                        End If
+                    Else
+                        '[Candidates not tied (only one)...]
+                        ' Get the value for the only candidate feature
+                        If Not (IsNull(pFeat.Value(lFld))) Then
+                            sValue = pFeat.Value(lFld)
+                            sBestValue = sValue
+                        Else
+                            MsgBox "The field " & pFeat.Fields.Field(lFld).Name & " contains a Null" & vbNewLine & _
+                                    "for the feature with OID=" & pFeat.OID & ".", _
+                                    vbCritical, "Error: GetValueViaOverlay"
+                            ' Keep the current value if any
+                        End If
+                    End If
+                    
+                    Set pFeat = pFeatCur.NextFeature
+                Wend
+                
+            End If
+        
+        Else
+            MsgBox "No " & pOverlayFC.AliasName & " features found" & vbNewLine & _
+                    "which intersect this feature.", _
+                    vbCritical, "Error: GetValueViaOverlay"
+            GoTo ErrorHandler
+        End If
+        
+    End If
+    
+    GetValueViaOverlay = sBestValue
+       
 
 Process_Exit:
   Exit Function
 
 ErrorHandler:
-    '++ START JWalton 2/7/2007
-    ' Return Null in the case of an error
+  HandleError True, _
+              "GetValueViaOverlay " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+              Err.Number, _
+              Err.Source, _
+              Err.Description, _
+              4
+    ' Return empty string in the case of an error
     GetValueViaOverlay = ""
-    '++END JWalton 2/7/2007
+End Function
+
+'***************************************************************************
+'Name:                  EnvelopeToPolygon
+'Initial Author:        Nick Seigal (LCOG)
+'Subsequent Author:     <<Type your name here>>
+'Created:               <<Unknown>>
+'Purpose:       Convert an envelope into a polygon.
+'Called From:   (Various)
+'Description:   Convert an envelope into a polygon.
+'Methods:       Puts envelope corners into a new polygon.
+'Inputs:        pEnvelope - An envelope
+'Parameters:    None
+'Outputs:       None
+'Returns:       A polygon.
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'***************************************************************************
+
+Private Function EnvelopeToPolygon(pEnvelope As IEnvelope) As IPolygon
+' Copy envelope points to polygon
+    
+    Dim pPolygon As IPolygon
+    Dim pPtCol As IPointCollection
+    
+    Set pPolygon = New Polygon
+    Set pPtCol = pPolygon 'QI
+    pPtCol.AddPoint pEnvelope.UpperRight
+    pPtCol.AddPoint pEnvelope.LowerRight
+    pPtCol.AddPoint pEnvelope.LowerLeft
+    pPtCol.AddPoint pEnvelope.UpperLeft
+    
+    Set EnvelopeToPolygon = pPolygon
+    
 End Function
 
 '***************************************************************************
@@ -826,7 +1127,9 @@ Public Function SpatialQuery( _
   ByRef lSpatialRelation As esriGeoDatabase.esriSpatialRelEnum, _
   Optional ByRef sWhereClause As String = "", _
   Optional ByVal bUpdateable As Boolean = False) As esriGeoDatabase.IFeatureCursor
+
 On Error GoTo ErrorHandler
+    
     '++ START JWalton 2/7/2007 Centralized Variable Declarations
     Dim pFeatCursor As esriGeoDatabase.IFeatureCursor
     Dim pQueryFilter As esriGeoDatabase.IQueryFilter
@@ -1475,7 +1778,9 @@ On Error GoTo ErrorHandler
     
 
     ' Checks for the existence of a current ORMAP Number and Taxlot number
-    sMIOMval = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIORMAPMapNumberFN)
+    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+    sMIOMval = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIORMAPMapNumberFN, g_pFldnames.MIMapNumberFN)
+    '++ END Nick Seigal (LCOG) 01/25/2008
     If sMIOMval = "" Then
         ValidateTaxlotNum = True
         GoTo Process_Exit
@@ -1553,7 +1858,9 @@ End Function
 Public Sub CalcTaxlotValues( _
   ByRef a_pFeat As esriGeoDatabase.IFeature, _
   ByRef a_pMIFLayer As esriCarto.IFeatureLayer)
+
 On Error GoTo ErrorHandler
+    
     '++ START JWalton 2/7/2007 Centralized Variable Declarations
     Dim pTaxlotFClass As esriGeoDatabase.IFeatureClass
     Dim pArea As esriGeometry.IArea
@@ -1582,6 +1889,9 @@ On Error GoTo ErrorHandler
     Dim lTLTownFld As Long
     Dim lTLTownDirFld As Long
     Dim lTLTownPartFld As Long
+    '++ START Nick Seigal (LCOG) 12/20/2007
+    Dim sExistORMAPNumber As String
+    '++ END Nick Seigal (LCOG) 12/20/2007
     Dim sExistMapNum As String
     Dim sExistOMTLNum As String
     Dim sExistVal As String
@@ -1685,33 +1995,44 @@ On Error GoTo ErrorHandler
     
     ' Obtain the map index poly via overlay
     Set pArea = a_pFeat.Shape
-    Set pCenter = pArea.Centroid
     
     ' Update Acreage
-    a_pFeat.Value(lTaxlotMapAcres) = pArea.Area / 43560  '(a_pFeat.Value(lTaxlotShapeArea) / 43560)
+    a_pFeat.Value(lTaxlotMapAcres) = pArea.Area / 43560
     
     ' Return and evaluate the ORMAP Number from the Map index
     Set pORMAPNumber = New ORMAPNumber
-'++ START JWalton 4/11/2007 -- Replaced pCenter with a_pFeat.ShapeCopy
-    If Not pORMAPNumber.ParseNumber(GetValueViaOverlay(a_pFeat.ShapeCopy, _
-                                                       a_pMIFLayer.FeatureClass, _
-                                                       g_pFldnames.MIORMAPMapNumberFN)) Then
-'++ END JWalton 4/11/2007
-    
-    
+    '++ START JWalton 4/11/2007 -- Replaced pCenter with a_pFeat.ShapeCopy
+    '++ START Nick Seigal (LCOG) 12/20/2007 - Simplified long line of code
+    'Set pCenter = pArea.Centroid
+    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+    sExistORMAPNumber = GetValueViaOverlay(a_pFeat.ShapeCopy, a_pMIFLayer.FeatureClass, _
+            g_pFldnames.MIORMAPMapNumberFN, g_pFldnames.MIMapNumberFN)
+    '++ END Nick Seigal (LCOG) 01/25/2008
+    If Not pORMAPNumber.ParseNumber(sExistORMAPNumber) Then
         ' Exits if there is no value, or an invalid value
         GoTo Process_Exit
     End If
+    '++ END Nick Seigal (LCOG) 12/20/2007
+    '++ END JWalton 4/11/2007
     
     ' Return and evaluate the Map Number from the Map Index
-'++ START JWalton 4/11/2007 -- Replaced pCenter with a_pFeat.ShapeCopy
-    sExistMapNum = GetValueViaOverlay(a_pFeat.ShapeCopy, a_pMIFLayer.FeatureClass, g_pFldnames.MIMapNumberFN)
-'++ END JWalton 4/11/2007
-    If Len(sExistMapNum) = 0 Then GoTo Process_Exit 'If no value for whatever reason, don't continue
+    '++ START JWalton 4/11/2007 -- Replaced pCenter with a_pFeat.ShapeCopy
+    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+    sExistMapNum = GetValueViaOverlay(a_pFeat.ShapeCopy, a_pMIFLayer.FeatureClass, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
+    '++ END Nick Seigal (LCOG) 01/25/2008
+    '++ END JWalton 4/11/2007
+    If Len(sExistMapNum) = 0 Then
+        'If no value for whatever reason, don't continue
+        GoTo Process_Exit
+    End If
     
-    ' Store individual components of the map number in taxlot
-    a_pFeat.Value(lOMNumFld) = pORMAPNumber.ORMAPNumber
+    ' Map Number
     a_pFeat.Value(lMNumFld) = sExistMapNum
+    
+    ' Store components of the ORMAP number in various fields
+    
+    ' ORMAP Number
+    a_pFeat.Value(lOMNumFld) = pORMAPNumber.ORMAPNumber
     
     ' County
     sExistVal = ConvertCode(a_pFeat.Fields, g_pFldnames.TLCountyFN, pORMAPNumber.County)
@@ -1777,10 +2098,12 @@ On Error GoTo ErrorHandler
     
     '++ START JWM 10/31/2006 assigning Maptaxlot field
     sMapTaxlotID = pORMAPNumber.ORMAPNumber & sTaxlotVal
-    '@@ START NIS(LCOG) 02/5/2007
-    '@@ DESCR: Add special code for Lane County (see comment below).
+    '++ START Nick Seigal (LCOG) 02/5/2007
+    '++ DESCR: Add special code for Lane County (see comment below).
     Dim iCountyCode As Integer
-    iCountyCode = CInt(Left$(sMapTaxlotID, 2))
+    '++ START Nick Seigal (LCOG) 11/19/2007
+    iCountyCode = CInt(g_pFldnames.DefCounty)
+    '++ END Nick Seigal (LCOG) 11/19/2007
     Select Case iCountyCode
     Case 1 To 19, 21 To 36
         a_pFeat.Value(lTLMapTaxlotFld) = gfn_s_CreateMapTaxlotValue(sMapTaxlotID, g_pFldnames.MapTaxlotFormatString)
@@ -1794,9 +2117,12 @@ On Error GoTo ErrorHandler
         '     gfn_s_CreateMapTaxlotValue function. Also, in this case, TAXLOT is padded
         '     on the left with zeros to make it always a 5-digit number (see comment
         '     above).
-        a_pFeat.Value(lTLMapTaxlotFld) = sExistMapNum & sTaxlotVal
+        '++ START Nick Seigal (LCOG) 11/19/2007
+        ' Trim the map number to only the left 8 characters (no spaces)
+        a_pFeat.Value(lTLMapTaxlotFld) = Trim$(Left$(sExistMapNum, 8)) & sTaxlotVal
+        '++ END Nick Seigal (LCOG) 11/19/2007
     End Select
-    '@@ END NIS(LCOG) 02/5/2007
+    '++ END Nick Seigal (LCOG) 02/5/2007
     '++ END JWM 10/31/2006
     
     ' Recalculate ORMAP Taxlot Number
@@ -2197,7 +2523,7 @@ On Error GoTo ErrorHandler
     '++ START JWalton 1/31/2007 Additional variable declarations
     Dim pFileDlg As clsCatalogFileDlg
     '++ END JWalton 1/31/2007
-    Dim pMXDoc As esriArcMapUI.IMxDocument
+    Dim pMxDoc As esriArcMapUI.IMxDocument
     Dim pFeatLayer As esriCarto.IFeatureLayer
     Dim pMap As esriCarto.IMap
     Dim pDataset As esriGeoDatabase.IDataset
@@ -2239,10 +2565,10 @@ On Error GoTo ErrorHandler
     Set pFeatLayer.FeatureClass = pFC
     Set pDataset = pFC
     pFeatLayer.Name = pDataset.Name
-    Set pMXDoc = g_pApp.Document
-    Set pMap = pMXDoc.FocusMap
+    Set pMxDoc = g_pApp.Document
+    Set pMap = pMxDoc.FocusMap
     pMap.AddLayer pFeatLayer
-    pMXDoc.CurrentContentsView.Refresh 0
+    pMxDoc.CurrentContentsView.Refresh 0
     
 '++ START JWalton 1/31/2007
     ' Returns the value of the function and exits
@@ -2422,7 +2748,9 @@ On Error GoTo ErrorHandler
     Set pMIFlayer = basUtilities.FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
     If pMIFlayer Is Nothing Then GoTo Process_Exit
     Set pMIFclass = pMIFlayer.FeatureClass
-    sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN)
+    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+    sMapNum = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
+    '++ END Nick Seigal (LCOG) 01/25/2008
     
     ' Allow existing anno to be moved without changing MapNumber
     ' Some anno will reside in another Taxlot, but labels the neighboring taxlot
@@ -2431,7 +2759,9 @@ On Error GoTo ErrorHandler
         pObj.Value(lAnnoMapNumFld) = sMapNum
     
         ' Update the size to reflect current mapscale
-        sMapScale = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN)
+        '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+        sMapScale = GetValueViaOverlay(pCenter, pMIFclass, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+        '++ END Nick Seigal (LCOG) 01/25/2008
         '++ START JWalton 5/7/2006
         If sMapScale = "" Then GoTo Process_Exit
         '++ STOP JWalton 5/7/2007
@@ -2875,14 +3205,14 @@ End Function
 
 Public Sub ZoomToExtent( _
   ByRef pEnv As IEnvelope, _
-  ByRef pMXDoc As IMxDocument)
+  ByRef pMxDoc As IMxDocument)
      '++ START JWalton 2/7/2007 Centralized Variable Declarations
     Dim pMap As esriCarto.IMap
     Dim pActiveView As esriCarto.IActiveView
     '++ END JWalton 2/7/2007
     
     ' Gets a reference to the current view window
-    Set pMap = pMXDoc.FocusMap
+    Set pMap = pMxDoc.FocusMap
     Set pActiveView = pMap
 
     ' Updates the view's extent
@@ -3942,7 +4272,7 @@ End Function
 Public Function GetMXDocRef() As esriArcMapUI.IMxDocument
 On Error GoTo ErrorHandler
     '++ START JWalton 2/7/2007 Centralized Variable Declarations
-    Dim pMXDoc As esriArcMapUI.IMxDocument
+    Dim pMxDoc As esriArcMapUI.IMxDocument
     Dim rot As esriFramework.AppROT
     Dim app As esriFramework.IApplication
     Dim pobjectFactory As esriFramework.IObjectFactory
@@ -3956,10 +4286,10 @@ On Error GoTo ErrorHandler
         Set app = rot.Item(1) 'ArcMap
     End If
     Set pobjectFactory = app
-    Set pMXDoc = app.Document
+    Set pMxDoc = app.Document
     
     ' Returns the function's value
-    Set GetMXDocRef = pMXDoc
+    Set GetMXDocRef = pMxDoc
 
 
     Exit Function
@@ -4033,48 +4363,99 @@ ErrorHandler:
 End Function
 
 
+''***************************************************************************
+''Name:                  Validate5Digits
+''Initial Author:        <<Unknown>>
+''Subsequent Author:     Type your name here.
+''Created:               10/11/2006
+''Purpose:       String formatting
+''Called From:   No calls are made to this function
+''Description:   Accepts a string and pads it to the left with zeros up to
+''               five characters
+''Methods:       None
+''Inputs:        sString - The string to pad
+''Parameters:    None
+''Outputs:       None
+''Returns:       A properly formatted string
+''Errors:        This routine raises no known errors.
+''Assumptions:   None
+''Updates:
+''       Type any updates here.
+''Developer:     Date:       Comments:
+''----------     ------      ---------
+''James Moore    10/11/2006  THIS FUNCTION IS DEAD. IT IS NOT CALLED BY ANY _
+'                            OTHER PROCESS.
+''***************************************************************************
+'
+'Public Function Validate5Digits( _
+'  ByVal sString As String) As String
+'On Error GoTo ErrorHandler
+'
+'    'Make sure taxlot number is 5 characters
+'    If Len(sString) < 5 Then
+'        Do Until Len(sString) = 5
+'            sString = "0" & sString
+'        Loop
+'    End If
+'    Validate5Digits = sString
+'
+'    Exit Function
+'ErrorHandler:
+'    HandleError True, _
+'                "Validate5Digits " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+'                Err.Number, _
+'                Err.Source, _
+'                Err.Description, _
+'4
+'End Function
+
 '***************************************************************************
-'Name:                  Validate5Digits
-'Initial Author:        <<Unknown>>
-'Subsequent Author:     Type your name here.
-'Created:               10/11/2006
-'Purpose:       String formatting
-'Called From:   No calls are made to this function
-'Description:   Accepts a string and pads it to the left with zeros up to
-'               five characters
+'Name:                  SetCurrentCommand
+'Initial Author:        Nick Seigal (LCOG)
+'Subsequent Author:     <Type your name here.>
+'Created:               12/20/2007
+'Purpose:       ArcMap UI Configuration
+'Called From:   frmTaxlotAssignment
+'Description:   Sets the current command to the command passed in the argument.
 'Methods:       None
-'Inputs:        sString - The string to pad
+'Inputs:        sFullCommandName - The string to pad
 'Parameters:    None
 'Outputs:       None
-'Returns:       A properly formatted string
+'Returns:       Nothing
 'Errors:        This routine raises no known errors.
 'Assumptions:   None
 'Updates:
 '       Type any updates here.
 'Developer:     Date:       Comments:
 '----------     ------      ---------
-'James Moore    10/11/2006  THIS FUNCTION IS DEAD. IT IS NOT CALLED BY ANY _
-                            OTHER PROCESS.
+'
 '***************************************************************************
 
-Public Function Validate5Digits( _
-  ByVal sString As String) As String
-On Error GoTo ErrorHandler
+Public Sub SetCurrentCommand(pMxDoc As IMxDocument, ByVal sFullCommandName As String)
 
-    'Make sure taxlot number is 5 characters
-    If Len(sString) < 5 Then
-        Do Until Len(sString) = 5
-            sString = "0" & sString
-        Loop
+    ' Set the current command to passed command
+    Dim pUID As New UID
+    Dim pDoc As IDocument
+    Dim pCmdItem As ICommandItem
+    
+    On Error Resume Next
+    
+    ' Use the PROGID of the passed command
+    pUID.Value = sFullCommandName
+    If Err.Number = 0 Then
+        Set pDoc = pMxDoc 'QI
+        Set pCmdItem = pDoc.CommandBars.Find(pUID)
+    Else
+        '[Error...]
+        MsgBox "Tool or command " & sFullCommandName & " not found!", vbCritical
     End If
-    Validate5Digits = sString
+    
+    If Not pCmdItem Is Nothing Then
+        pCmdItem.Execute
+    Else
+        '[Error...]
+        MsgBox "Tool or command " & sFullCommandName & " not found!", vbCritical
+    End If
+    
+End Sub
 
-    Exit Function
-ErrorHandler:
-    HandleError True, _
-                "Validate5Digits " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
-                Err.Number, _
-                Err.Source, _
-                Err.Description, _
-                4
-End Function

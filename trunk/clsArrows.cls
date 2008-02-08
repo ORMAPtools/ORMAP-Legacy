@@ -129,10 +129,53 @@ Private m_bolDimensionChanged As Boolean
     Dim colArrowPoints As Collection
 '++ END Laura Gordon
 
+'++ START Nick Seigal (LCOG) 12/20/2007 - Support for bitmap
+Private m_pBitmap As IPictureDisp
+'++ END Nick Seigal (LCOG) 12/20/2007
 '------------------------------
 'Private Constants and Enums
 '------------------------------
 Private Const c_sModuleFileName As String = "clsArrows.cls"
+
+'++ START Nick Seigal (LCOG) 12/20/2007 - Added event handler, bitmap
+'***************************************************************************
+'Name:                  ClassInitialize
+'Initial Author:        <<Unknown>>
+'Subsequent Author:     <<Type your name here>>
+'Created:               <<Unknown>>
+'Purpose:       Initialize class level variables
+'Called From:   Class Object
+'Description:   Loads the bitmap that describes the tool on the toolbar
+'               from the resource file.
+'Methods:       None
+'Inputs:        None
+'Parameters:    None
+'Outputs:       m_pBitmap - The toolbar icon that describes the tool
+'Returns:       None
+'Errors:        This routine raises no known errors.
+'Assumptions:   None
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'
+'***************************************************************************
+
+Private Sub Class_Initialize()
+  On Error GoTo ErrorHandler
+    
+    Set m_pBitmap = LoadResPicture("ARROWS_BITMAP", vbResBitmap)
+    
+    Exit Sub
+ErrorHandler:
+    HandleError True, _
+                "Class_Initialize " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
+End Sub
+'++ END Nick Seigal (LCOG) 12/20/2007
 
 Private Property Get ICommand_Enabled() As Boolean
 On Error GoTo ErrorHandler
@@ -260,7 +303,20 @@ ErrorHandler:
 End Property
  
 Private Property Get ICommand_Bitmap() As esriSystem.OLE_HANDLE
-    ' Not Implemented
+On Error GoTo ErrorHandler
+  
+    '++ START Nick Seigal (LCOG) 12/20/2007 - Implemented ICommand_Bitmap
+    ICommand_Bitmap = m_pBitmap
+    '++ END Nick Seigal (LCOG) 12/20/2007
+    
+    Exit Property
+ErrorHandler:
+    HandleError True, _
+                "ICommand_Bitmap " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl), _
+                Err.Number, _
+                Err.Source, _
+                Err.Description, _
+                4
 End Property
  
 Private Property Get ICommand_Category() As String
@@ -575,7 +631,7 @@ Private Sub ITool_OnMouseDown( _
 On Error GoTo ErrorHandler
     '++ START JWalton 2/8/2007 Centralized variable declarations
     ' Variable declarations
-    Dim pMXDoc As esriArcMapUI.IMxDocument
+    Dim pMxDoc As esriArcMapUI.IMxDocument
     Dim pActiveView As esriCarto.IActiveView
     Dim pArrowLayer As esriCarto.IFeatureLayer
     Dim pMIFL As esriCarto.IFeatureLayer
@@ -618,9 +674,9 @@ On Error GoTo ErrorHandler
     
     ' Initialize active view
     '++ START JWalton 2/8/2007 m_pApp to g_pApp
-    Set pMXDoc = g_pApp.Document
+    Set pMxDoc = g_pApp.Document
     '++ END JWalton
-    Set pActiveView = pMXDoc.FocusMap
+    Set pActiveView = pMxDoc.FocusMap
   
     ' Get reference to MapIndex FC
     Set pMIFL = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
@@ -639,17 +695,19 @@ On Error GoTo ErrorHandler
             Set m_pFromBreakPoint = m_pStartPoint
             
             ' Get the scale of the current mapindex
-            sScale = GetValueViaOverlay(m_pStartPoint, pMIFC, g_pFldnames.MIMapScaleFN)
+            '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+            sScale = GetValueViaOverlay(m_pStartPoint, pMIFC, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+            '++ END Nick Seigal (LCOG) 01/25/2008
             sScale = ConvertToDescription(pMIFC.Fields, g_pFldnames.MIMapScaleFN, sScale)
         
             
         Case "ARROW" 'If drawing annotation arrows
             'If m_bToolJustCompletedTask = False Then
                 If bolFinish = False Then
-                    'Right mouse click
                     If Button = 1 And Shift = 1 Then
-                        'Save the first point
+                        '[Left mouse click plus Shift key down...]
                         If colArrowPoints.Count = 0 Then
+                        '[Save the first point...]
                             If m_pArrowPt1 Is Nothing Then
                                 Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
                                 colArrowPoints.Add m_pArrowPt1
@@ -660,6 +718,7 @@ On Error GoTo ErrorHandler
                             
                         'Save the last point
                         Else
+                        '[Save the last point...]
                             If m_pArrowPt1 Is Nothing Then
                                 Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
                                 colArrowPoints.Add m_pArrowPt1
@@ -671,8 +730,8 @@ On Error GoTo ErrorHandler
                             End If
                         End If
                         
-                    'Left mouse click
                     ElseIf Button = 1 And Shift = 0 Then
+                    '[Left mouse click...]
                         'Add vertex
                         If m_pArrowPt1 Is Nothing Then
                             Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
@@ -701,7 +760,7 @@ On Error GoTo ErrorHandler
                 
                 If colArrowPoints.Count > 1 And bolFinish = True Then
                     
-                    ' Creates a new polygon from the points and smoothes it
+                    ' Creates a new polyline from the points and smoothes it
                     Set pArrowPoints = New esriGeometry.Polyline
                     
                     For lngIndex = 1 To colArrowPoints.Count
@@ -711,7 +770,7 @@ On Error GoTo ErrorHandler
                     Set pArrowLine = pArrowPoints
                     pArrowLine.Smooth pArrowLine.Length / 10
                     
-    '                ' Creates a new polygon from the points and smoothes it
+    '                ' Creates a new polyline from the points and smoothes it
     '                Set pArrowPoints = New esriGeometry.Polyline
     '                pArrowPoints.AddPoint m_pArrowPt1
     '                pArrowPoints.AddPoint m_pArrowPt2
@@ -745,13 +804,14 @@ On Error GoTo ErrorHandler
                     If lLineTypeFld = -1 Then GoTo Process_Exit
                     
                     ' Populate field values in the feature
-                    sCurMapNum = GetValueViaOverlay(pFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN)
+                    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+                    sCurMapNum = GetValueViaOverlay(pFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
+                    '++ END Nick Seigal (LCOG) 01/25/2008
                     pFeature.Value(lCLMNfld) = sCurMapNum
                     '++ START Laura Gordon 05/23/07, adding additional arrow types
                     'pFeature.Value(lLineTypeFld) = 100
                     pFeature.Value(lLineTypeFld) = Left(frmArrows.cmbArrow.Text, 3) '100
                     '++  END Laura Gordon
-                    pFeature.Store
                     
                     '++ START Laura 03/08/07, calc additional fields
                     'Set the AutoMethod Field
@@ -770,18 +830,30 @@ On Error GoTo ErrorHandler
                     pFeature.Value(lLineTypeFld) = Format(Now, "MM/DD/YYYY")
                     
                     'Set the MapScale Field
-                    sCurrentMapScale = GetValueViaOverlay(pFeature.Shape, pMIFC, g_pFldnames.MIMapScaleFN)
+                    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+                    sCurrentMapScale = GetValueViaOverlay(pFeature.Shape, pMIFC, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+                    '++ END Nick Seigal (LCOG) 01/25/2008
                     lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.MIMapScaleFN)
                     If lLineTypeFld = -1 Then Exit Sub
-                    pFeature.Value(lLineTypeFld) = sCurrentMapScale
+                    '++ START Nick Seigal (LCOG) 12/20/2007 - Fixed data type
+                    pFeature.Value(lLineTypeFld) = Val(sCurrentMapScale)
+                    '++ END Nick Seigal (LCOG) 12/20/2007
                     '++  End Laura Gordon
                             
-                    
+                     '++ START Nick Seigal (LCOG) 12/20/2007 - Moved store to after all fields are edited
+                    pFeature.Store
+                    '++ END Nick Seigal (LCOG) 12/20/2007
                     ' Finalize the edit operation
                     pWSEdit.StopEditOperation
                     
-                    ' Refresh the display
-                    pActiveView.PartialRefresh esriViewBackground, Nothing, pFeature.Extent.Envelope
+                    '++ START Nick Seigal (LCOG) 12/20/2007 - Better refresh
+                    'Partially refresh the display
+                    pActiveView.PartialRefresh _
+                            esriViewBackground Or _
+                            esriViewGeography Or _
+                            esriViewGraphics Or _
+                            esriViewGraphicSelection, Nothing, pFeature.Extent.Envelope
+                    '++ END Nick Seigal (LCOG) 12/20/2007
                     
                     ' Clean up
                     Set pArrowLine = Nothing
@@ -1099,7 +1171,9 @@ On Error GoTo ErrorHandler
                             
                             'Get the current MapNumber
                             Dim sCurrentMapNums As String
-                            sCurrentMapNums = GetValueViaOverlay(pDimensionFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN)
+                            '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+                            sCurrentMapNums = GetValueViaOverlay(pDimensionFeature.Shape, pMIFC, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
+                            '++ END Nick Seigal (LCOG) 01/25/2008
                             Dim lCLMNSfld As Long
                             lCLMNSfld = LocateFields(pDimensionArrowFC, g_pFldnames.MIMapNumberFN)
                             pDimensionFeature.Value(lCLMNSfld) = sCurrentMapNums
@@ -1123,15 +1197,22 @@ On Error GoTo ErrorHandler
                             'Set the MapScale Field
                             lLineTypeFld = LocateFields(pDimensionArrowFC, g_pFldnames.MIMapScaleFN)
                             If lLineTypeFld = -1 Then Exit Sub
-                            pDimensionFeature.Value(lLineTypeFld) = sCurrentMapScale * 12
+                            '++ START Nick Seigal (LCOG) 12/20/2007 - Fixed invalid value for field type error
+                            pDimensionFeature.Value(lLineTypeFld) = Val(sCurrentMapScale) * 12
+                            '++ END Nick Seigal (LCOG) 12/20/2007
                             '++  End Laura Gordon
                 
                             pDimensionFeature.Store
                             pDimensionWSEdit.StopEditOperation
                             
-                            'Refresh the display
-                            pActiveView.PartialRefresh esriViewBackground, Nothing, pDimensionFeature.Extent.Envelope
-                                                    
+                            '++ START Nick Seigal (LCOG) 12/20/2007 - Better refresh
+                            'Partially refresh the display
+                            pActiveView.PartialRefresh _
+                                    esriViewBackground Or _
+                                    esriViewGeography Or _
+                                    esriViewGraphics Or _
+                                    esriViewGraphicSelection, Nothing, pDimensionFeature.Extent.Envelope
+                            '++ END Nick Seigal (LCOG) 12/20/2007
                             Set pDimensionLine = Nothing
                             Set m_pArrowPtTemp = Nothing
                             Set m_pArrowPtTemp2 = Nothing
@@ -1216,7 +1297,7 @@ Private Sub ITool_OnMouseMove( _
 On Error GoTo ErrorHandler
     '++ START JWalton 2/9/2007 Centralized Variable Declarations
     ' Variable Declarations
-    Dim pMXDoc As esriArcMapUI.IMxDocument
+    Dim pMxDoc As esriArcMapUI.IMxDocument
     Dim pActiveView As esriCarto.IActiveView
     Dim pRGBColor As esriDisplay.IRgbColor
     Dim pSymbol As esriDisplay.ISymbol
@@ -1245,9 +1326,9 @@ On Error GoTo ErrorHandler
         If (Not m_bInUse) Then GoTo Process_Exit
         
         '++ START JWalton 2/8/2007 m_pApp to g_pApp
-        Set pMXDoc = g_pApp.Document
+        Set pMxDoc = g_pApp.Document
         '++ END JWalton 2/8/2007
-        Set pActiveView = pMXDoc.FocusMap
+        Set pActiveView = pMxDoc.FocusMap
         
         ' Checks to see if the line symbol is defined
         If (m_pLineSymbol Is Nothing) Then bfirstTime = True
@@ -1469,7 +1550,7 @@ Private Sub ITool_OnMouseUp( _
 On Error GoTo ErrorHandler
     '++ START JWalton 2/9/2007 Centralized Variable Declarations
     ' Variable Declarations
-    Dim pMXDoc As esriArcMapUI.IMxDocument
+    Dim pMxDoc As esriArcMapUI.IMxDocument
     Dim pActiveView As esriCarto.IActiveView
     '++ END JWalton 2/9/2007
     
@@ -1488,9 +1569,9 @@ On Error GoTo ErrorHandler
         
         '++ START JWalton 2/9/2007 m_pApp to g_pApp
     '    Set pMXDoc = m_pApp.Document Commented out by jwm on behalf of JWalton 2-20-07
-        Set pMXDoc = g_pApp.Document
+        Set pMxDoc = g_pApp.Document
         '++ END JWalton 2/9/2007
-        Set pActiveView = pMXDoc.FocusMap
+        Set pActiveView = pMxDoc.FocusMap
         
         ' Draws a temporary line on the screen
         pActiveView.ScreenDisplay.StartDrawing pActiveView.ScreenDisplay.hdc, -1
@@ -1640,7 +1721,7 @@ On Error GoTo ErrorHandler
     '++ START JWalton 2/9/2007 Centralized Variable Declarations
     ' Variable Declarations
     Dim pDoc As esriArcMapUI.IMxDocument
-    Dim pMXDoc As esriArcMapUI.IMxDocument
+    Dim pMxDoc As esriArcMapUI.IMxDocument
     Dim pActiveView As esriCarto.IActiveView
     Dim pHookLayer As esriCarto.IFeatureLayer
     Dim pMIFlayer As esriCarto.IFeatureLayer
@@ -1700,8 +1781,10 @@ On Error GoTo ErrorHandler
     Set pMIFclass = pMIFlayer.FeatureClass
     
     ' Retrieve the map scale from the overlaying Map Index layer
-    vMapScale1 = GetValueViaOverlay(pCurve.FromPoint, pMIFclass, g_pFldnames.MIMapScaleFN)
-    vMapScale2 = GetValueViaOverlay(pCurve.ToPoint, pMIFclass, g_pFldnames.MIMapScaleFN)
+    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+    vMapScale1 = GetValueViaOverlay(pCurve.FromPoint, pMIFclass, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+    vMapScale2 = GetValueViaOverlay(pCurve.ToPoint, pMIFclass, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+    '++ END Nick Seigal (LCOG) 01/25/2008
     
     ' Insure that the map scales exist and that they are equal
     If IsNull(vMapScale1) Or IsNull(vMapScale2) Then
@@ -1857,10 +1940,14 @@ On Error GoTo ErrorHandler
     'Set the MapScale Field
     lLineTypeFld = LocateFields(pHookFC, g_pFldnames.MIMapScaleFN)
     If lLineTypeFld = -1 Then Exit Sub
-    pFeature.Value(lLineTypeFld) = vMapScale1
+    '++ START Nick Seigal (LCOG) 12/20/2007 - Fixed data type
+    pFeature.Value(lLineTypeFld) = Val(vMapScale1)
+    '++ END Nick Seigal (LCOG) 12/20/2007
     
     'Set the MapNumber Field
-    sCurMapNum = GetValueViaOverlay(pFeature.Shape, pMIFclass, g_pFldnames.MIMapNumberFN)
+    '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+    sCurMapNum = GetValueViaOverlay(pFeature.Shape, pMIFclass, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
+    '++ END Nick Seigal (LCOG) 01/25/2008)
     lLineTypeFld = LocateFields(pHookFC, g_pFldnames.MIMapNumberFN)
     If lLineTypeFld = -1 Then Exit Sub
     pFeature.Value(lLineTypeFld) = sCurMapNum
@@ -1872,12 +1959,16 @@ On Error GoTo ErrorHandler
     
     'Refresh the display
     '++ START JWalton 2/9/2007 m_pApp to g_pApp
-    Set pMXDoc = g_pApp.Document
+    Set pMxDoc = g_pApp.Document
     '++ END JWalton 2/9/2007
-    Set pActiveView = pMXDoc.FocusMap
-    pActiveView.PartialRefresh esriCarto.esriViewDrawPhase.esriViewBackground, _
-                               Nothing, _
-                               pFeature.Extent.Envelope
+    Set pActiveView = pMxDoc.FocusMap
+    '++ START Nick Seigal (LCOG) 12/20/2007 - Better refresh
+    'Partially refresh the display
+    pActiveView.PartialRefresh esriViewBackground Or _
+            esriViewGeography Or _
+            esriViewGraphics Or _
+            esriViewGraphicSelection, Nothing, pFeature.Extent.Envelope
+    '++ END Nick Seigal (LCOG) 12/20/2007
 
 Process_Exit:
     Exit Sub
@@ -2041,7 +2132,7 @@ Private Sub DrawArrows()
 On Error GoTo ErrorHandler
     '++ START JWalton 2/9/2007 Centralized Variable Declarations
     ' Variable Declarations
-    Dim pMXDoc As esriArcMapUI.IMxDocument
+    Dim pMxDoc As esriArcMapUI.IMxDocument
     Dim pActiveView As esriCarto.IActiveView
     Dim pRGBColor As esriDisplay.IRgbColor
     Dim pSymbol As esriDisplay.ISymbol
@@ -2051,9 +2142,9 @@ On Error GoTo ErrorHandler
 
     ' Initialize references to the current document and map
     '++ START Laura Gordon 02/20/2007
-    Set pMXDoc = g_pApp.Document 'm_pApp.Document
+    Set pMxDoc = g_pApp.Document 'm_pApp.Document
     '++ STOP Laura Gordon 02/20/2007
-    Set pActiveView = pMXDoc.FocusMap
+    Set pActiveView = pMxDoc.FocusMap
     
     '++ START Laura Gordon 05/23/07, adding additional arrow types
     Dim lngIndex As Long
@@ -2238,9 +2329,11 @@ On Error GoTo ErrorHandler
       Set pDimensionFeatureTemp.Shape = pDimensionLineTemp
     
       
-      'Get the current MapNumber
+      'Get the current MapScale
       Dim sCurrentMapScale As String
-      GetCurrentMapScale = GetValueViaOverlay(pDimensionFeatureTemp.Shape, pMIFC, g_pFldnames.MIMapScaleFN)
+      '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+      GetCurrentMapScale = GetValueViaOverlay(pDimensionFeatureTemp.Shape, pMIFC, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
+      '++ END Nick Seigal (LCOG) 01/25/2008
       GetCurrentMapScale = GetCurrentMapScale / 12
       pDimensionWSEditTemp.AbortEditOperation
       pDimensionWSEditTemp.StopEditOperation
@@ -2364,7 +2457,7 @@ End Function
 'Developer:     Date:       Comments:
 '----------     ------      ---------
 '***************************************************************************
-Private Function GetChange(sCurrentMapScale, ByVal Shift As Long) As Integer
+Private Function GetChange(ByVal sCurrentMapScale, ByVal Shift As Long) As Integer
 
 On Error GoTo ErrorHandler
 

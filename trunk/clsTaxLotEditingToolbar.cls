@@ -84,7 +84,6 @@ Private Sub IToolBarDef_GetItemInfo( _
     ' START JWalton 2/5/2007 Changed order, added auto update, and added groups
     Select Case pos
       Case 0
-        itemDef.Group = True
         itemDef.ID = "TaxlotEditing.cmdAutoUpdate"
       Case 1
         itemDef.Group = True
@@ -97,6 +96,7 @@ Private Sub IToolBarDef_GetItemInfo( _
       Case 4
         itemDef.ID = "TaxlotEditing.cmdTaxlotCombine"
       Case 5
+        itemDef.Group = True
         itemDef.ID = "TaxlotEditing.cmdArrows"
     End Select
     ' END JWalton 2/5/2007
