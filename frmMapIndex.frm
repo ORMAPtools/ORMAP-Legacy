@@ -595,8 +595,8 @@ Attribute VB_Exposed = False
 '
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision$
-' Date of last change: $Date$
+' SCC Revision number: $Revision: 188 $
+' Date of last change: $Date: 2008-02-07 16:40:28 -0800 (Thu, 07 Feb 2008) $
 '
 '
 ' File name:            frmMapIndex

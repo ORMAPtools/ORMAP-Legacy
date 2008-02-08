@@ -2,8 +2,8 @@ Attribute VB_Name = "basWin32API"
 
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision$
-' Date of last change: $Date$
+' SCC Revision number: $Revision: 98 $
+' Date of last change: $Date: 2007-02-28 10:07:01 -0800 (Wed, 28 Feb 2007) $
 
 ' File name:            basWin32API.bas
 '

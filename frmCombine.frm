@@ -67,8 +67,8 @@ Attribute VB_Exposed = False
 '
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision$
-' Date of last change: $Date$
+' SCC Revision number: $Revision: 90 $
+' Date of last change: $Date: 2007-02-26 10:46:47 -0800 (Mon, 26 Feb 2007) $
 '
 '
 ' File name:            frmCombine
