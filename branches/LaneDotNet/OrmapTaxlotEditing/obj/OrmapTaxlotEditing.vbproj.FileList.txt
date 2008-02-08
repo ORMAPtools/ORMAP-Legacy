@@ -42,3 +42,5 @@ obj\Debug\OrmapTaxlotEditing.xml
 obj\Debug\OrmapTaxlotEditing.pdb
 G:\projects\OPET\branches\LaneDotNet\OrmapTaxlotEditing\bin\Release\OrmapTaxlotEditing.tlb
 G:\projects\OPET\branches\LaneDotNet\OrmapTaxlotEditing\bin\Debug\OrmapTaxlotEditing.tlb
+bin\Release\My Project\Settings.Designer.vb
+bin\Release\My Project\Settings.settings

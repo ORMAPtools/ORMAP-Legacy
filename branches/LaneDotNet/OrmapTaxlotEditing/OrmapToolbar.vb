@@ -1,6 +1,3 @@
-Imports System.Runtime.InteropServices
-Imports ESRI.ArcGIS.ADF.CATIDs
-Imports ESRI.ArcGIS.ADF.BaseClasses
 #Region "Copyright 2008 ORMAP Tech Group"
 
 ' File: OrmapToolbar.vb
@@ -13,6 +10,9 @@ Imports ESRI.ArcGIS.ADF.BaseClasses
 
 #End Region
 
+Imports System.Runtime.InteropServices
+Imports ESRI.ArcGIS.ADF.CATIDs
+Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.esriSystem
 
 <ComVisible(True)> _

@@ -24,7 +24,8 @@ Imports ESRI.ArcGIS.Framework
 ProgId("ORMAPTaxlotEditing.EditMapIndex")> _
 Public NotInheritable Class EditMapIndex
     Inherits BaseCommand
-    'TODO: Implement IDisposable ... see http://msdn2.microsoft.com/en-us/library/system.idisposable(VS.80).aspx
+    ' TODO: FxCop recommends: consider implementing IDisposable (for bitmap object) ... 
+    ' see http://msdn2.microsoft.com/en-us/library/system.idisposable(VS.80).aspx
     'Implements IDisposable 
 
 #Region "COM GUIDs"
