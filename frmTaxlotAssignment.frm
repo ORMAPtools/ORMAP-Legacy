@@ -235,7 +235,10 @@ Private m_ParentHWND As Long
 '------------------------------
 'Private Constants and Enums
 '------------------------------
-' Variables used by the Error handler function - DO NOT REMOVE
+'++ START Nick Seigal (LCOG) 12/20/2007
+Private Const c_sDefaultCommand As String = "esriArcMapUI.SelectTool"
+'++ END Nick Seigal (LCOG) 12/20/2007
+' Variable used by the Error handler function - DO NOT REMOVE
 Private Const c_sModuleFileName As String = "frmTaxlotAssignment.frm"
 
 '++START JWalton 1/31/2007 Properties of the form
@@ -468,6 +471,7 @@ Private Sub Form_Initialize()
     
     ' Makes the form the topmost form
     SetWindowPos Me.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
+    
 End Sub
 
 '***************************************************************************
@@ -495,17 +499,17 @@ End Sub
 
 Private Sub Form_Load()
 On Error GoTo ErrorHandler
+    
     'Populate drop down combobox and set default settings
     '++ START JWalton 2/6/2007 Removed m_pApp in favor of g_pApp
     Set m_pMxDoc = g_pApp.Document
     
     'Populate with preset values
     cmbTaxlotNum.AddItem "NUMBER"
-    cmbTaxlotNum.AddItem "0ROAD"
+    cmbTaxlotNum.AddItem "ROADS"
     cmbTaxlotNum.AddItem "WATER"
-    cmbTaxlotNum.AddItem "0RLRD"
-    cmbTaxlotNum.AddItem "00GAP"
-    cmbTaxlotNum.AddItem "00LAP"
+    cmbTaxlotNum.AddItem "RAILS"
+    cmbTaxlotNum.AddItem "NONTL"
     
     '++ START JWalton 1/31/2007
     ' Control defaults
@@ -564,6 +568,11 @@ Private Sub Form_Unload( _
     ' Saves the position of the form
     SaveSetting "ArcGIS.ArcMap.ORMAP.Tools", "FrmTaxlotAssignment", "Top", pWindowPos.Top
     SaveSetting "ArcGIS.ArcMap.ORMAP.Tools", "FrmTaxlotAssignment", "Left", pWindowPos.Left
+    
+    '++ START Nick Seigal (LCOG) 12/20/2007
+    SetCurrentCommand m_pMxDoc, c_sDefaultCommand
+    '++ END Nick Seigal (LCOG) 12/20/2007
+    
 End Sub
 
 '***************************************************************************
@@ -589,8 +598,10 @@ End Sub
 '***************************************************************************
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    
     ' Sets the form status to not open
     g_pForms.SetFormStatus Me.Name, False
+    
 End Sub
 
 
@@ -608,9 +619,9 @@ End Sub
 '               If no control is selected, then the zero control will be
 '               selected.
 'Methods:       None
-'Inputs:        Index, Button, Shift, X, Y,
+'Inputs:        None
 'Parameters:    None
-'Outputs:       m_lIncrement, m_iIndexItem, m_bIndexMouseDown
+'Outputs:       m_lIncrement
 'Returns:       Nothing
 'Errors:        This routine raises no known errors.
 'Assumptions:   None

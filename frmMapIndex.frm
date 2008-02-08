@@ -720,6 +720,8 @@ Private Type TaxlotFieldMap
 End Type
 
 
+
+
 '----------------------------------------------------------------------------
 'Name:                  cmdAssign_Click                                     '
 'Initial Author:        <<Unknown>>                                         '
@@ -963,6 +965,7 @@ Private Sub Form_Initialize()
     
     ' Makes the form the topmost form
     SetWindowPos Me.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
+    
 End Sub
 
 '***************************************************************************
@@ -2281,7 +2284,40 @@ On Error Resume Next
             sSpecialInt = "00000"
         End If
     
+        '++ START Nick Seigal (LCOG) 11/19/2007
+        ' Gets the map number value
+        Dim sMapNumber As String
+        If Not IsNull(pFeature.Value(m_pMapIndexFields.MapNumber)) Then
+            sMapNumber = pFeature.Value(m_pMapIndexFields.MapNumber)
+        Else
+            sMapNumber = ""
+        End If
+        '++ END Nick Seigal (LCOG) 11/19/2007
+        
         ' Copy new attributes to the taxlot table
+        '++ START Nick Seigal (LCOG) 11/19/2007
+        '++ DESCR: Add special code for Lane County (see comment below).
+        Dim sMapTaxlotID As String
+        sMapTaxlotID = m_pORMAPNumber.ORMAPNumber & sTaxlot
+        Dim sTLMapTaxlot As String
+        Dim iCountyCode As Integer
+        iCountyCode = CInt(g_pFldnames.DefCounty)
+        Select Case iCountyCode
+        Case 1 To 19, 21 To 36
+            sTLMapTaxlot = basUtilities.gfn_s_CreateMapTaxlotValue(sMapTaxlotID, g_pFldnames.MapTaxlotFormatString)
+        Case 20
+            ' 1.  Lane County uses a 2-digit numeric identifier for ranges.
+            '     Special handling is required for east ranges, where 02E is
+            '     stored as 25, 03E as 35, etc.
+            ' 2.  ORMAP standards (OCDES (pg 13); Taxmap Data Model (pg 11)) assert that
+            '     this field should be equal to MAPNUMBER + TAXLOT. In this case, MAPNUMBER
+            '     is already in the right format, thus removing the need for the
+            '     gfn_s_CreateMapTaxlotValue function. Also, in this case, TAXLOT is padded
+            '     on the left with zeros to make it always a 5-digit number (see comment
+            '     above).
+            ' Trim the map number to only the left 8 characters (no spaces)
+            sTLMapTaxlot = Trim$(Left$(sMapNumber, 8)) & sTaxlot
+        End Select
         With pTaxlotFeature
             .Value(m_pTaxlotFields.County) = m_pORMAPNumber.County
             .Value(m_pTaxlotFields.Township) = m_pORMAPNumber.Township
@@ -2300,11 +2336,11 @@ On Error Resume Next
             .Value(m_pTaxlotFields.OrmapMapNumber) = m_pORMAPNumber.ORMAPNumber
             .Value(m_pTaxlotFields.Taxlot) = CLng(sTaxlot)
             .Value(m_pTaxlotFields.SpecialInterest) = sSpecialInt
-            .Value(m_pTaxlotFields.MapTaxlotNumber) = basUtilities.gfn_s_CreateMapTaxlotValue(m_pORMAPNumber.ORMAPNumber & sTaxlot, _
-                                                                                              g_pFldnames.MapTaxlotFormatString)
+            .Value(m_pTaxlotFields.MapTaxlotNumber) = sTLMapTaxlot
             .Value(m_pTaxlotFields.OrmapTaxlotNumber) = m_pORMAPNumber.OrmapTaxlotNumber & sTaxlot
             .Store
         End With
+        '++ END Nick Seigal (LCOG) 11/19/2007
         
         ' Get the next feature
         Set pTaxlotFeature = pFeatSel.NextFeature
