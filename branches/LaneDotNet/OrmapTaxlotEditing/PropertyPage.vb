@@ -151,6 +151,13 @@ Public NotInheritable Class PropertyPage
 
     End Sub
 
+    Private Sub uxAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+        Dim aboutForm As New AboutForm
+        aboutForm.ShowDialog(DirectCast(sender, Control).FindForm)
+
+    End Sub
+
 #End Region
 
 #Region "Methods"
@@ -302,6 +309,7 @@ Public NotInheritable Class PropertyPage
         AddHandler PropertiesForm.uxEnableTools.CheckedChanged, AddressOf uxEnableTools_CheckedChanged
         AddHandler PropertiesForm.uxEnableAutoUpdate.CheckedChanged, AddressOf uxEnableAutoUpdate_CheckedChanged
         AddHandler PropertiesForm.uxSettings.Click, AddressOf uxSettings_Click
+        AddHandler PropertiesForm.uxAbout.Click, AddressOf uxAbout_Click
 
     End Sub
 

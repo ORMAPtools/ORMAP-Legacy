@@ -46,3 +46,7 @@ obj\Debug\OrmapTaxlotEditing.OrmapSettingsForm.resources
 obj\Release\OrmapTaxlotEditing.OrmapSettingsForm.resources
 bin\Release\license\COPYING.txt
 bin\Release\license\SOURCE.txt
+obj\Release\OrmapTaxlotEditing.AboutForm.resources
+bin\Debug\license\COPYING.txt
+bin\Debug\license\SOURCE.txt
+obj\Debug\OrmapTaxlotEditing.AboutForm.resources

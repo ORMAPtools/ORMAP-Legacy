@@ -11,9 +11,9 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("OrmapTaxlotEditing")> 
-<Assembly: AssemblyDescription("ORMAP Taxlot Editing Toolbar")> 
+<Assembly: AssemblyDescription("The ORMAP Taxlot Editing Toolbar gives the user tools to edit taxlots and related features in compliance with the ORMAP standard.")> 
 <Assembly: AssemblyCompany("ORMAP Tech Group")> 
-<Assembly: AssemblyProduct("OrmapTaxlotEditing")> 
+<Assembly: AssemblyProduct("Ormap Taxlot Editing Toolbar")> 
 <Assembly: AssemblyCopyright("Copyright ©  2008")> 
 <Assembly: AssemblyTrademark("")> 
 
@@ -37,7 +37,7 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.0.0")> 
-<Assembly: AssemblyFileVersion("1.0.0.0")> 
+<Assembly: AssemblyVersion("2.0.0.0")> 
+<Assembly: AssemblyFileVersion("2.0.0.0")> 
 
 <Assembly: NeutralResourcesLanguageAttribute("en-US")> 

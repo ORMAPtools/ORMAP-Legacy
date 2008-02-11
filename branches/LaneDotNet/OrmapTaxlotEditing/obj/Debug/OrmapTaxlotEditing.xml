@@ -6,7 +6,57 @@ OrmapTaxlotEditing
 </name>
 </assembly>
 <members>
-<member name="M:OrmapTaxlotEditing.OrmapSettingsForm.uxCancel_Click(System.Object,System.EventArgs)">
+<member name="M:OrmapTaxlotEditing.TaxlotAssignment.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.TaxlotAssignment.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.AddArrows.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.AddArrows.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.EditMapIndex.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.EditMapIndex.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.EditorExtension.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.EditorExtension.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category unregistration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.PropertyPage.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.PropertyPage.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category unregistration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.uxCancel_Click(System.Object,System.EventArgs)">
 	<summary>
  Closes the form without saving any modified settings.
  </summary>
@@ -56,16 +106,19 @@ OrmapTaxlotEditing
  corresponding default properties.
  </summary>
 	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.EditMapIndex.ArcGISCategoryRegistration(System.Type)">
+</member><member name="P:OrmapTaxlotEditing.My.Resources.Resources.ResourceManager">
 	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.EditMapIndex.ArcGISCategoryUnregistration(System.Type)">
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:OrmapTaxlotEditing.My.Resources.Resources.Culture">
 	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:OrmapTaxlotEditing.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member><member name="F:OrmapTaxlotEditing.PropertiesForm.components">
 	<summary>
  Required designer variable.
@@ -89,36 +142,12 @@ OrmapTaxlotEditing
  Required method for ArcGIS Component Category registration -
  Do not modify the contents of this method with the code editor.
  </summary>
-</member><member name="M:OrmapTaxlotEditing.TaxlotAssignment.ArcGISCategoryRegistration(System.Type)">
+</member><member name="M:OrmapTaxlotEditing.OrmapSettings.#ctor">
 	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
+ OrmapSettings constructor.
  </summary>
-</member><member name="M:OrmapTaxlotEditing.TaxlotAssignment.ArcGISCategoryUnregistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.PropertyPage.ArcGISCategoryRegistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.PropertyPage.ArcGISCategoryUnregistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category unregistration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.AddArrows.ArcGISCategoryRegistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.AddArrows.ArcGISCategoryUnregistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
+	<remarks>This class follows the singleton pattern and thus has a 
+ private constructor and all shared members.</remarks>
 </member><member name="M:OrmapTaxlotEditing.CombineTaxlots.ArcGISCategoryRegistration(System.Type)">
 	<summary>
  Required method for ArcGIS Component Category registration -
@@ -127,29 +156,6 @@ OrmapTaxlotEditing
 </member><member name="M:OrmapTaxlotEditing.CombineTaxlots.ArcGISCategoryUnregistration(System.Type)">
 	<summary>
  Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="P:OrmapTaxlotEditing.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:OrmapTaxlotEditing.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:OrmapTaxlotEditing.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member><member name="M:OrmapTaxlotEditing.EditorExtension.ArcGISCategoryRegistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.EditorExtension.ArcGISCategoryUnregistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category unregistration -
  Do not modify the contents of this method with the code editor.
  </summary>
 </member><member name="M:OrmapTaxlotEditing.OrmapToolbar.ArcGISCategoryRegistration(System.Type)">

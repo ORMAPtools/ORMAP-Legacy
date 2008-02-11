@@ -39,7 +39,6 @@ Imports System.Runtime.InteropServices
 <ComVisible(False)> _
 Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
 
-
 #Region "Class-Level Constants And Enumerations"
     ' None
 #End Region
@@ -74,9 +73,9 @@ Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
     Friend WithEvents uxEnableTools As CheckBox
     Friend WithEvents uxEnableAutoUpdate As CheckBox
     Friend WithEvents uxDescription As Label
-    Friend WithEvents uxLogo As PictureBox
     Friend WithEvents uxMinimumFieldsOption As RadioButton
     Friend WithEvents uxAllFieldsOption As RadioButton
+    Friend WithEvents uxAbout As System.Windows.Forms.Button
     Friend WithEvents uxSettings As Button
 
 #End Region
@@ -131,15 +130,13 @@ Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
     ''' the contents of this method with the code editor.
     ''' </summary>
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PropertiesForm))
         Me.uxDescription = New System.Windows.Forms.Label
-        Me.uxLogo = New System.Windows.Forms.PictureBox
         Me.uxMinimumFieldsOption = New System.Windows.Forms.RadioButton
         Me.uxAllFieldsOption = New System.Windows.Forms.RadioButton
         Me.uxEnableAutoUpdate = New System.Windows.Forms.CheckBox
         Me.uxEnableTools = New System.Windows.Forms.CheckBox
         Me.uxSettings = New System.Windows.Forms.Button
-        CType(Me.uxLogo, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.uxAbout = New System.Windows.Forms.Button
         Me.SuspendLayout()
         '
         'uxDescription
@@ -150,16 +147,6 @@ Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
         Me.uxDescription.TabIndex = 2
         Me.uxDescription.Text = "The ORMAP Taxlot Editing Toolbar gives the user tools to edit taxlots and related" & _
             " features in compliance with the ORMAP standard."
-        '
-        'uxLogo
-        '
-        Me.uxLogo.Image = CType(resources.GetObject("uxLogo.Image"), System.Drawing.Image)
-        Me.uxLogo.Location = New System.Drawing.Point(14, 302)
-        Me.uxLogo.Name = "uxLogo"
-        Me.uxLogo.Size = New System.Drawing.Size(86, 82)
-        Me.uxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.uxLogo.TabIndex = 3
-        Me.uxLogo.TabStop = False
         '
         'uxMinimumFieldsOption
         '
@@ -212,15 +199,24 @@ Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
         Me.uxSettings.Text = "Settings..."
         Me.uxSettings.UseVisualStyleBackColor = True
         '
+        'uxAbout
+        '
+        Me.uxAbout.Location = New System.Drawing.Point(11, 362)
+        Me.uxAbout.Name = "uxAbout"
+        Me.uxAbout.Size = New System.Drawing.Size(86, 23)
+        Me.uxAbout.TabIndex = 7
+        Me.uxAbout.Text = "About..."
+        Me.uxAbout.UseVisualStyleBackColor = True
+        '
         'PropertiesForm
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(456, 398)
+        Me.Controls.Add(Me.uxAbout)
         Me.Controls.Add(Me.uxSettings)
         Me.Controls.Add(Me.uxAllFieldsOption)
         Me.Controls.Add(Me.uxMinimumFieldsOption)
-        Me.Controls.Add(Me.uxLogo)
         Me.Controls.Add(Me.uxDescription)
         Me.Controls.Add(Me.uxEnableAutoUpdate)
         Me.Controls.Add(Me.uxEnableTools)
@@ -228,7 +224,6 @@ Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
         Me.Name = "PropertiesForm"
         Me.Padding = New System.Windows.Forms.Padding(8, 0, 0, 0)
         Me.Text = "PropertiesForm"
-        CType(Me.uxLogo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
