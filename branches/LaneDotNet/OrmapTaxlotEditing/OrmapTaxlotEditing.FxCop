@@ -138,6 +138,23 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="OnClick():System.Void">
+            <Messages>
+             <Message Id="System.Windows.Forms.MessageBox.Show(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2008-02-07 18:53:15Z">
+              <Issue>
+               <Item>AddArrows.OnClick():Void</Item>
+               <Item>1</Item>
+               <Item>MessageBox.Show(String):DialogResult</Item>
+               <Item>Add AddArrows.OnClick implementation</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-02-07 18:53:15Z">
+              <Issue>
+               <Item>AddArrows.OnClick():Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="RegisterFunction(System.Type):System.Void">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
@@ -170,6 +187,12 @@
          </Type>
          <Type Name="CombineTaxlots">
           <Messages>
+           <Message Id="Taxlots" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-07 18:53:15Z">
+            <Issue Name="Type">
+             <Item>Taxlots</Item>
+             <Item>OrmapTaxlotEditing.CombineTaxlots</Item>
+            </Issue>
+           </Message>
            <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Created="2008-02-02 08:16:14Z" FixCategory="Breaking">
             <Issue>
              <Item>OrmapTaxlotEditing.CombineTaxlots</Item>
@@ -242,6 +265,29 @@
                 <Note Id="2" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="OnClick():System.Void">
+            <Messages>
+             <Message Id="System.Windows.Forms.MessageBox.Show(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2008-02-07 18:53:15Z">
+              <Issue>
+               <Item>CombineTaxlots.OnClick():Void</Item>
+               <Item>1</Item>
+               <Item>MessageBox.Show(String):DialogResult</Item>
+               <Item>Add CombineTaxlots.OnClick implementation</Item>
+              </Issue>
+             </Message>
+             <Message Id="Taxlots" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Created="2008-02-07 18:53:15Z">
+              <Issue>
+               <Item>Taxlots</Item>
+               <Item>CombineTaxlots</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-02-07 18:53:15Z">
+              <Issue>
+               <Item>CombineTaxlots.OnClick():Void</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -352,6 +398,23 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="OnClick():System.Void">
+            <Messages>
+             <Message Id="System.Windows.Forms.MessageBox.Show(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2008-02-07 18:53:15Z">
+              <Issue>
+               <Item>EditMapIndex.OnClick():Void</Item>
+               <Item>1</Item>
+               <Item>MessageBox.Show(String):DialogResult</Item>
+               <Item>Add EditMapIndex.OnClick implementation</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-02-07 18:53:15Z">
+              <Issue>
+               <Item>EditMapIndex.OnClick():Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="RegisterFunction(System.Type):System.Void">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
@@ -442,6 +505,19 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="HasValidLicense">
+            <Accessors>
+             <Accessor Name="set_HasValidLicense(System.Boolean):System.Void">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-02-07 18:53:15Z">
+                <Issue>
+                 <Item>EditorExtension.set_HasValidLicense(Boolean):Void</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
            <Member Name="RegisterFunction(System.Type):System.Void">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
@@ -453,6 +529,24 @@
                 <Note Id="3" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="SetEditEvents(ESRI.ArcGIS.Editor.IEditEvents_Event):System.Void">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-02-07 18:53:15Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>EditorExtension.SetEditEvents(IEditEvents_Event):Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="SetEditor(ESRI.ArcGIS.Editor.IEditor):System.Void">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-02-07 18:53:15Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>EditorExtension.SetEditor(IEditor):Void</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -546,6 +640,23 @@
                 <Note Id="2" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="OnClick():System.Void">
+            <Messages>
+             <Message Id="System.Windows.Forms.MessageBox.Show(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2008-02-07 18:53:15Z">
+              <Issue>
+               <Item>LocateFeature.OnClick():Void</Item>
+               <Item>1</Item>
+               <Item>MessageBox.Show(String):DialogResult</Item>
+               <Item>Add LocateFeature.OnClick implementation</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-02-07 18:53:15Z">
+              <Issue>
+               <Item>LocateFeature.OnClick():Void</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -726,6 +837,12 @@
                <Item>The ORMAP Taxlot Editing Toolbar gives the user tools to edit taxlots and related features in compliance with the ORMAP standard.</Item>
               </Issue>
              </Message>
+             <Message Id="taxlots" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Created="2008-02-07 18:53:15Z">
+              <Issue>
+               <Item>taxlots</Item>
+               <Item>The ORMAP Taxlot Editing Toolbar gives the user tools to edit taxlots and related features in compliance with the ORMAP standard.</Item>
+              </Issue>
+             </Message>
             </Messages>
            </Member>
           </Members>
@@ -814,28 +931,6 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="PropertiesForm">
-            <Accessors>
-             <Accessor Name="get_PropertiesForm():OrmapTaxlotEditing.PropertiesForm">
-              <Messages>
-               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-02-02 08:16:14Z">
-                <Issue>
-                 <Item>PropertyPage.get_PropertiesForm():PropertiesForm</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-             <Accessor Name="set_PropertiesForm(OrmapTaxlotEditing.PropertiesForm):System.Void">
-              <Messages>
-               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-02-02 08:16:14Z">
-                <Issue>
-                 <Item>PropertyPage.set_PropertiesForm(PropertiesForm):Void</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
           </Members>
          </Type>
          <Type Name="TaxlotAssignment">
@@ -915,6 +1010,23 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="OnClick():System.Void">
+            <Messages>
+             <Message Id="System.Windows.Forms.MessageBox.Show(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2008-02-07 18:53:15Z">
+              <Issue>
+               <Item>TaxlotAssignment.OnClick():Void</Item>
+               <Item>1</Item>
+               <Item>MessageBox.Show(String):DialogResult</Item>
+               <Item>Add TaxlotAssignment.OnClick implementation</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-02-07 18:53:15Z">
+              <Issue>
+               <Item>TaxlotAssignment.OnClick():Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="RegisterFunction(System.Type):System.Void">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
@@ -983,6 +1095,15 @@
    <Rule TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303">
     <Resolution Name="Default">{0} passes a literal as parameter {1} of a call to {2}. Retrieve the following string argument from a resource table instead: '{3}'</Resolution>
    </Rule>
+   <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+    <Resolution Name="Type">Correct the spelling of the unrecognized token '{0}' in type name '{1}'.</Resolution>
+   </Rule>
+   <Rule TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204">
+    <Resolution Name="Default">Correct the spelling of the unrecognized token '{0}' in the literal '{1}'.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
+    <Resolution Name="Default">The 'this' parameter (or 'Me' in VB) of {0} is never used. Mark the member as static (or Shared in VB) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
+   </Rule>
    <Rule TypeName="PropertiesShouldNotBeWriteOnly" Category="Microsoft.Design" CheckId="CA1044">
     <Resolution Name="Default">Add a property getter to '{0}'.</Resolution>
    </Rule>
@@ -991,6 +1112,9 @@
    </Rule>
    <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
     <Resolution Name="Default">{0} makes a call to {1} that does not explicitly provide an IFormatProvider. This should be replaced with a call to {2}.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300">
+    <Resolution Name="Default">Change {0} to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Resolution>
    </Rule>
    <Rule TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001">
     <Resolution Name="Default">Implement IDisposable on '{0}' as it instantiates members of the following IDisposable types: {1}</Resolution>

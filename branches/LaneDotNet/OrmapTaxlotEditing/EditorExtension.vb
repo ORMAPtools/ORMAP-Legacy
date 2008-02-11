@@ -1,17 +1,36 @@
-
 #Region "Copyright 2008 ORMAP Tech Group"
 
-' File: EditorExtension.vb
-
-' Author: .NET Migration Team (Shad Campbell, James Moore, Nick Seigal)
-' Created: January 8, 2008
-
-' All rights reserved. Reproduction or transmission of this file, or a portion thereof,
-' is forbidden without prior written permission of the ORMAP Tech Group.
+' File:  EditorExtension.vb
+'
+' Original Author:  OPET.NET Migration Team (Shad Campbell, James Moore, 
+'                   Nick Seigal)
+'
+' Date Created:  January 8, 2008
+'
+' Copyright Holder:  ORMAP Tech Group  
+' Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at 
+' opet-developers@lists.sourceforge.net
+'
+' This file is part of the ORMAP Taxlot Editing Toolbar.
+'
+' ORMAP Taxlot Editing Toolbar is free software; you can redistribute it and/or
+' modify it under the terms of the GNU General Public License as published by 
+' the Free Software Foundation; either version 3 of the License, or (at your 
+' option) any later version.
+'
+' This program is distributed in the hope that it will be useful, but WITHOUT 
+' ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+' FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License located
+' in the COPYING.txt file for more details.
+'
+' You should have received a copy of the GNU General Public License along
+' with the ORMAP Taxlot Editing Toolbar; if not, write to the Free Software 
+' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #End Region
 
 Imports System
+Imports System.Windows.Forms
 Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Editor
@@ -28,80 +47,10 @@ Public NotInheritable Class EditorExtension
     Implements ESRI.ArcGIS.esriSystem.IPersistVariant
 
 #Region "Class-Level Constants And Enumerations"
-
+    ' None
 #End Region
 
 #Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
-
-#End Region
-
-#Region "Custom Class Members"
-
-#End Region
-
-#Region "Inherited Class Members"
-
-#End Region
-
-#Region "Implemented Interface Members"
-
-#End Region
-
-#Region "Other Members"
-
-#End Region
-
-
-#Region "COM GUIDs"
-    ' These  GUIDs provide the COM identity for this class 
-    ' and its COM interfaces. If you change them, existing 
-    ' clients will no longer be able to access the class.
-    Public Const ClassId As String = "3ffddc1a-bf54-45b4-a9dc-88740d97bcc2"
-    Public Const InterfaceId As String = "cf8fd284-b76e-4012-a738-bce6e0cbbff4"
-    Public Const EventsId As String = "e5719155-369f-4b3e-9e5e-99856449f05b"
-#End Region
-
-#Region "COM Registration Function(s)"
-    <ComRegisterFunction(), ComVisibleAttribute(False)> _
-    Public Shared Sub RegisterFunction(ByVal registerType As Type)
-        ' Required for ArcGIS Component Category Registrar support
-        ArcGISCategoryRegistration(registerType)
-
-        'Add any COM registration code after the ArcGISCategoryRegistration() call
-
-    End Sub
-
-    <ComUnregisterFunction(), ComVisibleAttribute(False)> _
-    Public Shared Sub UnregisterFunction(ByVal registerType As Type)
-        ' Required for ArcGIS Component Category Registrar support
-        ArcGISCategoryUnregistration(registerType)
-
-        'Add any COM unregistration code after the ArcGISCategoryUnregistration() call
-
-    End Sub
-
-#Region "ArcGIS Component Category Registrar generated code"
-    ''' <summary>
-    ''' Required method for ArcGIS Component Category registration -
-    ''' Do not modify the contents of this method with the code editor.
-    ''' </summary>
-    Private Shared Sub ArcGISCategoryRegistration(ByVal registerType As Type)
-        Dim regKey As String = String.Format("HKEY_CLASSES_ROOT\CLSID\{{{0}}}", registerType.GUID)
-        EditorExtensions.Register(regKey)
-
-    End Sub
-    ''' <summary>
-    ''' Required method for ArcGIS Component Category unregistration -
-    ''' Do not modify the contents of this method with the code editor.
-    ''' </summary>
-    Private Shared Sub ArcGISCategoryUnregistration(ByVal registerType As Type)
-        Dim regKey As String = String.Format("HKEY_CLASSES_ROOT\CLSID\{{{0}}}", registerType.GUID)
-        EditorExtensions.Unregister(regKey)
-
-    End Sub
-
-#End Region
-#End Region
 
 #Region "Constructors"
 
@@ -114,7 +63,11 @@ Public NotInheritable Class EditorExtension
 
 #End Region
 
-#Region "Friend Properties"
+#End Region
+
+#Region "Custom Class Members"
+
+#Region "Properties"
 
     Private Shared _editor As IEditor
 
@@ -141,6 +94,57 @@ Public NotInheritable Class EditorExtension
         ' TODO: Add validation code?
         _editEvents = value
     End Sub
+
+    Friend Shared ReadOnly Property TableNamesSettings() As TableNamesSettings
+        Get
+            Return New TableNamesSettings
+        End Get
+    End Property
+    Friend Shared ReadOnly Property AnnoTableNamesSettings() As AnnoTableNamesSettings
+        Get
+            Return New AnnoTableNamesSettings
+        End Get
+    End Property
+    Friend Shared ReadOnly Property AllTablesSettings() As AllTablesSettings
+        Get
+            Return New AllTablesSettings
+        End Get
+    End Property
+    Friend Shared ReadOnly Property MapIndexSettings() As MapIndexSettings
+        Get
+            Return New MapIndexSettings
+        End Get
+    End Property
+    Friend Shared ReadOnly Property TaxLotSettings() As TaxLotSettings
+        Get
+            Return New TaxLotSettings
+        End Get
+    End Property
+    Friend Shared ReadOnly Property TaxLotLinesSettings() As TaxLotLinesSettings
+        Get
+            Return New TaxLotLinesSettings
+        End Get
+    End Property
+    Friend Shared ReadOnly Property CartographicLinesSettings() As CartographicLinesSettings
+        Get
+            Return New CartographicLinesSettings
+        End Get
+    End Property
+    Friend Shared ReadOnly Property TaxlotAcreageAnnoSettings() As TaxlotAcreageAnnoSettings
+        Get
+            Return New TaxlotAcreageAnnoSettings
+        End Get
+    End Property
+    Friend Shared ReadOnly Property TaxlotNumberAnnoSettings() As TaxlotNumberAnnoSettings
+        Get
+            Return New TaxlotNumberAnnoSettings
+        End Get
+    End Property
+    Friend Shared ReadOnly Property DefaultValuesSettings() As DefaultValuesSettings
+        Get
+            Return New DefaultValuesSettings
+        End Get
+    End Property
 
     Private Shared _hasValidLicense As Boolean '= False
 
@@ -199,6 +203,79 @@ Public NotInheritable Class EditorExtension
 
 #End Region
 
+#Region "Editor Event Handlers"
+
+    Private Sub EditEvents_OnChangeFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject)
+        ' TODO: Connect to field AutoUpdate, etc. (see VB6 code)
+    End Sub
+
+    Private Sub EditEvents_OnCreateFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject)
+        ' TODO: Connect to field AutoUpdate, etc. (see VB6 code)
+    End Sub
+
+    Private Sub EditEvents_OnStartEditing()
+        ' Test for valid workspace and license
+        If EditorExtension.Editor.EditWorkspace.Type = esriWorkspaceType.esriFileSystemWorkspace Then
+            IsValidWorkspace = False
+        Else
+            IsValidWorkspace = True
+            ' Subscribe to editor events.
+            AddHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
+            AddHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
+
+            ' Set up document keyboard accelerators for extension commands.
+            CreateAccelerators()
+        End If
+        _hasValidLicense = (ValidateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
+                ValidateLicense(esriLicenseProductCode.esriLicenseProductCodeArcInfo))
+    End Sub
+
+    Private Sub EditEvents_OnStopEditing(ByVal save As Boolean)
+        ' Unsubscribe to editor events.
+        RemoveHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
+        RemoveHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
+    End Sub
+
+#End Region
+
+#Region "Methods"
+
+    ' TODO: Test (not sure this how this will work with editor extension)
+    Private Shared Sub SetAccelerator(ByRef acceleratorTable As IAcceleratorTable, _
+            ByVal classID As UID, ByVal key As Integer, _
+            ByVal usesCtrl As Boolean, ByVal usesAlt As Boolean, _
+            ByVal usesShift As Boolean)
+        ' Create accelerator only if nothing else is using it
+
+        Dim accelerator As IAccelerator
+
+        accelerator = acceleratorTable.FindByKey(key, usesCtrl, usesAlt, usesShift)
+        If accelerator Is Nothing Then
+            'The clsid of one of the commands in the ext
+            acceleratorTable.Add(classID, key, usesCtrl, usesAlt, usesShift)
+        End If
+
+    End Sub
+
+    Private Shared Function ValidateLicense(ByVal requiredProductCode As esriLicenseProductCode) As Boolean
+        ' Validate the license (e.g. ArcEditor or ArcInfo).
+
+        Dim aoInitTestProduct As New AoInitializeClass()
+        Dim productCode As esriLicenseProductCode = aoInitTestProduct.InitializedProduct()
+
+        Return (productCode = requiredProductCode)
+    End Function
+
+#End Region
+
+#End Region
+
+#Region "Inherited Class Members"
+    'None
+#End Region
+
+#Region "Implemented Interface Members"
+
 #Region "IExtension Interface Implementations"
 
     Public ReadOnly Property Name() As String Implements ESRI.ArcGIS.esriSystem.IExtension.Name
@@ -214,10 +291,10 @@ Public NotInheritable Class EditorExtension
 
     Public Sub Startup(ByRef initializationData As Object) Implements ESRI.ArcGIS.esriSystem.IExtension.Startup
         If Not initializationData Is Nothing AndAlso TypeOf initializationData Is IEditor Then
-            SetEditor(CType(initializationData, IEditor))
+            SetEditor(DirectCast(initializationData, IEditor))
 
             ' Subscribe to editor events.
-            SetEditEvents(CType(EditorExtension.Editor, IEditEvents_Event))
+            SetEditEvents(DirectCast(EditorExtension.Editor, IEditEvents_Event))
             AddHandler _editEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
             AddHandler _editEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
         End If
@@ -239,7 +316,7 @@ Public NotInheritable Class EditorExtension
         Dim acceleratorTable As IAcceleratorTable = doc.Accelerators
 
         ' Set LocateFeature accelerator keys to Ctrl + Alt + L
-        key = Convert.ToInt32(System.Windows.Forms.Keys.L)
+        key = Convert.ToInt32(Keys.L)
         usesCtrl = True
         usesAlt = True
         usesShift = False
@@ -247,7 +324,7 @@ Public NotInheritable Class EditorExtension
         SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
         ' Set TaxlotAssignment accelerator keys to Ctrl + Alt + T
-        key = Convert.ToInt32(System.Windows.Forms.Keys.T)
+        key = Convert.ToInt32(Keys.T)
         usesCtrl = True
         usesAlt = True
         usesShift = False
@@ -255,7 +332,7 @@ Public NotInheritable Class EditorExtension
         SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
         ' Set EditMapIndex accelerator keys to Ctrl + Alt + E
-        key = Convert.ToInt32(System.Windows.Forms.Keys.E)
+        key = Convert.ToInt32(Keys.E)
         usesCtrl = True
         usesAlt = True
         usesShift = False
@@ -263,7 +340,7 @@ Public NotInheritable Class EditorExtension
         SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
         ' Set CombineTaxlots accelerator keys to Ctrl + Alt + C
-        key = Convert.ToInt32(System.Windows.Forms.Keys.C)
+        key = Convert.ToInt32(Keys.C)
         usesCtrl = True
         usesAlt = True
         usesShift = False
@@ -271,7 +348,7 @@ Public NotInheritable Class EditorExtension
         SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
         ' Set AddArrows accelerator keys to Ctrl + Alt + A
-        key = Convert.ToInt32(System.Windows.Forms.Keys.A)
+        key = Convert.ToInt32(Keys.A)
         usesCtrl = True
         usesAlt = True
         usesShift = False
@@ -318,68 +395,60 @@ Public NotInheritable Class EditorExtension
 
 #End Region
 
-#Region "Editor Event Handlers"
+#End Region
 
-    Private Sub EditEvents_OnChangeFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject)
-        ' TODO: Connect to field AutoUpdate, etc. (see VB6 code)
+#Region "Other Members"
+
+#Region "COM GUIDs"
+    ' These  GUIDs provide the COM identity for this class 
+    ' and its COM interfaces. If you change them, existing 
+    ' clients will no longer be able to access the class.
+    Public Const ClassId As String = "3ffddc1a-bf54-45b4-a9dc-88740d97bcc2"
+    Public Const InterfaceId As String = "cf8fd284-b76e-4012-a738-bce6e0cbbff4"
+    Public Const EventsId As String = "e5719155-369f-4b3e-9e5e-99856449f05b"
+#End Region
+
+#Region "COM Registration Function(s)"
+    <ComRegisterFunction(), ComVisibleAttribute(False)> _
+    Public Shared Sub RegisterFunction(ByVal registerType As Type)
+        ' Required for ArcGIS Component Category Registrar support
+        ArcGISCategoryRegistration(registerType)
+
+        'Add any COM registration code after the ArcGISCategoryRegistration() call
+
     End Sub
 
-    Private Sub EditEvents_OnCreateFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject)
-        ' TODO: Connect to field AutoUpdate, etc. (see VB6 code)
+    <ComUnregisterFunction(), ComVisibleAttribute(False)> _
+    Public Shared Sub UnregisterFunction(ByVal registerType As Type)
+        ' Required for ArcGIS Component Category Registrar support
+        ArcGISCategoryUnregistration(registerType)
+
+        'Add any COM unregistration code after the ArcGISCategoryUnregistration() call
+
     End Sub
 
-    Private Sub EditEvents_OnStartEditing()
-        ' Test for valid workspace and license
-        If EditorExtension.Editor.EditWorkspace.Type = esriWorkspaceType.esriFileSystemWorkspace Then
-            IsValidWorkspace = False
-        Else
-            IsValidWorkspace = True
-            ' Subscribe to editor events.
-            AddHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
-            AddHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
+#Region "ArcGIS Component Category Registrar generated code"
+    ''' <summary>
+    ''' Required method for ArcGIS Component Category registration -
+    ''' Do not modify the contents of this method with the code editor.
+    ''' </summary>
+    Private Shared Sub ArcGISCategoryRegistration(ByVal registerType As Type)
+        Dim regKey As String = String.Format("HKEY_CLASSES_ROOT\CLSID\{{{0}}}", registerType.GUID)
+        EditorExtensions.Register(regKey)
 
-            ' Set up document keyboard accelerators for extension commands.
-            CreateAccelerators()
-        End If
-        _hasValidLicense = (ValidateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
-                ValidateLicense(esriLicenseProductCode.esriLicenseProductCodeArcInfo))
     End Sub
+    ''' <summary>
+    ''' Required method for ArcGIS Component Category unregistration -
+    ''' Do not modify the contents of this method with the code editor.
+    ''' </summary>
+    Private Shared Sub ArcGISCategoryUnregistration(ByVal registerType As Type)
+        Dim regKey As String = String.Format("HKEY_CLASSES_ROOT\CLSID\{{{0}}}", registerType.GUID)
+        EditorExtensions.Unregister(regKey)
 
-    Private Sub EditEvents_OnStopEditing(ByVal save As Boolean)
-        ' Unsubscribe to editor events.
-        RemoveHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
-        RemoveHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
     End Sub
 
 #End Region
-
-#Region "Private Methods"
-
-    ' TODO: Test (not sure this how this will work with editor extension)
-    Private Shared Sub SetAccelerator(ByRef acceleratorTable As IAcceleratorTable, _
-            ByVal classID As UID, ByVal key As Integer, _
-            ByVal usesCtrl As Boolean, ByVal usesAlt As Boolean, _
-            ByVal usesShift As Boolean)
-        ' Create accelerator only if nothing else is using it
-
-        Dim accelerator As IAccelerator
-
-        accelerator = acceleratorTable.FindByKey(key, usesCtrl, usesAlt, usesShift)
-        If accelerator Is Nothing Then
-            'The clsid of one of the commands in the ext
-            acceleratorTable.Add(classID, key, usesCtrl, usesAlt, usesShift)
-        End If
-
-    End Sub
-
-    Private Shared Function ValidateLicense(ByVal requiredProductCode As esriLicenseProductCode) As Boolean
-        ' Validate the license (e.g. ArcEditor or ArcInfo).
-
-        Dim aoInitTestProduct As New AoInitializeClass()
-        Dim productCode As esriLicenseProductCode = aoInitTestProduct.InitializedProduct()
-
-        Return (productCode = requiredProductCode)
-    End Function
+#End Region
 
 #End Region
 

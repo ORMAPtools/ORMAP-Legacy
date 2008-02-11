@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
   <Font Name="Tahoma" Size="8.25" />
-  <Comment CommentText="Copyright 2008 ORMAP Tech Group&#xD;&#xA;&#xD;&#xA;File: ClassDiagram.cd&#xD;&#xA;&#xD;&#xA;Author: .NET Migration Team (Shad Campbell, James Moore, Nick Seigal)&#xD;&#xA;Created: February 1, 2008&#xD;&#xA;&#xD;&#xA;All rights reserved. Reproduction or transmission of this file, or a portion thereof,&#xD;&#xA;is forbidden without prior written permission of the ORMAP Tech Group.">
-    <Position X="0.5" Y="8.844" Height="1.385" Width="4.419" />
+  <Comment CommentText="Copyright 2008 ORMAP Tech Group&#xD;&#xA;&#xD;&#xA;File:  EditorExtension.vb&#xD;&#xA;&#xD;&#xA;Original Author:  OPET.NET Migration Team (Shad Campbell, James Moore, Nick &#xD;&#xA;Seigal)&#xD;&#xA;&#xD;&#xA;Date Created:  January 8, 2008&#xD;&#xA;&#xD;&#xA;Copyright Holder:  ORMAP Tech Group  &#xD;&#xA;Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at &#xD;&#xA;opet-developers@lists.sourceforge.net&#xD;&#xA;&#xD;&#xA;This file is part of the ORMAP Taxlot Editing Toolbar.&#xD;&#xA;&#xD;&#xA;ORMAP Taxlot Editing Toolbar is free software; you can redistribute it and/or &#xD;&#xA;modify it under the terms of the GNU General Public License as published by the &#xD;&#xA;Free Software Foundation; either version 3 of the License, or (at your option) &#xD;&#xA;any later version.&#xD;&#xA;&#xD;&#xA;This program is distributed in the hope that it will be useful, but WITHOUT ANY &#xD;&#xA;WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS&#xD;&#xA;FOR A PARTICULAR PURPOSE.  See the GNU General Public License located in the&#xD;&#xA;COPYING.txt file for more details.&#xD;&#xA;&#xD;&#xA;You should have received a copy of the GNU General Public License along with the&#xD;&#xA;ORMAP Taxlot Editing Toolbar; if not, write to the Free Software Foundation, Inc.,&#xD;&#xA;51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.">
+    <Position X="14.595" Y="7.913" Height="1.812" Width="4.419" />
   </Comment>
   <Class Name="OrmapTaxlotEditing.AddArrows">
     <Position X="8.25" Y="0.75" Width="1.5" />
@@ -56,7 +56,7 @@
     <Position X="0.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>EditorExtension.vb</FileName>
-      <HashCode>gAAAhIDgAABCgAACUATECQUAggAAIAAAICAgCABABAA=</HashCode>
+      <HashCode>gAQQkKlgADhCgAASQATASQSAhgAAIAJEACAgAAJABAA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -87,14 +87,14 @@
     <Position X="6.25" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>PropertiesForm.vb</FileName>
-      <HashCode>AgAAABAAADAAAAAgAgCAAAACAAABAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AgAAABBAADAAAAAgAgCAAAACAAABAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="OrmapTaxlotEditing.PropertyPage" BaseTypeListCollapsed="true">
     <Position X="4.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>PropertyPage.vb</FileName>
-      <HashCode>BACGAAQgRBBAAEBEGQDAAMAQgAAEAAAAASAgAARAAQA=</HashCode>
+      <HashCode>BACGAAQgRBBAAFBEGQDAAMAQgAAEAAAEASAgAARAASA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -118,5 +118,22 @@
     <Position X="17.5" Y="0.75" Width="1.5" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="OrmapTaxlotEditing.OrmapSettings">
+    <Position X="8.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OrmapSettings.vb</FileName>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OrmapTaxlotEditing.OrmapSettingsForm">
+    <Position X="10" Y="6" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>OrmapSettingsForm.vb</FileName>
+      <HashCode>ziIJa2E6MCQMMVgqACGdT4A2E0EeQWjrDWIgwAPBCSE=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Internal" Collapsed="true" />
+    </Compartments>
   </Class>
 </ClassDiagram>

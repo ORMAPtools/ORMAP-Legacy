@@ -1,23 +1,43 @@
 #Region "Copyright 2008 ORMAP Tech Group"
 
-' File: PropertyPage.vb
-
-' Author: .NET Migration Team (Shad Campbell, James Moore, Nick Seigal)
-' Created: January 8, 2008
-
-' All rights reserved. Reproduction or transmission of this file, or a portion thereof,
-' is forbidden without prior written permission of the ORMAP Tech Group.
+' File:  PropertyPage.vb
+'
+' Original Author:  OPET.NET Migration Team (Shad Campbell, James Moore, 
+'                   Nick Seigal)
+'
+' Date Created:  January 8, 2008
+'
+' Copyright Holder:  ORMAP Tech Group  
+' Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at 
+' opet-developers@lists.sourceforge.net
+'
+' This file is part of the ORMAP Taxlot Editing Toolbar.
+'
+' ORMAP Taxlot Editing Toolbar is free software; you can redistribute it and/or
+' modify it under the terms of the GNU General Public License as published by 
+' the Free Software Foundation; either version 3 of the License, or (at your 
+' option) any later version.
+'
+' This program is distributed in the hope that it will be useful, but WITHOUT 
+' ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+' FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License located
+' in the COPYING.txt file for more details.
+'
+' You should have received a copy of the GNU General Public License along
+' with the ORMAP Taxlot Editing Toolbar; if not, write to the Free Software 
+' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #End Region
 
 Imports System
 Imports System.Runtime.InteropServices
-Imports ESRI.ArcGIS.Framework
-Imports ESRI.ArcGIS.Editor
-Imports ESRI.ArcGIS.Geodatabase
-Imports ESRI.ArcGIS.esriSystem
+Imports System.Windows.Forms
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
+Imports ESRI.ArcGIS.Editor
+Imports ESRI.ArcGIS.esriSystem
+Imports ESRI.ArcGIS.Framework
+Imports ESRI.ArcGIS.Geodatabase
 
 <ComVisible(True)> _
 <ComClass(PropertyPage.ClassId, PropertyPage.InterfaceId, PropertyPage.EventsId), _
@@ -25,58 +45,11 @@ ProgId("ORMAPTaxlotEditing.PropertyPage")> _
 Public NotInheritable Class PropertyPage
     Implements IComPropertyPage
 
-#Region "COM GUIDs"
-    ' These  GUIDs provide the COM identity for this class 
-    ' and its COM interfaces. If you change them, existing 
-    ' clients will no longer be able to access the class.
-    Public Const ClassId As String = "050c23da-ebd8-4a1d-871b-b7a9354d331b"
-    Public Const InterfaceId As String = "bae36023-8a03-43b6-bea6-fab534ff7c5e"
-    Public Const EventsId As String = "8ab94224-407b-4139-a003-48f5789bf3b3"
+#Region "Class-Level Constants And Enumerations"
+    ' None
 #End Region
 
-#Region "COM Registration Function(s)"
-    <ComRegisterFunction(), ComVisible(False)> _
-    Private Shared Sub RegisterFunction(ByVal registerType As Type)
-        ' Required for ArcGIS Component Category Registrar support
-        ArcGISCategoryRegistration(registerType)
-
-        '
-        ' TODO: Add any COM registration code here
-        '
-    End Sub
-
-    <ComUnregisterFunction(), ComVisible(False)> _
-    Private Shared Sub UnregisterFunction(ByVal registerType As Type)
-        ' Required for ArcGIS Component Category Registrar support
-        ArcGISCategoryUnregistration(registerType)
-
-        '
-        ' TODO: Add any COM unregistration code here
-        '
-    End Sub
-
-#Region "ArcGIS Component Category Registrar generated code"
-    ''' <summary>
-    ''' Required method for ArcGIS Component Category registration -
-    ''' Do not modify the contents of this method with the code editor.
-    ''' </summary>
-    Private Shared Sub ArcGISCategoryRegistration(ByVal registerType As Type)
-        Dim regKey As String = String.Format("HKEY_CLASSES_ROOT\CLSID\{{{0}}}", registerType.GUID)
-        EditorPropertyPages.Register(regKey)
-
-    End Sub
-    ''' <summary>
-    ''' Required method for ArcGIS Component Category unregistration -
-    ''' Do not modify the contents of this method with the code editor.
-    ''' </summary>
-    Private Shared Sub ArcGISCategoryUnregistration(ByVal registerType As Type)
-        Dim regKey As String = String.Format("HKEY_CLASSES_ROOT\CLSID\{{{0}}}", registerType.GUID)
-        EditorPropertyPages.Unregister(regKey)
-
-    End Sub
-
-#End Region
-#End Region
+#Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
 
 #Region "Constructors"
 
@@ -89,10 +62,18 @@ Public NotInheritable Class PropertyPage
 
 #End Region
 
-#Region "Friend Properties"
+#End Region
+
+#Region "Custom Class Members"
+
+#Region "Fields"
+    ' None
+#End Region
+
+#Region "Properties"
 
     Private _pageDirty As Boolean '= False
-    
+
     Friend ReadOnly Property PageDirty() As Boolean
         Get
             Return _pageDirty
@@ -117,7 +98,7 @@ Public NotInheritable Class PropertyPage
         _propertiesPageSite = value
     End Sub
 
-    Private WithEvents _propertiesForm As PropertiesForm
+    Private WithEvents _propertiesForm As PropertiesForm  ' TODO: Is WithEvents needed here?
 
     Friend ReadOnly Property PropertiesForm() As PropertiesForm
         Get
@@ -131,6 +112,66 @@ Public NotInheritable Class PropertyPage
     End Sub
 
 #End Region
+
+#Region "Event Handlers"
+
+    Private Sub uxEnableTools_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
+
+        PropertiesForm.uxEnableAutoUpdate.Enabled = PropertiesForm.uxEnableTools.Checked
+        PropertiesForm.uxMinimumFieldsOption.Enabled = PropertiesForm.uxEnableTools.Checked
+        PropertiesForm.uxAllFieldsOption.Enabled = PropertiesForm.uxEnableTools.Checked
+
+        ' Set dirty flag.
+        SetPageDirty(True)
+
+        If Not PropertiesPageSite Is Nothing Then
+            PropertiesPageSite.PageChanged()
+        End If
+
+    End Sub
+
+    Private Sub uxEnableAutoUpdate_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
+
+        PropertiesForm.uxMinimumFieldsOption.Enabled = PropertiesForm.uxEnableAutoUpdate.Checked
+        PropertiesForm.uxAllFieldsOption.Enabled = PropertiesForm.uxEnableAutoUpdate.Checked
+
+        ' Set dirty flag.
+        SetPageDirty(True)
+
+        If Not PropertiesPageSite Is Nothing Then
+            PropertiesPageSite.PageChanged()
+        End If
+
+    End Sub
+
+    Private Sub uxSettings_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+        Dim settingsForm As New OrmapSettingsForm
+        settingsForm.ShowDialog(DirectCast(sender, Control).FindForm)
+
+    End Sub
+
+#End Region
+
+#Region "Methods"
+    ' None
+#End Region
+
+#End Region
+
+#Region "Inherited Class Members"
+
+#Region "Properties"
+    ' None
+#End Region
+
+#Region "Methods"
+    ' None
+#End Region
+
+#End Region
+
+#Region "Implemented Interface Members"
 
 #Region "IComPropertyPage Implementations"
 
@@ -260,6 +301,7 @@ Public NotInheritable Class PropertyPage
         ' Wire up form events.
         AddHandler PropertiesForm.uxEnableTools.CheckedChanged, AddressOf uxEnableTools_CheckedChanged
         AddHandler PropertiesForm.uxEnableAutoUpdate.CheckedChanged, AddressOf uxEnableAutoUpdate_CheckedChanged
+        AddHandler PropertiesForm.uxSettings.Click, AddressOf uxSettings_Click
 
     End Sub
 
@@ -269,36 +311,62 @@ Public NotInheritable Class PropertyPage
 
 #End Region
 
-#Region "Private Methods"
+#End Region
 
-    Private Sub uxEnableTools_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
+#Region "Other Members"
 
-        PropertiesForm.uxEnableAutoUpdate.Enabled = PropertiesForm.uxEnableTools.Checked
-        PropertiesForm.uxMinimumFieldsOption.Enabled = PropertiesForm.uxEnableTools.Checked
-        PropertiesForm.uxAllFieldsOption.Enabled = PropertiesForm.uxEnableTools.Checked
+#Region "COM GUIDs"
+    ' These  GUIDs provide the COM identity for this class 
+    ' and its COM interfaces. If you change them, existing 
+    ' clients will no longer be able to access the class.
+    Public Const ClassId As String = "050c23da-ebd8-4a1d-871b-b7a9354d331b"
+    Public Const InterfaceId As String = "bae36023-8a03-43b6-bea6-fab534ff7c5e"
+    Public Const EventsId As String = "8ab94224-407b-4139-a003-48f5789bf3b3"
+#End Region
 
-        ' Set dirty flag.
-        SetPageDirty(True)
+#Region "COM Registration Function(s)"
+    <ComRegisterFunction(), ComVisible(False)> _
+    Private Shared Sub RegisterFunction(ByVal registerType As Type)
+        ' Required for ArcGIS Component Category Registrar support
+        ArcGISCategoryRegistration(registerType)
 
-        If Not PropertiesPageSite Is Nothing Then
-            PropertiesPageSite.PageChanged()
-        End If
+        '
+        ' TODO: Add any COM registration code here
+        '
+    End Sub
+
+    <ComUnregisterFunction(), ComVisible(False)> _
+    Private Shared Sub UnregisterFunction(ByVal registerType As Type)
+        ' Required for ArcGIS Component Category Registrar support
+        ArcGISCategoryUnregistration(registerType)
+
+        '
+        ' TODO: Add any COM unregistration code here
+        '
+    End Sub
+
+#Region "ArcGIS Component Category Registrar generated code"
+    ''' <summary>
+    ''' Required method for ArcGIS Component Category registration -
+    ''' Do not modify the contents of this method with the code editor.
+    ''' </summary>
+    Private Shared Sub ArcGISCategoryRegistration(ByVal registerType As Type)
+        Dim regKey As String = String.Format("HKEY_CLASSES_ROOT\CLSID\{{{0}}}", registerType.GUID)
+        EditorPropertyPages.Register(regKey)
+
+    End Sub
+    ''' <summary>
+    ''' Required method for ArcGIS Component Category unregistration -
+    ''' Do not modify the contents of this method with the code editor.
+    ''' </summary>
+    Private Shared Sub ArcGISCategoryUnregistration(ByVal registerType As Type)
+        Dim regKey As String = String.Format("HKEY_CLASSES_ROOT\CLSID\{{{0}}}", registerType.GUID)
+        EditorPropertyPages.Unregister(regKey)
 
     End Sub
 
-    Private Sub uxEnableAutoUpdate_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
-
-        PropertiesForm.uxMinimumFieldsOption.Enabled = PropertiesForm.uxEnableAutoUpdate.Checked
-        PropertiesForm.uxAllFieldsOption.Enabled = PropertiesForm.uxEnableAutoUpdate.Checked
-
-        ' Set dirty flag.
-        SetPageDirty(True)
-
-        If Not PropertiesPageSite Is Nothing Then
-            PropertiesPageSite.PageChanged()
-        End If
-        
-    End Sub
+#End Region
+#End Region
 
 #End Region
 

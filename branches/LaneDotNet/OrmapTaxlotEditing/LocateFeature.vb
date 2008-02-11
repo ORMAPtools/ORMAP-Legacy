@@ -1,12 +1,31 @@
 #Region "Copyright 2008 ORMAP Tech Group"
 
-' File: LocateFeature.vb
-
-' Author: .NET Migration Team (Shad Campbell, James Moore, Nick Seigal)
-' Created: January 8, 2008
-
-' All rights reserved. Reproduction or transmission of this file, or a portion thereof,
-' is forbidden without prior written permission of the ORMAP Tech Group.
+' File:  LocateFeature.vb
+'
+' Original Author:  OPET.NET Migration Team (Shad Campbell, James Moore, 
+'                   Nick Seigal)
+'
+' Date Created:  January 8, 2008
+'
+' Copyright Holder:  ORMAP Tech Group  
+' Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at 
+' opet-developers@lists.sourceforge.net
+'
+' This file is part of the ORMAP Taxlot Editing Toolbar.
+'
+' ORMAP Taxlot Editing Toolbar is free software; you can redistribute it and/or
+' modify it under the terms of the GNU General Public License as published by 
+' the Free Software Foundation; either version 3 of the License, or (at your 
+' option) any later version.
+'
+' This program is distributed in the hope that it will be useful, but WITHOUT 
+' ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+' FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License located
+' in the COPYING.txt file for more details.
+'
+' You should have received a copy of the GNU General Public License along
+' with the ORMAP Taxlot Editing Toolbar; if not, write to the Free Software 
+' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #End Region
 
@@ -24,6 +43,113 @@ Imports ESRI.ArcGIS.Framework
 ProgId("ORMAPTaxlotEditing.LocateFeature")> _
 Public NotInheritable Class LocateFeature
     Inherits BaseCommand
+
+#Region "Class-Level Constants And Enumerations"
+    ' None
+#End Region
+
+#Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
+
+#Region "Constructors"
+
+    ' A creatable COM class must have a Public Sub New() 
+    ' with no parameters, otherwise, the class will not be 
+    ' registered in the COM registry and cannot be created 
+    ' via CreateObject.
+    Public Sub New()
+        MyBase.New()
+
+        ' Define protected instance field values for the public properties
+        MyBase.m_category = "OrmapToolbar"  'localizable text 
+        MyBase.m_caption = "LocateFeature"   'localizable text 
+        MyBase.m_message = "Locate a Taxlot or Mapindex"   'localizable text 
+        MyBase.m_toolTip = "Locate Taxlot or Mapindex" 'localizable text 
+        MyBase.m_name = MyBase.m_category & "_LocateFeature"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
+
+        Try
+            ' Set the bitmap based on the name of the class.
+            Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
+            MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
+        Catch ex As ArgumentException
+            System.Diagnostics.Trace.WriteLine(ex.Message, "Invalid Bitmap")
+        End Try
+
+    End Sub
+
+#End Region
+
+#End Region
+
+#Region "Custom Class Members"
+
+#Region "Fields"
+
+    Private _application As IApplication
+
+#End Region
+
+#Region "Properties"
+    ' None
+#End Region
+
+#Region "Event Handlers"
+    ' None
+#End Region
+
+#Region "Methods"
+    ' None
+#End Region
+
+#End Region
+
+#Region "Inherited Class Members"
+
+#Region "Properties"
+
+    Public Overrides ReadOnly Property Enabled() As Boolean
+        Get
+            Return MyBase.Enabled AndAlso _
+                EditorExtension.Editor IsNot Nothing AndAlso _
+                EditorExtension.Editor.EditState = esriEditState.esriStateEditing AndAlso _
+                EditorExtension.IsValidWorkspace AndAlso _
+                EditorExtension.HasValidLicense AndAlso _
+                EditorExtension.CanEditTaxlots
+        End Get
+    End Property
+
+#End Region
+
+#Region "Methods"
+
+    Public Overrides Sub OnCreate(ByVal hook As Object)
+        If Not hook Is Nothing Then
+            _application = DirectCast(hook, IApplication)
+
+            'Disable if it is not ArcMap
+            If TypeOf hook Is IMxApplication Then
+                MyBase.m_enabled = True
+            Else
+                MyBase.m_enabled = False
+            End If
+        End If
+
+        ' TODO: Add other initialization code
+    End Sub
+
+    Public Overrides Sub OnClick()
+        'TODO: Add LocateFeature.OnClick implementation
+        System.Windows.Forms.MessageBox.Show("Add LocateFeature.OnClick implementation")
+    End Sub
+
+#End Region
+
+#End Region
+
+#Region "Implemented Interface Members"
+    ' None
+#End Region
+
+#Region "Other Members"
 
 #Region "COM GUIDs"
     ' These  GUIDs provide the COM identity for this class 
@@ -76,73 +202,6 @@ Public NotInheritable Class LocateFeature
 
 #End Region
 #End Region
-
-#Region "Private Fields"
-
-    Private _application As IApplication
-
-#End Region
-
-#Region "Constructors"
-
-    ' A creatable COM class must have a Public Sub New() 
-    ' with no parameters, otherwise, the class will not be 
-    ' registered in the COM registry and cannot be created 
-    ' via CreateObject.
-    Public Sub New()
-        MyBase.New()
-
-        ' Define protected instance field values for the public properties
-        MyBase.m_category = "OrmapToolbar"  'localizable text 
-        MyBase.m_caption = "LocateFeature"   'localizable text 
-        MyBase.m_message = "Locate a Taxlot or Mapindex"   'localizable text 
-        MyBase.m_toolTip = "Locate Taxlot or Mapindex" 'localizable text 
-        MyBase.m_name = MyBase.m_category & "_LocateFeature"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
-
-        Try
-            ' Set the bitmap based on the name of the class.
-            Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
-            MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
-        Catch ex As ArgumentException
-            System.Diagnostics.Trace.WriteLine(ex.Message, "Invalid Bitmap")
-        End Try
-
-    End Sub
-
-#End Region
-
-#Region "Inherited Properties and Methods"
-
-    Public Overrides ReadOnly Property Enabled() As Boolean
-        Get
-            Return MyBase.Enabled AndAlso _
-                EditorExtension.Editor IsNot Nothing AndAlso _
-                EditorExtension.Editor.EditState = esriEditState.esriStateEditing AndAlso _
-                EditorExtension.IsValidWorkspace AndAlso _
-                EditorExtension.HasValidLicense AndAlso _
-                EditorExtension.CanEditTaxlots
-        End Get
-    End Property
-
-    Public Overrides Sub OnCreate(ByVal hook As Object)
-        If Not hook Is Nothing Then
-            _application = CType(hook, IApplication)
-
-            'Disable if it is not ArcMap
-            If TypeOf hook Is IMxApplication Then
-                MyBase.m_enabled = True
-            Else
-                MyBase.m_enabled = False
-            End If
-        End If
-
-        ' TODO: Add other initialization code
-    End Sub
-
-    Public Overrides Sub OnClick()
-        'TODO: Add LocateFeature.OnClick implementation
-        System.Windows.Forms.MessageBox.Show("Add LocateFeature.OnClick implementation")
-    End Sub
 
 #End Region
 

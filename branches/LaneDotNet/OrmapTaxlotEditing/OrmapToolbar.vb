@@ -1,12 +1,31 @@
 #Region "Copyright 2008 ORMAP Tech Group"
 
-' File: OrmapToolbar.vb
-
-' Author: .NET Migration Team (Shad Campbell, James Moore, Nick Seigal)
-' Created: January 8, 2008
-
-' All rights reserved. Reproduction or transmission of this file, or a portion thereof,
-' is forbidden without prior written permission of the ORMAP Tech Group.
+' File:  OrmapToolbar.vb
+'
+' Original Author:  OPET.NET Migration Team (Shad Campbell, James Moore, 
+'                   Nick Seigal)
+'
+' Date Created:  January 8, 2008
+'
+' Copyright Holder:  ORMAP Tech Group  
+' Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at 
+' opet-developers@lists.sourceforge.net
+'
+' This file is part of the ORMAP Taxlot Editing Toolbar.
+'
+' ORMAP Taxlot Editing Toolbar is free software; you can redistribute it and/or
+' modify it under the terms of the GNU General Public License as published by 
+' the Free Software Foundation; either version 3 of the License, or (at your 
+' option) any later version.
+'
+' This program is distributed in the hope that it will be useful, but WITHOUT 
+' ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+' FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License located
+' in the COPYING.txt file for more details.
+'
+' You should have received a copy of the GNU General Public License along
+' with the ORMAP Taxlot Editing Toolbar; if not, write to the Free Software 
+' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #End Region
 
@@ -20,6 +39,99 @@ Imports ESRI.ArcGIS.esriSystem
 ProgId("ORMAPTaxlotEditing.OrmapToolbar")> _
 Public NotInheritable Class OrmapToolbar
     Inherits BaseToolbar
+
+#Region "Class-Level Constants And Enumerations"
+    ' None
+#End Region
+
+#Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
+
+#Region "Constructors"
+
+    ' A creatable COM class must have a Public Sub New() 
+    ' with no parameters, otherwise, the class will not be 
+    ' registered in the COM registry and cannot be created 
+    ' via CreateObject.
+    Public Sub New()
+
+        ' Define the toolbar by adding items.
+        AddItem("ORMAPTaxlotEditing.LocateFeature")
+        BeginGroup() 'Separator
+        AddItem("ORMAPTaxlotEditing.TaxlotAssignment")
+        AddItem("ORMAPTaxlotEditing.EditMapIndex")
+        AddItem("ORMAPTaxlotEditing.CombineTaxlots")
+        BeginGroup() 'Separator
+        AddItem("ORMAPTaxlotEditing.AddArrows")
+
+        ' Example:
+        'AddItem("{FBF8C3FB-0480-11D2-8D21-080009EE4E51}", 1) 'undo command
+        'AddItem(New Guid("FBF8C3FB-0480-11D2-8D21-080009EE4E51"), 2) 'redo command
+
+    End Sub
+
+#End Region
+
+#End Region
+
+#Region "Custom Class Members"
+
+#Region "Fields"
+    ' None
+#End Region
+
+#Region "Properties"
+    ' None
+#End Region
+
+#Region "Event Handlers"
+    ' None
+#End Region
+
+#Region "Methods"
+    ' None
+#End Region
+
+#End Region
+
+#Region "Inherited Class Members"
+
+#Region "Properties"
+
+    Public Overrides ReadOnly Property Caption() As String
+        Get
+            Return "ORMAP Taxlot Editor (.NET)"
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property Name() As String
+        Get
+            'TODO: Confirm that this choice of name will work well
+            Return "OrmapToolbar"
+        End Get
+    End Property
+
+#End Region
+
+#Region "Methods"
+    ' None
+#End Region
+
+#End Region
+
+#Region "Implemented Interface Members"
+    ' None
+#End Region
+
+#Region "Other Members"
+
+#Region "COM GUIDs"
+    ' These  GUIDs provide the COM identity for this class 
+    ' and its COM interfaces. If you change them, existing 
+    ' clients will no longer be able to access the class.
+    Public Const ClassId As String = "07b32247-abf9-4643-b078-4e68be56599e"
+    Public Const InterfaceId As String = "98eff0b1-3e68-4881-b5f8-5f8a9e242682"
+    Public Const EventsId As String = "8f2ffc36-8a61-44ef-9127-8e4935dcc563"
+#End Region
 
 #Region "COM Registration Function(s)"
     <ComRegisterFunction(), ComVisibleAttribute(False)> _
@@ -62,54 +174,6 @@ Public NotInheritable Class OrmapToolbar
 
 #End Region
 #End Region
-
-#Region "COM GUIDs"
-    ' These  GUIDs provide the COM identity for this class 
-    ' and its COM interfaces. If you change them, existing 
-    ' clients will no longer be able to access the class.
-    Public Const ClassId As String = "07b32247-abf9-4643-b078-4e68be56599e"
-    Public Const InterfaceId As String = "98eff0b1-3e68-4881-b5f8-5f8a9e242682"
-    Public Const EventsId As String = "8f2ffc36-8a61-44ef-9127-8e4935dcc563"
-#End Region
-
-#Region "Constructors"
-
-    ' A creatable COM class must have a Public Sub New() 
-    ' with no parameters, otherwise, the class will not be 
-    ' registered in the COM registry and cannot be created 
-    ' via CreateObject.
-    Public Sub New()
-
-        ' Define the toolbar by adding items.
-        AddItem("ORMAPTaxlotEditing.LocateFeature")
-        BeginGroup() 'Separator
-        AddItem("ORMAPTaxlotEditing.TaxlotAssignment")
-        AddItem("ORMAPTaxlotEditing.EditMapIndex")
-        AddItem("ORMAPTaxlotEditing.CombineTaxlots")
-        BeginGroup() 'Separator
-        AddItem("ORMAPTaxlotEditing.AddArrows")
-
-        'AddItem("{FBF8C3FB-0480-11D2-8D21-080009EE4E51}", 1) 'undo command
-        'AddItem(New Guid("FBF8C3FB-0480-11D2-8D21-080009EE4E51"), 2) 'redo command
-
-    End Sub
-
-#End Region
-
-#Region "Inherited Properties and Methods"
-
-    Public Overrides ReadOnly Property Caption() As String
-        Get
-            Return "ORMAP Taxlot Editor (.NET)"
-        End Get
-    End Property
-
-    Public Overrides ReadOnly Property Name() As String
-        Get
-            'TODO: Confirm that this choice of name will work well
-            Return "OrmapToolbar"
-        End Get
-    End Property
 
 #End Region
 

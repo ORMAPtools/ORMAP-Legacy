@@ -51,11 +51,11 @@
     <Reference Include="ESRI.ArcGIS.Display, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="ESRI.ArcGIS.Editor, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
+    <Reference Include="ESRI.ArcGIS.Editor, Version=9.2.0.1324, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
     <Reference Include="ESRI.ArcGIS.Framework, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="ESRI.ArcGIS.Geodatabase, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
+    <Reference Include="ESRI.ArcGIS.Geodatabase, Version=9.2.0.1324, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
     <Reference Include="ESRI.ArcGIS.System, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -78,13 +78,55 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddArrows.vb" />
+    <Compile Include="OrmapSettings.vb" />
+    <Compile Include="OrmapSettingsForm.Designer.vb">
+      <DependentUpon>OrmapSettingsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="OrmapSettingsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="settings\AllTablesSettings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>AllTablesSettings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="settings\AnnoTableNamesSettings1.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>AnnoTableNamesSettings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="settings\TaxlotAcreageAnnoSettings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>TaxlotAcreageAnnoSettings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="settings\CartographicLinesSettings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>CartographicLinesSettings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="settings\DefaultValuesSettings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>DefaultValuesSettings.settings</DependentUpon>
+    </Compile>
     <Compile Include="EditorExtension.vb" />
     <Compile Include="CombineTaxlots.vb" />
     <Compile Include="EditMapIndex.vb" />
+    <Compile Include="settings\MapIndexSettings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>MapIndexSettings.settings</DependentUpon>
+    </Compile>
     <Compile Include="PropertiesForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="LocateFeature.vb" />
+    <Compile Include="settings\TableNamesSettings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>TableNamesSettings.settings</DependentUpon>
+    </Compile>
     <Compile Include="TaxlotAssignment.vb" />
     <Compile Include="OrmapToolbar.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -103,6 +145,21 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="PropertyPage.vb" />
+    <Compile Include="settings\TaxlotNumberAnnoSettings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>TaxlotNumberAnnoSettings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="settings\TaxLotSettings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>TaxLotSettings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="settings\TaxLotLinesSettings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>TaxLotLinesSettings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -113,9 +170,43 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="My Project\DataSources\AllTablesSettings.datasource" />
+    <None Include="My Project\DataSources\AnnoTableNamesSettings.datasource" />
+    <None Include="My Project\DataSources\CartographicLinesSettings.datasource" />
+    <None Include="My Project\DataSources\DefaultValuesSettings.datasource" />
+    <None Include="My Project\DataSources\MapIndexSettings.datasource" />
+    <None Include="My Project\DataSources\TableNamesSettings.datasource" />
+    <None Include="My Project\DataSources\TaxlotAcreageAnnoSettings.datasource" />
+    <None Include="My Project\DataSources\TaxLotLinesSettings.datasource" />
+    <None Include="My Project\DataSources\TaxlotNumberAnnoSettings.datasource" />
+    <None Include="My Project\DataSources\TaxLotSettings.datasource" />
+    <None Include="settings\AllTablesSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>AllTablesSettings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="settings\AnnoTableNamesSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>AnnoTableNamesSettings1.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="settings\TaxlotAcreageAnnoSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>TaxlotAcreageAnnoSettings.Designer.vb</LastGenOutput>
+    </None>
     <None Include="App.Config" />
+    <None Include="settings\CartographicLinesSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>CartographicLinesSettings.Designer.vb</LastGenOutput>
+    </None>
     <None Include="ClassDiagram.cd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="settings\DefaultValuesSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>DefaultValuesSettings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="settings\MapIndexSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>MapIndexSettings.Designer.vb</LastGenOutput>
     </None>
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
@@ -125,6 +216,22 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="settings\TableNamesSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>TableNamesSettings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="settings\TaxlotNumberAnnoSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>TaxlotNumberAnnoSettings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="settings\TaxLotSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>TaxLotSettings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="settings\TaxLotLinesSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>TaxLotLinesSettings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -144,7 +251,19 @@
     <EmbeddedResource Include="icons\CombineTaxlots.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="OrmapSettingsForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>OrmapSettingsForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="icons\ORMAPLogo.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="license\COPYING.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="license\SOURCE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
