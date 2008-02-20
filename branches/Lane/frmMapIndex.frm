@@ -2283,7 +2283,7 @@ On Error Resume Next
           Else
             sSpecialInt = "00000"
         End If
-        
+    
         '++ START Nick Seigal (LCOG) 11/19/2007
         ' Gets the map number value
         Dim sMapNumber As String
