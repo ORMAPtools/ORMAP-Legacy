@@ -441,7 +441,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -1174,7 +1174,7 @@ ErrorHandler:
               Err.Number, _
               Err.Source, _
               Err.Description, _
-4
+              4
 End Function
 
 '***************************************************************************
@@ -1229,7 +1229,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -1291,7 +1291,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -1419,7 +1419,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -1713,7 +1713,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -1809,7 +1809,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -2148,7 +2148,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Sub
 
 '***************************************************************************
@@ -2194,7 +2194,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -2233,7 +2233,7 @@ On Error GoTo ErrorHandler
     Set pCenter = New esriGeometry.Point
     
     ' Set the coordinates of the center of the envelope in the point
-    pCenter.x = pEnv.XMin + (pEnv.XMax - pEnv.XMin) / 2
+    pCenter.X = pEnv.XMin + (pEnv.XMax - pEnv.XMin) / 2
     pCenter.Y = pEnv.YMin + (pEnv.YMax - pEnv.YMin) / 2
     
     ' Returns the center of the envelope to the function
@@ -2246,7 +2246,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -2434,7 +2434,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -2801,7 +2801,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Sub
 
 '***************************************************************************
@@ -2922,7 +2922,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Sub
 
 '***************************************************************************
@@ -3131,7 +3131,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -3173,7 +3173,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -3539,7 +3539,7 @@ gfn_s_CreateMapTaxlotValue_Error:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -3666,7 +3666,7 @@ ffn_s_CreateParcelID_Error:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -3903,7 +3903,7 @@ ErrorHandler:
               Err.Number, _
               Err.Source, _
               Err.Description, _
-4
+              4
 End Sub
 
 '***************************************************************************
@@ -3998,7 +3998,7 @@ ErrorHandler:
               Err.Number, _
               Err.Source, _
               Err.Description, _
-4
+              4
 End Function
 
 '***************************************************************************
@@ -4056,7 +4056,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -4104,7 +4104,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -4188,7 +4188,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -4240,7 +4240,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -4299,7 +4299,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 '***************************************************************************
@@ -4359,7 +4359,7 @@ ErrorHandler:
                 Err.Number, _
                 Err.Source, _
                 Err.Description, _
-4
+                4
 End Function
 
 

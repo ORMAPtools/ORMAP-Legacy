@@ -132,7 +132,6 @@ Private m_bolDimensionChanged As Boolean
 '++ START Nick Seigal (LCOG) 12/20/2007 - Support for bitmap
 Private m_pBitmap As IPictureDisp
 '++ END Nick Seigal (LCOG) 12/20/2007
-
 '------------------------------
 'Private Constants and Enums
 '------------------------------
@@ -378,7 +377,6 @@ On Error GoTo ErrorHandler
     
         ' Removed initialization of m_pDoc and m_pMap to ICommand_OnClick
     '++ END JWalton 2/7/2007
-    
 
   Exit Sub
 ErrorHandler:
@@ -533,7 +531,7 @@ Private Sub ITool_OnKeyUp(ByVal keyCode As Long, ByVal Shift As Long)
     ' Not Implemented
 End Sub
  
-Private Function ITool_OnContextMenu(ByVal x As Long, ByVal Y As Long) As Boolean
+Private Function ITool_OnContextMenu(ByVal X As Long, ByVal Y As Long) As Boolean
     ' Not Implemented
 End Function
 
@@ -628,7 +626,7 @@ End Function
 Private Sub ITool_OnMouseDown( _
   ByVal Button As Long, _
   ByVal Shift As Long, _
-  ByVal x As Long, _
+  ByVal X As Long, _
   ByVal Y As Long)
 On Error GoTo ErrorHandler
     '++ START JWalton 2/8/2007 Centralized variable declarations
@@ -692,7 +690,7 @@ On Error GoTo ErrorHandler
         Case "HOOK"  '"Hook" 'If drawing hooks
         '++ End Laura Gordon, 02/20/2007
             ' Get point to measure distance from
-            Set m_pStartPoint = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, Y)
+            Set m_pStartPoint = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
             m_bDoOnce = False 'testing
             Set m_pFromBreakPoint = m_pStartPoint
             
@@ -708,23 +706,21 @@ On Error GoTo ErrorHandler
                 If bolFinish = False Then
                     If Button = 1 And Shift = 1 Then
                         '[Left mouse click plus Shift key down...]
-                        
                         If colArrowPoints.Count = 0 Then
-                            '[Save the first point...]
-                            
+                        '[Save the first point...]
                             If m_pArrowPt1 Is Nothing Then
-                                Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, Y)
+                                Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
                                 colArrowPoints.Add m_pArrowPt1
                                 
                                 'Clear existing point
                                 Set m_pArrowPt1 = Nothing
                             End If
                             
+                        'Save the last point
                         Else
-                            '[Save the last point...]
-                            
+                        '[Save the last point...]
                             If m_pArrowPt1 Is Nothing Then
-                                Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, Y)
+                                Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
                                 colArrowPoints.Add m_pArrowPt1
                                 DrawArrows
                                 
@@ -735,17 +731,15 @@ On Error GoTo ErrorHandler
                         End If
                         
                     ElseIf Button = 1 And Shift = 0 Then
-                        '[Left mouse click...]
-                        
+                    '[Left mouse click...]
                         'Add vertex
                         If m_pArrowPt1 Is Nothing Then
-                            Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, Y)
+                            Set m_pArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
                             colArrowPoints.Add m_pArrowPt1
                             
                             'Clear existing point
                             Set m_pArrowPt1 = Nothing
                         End If
-                        
                     End If
                 End If
     '            If m_pArrowPt1 Is Nothing Then
@@ -818,6 +812,7 @@ On Error GoTo ErrorHandler
                     'pFeature.Value(lLineTypeFld) = 100
                     pFeature.Value(lLineTypeFld) = Left(frmArrows.cmbArrow.Text, 3) '100
                     '++  END Laura Gordon
+                    
                     '++ START Laura 03/08/07, calc additional fields
                     'Set the AutoMethod Field
                     lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.AutoMethodFN)
@@ -828,7 +823,7 @@ On Error GoTo ErrorHandler
                     lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.AutoWhoFN)
                     If lLineTypeFld = -1 Then Exit Sub
                     pFeature.Value(lLineTypeFld) = UserName
-
+                    
                     'Set the AutoDate Field
                     lLineTypeFld = LocateFields(pArrowFC, g_pFldnames.AutoDateFN)
                     If lLineTypeFld = -1 Then Exit Sub
@@ -844,11 +839,10 @@ On Error GoTo ErrorHandler
                     pFeature.Value(lLineTypeFld) = Val(sCurrentMapScale)
                     '++ END Nick Seigal (LCOG) 12/20/2007
                     '++  End Laura Gordon
-                    
-                    '++ START Nick Seigal (LCOG) 12/20/2007 - Moved store to after all fields are edited
+                            
+                     '++ START Nick Seigal (LCOG) 12/20/2007 - Moved store to after all fields are edited
                     pFeature.Store
                     '++ END Nick Seigal (LCOG) 12/20/2007
-                    
                     ' Finalize the edit operation
                     pWSEdit.StopEditOperation
                     
@@ -907,11 +901,11 @@ On Error GoTo ErrorHandler
                     Set m_pArrowPt2 = m_pPt
                     DrawArrows
                 ElseIf m_pArrowPt3 Is Nothing Then
-                    Set m_pArrowPt3 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, Y)
+                    Set m_pArrowPt3 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
                     DrawArrows
                     
                         'Check to be sure the 2 points are not equal
-                        If (m_pArrowPt1.x = m_pArrowPt2.x) And (m_pArrowPt1.Y = m_pArrowPt2.Y) Then
+                        If (m_pArrowPt1.X = m_pArrowPt2.X) And (m_pArrowPt1.Y = m_pArrowPt2.Y) Then
                             Call MsgBox("Two input points can't be equal, dimension arrows terminated.", vbInformation, "Invalid Input")
                             '++ START Laura Gordon 03/05/07, Prevent error.
                             Call ITool_OnKeyDown(vbKeyQ, 1)
@@ -1040,7 +1034,7 @@ On Error GoTo ErrorHandler
                                     End If
                                     
                                     'Save the to and from points of the line
-                                    m_pArrowPtTemp.x = pLine.ToPoint.x
+                                    m_pArrowPtTemp.X = pLine.ToPoint.X
                                     m_pArrowPtTemp.Y = pLine.ToPoint.Y
                                     Set pLine = Nothing
                                     
@@ -1103,7 +1097,7 @@ On Error GoTo ErrorHandler
                                     End If
                                     
                                     'Save the to and from points of the line
-                                    m_pArrowPtTemp2.x = pLine.ToPoint.x
+                                    m_pArrowPtTemp2.X = pLine.ToPoint.X
                                     m_pArrowPtTemp2.Y = pLine.ToPoint.Y
                                     Set pLine = Nothing
                                     
@@ -1219,7 +1213,6 @@ On Error GoTo ErrorHandler
                                     esriViewGraphics Or _
                                     esriViewGraphicSelection, Nothing, pDimensionFeature.Extent.Envelope
                             '++ END Nick Seigal (LCOG) 12/20/2007
-                                                    
                             Set pDimensionLine = Nothing
                             Set m_pArrowPtTemp = Nothing
                             Set m_pArrowPtTemp2 = Nothing
@@ -1299,7 +1292,7 @@ End Sub
 Private Sub ITool_OnMouseMove( _
   ByVal Button As Long, _
   ByVal Shift As Long, _
-  ByVal x As Long, _
+  ByVal X As Long, _
   ByVal Y As Long)
 On Error GoTo ErrorHandler
     '++ START JWalton 2/9/2007 Centralized Variable Declarations
@@ -1341,7 +1334,7 @@ On Error GoTo ErrorHandler
         If (m_pLineSymbol Is Nothing) Then bfirstTime = True
         
         ' Get current point
-        Set pPoint = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, Y)
+        Set pPoint = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
         Set m_pToBreakPoint = pPoint 'the unextended to point used to break the hooks
         
         '++ START Added by Laura Gordon, 02/20/2007
@@ -1423,9 +1416,9 @@ On Error GoTo ErrorHandler
         
         'For drawing text, get text(distance), angle, and point
         'jwm dead variable Dim distance As Double
-        deltaX = pPoint.x - m_pStartPoint.x
+        deltaX = pPoint.X - m_pStartPoint.X
         deltaY = pPoint.Y - m_pStartPoint.Y
-        m_pTextPoint.x = m_pStartPoint.x + deltaX / 2#
+        m_pTextPoint.X = m_pStartPoint.X + deltaX / 2#
         m_pTextPoint.Y = m_pStartPoint.Y + deltaY / 2#
         m_pTextSymbol.angle = angle
         'jwm   distance = Round(Sqr((deltaX * deltaX) + (deltaY * deltaY)), 3)
@@ -1481,9 +1474,9 @@ On Error GoTo ErrorHandler
         'erase the old agent
         m_pEditor.InvertAgent m_pPt, 0
         'get the new point
-        GetMousePoint x, Y
+        GetMousePoint X, Y
       Else
-        Set m_pPt = m_pActive.ScreenDisplay.DisplayTransformation.ToMapPoint(x, Y)
+        Set m_pPt = m_pActive.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
       End If
       m_bMouseHasMoved = True
     
@@ -1492,13 +1485,13 @@ On Error GoTo ErrorHandler
         Set pSnapenv = m_pEditor
         Dim pTmpPt As IPoint
         Set pTmpPt = New Point
-        pTmpPt.PutCoords m_pPt.x, m_pPt.Y
+        pTmpPt.PutCoords m_pPt.X, m_pPt.Y
         Dim dTol As Double
         dTol = pSnapenv.SnapTolerance
         m_bInTol = pSnapenv.SnapPoint(m_pPt)
         If Not m_bInTol Then
           Set m_pPt = New Point
-          m_pPt.PutCoords pTmpPt.x, pTmpPt.Y  '+++ set the point back b/c it was not in the snap tol
+          m_pPt.PutCoords pTmpPt.X, pTmpPt.Y  '+++ set the point back b/c it was not in the snap tol
         End If
       Else
         m_bInTol = False
@@ -1552,7 +1545,7 @@ End Sub
 Private Sub ITool_OnMouseUp( _
   ByVal Button As Long, _
   ByVal Shift As Long, _
-  ByVal x As Long, _
+  ByVal X As Long, _
   ByVal Y As Long)
 On Error GoTo ErrorHandler
     '++ START JWalton 2/9/2007 Centralized Variable Declarations
@@ -1592,7 +1585,7 @@ On Error GoTo ErrorHandler
         If frmArrows.ArrowType = "Hook" Then
             ' Generate hooks based on the graphic polyline
             GenerateHooks m_pLinePolyline
-        Else
+          Else
             ' Do Nothing / Store nothing
         End If
         '++ END JWalton 2/9/2007
@@ -1924,7 +1917,6 @@ On Error GoTo ErrorHandler
     
     'Store the new land hook feature
     pWSEdit.StartEditOperation
-    
     Set pFeature = pHookFC.CreateFeature
     Set pFeature.Shape = pGeomColl
     pFeature.Value(lLineTypeFld) = 101
@@ -1955,14 +1947,14 @@ On Error GoTo ErrorHandler
     'Set the MapNumber Field
     '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
     sCurMapNum = GetValueViaOverlay(pFeature.Shape, pMIFclass, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
-    '++ END Nick Seigal (LCOG) 01/25/2008
+    '++ END Nick Seigal (LCOG) 01/25/2008)
     lLineTypeFld = LocateFields(pHookFC, g_pFldnames.MIMapNumberFN)
     If lLineTypeFld = -1 Then Exit Sub
     pFeature.Value(lLineTypeFld) = sCurMapNum
     '++  END Laura Gordon
     
-    pFeature.Store
     
+    pFeature.Store
     pWSEdit.StopEditOperation
     
     'Refresh the display
@@ -1972,13 +1964,11 @@ On Error GoTo ErrorHandler
     Set pActiveView = pMxDoc.FocusMap
     '++ START Nick Seigal (LCOG) 12/20/2007 - Better refresh
     'Partially refresh the display
-    pActiveView.PartialRefresh _
-            esriViewBackground Or _
+    pActiveView.PartialRefresh esriViewBackground Or _
             esriViewGeography Or _
             esriViewGraphics Or _
             esriViewGraphicSelection, Nothing, pFeature.Extent.Envelope
     '++ END Nick Seigal (LCOG) 12/20/2007
-                            
 
 Process_Exit:
     Exit Sub
@@ -2239,12 +2229,12 @@ End Sub
 'Developer:     Date:       Comments:
 '----------     ------      ---------
 '***************************************************************************
-Private Sub GetMousePoint(x As Long, Y As Long)
+Private Sub GetMousePoint(X As Long, Y As Long)
 
 On Error GoTo ErrorHandler
 
   '+++ Get the current map point (and invert the agent at that location)
-  Set m_pPt = m_pActive.ScreenDisplay.DisplayTransformation.ToMapPoint(x, Y)
+  Set m_pPt = m_pActive.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
   
   '+++ get the snap agent, if it is being used
   Set m_pSnapAgent = Nothing
@@ -2401,31 +2391,31 @@ On Error GoTo ErrorHandler
 
     slope = 0
     If m_pArrowPt2.Y <> m_pArrowPt1.Y Then
-        slope = (m_pArrowPt1.Y - m_pArrowPt2.Y) / (m_pArrowPt1.x - m_pArrowPt2.x)
+        slope = (m_pArrowPt1.Y - m_pArrowPt2.Y) / (m_pArrowPt1.X - m_pArrowPt2.X)
     End If
     
-    yint = m_pArrowPt1.Y - (slope * m_pArrowPt1.x)
+    yint = m_pArrowPt1.Y - (slope * m_pArrowPt1.X)
     
-    z = (slope * m_pArrowPt3.x) + yint - m_pArrowPt3.Y
+    z = (slope * m_pArrowPt3.X) + yint - m_pArrowPt3.Y
     
-    If m_pArrowPt1.x = m_pArrowPt2.x Then           'vertical
-        If m_pArrowPt3.x = m_pArrowPt1.x Then z = 0
+    If m_pArrowPt1.X = m_pArrowPt2.X Then           'vertical
+        If m_pArrowPt3.X = m_pArrowPt1.X Then z = 0
         If m_pArrowPt1.Y < m_pArrowPt2.Y Then       'going up
-            If m_pArrowPt3.x > m_pArrowPt1.x Then z = 1
-            If m_pArrowPt3.x < m_pArrowPt1.x Then z = -1
+            If m_pArrowPt3.X > m_pArrowPt1.X Then z = 1
+            If m_pArrowPt3.X < m_pArrowPt1.X Then z = -1
         End If
         If m_pArrowPt1.Y > m_pArrowPt2.Y Then       'going down
-            If m_pArrowPt3.x < m_pArrowPt1.x Then z = 1
-            If m_pArrowPt3.x > m_pArrowPt1.x Then z = -1
+            If m_pArrowPt3.X < m_pArrowPt1.X Then z = 1
+            If m_pArrowPt3.X > m_pArrowPt1.X Then z = -1
         End If
     End If
     If m_pArrowPt1.Y = m_pArrowPt2.Y Then           'horizontal
         If m_pArrowPt3.Y = m_pArrowPt1.Y Then z = 0
-        If m_pArrowPt1.x < m_pArrowPt2.x Then       'going right
+        If m_pArrowPt1.X < m_pArrowPt2.X Then       'going right
             If m_pArrowPt3.Y > m_pArrowPt1.Y Then z = -1
             If m_pArrowPt3.Y < m_pArrowPt1.Y Then z = 1
         End If
-        If m_pArrowPt1.x > m_pArrowPt2.x Then       'going left
+        If m_pArrowPt1.X > m_pArrowPt2.X Then       'going left
             If m_pArrowPt3.Y < m_pArrowPt1.Y Then z = -1
             If m_pArrowPt3.Y > m_pArrowPt1.Y Then z = 1
         End If
@@ -2435,7 +2425,7 @@ On Error GoTo ErrorHandler
     If z > 0 Then GetDimensionArrowSide = "right"
     If z = 0 Then GetDimensionArrowSide = "left" '"online"
     
-    If (m_pArrowPt1.x > m_pArrowPt2.x And m_pArrowPt1.Y > m_pArrowPt2.Y) Or (m_pArrowPt1.x > m_pArrowPt2.x And m_pArrowPt2.Y > m_pArrowPt1.Y) Then
+    If (m_pArrowPt1.X > m_pArrowPt2.X And m_pArrowPt1.Y > m_pArrowPt2.Y) Or (m_pArrowPt1.X > m_pArrowPt2.X And m_pArrowPt2.Y > m_pArrowPt1.Y) Then
      If z > 0 Then GetDimensionArrowSide = "left"
      If z < 0 Then GetDimensionArrowSide = "right"
      If z = 0 Then GetDimensionArrowSide = "left" '"online"

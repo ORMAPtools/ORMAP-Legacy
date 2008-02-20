@@ -29,8 +29,8 @@ Attribute VB_Exposed = True
 '
 ' Keyword expansion for source code control
 ' Tag for this file : $Name$
-' SCC Revision number: $Revision: 157 $
-' Date of last change: $Date: 2007-07-05 09:29:57 -0700 (Thu, 05 Jul 2007) $
+' SCC Revision number: $Revision: 188 $
+' Date of last change: $Date: 2008-02-07 16:40:28 -0800 (Thu, 07 Feb 2008) $
 '
 '
 ' File name:            clsAutoUpdate
@@ -101,7 +101,6 @@ Private m_pBmp As IPictureDisp
 '++ START Nick Seigal (LCOG) 02/5/2007 - Support for avoiding rentrancy
 Private m_bDuringAutoUpdate As Boolean
 '++ END Nick Seigal (LCOG) 02/5/2007
-
 '------------------------------
 'Private Constants and Enums
 '------------------------------
@@ -343,9 +342,7 @@ End Sub
 
 Private Sub m_pEditorEvents_OnChangeFeature( _
   ByVal obj As esriGeoDatabase.IObject)
-
 On Error GoTo ErrorHandler
-    
     '++ START Nick Seigal (LCOG) 02/05/2007 - Avoid rentrancy
     If m_bDuringAutoUpdate = False Then
         m_bDuringAutoUpdate = True
@@ -353,20 +350,19 @@ On Error GoTo ErrorHandler
         GoTo Process_Exit
     End If
     '++ END Nick Seigal (LCOG) 02/05/2007
-    
+
     ' Variable declarations
     Dim u As New esriSystem.UID
     Dim pFeat As esriGeoDatabase.IFeature
     Dim pAnnotationFeature As esriCarto.IAnnotationFeature
-    
+
     'These are the autocalculated fields
     UpdateAutoFields obj
     
     If IsTaxlot(obj) Then
         'Obtain ORMAPMapnum via overlay and calculate other field values
         CalcTaxlotValues obj, m_pMIFlayer
-    
-    ElseIf IsAnno(obj) Then
+      ElseIf IsAnno(obj) Then
         Set pAnnotationFeature = obj
         
         'Get the parent feature so mapnumber can be obtained
@@ -382,11 +378,9 @@ On Error GoTo ErrorHandler
         
         'Set anno size
         SetAnnoSize obj, pFeat
-        
     End If
     
-    m_bDuringAutoUpdate = False
-    
+   m_bDuringAutoUpdate = False
 Process_Exit:
     Exit Sub
     
@@ -426,7 +420,6 @@ End Sub
 '                                   procedure just falls through.
 'Jim Moore      7-2-07      Based upon communication with JWalton made corrections to this code in response to Tracker 1725102
 '                                   Replaced Mapscale and MapNum variant variables with string
-'Nick Seigal    1-6-08      Changed variable from a_Obj to obj to be consistent with other event handlers
 '***************************************************************************
 Private Sub m_pEditorEvents_OnCreateFeature( _
   ByVal obj As esriGeoDatabase.IObject)
@@ -481,6 +474,7 @@ On Error GoTo ErrorHandler
         Set pCenter = CT_GetCenterOfEnvelope(pEnv)
         Set pGeometry = pCenter 'QI
         '++ END Nick Seigal (LCOG) 12/21/2007
+                          
         Set pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCMapIndex)
         If pMIFlayer Is Nothing Then GoTo Process_Exit
         Set pMIFclass = pMIFlayer.FeatureClass
@@ -489,8 +483,8 @@ On Error GoTo ErrorHandler
         '++ END Nick Seigal (LCOG) 01/25/2008
         obj.Value(lAnnoMapNumFld) = sMapNum
         If lMapScaleFld > -1 Then
-            '++ START JWM 07/02/2007 changed from variant to string++++++++++
-            '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+'++ START JWM 07/02/2007 changed from variant to string++++++++
+'           ++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by
             sMapScale = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
             '++ END Nick Seigal (LCOG) 01/25/2008
             If Len(sMapScale) > 0 Then
@@ -498,12 +492,10 @@ On Error GoTo ErrorHandler
             Else
                 obj.Value(lMapScaleFld) = Null
             End If
-            '++ END JWM 07/02/2007++++++++++
         End If
-        
+'++ END JWM 07/02/2007++++++++++
         ' Set size based on mapscale
         SetAnnoSize obj, pFeat
-    
     Else
         ' Update MapScale and mapnumber for all features with a MapScale field (except MapIndex)
         If lMapScaleFld > -1 And Not IsMapIndex(obj) Then
@@ -533,24 +525,24 @@ On Error GoTo ErrorHandler
             sMapScale = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapScaleFN, g_pFldnames.MIMapNumberFN)
             '++ END Nick Seigal (LCOG) 01/25/2008
             '++ START JWM 07/02/2007 changed variant to string++++++++++
-            If Len(sMapScale) > 0 Then
-                obj.Value(lMapScaleFld) = sMapScale
-            Else
-                obj.Value(lMapScaleFld) = Null
-            End If
-            '++ END JWM 07/02/2007++++++++++
+                If Len(sMapScale) > 0 Then
+                    obj.Value(lMapScaleFld) = sMapScale
+                Else
+                    obj.Value(lMapScaleFld) = Null
+                End If
+'           ++ END JWM 07/02/2007++++++++++
             ' If a dataset with MapNumber, populate it
             If lMapNumFld > -1 Then
-                '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
-                sMapNum = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
-                '++ END Nick Seigal (LCOG) 01/25/2008
-                '++ START JWM 07/02/2007 changed variant to string++++++++++
+            '++ START Nick Seigal (LCOG) 01/25/2008 - Added sort-by field
+            sMapNum = GetValueViaOverlay(pGeometry, pMIFclass, g_pFldnames.MIMapNumberFN, g_pFldnames.MIMapNumberFN)
+            '++ END Nick Seigal (LCOG) 01/25/2008
+'           ++ START JWM 07/02/2007 changed variant to string++++++++++
                 If Len(sMapNum) > 0 Then
                     obj.Value(lMapNumFld) = sMapNum
                 Else
                     obj.Value(lMapNumFld) = Null
                 End If
-                '++ END JWM 07/02/2007++++++++++
+'           ++ END JWM 07/02/2007++++++++++
             End If
         End If
     End If
