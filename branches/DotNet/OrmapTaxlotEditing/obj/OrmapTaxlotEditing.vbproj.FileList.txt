@@ -50,3 +50,4 @@ obj\Release\OrmapTaxlotEditing.AboutForm.resources
 bin\Debug\license\COPYING.txt
 bin\Debug\license\SOURCE.txt
 obj\Debug\OrmapTaxlotEditing.AboutForm.resources
+G:\projects\OPET\branches\DotNet\OrmapTaxlotEditing\bin\Release\OrmapTaxlotEditing.tlb
