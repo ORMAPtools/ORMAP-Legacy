@@ -29,6 +29,12 @@
 
 #End Region
 
+#Region "Subversion Keyword expansion"
+'Tag for this file: $Name$
+'SCC revision number: $Revision:$
+'Date of Last Change: $Date:$
+#End Region
+
 Imports System.Drawing
 Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.ADF.BaseClasses
