@@ -29,18 +29,20 @@
 
 #Region "Subversion Keyword expansion"
 'Tag for this file: $Name$
-'SCC revision number: $Revision:$
-'Date of Last Change: $Date:$
+'SCC revision number: $Revision$
+'Date of Last Change: $Date$
 #End Region
 
-#Region "Imported namespace statements"
+#Region "Imported namespaces"
 Imports System.Windows.Forms
+Imports System.Text
 #End Region
 
 #Region "Class Declaration"
 Public NotInheritable Class StringUtilities
 #Region "Custom Class Members"
 #Region "Public Members"
+
     ''' <summary>
     ''' Adds leading zeros if necessary
     ''' </summary>
@@ -86,6 +88,54 @@ Public NotInheritable Class StringUtilities
 #End Region
 
 #Region "Private Members"
+    ''' <summary>
+    ''' Create a parcel ID from a mask.
+    ''' </summary>
+    ''' <param name="valueToMask"></param>
+    ''' <param name="maskToApply"></param>
+    ''' <returns> If a value is passed in that is not numeric then just pass it straight through else return a parcel id with or without leading zeros</returns>
+    ''' <remarks>I use the Format function with user-defined string formats which consist of either all (@) characters or all ampersands</remarks>
+    Private Shared Function CreateParcelID(ByVal valueToMask As String, ByVal maskToApply As String) As String
+        Dim sb As StringBuilder
+        If valueToMask.Length = 0 OrElse maskToApply.Length = 0 Then
+            Return String.Empty
+        End If
+
+        If IsNumeric(valueToMask) Then
+            sb = New StringBuilder(Format(valueToMask, maskToApply), maskToApply.Length)
+
+        Else
+            sb = New StringBuilder(valueToMask, maskToApply.Length)
+        End If
+        Return sb.ToString
+
+    End Function
+
+    Private Shared Function StripLeadingZeros(ByRef stringToParse As String) As String
+        Dim inputCharCount As Integer
+        Dim aChar As Char
+        Dim sTemp As StringBuilder
+
+        inputCharCount = stringToParse.Length
+        'create string of same length
+        sTemp = New StringBuilder(" ", inputCharCount)
+
+        'TODO JWM test this function
+
+        For counter As Integer = 1 To inputCharCount
+            'aChar = Mid(stringToParse, counter, 1)
+            aChar = stringToParse.Chars(counter)
+            If stringToParse.Contains(aChar) Then
+                sTemp.Insert(counter, stringToParse.Substring(counter, inputCharCount - counter))
+                Exit For
+                'If InStr(1, "0", aChar, CompareMethod.Text) < 1 Then 'go past all leading zeros
+                '    Mid(sTemp, counter) = Mid(stringToParse, counter) 'get all remaing chars
+                '    Exit For 'and exit
+                'End If
+            End If
+        Next counter
+        Return sTemp.ToString  ' do not trim off leading spaces
+    End Function
 
 #End Region
 #End Region

@@ -31,12 +31,13 @@
 
 #Region "Subversion Keyword expansion"
 'Tag for this file: $Name$
-'SCC revision number: $Revision:$
-'Date of Last Change: $Date:$
+'SCC revision number: $Revision$
+'Date of Last Change: $Date$
 #End Region
 
-#Region "Imported namespace statements"
+#Region "Imported namespaces"
 Imports System.Windows.Forms
+Imports System.IO
 #End Region
 
 #Region "Class Declaration"
@@ -55,6 +56,29 @@ Public NotInheritable Class Utilities
             ' The application is using custom authentication.
             Return My.User.Name
         End If
+    End Function
+
+    ''' <summary>
+    ''' Determine file existence
+    ''' </summary>
+    ''' <param name="path">A string that represents the file to check</param>
+    ''' <returns>True or False</returns>
+    ''' <remarks></remarks>
+    Public Shared Function FileExists(ByVal path As String) As Boolean
+        Try
+            If path Is Nothing OrElse path.Length = 0 Then
+                Throw New ArgumentNullException("path")
+            End If
+            Dim fInfo As New FileInfo(path)
+            If fInfo.Exists Then
+                Return True
+            Else
+                Return False
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+            Return False
+        End Try
     End Function
 #End Region
 
