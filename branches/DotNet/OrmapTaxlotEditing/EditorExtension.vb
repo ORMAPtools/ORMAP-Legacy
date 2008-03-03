@@ -30,8 +30,8 @@
 #End Region
 #Region "Subversion Keyword expansion"
 'Tag for this file: $Name$
-'SCC revision number: $Revision:$
-'Date of Last Change: $Date:$
+'SCC revision number: $Revision$
+'Date of Last Change: $Date$
 #End Region
 
 Imports System
@@ -83,7 +83,7 @@ Public NotInheritable Class EditorExtension
     End Property
 
     Private Sub SetEditor(ByVal value As IEditor)
-        ' TODO: Add validation code?
+        ' TODO: NIS Add validation code?
         _editor = value
     End Sub
 
@@ -96,7 +96,7 @@ Public NotInheritable Class EditorExtension
     End Property
 
     Private Sub SetEditEvents(ByVal value As IEditEvents_Event)
-        ' TODO: Add validation code?
+        ' TODO: NIS Add validation code?
         _editEvents = value
     End Sub
 
@@ -211,11 +211,11 @@ Public NotInheritable Class EditorExtension
 #Region "Editor Event Handlers"
 
     Private Sub EditEvents_OnChangeFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject)
-        ' TODO: Connect to field AutoUpdate, etc. (see VB6 code)
+        ' TODO: NIS Connect to field AutoUpdate, etc. (see VB6 code)
     End Sub
 
     Private Sub EditEvents_OnCreateFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject)
-        ' TODO: Connect to field AutoUpdate, etc. (see VB6 code)
+        ' TODO: NIS Connect to field AutoUpdate, etc. (see VB6 code)
     End Sub
 
     Private Sub EditEvents_OnStartEditing()
@@ -245,7 +245,7 @@ Public NotInheritable Class EditorExtension
 
 #Region "Methods"
 
-    ' TODO: Test (not sure this how this will work with editor extension)
+    ' TODO: NIS Test (not sure this how this will work with editor extension)
     Private Shared Sub SetAccelerator(ByRef acceleratorTable As IAcceleratorTable, _
             ByVal classID As UID, ByVal key As Integer, _
             ByVal usesCtrl As Boolean, ByVal usesAlt As Boolean, _
@@ -311,7 +311,7 @@ Public NotInheritable Class EditorExtension
 
     Public Sub CreateAccelerators() Implements ESRI.ArcGIS.esriSystem.IExtensionAccelerators.CreateAccelerators
         ' Create the keyboard accelerators for this extension.
-        ' TODO: Test this (not sure this will work with an editor extension)
+        ' TODO: NIS Test this (not sure this will work with an editor extension)
         Dim key As Integer
         Dim usesCtrl As Boolean
         Dim usesAlt As Boolean

@@ -40,6 +40,7 @@ Imports System.Text
 
 #Region "Class Declaration"
 Public NotInheritable Class StringUtilities
+
 #Region "Custom Class Members"
 #Region "Public Members"
 
@@ -139,5 +140,6 @@ Public NotInheritable Class StringUtilities
 
 #End Region
 #End Region
+
 End Class
 #End Region

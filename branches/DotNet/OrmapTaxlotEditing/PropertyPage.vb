@@ -30,8 +30,8 @@
 #End Region
 #Region "Subversion Keyword expansion"
 'Tag for this file: $Name$
-'SCC revision number: $Revision:$
-'Date of Last Change: $Date:$
+'SCC revision number: $Revision$
+'Date of Last Change: $Date$
 #End Region
 
 Imports System
@@ -86,7 +86,7 @@ Public NotInheritable Class PropertyPage
     End Property
 
     Private Sub SetPageDirty(ByVal value As Boolean)
-        ' TODO: Add validation code?
+        ' TODO: NIS Add validation code?
         _pageDirty = value
     End Sub
 
@@ -99,11 +99,11 @@ Public NotInheritable Class PropertyPage
     End Property
 
     Private Sub SetPropertiesPageSite(ByVal value As IComPropertyPageSite)
-        ' TODO: Add validation code?
+        ' TODO: NIS Add validation code?
         _propertiesPageSite = value
     End Sub
 
-    Private WithEvents _propertiesForm As PropertiesForm  ' TODO: Is WithEvents needed here?
+    Private WithEvents _propertiesForm As PropertiesForm  ' TODO: NIS Is WithEvents needed here?
 
     Friend ReadOnly Property PropertiesForm() As PropertiesForm
         Get
@@ -112,7 +112,7 @@ Public NotInheritable Class PropertyPage
     End Property
 
     Private Sub SetPropertiesForm(ByVal value As PropertiesForm)
-        ' TODO: Add validation code?
+        ' TODO: NIS Add validation code?
         _propertiesForm = value
     End Sub
 
@@ -174,11 +174,9 @@ Public NotInheritable Class PropertyPage
 #Region "Inherited Class Members"
 
 #Region "Properties"
-    ' None
 #End Region
 
 #Region "Methods"
-    ' None
 #End Region
 
 #End Region
@@ -195,13 +193,13 @@ Public NotInheritable Class PropertyPage
 
     Public ReadOnly Property HelpFile() As String Implements IComPropertyPage.HelpFile
         Get
-            Return Nothing  ' TODO: Implement Help File
+            Return Nothing  ' TODO: NIS Implement Help File
         End Get
     End Property
 
     Public ReadOnly Property HelpContextID(ByVal controlID As Integer) As Integer Implements IComPropertyPage.HelpContextID
         Get
-            Return 0  ' TODO: Implement Help File
+            Return 0  ' TODO: NIS Implement Help File
         End Get
     End Property
 
@@ -284,7 +282,7 @@ Public NotInheritable Class PropertyPage
     End Sub
 
     Public Sub Cancel() Implements IComPropertyPage.Cancel
-        ' TODO: Implement this?
+        ' TODO: NIS Implement this?
     End Sub
 
     Public Sub Deactivate() Implements IComPropertyPage.Deactivate
@@ -303,7 +301,7 @@ Public NotInheritable Class PropertyPage
         ' Note: The Applies() method should have done preliminary checking of 
         ' editor states before this method is called.
 
-        ' TODO: Move (to where)?
+        ' TODO: NIS Move (to where)?
         SetPropertiesForm(New PropertiesForm())
         PropertiesForm.uxEnableTools.Checked = EditorExtension.CanEditTaxlots
         PropertiesForm.uxEnableAutoUpdate.Checked = EditorExtension.CanAutoUpdate

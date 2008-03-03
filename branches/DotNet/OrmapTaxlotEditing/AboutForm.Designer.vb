@@ -36,10 +36,10 @@ Partial Class AboutForm
         Me.LabelVersion = New System.Windows.Forms.Label
         Me.LabelCopyright = New System.Windows.Forms.Label
         Me.LabelCompanyName = New System.Windows.Forms.Label
-        Me.TextBoxDescription = New System.Windows.Forms.TextBox
         Me.OKButton = New System.Windows.Forms.Button
-        Me.uxLogo = New System.Windows.Forms.PictureBox
+        Me.TextBoxDescription = New System.Windows.Forms.TextBox
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox
+        Me.uxLogo = New System.Windows.Forms.PictureBox
         Me.TableLayoutPanel.SuspendLayout()
         CType(Me.uxLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -118,6 +118,16 @@ Partial Class AboutForm
         Me.LabelCompanyName.Text = "Company Name"
         Me.LabelCompanyName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
+        'OKButton
+        '
+        Me.OKButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.OKButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.OKButton.Location = New System.Drawing.Point(318, 232)
+        Me.OKButton.Name = "OKButton"
+        Me.OKButton.Size = New System.Drawing.Size(75, 23)
+        Me.OKButton.TabIndex = 0
+        Me.OKButton.Text = "&OK"
+        '
         'TextBoxDescription
         '
         Me.TableLayoutPanel.SetColumnSpan(Me.TextBoxDescription, 2)
@@ -132,26 +142,6 @@ Partial Class AboutForm
         Me.TextBoxDescription.TabStop = False
         Me.TextBoxDescription.Text = resources.GetString("TextBoxDescription.Text")
         '
-        'OKButton
-        '
-        Me.OKButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.OKButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.OKButton.Location = New System.Drawing.Point(318, 232)
-        Me.OKButton.Name = "OKButton"
-        Me.OKButton.Size = New System.Drawing.Size(75, 23)
-        Me.OKButton.TabIndex = 0
-        Me.OKButton.Text = "&OK"
-        '
-        'uxLogo
-        '
-        Me.uxLogo.Image = CType(resources.GetObject("uxLogo.Image"), System.Drawing.Image)
-        Me.uxLogo.Location = New System.Drawing.Point(32, 12)
-        Me.uxLogo.Name = "uxLogo"
-        Me.uxLogo.Size = New System.Drawing.Size(86, 82)
-        Me.uxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.uxLogo.TabIndex = 4
-        Me.uxLogo.TabStop = False
-        '
         'RichTextBox1
         '
         Me.RichTextBox1.BackColor = System.Drawing.SystemColors.Control
@@ -162,6 +152,16 @@ Partial Class AboutForm
         Me.RichTextBox1.Size = New System.Drawing.Size(390, 71)
         Me.RichTextBox1.TabIndex = 1
         Me.RichTextBox1.Text = resources.GetString("RichTextBox1.Text")
+        '
+        'uxLogo
+        '
+        Me.uxLogo.Image = CType(resources.GetObject("uxLogo.Image"), System.Drawing.Image)
+        Me.uxLogo.Location = New System.Drawing.Point(32, 12)
+        Me.uxLogo.Name = "uxLogo"
+        Me.uxLogo.Size = New System.Drawing.Size(86, 82)
+        Me.uxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.uxLogo.TabIndex = 4
+        Me.uxLogo.TabStop = False
         '
         'AboutForm
         '
@@ -177,6 +177,7 @@ Partial Class AboutForm
         Me.Padding = New System.Windows.Forms.Padding(9)
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.Text = "About"
         Me.TableLayoutPanel.ResumeLayout(False)
         Me.TableLayoutPanel.PerformLayout()
         CType(Me.uxLogo, System.ComponentModel.ISupportInitialize).EndInit()

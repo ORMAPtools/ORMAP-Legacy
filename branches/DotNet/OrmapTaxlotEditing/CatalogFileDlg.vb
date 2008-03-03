@@ -50,20 +50,20 @@ Imports System.Windows.Forms
 Public Class CatalogFileDialog
 
 #Region "Class level fields"
-    Private _dialog As IGxDialog
+    Private _theGxDialog As IGxDialog
     Private _colSelection As Collection
 #End Region
 
     Public Sub New()
         MyBase.New()
-        _dialog = New GxDialog
-        _dialog.RememberLocation = True
-        _dialog.AllowMultiSelect = False
+        _theGxDialog = New GxDialog
+        _theGxDialog.RememberLocation = True
+        _theGxDialog.AllowMultiSelect = False
 
     End Sub
 
     Protected Overrides Sub Finalize()
-        _dialog = Nothing
+        _theGxDialog = Nothing
         MyBase.Finalize()
     End Sub
 
@@ -71,10 +71,10 @@ Public Class CatalogFileDialog
 
     Public Property Name() As String
         Get
-            Name = _dialog.Name
+            Name = _theGxDialog.Name
         End Get
         Set(ByVal value As String)
-            _dialog.Name = value
+            _theGxDialog.Name = value
         End Set
     End Property
 
@@ -87,7 +87,7 @@ Public Class CatalogFileDialog
     ''' <remarks></remarks>
     Public ReadOnly Property FinalLocation() As String
         Get
-            FinalLocation = _dialog.FinalLocation.FullName
+            FinalLocation = _theGxDialog.FinalLocation.FullName
         End Get
     End Property
 
@@ -112,11 +112,11 @@ Public Class CatalogFileDialog
     End Function
 
     Public Sub SetAllowMultiSelect(ByVal allow As Boolean)
-        _dialog.AllowMultiSelect = allow
+        _theGxDialog.AllowMultiSelect = allow
     End Sub
 
     Public Sub SetButtonCaption(ByVal caption As String)
-        _dialog.ButtonCaption = caption
+        _theGxDialog.ButtonCaption = caption
     End Sub
 
 
@@ -126,11 +126,11 @@ Public Class CatalogFileDialog
     ''' <param name="pointer"></param>
     ''' <remarks></remarks>
     Public Sub SetStartingLocation(ByVal pointer As System.IntPtr)
-        _dialog.StartingLocation = pointer
+        _theGxDialog.StartingLocation = pointer
     End Sub
 
     Public Sub SetTitle(ByVal title As String)
-        _dialog.Title = title
+        _theGxDialog.Title = title
     End Sub
 
     ''' <summary>
@@ -144,7 +144,7 @@ Public Class CatalogFileDialog
     Public Function SetFilter(ByRef filter As IGxObjectFilter, Optional ByRef isDefault As Boolean = False, Optional ByRef resetAll As Boolean = True) As Boolean
         Try
             Dim filters As IGxObjectFilterCollection
-            filters = DirectCast(_dialog, IGxObjectFilterCollection)
+            filters = DirectCast(_theGxDialog, IGxObjectFilterCollection)
             If resetAll Then
                 filters.RemoveAllFilters()
             End If
@@ -168,7 +168,7 @@ Public Class CatalogFileDialog
             selection = New GxObjectArray
 
             _colSelection = New Collection
-            If Not _dialog.DoModalOpen(1, selection) Then 'TODO: JWM Need a window handle for this function
+            If Not _theGxDialog.DoModalOpen(EditorExtension.Editor.Parent.hWnd, selection) Then
                 'need to return a empty collection
                 Return New Collection
             End If
@@ -193,13 +193,13 @@ Public Class CatalogFileDialog
     ''' <remarks></remarks>
     Public Function ShowSave() As Collection
         Try
-            If Not _dialog.DoModalSave(1) Then 'TODO: JWM need a window handle
-                'return an empty collection
+            If Not _theGxDialog.DoModalSave(EditorExtension.Editor.Parent.hWnd) Then
+                ' Return an empty collection
                 Return New Collection
             End If
             Dim selectedObject As IGxObject
-            selectedObject = _dialog.FinalLocation
-            _colSelection.Add(String.Concat(selectedObject.FullName, "\", _dialog.Name))
+            selectedObject = _theGxDialog.FinalLocation
+            _colSelection.Add(String.Concat(selectedObject.FullName, "\", _theGxDialog.Name))
             Return _colSelection
         Catch ex As Exception
             MessageBox.Show(ex.Message)

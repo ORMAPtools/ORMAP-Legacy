@@ -2,6 +2,11 @@ ORMAP Taxlot Editing Toolbar
 Copyright 2008 ORMAP Tech Group
 Version 2, January 8, 2008
 
+Tag for this file: $Name$
+SCC revision number: $Revision: 208 $
+Date of Last Change: $Date: 2008-02-25 16:41:30 -0800 (Mon, 25 Feb 2008) $
+
+
 
 Copyright Holder:  ORMAP Tech Group  
 Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at 

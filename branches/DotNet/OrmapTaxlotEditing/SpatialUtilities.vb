@@ -35,8 +35,10 @@
 'Date of Last Change: $Date$
 #End Region
 
-#Region "Imported namespace statements"
+#Region "Imported Namespace Statements"
+Imports System.Collections.Generic
 Imports System.Windows.Forms
+Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Geometry
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Geodatabase
@@ -46,19 +48,21 @@ Imports ESRI.ArcGIS.Carto
 
 #Region "Class Declaration"
 ''' <summary>
-'''  General utility class
+'''  General utility class.
 ''' </summary>
-''' <remarks>Commonly used procedures and functions</remarks>
+''' <remarks>Commonly used procedures and functions.</remarks>
 Public NotInheritable Class SpatialUtilities
 #Region "Custom Class Members"
 #Region "Public Members"
 
     ''' <summary>
-    ''' Calculates Taxlot values from ORMAPMapnum
+    ''' Calculates Taxlot values from ORMAPMapnum.
     ''' </summary>
-    ''' <param name="feature">A feature from the Taxlot feature class</param>
-    ''' <param name="mapIndexLayer">The Map Index feature layer</param>
-    ''' <remarks>Update the ORMAP fields in a_pFeat to the reflect the current ORMAP Number and Map Number elements in the overlaying Map Index polygon.</remarks>
+    ''' <param name="feature">A feature from the Taxlot feature class.</param>
+    ''' <param name="mapIndexLayer">The Map Index feature layer.</param>
+    ''' <remarks>Updates the ORMAP fields in <paramref name="feature"/> to 
+    ''' reflect the current ORMAP Number and Map Number elements in the 
+    ''' overlaying <paramref name="mapIndexLayer"/> polygon.</remarks>
     Public Shared Sub CalculateTaxlotValues(ByRef feature As IFeature, ByRef mapIndexLayer As IFeatureLayer)
         'TODO: JWM flesh out
         Try
@@ -69,12 +73,15 @@ Public NotInheritable Class SpatialUtilities
     End Sub
 
     ''' <summary>
-    ''' Converts a domain descriptive value to the stored code
+    ''' Converts a domain descriptive value to the stored code.
     ''' </summary>
-    ''' <param name="fields">An object that supports the IFields interface</param>
-    ''' <param name="fieldName">A field that exists in fields</param>
+    ''' <param name="fields">An field collection object that supports the 
+    ''' <c>IFields</c> interface.</param>
+    ''' <param name="fieldName">A field that exists in fields.</param>
     ''' <param name="codedValue">A coded name to convert to a coded value</param>
-    ''' <returns>A string that represents the domain coded value that corresponds with the coded name, codedValue, or a empty string.</returns>
+    ''' <returns>A string that represents the domain coded value that 
+    ''' corresponds with the coded value name (<paramref name="codedValue"/>), or 
+    ''' a empty string.</returns>
     ''' <remarks></remarks>
     Public Shared Function ConvertCodeValueDomainToCode(ByVal fields As IFields, ByVal fieldName As String, ByVal codedValue As String) As String
         Try
@@ -115,12 +122,15 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Converts a code index to the  domain descriptive value
+    ''' Converts a code index to the domain descriptive value.
     ''' </summary>
-    ''' <param name="fields">An object that supports the IFields interface</param>
-    ''' <param name="fieldName">A field that exists in fields</param>
-    ''' <param name="codedValue">A coded value to covert to a coded name</param>
-    ''' <returns>A string that represents the domain coded name that corresponds with the coded value, codedValue, or a zero-length string.</returns>
+    ''' <param name="fields">An field collection object that supports the 
+    ''' <c>IFields</c> interface.</param>
+    ''' <param name="fieldName">A field that exists in fields.</param>
+    ''' <param name="codedValue">A coded value to covert to a coded name.</param>
+    ''' <returns>A string that represents the domain coded name that 
+    ''' corresponds with the coded value name (<paramref name="codedValue"/>), or 
+    ''' empty string.</returns>
     ''' <remarks></remarks>
     Public Shared Function ConvertCodeValueDomainToDescription(ByVal fields As IFields, ByVal fieldName As String, ByVal codedValue As String) As String
         Try
@@ -155,52 +165,47 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Locate a feature layer in the TOC
+    ''' Locate a feature layer by its dataset name.
     ''' </summary>
-    ''' <param name="dataSetName">The name of the dataset to find</param>
-    ''' <returns>A layer object of that supports the IFeatureLayer interface.</returns>
-    ''' <remarks>Return the Feature Layer based on its dataset name, recursively</remarks>
+    ''' <param name="dataSetName">The name of the dataset to find.</param>
+    ''' <returns>A layer object of that supports the <c>IFeatureLayer</c> 
+    ''' interface.</returns>
+    ''' <remarks>Searches in the TOC recursively (i.e. within group layers). 
+    ''' Returns the first Feature Layer with a matching dataset name.</remarks>
     Public Shared Function FindFeatureLayerByDSName(ByVal dataSetName As String) As ESRI.ArcGIS.Carto.IFeatureLayer
         Try
-            Dim returnValue As IFeatureLayer
+            Dim returnValue As IFeatureLayer = Nothing
 
-            Dim thisDoc As Object 'TODO: JWM need a pointer/handle to the ARcMap document
-            Dim theMap As IMap = thisDoc.focusMap
-            Dim thisUID As UID
+            Dim theMap As IMap = EditorExtension.Editor.Map
+            Dim thisUID As New UID
             ' Get a reference to the feature layers collection of the document. 
             thisUID.Value = "{E156D7E5-22AF-11D3-9F99-00C04F6BC78E}"
             'We want a EnumLayer containing all FeatureLayer objects.
-            Dim theLayers As IEnumLayer
-            theLayers = theMap.Layers(thisUID, True)
+            Dim theFeatureLayers As IEnumLayer
+            theFeatureLayers = theMap.Layers(thisUID, True)
 
-            theLayers.Reset()
-            Dim thisLayer As ILayer
-            thisLayer = theLayers.Next()
-
+            theFeatureLayers.Reset()
             Dim thisFeatureLayer As IFeatureLayer
+            thisFeatureLayer = DirectCast(theFeatureLayers.Next, IFeatureLayer)
+
             Dim thisDataSet As IDataset
 
-            Do While Not (thisLayer Is Nothing)
-                thisFeatureLayer = DirectCast(thisLayer, IFeatureLayer)
+            Do While Not (thisFeatureLayer Is Nothing)
                 thisDataSet = DirectCast(thisFeatureLayer.FeatureClass, IDataset)
                 If Not (thisDataSet Is Nothing) Then
                     If String.Compare(thisDataSet.Name, dataSetName, True) = 0 Then
-                        returnValue = DirectCast(thisLayer, IFeatureLayer)
+                        returnValue = DirectCast(thisFeatureLayer, IFeatureLayer)
+                        Exit Do
                     End If
                 End If
-                thisLayer = theLayers.Next
+                thisFeatureLayer = DirectCast(theFeatureLayers.Next(), IFeatureLayer)
             Loop
-
-            If (returnValue Is Nothing) Then 'TODO: JWM Is this how we should return objects?
-                returnValue = New FeatureLayer
-                Return returnValue
-            Else
-                Return returnValue
-            End If
 
             thisUID = Nothing
             theMap = Nothing
-            thisDoc = Nothing
+
+            Return returnValue
+            
         Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return Nothing
@@ -208,35 +213,36 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Retrieve a feature-linked annotation feature
+    ''' Retrieve a feature-linked annotation feature.
     ''' </summary>
-    ''' <param name="anObject">An initialized geodatabase object</param>
-    ''' <returns>An object that supports the IFeature interface.</returns>
-    ''' <remarks>Finds all related objects to the feature through the first found relationship class, and returns the first related object as the return value.
-    ''' This is optimized for annotation because there is a single relationship class.</remarks>
+    ''' <param name="anObject">An initialized geodatabase object.</param>
+    ''' <returns>An object that supports the <c>IFeature</c> interface.</returns>
+    ''' <remarks><para>Finds all related objects to the feature through the 
+    ''' first found relationship class, and returns the first related object as 
+    ''' the return value.</para>
+    ''' <para>This is optimized for annotation because there is a single 
+    ''' relationship class.</para></remarks>
     Public Shared Function GetRelatedObjects(ByVal anObject As IObject) As IFeature
         Try
             Dim relationshipClassEnum As IEnumRelationshipClass
-            Dim parentSet As ISet
 
             relationshipClassEnum = anObject.Class.RelationshipClasses(esriRelRole.esriRelRoleAny)
-            If Not relationshipClassEnum Is Nothing Then
+            If relationshipClassEnum IsNot Nothing Then
                 Dim thisRelationshipClass As IRelationshipClass
                 thisRelationshipClass = relationshipClassEnum.Next
-                If Not thisRelationshipClass Is Nothing Then
+                If thisRelationshipClass IsNot Nothing Then
+                    Dim parentSet As ISet
                     parentSet = thisRelationshipClass.GetObjectsRelatedToObject(anObject)
-                End If
-            Else
-                Return Nothing
-            End If
-            ' Returns the first related feature
-            If Not parentSet Is Nothing Then
-                Dim parentFeature As IFeature
-                parentFeature = DirectCast(parentSet.Next, IFeature)
-                If Not parentFeature Is Nothing Then
-                    Return parentFeature
+                    If parentSet IsNot Nothing Then
+                        Dim parentFeature As IFeature
+                        parentFeature = DirectCast(parentSet.Next, IFeature)
+                        If parentFeature IsNot Nothing Then
+                            Return parentFeature
+                        End If
+                    End If
                 End If
             End If
+            Return Nothing
         Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return Nothing
@@ -244,11 +250,12 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Return a cursor for the selected features
+    ''' Return a feature cursor of the selected features of the specified layer.
     ''' </summary>
     ''' <param name="layer">The feature layer to return the selection from</param>
-    ''' <returns>An object that supports the IFeatureCursor interface</returns>
-    ''' <remarks>References the currently selected features in layer, and return a cursor with the feature in it.</remarks>
+    ''' <returns>An object that supports the <c>IFeatureCursor</c> interface.</returns>
+    ''' <remarks>References the currently selected features in layer, and 
+    ''' returns a feature cursor with the selected features in it.</remarks>
     Public Shared Function GetSelectedFeatures(ByVal layer As IFeatureLayer) As IFeatureCursor
         Try
             If Not TypeOf layer Is IFeatureLayer Then
@@ -258,8 +265,9 @@ Public NotInheritable Class SpatialUtilities
             Dim thisSelection As IFeatureSelection
             thisSelection = DirectCast(layer, IFeatureSelection)
             Dim returnValue As IFeatureCursor
-            ' Returns a cursor with the selected items from the specified feature layer
-            thisSelection.SelectionSet.Search(Nothing, False, DirectCast(returnValue, ICursor))
+            Dim thisCursor As ICursor = Nothing
+            thisSelection.SelectionSet.Search(Nothing, False, thisCursor)
+            returnValue = DirectCast(thisCursor, IFeatureCursor)
             Return returnValue
         Catch ex As Exception
             MessageBox.Show(ex.Message)
@@ -267,45 +275,55 @@ Public NotInheritable Class SpatialUtilities
         End Try
     End Function
 
+    ' TODO: NIS Take over this function from JWM and refactor (smaller modules).
     ''' <summary>
-    ''' Overlay the passed in feature with a feature class to get a value from fieldName
+    ''' Overlay the passed in feature with a feature class to get a value from 
+    ''' the specified field.
     ''' </summary>
-    ''' <param name="theGeometry">The search geometry</param>
-    ''' <param name="ovrlayFeatureClass">Overlying feature class</param>
-    ''' <param name="fieldName">Name of field to return value for</param>
-    ''' <param name="orderBestByFldName">Name of field to order by in the case of a tie in area/length of intersection</param>
-    ''' <returns>Returns the value from the specified field (fieldName) as a string</returns>
-    ''' <remarks>Get the target feature with the largest area of intersection with pGeometry and get its value from the field, or, if tied
-    '''(unikely but possible), then get the best (lowest) value from the field.</remarks>
-    Public Shared Function GetValueViaOverlay(ByRef theGeometry As IGeometry, ByRef ovrlayFeatureClass As IFeatureClass, ByVal fieldName As String, Optional ByVal orderBestByFldName As String = "") As String
+    ''' <param name="theGeometry">The search geometry.</param>
+    ''' <param name="overlayFeatureClass">Overlaying feature class.</param>
+    ''' <param name="valueFieldName">Name of field to return value for.</param>
+    ''' <param name="orderBestByFieldName">Name of field to order by in the 
+    ''' case of a tie in area/length of intersection.</param>
+    ''' <returns>Returns the value from the specified field (<paramref>valueFieldName</paramref>) as a string.</returns>
+    ''' <remarks>Gets the target feature with the largest area of intersection 
+    ''' with the geometry and gets its value from the field, or, if tied (unikely 
+    ''' but possible), then gets the best (lowest) value from the field, based 
+    ''' on the order by field value.</remarks>
+    Public Shared Function GetValueViaOverlay(ByRef theGeometry As IGeometry, ByRef overlayFeatureClass As IFeatureClass, ByVal valueFieldName As String, Optional ByVal orderBestByFieldName As String = "") As String
         Try
             Dim continueThisProcess As Boolean
 
             continueThisProcess = True 'initialize
 
-            If (theGeometry Is Nothing) OrElse (ovrlayFeatureClass Is Nothing) OrElse (Len(fieldName) <= 0) Then
+            If (theGeometry Is Nothing) OrElse (overlayFeatureClass Is Nothing) OrElse (Len(valueFieldName) <= 0) Then
                 continueThisProcess = False
             End If
 
-            Dim fieldIndex As Integer
-            fieldIndex = ovrlayFeatureClass.Fields.FindField(fieldName)
-            If fieldIndex < 0 Then
-                continueThisProcess = False
+            Dim valueFieldIndex As Integer = -1
+            If continueThisProcess Then
+                valueFieldIndex = overlayFeatureClass.Fields.FindField(valueFieldName)
+                If valueFieldIndex < 0 Then
+                    continueThisProcess = False
+                End If
             End If
 
-            Dim indexOrderByField As Integer
-            If orderBestByFldName.Length = 0 Then
-                ' Use the value field as the order-by field
-                indexOrderByField = fieldIndex
-            Else
-                indexOrderByField = ovrlayFeatureClass.Fields.FindField(orderBestByFldName)
-                If indexOrderByField < 0 Then
-                    'field not found. Try the OID field
-                    If ovrlayFeatureClass.HasOID Then
-                        indexOrderByField = ovrlayFeatureClass.Fields.FindField(ovrlayFeatureClass.OIDFieldName)
-                        MessageBox.Show("Field " & orderBestByFldName & " not found in " & ovrlayFeatureClass.AliasName & ". Using " & ovrlayFeatureClass.OIDFieldName, "Taxlot Editing - Get Value Via Overlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                    Else
-                        continueThisProcess = False
+            Dim orderBestByFieldIndex As Integer = -1
+            If continueThisProcess Then
+                If orderBestByFieldName.Length = 0 Then
+                    ' Use the value field as the order-by field
+                    orderBestByFieldIndex = valueFieldIndex
+                Else
+                    orderBestByFieldIndex = overlayFeatureClass.Fields.FindField(orderBestByFieldName)
+                    If orderBestByFieldIndex < 0 Then
+                        ' Field not found. Try the OID field
+                        If overlayFeatureClass.HasOID Then
+                            orderBestByFieldIndex = overlayFeatureClass.Fields.FindField(overlayFeatureClass.OIDFieldName)
+                            'TODO: NIS Remove this message or handle better?
+                            MessageBox.Show("Field " & orderBestByFieldName & " not found in " & overlayFeatureClass.AliasName & ". Using " & overlayFeatureClass.OIDFieldName, "Taxlot Editing - Get Value Via Overlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                        Else
+                            continueThisProcess = False
+                        End If
                     End If
                 End If
             End If
@@ -314,148 +332,178 @@ Public NotInheritable Class SpatialUtilities
             Dim thisArea As IArea
             Dim thisCurve As ICurve
             Dim thisEnvelope As IEnvelope
-            Dim aPointCollection As IPointCollection
-            Dim workingFuzzAmount As Double
-            Dim dictCandidates As Dictionary(Of Integer, Double)
-            Const fuzzFactor As Double = 0.05
-            Dim theBestValue As String = ""
-
+            Dim intersectFuzzAmount As Double
+            Const fuzzFactor As Double = 0.05 ' TODO: NIS Re-implement as user setting?
+            
             If continueThisProcess Then
                 Select Case theGeometry.GeometryType
                     Case esriGeometryType.esriGeometryPolygon
                         thisPolygon = DirectCast(theGeometry, IPolygon)
                         thisArea = DirectCast(thisPolygon, IArea)
-                        workingFuzzAmount = thisArea.Area * fuzzFactor
+                        intersectFuzzAmount = thisArea.Area * fuzzFactor
 
                     Case esriGeometryType.esriGeometryPolyline, esriGeometryType.esriGeometryLine, esriGeometryType.esriGeometryBezier3Curve, esriGeometryType.esriGeometryCircularArc, esriGeometryType.esriGeometryEllipticArc, esriGeometryType.esriGeometryPath
                         thisCurve = DirectCast(theGeometry, ICurve)
-                        workingFuzzAmount = thisCurve.Length * fuzzFactor
+                        intersectFuzzAmount = thisCurve.Length * fuzzFactor
 
                     Case esriGeometryType.esriGeometryEnvelope
                         thisEnvelope = DirectCast(theGeometry, IEnvelope)
                         thisPolygon = EnvelopeToPolygon(thisEnvelope)
+                        thisArea = DirectCast(thisPolygon, IArea)
+                        intersectFuzzAmount = thisArea.Area * fuzzFactor
+
                     Case Else
-                        Exit Try 'HACK JWM
+                        continueThisProcess = False
+
                 End Select
+            End If
 
-                Dim largestInternalArea As Double = 0
-                Dim longestInternalLength As Double = 0
+            Dim theOverlayFeatureCursor As IFeatureCursor
+            Dim anOverlayFeature As IFeature
+            Dim dictCandidates As New Dictionary(Of Integer, Double) '(key::value) OID::area/length
 
-                Dim aFeatureCursor As IFeatureCursor
-                Dim aFeature As IFeature
-                aFeatureCursor = DoSpatialQuery(ovrlayFeatureClass, theGeometry, esriSpatialRelEnum.esriSpatialRelIntersects)
-                If Not (aFeatureCursor Is Nothing) Then
-                    aFeature = aFeatureCursor.NextFeature
+            If continueThisProcess Then
+
+                Dim largestIntersectArea As Double = 0
+                Dim longestIntersectLength As Double = 0
+
+                theOverlayFeatureCursor = DoSpatialQuery(overlayFeatureClass, theGeometry, esriSpatialRelEnum.esriSpatialRelIntersects)
+                If theOverlayFeatureCursor IsNot Nothing Then
+                    anOverlayFeature = theOverlayFeatureCursor.NextFeature
                     Dim topoOperator As ITopologicalOperator
-                    Dim interiorGeometry As IGeometry
-                    Dim interiorArea As Double = 0
+                    Dim intersectGeometry As IGeometry
+                    Dim intersectArea As Double = 0
                     dictCandidates = New Dictionary(Of Integer, Double)
-                    While Not (aFeature Is Nothing)
+                    While Not (anOverlayFeature Is Nothing)
 
-                        topoOperator = DirectCast(aFeature.Shape, ITopologicalOperator)
+                        topoOperator = DirectCast(anOverlayFeature.Shape, ITopologicalOperator)
                         If Not topoOperator.IsSimple Then
                             topoOperator.Simplify()
                         End If
-
 
                         Select Case theGeometry.GeometryType
 
                             Case esriGeometryType.esriGeometryEnvelope, esriGeometryType.esriGeometryPolygon
                                 ' Determine if the target feature has the largest area of intersection with the
                                 ' current source feature. Set flags used below.
-                                interiorGeometry = topoOperator.Intersect(theGeometry, esriGeometryDimension.esriGeometry2Dimension)
-                                If Not interiorGeometry.IsEmpty Then
-                                    thisPolygon = DirectCast(interiorGeometry, IPolygon)
+                                intersectGeometry = topoOperator.Intersect(theGeometry, esriGeometryDimension.esriGeometry2Dimension)
+                                If Not intersectGeometry.IsEmpty Then
+                                    thisPolygon = DirectCast(intersectGeometry, IPolygon)
                                     thisArea = DirectCast(thisPolygon, IArea)
-                                    interiorArea = thisArea.Area
-                                    If System.Math.Abs(interiorArea - largestInternalArea) > workingFuzzAmount Then
+                                    intersectArea = thisArea.Area
+                                    If System.Math.Abs(intersectArea - largestIntersectArea) > intersectFuzzAmount Then
                                         '[Difference greater than fuzz amount, so not a "fuzzy tie"...]
-
-                                        ' Determine if this is the feature with the largest area of intersection
-                                        If interiorArea > largestInternalArea Then
-                                            largestInternalArea = interiorArea
-                                            '[New longest intersection...]
-                                            ' Get the value only for this feature
-                                            'TODO: JWM Need to empty collection then add
-                                            dictCandidates.Add(aFeature.OID, largestInternalArea)
+                                        ' Determine if this is the feature with the largest area of intersection.
+                                        If intersectArea > largestIntersectArea Then
+                                            largestIntersectArea = intersectArea
+                                            '[New largest intersection...]
+                                            ' Get the value only for this feature.
+                                            dictCandidates.Clear()
+                                            dictCandidates.Add(anOverlayFeature.OID, largestIntersectArea)
+                                        Else
+                                            '[Smaller intersection...]
+                                            ' Don't get the value for this feature.
                                         End If
                                     Else
                                         '[Difference not greater than fuzz amount, so a "fuzzy tie"...]
-
-                                        ' Evaluate this feature against other tied candidates
-                                        dictCandidates.Add(aFeature.OID, largestInternalArea)
+                                        ' Evaluate this feature against other tied candidates (don't clear dictionary).
+                                        dictCandidates.Add(anOverlayFeature.OID, largestIntersectArea)
                                     End If
+                                Else
+                                    '[Empty intersection geometry...]
+                                    ' Don't get the value for this feature
                                 End If
 
                             Case esriGeometryType.esriGeometryLine, esriGeometryType.esriGeometryPolyline
                                 ' Determine if the target feature has the longest length of intersection with the
                                 ' current source feature. Set flags used below.
-                                interiorGeometry = topoOperator.Intersect(theGeometry, esriGeometryDimension.esriGeometry1Dimension)
-                                If Not interiorGeometry.IsEmpty Then
-                                    thisCurve = DirectCast(interiorGeometry, ICurve)
-                                    Dim interiorLength As Double
-                                    interiorLength = thisCurve.Length
-                                    If System.Math.Abs(interiorLength - longestInternalLength) > workingFuzzAmount Then
+                                intersectGeometry = topoOperator.Intersect(theGeometry, esriGeometryDimension.esriGeometry1Dimension)
+                                If Not intersectGeometry.IsEmpty Then
+                                    thisCurve = DirectCast(intersectGeometry, ICurve)
+                                    Dim intersectLength As Double
+                                    intersectLength = thisCurve.Length
+                                    If System.Math.Abs(intersectLength - longestIntersectLength) > intersectFuzzAmount Then
                                         '[Difference greater than fuzz amount, so not a "fuzzy tie"...]
                                         ' Determine if this is the feature with the longest length of intersection
-                                        If interiorLength > longestInternalLength Then
-                                            longestInternalLength = interiorLength
-                                            'TODO: JWM Need to empty collection then add
-                                            dictCandidates.Add(aFeature.OID, longestInternalLength)
+                                        If intersectLength > longestIntersectLength Then
+                                            longestIntersectLength = intersectLength
+                                            dictCandidates.Clear()
+                                            dictCandidates.Add(anOverlayFeature.OID, longestIntersectLength)
+                                        Else
+                                            '[Smaller intersection...]
+                                            ' Don't get the value for this feature
                                         End If
                                     Else
                                         '[Difference not greater than fuzz amount, so a "fuzzy tie"...]
-                                        'Evaluate this feature against other tied candidates
-                                        dictCandidates.Add(aFeature.OID, longestInternalLength)
+                                        'Evaluate this feature against other tied candidates (don't clear dictionary).
+                                        dictCandidates.Add(anOverlayFeature.OID, longestIntersectLength)
                                     End If
+                                Else
+                                    '[Empty intersection geometry...]
+                                    ' Don't get the value for this feature
                                 End If
+
                             Case esriGeometryType.esriGeometryPoint
                                 '[Tied by definition (0-dimension = zero area & length = tie)...]
-                                ' Evaluate this feature against other tied candidates
-                                dictCandidates.Add(aFeature.OID, 0)
+                                ' Evaluate this feature against other tied candidates (don't clear dictionary).
+                                dictCandidates.Add(anOverlayFeature.OID, 0)
+
                             Case Else
-                                Exit Try 'HACK jwm
+                                continueThisProcess = False
+
                         End Select
-                        aFeature = aFeatureCursor.NextFeature
+                        anOverlayFeature = theOverlayFeatureCursor.NextFeature
                     End While
                 End If
-                If dictCandidates.Count > 0 Then
-                    Dim theValue As String = ""
 
+            End If
+
+            Dim theBestValue As String = ""
+
+            If continueThisProcess Then
+
+                If dictCandidates.Count > 0 Then
+                    Dim aValue As String = ""
                     Dim theBestOrderByValue As String = ""
 
-                    Dim whereClause As String = String.Concat(ovrlayFeatureClass.OIDFieldName, " in (", Join(dictCandidates.KeyCollection, ","), ")") 'TODO JWM Fix this assignment
-                    aFeatureCursor = DoSpatialQuery(ovrlayFeatureClass, theGeometry, esriSpatialRelEnum.esriSpatialRelIntersects, whereClause)
-                    If Not (aFeatureCursor Is Nothing) Then
-                        aFeature = aFeatureCursor.NextFeature
-                        While Not (aFeature Is Nothing)
+                    Dim whereClause As String = String.Concat(overlayFeatureClass.OIDFieldName, " in (", CandidateKeysToDelimitedString(dictCandidates), ")")
+                    theOverlayFeatureCursor = DoSpatialQuery(overlayFeatureClass, theGeometry, esriSpatialRelEnum.esriSpatialRelIntersects, whereClause)
+                    If Not (theOverlayFeatureCursor Is Nothing) Then
+                        anOverlayFeature = theOverlayFeatureCursor.NextFeature
+                        While Not (anOverlayFeature Is Nothing)
                             If dictCandidates.Count > 1 Then
                                 '[Candidates tied for area/length of intersection (unikely but possible)...]
                                 ' Get the value only if the candidate source feature has the best (lowest) order-by value
-                                Dim orderByValue As String = CStr(aFeature.Value(indexOrderByField))
-                                If theBestOrderByValue.Length = 0 Or (orderByValue < theBestOrderByValue) Then 'TODO: JWM Ask Nick about this comparison
-                                    theBestOrderByValue = orderByValue
-                                    If Not IsDBNull(aFeature.Value(fieldIndex)) Then
-                                        theValue = CStr(aFeature.Value(fieldIndex))
-                                        theBestValue = theValue
+                                Dim anOrderByValue As String = CStr(anOverlayFeature.Value(orderBestByFieldIndex))
+                                ' Note: When you compare strings, the string expressions are evaluated based on their 
+                                ' alphabetical sort order (e.g. "A" < "B" and "A" < "Ax"), which depends on the Option 
+                                ' Compare setting.
+                                If theBestOrderByValue.Length = 0 OrElse anOrderByValue < theBestOrderByValue Then
+                                    '[Any new value beats an empty value...]
+                                    '[lower in the sort order is assumed to be better...]
+                                    theBestOrderByValue = anOrderByValue
+                                    If Not IsDBNull(anOverlayFeature.Value(valueFieldIndex)) Then
+                                        aValue = CStr(anOverlayFeature.Value(valueFieldIndex))
+                                        theBestValue = aValue
                                     Else
-                                        MessageBox.Show("The field " & aFeature.Fields.Field(fieldIndex).Name & " contains a Null" & vbNewLine & "for the feature with OID=" & aFeature.OID & ".", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                        MessageBox.Show("The field " & anOverlayFeature.Fields.Field(valueFieldIndex).Name & " contains a Null" & vbNewLine & "for the feature with OID=" & anOverlayFeature.OID & ".", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                                     End If
                                 End If
                             Else
                                 '[Candidates not tied (only one)...]
                                 ' Get the value for the only candidate feature
-                                If Not IsDBNull(aFeature.Value(fieldIndex)) Then
-                                    theValue = CStr(aFeature.Value(fieldIndex))
-                                    theBestValue = theValue
+                                If Not IsDBNull(anOverlayFeature.Value(valueFieldIndex)) Then
+                                    aValue = CStr(anOverlayFeature.Value(valueFieldIndex))
+                                    theBestValue = aValue
                                 Else
-                                    MessageBox.Show("The field " & aFeature.Fields.Field(fieldIndex).Name & " contains a Null" & vbNewLine & "for the feature with OID=" & aFeature.OID & ".", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                    MessageBox.Show("The field " & anOverlayFeature.Fields.Field(valueFieldIndex).Name & " contains a Null" & vbNewLine & "for the feature with OID=" & anOverlayFeature.OID & ".", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                                 End If
-                            End If 'dictCandidates.count >1
+                                Exit While
+                            End If 'dictCandidates.count > 1
                         End While
                     End If 'featurecursor is not nothing
                 Else
-                    MessageBox.Show("No " & ovrlayFeatureClass.AliasName & "features found " & vbNewLine & " which intersect this feature.", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    MessageBox.Show("No " & overlayFeatureClass.AliasName & "features found " & vbNewLine & " which intersect this feature.", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 End If 'dictionary count > zero
             End If 'continueThisProcess 
 
@@ -470,27 +518,20 @@ Public NotInheritable Class SpatialUtilities
     ''' <summary>
     ''' Determines if the feature layer has a selection
     ''' </summary>
-    ''' <param name="layer">An object that supports the IFeatureLayer2</param>
+    ''' <param name="layer">An object that supports the IFeatureLayer</param>
     ''' <returns>True or False</returns>
     ''' <remarks>Checking the selection set of layer, determine if one, many, or no features are selected.</remarks>
-    Public Shared Function HasSelectedFeatures(ByVal layer As IFeatureLayer2) As Boolean
+    Public Shared Function HasSelectedFeatures(ByVal layer As IFeatureLayer) As Boolean
         Try
             Dim returnValue As Boolean = False
             If (layer Is Nothing) Or Not (TypeOf layer Is IFeatureLayer) Then
-                Return False
+                Return returnValue
             End If
-            'how many are selected
+
+            ' How many are selected?
             Dim featuresSelected As IFeatureSelection
             featuresSelected = DirectCast(layer, IFeatureSelection)
-            Dim thisFeatureCursor As IFeatureCursor
-            featuresSelected.SelectionSet.Search(Nothing, False, DirectCast(thisFeatureCursor, ICursor))
-            If Not thisFeatureCursor Is Nothing Then
-                Dim thisFeature As IFeature
-                thisFeature = thisFeatureCursor.NextFeature
-                If thisFeature Is Nothing Then
-                    returnValue = True
-                End If
-            End If
+            returnValue = (featuresSelected.SelectionSet.Count > 0)
             Return returnValue
         Catch ex As Exception
             MessageBox.Show(ex.Message)
@@ -499,12 +540,13 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Determine if the feature belongs to the Taxlot feature class
+    ''' Determine if the feature belongs to the Taxlot feature class.
     ''' </summary>
-    ''' <param name="thisObject">A valid initialized geodatabase object</param>
-    ''' <returns>True or False</returns>
-    ''' <remarks>Determine if thisObject belongs to the Taxlot feature class by checking the name of the dataset of thisObject feature class
-    ''' againts the Taxlot Feature Class constant.</remarks>
+    ''' <param name="thisObject">A valid initialized geodatabase object.</param>
+    ''' <returns><c>True</c> or <c>False</c>.</returns>
+    ''' <remarks>Determine if thisObject belongs to the Taxlot feature class by 
+    ''' checking the name of the dataset of thisObject feature class against 
+    ''' the Taxlot Feature Class constant.</remarks>
     Public Shared Function IsTaxlot(ByVal thisObject As IObject) As Boolean
         Try
             Dim thisObjectClass As IObjectClass
@@ -523,12 +565,13 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Determine if the feature belongs to the MapIndex feature class
+    ''' Determine if the feature belongs to the MapIndex feature class.
     ''' </summary>
-    ''' <param name="thisObject">A valid initialized geodatabase object</param>
-    ''' <returns>True or False</returns>
-    ''' <remarks>Compares the name of the dataset of thisObject feature class to the Map Index layer name in order to determine if thisObject
-    ''' belongs to the MapIndex feature class.</remarks>
+    ''' <param name="thisObject">A valid initialized geodatabase object.</param>
+    ''' <returns><c>True</c> or <c>False</c>.</returns>
+    ''' <remarks>Compares the name of the dataset of the <paramref name="thisObject"/> 
+    ''' feature class to the Map Index layer name in order to determine if it 
+    ''' is the MapIndex feature class.</remarks>
     Public Shared Function IsMapIndex(ByVal thisObject As IObject) As Boolean
         Try
             Dim thisObjectClass As IObjectClass
@@ -547,12 +590,12 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Determine if a feature is annotation
+    ''' Determine if a feature is annotation.
     ''' </summary>
-    ''' <param name="thisObject">A valid initialized geodatabase object</param>
-    ''' <returns>True or False</returns>
-    ''' <remarks>Compares the feature type of thisObjec with that of annotation
-    ''' and return the truth value of the comparison</remarks>
+    ''' <param name="thisObject">A valid initialized geodatabase object.</param>
+    ''' <returns><c>True</c> or <c>False</c>.</returns>
+    ''' <remarks>Compares the feature type of <paramref name="thisObject"/> with 
+    ''' that of annotation and return the truth value of the comparison.</remarks>
     Public Shared Function IsAnno(ByVal thisObject As IObject) As Boolean
         Try
             Dim thisObjectClass As IObjectClass
@@ -573,6 +616,7 @@ Public NotInheritable Class SpatialUtilities
         End Try
     End Function
 
+    ' TODO: NIS Format XML comments like previous (ending periods, etc.).
     ''' <summary>
     ''' Loads a feature class into the current map
     ''' </summary>
@@ -621,18 +665,20 @@ Public NotInheritable Class SpatialUtilities
             thisDataSet = DirectCast(thisFeatureClass, IDataset)
             thisFeatureLayer.Name = thisDataSet.Name
 
-            Dim thisArcMapDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
-            thisArcMapDoc= object 'TODO: Need a pointer/handle to the application
             Dim thisMap As ESRI.ArcGIS.Carto.IMap
-            thisMap = thisArcMapDoc.FocusMap
-
+            thisMap = EditorExtension.Editor.Map
             thisMap.AddLayer(thisFeatureLayer)
+
+            Dim thisArcMapDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
+            thisArcMapDoc = DirectCast(EditorExtension.Editor.Parent.Document, IMxDocument)
             thisArcMapDoc.CurrentContentsView.Refresh(0)
+
             Return True
         Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return False
         End Try
+
     End Function
 
     ''' <summary>
@@ -677,7 +723,7 @@ Public NotInheritable Class SpatialUtilities
                         domainValue = row.Value(fieldIndex)
                         'search domain for the code
                         For domainIndex As Integer = 0 To thisCodedValueDomain.CodeCount - 1
-                            If thisCodedValueDomain.Value(domainIndex) = domainValue Then 'TODO: JWM Need to resolve this comparison
+                            If thisCodedValueDomain.Value(domainIndex).ToString = domainValue.ToString Then 'TODO: NIS Confirm that ToString will work here
                                 returnValue = thisCodedValueDomain.Name(domainIndex)
                                 Exit For
                             End If
@@ -753,7 +799,7 @@ Public NotInheritable Class SpatialUtilities
             mapIndexFeatureClass = mapIndexFeatureLayer.FeatureClass
 
             ' Checks for the existence of a current ORMAP Number and Taxlot number
-            Dim mapIndexORMAPValue As String
+            Dim mapIndexORMAPValue As String = String.Empty
             'mapIndexORMAPValue= getvalueViaOverlay()'TODO: JWM Flesh this function out
             If mapIndexORMAPValue.Length = 0 Then
                 returnValue = True
@@ -808,6 +854,33 @@ Public NotInheritable Class SpatialUtilities
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
+    End Function
+
+    ''' <summary>
+    ''' Converts the list of candidate dictionary keys to a string in the 
+    ''' format of a comma-delimited list.
+    ''' </summary>
+    ''' <param name="candidatesDictionary">A dictionary of integer candidate ids for keys.</param>
+    ''' <returns>A string in the format of a comma-delimited list.</returns>
+    ''' <remarks>An empty dictionary will return as an empty string.</remarks>
+    Private Shared Function CandidateKeysToDelimitedString(ByRef candidatesDictionary As Dictionary(Of Integer, Double)) As String
+        Dim keyCollection As ICollection(Of Integer) = DirectCast(candidatesDictionary.Keys, ICollection(Of Integer))
+        Dim returnValue As String = String.Empty
+
+        If keyCollection.Count > 0 Then
+            ' The elements of the keyCollection are strongly typed
+            ' with the type that was specified for dictionary values.
+            For Each n As Integer In keyCollection
+                ' Append keys as strings and commas.
+                returnValue &= (CStr(n) & ",")
+            Next n
+            ' Trim off the last comma.
+            returnValue = Left(returnValue, Len(False) - 1)
+        Else
+            ' Will return the default empty string.
+        End If
+        Return returnValue
+
     End Function
 
     ''' <summary>

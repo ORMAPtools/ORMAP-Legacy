@@ -142,7 +142,7 @@ Public NotInheritable Class AddArrows
     End Sub
 
     Public Overrides Sub OnClick()
-        'TODO: Add AddArrows.OnClick implementation
+        ' TODO: NIS Add AddArrows.OnClick implementation
         System.Windows.Forms.MessageBox.Show("Add AddArrows.OnClick implementation")
     End Sub
 

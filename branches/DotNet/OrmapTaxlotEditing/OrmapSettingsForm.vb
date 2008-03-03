@@ -28,15 +28,18 @@
 ' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #End Region
+
 #Region "Subversion Keyword expansion"
 'Tag for this file: $Name$
-'SCC revision number: $Revision:$
-'Date of Last Change: $Date:$
+'SCC revision number: $Revision$
+'Date of Last Change: $Date$
 #End Region
 
+Imports System.Runtime.InteropServices
 Imports System.Configuration
 Imports System.Windows.Forms
 
+<ComVisible(False)> _
 Public Class OrmapSettingsForm
 
 #Region "Class-Level Constants And Enumerations"
@@ -65,11 +68,9 @@ Public Class OrmapSettingsForm
 #Region "Custom Class Members"
 
 #Region "Fields"
-    ' None
 #End Region
 
 #Region "Properties"
-    ' None
 #End Region
 
 #Region "Event Handlers"

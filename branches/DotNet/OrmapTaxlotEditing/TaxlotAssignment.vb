@@ -31,8 +31,8 @@
 
 #Region "Subversion Keyword expansion"
 'Tag for this file: $Name$
-'SCC revision number: $Revision:$
-'Date of Last Change: $Date:$
+'SCC revision number: $Revision$
+'Date of Last Change: $Date$
 #End Region
 
 Imports System.Drawing
@@ -41,6 +41,7 @@ Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Editor
+Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Framework
 
 <ComVisible(True)> _
@@ -91,6 +92,9 @@ Public NotInheritable Class TaxlotAssignment
 #Region "Fields"
 
     Private _application As IApplication
+    Private _dockableWindow As IDockableWindow
+
+    Private Const DockableWindowGuid As String = "{e844dd61-81e9-4ca6-ade5-c55bde8ec51e}"
 
 #End Region
 
@@ -103,7 +107,19 @@ Public NotInheritable Class TaxlotAssignment
 #End Region
 
 #Region "Methods"
-    ' None
+
+    Private Sub SetupDockableWindow()
+        If _dockableWindow Is Nothing Then
+            Dim dockWindowManager As IDockableWindowManager
+            dockWindowManager = CType(_application, IDockableWindowManager)
+            If Not dockWindowManager Is Nothing Then
+                Dim windowID As UID = New UIDClass
+                windowID.Value = DockableWindowGuid
+                _dockableWindow = dockWindowManager.GetDockableWindow(windowID)
+            End If
+        End If
+    End Sub
+
 #End Region
 
 #End Region
@@ -127,38 +143,65 @@ Public NotInheritable Class TaxlotAssignment
 
 #Region "Methods"
 
+    ''' <summary>
+    ''' Occurs when this command is created
+    ''' </summary>
+    ''' <param name="hook">Instance of the application</param>
     Public Overrides Sub OnCreate(ByVal hook As Object)
         If Not hook Is Nothing Then
             _application = DirectCast(hook, IApplication)
 
             'Disable if it is not ArcMap
             If TypeOf hook Is IMxApplication Then
-                MyBase.m_enabled = True
+                SetupDockableWindow()
+                MyBase.m_enabled = _dockableWindow IsNot Nothing
             Else
                 MyBase.m_enabled = False
             End If
+
         End If
 
         ' TODO: Add other initialization code
     End Sub
 
+    ''Public Overrides Sub OnClick()
+    '    'TODO: NIS Add TaxlotAssignment.OnClick implementation
+    '    System.Windows.Forms.MessageBox.Show("Add TaxlotAssignment.OnClick implementation")
+    'End Sub
+
+    ''' <summary>
+    ''' Toggle visiblity of dockable window and show the visible state by its checked property.
+    ''' </summary>
     Public Overrides Sub OnClick()
-        'TODO: Add TaxlotAssignment.OnClick implementation
-        System.Windows.Forms.MessageBox.Show("Add TaxlotAssignment.OnClick implementation")
+        If _dockableWindow Is Nothing Then Return
+
+        If _dockableWindow.IsVisible() Then
+            _dockableWindow.Show(False)
+        Else
+            _dockableWindow.Show(True)
+        End If
+
+        MyBase.m_checked = _dockableWindow.IsVisible()
     End Sub
 
+    Public Overrides ReadOnly Property Checked() As Boolean
+        Get
+            Return (_dockableWindow IsNot Nothing) AndAlso (_dockableWindow.IsVisible())
+        End Get
+    End Property
+
     Public Overrides Sub OnMouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
-        'TODO: Add TaxlotAssignment.OnMouseDown implementation
+        'TODO: NIS Add TaxlotAssignment.OnMouseDown implementation
         System.Windows.Forms.MessageBox.Show("Add TaxlotAssignment.OnMouseDown implementation")
     End Sub
 
     Public Overrides Sub OnMouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
-        'TODO: Add TaxlotAssignment.OnMouseMove implementation
+        'TODO: NIS Add TaxlotAssignment.OnMouseMove implementation
         System.Windows.Forms.MessageBox.Show("Add TaxlotAssignment.OnMouseMove implementation")
     End Sub
 
     Public Overrides Sub OnMouseUp(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
-        'TODO: Add TaxlotAssignment.OnMouseUp implementation
+        'TODO: NIS Add TaxlotAssignment.OnMouseUp implementation
         System.Windows.Forms.MessageBox.Show("Add TaxlotAssignment.OnMouseUp implementation")
     End Sub
 

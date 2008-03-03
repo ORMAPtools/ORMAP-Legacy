@@ -30,8 +30,8 @@
 #End Region
 #Region "Subversion Keyword expansion"
 'Tag for this file: $Name$
-'SCC revision number: $Revision:$
-'Date of Last Change: $Date:$
+'SCC revision number: $Revision$
+'Date of Last Change: $Date$
 #End Region
 
 Imports System.Runtime.InteropServices
@@ -110,7 +110,7 @@ Public NotInheritable Class OrmapToolbar
 
     Public Overrides ReadOnly Property Name() As String
         Get
-            'TODO: Confirm that this choice of name will work well
+            'TODO: NIS Confirm that this choice of name will work well
             Return "OrmapToolbar"
         End Get
     End Property

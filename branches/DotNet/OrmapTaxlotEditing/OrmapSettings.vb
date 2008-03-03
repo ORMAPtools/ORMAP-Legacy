@@ -28,14 +28,14 @@
 ' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #End Region
+
 #Region "Subversion Keyword expansion"
 'Tag for this file: $Name$
-'SCC revision number: $Revision:$
-'Date of Last Change: $Date:$
+'SCC revision number: $Revision$
+'Date of Last Change: $Date$
 #End Region
 
-' TODO: Implement this class and move code here from the form so as to seperate
-' the UI and business logic layers.
+' TODO: NIS Implement this class and move code here from the form so as to seperate the UI and business logic layers.
 
 Imports System.Runtime.InteropServices
 
@@ -79,14 +79,13 @@ Public NotInheritable Class OrmapSettings
     End Property
 
     Private Sub SetOrmapSettingsForm(ByVal value As OrmapSettingsForm)
-        ' TODO: Add validation code?
+        ' TODO: NIS Add validation code?
         _ormapSettingsForm = value
     End Sub
 
 #End Region
 
 #Region "Event Handlers"
-    ' TODO: Add event handlers for the form controls.
 #End Region
 
 #Region "Methods"

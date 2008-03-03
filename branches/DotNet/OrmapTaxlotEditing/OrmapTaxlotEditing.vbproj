@@ -185,6 +185,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>TaxLotLinesSettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="TaxlotAssignmentForm.Designer.vb">
+      <DependentUpon>TaxlotAssignmentForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TaxlotAssignmentForm.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Utilities.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -286,6 +292,10 @@
       <DependentUpon>OrmapSettingsForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="icons\ORMAPLogo.gif" />
+    <EmbeddedResource Include="TaxlotAssignmentForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>TaxlotAssignmentForm.vb</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="license\COPYING.txt">

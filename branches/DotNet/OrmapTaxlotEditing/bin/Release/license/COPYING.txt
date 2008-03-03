@@ -672,3 +672,8 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
+
+Tag for this file: $Name$
+SCC revision number: $Revision: 208 $
+Date of Last Change: $Date: 2008-02-25 16:41:30 -0800 (Mon, 25 Feb 2008) $
+

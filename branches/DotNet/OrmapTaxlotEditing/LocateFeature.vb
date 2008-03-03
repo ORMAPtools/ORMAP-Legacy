@@ -30,8 +30,8 @@
 #End Region
 #Region "Subversion Keyword expansion"
 'Tag for this file: $Name$
-'SCC revision number: $Revision:$
-'Date of Last Change: $Date:$
+'SCC revision number: $Revision$
+'Date of Last Change: $Date$
 #End Region
 
 Imports System.Drawing
@@ -142,7 +142,7 @@ Public NotInheritable Class LocateFeature
     End Sub
 
     Public Overrides Sub OnClick()
-        'TODO: Add LocateFeature.OnClick implementation
+        ' TODO: NIS Add LocateFeature.OnClick implementation
         System.Windows.Forms.MessageBox.Show("Add LocateFeature.OnClick implementation")
     End Sub
 

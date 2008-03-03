@@ -51,3 +51,5 @@ bin\Debug\license\COPYING.txt
 bin\Debug\license\SOURCE.txt
 obj\Debug\OrmapTaxlotEditing.AboutForm.resources
 G:\projects\OPET\branches\DotNet\OrmapTaxlotEditing\bin\Release\OrmapTaxlotEditing.tlb
+obj\Release\OrmapTaxlotEditing.TaxlotAssignmentForm.resources
+L:\LCOG\fromMYWORKSTATION\G\Projects\OPET\branches\DotNet\OrmapTaxlotEditing\bin\Release\OrmapTaxlotEditing.tlb
