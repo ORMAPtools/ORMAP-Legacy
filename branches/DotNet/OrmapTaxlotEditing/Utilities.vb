@@ -35,14 +35,16 @@
 'Date of Last Change: $Date$
 #End Region
 
-#Region "Imported namespaces"
+#Region "Imported Namespaces"
 Imports System.Windows.Forms
 Imports System.IO
 #End Region
 
 #Region "Class Declaration"
 Public NotInheritable Class Utilities
+
 #Region "Custom Class Members"
+
 #Region "Public Members"
     Public Shared Function GetUserName() As String
         If TypeOf My.User.CurrentPrincipal Is _
@@ -87,5 +89,6 @@ Public NotInheritable Class Utilities
 #End Region
 
 #End Region
+
 End Class
 #End Region

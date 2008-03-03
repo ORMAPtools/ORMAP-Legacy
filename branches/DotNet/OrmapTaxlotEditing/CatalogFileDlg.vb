@@ -35,7 +35,7 @@
 'Date of Last Change: $Date:$
 #End Region
 
-#Region "Imported namespaces"
+#Region "Imported Namespaces"
 Imports ESRI.ArcGIS.CatalogUI
 Imports ESRI.ArcGIS.Catalog
 Imports System.Windows.Forms

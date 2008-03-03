@@ -33,7 +33,7 @@
 'Date of Last Change: $Date$
 #End Region
 
-#Region "Imported namespaces"
+#Region "Imported Namespaces"
 Imports System.Windows.Forms
 Imports System.Text
 #End Region

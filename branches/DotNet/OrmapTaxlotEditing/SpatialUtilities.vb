@@ -35,7 +35,7 @@
 'Date of Last Change: $Date$
 #End Region
 
-#Region "Imported Namespace Statements"
+#Region "Imported Namespaces"
 Imports System.Collections.Generic
 Imports System.Windows.Forms
 Imports ESRI.ArcGIS.ArcMapUI
@@ -296,7 +296,7 @@ Public NotInheritable Class SpatialUtilities
 
             continueThisProcess = True 'initialize
 
-            If (theGeometry Is Nothing) OrElse (overlayFeatureClass Is Nothing) OrElse (Len(valueFieldName) <= 0) Then
+            If (theGeometry Is Nothing) OrElse (overlayFeatureClass Is Nothing) OrElse (valueFieldName.Length <= 0) Then
                 continueThisProcess = False
             End If
 
@@ -643,7 +643,7 @@ Public NotInheritable Class SpatialUtilities
             End With
 
             'exit if there is nothing selected
-            If Len(thisFileDialog.SelectedObject(1)) = 0 Then
+            If thisFileDialog.SelectedObject(1) Is Nothing Then
                 Return False
             End If
 
@@ -875,7 +875,7 @@ Public NotInheritable Class SpatialUtilities
                 returnValue &= (CStr(n) & ",")
             Next n
             ' Trim off the last comma.
-            returnValue = Left(returnValue, Len(False) - 1)
+            returnValue = Left(returnValue, returnValue.Length - 1)
         Else
             ' Will return the default empty string.
         End If
