@@ -28,6 +28,7 @@
 ' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #End Region
+
 #Region "Subversion Keyword expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$

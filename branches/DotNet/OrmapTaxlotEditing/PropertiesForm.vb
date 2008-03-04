@@ -28,10 +28,11 @@
 ' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #End Region
+
 #Region "Subversion Keyword expansion"
 'Tag for this file: $Name$
-'SCC revision number: $Revision:$
-'Date of Last Change: $Date:$
+'SCC revision number: $Revision$
+'Date of Last Change: $Date$
 #End Region
 
 Imports System
@@ -45,7 +46,6 @@ Imports System.Runtime.InteropServices
 Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
 
 #Region "Class-Level Constants And Enumerations"
-    ' None
 #End Region
 
 #Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
@@ -86,15 +86,12 @@ Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
 #End Region
 
 #Region "Properties"
-    ' None
 #End Region
 
 #Region "Event Handlers"
-    ' None
 #End Region
 
 #Region "Methods"
-    ' None
 #End Region
 
 #End Region

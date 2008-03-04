@@ -28,6 +28,7 @@
 ' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #End Region
+
 #Region "Subversion Keyword expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$
@@ -51,7 +52,6 @@ Public NotInheritable Class PropertyPage
     Implements IComPropertyPage
 
 #Region "Class-Level Constants And Enumerations"
-    ' None
 #End Region
 
 #Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
@@ -72,7 +72,6 @@ Public NotInheritable Class PropertyPage
 #Region "Custom Class Members"
 
 #Region "Fields"
-    ' None
 #End Region
 
 #Region "Properties"
@@ -103,17 +102,17 @@ Public NotInheritable Class PropertyPage
         _propertiesPageSite = value
     End Sub
 
-    Private WithEvents _propertiesForm As PropertiesForm  ' TODO: NIS Is WithEvents needed here?
+    Private WithEvents _partnerPropertiesForm As PropertiesForm  ' TODO: NIS Is WithEvents needed here?
 
-    Friend ReadOnly Property PropertiesForm() As PropertiesForm
+    Friend ReadOnly Property PartnerPropertiesForm() As PropertiesForm
         Get
-            Return _propertiesForm
+            Return _partnerPropertiesForm
         End Get
     End Property
 
-    Private Sub SetPropertiesForm(ByVal value As PropertiesForm)
+    Private Sub SetPartnerPropertiesForm(ByVal value As PropertiesForm)
         ' TODO: NIS Add validation code?
-        _propertiesForm = value
+        _partnerPropertiesForm = value
     End Sub
 
 #End Region
@@ -122,9 +121,9 @@ Public NotInheritable Class PropertyPage
 
     Private Sub uxEnableTools_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
 
-        PropertiesForm.uxEnableAutoUpdate.Enabled = PropertiesForm.uxEnableTools.Checked
-        PropertiesForm.uxMinimumFieldsOption.Enabled = PropertiesForm.uxEnableTools.Checked
-        PropertiesForm.uxAllFieldsOption.Enabled = PropertiesForm.uxEnableTools.Checked
+        PartnerPropertiesForm.uxEnableAutoUpdate.Enabled = PartnerPropertiesForm.uxEnableTools.Checked
+        PartnerPropertiesForm.uxMinimumFieldsOption.Enabled = PartnerPropertiesForm.uxEnableTools.Checked
+        PartnerPropertiesForm.uxAllFieldsOption.Enabled = PartnerPropertiesForm.uxEnableTools.Checked
 
         ' Set dirty flag.
         SetPageDirty(True)
@@ -137,8 +136,8 @@ Public NotInheritable Class PropertyPage
 
     Private Sub uxEnableAutoUpdate_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
 
-        PropertiesForm.uxMinimumFieldsOption.Enabled = PropertiesForm.uxEnableAutoUpdate.Checked
-        PropertiesForm.uxAllFieldsOption.Enabled = PropertiesForm.uxEnableAutoUpdate.Checked
+        PartnerPropertiesForm.uxMinimumFieldsOption.Enabled = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
+        PartnerPropertiesForm.uxAllFieldsOption.Enabled = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
 
         ' Set dirty flag.
         SetPageDirty(True)
@@ -166,7 +165,6 @@ Public NotInheritable Class PropertyPage
 #End Region
 
 #Region "Methods"
-    ' None
 #End Region
 
 #End Region
@@ -187,7 +185,7 @@ Public NotInheritable Class PropertyPage
 
     Public ReadOnly Property Height() As Integer Implements IComPropertyPage.Height
         Get
-            Return PropertiesForm.Height
+            Return PartnerPropertiesForm.Height
         End Get
     End Property
 
@@ -235,12 +233,12 @@ Public NotInheritable Class PropertyPage
 
     Public ReadOnly Property Width() As Integer Implements IComPropertyPage.Width
         Get
-            Return PropertiesForm.Width
+            Return PartnerPropertiesForm.Width
         End Get
     End Property
 
     Public Function Activate() As Integer Implements IComPropertyPage.Activate
-        Return PropertiesForm.Handle.ToInt32()
+        Return PartnerPropertiesForm.Handle.ToInt32()
     End Function
 
     Public Function Applies(ByVal objects As ESRI.ArcGIS.esriSystem.ISet) As Boolean Implements IComPropertyPage.Applies
@@ -275,9 +273,9 @@ Public NotInheritable Class PropertyPage
 
     Public Sub Apply() Implements IComPropertyPage.Apply
         ' Write to the EditorExtension.CanEdit shared (i.e. by all class objects) property
-        EditorExtension.CanEditTaxlots = PropertiesForm.uxEnableTools.Checked
-        EditorExtension.CanAutoUpdate = PropertiesForm.uxEnableAutoUpdate.Checked
-        EditorExtension.CanAutoUpdateAllFields = Not PropertiesForm.uxAllFieldsOption.Checked
+        EditorExtension.CanEditTaxlots = PartnerPropertiesForm.uxEnableTools.Checked
+        EditorExtension.CanAutoUpdate = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
+        EditorExtension.CanAutoUpdateAllFields = Not PartnerPropertiesForm.uxAllFieldsOption.Checked
         SetPageDirty(False)
     End Sub
 
@@ -286,15 +284,15 @@ Public NotInheritable Class PropertyPage
     End Sub
 
     Public Sub Deactivate() Implements IComPropertyPage.Deactivate
-        If Not _propertiesForm Is Nothing Then
-            PropertiesForm.Dispose()
+        If Not _partnerPropertiesForm Is Nothing Then
+            PartnerPropertiesForm.Dispose()
         End If
-        SetPropertiesForm(Nothing)
+        SetPartnerPropertiesForm(Nothing)
         SetPropertiesPageSite(Nothing)
     End Sub
 
     Public Sub Hide() Implements IComPropertyPage.Hide
-        PropertiesForm.Hide()
+        PartnerPropertiesForm.Hide()
     End Sub
 
     Public Sub SetObjects(ByVal objects As ESRI.ArcGIS.esriSystem.ISet) Implements IComPropertyPage.SetObjects
@@ -302,22 +300,22 @@ Public NotInheritable Class PropertyPage
         ' editor states before this method is called.
 
         ' TODO: NIS Move (to where)?
-        SetPropertiesForm(New PropertiesForm())
-        PropertiesForm.uxEnableTools.Checked = EditorExtension.CanEditTaxlots
-        PropertiesForm.uxEnableAutoUpdate.Checked = EditorExtension.CanAutoUpdate
-        PropertiesForm.uxMinimumFieldsOption.Checked = Not EditorExtension.CanAutoUpdateAllFields
-        PropertiesForm.uxAllFieldsOption.Checked = EditorExtension.CanAutoUpdateAllFields
+        SetPartnerPropertiesForm(New PropertiesForm())
+        PartnerPropertiesForm.uxEnableTools.Checked = EditorExtension.CanEditTaxlots
+        PartnerPropertiesForm.uxEnableAutoUpdate.Checked = EditorExtension.CanAutoUpdate
+        PartnerPropertiesForm.uxMinimumFieldsOption.Checked = Not EditorExtension.CanAutoUpdateAllFields
+        PartnerPropertiesForm.uxAllFieldsOption.Checked = EditorExtension.CanAutoUpdateAllFields
 
         ' Wire up form events.
-        AddHandler PropertiesForm.uxEnableTools.CheckedChanged, AddressOf uxEnableTools_CheckedChanged
-        AddHandler PropertiesForm.uxEnableAutoUpdate.CheckedChanged, AddressOf uxEnableAutoUpdate_CheckedChanged
-        AddHandler PropertiesForm.uxSettings.Click, AddressOf uxSettings_Click
-        AddHandler PropertiesForm.uxAbout.Click, AddressOf uxAbout_Click
+        AddHandler PartnerPropertiesForm.uxEnableTools.CheckedChanged, AddressOf uxEnableTools_CheckedChanged
+        AddHandler PartnerPropertiesForm.uxEnableAutoUpdate.CheckedChanged, AddressOf uxEnableAutoUpdate_CheckedChanged
+        AddHandler PartnerPropertiesForm.uxSettings.Click, AddressOf uxSettings_Click
+        AddHandler PartnerPropertiesForm.uxAbout.Click, AddressOf uxAbout_Click
 
     End Sub
 
     Public Sub Show() Implements IComPropertyPage.Show
-        PropertiesForm.Show()
+        PartnerPropertiesForm.Show()
     End Sub
 
 #End Region

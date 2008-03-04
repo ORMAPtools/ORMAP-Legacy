@@ -52,7 +52,9 @@ Imports ESRI.ArcGIS.Carto
 ''' </summary>
 ''' <remarks>Commonly used procedures and functions.</remarks>
 Public NotInheritable Class SpatialUtilities
+
 #Region "Custom Class Members"
+
 #Region "Public Members"
 
     ''' <summary>
@@ -205,7 +207,7 @@ Public NotInheritable Class SpatialUtilities
             theMap = Nothing
 
             Return returnValue
-            
+
         Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return Nothing
@@ -334,7 +336,7 @@ Public NotInheritable Class SpatialUtilities
             Dim thisEnvelope As IEnvelope
             Dim intersectFuzzAmount As Double
             Const fuzzFactor As Double = 0.05 ' TODO: NIS Re-implement as user setting?
-            
+
             If continueThisProcess Then
                 Select Case theGeometry.GeometryType
                     Case esriGeometryType.esriGeometryPolygon
@@ -1051,6 +1053,8 @@ Public NotInheritable Class SpatialUtilities
     End Sub
 
 #End Region
+
 #End Region
+
 End Class
 #End Region

@@ -2154,7 +2154,7 @@ Partial Class OrmapSettingsForm
         Me.uxReload.Name = "uxReload"
         Me.uxReload.Size = New System.Drawing.Size(67, 23)
         Me.uxReload.TabIndex = 1
-        Me.uxReload.Text = "Reload"
+        Me.uxReload.Text = "&Reload"
         '
         'uxSave
         '
@@ -2164,7 +2164,7 @@ Partial Class OrmapSettingsForm
         Me.uxSave.Name = "uxSave"
         Me.uxSave.Size = New System.Drawing.Size(67, 23)
         Me.uxSave.TabIndex = 0
-        Me.uxSave.Text = "Save"
+        Me.uxSave.Text = "&Save"
         '
         'uxReset
         '
@@ -2173,7 +2173,7 @@ Partial Class OrmapSettingsForm
         Me.uxReset.Name = "uxReset"
         Me.uxReset.Size = New System.Drawing.Size(67, 23)
         Me.uxReset.TabIndex = 2
-        Me.uxReset.Text = "Reset"
+        Me.uxReset.Text = "Re&set"
         '
         'TopToolStripPanel
         '
@@ -2221,7 +2221,7 @@ Partial Class OrmapSettingsForm
         Me.uxCancel.Name = "uxCancel"
         Me.uxCancel.Size = New System.Drawing.Size(67, 23)
         Me.uxCancel.TabIndex = 3
-        Me.uxCancel.Text = "Cancel"
+        Me.uxCancel.Text = "&Cancel"
         '
         'RightToolStripPanel
         '
@@ -2254,6 +2254,7 @@ Partial Class OrmapSettingsForm
         Me.MinimizeBox = False
         Me.Name = "OrmapSettingsForm"
         Me.Padding = New System.Windows.Forms.Padding(10)
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "ORMAP Taxlot Editing Settings"
         Me.TopMost = True

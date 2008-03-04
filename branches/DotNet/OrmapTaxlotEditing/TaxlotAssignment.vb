@@ -37,6 +37,7 @@
 
 Imports System.Drawing
 Imports System.Runtime.InteropServices
+Imports System.Windows.Forms
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
@@ -51,7 +52,16 @@ Public NotInheritable Class TaxlotAssignment
     Inherits BaseTool
 
 #Region "Class-Level Constants And Enumerations"
-    ' None
+
+    ' Taxlot number type constants
+    Private Const taxlotNumberTypeTaxlot As String = "TAXLOT" 'normal taxlot number
+    Private Const taxlotNumberTypeRoads As String = "ROADS"
+    Private Const taxlotNumberTypeWater As String = "WATER"
+    Private Const taxlotNumberTypeRails As String = "RAILS"
+    Private Const taxlotNumberTypeNontaxlot As String = "NONTL"
+
+    Private Const defaultCommand As String = "esriArcMapUI.SelectTool"
+
 #End Region
 
 #Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
@@ -76,9 +86,16 @@ Public NotInheritable Class TaxlotAssignment
             ' Set the bitmap based on the name of the class.
             Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
-            'MyBase.m_cursor = New System.Windows.Forms.Cursor(Me.GetType(), Me.GetType().Name + ".cur")
         Catch ex As ArgumentException
             System.Diagnostics.Trace.WriteLine(ex.Message, "Invalid Bitmap")
+        End Try
+
+        Try
+            ' Set the (enabled) cursor based on the name of the class.
+            Dim cursorResourceName As String = Me.GetType().Name + ".cur"
+            MyBase.m_cursor = New Cursor(Me.GetType(), cursorResourceName)
+        Catch ex As ArgumentException
+            System.Diagnostics.Trace.WriteLine(ex.Message, "Invalid Cursor")
         End Try
 
     End Sub
@@ -92,34 +109,133 @@ Public NotInheritable Class TaxlotAssignment
 #Region "Fields"
 
     Private _application As IApplication
-    Private _dockableWindow As IDockableWindow
 
-    Private Const DockableWindowGuid As String = "{e844dd61-81e9-4ca6-ade5-c55bde8ec51e}"
+    Private _disabledCursor As System.Drawing.Image
 
 #End Region
 
 #Region "Properties"
-    ' None
-#End Region
 
-#Region "Event Handlers"
-    ' None
-#End Region
+    Private _incrementNumber As Integer
 
-#Region "Methods"
+    Public ReadOnly Property IncrementNumber() As Integer
+        Get
+            _incrementNumber = CInt(PartnerTaxlotAssignmentForm.uxType.SelectedItem.ToString)
+            Return _incrementNumber
+        End Get
+    End Property
 
-    Private Sub SetupDockableWindow()
-        If _dockableWindow Is Nothing Then
-            Dim dockWindowManager As IDockableWindowManager
-            dockWindowManager = CType(_application, IDockableWindowManager)
-            If Not dockWindowManager Is Nothing Then
-                Dim windowID As UID = New UIDClass
-                windowID.Value = DockableWindowGuid
-                _dockableWindow = dockWindowManager.GetDockableWindow(windowID)
+    Private _taxlotType As String
+
+    Public ReadOnly Property TaxlotType() As String
+        Get
+            _taxlotType = PartnerTaxlotAssignmentForm.uxType.SelectedItem.ToString
+            Return _taxlotType
+        End Get
+    End Property
+
+    Private _numberStartingFrom As Integer
+
+    Public ReadOnly Property NumberStartingFrom() As Integer
+        Get
+            _numberStartingFrom = CInt(PartnerTaxlotAssignmentForm.uxStartingFrom.Text)
+            Return _numberStartingFrom
+        End Get
+    End Property
+
+    Private WithEvents _partnerTaxlotAssignmentForm As TaxlotAssignmentForm  ' TODO: NIS Is WithEvents needed here?
+
+    Friend ReadOnly Property PartnerTaxlotAssignmentForm() As TaxlotAssignmentForm
+        Get
+            If _partnerTaxlotAssignmentForm Is Nothing OrElse _partnerTaxlotAssignmentForm.IsDisposed Then
+                SetPartnerTaxlotAssignmentForm(New TaxlotAssignmentForm())
             End If
+            Return _partnerTaxlotAssignmentForm
+        End Get
+    End Property
+
+    Private Sub SetPartnerTaxlotAssignmentForm(ByVal value As TaxlotAssignmentForm)
+        ' TODO: NIS Add validation code?
+        If value IsNot Nothing Then
+            _partnerTaxlotAssignmentForm = value
+            ' Wire up partner form events.
+            AddHandler _partnerTaxlotAssignmentForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
+            AddHandler _partnerTaxlotAssignmentForm.uxHelp.Click, AddressOf uxHelp_Click
+            AddHandler _partnerTaxlotAssignmentForm.uxType.SelectedValueChanged, AddressOf uxType_SelectedValueChanged
         End If
     End Sub
 
+#End Region
+
+#Region "Event Handlers"
+
+    Private Sub PartnerTaxlotAssignmentForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.Load
+
+        With PartnerTaxlotAssignmentForm
+
+            'Populate multi-value controls
+            .uxType.Items.Add(taxlotNumberTypeTaxlot)
+            .uxType.Items.Add(taxlotNumberTypeRoads)
+            .uxType.Items.Add(taxlotNumberTypeWater)
+            .uxType.Items.Add(taxlotNumberTypeRails)
+            .uxType.Items.Add(taxlotNumberTypeNontaxlot)
+
+            ' Set control defaults
+            .uxType.Text = taxlotNumberTypeTaxlot
+            .uxIncrementByNone.Checked = True
+            .uxStartingFrom.Text = "0"
+
+            ' Enable the numbering settings controls by enabling the group
+            .uxTaxlotNumberingOptions.Enabled = True
+            'With .uxStartingFrom
+            '    '.BackColor = System.Drawing.Color.White
+            '    .Enabled = True
+            'End With
+            '.uxIncrementByNone.Enabled = True
+            '.uxIncrementBy1.Enabled = True
+            '.uxIncrementBy10.Enabled = True
+            '.uxIncrementBy100.Enabled = True
+            '.uxIncrementBy1000.Enabled = True
+        End With
+
+
+    End Sub
+
+    Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles TaxlotAssignmentForm.uxHelp.Click
+        ' TODO: NIS Could be replaced with new help mechanism.
+        ' Open a custom help file.
+        ' Note: Requires a specific file in the help subdirectory of the application directory.
+        Dim filePath As String
+        filePath = My.Application.Info.DirectoryPath & "\help\TaxlotAssignmentHelp.rtf"
+        If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(filePath) Then
+            ' Open help file from the application directory.
+            Dim helpForm As New HelpForm
+            helpForm.uxContent.LoadFile(filePath, RichTextBoxStreamType.RichText)
+            helpForm.Text = "Taxlot Assignment Help"
+            helpForm.Show()
+        Else
+            MessageBox.Show("No help file available in the directory " & My.Application.Info.DirectoryPath & "\help" & ".")
+        End If
+    End Sub
+
+    Private Sub uxType_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles TaxlotAssignmentForm.uxType.SelectedValueChanged
+        With PartnerTaxlotAssignmentForm
+            If .uxType.SelectedIndex <> -1 Then
+                If .uxType.SelectedItem.ToString = taxlotNumberTypeTaxlot Then
+                    ' Enable the numbering settings controls by enabling the group
+                    .uxTaxlotNumberingOptions.Enabled = True
+                Else
+                    ' Disable the numbering settings controls by disabling the group
+                    .uxTaxlotNumberingOptions.Enabled = False
+                End If
+            End If
+        End With
+
+    End Sub
+
+#End Region
+
+#Region "Methods (none)"
 #End Region
 
 #End Region
@@ -139,70 +255,72 @@ Public NotInheritable Class TaxlotAssignment
         End Get
     End Property
 
+    Public Overrides ReadOnly Property Cursor() As Integer
+        Get
+            'Return MyBase.Cursor
+            ' Sets the proper cursor
+            If PartnerTaxlotAssignmentForm.Visible Then
+                If Me.Enabled Then
+                    Return MyBase.Cursor
+                Else
+                    ' TODO: NIS
+                End If
+            End If
+        End Get
+    End Property
+
 #End Region
 
 #Region "Methods"
 
     ''' <summary>
-    ''' Occurs when this command is created
+    ''' Occurs when this command is created.
     ''' </summary>
-    ''' <param name="hook">Instance of the application</param>
+    ''' <param name="hook">A generic <c>Object</c> hook to an instance of the application.</param>
+    ''' <remarks>The application hook may not point to an <c>IMxApplication</c> object.</remarks>
     Public Overrides Sub OnCreate(ByVal hook As Object)
         If Not hook Is Nothing Then
             _application = DirectCast(hook, IApplication)
 
-            'Disable if it is not ArcMap
+            'Disable tool if parent application is not ArcMap
             If TypeOf hook Is IMxApplication Then
-                SetupDockableWindow()
-                MyBase.m_enabled = _dockableWindow IsNot Nothing
+                MyBase.m_enabled = True
             Else
                 MyBase.m_enabled = False
             End If
 
+            If MyBase.m_enabled Then
+                ' Set partner form.
+                SetPartnerTaxlotAssignmentForm(New TaxlotAssignmentForm())
+            End If
         End If
 
         ' TODO: Add other initialization code
+
     End Sub
 
-    ''Public Overrides Sub OnClick()
-    '    'TODO: NIS Add TaxlotAssignment.OnClick implementation
-    '    System.Windows.Forms.MessageBox.Show("Add TaxlotAssignment.OnClick implementation")
-    'End Sub
-
-    ''' <summary>
-    ''' Toggle visiblity of dockable window and show the visible state by its checked property.
-    ''' </summary>
     Public Overrides Sub OnClick()
-        If _dockableWindow Is Nothing Then Return
+        'TODO: NIS Port more of TaxlotAssignment.OnClick implementation
+        System.Windows.Forms.MessageBox.Show("Port more of TaxlotAssignment.OnClick implementation")
 
-        If _dockableWindow.IsVisible() Then
-            _dockableWindow.Show(False)
-        Else
-            _dockableWindow.Show(True)
+        ' HACK: NIS Don't know why this form is disposed after first use, but 
+        ' this check insures it is available again.
+        If PartnerTaxlotAssignmentForm.IsDisposed Then
+            SetPartnerTaxlotAssignmentForm(New TaxlotAssignmentForm())
         End If
 
-        MyBase.m_checked = _dockableWindow.IsVisible()
-    End Sub
+        ' Show and activate the partner form.
+        If PartnerTaxlotAssignmentForm.Visible Then
+            PartnerTaxlotAssignmentForm.Activate()
+        Else
+            PartnerTaxlotAssignmentForm.Show()
+        End If
 
-    Public Overrides ReadOnly Property Checked() As Boolean
-        Get
-            Return (_dockableWindow IsNot Nothing) AndAlso (_dockableWindow.IsVisible())
-        End Get
-    End Property
+    End Sub
 
     Public Overrides Sub OnMouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
-        'TODO: NIS Add TaxlotAssignment.OnMouseDown implementation
-        System.Windows.Forms.MessageBox.Show("Add TaxlotAssignment.OnMouseDown implementation")
-    End Sub
-
-    Public Overrides Sub OnMouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
-        'TODO: NIS Add TaxlotAssignment.OnMouseMove implementation
-        System.Windows.Forms.MessageBox.Show("Add TaxlotAssignment.OnMouseMove implementation")
-    End Sub
-
-    Public Overrides Sub OnMouseUp(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
-        'TODO: NIS Add TaxlotAssignment.OnMouseUp implementation
-        System.Windows.Forms.MessageBox.Show("Add TaxlotAssignment.OnMouseUp implementation")
+        'TODO: NIS Port TaxlotAssignment.OnMouseDown implementation
+        System.Windows.Forms.MessageBox.Show("Port TaxlotAssignment.OnMouseDown implementation")
     End Sub
 
 #End Region
@@ -210,7 +328,6 @@ Public NotInheritable Class TaxlotAssignment
 #End Region
 
 #Region "Implemented Interface Members"
-    ' None
 #End Region
 
 #Region "Other Members"

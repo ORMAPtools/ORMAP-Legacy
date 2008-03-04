@@ -1,6 +1,6 @@
 #Region "Copyright 2008 ORMAP Tech Group"
 
-' File:  TaxlotAssignmentForm.vb
+' File:  HelpForm.vb
 '
 ' Original Author:  OPET.NET Migration Team (Shad Campbell, James Moore, 
 '                   Nick Seigal)
@@ -36,25 +36,8 @@
 #End Region
 
 Imports System.Runtime.InteropServices
-Imports System.Windows.Forms
-Imports ESRI.ArcGIS.esriSystem
-Imports ESRI.ArcGIS.SystemUI
-Imports ESRI.ArcGIS.Framework
-Imports ESRI.ArcGIS.ADF.CATIDs
-
-' TODO: NIS Add Standard Regions
 
 <ComVisible(False)> _
-Public Class TaxlotAssignmentForm : Inherits System.Windows.Forms.Form
-
-    'Private _application As IApplication
-    '
-    'Public Sub New()
-    '    ' This call is required by the Windows Form Designer.
-    '    InitializeComponent()
-    '
-    '    ' Add any initialization after the InitializeComponent() call.
-    '
-    'End Sub
+Public Class HelpForm
 
 End Class

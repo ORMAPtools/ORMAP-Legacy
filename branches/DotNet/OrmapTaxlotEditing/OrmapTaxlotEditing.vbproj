@@ -101,6 +101,12 @@
     </Compile>
     <Compile Include="AddArrows.vb" />
     <Compile Include="CatalogFileDlg.vb" />
+    <Compile Include="HelpForm.Designer.vb">
+      <DependentUpon>HelpForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="HelpForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="OrmapSettings.vb" />
     <Compile Include="OrmapSettingsForm.Designer.vb">
       <DependentUpon>OrmapSettingsForm.vb</DependentUpon>
@@ -189,7 +195,7 @@
       <DependentUpon>TaxlotAssignmentForm.vb</DependentUpon>
     </Compile>
     <Compile Include="TaxlotAssignmentForm.vb">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Utilities.vb" />
   </ItemGroup>
@@ -202,6 +208,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="help\TaxlotAssignmentHelp.rtf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="My Project\DataSources\AllTablesSettings.datasource" />
     <None Include="My Project\DataSources\AnnoTableNamesSettings.datasource" />
     <None Include="My Project\DataSources\CartographicLinesSettings.datasource" />
@@ -267,8 +276,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="cursors\plus.cur" />
-    <EmbeddedResource Include="cursors\no.cur" />
+    <EmbeddedResource Include="cursors\TaxlotAssignment.cur" />
+    <EmbeddedResource Include="cursors\Disabled.cur" />
     <EmbeddedResource Include="PropertiesForm.resx">
       <DependentUpon>PropertiesForm.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -286,6 +295,10 @@
     <EmbeddedResource Include="AboutForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AboutForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HelpForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>HelpForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OrmapSettingsForm.resx">
       <SubType>Designer</SubType>

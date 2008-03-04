@@ -1,6 +1,6 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class TaxlotAssignmentForm
-    Inherits System.Windows.Forms.UserControl
+    Inherits System.Windows.Forms.Form
 
     'UserControl overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()> _
@@ -19,56 +19,20 @@ Partial Class TaxlotAssignmentForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.uxIncrementBy100 = New System.Windows.Forms.RadioButton
-        Me.uxIncrementBy10 = New System.Windows.Forms.RadioButton
-        Me.uxIncrementBy1 = New System.Windows.Forms.RadioButton
         Me.uxTypeLabel = New System.Windows.Forms.Label
         Me.uxType = New System.Windows.Forms.ComboBox
+        Me.uxTaxlotNumberingOptions = New System.Windows.Forms.GroupBox
         Me.uxIncrementByNone = New System.Windows.Forms.RadioButton
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox
+        Me.uxIncrementBy1 = New System.Windows.Forms.RadioButton
+        Me.uxIncrementBy10 = New System.Windows.Forms.RadioButton
+        Me.uxIncrementBy100 = New System.Windows.Forms.RadioButton
         Me.uxIncrementBy1000 = New System.Windows.Forms.RadioButton
         Me.uxIncrementByLabel = New System.Windows.Forms.Label
         Me.uxStartingFrom = New System.Windows.Forms.TextBox
         Me.uxStartingFromLabel = New System.Windows.Forms.Label
         Me.uxHelp = New System.Windows.Forms.Button
-        Me.GroupBox1.SuspendLayout()
+        Me.uxTaxlotNumberingOptions.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'uxIncrementBy100
-        '
-        Me.uxIncrementBy100.Appearance = System.Windows.Forms.Appearance.Button
-        Me.uxIncrementBy100.Location = New System.Drawing.Point(174, 68)
-        Me.uxIncrementBy100.Name = "uxIncrementBy100"
-        Me.uxIncrementBy100.Size = New System.Drawing.Size(50, 24)
-        Me.uxIncrementBy100.TabIndex = 7
-        Me.uxIncrementBy100.TabStop = True
-        Me.uxIncrementBy100.Text = "100"
-        Me.uxIncrementBy100.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.uxIncrementBy100.UseVisualStyleBackColor = True
-        '
-        'uxIncrementBy10
-        '
-        Me.uxIncrementBy10.Appearance = System.Windows.Forms.Appearance.Button
-        Me.uxIncrementBy10.Location = New System.Drawing.Point(118, 68)
-        Me.uxIncrementBy10.Name = "uxIncrementBy10"
-        Me.uxIncrementBy10.Size = New System.Drawing.Size(50, 24)
-        Me.uxIncrementBy10.TabIndex = 6
-        Me.uxIncrementBy10.TabStop = True
-        Me.uxIncrementBy10.Text = "10"
-        Me.uxIncrementBy10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.uxIncrementBy10.UseVisualStyleBackColor = True
-        '
-        'uxIncrementBy1
-        '
-        Me.uxIncrementBy1.Appearance = System.Windows.Forms.Appearance.Button
-        Me.uxIncrementBy1.Location = New System.Drawing.Point(62, 68)
-        Me.uxIncrementBy1.Name = "uxIncrementBy1"
-        Me.uxIncrementBy1.Size = New System.Drawing.Size(50, 24)
-        Me.uxIncrementBy1.TabIndex = 5
-        Me.uxIncrementBy1.TabStop = True
-        Me.uxIncrementBy1.Text = "1"
-        Me.uxIncrementBy1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.uxIncrementBy1.UseVisualStyleBackColor = True
         '
         'uxTypeLabel
         '
@@ -97,44 +61,80 @@ Partial Class TaxlotAssignmentForm
         Me.uxType.Size = New System.Drawing.Size(128, 22)
         Me.uxType.TabIndex = 1
         '
+        'uxTaxlotNumberingOptions
+        '
+        Me.uxTaxlotNumberingOptions.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.uxTaxlotNumberingOptions.Controls.Add(Me.uxIncrementByNone)
+        Me.uxTaxlotNumberingOptions.Controls.Add(Me.uxIncrementBy1)
+        Me.uxTaxlotNumberingOptions.Controls.Add(Me.uxIncrementBy10)
+        Me.uxTaxlotNumberingOptions.Controls.Add(Me.uxIncrementBy100)
+        Me.uxTaxlotNumberingOptions.Controls.Add(Me.uxIncrementBy1000)
+        Me.uxTaxlotNumberingOptions.Controls.Add(Me.uxIncrementByLabel)
+        Me.uxTaxlotNumberingOptions.Controls.Add(Me.uxStartingFrom)
+        Me.uxTaxlotNumberingOptions.Controls.Add(Me.uxStartingFromLabel)
+        Me.uxTaxlotNumberingOptions.Location = New System.Drawing.Point(15, 36)
+        Me.uxTaxlotNumberingOptions.Name = "uxTaxlotNumberingOptions"
+        Me.uxTaxlotNumberingOptions.Size = New System.Drawing.Size(259, 105)
+        Me.uxTaxlotNumberingOptions.TabIndex = 2
+        Me.uxTaxlotNumberingOptions.TabStop = False
+        Me.uxTaxlotNumberingOptions.Text = "Taxlot numbering options"
+        '
         'uxIncrementByNone
         '
         Me.uxIncrementByNone.Appearance = System.Windows.Forms.Appearance.Button
-        Me.uxIncrementByNone.Location = New System.Drawing.Point(6, 68)
+        Me.uxIncrementByNone.Checked = True
+        Me.uxIncrementByNone.Location = New System.Drawing.Point(8, 69)
         Me.uxIncrementByNone.Name = "uxIncrementByNone"
-        Me.uxIncrementByNone.Size = New System.Drawing.Size(50, 24)
-        Me.uxIncrementByNone.TabIndex = 4
+        Me.uxIncrementByNone.Size = New System.Drawing.Size(44, 20)
+        Me.uxIncrementByNone.TabIndex = 14
         Me.uxIncrementByNone.TabStop = True
         Me.uxIncrementByNone.Text = "None"
         Me.uxIncrementByNone.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.uxIncrementByNone.UseVisualStyleBackColor = True
         '
-        'GroupBox1
+        'uxIncrementBy1
         '
-        Me.GroupBox1.Controls.Add(Me.uxIncrementBy1000)
-        Me.GroupBox1.Controls.Add(Me.uxIncrementByLabel)
-        Me.GroupBox1.Controls.Add(Me.uxIncrementBy100)
-        Me.GroupBox1.Controls.Add(Me.uxIncrementBy10)
-        Me.GroupBox1.Controls.Add(Me.uxIncrementBy1)
-        Me.GroupBox1.Controls.Add(Me.uxIncrementByNone)
-        Me.GroupBox1.Controls.Add(Me.uxStartingFrom)
-        Me.GroupBox1.Controls.Add(Me.uxStartingFromLabel)
-        Me.GroupBox1.Location = New System.Drawing.Point(15, 36)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(292, 109)
-        Me.GroupBox1.TabIndex = 2
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Taxlot numbering options"
+        Me.uxIncrementBy1.Appearance = System.Windows.Forms.Appearance.Button
+        Me.uxIncrementBy1.Location = New System.Drawing.Point(58, 69)
+        Me.uxIncrementBy1.Name = "uxIncrementBy1"
+        Me.uxIncrementBy1.Size = New System.Drawing.Size(44, 20)
+        Me.uxIncrementBy1.TabIndex = 15
+        Me.uxIncrementBy1.Text = "1"
+        Me.uxIncrementBy1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.uxIncrementBy1.UseVisualStyleBackColor = True
+        '
+        'uxIncrementBy10
+        '
+        Me.uxIncrementBy10.Appearance = System.Windows.Forms.Appearance.Button
+        Me.uxIncrementBy10.Location = New System.Drawing.Point(108, 69)
+        Me.uxIncrementBy10.Name = "uxIncrementBy10"
+        Me.uxIncrementBy10.Size = New System.Drawing.Size(44, 20)
+        Me.uxIncrementBy10.TabIndex = 16
+        Me.uxIncrementBy10.Text = "10"
+        Me.uxIncrementBy10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.uxIncrementBy10.UseVisualStyleBackColor = True
+        '
+        'uxIncrementBy100
+        '
+        Me.uxIncrementBy100.Appearance = System.Windows.Forms.Appearance.Button
+        Me.uxIncrementBy100.Location = New System.Drawing.Point(158, 69)
+        Me.uxIncrementBy100.Name = "uxIncrementBy100"
+        Me.uxIncrementBy100.Size = New System.Drawing.Size(44, 20)
+        Me.uxIncrementBy100.TabIndex = 17
+        Me.uxIncrementBy100.Text = "100"
+        Me.uxIncrementBy100.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.uxIncrementBy100.UseVisualStyleBackColor = True
         '
         'uxIncrementBy1000
         '
         Me.uxIncrementBy1000.AccessibleDescription = ""
         Me.uxIncrementBy1000.Appearance = System.Windows.Forms.Appearance.Button
-        Me.uxIncrementBy1000.Location = New System.Drawing.Point(230, 68)
+        Me.uxIncrementBy1000.Location = New System.Drawing.Point(208, 69)
         Me.uxIncrementBy1000.Name = "uxIncrementBy1000"
-        Me.uxIncrementBy1000.Size = New System.Drawing.Size(50, 24)
-        Me.uxIncrementBy1000.TabIndex = 8
-        Me.uxIncrementBy1000.TabStop = True
+        Me.uxIncrementBy1000.Size = New System.Drawing.Size(44, 20)
+        Me.uxIncrementBy1000.TabIndex = 18
         Me.uxIncrementBy1000.Text = "1000"
         Me.uxIncrementBy1000.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.uxIncrementBy1000.UseVisualStyleBackColor = True
@@ -156,7 +156,7 @@ Partial Class TaxlotAssignmentForm
         'uxStartingFrom
         '
         Me.uxStartingFrom.AcceptsReturn = True
-        Me.uxStartingFrom.BackColor = System.Drawing.Color.White
+        Me.uxStartingFrom.BackColor = System.Drawing.SystemColors.Window
         Me.uxStartingFrom.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.uxStartingFrom.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.uxStartingFrom.ForeColor = System.Drawing.SystemColors.WindowText
@@ -183,10 +183,11 @@ Partial Class TaxlotAssignmentForm
         '
         'uxHelp
         '
-        Me.uxHelp.Location = New System.Drawing.Point(232, 151)
+        Me.uxHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.uxHelp.Location = New System.Drawing.Point(199, 147)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
-        Me.uxHelp.TabIndex = 3
+        Me.uxHelp.TabIndex = 4
         Me.uxHelp.Text = "Help"
         Me.uxHelp.UseVisualStyleBackColor = True
         '
@@ -194,28 +195,33 @@ Partial Class TaxlotAssignmentForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.ClientSize = New System.Drawing.Size(282, 177)
         Me.Controls.Add(Me.uxHelp)
         Me.Controls.Add(Me.uxTypeLabel)
         Me.Controls.Add(Me.uxType)
-        Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.uxTaxlotNumberingOptions)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "TaxlotAssignmentForm"
-        Me.Size = New System.Drawing.Size(321, 183)
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
+        Me.Text = "Taxlot Assignment"
+        Me.TopMost = True
+        Me.uxTaxlotNumberingOptions.ResumeLayout(False)
+        Me.uxTaxlotNumberingOptions.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents uxIncrementBy100 As System.Windows.Forms.RadioButton
-    Friend WithEvents uxIncrementBy10 As System.Windows.Forms.RadioButton
-    Friend WithEvents uxIncrementBy1 As System.Windows.Forms.RadioButton
-    Public WithEvents uxTypeLabel As System.Windows.Forms.Label
-    Public WithEvents uxType As System.Windows.Forms.ComboBox
+    Friend WithEvents uxTaxlotNumberingOptions As System.Windows.Forms.GroupBox
     Friend WithEvents uxIncrementByNone As System.Windows.Forms.RadioButton
-    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
-    Public WithEvents uxStartingFrom As System.Windows.Forms.TextBox
-    Public WithEvents uxStartingFromLabel As System.Windows.Forms.Label
-    Public WithEvents uxIncrementByLabel As System.Windows.Forms.Label
+    Friend WithEvents uxIncrementBy1 As System.Windows.Forms.RadioButton
+    Friend WithEvents uxIncrementBy10 As System.Windows.Forms.RadioButton
+    Friend WithEvents uxIncrementBy100 As System.Windows.Forms.RadioButton
     Friend WithEvents uxIncrementBy1000 As System.Windows.Forms.RadioButton
+    Friend WithEvents uxTypeLabel As System.Windows.Forms.Label
+    Friend WithEvents uxType As System.Windows.Forms.ComboBox
+    Friend WithEvents uxStartingFrom As System.Windows.Forms.TextBox
+    Friend WithEvents uxStartingFromLabel As System.Windows.Forms.Label
+    Friend WithEvents uxIncrementByLabel As System.Windows.Forms.Label
     Friend WithEvents uxHelp As System.Windows.Forms.Button
 
 End Class

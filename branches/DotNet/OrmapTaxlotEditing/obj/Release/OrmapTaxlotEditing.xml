@@ -6,70 +6,113 @@ OrmapTaxlotEditing
 </name>
 </assembly>
 <members>
-<member name="M:OrmapTaxlotEditing.OrmapSettings.#ctor">
-	<summary>
- OrmapSettings constructor.
- </summary>
-	<remarks>This class follows the singleton pattern and thus has a 
- private constructor and all shared members.</remarks>
-</member><member name="M:OrmapTaxlotEditing.EditorExtension.ArcGISCategoryRegistration(System.Type)">
+<member name="M:OrmapTaxlotEditing.OrmapToolbar.ArcGISCategoryRegistration(System.Type)">
 	<summary>
  Required method for ArcGIS Component Category registration -
  Do not modify the contents of this method with the code editor.
  </summary>
-</member><member name="M:OrmapTaxlotEditing.EditorExtension.ArcGISCategoryUnregistration(System.Type)">
+</member><member name="M:OrmapTaxlotEditing.OrmapToolbar.ArcGISCategoryUnregistration(System.Type)">
 	<summary>
  Required method for ArcGIS Component Category unregistration -
  Do not modify the contents of this method with the code editor.
  </summary>
-</member><member name="M:OrmapTaxlotEditing.TaxlotAssignmentForm.ArcGISCategoryRegistration(System.Type)">
+</member><member name="P:OrmapTaxlotEditing.CatalogFileDialog.FinalLocation">
 	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
+ The file path present when the user specifies a file to open
+ or a file name to save in Open/Save As dialog boxes
  </summary>
-</member><member name="M:OrmapTaxlotEditing.TaxlotAssignmentForm.ArcGISCategoryUnregistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category unregistration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.StringUtilities.AddLeadingZeros(System.String,System.Int32)">
-	<summary>
- Adds leading zeros if necessary
- </summary>
-	<param name="currentString">The string to pad with zeros</param>
-	<param name="width">The final length of the string</param>
-	<returns>A string of length width characters</returns>
-	<remarks>Creates a string of width characters padded on the left with zeros</remarks>
-</member><member name="M:OrmapTaxlotEditing.StringUtilities.ExtractString(System.String,System.Int32,System.Int32)">
-	<summary>
- Isolate elements of a string
- </summary>
-	<param name="theWholeString">The string to isolate the substring from</param>
-	<param name="lowPart"></param>
-	<param name="highPart"></param>
-	<returns>A string that is a substring of theWholeString.</returns>
+	<value></value>
+	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.StringUtilities.CreateParcelID(System.String,System.String)">
+</member><member name="M:OrmapTaxlotEditing.CatalogFileDialog.SelectedObject(System.Int32)">
 	<summary>
- Create a parcel ID from a mask.
+ Retrieve an item selected from a file dialog box
  </summary>
-	<param name="valueToMask"></param>
-	<param name="maskToApply"></param>
-	<returns> If a value is passed in that is not numeric then just pass it straight through else return a parcel id with or without leading zeros</returns>
-	<remarks>I use the Format function with user-defined string formats which consist of either all (@) characters or all ampersands</remarks>
-</member><member name="P:OrmapTaxlotEditing.My.Resources.Resources.ResourceManager">
+	<param name="selection"></param>
+	<returns></returns>
+	<remarks>Return the nth selected element from the most recent file save/open dialog request</remarks>
+</member><member name="M:OrmapTaxlotEditing.CatalogFileDialog.SetStartingLocation(System.IntPtr)">
 	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:OrmapTaxlotEditing.My.Resources.Resources.Culture">
+ Initial file path for either open or save dialog boxes
+ </summary>
+	<param name="pointer"></param>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditing.CatalogFileDialog.SetFilter(ESRI.ArcGIS.Catalog.IGxObjectFilter@,System.Boolean@,System.Boolean@)">
 	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:OrmapTaxlotEditing.My.Resources.Resources">
+ Simplify adding a filter to the file dialog box
+ </summary>
+	<param name="filter">An ArcObject defined object filter</param>
+	<param name="isDefault">Indicates if the filter should be the default filter</param>
+	<param name="resetAll">Indicates whether or not all of the current filters should be cleared</param>
+	<returns></returns>
+	<remarks>Adds a ESRI ArcCatalog defined filter to a file dialog box filter list</remarks>
+</member><member name="M:OrmapTaxlotEditing.CatalogFileDialog.ShowOPen">
 	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
+ Show the ArcCatalog file open dialog box
+ </summary>
+	<returns>  A collection of names of objects that have been selected by the user from the dialog box</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditing.CatalogFileDialog.ShowSave">
+	<summary>
+ Show the ArcCatalog file save dialog box
+ </summary>
+	<returns>A collection holding the full path that is a concatenation of the final path and the specified name</returns>
+	<remarks></remarks>
+</member><member name="T:OrmapTaxlotEditing.CatalogFileDialog">
+	<summary>
+ Programmatically expose the ArcCatalog file dialog as one integral unit for simple access and use.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.uxCancel_Click(System.Object,System.EventArgs)">
+	<summary>
+ Closes the form without saving any modified settings.
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.uxReload_Click(System.Object,System.EventArgs)">
+	<summary>
+ Reloads application settings values and keeps the dialog open. 
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.uxReset_Click(System.Object,System.EventArgs)">
+	<summary>
+ Resets application settings values and keeps the dialog open. 
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.uxSave_Click(System.Object,System.EventArgs)">
+	<summary>
+ Saves the current application settings values and closes the dialog.
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.SetBindings">
+	<summary>
+ Set the control binding sources for the form.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.SaveSettings">
+	<summary>
+ Stores the current values of the application settings in persistent storage.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.ReloadSettings">
+	<summary>
+ Refreshes the application settings values from persistent 
+ storage.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.ResetSettings">
+	<summary>
+ Restores the persisted application settings values to their 
+ corresponding default properties.
+ </summary>
+	<remarks></remarks>
 </member><member name="M:OrmapTaxlotEditing.AddArrows.ArcGISCategoryRegistration(System.Type)">
 	<summary>
  Required method for ArcGIS Component Category registration -
@@ -80,12 +123,62 @@ OrmapTaxlotEditing
  Required method for ArcGIS Component Category registration -
  Do not modify the contents of this method with the code editor.
  </summary>
+</member><member name="F:OrmapTaxlotEditing.PropertiesForm.components">
+	<summary>
+ Required designer variable.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.PropertiesForm.Dispose(System.Boolean)">
+	<summary>
+ Clean up any resources being used.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.PropertiesForm.InitializeComponent">
+	<summary>
+ Required method for Designer support - do not modify
+ the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.CombineTaxlots.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.CombineTaxlots.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.Utilities.FileExists(System.String)">
+	<summary>
+ Determine file existence
+ </summary>
+	<param name="path">A string that represents the file to check</param>
+	<returns>True or False</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditing.EditorExtension.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.EditorExtension.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category unregistration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
 </member><member name="M:OrmapTaxlotEditing.EditMapIndex.ArcGISCategoryRegistration(System.Type)">
 	<summary>
  Required method for ArcGIS Component Category registration -
  Do not modify the contents of this method with the code editor.
  </summary>
 </member><member name="M:OrmapTaxlotEditing.EditMapIndex.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.LocateFeature.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditing.LocateFeature.ArcGISCategoryUnregistration(System.Type)">
 	<summary>
  Required method for ArcGIS Component Category registration -
  Do not modify the contents of this method with the code editor.
@@ -295,32 +388,12 @@ Private empty constructor to prevent instantiation
   General utility class.
  </summary>
 	<remarks>Commonly used procedures and functions.</remarks>
-</member><member name="M:OrmapTaxlotEditing.PropertyPage.ArcGISCategoryRegistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.PropertyPage.ArcGISCategoryUnregistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category unregistration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.Utilities.FileExists(System.String)">
-	<summary>
- Determine file existence
- </summary>
-	<param name="path">A string that represents the file to check</param>
-	<returns>True or False</returns>
-	<remarks></remarks>
 </member><member name="M:OrmapTaxlotEditing.TaxlotAssignment.OnCreate(System.Object)">
 	<summary>
- Occurs when this command is created
+ Occurs when this command is created.
  </summary>
-	<param name="hook">Instance of the application</param>
-</member><member name="M:OrmapTaxlotEditing.TaxlotAssignment.OnClick">
-	<summary>
- Toggle visiblity of dockable window and show the visible state by its checked property.
- </summary>
+	<param name="hook">A generic <c>Object</c> hook to an instance of the application.</param>
+	<remarks>The application hook may not point to an <c>IMxApplication</c> object.</remarks>
 </member><member name="M:OrmapTaxlotEditing.TaxlotAssignment.ArcGISCategoryRegistration(System.Type)">
 	<summary>
  Required method for ArcGIS Component Category registration -
@@ -331,146 +404,60 @@ Private empty constructor to prevent instantiation
  Required method for ArcGIS Component Category registration -
  Do not modify the contents of this method with the code editor.
  </summary>
-</member><member name="P:OrmapTaxlotEditing.CatalogFileDialog.FinalLocation">
+</member><member name="M:OrmapTaxlotEditing.OrmapSettings.#ctor">
 	<summary>
- The file path present when the user specifies a file to open
- or a file name to save in Open/Save As dialog boxes
+ OrmapSettings constructor.
  </summary>
-	<value></value>
-	<returns></returns>
+	<remarks>This class follows the singleton pattern and thus has a 
+ private constructor and all shared members.</remarks>
+</member><member name="M:OrmapTaxlotEditing.StringUtilities.AddLeadingZeros(System.String,System.Int32)">
+	<summary>
+ Adds leading zeros if necessary
+ </summary>
+	<param name="currentString">The string to pad with zeros</param>
+	<param name="width">The final length of the string</param>
+	<returns>A string of length width characters</returns>
+	<remarks>Creates a string of width characters padded on the left with zeros</remarks>
+</member><member name="M:OrmapTaxlotEditing.StringUtilities.ExtractString(System.String,System.Int32,System.Int32)">
+	<summary>
+ Isolate elements of a string
+ </summary>
+	<param name="theWholeString">The string to isolate the substring from</param>
+	<param name="lowPart"></param>
+	<param name="highPart"></param>
+	<returns>A string that is a substring of theWholeString.</returns>
 	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.CatalogFileDialog.SelectedObject(System.Int32)">
+</member><member name="M:OrmapTaxlotEditing.StringUtilities.CreateParcelID(System.String,System.String)">
 	<summary>
- Retrieve an item selected from a file dialog box
+ Create a parcel ID from a mask.
  </summary>
-	<param name="selection"></param>
-	<returns></returns>
-	<remarks>Return the nth selected element from the most recent file save/open dialog request</remarks>
-</member><member name="M:OrmapTaxlotEditing.CatalogFileDialog.SetStartingLocation(System.IntPtr)">
-	<summary>
- Initial file path for either open or save dialog boxes
- </summary>
-	<param name="pointer"></param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.CatalogFileDialog.SetFilter(ESRI.ArcGIS.Catalog.IGxObjectFilter@,System.Boolean@,System.Boolean@)">
-	<summary>
- Simplify adding a filter to the file dialog box
- </summary>
-	<param name="filter">An ArcObject defined object filter</param>
-	<param name="isDefault">Indicates if the filter should be the default filter</param>
-	<param name="resetAll">Indicates whether or not all of the current filters should be cleared</param>
-	<returns></returns>
-	<remarks>Adds a ESRI ArcCatalog defined filter to a file dialog box filter list</remarks>
-</member><member name="M:OrmapTaxlotEditing.CatalogFileDialog.ShowOPen">
-	<summary>
- Show the ArcCatalog file open dialog box
- </summary>
-	<returns>  A collection of names of objects that have been selected by the user from the dialog box</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.CatalogFileDialog.ShowSave">
-	<summary>
- Show the ArcCatalog file save dialog box
- </summary>
-	<returns>A collection holding the full path that is a concatenation of the final path and the specified name</returns>
-	<remarks></remarks>
-</member><member name="T:OrmapTaxlotEditing.CatalogFileDialog">
-	<summary>
- Programmatically expose the ArcCatalog file dialog as one integral unit for simple access and use.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.OrmapToolbar.ArcGISCategoryRegistration(System.Type)">
+	<param name="valueToMask"></param>
+	<param name="maskToApply"></param>
+	<returns> If a value is passed in that is not numeric then just pass it straight through else return a parcel id with or without leading zeros</returns>
+	<remarks>I use the Format function with user-defined string formats which consist of either all (@) characters or all ampersands</remarks>
+</member><member name="M:OrmapTaxlotEditing.PropertyPage.ArcGISCategoryRegistration(System.Type)">
 	<summary>
  Required method for ArcGIS Component Category registration -
  Do not modify the contents of this method with the code editor.
  </summary>
-</member><member name="M:OrmapTaxlotEditing.OrmapToolbar.ArcGISCategoryUnregistration(System.Type)">
+</member><member name="M:OrmapTaxlotEditing.PropertyPage.ArcGISCategoryUnregistration(System.Type)">
 	<summary>
  Required method for ArcGIS Component Category unregistration -
  Do not modify the contents of this method with the code editor.
  </summary>
-</member><member name="F:OrmapTaxlotEditing.PropertiesForm.components">
+</member><member name="P:OrmapTaxlotEditing.My.Resources.Resources.ResourceManager">
 	<summary>
- Required designer variable.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.PropertiesForm.Dispose(System.Boolean)">
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:OrmapTaxlotEditing.My.Resources.Resources.Culture">
 	<summary>
- Clean up any resources being used.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.PropertiesForm.InitializeComponent">
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:OrmapTaxlotEditing.My.Resources.Resources">
 	<summary>
- Required method for Designer support - do not modify
- the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.uxCancel_Click(System.Object,System.EventArgs)">
-	<summary>
- Closes the form without saving any modified settings.
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.uxReload_Click(System.Object,System.EventArgs)">
-	<summary>
- Reloads application settings values and keeps the dialog open. 
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.uxReset_Click(System.Object,System.EventArgs)">
-	<summary>
- Resets application settings values and keeps the dialog open. 
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.uxSave_Click(System.Object,System.EventArgs)">
-	<summary>
- Saves the current application settings values and closes the dialog.
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.SetBindings">
-	<summary>
- Set the control binding sources for the form.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.SaveSettings">
-	<summary>
- Stores the current values of the application settings in persistent storage.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.ReloadSettings">
-	<summary>
- Refreshes the application settings values from persistent 
- storage.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.OrmapSettingsForm.ResetSettings">
-	<summary>
- Restores the persisted application settings values to their 
- corresponding default properties.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditing.CombineTaxlots.ArcGISCategoryRegistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.CombineTaxlots.ArcGISCategoryUnregistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.LocateFeature.ArcGISCategoryRegistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditing.LocateFeature.ArcGISCategoryUnregistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member>
 </members>
 </doc>

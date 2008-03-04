@@ -42,8 +42,7 @@ Imports System.Runtime.InteropServices
 <ComVisible(False)> _
 Public NotInheritable Class OrmapSettings
 
-#Region "Class-Level Constants And Enumerations"
-    ' None
+#Region "Class-Level Constants And Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
@@ -64,54 +63,48 @@ Public NotInheritable Class OrmapSettings
 
 #Region "Custom Class Members"
 
-#Region "Fields"
-    ' None
+#Region "Fields (none)"
 #End Region
 
 #Region "Properties"
 
-    Private WithEvents _ormapSettingsForm As OrmapSettingsForm
+    Private WithEvents _partnerOrmapSettingsForm As OrmapSettingsForm
 
-    Friend ReadOnly Property OrmapSettingsForm() As OrmapSettingsForm
+    Friend ReadOnly Property PartnerOrmapSettingsForm() As OrmapSettingsForm
         Get
-            Return _ormapSettingsForm
+            Return _partnerOrmapSettingsForm
         End Get
     End Property
 
-    Private Sub SetOrmapSettingsForm(ByVal value As OrmapSettingsForm)
+    Private Sub SetPartnerOrmapSettingsForm(ByVal value As OrmapSettingsForm)
         ' TODO: NIS Add validation code?
-        _ormapSettingsForm = value
+        _partnerOrmapSettingsForm = value
     End Sub
 
 #End Region
 
-#Region "Event Handlers"
+#Region "Event Handlers (none)"
 #End Region
 
-#Region "Methods"
-    ' None
-#End Region
-
-#End Region
-
-#Region "Inherited Class Members"
-
-#Region "Properties"
-    ' None
-#End Region
-
-#Region "Methods"
-    ' None
+#Region "Methods (none)"
 #End Region
 
 #End Region
 
-#Region "Implemented Interface Members"
-    ' None
+#Region "Inherited Class Members (none)"
+
+#Region "Properties (none)"
 #End Region
 
-#Region "Other Members"
-    ' None
+#Region "Methods (none)"
+#End Region
+
+#End Region
+
+#Region "Implemented Interface Members (none)"
+#End Region
+
+#Region "Other Members (none)"
 #End Region
 
 End Class
