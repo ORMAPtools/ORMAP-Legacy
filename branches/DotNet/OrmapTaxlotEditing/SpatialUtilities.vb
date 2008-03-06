@@ -66,8 +66,25 @@ Public NotInheritable Class SpatialUtilities
     ''' reflect the current ORMAP Number and Map Number elements in the 
     ''' overlaying <paramref name="mapIndexLayer"/> polygon.</remarks>
     Public Shared Sub CalculateTaxlotValues(ByRef feature As IFeature, ByRef mapIndexLayer As IFeatureLayer)
-        'TODO: JWM flesh out
+
         Try
+            Dim taxlotFClass As IFeatureClass
+            taxlotFClass = DirectCast(feature, IFeatureClass)
+
+            mapIndexLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
+            If mapIndexLayer Is Nothing Then
+                If LoadFCIntoMap(EditorExtension.TableNamesSettings.MapIndexFC, "Locate Database with Map Index") Then
+                    mapIndexLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
+                End If
+                If mapIndexLayer Is Nothing Then
+                    Exit Try
+                End If
+            End If
+            'TODO: JWM Continue to flesh this out
+            Dim indexOrmapTaxlotNumberField As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapTaxlotField)
+            Dim indexOrmapMapNumberField As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapMapNumberField)
+            Dim indexMapNumberField As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapNumberField)
+            Dim indexCountyField As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.CountyField)
 
         Catch ex As Exception
 
@@ -618,13 +635,12 @@ Public NotInheritable Class SpatialUtilities
         End Try
     End Function
 
-    ' TODO: NIS Format XML comments like previous (ending periods, etc.).
     ''' <summary>
-    ''' Loads a feature class into the current map
+    ''' Loads a feature class into the current map.
     ''' </summary>
-    ''' <param name="featureClassName">The feature class to find</param>
-    ''' <param name="title">An alternate title for the file dialog box</param>
-    ''' <returns>True for loaded, False for not loaded</returns>
+    ''' <param name="featureClassName">The feature class to find.</param>
+    ''' <param name="title">An alternate title for the file dialog box.</param>
+    ''' <returns>True for loaded, False for not loaded.</returns>
     ''' <remarks>Show a dialog box with title; title that allows the user to select the personal geodatabase that featureClassName resides in.
     ''' The feature class featureClassName is then loaded from the chosen personal geodatabase.</remarks>
     Public Shared Function LoadFCIntoMap(ByVal featureClassName As String, Optional ByVal title As String = "") As Boolean
@@ -684,36 +700,54 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
+    ''' Find the index of a field in a feature class.
+    ''' </summary>
+    ''' <param name="featureClass">The feature class to locate a field in.</param>
+    ''' <param name="fieldName">The name of the field to find.</param>
+    ''' <returns>Index of field or -1.</returns>
+    ''' <remarks>This function may return zero because that is a valid index, but -1 is not. The return value of -1 means the field was not found.</remarks>
+    Public Shared Function LocateFields(ByRef featureClass As ESRI.ArcGIS.Geodatabase.IFeatureClass, ByRef fieldName As String) As Integer
+        Try
+            Dim returnValue As Integer
+            returnValue = featureClass.Fields.FindField(fieldName)
+            Return returnValue
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+            Return -1
+        End Try
+    End Function
+
+    ''' <summary>
     ''' Reads a value from a row, given a field name.
     ''' </summary>
-    ''' <param name="row">An object that implements the IRow interface</param>
-    ''' <param name="fieldName">A field that exists in row</param>
-    ''' <param name="dataType">A string value indicating data type of the field</param>
+    ''' <param name="aRow">An object that implements the IRow interface</param>
+    ''' <param name="fieldName">A field that exists in row.</param>
+    ''' <param name="dataType">A string value indicating data type of the field.</param>
     ''' <returns></returns>
     ''' <remarks>Reads the value of a field with a domain and translates the value from the coded value to the coded name.</remarks>
-    Public Shared Function ReadValue(ByRef row As IRow, ByVal fieldName As String, Optional ByVal dataType As String = "") As String
+    Public Shared Function ReadValue(ByRef aRow As IRow, ByVal fieldName As String, Optional ByVal dataType As String = "") As String
         Try
             Dim fieldIndex As Integer
             Dim returnValue As String = ""
 
-            fieldIndex = row.Fields.FindField(fieldName)
+            fieldIndex = aRow.Fields.FindField(fieldName)
             If fieldIndex > -1 Then
                 If String.Compare(dataType, "date", True) = 0 Then
-                    If IsDBNull(row.Value(fieldIndex)) Then
+                    If IsDBNull(aRow.Value(fieldIndex)) Then
                         returnValue = CStr(System.DateTime.Today)
                     Else
-                        returnValue = CStr(row.Value(fieldIndex))
+                        returnValue = CStr(aRow.Value(fieldIndex))
                     End If
                 Else
-                    If IsDBNull(row.Value(fieldIndex)) Then
+                    If IsDBNull(aRow.Value(fieldIndex)) Then
                         returnValue = String.Empty
                     Else
-                        returnValue = CStr(row.Value(fieldIndex))
+                        returnValue = CStr(aRow.Value(fieldIndex))
                     End If
                 End If
                 'Determine if a Domain Field
                 Dim field As IField
-                field = row.Fields.Field(fieldIndex)
+                field = aRow.Fields.Field(fieldIndex)
                 Dim domain As IDomain
                 domain = field.Domain
                 If Not domain Is Nothing Then
@@ -722,7 +756,7 @@ Public NotInheritable Class SpatialUtilities
                         Dim thisCodedValueDomain As ICodedValueDomain
                         thisCodedValueDomain = DirectCast(domain, ICodedValueDomain)
                         Dim domainValue As Object
-                        domainValue = row.Value(fieldIndex)
+                        domainValue = aRow.Value(fieldIndex)
                         'search domain for the code
                         For domainIndex As Integer = 0 To thisCodedValueDomain.CodeCount - 1
                             If thisCodedValueDomain.Value(domainIndex).ToString = domainValue.ToString Then 'TODO: NIS Confirm that ToString will work here
@@ -744,7 +778,7 @@ Public NotInheritable Class SpatialUtilities
     ''' <summary>
     ''' Update Auto fields in a feature class.
     ''' </summary>
-    ''' <param name="feature"> An object that implements the Ifeature interface</param>
+    ''' <param name="feature"> An object that implements the Ifeature interface.</param>
     ''' <remarks>Update the AutoWho and the AutoDate fields with the current username and date/time, respectively.</remarks>
     Public Shared Sub UpdateAutoFields(ByRef feature As IFeature)
         Try
@@ -769,10 +803,10 @@ Public NotInheritable Class SpatialUtilities
     End Sub
 
     ''' <summary>
-    ''' Determine the validity of a taxlot number
+    ''' Determine the validity of a taxlot number.
     ''' </summary>
-    ''' <param name="taxlotNumber">The taxlot value to validate</param>
-    ''' <param name="thisGeometry">The geometry of the feature to check</param>
+    ''' <param name="taxlotNumber">The taxlot value to validate.</param>
+    ''' <param name="thisGeometry">The geometry of the feature to check.</param>
     ''' <returns>True or False</returns>
     ''' <remarks>Determine if the feature represented by thisGeometry with taxlot taxlotNumber is a unique and therefore valid.</remarks>
     Public Shared Function ValidateTaxlotNumber(ByVal taxlotNumber As String, ByRef thisGeometry As IGeometry) As Boolean
