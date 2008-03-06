@@ -107,6 +107,7 @@
     <Compile Include="HelpForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ORMAPNumber.vb" />
     <Compile Include="OrmapSettings.vb" />
     <Compile Include="OrmapSettingsForm.Designer.vb">
       <DependentUpon>OrmapSettingsForm.vb</DependentUpon>
@@ -208,6 +209,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="help\TaxlotAssignmentHelp.rtf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
