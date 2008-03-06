@@ -49,6 +49,7 @@ Public NotInheritable Class Utilities
     Public Shared Function GetUserName() As String
         If TypeOf My.User.CurrentPrincipal Is _
         Security.Principal.WindowsPrincipal Then
+            'TODO: Since this a dll need to call My.User.InitializeWithWindowsUser() on initial startup maybe in editorextension startup
             ' The application is using Windows authentication.
             ' The name format is DOMAIN\USERNAME.
             Dim parts() As String = Split(My.User.Name, "\")
@@ -82,6 +83,23 @@ Public NotInheritable Class Utilities
             Return False
         End Try
     End Function
+
+    ''' <summary>
+    ''' Opens a document with its associated application.
+    ''' </summary>
+    ''' <param name="path">Fully qualified path to document (including file name).</param>
+    ''' <remarks></remarks>
+    Public Shared Sub StartDoc(ByVal path As String)
+        Try
+            System.Diagnostics.Process.Start(path)
+        Catch fex As FileNotFoundException
+            MessageBox.Show("File not Found", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+            Return
+        End Try
+    End Sub
 #End Region
 
 #Region "Private Members"
