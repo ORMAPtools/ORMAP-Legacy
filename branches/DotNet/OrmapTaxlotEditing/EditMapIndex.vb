@@ -121,7 +121,7 @@ Public NotInheritable Class EditMapIndex
                 EditorExtension.Editor.EditState = esriEditState.esriStateEditing AndAlso _
                 EditorExtension.IsValidWorkspace AndAlso _
                 EditorExtension.HasValidLicense AndAlso _
-                EditorExtension.CanEditTaxlots
+                EditorExtension.AllowedToEditTaxlots
         End Get
     End Property
 
@@ -145,7 +145,7 @@ Public NotInheritable Class EditMapIndex
     End Sub
 
     Public Overrides Sub OnClick()
-        ' TODO: NIS Add EditMapIndex.OnClick implementation
+        ' TODO: Port EditMapIndex.OnClick implementation
         System.Windows.Forms.MessageBox.Show("Add EditMapIndex.OnClick implementation")
     End Sub
 

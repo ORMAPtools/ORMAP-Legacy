@@ -294,13 +294,15 @@ OrmapTaxlotEditing
  that of annotation and return the truth value of the comparison.</remarks>
 </member><member name="M:OrmapTaxlotEditing.SpatialUtilities.LoadFCIntoMap(System.String,System.String)">
 	<summary>
- Loads a feature class into the current map
+ Loads the specified feature class into the current map.
  </summary>
-	<param name="featureClassName">The feature class to find</param>
-	<param name="title">An alternate title for the file dialog box</param>
-	<returns>True for loaded, False for not loaded</returns>
-	<remarks>Show a dialog box with title; title that allows the user to select the personal geodatabase that featureClassName resides in.
- The feature class featureClassName is then loaded from the chosen personal geodatabase.</remarks>
+	<param name="featureClassName">The feature class to find.</param>
+	<param name="title">An alternate title for the file dialog box.</param>
+	<returns><c>True</c> for found and loaded, <c>False</c> for not found and loaded.</returns>
+	<remarks>Show a dialog box with title that allows the user to select the 
+ personal geodatabase that the <paramref name="featureClassName"/> resides in. 
+ The feature class featureClassName is then loaded in the current map from the 
+ chosen personal geodatabase.</remarks>
 </member><member name="M:OrmapTaxlotEditing.SpatialUtilities.ReadValue(ESRI.ArcGIS.Geodatabase.IRow@,System.String,System.String)">
 	<summary>
  Reads a value from a row, given a field name.

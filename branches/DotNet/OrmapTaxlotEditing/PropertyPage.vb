@@ -273,9 +273,9 @@ Public NotInheritable Class PropertyPage
 
     Public Sub Apply() Implements IComPropertyPage.Apply
         ' Write to the EditorExtension.CanEdit shared (i.e. by all class objects) property
-        EditorExtension.CanEditTaxlots = PartnerPropertiesForm.uxEnableTools.Checked
-        EditorExtension.CanAutoUpdate = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
-        EditorExtension.CanAutoUpdateAllFields = Not PartnerPropertiesForm.uxAllFieldsOption.Checked
+        EditorExtension.AllowedToEditTaxlots = PartnerPropertiesForm.uxEnableTools.Checked
+        EditorExtension.AllowedToAutoUpdate = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
+        EditorExtension.AllowedToAutoUpdateAllFields = Not PartnerPropertiesForm.uxAllFieldsOption.Checked
         SetPageDirty(False)
     End Sub
 
@@ -301,10 +301,10 @@ Public NotInheritable Class PropertyPage
 
         ' TODO: NIS Move (to where)?
         SetPartnerPropertiesForm(New PropertiesForm())
-        PartnerPropertiesForm.uxEnableTools.Checked = EditorExtension.CanEditTaxlots
-        PartnerPropertiesForm.uxEnableAutoUpdate.Checked = EditorExtension.CanAutoUpdate
-        PartnerPropertiesForm.uxMinimumFieldsOption.Checked = Not EditorExtension.CanAutoUpdateAllFields
-        PartnerPropertiesForm.uxAllFieldsOption.Checked = EditorExtension.CanAutoUpdateAllFields
+        PartnerPropertiesForm.uxEnableTools.Checked = EditorExtension.AllowedToEditTaxlots
+        PartnerPropertiesForm.uxEnableAutoUpdate.Checked = EditorExtension.AllowedToAutoUpdate
+        PartnerPropertiesForm.uxMinimumFieldsOption.Checked = Not EditorExtension.AllowedToAutoUpdateAllFields
+        PartnerPropertiesForm.uxAllFieldsOption.Checked = EditorExtension.AllowedToAutoUpdateAllFields
 
         ' Wire up form events.
         AddHandler PartnerPropertiesForm.uxEnableTools.CheckedChanged, AddressOf uxEnableTools_CheckedChanged

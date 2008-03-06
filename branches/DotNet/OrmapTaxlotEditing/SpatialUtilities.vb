@@ -636,13 +636,15 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Loads a feature class into the current map.
+    ''' Loads the specified feature class into the current map.
     ''' </summary>
     ''' <param name="featureClassName">The feature class to find.</param>
     ''' <param name="title">An alternate title for the file dialog box.</param>
-    ''' <returns>True for loaded, False for not loaded.</returns>
-    ''' <remarks>Show a dialog box with title; title that allows the user to select the personal geodatabase that featureClassName resides in.
-    ''' The feature class featureClassName is then loaded from the chosen personal geodatabase.</remarks>
+    ''' <returns><c>True</c> for found and loaded, <c>False</c> for not found and loaded.</returns>
+    ''' <remarks>Show a dialog box with title that allows the user to select the 
+    ''' personal geodatabase that the <paramref name="featureClassName"/> resides in. 
+    ''' The feature class featureClassName is then loaded in the current map from the 
+    ''' chosen personal geodatabase.</remarks>
     Public Shared Function LoadFCIntoMap(ByVal featureClassName As String, Optional ByVal title As String = "") As Boolean
         Try
             Dim thisFileDialog As CatalogFileDialog
@@ -688,7 +690,7 @@ Public NotInheritable Class SpatialUtilities
             thisMap.AddLayer(thisFeatureLayer)
 
             Dim thisArcMapDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
-            thisArcMapDoc = DirectCast(EditorExtension.Editor.Parent.Document, IMxDocument)
+            thisArcMapDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
             thisArcMapDoc.CurrentContentsView.Refresh(0)
 
             Return True
@@ -698,6 +700,8 @@ Public NotInheritable Class SpatialUtilities
         End Try
 
     End Function
+
+    ' TODO: NIS Format following XML comments like previous (ending periods, etc.).
 
     ''' <summary>
     ''' Find the index of a field in a feature class.

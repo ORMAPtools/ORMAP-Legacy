@@ -74,6 +74,19 @@ Public NotInheritable Class EditorExtension
 
 #Region "Properties"
 
+    Private Shared _application As IApplication
+
+    Friend Shared ReadOnly Property Application() As IApplication
+        Get
+            Return _application
+        End Get
+    End Property
+
+    Private Sub SetApplication(ByVal value As IApplication)
+        ' TODO: NIS Add validation code?
+        _application = value
+    End Sub
+
     Private Shared _editor As IEditor
 
     Friend Shared ReadOnly Property Editor() As IEditor
@@ -173,36 +186,36 @@ Public NotInheritable Class EditorExtension
         End Set
     End Property
 
-    Private Shared _canEditTaxlots As Boolean = True
+    Private Shared _allowedToEditTaxlots As Boolean = True
 
-    Friend Shared Property CanEditTaxlots() As Boolean
+    Friend Shared Property AllowedToEditTaxlots() As Boolean
         Get
-            Return _canEditTaxlots
+            Return _allowedToEditTaxlots
         End Get
         Set(ByVal value As Boolean)
-            _canEditTaxlots = value
+            _allowedToEditTaxlots = value
         End Set
     End Property
 
-    Private Shared _canAutoUpdate As Boolean = True
+    Private Shared _allowedToAutoUpdate As Boolean = True
 
-    Friend Shared Property CanAutoUpdate() As Boolean
+    Friend Shared Property AllowedToAutoUpdate() As Boolean
         Get
-            Return _canAutoUpdate
+            Return _allowedToAutoUpdate
         End Get
         Set(ByVal value As Boolean)
-            _canAutoUpdate = value
+            _allowedToAutoUpdate = value
         End Set
     End Property
 
-    Private Shared _canAutoUpdateAllFields As Boolean = True
+    Private Shared _allowedToAutoUpdateAllFields As Boolean = True
 
-    Friend Shared Property CanAutoUpdateAllFields() As Boolean
+    Friend Shared Property AllowedToAutoUpdateAllFields() As Boolean
         Get
-            Return _canAutoUpdateAllFields
+            Return _allowedToAutoUpdateAllFields
         End Get
         Set(ByVal value As Boolean)
-            _canAutoUpdateAllFields = value
+            _allowedToAutoUpdateAllFields = value
         End Set
     End Property
 
@@ -290,6 +303,7 @@ Public NotInheritable Class EditorExtension
     End Property
 
     Public Sub Shutdown() Implements ESRI.ArcGIS.esriSystem.IExtension.Shutdown
+        SetApplication(Nothing)
         SetEditor(Nothing)
         SetEditEvents(Nothing)
     End Sub
@@ -297,9 +311,10 @@ Public NotInheritable Class EditorExtension
     Public Sub Startup(ByRef initializationData As Object) Implements ESRI.ArcGIS.esriSystem.IExtension.Startup
         If Not initializationData Is Nothing AndAlso TypeOf initializationData Is IEditor Then
             SetEditor(DirectCast(initializationData, IEditor))
-
-            ' Subscribe to editor events.
+            SetApplication(DirectCast(Editor.Parent, IApplication))
             SetEditEvents(DirectCast(EditorExtension.Editor, IEditEvents_Event))
+
+            ' Wire up editor events.
             AddHandler _editEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
             AddHandler _editEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
         End If
@@ -317,7 +332,7 @@ Public NotInheritable Class EditorExtension
         Dim usesAlt As Boolean
         Dim usesShift As Boolean
         Dim uid As New UID
-        Dim doc As IDocument = EditorExtension.Editor.Parent.Document
+        Dim doc As IDocument = EditorExtension.Application.Document
         Dim acceleratorTable As IAcceleratorTable = doc.Accelerators
 
         ' Set LocateFeature accelerator keys to Ctrl + Alt + L
@@ -380,9 +395,9 @@ Public NotInheritable Class EditorExtension
             Throw New ArgumentNullException("Stream")
         End If
 
-        CanEditTaxlots = CBool(Stream.Read())
-        CanAutoUpdate = CBool(Stream.Read())
-        CanAutoUpdateAllFields = CBool(Stream.Read())
+        AllowedToEditTaxlots = CBool(Stream.Read())
+        AllowedToAutoUpdate = CBool(Stream.Read())
+        AllowedToAutoUpdateAllFields = CBool(Stream.Read())
 
     End Sub
 
@@ -392,9 +407,9 @@ Public NotInheritable Class EditorExtension
             Throw New ArgumentNullException("Stream")
         End If
 
-        Stream.Write(CanEditTaxlots)
-        Stream.Write(CanAutoUpdate)
-        Stream.Write(CanAutoUpdateAllFields)
+        Stream.Write(AllowedToEditTaxlots)
+        Stream.Write(AllowedToAutoUpdate)
+        Stream.Write(AllowedToAutoUpdateAllFields)
 
     End Sub
 

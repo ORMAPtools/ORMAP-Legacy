@@ -119,7 +119,7 @@ Public NotInheritable Class LocateFeature
                 EditorExtension.Editor.EditState = esriEditState.esriStateEditing AndAlso _
                 EditorExtension.IsValidWorkspace AndAlso _
                 EditorExtension.HasValidLicense AndAlso _
-                EditorExtension.CanEditTaxlots
+                EditorExtension.AllowedToEditTaxlots
         End Get
     End Property
 
@@ -143,8 +143,8 @@ Public NotInheritable Class LocateFeature
     End Sub
 
     Public Overrides Sub OnClick()
-        ' TODO: NIS Add LocateFeature.OnClick implementation
-        System.Windows.Forms.MessageBox.Show("Add LocateFeature.OnClick implementation")
+        ' TODO: Port LocateFeature.OnClick implementation
+        System.Windows.Forms.MessageBox.Show("Port LocateFeature.OnClick implementation")
     End Sub
 
 #End Region

@@ -168,7 +168,7 @@ Public Class CatalogFileDialog
             selection = New GxObjectArray
 
             _colSelection = New Collection
-            If Not _theGxDialog.DoModalOpen(EditorExtension.Editor.Parent.hWnd, selection) Then
+            If Not _theGxDialog.DoModalOpen(EditorExtension.Application.hWnd, selection) Then
                 'need to return a empty collection
                 Return New Collection
             End If
@@ -193,7 +193,7 @@ Public Class CatalogFileDialog
     ''' <remarks></remarks>
     Public Function ShowSave() As Collection
         Try
-            If Not _theGxDialog.DoModalSave(EditorExtension.Editor.Parent.hWnd) Then
+            If Not _theGxDialog.DoModalSave(EditorExtension.Application.hWnd) Then
                 ' Return an empty collection
                 Return New Collection
             End If
