@@ -41,6 +41,7 @@
     <WarningLevel>1</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ESRI.ArcGIS.ADF, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">

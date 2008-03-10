@@ -51,7 +51,7 @@ Public Class CatalogFileDialog
 
 #Region "Class level fields"
     Private _theGxDialog As IGxDialog
-    Private _colSelection As Collection
+    Private _colSelection As Collection 'TODO: JWM Consider replacing with Hashtable
 #End Region
 
     Public Sub New()

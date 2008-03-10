@@ -40,7 +40,7 @@
     <Position X="5.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>EditorExtension.vb</FileName>
-      <HashCode>gAQQkKlgADhCgAASQATASQSAhgAAIAJEACAgAAJABAA=</HashCode>
+      <HashCode>AAQQkKlggDhWgAASQATASQQAlgAAICJEACAgAAJAAAA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
@@ -158,24 +158,21 @@
     <Position X="2.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>SpatialUtilities.vb</FileName>
-      <HashCode>AAAIjEABBAGAAEBAAIAAEEABAAAAAAQAEACAAIEgAAA=</HashCode>
+      <HashCode>AAAIjEABBAGAAEDAAIAAEEABAAAAAQSAEACAAJEgAAA=</HashCode>
     </TypeIdentifier>
-    <Members>
-      <Method Name="New" Hidden="true" />
-    </Members>
   </Class>
-  <Class Name="OrmapTaxlotEditing.StringUtilities" Collapsed="true">
+  <Class Name="OrmapTaxlotEditing.StringUtilities">
     <Position X="4" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>StringUtilities.vb</FileName>
-      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAIAQAACAAAA=</HashCode>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAAAACAAAAAAIAQAACAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="OrmapTaxlotEditing.TaxlotAssignment" Collapsed="true">
     <Position X="9.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>TaxlotAssignment.vb</FileName>
-      <HashCode>AABEAAAgAQAEAYADIADFAFACgCEACAAEICAgCQRAEAQ=</HashCode>
+      <HashCode>AABEAAAgAAAEAYADIADFAFACgCEACAAEICAgCQRAEAQ=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="OrmapTaxlotEditing.TaxlotAssignmentForm" Collapsed="true">
@@ -198,7 +195,7 @@
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="OrmapTaxlotEditing.ORMAPNumber">
+  <Class Name="OrmapTaxlotEditing.ORMAPNumber" Collapsed="true">
     <Position X="9.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>ORMAPNumber.vb</FileName>

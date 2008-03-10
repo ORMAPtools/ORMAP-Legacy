@@ -54,7 +54,7 @@ Public NotInheritable Class StringUtilities
     Public Shared Function AddLeadingZeros(ByVal currentString As String, ByVal width As Integer) As String
         Try
             If currentString.Length < width Then
-                Return currentString.PadLeft(width - currentString.Length, CChar("0"))
+                Return currentString.PadLeft(width - currentString.Length, "0"c)
             Else
                 Return currentString
             End If
@@ -62,6 +62,9 @@ Public NotInheritable Class StringUtilities
             MessageBox.Show(ex.Message)
             Return String.Empty
         End Try
+    End Function
+    Public Shared Function CreateMapTaxlotValue(ByVal mapTaxlotIDValue As String, ByVal formatString As String) As String
+        Return String.Empty 'TODO:jwm flesh this out
     End Function
 
     ''' <summary>

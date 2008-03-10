@@ -38,6 +38,7 @@
 #Region "Imported Namespaces"
 Imports System.Collections.Generic
 Imports System.Windows.Forms
+Imports System.Text
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Geometry
 Imports ESRI.ArcGIS.esriSystem
@@ -62,7 +63,7 @@ Public NotInheritable Class SpatialUtilities
     ''' </summary>
     ''' <param name="editFeature">A feature from the Taxlot feature class.</param>
     ''' <param name="mapIndexLayer">The Map Index feature layer.</param>
-    ''' <remarks>Updates the ORMAP fields in <paramref name="feature"/> to 
+    ''' <remarks>Updates the ORMAP fields in <paramref name="editFeature"/> to 
     ''' reflect the current ORMAP Number and Map Number elements in the 
     ''' overlaying <paramref name="mapIndexLayer"/> polygon.</remarks>
     Public Shared Sub CalculateTaxlotValues(ByRef editFeature As IFeature, ByRef mapIndexLayer As IFeatureLayer)
@@ -70,12 +71,14 @@ Public NotInheritable Class SpatialUtilities
         Try
             Dim taxlotFClass As IFeatureClass
             taxlotFClass = DirectCast(editFeature, IFeatureClass)
-
+            'locate map index layer
             mapIndexLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
             If mapIndexLayer Is Nothing Then
+                ' Prompt the user for the location of the MapIndex feature class
                 If LoadFCIntoMap(EditorExtension.TableNamesSettings.MapIndexFC, "Locate Database with Map Index") Then
                     mapIndexLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
                 End If
+                ' Tests for a failure to load the MapIndex feature class
                 If mapIndexLayer Is Nothing Then
                     Exit Try
                 End If
@@ -101,16 +104,17 @@ Public NotInheritable Class SpatialUtilities
             Dim idxMapTaxlotFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapTaxlotField)
             Dim idxMapAcresFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapAcresField)
             Dim idxAnomalyFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.AnomalyField)
+            'TODO:JWM If any of these index fields are -1 we should bail according to VB6 version
 
             Dim thisArea As IArea
             thisArea = DirectCast(editFeature.Shape, IArea)
-            Dim thisCenter As IPoint
-            thisCenter = thisArea.Centroid
             ' Update Acreage
             editFeature.Value(idxMapAcresFld) = thisArea.Area / 43560
 
+            ' Return and evaluate the ORMAP Number from the Map index
             Dim thisORMAPNumber As New ORMAPNumber()
             If Not thisORMAPNumber.ParseNumber(GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)) Then
+                ' Exit if there is no value, or an invalid value
                 Exit Try
             End If
 
@@ -120,6 +124,7 @@ Public NotInheritable Class SpatialUtilities
             End If
 
             editFeature.Value(idxMapNumberFld) = existingMapNumber
+            ' Store components of the ORMAP number in various fields
             editFeature.Value(idxOrmapMapNumberFld) = thisORMAPNumber.GetORMAPMapNumber
 
             Dim existingValue As String = ConvertCodeValueDomainToCode(editFeature.Fields, EditorExtension.TaxLotSettings.CountyField, thisORMAPNumber.County)
@@ -159,10 +164,43 @@ Public NotInheritable Class SpatialUtilities
                 Exit Try
             End If
 
-            Dim existingORMAPTaxlotNumber As String = CStr(editFeature.Value(idxOrmapTaxlotNumberFld))
-            'Dim newORMAPTaxlotNumber As String = 
-            'TODO: JWM Continue to flesh this out
+            ' Taxlot has actual taxlot number.  ORMAPTaxlot requires a 5-digit number, so leading zeros have to be added
+            Dim existingTaxlotValue As String = CStr(editFeature.Value(idxTaxlotFld))
+            existingTaxlotValue = StringUtilities.AddLeadingZeros(existingValue, ORMAPNumber.GetORMAP_ORTaxlotFieldLength)
 
+            Dim mapTaxlotID As String
+            mapTaxlotID = String.Concat(thisORMAPNumber.GetORMAPNumber, existingTaxlotValue)
+
+            Dim countyCode As Short = CShort(EditorExtension.DefaultValuesSettings.County)
+            Select Case countyCode
+                Case 1 To 19, 21 To 36
+                    editFeature.Value(idxTaxlotFld) = StringUtilities.CreateMapTaxlotValue(mapTaxlotID, EditorExtension.TaxLotSettings.MapTaxlotFormatMask)
+                Case 20
+                    ' 1.  Lane County uses a 2-digit numeric identifier for ranges.
+                    '     Special handling is required for east ranges, where 02E is
+                    '     stored as 25, 03E as 35, etc.
+                    ' 2.  ORMAP standards (OCDES (pg 13); Taxmap Data Model (pg 11)) assert that
+                    '     this field should be equal to MAPNUMBER + TAXLOT. In this case, MAPNUMBER
+                    '     is already in the right format, thus removing the need for the
+                    '     gfn_s_CreateMapTaxlotValue function. Also, in this case, TAXLOT is padded
+                    '     on the left with zeros to make it always a 5-digit number (see comment
+                    '     above).
+                    ' Trim the map number to only the left 8 characters (no spaces)
+                    Dim sb As String = existingMapNumber.Trim(CChar(existingMapNumber.Substring(0, 8)))
+                    editFeature.Value(idxTaxlotFld) = String.Concat(sb, existingValue)
+            End Select
+
+            ' Recalculate ORMAP Taxlot Number
+            If IsDBNull(editFeature.Value(idxOrmapTaxlotNumberFld)) Then
+                Exit Try
+            End If
+            ' Get the current and the new ORMAP Taxlot Numbers
+            Dim existingORMAPTaxlotNumber As String = CStr(editFeature.Value(idxOrmapTaxlotNumberFld))
+            Dim newORMAPTaxlotNumber As String = CalculateORMAPTaxlotNumber(existingTaxlotValue, editFeature, existingTaxlotValue)
+            'If no changes, don't save value
+            If String.Compare(existingORMAPTaxlotNumber, newORMAPTaxlotNumber, True) <> 0 Then
+                editFeature.Value(idxOrmapTaxlotNumberFld) = newORMAPTaxlotNumber
+            End If
             thisORMAPNumber = Nothing
 
         Catch ex As Exception
@@ -174,8 +212,7 @@ Public NotInheritable Class SpatialUtilities
     ''' <summary>
     ''' Converts a domain descriptive value to the stored code.
     ''' </summary>
-    ''' <param name="fields">An field collection object that supports the 
-    ''' <c>IFields</c> interface.</param>
+    ''' <param name="fields">An field collection object that supports the IFields interface.</param>
     ''' <param name="fieldName">A field that exists in fields.</param>
     ''' <param name="codedValue">A coded name to convert to a coded value</param>
     ''' <returns>A string that represents the domain coded value that 
@@ -267,8 +304,7 @@ Public NotInheritable Class SpatialUtilities
     ''' Locate a feature layer by its dataset name.
     ''' </summary>
     ''' <param name="dataSetName">The name of the dataset to find.</param>
-    ''' <returns>A layer object of that supports the <c>IFeatureLayer</c> 
-    ''' interface.</returns>
+    ''' <returns>A layer object of that supports the IFeatureLayer interface.</returns>
     ''' <remarks>Searches in the TOC recursively (i.e. within group layers). 
     ''' Returns the first Feature Layer with a matching dataset name.</remarks>
     Public Shared Function FindFeatureLayerByDSName(ByVal dataSetName As String) As ESRI.ArcGIS.Carto.IFeatureLayer
@@ -318,10 +354,27 @@ Public NotInheritable Class SpatialUtilities
     ''' <returns>A string the represents a properly formatted Map Suffix.</returns>
     ''' <remarks></remarks>
     Public Shared Function GetMapSuffixNum(ByVal theFeature As IFeature) As String
-        Try
-            'TODO: JWM
-        Catch ex As Exception
+        Dim returnValue As New String("0"c, 3)
 
+        Try
+            Dim indexTaxlotMapSuffixFld As Integer
+            indexTaxlotMapSuffixFld = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixNumberField)
+            If indexTaxlotMapSuffixFld > -1 Then
+                If Not IsDBNull(theFeature.Value(indexTaxlotMapSuffixFld)) Then
+                    returnValue = CStr(theFeature.Value(indexTaxlotMapSuffixFld))
+                End If
+                'verify that it is 3 digits
+                If returnValue.Length < 3 Then
+                    returnValue.PadLeft(3, "0"c)
+                End If
+                If returnValue.Length > 3 Then
+                    returnValue = returnValue.Substring(0, 3)
+                End If
+            End If
+            Return returnValue
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+            Return "000"
         End Try
     End Function
 
@@ -332,10 +385,27 @@ Public NotInheritable Class SpatialUtilities
     ''' <returns> A string that represents a properly formatted Map Suffix Type.</returns>
     ''' <remarks></remarks>
     Public Shared Function GetMapSuffixType(ByRef theFeature As IFeature) As String
+        Dim returnValue As New String("0"c, 1)
         Try
-            'TODO:JWM
+            Dim indexTaxlotMapTypeFld As Integer
+            indexTaxlotMapTypeFld = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixTypeField)
+            If indexTaxlotMapTypeFld > -1 Then
+                If Not IsDBNull(theFeature.Value(indexTaxlotMapTypeFld)) Then
+                    returnValue = CStr(theFeature.Value(indexTaxlotMapTypeFld))
+                End If
+                'verify that it is one digit
+                If returnValue.Length > 1 Then
+                    returnValue.PadLeft(1, "0"c)
+                End If
+                'verify that it is not more than 1 digit
+                If returnValue.Length > 1 Then
+                    returnValue = returnValue.Substring(0, 1)
+                End If
+            End If
+            Return returnValue
         Catch ex As Exception
-
+            MessageBox.Show(ex.Message)
+            Return "0"
         End Try
     End Function
 
@@ -809,8 +879,6 @@ Public NotInheritable Class SpatialUtilities
 
     End Function
 
-    ' TODO: NIS Format following XML comments like previous (ending periods, etc.).
-
     ''' <summary>
     ''' Find the index of a field in a feature class.
     ''' </summary>
@@ -832,7 +900,7 @@ Public NotInheritable Class SpatialUtilities
     ''' <summary>
     ''' Reads a value from a row, given a field name.
     ''' </summary>
-    ''' <param name="aRow">An object that implements the IRow interface</param>
+    ''' <param name="aRow">An object that implements the IRow interface.</param>
     ''' <param name="fieldName">A field that exists in row.</param>
     ''' <param name="dataType">A string value indicating data type of the field.</param>
     ''' <returns></returns>
@@ -980,12 +1048,12 @@ Public NotInheritable Class SpatialUtilities
 #Region "Private Members"
 
     ''' <summary>
-    ''' Return a cursor that represents the results of an attribute query
+    ''' Return a cursor that represents the results of an attribute query.
     ''' </summary>
-    ''' <param name="table">An object that supports the ITable interface</param>
-    ''' <param name="whereClause">An Sql Where clause</param>
-    ''' <returns>Return a cursor that represents the results of an attribute query</returns>
-    ''' <remarks>Creates a cursor from table that contains all feature records that meet the criteria in whereClause</remarks>
+    ''' <param name="table">An object that supports the ITable interface.</param>
+    ''' <param name="whereClause">An Sql Where clause.</param>
+    ''' <returns>Return a cursor that represents the results of an attribute query.</returns>
+    ''' <remarks>Creates a cursor from table that contains all feature records that meet the criteria in whereClause.</remarks>
     Private Shared Function AttributeQuery(ByRef table As ITable, Optional ByRef whereClause As String = "") As ICursor
         Try
             Dim thisQueryFilter As IQueryFilter
@@ -1016,10 +1084,14 @@ Public NotInheritable Class SpatialUtilities
     ''' append taxlotValue to form the return value.</remarks>
     Private Shared Function CalculateORMAPTaxlotNumber(ByVal existingORMAPNumber As String, ByRef theFeature As IFeature, ByVal taxlotValue As String) As String
         Try
-            Dim shortORMAPNumber As String = existingORMAPNumber.Substring(0, 20)
-            'dim taxlotMapSufNumberValue as String = 'TODO: JWM
+            Dim shortORMAPNumber As String = existingORMAPNumber.Substring(0, 20) 'replaces the ShortenOMTLNum function 
+            Dim taxlotMapSufNumberValue As String = GetMapSuffixNum(theFeature)
+            Dim taxlotMapSufTypeValue As String = GetMapSuffixType(theFeature)
+            ' Recreate and return the ORMAP Taxlot number
+            Return String.Concat(shortORMAPNumber, taxlotMapSufTypeValue, taxlotMapSufNumberValue, taxlotValue)
         Catch ex As Exception
-
+            MessageBox.Show(ex.Message)
+            Return String.Empty
         End Try
     End Function
 
@@ -1051,19 +1123,20 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Return a feature cursor based on the results of a spatial query
+    ''' Return a feature cursor based on the results of a spatial query.
     ''' </summary>
-    ''' <param name="inFeatureClass">Feature class to search</param>
-    ''' <param name="searchGeometry">Geometry to search in relation to spatialRelation</param>
-    ''' <param name="spatialRelation">Geometry relationship to searchGeometry</param>
-    ''' <param name="whereClause">SQL Where clause</param>
-    ''' <param name="isUpdateable">Read/Write state of the return cursor</param>
-    ''' <returns>Returns a feature cursor that represents the results of the spatial query</returns>
-    ''' <remarks>Given a feature class, pFeatureClassIn, a search geometry, pSearchGeometry, a spatial relationship, lSpatialRelation,
-    ''' an Sql search statement, sWhereClause, and whether or not
-    ''' the returned cursor should be updateable, bUpdateable.
-    ''' Perform a spatial query on pFeatureClassIn where feature
-    ''' which meet criteria sWhereClause have a relationship of lSpatialRelation to pSearchGeometry. The returned cursor is updatable if bUpdateable is True.</remarks>
+    ''' <param name="inFeatureClass">Feature class to search.</param>
+    ''' <param name="searchGeometry">Geometry to search in relation to spatialRelation.</param>
+    ''' <param name="spatialRelation">Geometry relationship to searchGeometry.</param>
+    ''' <param name="whereClause">SQL Where clause.</param>
+    ''' <param name="isUpdateable">Read/Write state of the return cursor.</param>
+    ''' <returns>Returns a feature cursor that represents the results of the spatial query.</returns>
+    ''' <remarks>Given a feature class, <paramref name="inFeatureClass">inFeatureClass</paramref>, 
+    ''' a search geometry,<paramref name=" searchGeometry">searchGeometry</paramref> , a spatial relationship,<paramref name=" spatialRelation">spatialRelation</paramref> , 
+    ''' an Sql search statement, <paramref name=" whereClause">whereClause</paramref>,
+    ''' and whether or not the returned cursor should be updateable, <paramref name=" isUpdateable">IsUpdateable</paramref>.
+    ''' Perform a spatial query <paramref name="infeatureClass">inFeatureClass</paramref> where feature
+    ''' which meet criteria whereClause have a relationship of spatialRelation to searchGeometry. The returned cursor is updatable if IsUpdateable is True.</remarks>
     Private Shared Function DoSpatialQuery(ByRef inFeatureClass As IFeatureClass, ByRef searchGeometry As IGeometry, ByRef spatialRelation As ESRI.ArcGIS.Geodatabase.esriSpatialRelEnum, Optional ByRef whereClause As String = "", Optional ByVal isUpdateable As Boolean = False) As IFeatureCursor
         Try
             Dim thisSpatialFilter As ISpatialFilter
@@ -1094,10 +1167,10 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Copy envelope points to polygon
+    ''' Copy envelope points to polygon.
     ''' </summary>
     ''' <param name="envelope"></param>
-    ''' <returns>A Polygon</returns>
+    ''' <returns>A Polygon.</returns>
     ''' <remarks></remarks>
     Private Shared Function EnvelopeToPolygon(ByRef envelope As IEnvelope) As IPolygon
         Try
@@ -1119,13 +1192,14 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Determine the annotation size based on scale
+    ''' Determine the annotation size based on scale.
     ''' </summary>
-    ''' <param name="thisFeatureClassName">Feature class to find the proper annotation size for</param>
-    ''' <param name="scale">The scale of the feature class</param>
-    ''' <returns>A double that represents the proper scale factor</returns>
-    ''' <remarks>Determines the proper size for the text in thisFeatureClassName. Defaults at size 5 is the scale is invalid, and size 10 if
-    ''' thisFeatureClassName is not Taxlot Acreage Annotation or Taxlot Number Annotation</remarks>
+    ''' <param name="thisFeatureClassName">Feature class to find the proper annotation size for.</param>
+    ''' <param name="scale">The scale of the feature class.</param>
+    ''' <returns>A double that represents the proper scale factor.</returns>
+    ''' <remarks>Determines the proper size for the text in thisFeatureClassName.
+    ''' Defaults at size 5 is the <paramref name="scale">scale</paramref> is invalid, and size 10 if
+    ''' <paramref name="thisFeatureClassName">thisFeatureClassName</paramref> is not Taxlot Acreage Annotation or Taxlot Number Annotation.</remarks>
     Private Shared Function GetAnnoSizeByScale(ByVal thisFeatureClassName As String, ByVal scale As Integer) As Double
         Try 'TODO: JWM verify the table names that we are comparing
             Dim size As String
@@ -1192,10 +1266,10 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Determine the x and y coordinates of the center of envelope, and return them as a Point object
+    ''' Determine the x and y coordinates of the center of envelope, and return them as a Point object.
     ''' </summary>
-    ''' <param name="envelope">An envelope object of type IEnvelope</param>
-    ''' <returns>A Point object that represents the center of the envelope</returns>
+    ''' <param name="envelope">An envelope object of type IEnvelope.</param>
+    ''' <returns>A Point object that represents the center of the envelope.</returns>
     ''' <remarks></remarks>
     Private Shared Function GetCenterOfEnvelope(ByRef envelope As IEnvelope) As IPoint
         Try
@@ -1211,7 +1285,7 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    '''Private empty constructor to prevent instantiation
+    '''Private empty constructor to prevent instantiation.
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub New()
