@@ -60,16 +60,16 @@ Public NotInheritable Class SpatialUtilities
     ''' <summary>
     ''' Calculates Taxlot values from ORMAPMapnum.
     ''' </summary>
-    ''' <param name="feature">A feature from the Taxlot feature class.</param>
+    ''' <param name="editFeature">A feature from the Taxlot feature class.</param>
     ''' <param name="mapIndexLayer">The Map Index feature layer.</param>
     ''' <remarks>Updates the ORMAP fields in <paramref name="feature"/> to 
     ''' reflect the current ORMAP Number and Map Number elements in the 
     ''' overlaying <paramref name="mapIndexLayer"/> polygon.</remarks>
-    Public Shared Sub CalculateTaxlotValues(ByRef feature As IFeature, ByRef mapIndexLayer As IFeatureLayer)
+    Public Shared Sub CalculateTaxlotValues(ByRef editFeature As IFeature, ByRef mapIndexLayer As IFeatureLayer)
 
         Try
             Dim taxlotFClass As IFeatureClass
-            taxlotFClass = DirectCast(feature, IFeatureClass)
+            taxlotFClass = DirectCast(editFeature, IFeatureClass)
 
             mapIndexLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
             If mapIndexLayer Is Nothing Then
@@ -80,13 +80,93 @@ Public NotInheritable Class SpatialUtilities
                     Exit Try
                 End If
             End If
+
+            Dim idxOrmapTaxlotNumberFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapTaxlotField)
+            Dim idxOrmapMapNumberFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapMapNumberField)
+            Dim idxMapNumberFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapNumberField)
+            Dim idxCountyFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.CountyField)
+            Dim idxTaxlotFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TaxlotField)
+            Dim idxTownFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipField)
+            Dim idxTownPartFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipPartField)
+            Dim idxTownDirFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipDirectionField)
+            Dim idxRangeFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangeField)
+            Dim idxRangePartFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangePartField)
+            Dim idxRangeDirFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangeDirectionField)
+            Dim idxSectionFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.SectionNumberField)
+            Dim idxQrtrFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.QuarterSectionField)
+            Dim idxQrtrQrtrFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.QuarterQuarterSectionField)
+            Dim idxMapSuffixTypeFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixTypeField)
+            Dim idxMapSuffixNumFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixNumberField)
+            Dim idxSpcIntrstFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.SpecialInterestField)
+            Dim idxMapTaxlotFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapTaxlotField)
+            Dim idxMapAcresFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapAcresField)
+            Dim idxAnomalyFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.AnomalyField)
+
+            Dim thisArea As IArea
+            thisArea = DirectCast(editFeature.Shape, IArea)
+            Dim thisCenter As IPoint
+            thisCenter = thisArea.Centroid
+            ' Update Acreage
+            editFeature.Value(idxMapAcresFld) = thisArea.Area / 43560
+
+            Dim thisORMAPNumber As New ORMAPNumber()
+            If Not thisORMAPNumber.ParseNumber(GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)) Then
+                Exit Try
+            End If
+
+            Dim existingMapNumber As String = GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+            If existingMapNumber.Length = 0 Then
+                Exit Try
+            End If
+
+            editFeature.Value(idxMapNumberFld) = existingMapNumber
+            editFeature.Value(idxOrmapMapNumberFld) = thisORMAPNumber.GetORMAPMapNumber
+
+            Dim existingValue As String = ConvertCodeValueDomainToCode(editFeature.Fields, EditorExtension.TaxLotSettings.CountyField, thisORMAPNumber.County)
+            If existingValue.Length > 0 AndAlso IsNumeric(existingValue) Then
+                editFeature.Value(idxCountyFld) = CShort(existingValue)
+            Else
+                editFeature.Value(idxCountyFld) = DBNull.Value
+            End If
+            With editFeature
+                .Value(idxTownFld) = CShort(thisORMAPNumber.Township)
+                .Value(idxTownPartFld) = CDbl(thisORMAPNumber.PartialTownshipCode)
+                .Value(idxTownDirFld) = thisORMAPNumber.TownshipDirectional
+                .Value(idxRangeFld) = CShort(thisORMAPNumber.Range)
+                .Value(idxRangePartFld) = CDbl(thisORMAPNumber.PartialRangeCode)
+                .Value(idxRangeDirFld) = thisORMAPNumber.RangeDirectional
+                .Value(idxSectionFld) = CShort(thisORMAPNumber.Section)
+                .Value(idxQrtrFld) = thisORMAPNumber.Quarter
+                .Value(idxQrtrQrtrFld) = thisORMAPNumber.QuarterQuarter
+                .Value(idxMapSuffixTypeFld) = ConvertCodeValueDomainToCode(.Fields, EditorExtension.MapIndexSettings.MapSuffixTypeField, thisORMAPNumber.SuffixType)
+                .Value(idxMapSuffixNumFld) = thisORMAPNumber.SuffixNumber
+                .Value(idxAnomalyFld) = thisORMAPNumber.Anomaly
+            End With
+
+            If IsDBNull(editFeature.Value(idxSpcIntrstFld)) Then
+                existingValue = "00000"
+            Else
+                existingValue = CStr(editFeature.Value(idxSpcIntrstFld))
+            End If
+            If existingValue.Length <= 5 Then
+                existingValue.PadLeft(5, "0"c)
+                'Old method sExistVal = New String("0", 5 - Len(sExistVal)) & sExistVal
+            End If
+            editFeature.Value(idxSpcIntrstFld) = existingValue
+
+            ' Recalculate OMTaxlot
+            If IsDBNull(editFeature.Value(idxTaxlotFld)) Then
+                Exit Try
+            End If
+
+            Dim existingORMAPTaxlotNumber As String = CStr(editFeature.Value(idxOrmapTaxlotNumberFld))
+            'Dim newORMAPTaxlotNumber As String = 
             'TODO: JWM Continue to flesh this out
-            Dim indexOrmapTaxlotNumberField As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapTaxlotField)
-            Dim indexOrmapMapNumberField As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapMapNumberField)
-            Dim indexMapNumberField As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapNumberField)
-            Dim indexCountyField As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.CountyField)
+
+            thisORMAPNumber = Nothing
 
         Catch ex As Exception
+            MessageBox.Show(ex.Message)
 
         End Try
     End Sub
@@ -228,6 +308,34 @@ Public NotInheritable Class SpatialUtilities
         Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return Nothing
+        End Try
+    End Function
+
+    ''' <summary>
+    '''  Validate and format a map suffix number.
+    ''' </summary>
+    ''' <param name="theFeature">An object that supports the IFeature interface.</param>
+    ''' <returns>A string the represents a properly formatted Map Suffix.</returns>
+    ''' <remarks></remarks>
+    Public Shared Function GetMapSuffixNum(ByVal theFeature As IFeature) As String
+        Try
+            'TODO: JWM
+        Catch ex As Exception
+
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Validate and format a map suffix type.
+    ''' </summary>
+    ''' <param name="theFeature">An object that supports the IFeature interface.</param>
+    ''' <returns> A string that represents a properly formatted Map Suffix Type.</returns>
+    ''' <remarks></remarks>
+    Public Shared Function GetMapSuffixType(ByRef theFeature As IFeature) As String
+        Try
+            'TODO:JWM
+        Catch ex As Exception
+
         End Try
     End Function
 
@@ -893,6 +1001,25 @@ Public NotInheritable Class SpatialUtilities
         Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return Nothing
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Calculate ORMAP Taxlot Number when one if its components has changed.
+    ''' </summary>
+    ''' <param name="existingORMAPNumber">An ORMAP Number.</param>
+    ''' <param name="theFeature">An object that supports the IFeature interface.</param>
+    ''' <param name="taxlotValue">A taxlot number.</param>
+    ''' <returns>A string that represents an ORMAP number updated with the value from theFeature and taxlotValue.</returns>
+    ''' <remarks>Given an ORMAP Number, sExistOMNum, and feature, pFeat, and a taxlot value, sTLVal.
+    ''' Remove the existing map suffix type and number from ExistingORMAPNumber and replace them with the new values in theFeature and
+    ''' append taxlotValue to form the return value.</remarks>
+    Private Shared Function CalculateORMAPTaxlotNumber(ByVal existingORMAPNumber As String, ByRef theFeature As IFeature, ByVal taxlotValue As String) As String
+        Try
+            Dim shortORMAPNumber As String = existingORMAPNumber.Substring(0, 20)
+            'dim taxlotMapSufNumberValue as String = 'TODO: JWM
+        Catch ex As Exception
+
         End Try
     End Function
 
