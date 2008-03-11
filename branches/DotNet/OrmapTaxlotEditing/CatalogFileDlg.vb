@@ -48,10 +48,10 @@ Imports System.Windows.Forms
 ''' </summary>
 ''' <remarks></remarks>
 Public Class CatalogFileDialog
-
+    'TODO: JWM Would like to remove the dependency on VB.Collection object
 #Region "Class level fields"
     Private _theGxDialog As IGxDialog
-    Private _colSelection As Collection 'TODO: JWM Consider replacing with Hashtable
+    Private _colSelection As Collection
 #End Region
 
     Public Sub New()
@@ -168,6 +168,7 @@ Public Class CatalogFileDialog
             selection = New GxObjectArray
 
             _colSelection = New Collection
+
             If Not _theGxDialog.DoModalOpen(EditorExtension.Application.hWnd, selection) Then
                 'need to return a empty collection
                 Return New Collection

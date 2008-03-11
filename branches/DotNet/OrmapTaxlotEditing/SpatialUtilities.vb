@@ -57,6 +57,67 @@ Public NotInheritable Class SpatialUtilities
 #Region "Custom Class Members"
 
 #Region "Public Members"
+    ''' <summary>
+    ''' Add the descriptive values from each domain to the drop down comboboxes.
+    ''' </summary>
+    ''' <param name="fieldName">Name of the field to draw the domain from.</param>
+    ''' <param name="fields">The fields collection that contains <paramref name="fieldName">fieldName</paramref>.</param>
+    ''' <param name="aComboBox">The combobox to populate.</param>
+    ''' <param name="currentValue">The current value of the field.</param>
+    ''' <param name="allowSpace">Allow a space/null entry in the list.</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Shared Function AddCodesToCombo(ByVal fieldName As String, ByVal fields As IFields, ByRef aComboBox As ComboBox, ByVal currentValue As Object, Optional ByVal allowSpace As Boolean = False) As Boolean
+        Dim returnValue As Boolean = False
+        Try
+            Dim idxField As Integer = fields.FindField(fieldName)
+            If idxField > -1 Then
+                Dim thisField As IField
+                thisField = fields.Field(idxField)
+                Dim thisDomain As IDomain
+                thisDomain = thisField.Domain
+                If Not (thisDomain Is Nothing) Then
+                    If TypeOf thisDomain Is ICodedValueDomain Then
+                        Dim thisCodedValueDomain As ICodedValueDomain
+                        thisCodedValueDomain = DirectCast(thisDomain, ICodedValueDomain)
+                        Dim codeCount As Integer = thisCodedValueDomain.CodeCount
+                        If Not allowSpace Then
+                            With aComboBox
+                                If .Items.Count > 0 Then
+                                    'find the blank
+                                    Dim textPosition As Integer = .FindStringExact(String.Empty, -1) 'HACK: JWM this is my best guess on how to find null string
+                                    If textPosition > -1 Then
+                                        .Items.RemoveAt(textPosition)
+                                    End If
+                                End If
+                            End With
+                        End If
+                        For idx As Integer = 0 To codeCount - 1
+                            aComboBox.Items.Add(thisCodedValueDomain.Name(idx))
+                        Next idx
+                        'If current value is null, add an empty string and make it active
+                        If TypeOf currentValue Is String Then
+                            If currentValue.Equals(String.Empty) Then
+                                If allowSpace Then
+                                    aComboBox.Items.Add(String.Empty)
+                                    aComboBox.SelectedIndex = aComboBox.FindStringExact(String.Empty, 0)
+                                Else
+                                    aComboBox.SelectedIndex = 0
+                                End If
+                            Else 'Otherwise, select the existing value from the list
+                                aComboBox.SelectedIndex = aComboBox.FindStringExact(CStr(currentValue), 0)
+                            End If
+                            returnValue = True
+                        End If 'if a valid domain
+                    End If 'field not found
+                End If
+            End If
+            Return returnValue
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+            Return False
+        End Try
+    End Function
 
     ''' <summary>
     ''' Calculates Taxlot values from ORMAPMapnum.
@@ -737,23 +798,25 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Determine if the feature belongs to the Taxlot feature class.
+    ''' Determine if a feature is annotation.
     ''' </summary>
     ''' <param name="thisObject">A valid initialized geodatabase object.</param>
     ''' <returns><c>True</c> or <c>False</c>.</returns>
-    ''' <remarks>Determine if thisObject belongs to the Taxlot feature class by 
-    ''' checking the name of the dataset of thisObject feature class against 
-    ''' the Taxlot Feature Class constant.</remarks>
-    Public Shared Function IsTaxlot(ByVal thisObject As IObject) As Boolean
+    ''' <remarks>Compares the feature type of <paramref name="thisObject"/> with 
+    ''' that of annotation and return the truth value of the comparison.</remarks>
+    Public Shared Function IsAnno(ByVal thisObject As IObject) As Boolean
         Try
             Dim thisObjectClass As IObjectClass
-            Dim thisDataset As IDataset
             thisObjectClass = thisObject.Class
-            thisDataset = DirectCast(thisObjectClass, IDataset)
-            If String.Compare(thisDataset.Name, EditorExtension.TableNamesSettings.TaxLotFC, True) = 0 Then
-                Return True
-            Else
-                Return False
+
+            If TypeOf thisObject Is IFeature Then
+                Dim thisFeatureClass As IFeatureClass
+                thisFeatureClass = DirectCast(thisObjectClass, IFeatureClass)
+                If thisFeatureClass.FeatureType = esriFeatureType.esriFTAnnotation Then
+                    Return True
+                Else
+                    Return False
+                End If
             End If
         Catch ex As Exception
             MessageBox.Show(ex.Message)
@@ -787,31 +850,74 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Determine if a feature is annotation.
+    ''' Determines if a feature class is part of the ORMAP design.
+    ''' </summary>
+    ''' <param name="theObject">A valid initialized geodatabase object</param>
+    ''' <returns>True or False</returns>
+    ''' <remarks></remarks>
+    Public Shared Function IsORMAPFeature(ByRef theObject As IObject) As Boolean
+        Try
+            Dim returnValue As Boolean = False
+            Dim thisObjectClass As IObjectClass
+            thisObjectClass = theObject.Class
+
+            Dim thisDataset As IDataset
+            thisDataset = DirectCast(thisObjectClass, IDataset)
+            Dim datasetName As String = thisDataset.Name
+            'TODO:Verify these EditorExtension values
+            returnValue = String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0010scaleFC, True) = 0
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0020scaleFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0100scaleFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0200scaleFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno2000scaleFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0030scaleFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0040scaleFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0400scaleFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0050scaleFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0800scaleFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.CartographicLinesFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxLotFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.MapIndexFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.PlatsFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.ReferenceLinesFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxCodeFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxCodeAnnoFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxLotLinesFC, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnno, True) = 0)
+            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True) = 0)
+            Return returnValue
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Determine if the feature belongs to the Taxlot feature class.
     ''' </summary>
     ''' <param name="thisObject">A valid initialized geodatabase object.</param>
     ''' <returns><c>True</c> or <c>False</c>.</returns>
-    ''' <remarks>Compares the feature type of <paramref name="thisObject"/> with 
-    ''' that of annotation and return the truth value of the comparison.</remarks>
-    Public Shared Function IsAnno(ByVal thisObject As IObject) As Boolean
+    ''' <remarks>Determine if thisObject belongs to the Taxlot feature class by 
+    ''' checking the name of the dataset of thisObject feature class against 
+    ''' the Taxlot Feature Class constant.</remarks>
+    Public Shared Function IsTaxlot(ByVal thisObject As IObject) As Boolean
         Try
             Dim thisObjectClass As IObjectClass
+            Dim thisDataset As IDataset
             thisObjectClass = thisObject.Class
-
-            If TypeOf thisObject Is IFeature Then
-                Dim thisFeatureClass As IFeatureClass
-                thisFeatureClass = DirectCast(thisObjectClass, IFeatureClass)
-                If thisFeatureClass.FeatureType = esriFeatureType.esriFTAnnotation Then
-                    Return True
-                Else
-                    Return False
-                End If
+            thisDataset = DirectCast(thisObjectClass, IDataset)
+            If String.Compare(thisDataset.Name, EditorExtension.TableNamesSettings.TaxLotFC, True) = 0 Then
+                Return True
+            Else
+                Return False
             End If
         Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return False
         End Try
     End Function
+
+
 
     ''' <summary>
     ''' Loads the specified feature class into the current map.
@@ -954,6 +1060,115 @@ Public NotInheritable Class SpatialUtilities
             Return String.Empty
         End Try
     End Function
+
+    ''' <summary>
+    ''' Update/Initialize feature linked annotation size.
+    ''' </summary>
+    ''' <param name="theObject">A valid initialized geodatabase object.</param>
+    ''' <param name="theFeature">The feature associated with the annotation.</param>
+    ''' <remarks> Given an object, <paramref name="theObject">theObject</paramref>, and a feature, <paramref name="theFeature">theFeature</paramref>.
+    ''' Determines if <paramref name="theObject">theObject</paramref> is an annotation feature, derives the map number for the Map Index polygon overlaying <paramref name="theFeature">theFeature</paramref>, and
+    ''' resets the annotation feature size in <paramref name="theObject">theObject</paramref></remarks>
+    Public Shared Sub SetAnnoSize(ByRef theObject As IObject, ByRef theFeature As IFeature)
+        Try
+            Dim annoObjectClass As IObjectClass
+            annoObjectClass = theObject.Class
+            Dim annoFeature As IFeature
+            annoFeature = DirectCast(theObject, IFeature)
+
+            'Capture MapNumber for each anno feature created
+            Dim annoMapNumField As Integer = LocateFields(DirectCast(theObject.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapNumberField)
+            If annoMapNumField = -1 Then
+                Exit Try
+            End If
+
+            Dim fieldIndex As Integer = annoFeature.Fields.FindField("TextString")
+            If fieldIndex = -1 Then
+                MessageBox.Show("Unable to locate text string field in annotation class. Cannot set size", "Cannot set size", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Try
+            End If
+
+            Dim thisValue As Object
+            thisValue = annoFeature.Value(fieldIndex)
+            If IsDBNull(thisValue) Then
+                Exit Try
+            End If
+
+            theFeature = CType(theObject, IFeature) 'TODO: JWM See if DirectCast would work here
+            Dim thisGeometry As IGeometry
+            thisGeometry = theFeature.Shape
+            If thisGeometry.IsEmpty Then
+                Exit Try
+            End If
+
+            Dim thisEnvelope As IEnvelope
+            thisEnvelope = thisGeometry.Envelope
+
+            'Dim thisCenter As IPoint
+            'thisCenter = GetCenterOfEnvelope(thisEnvelope)
+
+            Dim mapIndexFeatureLayer As IFeatureLayer
+            mapIndexFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
+            If mapIndexFeatureLayer Is Nothing Then
+                Exit Try
+            End If
+
+            Dim mapIndexFeatureClass As IFeatureClass
+            mapIndexFeatureClass = mapIndexFeatureLayer.FeatureClass
+            'original vb6 code placed the point object as the first parameter. 
+            Dim mapNumber As String = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField) 'TODO:JWM check this
+
+            ' Allow existing anno to be moved without changing MapNumber
+            ' Some anno will reside in another Taxlot, but labels the neighboring taxlot
+            If String.Compare(mapNumber, CStr(theObject.Value(annoMapNumField)), True) = 0 Then
+                ' Sets the value of the annotation map number field
+                theObject.Value(annoMapNumField) = mapNumber
+                ' Update the size to reflect current mapscale
+                Dim mapScale As String = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+                If mapScale.Length = 0 Then
+                    Exit Try
+                End If
+                ' Determine which annotation class this is
+                Dim annoClass As IObjectClass
+                annoClass = theObject.Class
+
+                Dim annoDataSet As IDataset
+                annoDataSet = DirectCast(annoClass, IDataset)
+
+                'If other anno, don't continue
+                If String.Compare(annoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC) <> 0 And String.Compare(annoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnno, True) <> 0 Then
+                    Exit Try
+                End If
+
+                ' Gets the size of the annotation from the scale of the annotation dataset
+                Dim annotationSize As Double = GetAnnoSizeByScale(annoDataSet.Name, CInt(mapScale))
+
+                Dim annoFeature2 As IAnnotationFeature
+                annoFeature2 = DirectCast(theObject, IAnnotationFeature)
+
+                Dim annoElement As IAnnotationElement
+                annoElement = DirectCast(annoFeature2.Annotation, IAnnotationElement)
+
+                Dim cartoElement As IElement
+                cartoElement = DirectCast(annoElement, IElement)
+
+                Dim thisTextElement As ITextElement
+                thisTextElement = DirectCast(cartoElement, ITextElement)
+
+                Dim thisTextSymbol As ESRI.ArcGIS.Display.ITextSymbol
+                thisTextSymbol = thisTextElement.Symbol
+
+                thisTextSymbol.Size = annotationSize
+                thisTextElement.Symbol = thisTextSymbol
+                cartoElement = DirectCast(thisTextElement, IElement)
+                annoElement = DirectCast(cartoElement, IAnnotationElement)
+                annoFeature2.Annotation = DirectCast(annoElement, IElement)
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+    End Sub
 
     ''' <summary>
     ''' Update Auto fields in a feature class.

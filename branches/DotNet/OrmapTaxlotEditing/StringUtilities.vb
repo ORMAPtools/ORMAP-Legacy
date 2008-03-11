@@ -63,6 +63,7 @@ Public NotInheritable Class StringUtilities
             Return String.Empty
         End Try
     End Function
+
     Public Shared Function CreateMapTaxlotValue(ByVal mapTaxlotIDValue As String, ByVal formatString As String) As String
         Return String.Empty 'TODO:jwm flesh this out
     End Function
@@ -76,7 +77,7 @@ Public NotInheritable Class StringUtilities
     ''' <returns>A string that is a substring of theWholeString.</returns>
     ''' <remarks></remarks>
     Public Shared Function ExtractString(ByVal theWholeString As String, ByVal lowPart As Integer, ByVal highPart As Integer) As String
-        Try
+        Try 'HACK: JWM Probably can be replaced with String.Substring()
             If lowPart <= highPart Then
                 'Return Mid(theWholeString, lowPart, highPart - lowPart + 1)
                 Return theWholeString.Substring(lowPart, highPart - lowPart + 1)

@@ -63,7 +63,7 @@ Public NotInheritable Class ORMAPNumber
 #End Region
 
 #Region "Built-in class members"
-    Public Event OnChange(ByVal NewNumber As String)
+    Public Event OnChange(ByVal newNumber As String)
 
 
     ''' <summary>
@@ -321,9 +321,7 @@ Public NotInheritable Class ORMAPNumber
             RaiseEvent OnChange(Me.GetORMAPNumber)
         End Set
     End Property
-    Private Sub ORMAPNumber_OnChange(ByVal newNumber As String) Handles Me.OnChange
-        'TODO:JWM How to handle this event. VB6 version of frmMapIndex dimmed this class withevents
-    End Sub
+
 #End Region
 
 #Region "Custom class members"
@@ -381,6 +379,7 @@ Public NotInheritable Class ORMAPNumber
     ''' </summary>
     ''' <returns>Returns a properly formatted ORMAP Number.</returns>
     Public Function GetORMAPNumber() As String
+        ' Creates a formatted ORMAP Map Number
         If IsValidNumber() Then
             Dim sb As New StringBuilder(_county, ORMAPNumber.GetORMAP_MapNumFieldLength())
             sb.Append(_township)
@@ -402,33 +401,6 @@ Public NotInheritable Class ORMAPNumber
         End If
     End Function
 
-    ''' <summary>
-    ''' Create base ORMAP Taxlot Number.
-    ''' </summary>
-    ''' <returns>Returns a properly formatted ORMAP Number.</returns>
-    Public Function GetOrmapTaxlotNumber() As String
-        'TODO: JWM See if we can replace the calls to this function with ORMAPNumber since they do the same thing
-        Return GetORMAPMapNumber()
-        'If IsValidNumber() Then
-        '    Dim sb As New StringBuilder(_county, 24)
-        '    sb.Append(_township)
-        '    sb.Append(_townPartialCode)
-        '    sb.Append(_townDirectional)
-        '    sb.Append(_range)
-        '    sb.Append(_rangePartialCode)
-        '    sb.Append(_rangeDirectional)
-        '    sb.Append(_section)
-        '    sb.Append(_quarter)
-        '    sb.Append(_quarterQuarter)
-        '    sb.Append(_anomaly)
-        '    sb.Append(_suffixType)
-        '    sb.Append(_suffixNumber)
-
-        '    Return sb.ToString
-        'Else
-        '    Return String.Empty
-        'End If
-    End Function
 
     ''' <summary>
     ''' Validate ORMAP Numbers
