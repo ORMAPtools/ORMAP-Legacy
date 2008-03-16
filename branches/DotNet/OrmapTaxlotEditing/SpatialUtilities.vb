@@ -113,7 +113,7 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
             Return returnValue
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -173,8 +173,9 @@ Public NotInheritable Class SpatialUtilities
             editFeature.Value(idxMapAcresFld) = thisArea.Area / 43560
 
             ' Return and evaluate the ORMAP Number from the Map index
-            Dim thisORMAPNumber As New ORMAPNumber()
-            If Not thisORMAPNumber.ParseNumber(GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)) Then
+            Dim theOrmapNumber As String = GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+            Dim thisORMAPNumberClass As New ORMAPNumber()
+            If Not thisORMAPNumberClass.ParseNumber(theOrmapNumber) Then
                 ' Exit if there is no value, or an invalid value
                 Exit Try
             End If
@@ -186,27 +187,27 @@ Public NotInheritable Class SpatialUtilities
 
             editFeature.Value(idxMapNumberFld) = existingMapNumber
             ' Store components of the ORMAP number in various fields
-            editFeature.Value(idxOrmapMapNumberFld) = thisORMAPNumber.GetORMAPMapNumber
+            editFeature.Value(idxOrmapMapNumberFld) = thisORMAPNumberClass.GetORMAPMapNumber
 
-            Dim existingValue As String = ConvertCodeValueDomainToCode(editFeature.Fields, EditorExtension.TaxLotSettings.CountyField, thisORMAPNumber.County)
+            Dim existingValue As String = ConvertCodeValueDomainToCode(editFeature.Fields, EditorExtension.TaxLotSettings.CountyField, thisORMAPNumberClass.County)
             If existingValue.Length > 0 AndAlso IsNumeric(existingValue) Then
                 editFeature.Value(idxCountyFld) = CShort(existingValue)
             Else
                 editFeature.Value(idxCountyFld) = DBNull.Value
             End If
             With editFeature
-                .Value(idxTownFld) = CShort(thisORMAPNumber.Township)
-                .Value(idxTownPartFld) = CDbl(thisORMAPNumber.PartialTownshipCode)
-                .Value(idxTownDirFld) = thisORMAPNumber.TownshipDirectional
-                .Value(idxRangeFld) = CShort(thisORMAPNumber.Range)
-                .Value(idxRangePartFld) = CDbl(thisORMAPNumber.PartialRangeCode)
-                .Value(idxRangeDirFld) = thisORMAPNumber.RangeDirectional
-                .Value(idxSectionFld) = CShort(thisORMAPNumber.Section)
-                .Value(idxQrtrFld) = thisORMAPNumber.Quarter
-                .Value(idxQrtrQrtrFld) = thisORMAPNumber.QuarterQuarter
-                .Value(idxMapSuffixTypeFld) = ConvertCodeValueDomainToCode(.Fields, EditorExtension.MapIndexSettings.MapSuffixTypeField, thisORMAPNumber.SuffixType)
-                .Value(idxMapSuffixNumFld) = thisORMAPNumber.SuffixNumber
-                .Value(idxAnomalyFld) = thisORMAPNumber.Anomaly
+                .Value(idxTownFld) = CShort(thisORMAPNumberClass.Township)
+                .Value(idxTownPartFld) = CDbl(thisORMAPNumberClass.PartialTownshipCode)
+                .Value(idxTownDirFld) = thisORMAPNumberClass.TownshipDirectional
+                .Value(idxRangeFld) = CShort(thisORMAPNumberClass.Range)
+                .Value(idxRangePartFld) = CDbl(thisORMAPNumberClass.PartialRangeCode)
+                .Value(idxRangeDirFld) = thisORMAPNumberClass.RangeDirectional
+                .Value(idxSectionFld) = CShort(thisORMAPNumberClass.Section)
+                .Value(idxQrtrFld) = thisORMAPNumberClass.Quarter
+                .Value(idxQrtrQrtrFld) = thisORMAPNumberClass.QuarterQuarter
+                .Value(idxMapSuffixTypeFld) = ConvertCodeValueDomainToCode(.Fields, EditorExtension.MapIndexSettings.MapSuffixTypeField, thisORMAPNumberClass.SuffixType)
+                .Value(idxMapSuffixNumFld) = thisORMAPNumberClass.SuffixNumber
+                .Value(idxAnomalyFld) = thisORMAPNumberClass.Anomaly
             End With
 
             If IsDBNull(editFeature.Value(idxSpcIntrstFld)) Then
@@ -230,7 +231,7 @@ Public NotInheritable Class SpatialUtilities
             existingTaxlotValue = StringUtilities.AddLeadingZeros(existingValue, ORMAPNumber.GetORMAP_ORTaxlotFieldLength)
 
             Dim mapTaxlotID As String
-            mapTaxlotID = String.Concat(thisORMAPNumber.GetORMAPNumber, existingTaxlotValue)
+            mapTaxlotID = String.Concat(thisORMAPNumberClass.GetORMAPNumber, existingTaxlotValue)
 
             Dim countyCode As Short = CShort(EditorExtension.DefaultValuesSettings.County)
             Select Case countyCode
@@ -262,9 +263,9 @@ Public NotInheritable Class SpatialUtilities
             If String.Compare(existingORMAPTaxlotNumber, newORMAPTaxlotNumber, True) <> 0 Then
                 editFeature.Value(idxOrmapTaxlotNumberFld) = newORMAPTaxlotNumber
             End If
-            thisORMAPNumber = Nothing
+            thisORMAPNumberClass = Nothing
 
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
 
         End Try
@@ -312,7 +313,7 @@ Public NotInheritable Class SpatialUtilities
             End If
 
             Return returnValue
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             ConvertCodeValueDomainToCode = String.Empty
         End Try
@@ -355,7 +356,7 @@ Public NotInheritable Class SpatialUtilities
                 End If 'if domain is valid object
             End If
             Return returnValue
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return String.Empty
         End Try
@@ -402,7 +403,7 @@ Public NotInheritable Class SpatialUtilities
 
             Return returnValue
 
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
@@ -433,7 +434,7 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
             Return returnValue
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return "000"
         End Try
@@ -464,7 +465,7 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
             Return returnValue
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return "0"
         End Try
@@ -501,7 +502,7 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
             Return Nothing
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
@@ -527,7 +528,7 @@ Public NotInheritable Class SpatialUtilities
             thisSelection.SelectionSet.Search(Nothing, False, thisCursor)
             returnValue = DirectCast(thisCursor, IFeatureCursor)
             Return returnValue
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
@@ -558,7 +559,7 @@ Public NotInheritable Class SpatialUtilities
                 continueThisProcess = False
             End If
 
-            Dim valueFieldIndex As Integer = -1
+            Dim valueFieldIndex As Integer = Utilities.FieldNotFoundIndex
             If continueThisProcess Then
                 valueFieldIndex = overlayFeatureClass.Fields.FindField(valueFieldName)
                 If valueFieldIndex < 0 Then
@@ -566,7 +567,7 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
 
-            Dim orderBestByFieldIndex As Integer = -1
+            Dim orderBestByFieldIndex As Integer = Utilities.FieldNotFoundIndex
             If continueThisProcess Then
                 If orderBestByFieldName.Length = 0 Then
                     ' Use the value field as the order-by field
@@ -767,7 +768,7 @@ Public NotInheritable Class SpatialUtilities
 
             Return theBestValue
 
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return String.Empty
         End Try
@@ -791,7 +792,7 @@ Public NotInheritable Class SpatialUtilities
             featuresSelected = DirectCast(layer, IFeatureSelection)
             returnValue = (featuresSelected.SelectionSet.Count > 0)
             Return returnValue
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -818,7 +819,7 @@ Public NotInheritable Class SpatialUtilities
                     Return False
                 End If
             End If
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -843,7 +844,7 @@ Public NotInheritable Class SpatialUtilities
             Else
                 Return False
             End If
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -886,7 +887,7 @@ Public NotInheritable Class SpatialUtilities
             returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnno, True) = 0)
             returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True) = 0)
             Return returnValue
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -911,7 +912,7 @@ Public NotInheritable Class SpatialUtilities
             Else
                 Return False
             End If
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -978,7 +979,7 @@ Public NotInheritable Class SpatialUtilities
             thisArcMapDoc.CurrentContentsView.Refresh(0)
 
             Return True
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -997,7 +998,7 @@ Public NotInheritable Class SpatialUtilities
             Dim returnValue As Integer
             returnValue = featureClass.Fields.FindField(fieldName)
             Return returnValue
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return -1
         End Try
@@ -1055,7 +1056,7 @@ Public NotInheritable Class SpatialUtilities
             End If
 
             Return returnValue
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return String.Empty
         End Try
@@ -1078,12 +1079,12 @@ Public NotInheritable Class SpatialUtilities
 
             'Capture MapNumber for each anno feature created
             Dim annoMapNumField As Integer = LocateFields(DirectCast(theObject.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapNumberField)
-            If annoMapNumField = -1 Then
+            If annoMapNumField = Utilities.FieldNotFoundIndex Then
                 Exit Try
             End If
 
             Dim fieldIndex As Integer = annoFeature.Fields.FindField("TextString")
-            If fieldIndex = -1 Then
+            If fieldIndex = Utilities.FieldNotFoundIndex Then
                 MessageBox.Show("Unable to locate text string field in annotation class. Cannot set size", "Cannot set size", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Try
             End If
@@ -1165,7 +1166,7 @@ Public NotInheritable Class SpatialUtilities
                 annoFeature2.Annotation = DirectCast(annoElement, IElement)
             End If
 
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
         End Try
     End Sub
@@ -1192,7 +1193,7 @@ Public NotInheritable Class SpatialUtilities
             If indexAutoWhoField > -1 Then
                 feature.Value(indexAutoWhoField) = Utilities.GetUserName
             End If
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
         End Try
     End Sub
@@ -1207,11 +1208,14 @@ Public NotInheritable Class SpatialUtilities
     Public Shared Function ValidateTaxlotNumber(ByVal taxlotNumber As String, ByRef thisGeometry As IGeometry) As Boolean
         Try
             Dim returnValue As Boolean = False
+
             'check for existence of Taxlot layer
             Dim thisTaxlotFeatureLayer As IFeatureLayer
             thisTaxlotFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
             If thisTaxlotFeatureLayer Is Nothing Then 'TODO: JWM Place strings in resource file and use may use different type of notification
-                MessageBox.Show("Unable to locate Taxlot layer in Table of Contents. This process requires a feature class called " & EditorExtension.TableNamesSettings.TaxLotFC)
+                MessageBox.Show("Unable to locate the Taxlot layer in Table of Contents." & vbNewLine & _
+                                "This process requires a feature class called " & EditorExtension.TableNamesSettings.TaxLotFC & ".", _
+                                String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Return returnValue
             End If
 
@@ -1222,7 +1226,9 @@ Public NotInheritable Class SpatialUtilities
             Dim mapIndexFeatureLayer As IFeatureLayer
             mapIndexFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
             If mapIndexFeatureLayer Is Nothing Then
-                MessageBox.Show("Unable to locate MapIndex layer in Table of Contents. This process requires a feature class called " & EditorExtension.TableNamesSettings.MapIndexFC)
+                MessageBox.Show("Unable to locate the MapIndex layer in Table of Contents." & vbNewLine & _
+                                "This process requires a feature class called " & EditorExtension.TableNamesSettings.MapIndexFC & ".", _
+                                String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Return returnValue
             End If
 
@@ -1231,7 +1237,7 @@ Public NotInheritable Class SpatialUtilities
 
             ' Checks for the existence of a current ORMAP Number and Taxlot number
             Dim mapIndexORMAPValue As String = String.Empty
-            'mapIndexORMAPValue= getvalueViaOverlay()'TODO: JWM Flesh this function out
+            'mapIndexORMAPValue= getValueViaOverlay() 'TODO: JWM Flesh getValueViaOverlay function out
             If mapIndexORMAPValue.Length = 0 Then
                 returnValue = True
             End If
@@ -1251,7 +1257,7 @@ Public NotInheritable Class SpatialUtilities
 
             Return returnValue
 
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -1281,7 +1287,7 @@ Public NotInheritable Class SpatialUtilities
             Else
                 Return thisCursor
             End If
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
@@ -1304,7 +1310,7 @@ Public NotInheritable Class SpatialUtilities
             Dim taxlotMapSufTypeValue As String = GetMapSuffixType(theFeature)
             ' Recreate and return the ORMAP Taxlot number
             Return String.Concat(shortORMAPNumber, taxlotMapSufTypeValue, taxlotMapSufNumberValue, taxlotValue)
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return String.Empty
         End Try
@@ -1375,7 +1381,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             Return thisFeatureCursor
 
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
@@ -1400,7 +1406,7 @@ Public NotInheritable Class SpatialUtilities
                 .AddPoint(envelope.UpperLeft)
             End With
             Return thisPolygon
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
@@ -1474,7 +1480,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             Return CDbl(size)
 
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return 10 'default
         End Try
@@ -1493,7 +1499,7 @@ Public NotInheritable Class SpatialUtilities
             center.X = envelope.XMin + (envelope.XMax - envelope.XMin) / 2
             center.Y = envelope.YMin + (envelope.YMax - envelope.YMin) / 2
             Return center
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try

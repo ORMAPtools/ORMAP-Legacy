@@ -28,6 +28,7 @@
 ' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #End Region
+
 #Region "Subversion Keyword expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$
@@ -47,12 +48,11 @@ Imports ESRI.ArcGIS.Framework
 <ComClass(EditorExtension.ClassId, EditorExtension.InterfaceId, EditorExtension.EventsId), _
 ProgId("ORMAPTaxlotEditing.EditorExtension")> _
 Public NotInheritable Class EditorExtension
-    Implements ESRI.ArcGIS.esriSystem.IExtension
-    Implements ESRI.ArcGIS.esriSystem.IExtensionAccelerators
-    Implements ESRI.ArcGIS.esriSystem.IPersistVariant
+    Implements IExtension
+    Implements IExtensionAccelerators
+    Implements IPersistVariant
 
-#Region "Class-Level Constants And Enumerations"
-    ' None
+#Region "Class-Level Constants And Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"

@@ -42,8 +42,7 @@ Imports System.Windows.Forms
 <ComVisible(False)> _
 Public Class OrmapSettingsForm
 
-#Region "Class-Level Constants And Enumerations"
-    ' None
+#Region "Class-Level Constants And Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
@@ -67,10 +66,10 @@ Public Class OrmapSettingsForm
 
 #Region "Custom Class Members"
 
-#Region "Fields"
+#Region "Fields (none)"
 #End Region
 
-#Region "Properties"
+#Region "Properties (none)"
 #End Region
 
 #Region "Event Handlers"
@@ -257,24 +256,20 @@ Public Class OrmapSettingsForm
 
 #End Region
 
-#Region "Inherited Class Members"
+#Region "Inherited Class Members (none)"
 
-#Region "Properties"
-    ' None
+#Region "Properties (none)"
 #End Region
 
-#Region "Methods"
-    ' None
+#Region "Methods (none)"
 #End Region
 
 #End Region
 
-#Region "Implemented Interface Members"
-    ' None
+#Region "Implemented Interface Members (none) "
 #End Region
 
-#Region "Other Members"
-    ' None
+#Region "Other Members (none)"
 #End Region
 
 End Class

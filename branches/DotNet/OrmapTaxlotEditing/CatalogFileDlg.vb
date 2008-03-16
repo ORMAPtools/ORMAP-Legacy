@@ -95,16 +95,18 @@ Public Class CatalogFileDialog
 
 #Region "Custom class members"
 
+    Public Const NoSelectedElementIndex As Integer = -1
+
     ''' <summary>
     ''' Retrieve an item selected from a file dialog box
     ''' </summary>
     ''' <param name="selection"></param>
     ''' <returns></returns>
     ''' <remarks>Return the nth selected element from the most recent file save/open dialog request</remarks>
-    Public Function SelectedObject(Optional ByVal selection As Integer = -1) As Object
+    Public Function SelectedObject(Optional ByVal selection As Integer = NoSelectedElementIndex) As Object
         If selection > _colSelection.Count Then
             Return String.Empty
-        ElseIf selection = -1 Then
+        ElseIf selection = NoSelectedElementIndex Then
             Return _colSelection
         Else
             Return _colSelection.Item(selection)
@@ -150,7 +152,7 @@ Public Class CatalogFileDialog
             End If
             filters.AddFilter(filter, isDefault)
             Return True
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -181,7 +183,7 @@ Public Class CatalogFileDialog
                 thisSelectedObject = selection.Next
             Loop
             Return _colSelection
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return New Collection
         End Try
@@ -202,7 +204,7 @@ Public Class CatalogFileDialog
             selectedObject = _theGxDialog.FinalLocation
             _colSelection.Add(String.Concat(selectedObject.FullName, "\", _theGxDialog.Name))
             Return _colSelection
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return New Collection
         End Try

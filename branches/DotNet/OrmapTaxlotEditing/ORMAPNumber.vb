@@ -36,35 +36,43 @@
 #End Region
 
 #Region "Imported Namespaces"
+
+Imports System.Runtime.InteropServices
 Imports System.Text
+
 #End Region
 
 #Region "Class Declaration"
 ''' <summary>
-''' Encapsulates all elements of a ORMAP number into one class.
+''' Encapsulates all elements of an ORMAP number into one class.
 ''' </summary>
 ''' <remarks>Encapsulates all elements of a ORMAP number into one multipurpose class that allows an ORMAP number to be either created or parsed, manipulated, or validated against the current ORMAP number model.</remarks>
+<ComVisible(False)> _
 Public NotInheritable Class ORMAPNumber
 
-#Region "Class level fields"
-    Private _county As String
-    Private _township As String
-    Private _townPartialCode As String
-    Private _townDirectional As String
-    Private _range As String
-    Private _rangePartialCode As String
-    Private _rangeDirectional As String
-    Private _section As String
-    Private _quarter As String
-    Private _quarterQuarter As String
-    Private _suffixType As String
-    Private _suffixNumber As String
-    Private _anomaly As String
+#Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
+
+#Region "Constructors"
+
+    Public Sub New()
+    End Sub
+
 #End Region
 
-#Region "Built-in class members"
-    Public Event OnChange(ByVal newNumber As String)
+#End Region
 
+#Region "Custom class members"
+
+#Region "Fields (none)"
+#End Region
+
+#Region "Events"
+    Public Event OnChange(ByVal newNumber As String)
+#End Region
+
+#Region "Properties"
+
+    Private _county As String
 
     ''' <summary>
     ''' Two digit code for the County -- Default: 00
@@ -85,10 +93,12 @@ Public NotInheritable Class ORMAPNumber
                 Case Is > 2
                     _county = value.Substring(0, 2) 'left(value,2)
             End Select
-            RaiseEvent OnChange(Me.GetORMAPNumber)
+            RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
 
     End Property
+
+    Private _township As String
 
     ''' <summary>
     ''' Two digit code for the township -- Default: 01
@@ -103,45 +113,51 @@ Public NotInheritable Class ORMAPNumber
             Else
                 _township = value
             End If
-            RaiseEvent OnChange(Me.GetORMAPNumber)
+            RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
     End Property
+
+    Private _partialTownshipCode As String
 
     ''' <summary>
     ''' Three digit code for the partial township code -- Default: .00
     ''' </summary>
     Public Property PartialTownshipCode() As String
         Get
-            PartialTownshipCode = _townPartialCode
+            PartialTownshipCode = _partialTownshipCode
         End Get
         Set(ByVal value As String)
             Select Case value
                 Case "0.25", "0.50", "0.75"
-                    _townPartialCode = value.Substring(1, 3) 'same as mid(value,2)
+                    _partialTownshipCode = value.Substring(1, 3) 'same as mid(value,2)
                 Case Else
-                    _townPartialCode = value
+                    _partialTownshipCode = value
             End Select
-            RaiseEvent OnChange(Me.GetORMAPNumber)
+            RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
     End Property
+
+    Private _townshipDirectional As String
 
     ''' <summary>
     ''' One digit directional for the township -- Default: N
     ''' </summary>
     Public Property TownshipDirectional() As String
         Get
-            TownshipDirectional = _townDirectional
+            TownshipDirectional = _townshipDirectional
         End Get
         Set(ByVal value As String)
             Select Case value
                 Case "N", "S"
-                    _townDirectional = value
+                    _townshipDirectional = value
                 Case Else
-                    _townDirectional = "N"
+                    _townshipDirectional = "N"
             End Select
-            RaiseEvent OnChange(Me.GetORMAPNumber)
+            RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
     End Property
+
+    Private _range As String
 
     ''' <summary>
     ''' Two digit code for the range -- Default: 01
@@ -156,27 +172,31 @@ Public NotInheritable Class ORMAPNumber
             Else
                 _range = value
             End If
-            RaiseEvent OnChange(Me.GetORMAPNumber)
+            RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
     End Property
+
+    Private _partialRangeCode As String
 
     ''' <summary>
     ''' Three-digit code for the partial range code -- Default: .00
     ''' </summary>
     Public Property PartialRangeCode() As String
         Get
-            PartialRangeCode = _rangePartialCode
+            PartialRangeCode = _partialRangeCode
         End Get
         Set(ByVal value As String)
             Select Case value
                 Case "0.25", "0.50", "0.75"
-                    _rangePartialCode = value.Substring(1, 3) 'Mid(value, 2)
+                    _partialRangeCode = value.Substring(1, 3) 'Mid(value, 2)
                 Case Else
-                    _rangePartialCode = ".00"
+                    _partialRangeCode = ".00"
             End Select
-            RaiseEvent OnChange(Me.GetORMAPNumber)
+            RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
     End Property
+
+    Private _rangeDirectional As String
 
     ''' <summary>
     ''' One digit code for the directional for the range -- Default: W
@@ -192,9 +212,11 @@ Public NotInheritable Class ORMAPNumber
                 Case Else
                     _rangeDirectional = "W"
             End Select
-            RaiseEvent OnChange(Me.GetORMAPNumber)
+            RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
     End Property
+
+    Private _section As String
 
     ''' <summary>
     ''' Two digit code for the section number from 00 to 37 -- Default: 00
@@ -218,9 +240,11 @@ Public NotInheritable Class ORMAPNumber
             Else
                 _section = "00"
             End If
-            RaiseEvent OnChange(Me.GetORMAPNumber)
+            RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
     End Property
+
+    Private _quarter As String
 
     ''' <summary>
     ''' One digit code for the quarter from A to J -- Default: 0
@@ -236,9 +260,11 @@ Public NotInheritable Class ORMAPNumber
                 Case Else
                     _quarter = "0"
             End Select
-            RaiseEvent OnChange(Me.GetORMAPNumber)
+            RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
     End Property
+
+    Private _quarterQuarter As String
 
     ''' <summary>
     ''' One digit code for the quarter/quarter from A to J -- Default: 0
@@ -254,9 +280,11 @@ Public NotInheritable Class ORMAPNumber
                 Case Else
                     _quarterQuarter = "0"
             End Select
-            RaiseEvent OnChange(Me.GetORMAPNumber)
+            RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
     End Property
+
+    Private _suffixType As String
 
     ''' <summary>
     ''' One digit code, S, D, T, or 0, for suffix type -- Default: 0
@@ -272,9 +300,11 @@ Public NotInheritable Class ORMAPNumber
                 Case Else
                     _suffixType = "0"
             End Select
-            RaiseEvent OnChange(Me.GetORMAPNumber)
+            RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
     End Property
+
+    Private _suffixNumber As String
 
     ''' <summary>
     ''' Three digit code for the suffix number from 000 to 999 -- Default: 000
@@ -299,9 +329,11 @@ Public NotInheritable Class ORMAPNumber
             Else
                 _suffixNumber = "00"
             End If
-            RaiseEvent OnChange(Me.GetORMAPNumber)
+            RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
     End Property
+
+    Private _anomaly As String
 
     ''' <summary>
     ''' Two digit code for any oddball situations.
@@ -318,20 +350,20 @@ Public NotInheritable Class ORMAPNumber
                 sb.Append(value)
                 _anomaly = sb.ToString
             End If
-            RaiseEvent OnChange(Me.GetORMAPNumber)
+            RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
     End Property
 
 #End Region
 
-#Region "Custom class members"
+#Region "Methods"
 
     ''' <summary>
     ''' Parse an ORMAP Number into its component pieces.
     ''' </summary>
     Public Function ParseNumber(ByVal number As String) As Boolean
         Dim returnValue As Boolean = False
-        If number.Length >= GetORMAP_MapNumFieldLength() Then
+        If number.Length >= GetOrmap_MapNumFieldLength() Then
             Me.County = number.Substring(0, 2)
             Me.Township = number.Substring(2, 2)
             Me.PartialTownshipCode = number.Substring(4, 3)
@@ -353,13 +385,13 @@ Public NotInheritable Class ORMAPNumber
     ''' <summary>
     ''' Returns a properly formatted ORMAP Number minus the County.
     ''' </summary>
-    Public Function GetORMAPMapNumber() As String
+    Public Function GetOrmapMapNumber() As String
         If IsValidNumber() Then
-            Dim sb As New StringBuilder(_township, ORMAPNumber.GetORMAP_MapNumFieldLength())
-            sb.Append(_townPartialCode)
-            sb.Append(_townDirectional)
+            Dim sb As New StringBuilder(_township, ORMAPNumber.GetOrmap_MapNumFieldLength())
+            sb.Append(_partialTownshipCode)
+            sb.Append(_townshipDirectional)
             sb.Append(_range)
-            sb.Append(_rangePartialCode)
+            sb.Append(_partialRangeCode)
             sb.Append(_rangeDirectional)
             sb.Append(_section)
             sb.Append(_quarter)
@@ -378,15 +410,15 @@ Public NotInheritable Class ORMAPNumber
     ''' ORMAP Number.
     ''' </summary>
     ''' <returns>Returns a properly formatted ORMAP Number.</returns>
-    Public Function GetORMAPNumber() As String
+    Public Function GetOrmapNumber() As String
         ' Creates a formatted ORMAP Map Number
         If IsValidNumber() Then
-            Dim sb As New StringBuilder(_county, ORMAPNumber.GetORMAP_MapNumFieldLength())
+            Dim sb As New StringBuilder(_county, ORMAPNumber.GetOrmap_MapNumFieldLength())
             sb.Append(_township)
-            sb.Append(_townPartialCode)
-            sb.Append(_townDirectional)
+            sb.Append(_partialTownshipCode)
+            sb.Append(_townshipDirectional)
             sb.Append(_range)
-            sb.Append(_rangePartialCode)
+            sb.Append(_partialRangeCode)
             sb.Append(_rangeDirectional)
             sb.Append(_section)
             sb.Append(_quarter)
@@ -412,10 +444,10 @@ Public NotInheritable Class ORMAPNumber
 
         returnValue = returnValue And _county.Length > 0
         returnValue = returnValue And _township.Length > 0
-        returnValue = returnValue And _townPartialCode.Length > 0
-        returnValue = returnValue And _townDirectional.Length > 0
+        returnValue = returnValue And _partialTownshipCode.Length > 0
+        returnValue = returnValue And _townshipDirectional.Length > 0
         returnValue = returnValue And _range.Length > 0
-        returnValue = returnValue And _rangePartialCode.Length > 0
+        returnValue = returnValue And _partialRangeCode.Length > 0
         returnValue = returnValue And _rangeDirectional.Length > 0
         returnValue = returnValue And _section.Length > 0
         returnValue = returnValue And _quarter.Length > 0
@@ -430,7 +462,7 @@ Public NotInheritable Class ORMAPNumber
     ''' Length of ORMAPMapNum field
     ''' </summary>
     ''' <returns>Number of characters allowed in this field as integer.</returns>
-    Public Shared Function GetORMAP_MapNumFieldLength() As Integer
+    Public Shared Function GetOrmap_MapNumFieldLength() As Integer
         Return 24
     End Function
 
@@ -438,7 +470,7 @@ Public NotInheritable Class ORMAPNumber
     ''' Combines MapNumFieldLenth and ORTaxlotFieldLength.
     ''' </summary>
     ''' <returns>Integer.</returns>
-    Public Shared Function GetORMAP_TaxlotFieldLength() As Integer
+    Public Shared Function GetOrmap_TaxlotFieldLength() As Integer
         Return 5
     End Function
 
@@ -446,9 +478,11 @@ Public NotInheritable Class ORMAPNumber
     ''' Length of taxlot field.
     ''' </summary>
     ''' <returns>Number of characters allowed in this field as integer.</returns>
-    Public Shared Function GetORMAP_ORTaxlotFieldLength() As Integer
-        Return (GetORMAP_MapNumFieldLength() + GetORMAP_TaxlotFieldLength())
+    Public Shared Function GetOrmap_ORTaxlotFieldLength() As Integer
+        Return (GetOrmap_MapNumFieldLength() + GetOrmap_TaxlotFieldLength())
     End Function
+
+#End Region
 
 #End Region
 

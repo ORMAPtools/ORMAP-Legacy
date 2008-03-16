@@ -46,6 +46,8 @@ Public NotInheritable Class Utilities
 #Region "Custom Class Members"
 
 #Region "Public Members"
+    Public Const FieldNotFoundIndex As Integer = -1
+
     Public Shared Function GetUserName() As String
         If TypeOf My.User.CurrentPrincipal Is _
         Security.Principal.WindowsPrincipal Then
@@ -78,7 +80,7 @@ Public NotInheritable Class Utilities
             Else
                 Return False
             End If
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -95,15 +97,14 @@ Public NotInheritable Class Utilities
         Catch fex As FileNotFoundException
             MessageBox.Show("File not Found", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
-        Catch ex As Exception
+        Catch ex As ApplicationException
             MessageBox.Show(ex.Message)
             Return
         End Try
     End Sub
 #End Region
 
-#Region "Private Members"
-
+#Region "Private Members (none)"
 #End Region
 
 #End Region
