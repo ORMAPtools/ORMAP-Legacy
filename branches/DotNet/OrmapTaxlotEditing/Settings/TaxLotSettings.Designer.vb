@@ -208,7 +208,7 @@ Partial Friend NotInheritable Class TaxLotSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("TR^DSSQQ@@@@@")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("TTRRSSQQ@@@@@")>  _
     Public Property MapTaxlotFormatMask() As String
         Get
             Return CType(Me("MapTaxlotFormatMask"),String)

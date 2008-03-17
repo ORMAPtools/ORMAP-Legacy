@@ -93,9 +93,6 @@ Public NotInheritable Class Utilities
     ''' <remarks></remarks>
     Public Shared Sub StartDoc(ByVal path As String)
         Try
-            If path Is Nothing OrElse path.Length = 0 Then
-                Throw New ArgumentNullException("path")
-            End If
             System.Diagnostics.Process.Start(path)
         Catch fex As FileNotFoundException
             MessageBox.Show("File not Found", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error)

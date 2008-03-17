@@ -28,7 +28,7 @@ Partial Friend NotInheritable Class TableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.MapIndex")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("MapIndex")>  _
     Public Property MapIndexFC() As String
         Get
             Return CType(Me("MapIndexFC"),String)
@@ -40,7 +40,7 @@ Partial Friend NotInheritable Class TableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.TaxCode")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("TaxCode")>  _
     Public Property TaxCodeFC() As String
         Get
             Return CType(Me("TaxCodeFC"),String)
@@ -52,7 +52,7 @@ Partial Friend NotInheritable Class TableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.TaxLot")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("TaxLot")>  _
     Public Property TaxLotFC() As String
         Get
             Return CType(Me("TaxLotFC"),String)
@@ -64,7 +64,7 @@ Partial Friend NotInheritable Class TableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.TaxLotLines")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("TaxLotLines")>  _
     Public Property TaxLotLinesFC() As String
         Get
             Return CType(Me("TaxLotLinesFC"),String)
@@ -76,7 +76,7 @@ Partial Friend NotInheritable Class TableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.Plats")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("Plats")>  _
     Public Property PlatsFC() As String
         Get
             Return CType(Me("PlatsFC"),String)
@@ -88,7 +88,7 @@ Partial Friend NotInheritable Class TableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.CartographicLines")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("CartographicLines")>  _
     Public Property CartographicLinesFC() As String
         Get
             Return CType(Me("CartographicLinesFC"),String)
@@ -100,7 +100,7 @@ Partial Friend NotInheritable Class TableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.ReferenceLines")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("ReferenceLines")>  _
     Public Property ReferenceLinesFC() As String
         Get
             Return CType(Me("ReferenceLinesFC"),String)
@@ -112,7 +112,7 @@ Partial Friend NotInheritable Class TableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.CancelledNumbers")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("CancelledNumbers")>  _
     Public Property CancelledNumbersTable() As String
         Get
             Return CType(Me("CancelledNumbersTable"),String)

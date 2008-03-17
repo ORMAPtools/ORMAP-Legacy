@@ -3,13 +3,13 @@
   <Profiles />
   <Settings>
     <Setting Name="County" Type="System.String" Scope="User">
-      <Value Profile="(Default)">3</Value>
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="TownshipPart" Type="System.String" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="TownshipDirection" Type="System.String" Scope="User">
-      <Value Profile="(Default)">S</Value>
+      <Value Profile="(Default)">N</Value>
     </Setting>
     <Setting Name="RangePart" Type="System.String" Scope="User">
       <Value Profile="(Default)">0</Value>

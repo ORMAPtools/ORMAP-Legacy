@@ -500,7 +500,8 @@ Public NotInheritable Class TaxlotAssignment
             End If
 
             '------------------------------------------
-            ' Define the Taxlot number (can be a word also) as a string value.
+            ' Define the Taxlot number (can be a word 
+            ' also) as a string value.
             '------------------------------------------
             Dim theExistTaxlotNumberVal As String = String.Empty 'initialize
             ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
@@ -537,7 +538,8 @@ Public NotInheritable Class TaxlotAssignment
             End If
 
             '------------------------------------------
-            ' Get the MapSuffixType and MapSuffixNum as string values
+            ' Get the MapSuffixType and MapSuffixNum as 
+            ' string values
             '------------------------------------------
             Dim theTLMapSuffixNumVal As String = String.Empty 'initialize
             Dim theTLMapSuffixTypeVal As String = String.Empty 'initialize
@@ -550,19 +552,30 @@ Public NotInheritable Class TaxlotAssignment
             If IsDBNull(theTLMapSuffixNumVal) Then theTLMapSuffixNumVal = "000"
 
             '------------------------------------------
+            ' Define the Anomaly from MapIndex
+            '------------------------------------------
+            Dim theORMAPNumberClass As New ORMAPNumber()
+            Dim theAnomalyVal As String = String.Empty
+            If (theORMAPNumberClass.ParseNumber(theExistOrmapMapNumberVal)) Then
+                theAnomalyVal = theORMAPNumberClass.Anomaly
+            End If
+
+            '------------------------------------------
             ' Put together the OrmapTaxlot (ORTaxlot, 
             ' NOT to be confused with the Taxlot or 
             ' MapTaxlot fields) string from its parts.
             ' Set the value.
             '------------------------------------------
-            Dim theShortOrmapMapNumber As String = String.Empty 'initialize
             Dim theCombinedOrmapTaxlotNumber As String = String.Empty 'initialize
-            theShortOrmapMapNumber = OrmapMapNumberNoCountyCodeSuffix(theExistOrmapMapNumberVal)
-            theCombinedOrmapTaxlotNumber = theShortOrmapMapNumber & theTLMapSuffixTypeVal & theTLMapSuffixNumVal & theNewTLTaxlotNumVal_5digit
+            theCombinedOrmapTaxlotNumber = theExistOrmapMapNumberVal & theNewTLTaxlotNumVal_5digit
+            ' TODO: [NIS] Find out if this is VB6 pattern is actually the correct pattern...
+            'Dim theShortOrmapMapNumber As String = String.Empty 'initialize
+            'theShortOrmapMapNumber = OrmapMapNumberNoCountyCodeSuffix(theExistOrmapMapNumberVal)
+            'theCombinedOrmapTaxlotNumber = theShortOrmapMapNumber & theTLMapSuffixTypeVal & theTLMapSuffixNumVal & theNewTLTaxlotNumVal_5digit
 
             '------------------------------------------
-            ' Define and set the MapTaxlot (NOT to be 
-            ' confused with the OrmapTaxlot!) value.
+            ' Define the MapTaxlot (NOT to be confused 
+            ' with the OrmapTaxlot!) value.
             '------------------------------------------
             'Create  masked value from a combination of ORMapNum and the new taxlot
             'Note: Special code for Lane County (see comment below).
@@ -585,15 +598,6 @@ Public NotInheritable Class TaxlotAssignment
                     theMapTaxlotNumber = Trim(Left(theExistOrmapMapNumberVal, 8)) & theNewTLTaxlotNumVal_5digit
             End Select
 
-            '------------------------------------------
-            ' Define and set the Anomaly from MapIndex
-            '------------------------------------------
-            Dim theORMAPNumberClass As New ORMAPNumber()
-            Dim theAnomalyVal As String = String.Empty
-            If (theORMAPNumberClass.ParseNumber(theExistOrmapMapNumberVal)) Then
-                theAnomalyVal = theORMAPNumberClass.Anomaly
-            End If
-
             '##################################
             ' Write the Taxlot value
             theTaxlotFeature.Value(_theTLTaxlotFldIdx) = theNewTLTaxlotNumVal
@@ -609,7 +613,7 @@ Public NotInheritable Class TaxlotAssignment
             ' End the edit operation
             '------------------------------------------
             theTaxlotFeature.Store()
-            EditorExtension.Editor.StopOperation("Assign Taxlot Number (AutoIncrement")
+            EditorExtension.Editor.StopOperation("Assign Taxlot Number (AutoIncrement)")
 
             '------------------------------------------
             ' AutoIncrement if taxlot number type
@@ -906,7 +910,7 @@ Public NotInheritable Class TaxlotAssignment
     Public Overrides ReadOnly Property Enabled() As Boolean
         Get
             Dim canEnable As Boolean
-            canEnable = EditorExtension.CanEnableCommands
+            canEnable = EditorExtension.CanEnableExtendedEditing
             canEnable = canEnable AndAlso State = CommandStateType.Enabled
             Return canEnable
         End Get
@@ -915,6 +919,26 @@ Public NotInheritable Class TaxlotAssignment
 #End Region
 
 #Region "Methods"
+
+    Public Overrides Sub OnClick()
+        Try
+            ' TODO: [NIS] Remove this if not needed anymore.
+            '' HACK: [NIS] Don't know why this form is disposed after first use, but 
+            '' this check insures it is available again.
+            'If PartnerTaxlotAssignmentForm.IsDisposed Then
+            '    SetPartnerTaxlotAssignmentForm(New TaxlotAssignmentForm())
+            'End If
+
+            ' Show and activate the partner form.
+            If PartnerTaxlotAssignmentForm.Visible Then
+                PartnerTaxlotAssignmentForm.Activate()
+            Else
+                PartnerTaxlotAssignmentForm.Show()
+            End If
+        Catch ex As Exception
+            ' TODO: [NIS] Add exception handling here
+        End Try
+    End Sub
 
     ''' <summary>
     ''' Occurs when this command is created.
@@ -949,25 +973,6 @@ Public NotInheritable Class TaxlotAssignment
 
             ' TODO: Add other initialization code?
 
-        Catch ex As Exception
-            ' TODO: [NIS] Add exception handling here
-        End Try
-    End Sub
-
-    Public Overrides Sub OnClick()
-        Try
-            '' HACK: NIS Don't know why this form is disposed after first use, but 
-            '' this check insures it is available again.
-            'If PartnerTaxlotAssignmentForm.IsDisposed Then
-            '    SetPartnerTaxlotAssignmentForm(New TaxlotAssignmentForm())
-            'End If
-
-            ' Show and activate the partner form.
-            If PartnerTaxlotAssignmentForm.Visible Then
-                PartnerTaxlotAssignmentForm.Activate()
-            Else
-                PartnerTaxlotAssignmentForm.Show()
-            End If
         Catch ex As Exception
             ' TODO: [NIS] Add exception handling here
         End Try

@@ -2,7 +2,7 @@
 <ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
   <Font Name="Tahoma" Size="8.25" />
   <Comment CommentText="ORMAP Taxlot Editing Toolbar&#xD;&#xA;Copyright 2008 ORMAP Tech Group&#xD;&#xA;&#xD;&#xA;Original Authors:  OPET.NET Migration Team (Shad Campbell, James Moore, Nick Seigal)&#xD;&#xA;&#xD;&#xA;Copyright Holder:  ORMAP Tech Group  &#xD;&#xA;Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at opet-developers@lists.sourceforge.net&#xD;&#xA;&#xD;&#xA;ORMAP Taxlot Editing Toolbar is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.&#xD;&#xA;&#xD;&#xA;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License located in the COPYING.txt file for more details.&#xD;&#xA;&#xD;&#xA;You should have received a copy of the GNU General Public License along with the ORMAP Taxlot Editing Toolbar; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.&#xD;&#xA;">
-    <Position X="13.917" Y="15.809" Height="2.979" Width="5.481" />
+    <Position X="7.98" Y="7.33" Height="2.979" Width="5.481" />
   </Comment>
   <Class Name="OrmapTaxlotEditing.AddArrows">
     <Position X="8.5" Y="0.75" Width="1.5" />
@@ -53,7 +53,7 @@
     <Position X="0.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>EditorExtension.vb</FileName>
-      <HashCode>AAQQkKlggDhWgAASQATASQQAlgAAICJEACAgAAJAAAA=</HashCode>
+      <HashCode>AEQQgKlggDhGgAASUATASRQAlgAAIDJGACAkQAJAAAA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -86,8 +86,23 @@
     <Position X="15.5" Y="0.75" Width="2" />
     <TypeIdentifier>
       <FileName>TaxlotAssignment.vb</FileName>
-      <HashCode>AABEAAAgABAEAYCDIIDFQFBCgCWACBgUIGAkCQZAWAQ=</HashCode>
+      <HashCode>AABOAABgACQEEYADIILNSVBCgKGACBAUIKQkDwRCGAU=</HashCode>
     </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="OrmapTaxlotEditing.TaxlotAssignment.StatePassageType">
+        <TypeIdentifier>
+          <NewMemberFileName>TaxlotAssignment.vb</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="OrmapTaxlotEditing.TaxlotAssignment.CommandStateType">
+        <TypeIdentifier>
+          <NewMemberFileName>TaxlotAssignment.vb</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
   </Class>
   <Class Name="ESRI.ArcGIS.ADF.BaseClasses.BaseCommand" Collapsed="true">
     <Position X="18" Y="0.75" Width="1.5" />
@@ -117,17 +132,20 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="OrmapTaxlotEditing.TaxlotAssignmentForm">
-    <Position X="15.5" Y="7.5" Width="2" />
+    <Position X="17.75" Y="11.5" Width="2" />
     <TypeIdentifier>
       <FileName>TaxlotAssignmentForm.vb</FileName>
       <HashCode>AAQAAEEAACACAAAAAACAAABCQABAABAAAAQAAAQAAEA=</HashCode>
     </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Private" Collapsed="true" />
+    </Compartments>
   </Class>
   <Class Name="OrmapTaxlotEditing.StringUtilities">
     <Position X="2.25" Y="12.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>StringUtilities.vb</FileName>
-      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAAAACAABAAAIAQAACAAAA=</HashCode>
+      <HashCode>AAAAAABAAEAAAAAAAAAAAAAAAACAAAAAAIAQAACAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="OrmapTaxlotEditing.SpatialUtilities">
@@ -169,7 +187,7 @@
     <Position X="5.75" Y="12.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>ORMAPNumber.vb</FileName>
-      <HashCode>gAAUAIgACQQACAhAEAAAygQCAgEQAABIAQCEQcAAgBI=</HashCode>
+      <HashCode>gAAUAIgACQQACAhAEAAAygQCAgEQAABIAACEQcAAghI=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="OrmapTaxlotEditing.PropertyPage">

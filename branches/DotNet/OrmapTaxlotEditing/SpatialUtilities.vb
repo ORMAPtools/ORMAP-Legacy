@@ -258,7 +258,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             ' Get the current and the new ORMAP Taxlot Numbers
             Dim existingORMAPTaxlotNumber As String = CStr(editFeature.Value(idxOrmapTaxlotNumberFld))
-            Dim newORMAPTaxlotNumber As String = CalculateORMAPTaxlotNumber(existingTaxlotValue, editFeature, existingTaxlotValue)
+            Dim newORMAPTaxlotNumber As String = calculateORMAPTaxlotNumber(existingTaxlotValue, editFeature, existingTaxlotValue)
             'If no changes, don't save value
             If String.Compare(existingORMAPTaxlotNumber, newORMAPTaxlotNumber, True) <> 0 Then
                 editFeature.Value(idxOrmapTaxlotNumberFld) = newORMAPTaxlotNumber
@@ -626,7 +626,7 @@ Public NotInheritable Class SpatialUtilities
 
                     Case esriGeometryType.esriGeometryEnvelope
                         thisEnvelope = DirectCast(theGeometry, IEnvelope)
-                        thisPolygon = EnvelopeToPolygon(thisEnvelope)
+                        thisPolygon = envelopeToPolygon(thisEnvelope)
                         thisArea = DirectCast(thisPolygon, IArea)
                         intersectFuzzAmount = thisArea.Area * fuzzFactor
 
@@ -645,7 +645,7 @@ Public NotInheritable Class SpatialUtilities
                 Dim largestIntersectArea As Double = 0
                 Dim longestIntersectLength As Double = 0
 
-                theOverlayFeatureCursor = DoSpatialQuery(overlayFeatureClass, theGeometry, esriSpatialRelEnum.esriSpatialRelIntersects)
+                theOverlayFeatureCursor = doSpatialQuery(overlayFeatureClass, theGeometry, esriSpatialRelEnum.esriSpatialRelIntersects)
                 If theOverlayFeatureCursor IsNot Nothing Then
                     anOverlayFeature = theOverlayFeatureCursor.NextFeature
                     Dim topoOperator As ITopologicalOperator
@@ -744,8 +744,8 @@ Public NotInheritable Class SpatialUtilities
                     Dim aValue As String = ""
                     Dim theBestOrderByValue As String = ""
 
-                    Dim whereClause As String = String.Concat(overlayFeatureClass.OIDFieldName, " in (", CandidateKeysToDelimitedString(dictCandidates), ")")
-                    theOverlayFeatureCursor = DoSpatialQuery(overlayFeatureClass, theGeometry, esriSpatialRelEnum.esriSpatialRelIntersects, whereClause)
+                    Dim whereClause As String = String.Concat(overlayFeatureClass.OIDFieldName, " in (", candidateKeysToDelimitedString(dictCandidates), ")")
+                    theOverlayFeatureCursor = doSpatialQuery(overlayFeatureClass, theGeometry, esriSpatialRelEnum.esriSpatialRelIntersects, whereClause)
                     If Not (theOverlayFeatureCursor Is Nothing) Then
                         anOverlayFeature = theOverlayFeatureCursor.NextFeature
                         While Not (anOverlayFeature Is Nothing)
@@ -1161,7 +1161,7 @@ Public NotInheritable Class SpatialUtilities
                 End If
 
                 ' Gets the size of the annotation from the scale of the annotation dataset
-                Dim annotationSize As Double = GetAnnoSizeByScale(annoDataSet.Name, CInt(mapScale))
+                Dim annotationSize As Double = getAnnoSizeByScale(annoDataSet.Name, CInt(mapScale))
 
                 Dim annoFeature2 As IAnnotationFeature
                 annoFeature2 = DirectCast(theObject, IAnnotationFeature)
@@ -1195,7 +1195,7 @@ Public NotInheritable Class SpatialUtilities
     ''' </summary>
     ''' <param name="feature">An object that implements the Ifeature interface.</param>
     ''' <remarks>Update the AutoWho and the AutoDate fields with the current username and date/time, respectively.</remarks>
-    Public Shared Sub UpdateAutoFields(ByRef feature As IFeature)
+    Public Shared Sub UpdateMinimumAutoFields(ByRef feature As IFeature)
         Try
             If feature Is Nothing Then
                 Exit Try
@@ -1267,7 +1267,7 @@ Public NotInheritable Class SpatialUtilities
             'TODO: JWM check these EditorExtension values
             Dim whereClause As String = String.Concat(EditorExtension.TaxLotSettings.MapNumberField, "='", mapIndexORMAPValue, "' AND ", EditorExtension.TaxLotSettings.TaxlotField, " = '", taxlotNumber, "'")
             Dim cursor As ICursor
-            cursor = AttributeQuery(DirectCast(thisTaxlotFeatureClass, ITable), whereClause)
+            cursor = attributeQuery(DirectCast(thisTaxlotFeatureClass, ITable), whereClause)
             If Not (cursor Is Nothing) AndAlso (returnValue = False) Then
                 Dim row As IRow
                 row = cursor.NextRow
@@ -1296,14 +1296,14 @@ Public NotInheritable Class SpatialUtilities
     ''' <param name="whereClause">An Sql Where clause.</param>
     ''' <returns>Return a cursor that represents the results of an attribute query.</returns>
     ''' <remarks>Creates a cursor from table that contains all feature records that meet the criteria in whereClause.</remarks>
-    Private Shared Function AttributeQuery(ByRef table As ITable, Optional ByRef whereClause As String = "") As ICursor
+    Private Shared Function attributeQuery(ByRef table As ITable, Optional ByRef whereClause As String = "") As ICursor
         Try
             Dim thisQueryFilter As IQueryFilter
             thisQueryFilter = New QueryFilter
             thisQueryFilter.WhereClause = whereClause
             Dim thisCursor As ICursor
-            thisCursor = table.Search(thisQueryFilter, False)
-            If table.RowCount(thisQueryFilter) = 0 Then
+            thisCursor = Table.Search(thisQueryFilter, False)
+            If Table.RowCount(thisQueryFilter) = 0 Then
                 Return Nothing
             Else
                 Return thisCursor
@@ -1324,7 +1324,7 @@ Public NotInheritable Class SpatialUtilities
     ''' <remarks>Given an ORMAP Number, sExistOMNum, and feature, pFeat, and a taxlot value, sTLVal.
     ''' Remove the existing map suffix type and number from ExistingORMAPNumber and replace them with the new values in theFeature and
     ''' append taxlotValue to form the return value.</remarks>
-    Private Shared Function CalculateORMAPTaxlotNumber(ByVal existingORMAPNumber As String, ByRef theFeature As IFeature, ByVal taxlotValue As String) As String
+    Private Shared Function calculateORMAPTaxlotNumber(ByVal existingORMAPNumber As String, ByRef theFeature As IFeature, ByVal taxlotValue As String) As String
         Try
             Dim shortORMAPNumber As String = existingORMAPNumber.Substring(0, 20) 'replaces the ShortenOMTLNum function 
             Dim taxlotMapSufNumberValue As String = GetMapSuffixNum(theFeature)
@@ -1341,10 +1341,10 @@ Public NotInheritable Class SpatialUtilities
     ''' Converts the list of candidate dictionary keys to a string in the 
     ''' format of a comma-delimited list.
     ''' </summary>
-    ''' <param name="candidatesDictionary">A dictionary of integer candidate ids for keys.</param>
+    ''' <param name="candidatesDictionary">A dictionary of integer candidate IDs for keys.</param>
     ''' <returns>A string in the format of a comma-delimited list.</returns>
     ''' <remarks>An empty dictionary will return as an empty string.</remarks>
-    Private Shared Function CandidateKeysToDelimitedString(ByRef candidatesDictionary As Dictionary(Of Integer, Double)) As String
+    Private Shared Function candidateKeysToDelimitedString(ByRef candidatesDictionary As Dictionary(Of Integer, Double)) As String
         Dim keyCollection As ICollection(Of Integer) = DirectCast(candidatesDictionary.Keys, ICollection(Of Integer))
         Dim returnValue As String = String.Empty
 
@@ -1379,7 +1379,7 @@ Public NotInheritable Class SpatialUtilities
     ''' and whether or not the returned cursor should be updateable, <paramref name=" isUpdateable">IsUpdateable</paramref>.
     ''' Perform a spatial query <paramref name="infeatureClass">inFeatureClass</paramref> where feature
     ''' which meet criteria whereClause have a relationship of spatialRelation to searchGeometry. The returned cursor is updatable if IsUpdateable is True.</remarks>
-    Private Shared Function DoSpatialQuery(ByRef inFeatureClass As IFeatureClass, ByRef searchGeometry As IGeometry, ByRef spatialRelation As ESRI.ArcGIS.Geodatabase.esriSpatialRelEnum, Optional ByRef whereClause As String = "", Optional ByVal isUpdateable As Boolean = False) As IFeatureCursor
+    Private Shared Function doSpatialQuery(ByRef inFeatureClass As IFeatureClass, ByRef searchGeometry As IGeometry, ByRef spatialRelation As ESRI.ArcGIS.Geodatabase.esriSpatialRelEnum, Optional ByRef whereClause As String = "", Optional ByVal isUpdateable As Boolean = False) As IFeatureCursor
         Try
             Dim thisSpatialFilter As ISpatialFilter
             thisSpatialFilter = New SpatialFilter
@@ -1414,7 +1414,7 @@ Public NotInheritable Class SpatialUtilities
     ''' <param name="envelope"></param>
     ''' <returns>A Polygon.</returns>
     ''' <remarks></remarks>
-    Private Shared Function EnvelopeToPolygon(ByRef envelope As IEnvelope) As IPolygon
+    Private Shared Function envelopeToPolygon(ByRef envelope As IEnvelope) As IPolygon
         Try
             Dim thisPolygon As IPolygon
             thisPolygon = New Polygon
@@ -1442,7 +1442,7 @@ Public NotInheritable Class SpatialUtilities
     ''' <remarks>Determines the proper size for the text in thisFeatureClassName.
     ''' Defaults at size 5 is the <paramref name="scale">scale</paramref> is invalid, and size 10 if
     ''' <paramref name="thisFeatureClassName">thisFeatureClassName</paramref> is not Taxlot Acreage Annotation or Taxlot Number Annotation.</remarks>
-    Private Shared Function GetAnnoSizeByScale(ByVal thisFeatureClassName As String, ByVal scale As Integer) As Double
+    Private Shared Function getAnnoSizeByScale(ByVal thisFeatureClassName As String, ByVal scale As Integer) As Double
         Try 'TODO: JWM verify the table names that we are comparing
             Dim size As String
             If String.Compare(thisFeatureClassName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnno, True) = 0 Then
@@ -1504,6 +1504,7 @@ Public NotInheritable Class SpatialUtilities
         Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return 10 'default
+
         End Try
     End Function
 

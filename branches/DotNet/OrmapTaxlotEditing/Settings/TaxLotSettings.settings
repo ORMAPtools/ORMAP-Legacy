@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="" GeneratedClassName="TaxlotSettings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="" GeneratedClassName="TaxLotSettings">
   <Profiles />
   <Settings>
     <Setting Name="CountyField" Type="System.String" Scope="User">
@@ -48,7 +48,7 @@
       <Value Profile="(Default)">MapTaxlot</Value>
     </Setting>
     <Setting Name="MapTaxlotFormatMask" Type="System.String" Scope="User">
-      <Value Profile="(Default)">TR^DSSQQ@@@@@</Value>
+      <Value Profile="(Default)">TTRRSSQQ@@@@@</Value>
     </Setting>
     <Setting Name="SpecialInterestField" Type="System.String" Scope="User">
       <Value Profile="(Default)">SpecialInt</Value>

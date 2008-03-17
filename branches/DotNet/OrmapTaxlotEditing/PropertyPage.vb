@@ -51,7 +51,7 @@ ProgId("ORMAPTaxlotEditing.PropertyPage")> _
 Public NotInheritable Class PropertyPage
     Implements IComPropertyPage
 
-#Region "Class-Level Constants And Enumerations"
+#Region "Class-Level Constants And Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"
@@ -84,7 +84,7 @@ Public NotInheritable Class PropertyPage
         End Get
     End Property
 
-    Private Sub SetPageDirty(ByVal value As Boolean)
+    Private Sub setPageDirty(ByVal value As Boolean)
         ' TODO: [NIS] Add validation code?
         _pageDirty = value
     End Sub
@@ -97,7 +97,7 @@ Public NotInheritable Class PropertyPage
         End Get
     End Property
 
-    Private Sub SetPropertiesPageSite(ByVal value As IComPropertyPageSite)
+    Private Sub setPropertiesPageSite(ByVal value As IComPropertyPageSite)
         ' TODO: [NIS] Add validation code?
         _propertiesPageSite = value
     End Sub
@@ -110,7 +110,7 @@ Public NotInheritable Class PropertyPage
         End Get
     End Property
 
-    Private Sub SetPartnerPropertiesForm(ByVal value As PropertiesForm)
+    Private Sub setPartnerPropertiesForm(ByVal value As PropertiesForm)
         ' TODO: [NIS] Add validation code?
         _partnerPropertiesForm = value
     End Sub
@@ -126,7 +126,7 @@ Public NotInheritable Class PropertyPage
         PartnerPropertiesForm.uxAllFieldsOption.Enabled = PartnerPropertiesForm.uxEnableTools.Checked
 
         ' Set dirty flag.
-        SetPageDirty(True)
+        setPageDirty(True)
 
         If Not PropertiesPageSite Is Nothing Then
             PropertiesPageSite.PageChanged()
@@ -140,7 +140,7 @@ Public NotInheritable Class PropertyPage
         PartnerPropertiesForm.uxAllFieldsOption.Enabled = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
 
         ' Set dirty flag.
-        SetPageDirty(True)
+        setPageDirty(True)
 
         If Not PropertiesPageSite Is Nothing Then
             PropertiesPageSite.PageChanged()
@@ -169,12 +169,12 @@ Public NotInheritable Class PropertyPage
 
 #End Region
 
-#Region "Inherited Class Members"
+#Region "Inherited Class Members (none)"
 
-#Region "Properties"
+#Region "Properties (none)"
 #End Region
 
-#Region "Methods"
+#Region "Methods (none)"
 #End Region
 
 #End Region
@@ -209,7 +209,7 @@ Public NotInheritable Class PropertyPage
 
     Public WriteOnly Property PageSite() As ESRI.ArcGIS.Framework.IComPropertyPageSite Implements IComPropertyPage.PageSite
         Set(ByVal value As ESRI.ArcGIS.Framework.IComPropertyPageSite)
-            SetPropertiesPageSite(value)
+            setPropertiesPageSite(value)
         End Set
     End Property
 
@@ -276,7 +276,7 @@ Public NotInheritable Class PropertyPage
         EditorExtension.AllowedToEditTaxlots = PartnerPropertiesForm.uxEnableTools.Checked
         EditorExtension.AllowedToAutoUpdate = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
         EditorExtension.AllowedToAutoUpdateAllFields = Not PartnerPropertiesForm.uxAllFieldsOption.Checked
-        SetPageDirty(False)
+        setPageDirty(False)
     End Sub
 
     Public Sub Cancel() Implements IComPropertyPage.Cancel
@@ -287,8 +287,8 @@ Public NotInheritable Class PropertyPage
         If Not _partnerPropertiesForm Is Nothing Then
             PartnerPropertiesForm.Dispose()
         End If
-        SetPartnerPropertiesForm(Nothing)
-        SetPropertiesPageSite(Nothing)
+        setPartnerPropertiesForm(Nothing)
+        setPropertiesPageSite(Nothing)
     End Sub
 
     Public Sub Hide() Implements IComPropertyPage.Hide
@@ -300,7 +300,7 @@ Public NotInheritable Class PropertyPage
         ' editor states before this method is called.
 
         ' TODO: [NIS] Move (to where)?
-        SetPartnerPropertiesForm(New PropertiesForm())
+        setPartnerPropertiesForm(New PropertiesForm())
         PartnerPropertiesForm.uxEnableTools.Checked = EditorExtension.AllowedToEditTaxlots
         PartnerPropertiesForm.uxEnableAutoUpdate.Checked = EditorExtension.AllowedToAutoUpdate
         PartnerPropertiesForm.uxMinimumFieldsOption.Checked = Not EditorExtension.AllowedToAutoUpdateAllFields

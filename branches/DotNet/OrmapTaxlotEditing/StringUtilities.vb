@@ -118,7 +118,7 @@ Public NotInheritable Class StringUtilities
     ''' <param name="maskToApply"></param>
     ''' <returns> If a value is passed in that is not numeric then just pass it straight through else return a parcel id with or without leading zeros</returns>
     ''' <remarks>I use the Format function with user-defined string formats which consist of either all (@) characters or all ampersands</remarks>
-    Private Shared Function CreateParcelID(ByVal valueToMask As String, ByVal maskToApply As String) As String
+    Private Shared Function createParcelID(ByVal valueToMask As String, ByVal maskToApply As String) As String
         Dim sb As StringBuilder
         If valueToMask.Length = 0 OrElse maskToApply.Length = 0 Then
             Return String.Empty
@@ -134,7 +134,7 @@ Public NotInheritable Class StringUtilities
 
     End Function
 
-    Private Shared Function StripLeadingZeros(ByRef stringToParse As String) As String
+    Private Shared Function stripLeadingZeros(ByRef stringToParse As String) As String
         Dim inputCharCount As Integer
         Dim aChar As Char
         Dim sTemp As StringBuilder

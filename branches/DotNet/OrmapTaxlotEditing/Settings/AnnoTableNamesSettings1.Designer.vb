@@ -28,7 +28,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.TaxCodeAnno")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("TaxCodeAnno")>  _
     Public Property TaxCodeAnnoFC() As String
         Get
             Return CType(Me("TaxCodeAnnoFC"),String)
@@ -40,7 +40,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.LotsAnno")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("LotsAnno")>  _
     Public Property LotsAnnoFC() As String
         Get
             Return CType(Me("LotsAnnoFC"),String)
@@ -52,7 +52,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.TaxlotNumberAnno")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("TaxlotNumberAnno")>  _
     Public Property TaxlotNumberAnnoFC() As String
         Get
             Return CType(Me("TaxlotNumberAnnoFC"),String)
@@ -64,7 +64,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.TaxlotAcreageAnno")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("TaxlotAcreageAnno")>  _
     Public Property TaxlotAcreageAnno() As String
         Get
             Return CType(Me("TaxlotAcreageAnno"),String)
@@ -76,7 +76,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.Anno0010scale")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("Anno0010scale")>  _
     Public Property Anno0010scaleFC() As String
         Get
             Return CType(Me("Anno0010scaleFC"),String)
@@ -88,7 +88,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.Anno0020scale")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("Anno0020scale")>  _
     Public Property Anno0020scaleFC() As String
         Get
             Return CType(Me("Anno0020scaleFC"),String)
@@ -100,7 +100,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.Anno0030scale")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("Anno0030scale")>  _
     Public Property Anno0030scaleFC() As String
         Get
             Return CType(Me("Anno0030scaleFC"),String)
@@ -112,7 +112,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.Anno0040scale")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("Anno0040scale")>  _
     Public Property Anno0040scaleFC() As String
         Get
             Return CType(Me("Anno0040scaleFC"),String)
@@ -124,7 +124,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.Anno0050scale")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("Anno0050scale")>  _
     Public Property Anno0050scaleFC() As String
         Get
             Return CType(Me("Anno0050scaleFC"),String)
@@ -136,7 +136,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.Anno0100scale")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("Anno0100scale")>  _
     Public Property Anno0100scaleFC() As String
         Get
             Return CType(Me("Anno0100scaleFC"),String)
@@ -148,7 +148,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.Anno0200scale")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("Anno0200scale")>  _
     Public Property Anno0200scaleFC() As String
         Get
             Return CType(Me("Anno0200scaleFC"),String)
@@ -160,7 +160,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.Anno0400scale")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("Anno0400scale")>  _
     Public Property Anno0400scaleFC() As String
         Get
             Return CType(Me("Anno0400scaleFC"),String)
@@ -172,7 +172,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.Anno0800scale")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("Anno0800scale")>  _
     Public Property Anno0800scaleFC() As String
         Get
             Return CType(Me("Anno0800scaleFC"),String)
@@ -184,7 +184,7 @@ Partial Friend NotInheritable Class AnnoTableNamesSettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("sdedatabase.VERSION.Anno2000scale")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("Anno2000scale")>  _
     Public Property Anno2000scaleFC() As String
         Get
             Return CType(Me("Anno2000scaleFC"),String)

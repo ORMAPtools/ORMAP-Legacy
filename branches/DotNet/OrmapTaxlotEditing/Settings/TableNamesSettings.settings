@@ -3,28 +3,28 @@
   <Profiles />
   <Settings>
     <Setting Name="MapIndexFC" Type="System.String" Scope="User">
-      <Value Profile="(Default)">sdedatabase.VERSION.MapIndex</Value>
+      <Value Profile="(Default)">MapIndex</Value>
     </Setting>
     <Setting Name="TaxCodeFC" Type="System.String" Scope="User">
-      <Value Profile="(Default)">sdedatabase.VERSION.TaxCode</Value>
+      <Value Profile="(Default)">TaxCode</Value>
     </Setting>
     <Setting Name="TaxLotFC" Type="System.String" Scope="User">
-      <Value Profile="(Default)">sdedatabase.VERSION.TaxLot</Value>
+      <Value Profile="(Default)">TaxLot</Value>
     </Setting>
     <Setting Name="TaxLotLinesFC" Type="System.String" Scope="User">
-      <Value Profile="(Default)">sdedatabase.VERSION.TaxLotLines</Value>
+      <Value Profile="(Default)">TaxLotLines</Value>
     </Setting>
     <Setting Name="PlatsFC" Type="System.String" Scope="User">
-      <Value Profile="(Default)">sdedatabase.VERSION.Plats</Value>
+      <Value Profile="(Default)">Plats</Value>
     </Setting>
     <Setting Name="CartographicLinesFC" Type="System.String" Scope="User">
-      <Value Profile="(Default)">sdedatabase.VERSION.CartographicLines</Value>
+      <Value Profile="(Default)">CartographicLines</Value>
     </Setting>
     <Setting Name="ReferenceLinesFC" Type="System.String" Scope="User">
-      <Value Profile="(Default)">sdedatabase.VERSION.ReferenceLines</Value>
+      <Value Profile="(Default)">ReferenceLines</Value>
     </Setting>
     <Setting Name="CancelledNumbersTable" Type="System.String" Scope="User">
-      <Value Profile="(Default)">sdedatabase.VERSION.CancelledNumbers</Value>
+      <Value Profile="(Default)">CancelledNumbers</Value>
     </Setting>
   </Settings>
 </SettingsFile>

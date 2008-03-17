@@ -181,7 +181,7 @@ Public NotInheritable Class EditorExtension
         End Get
     End Property
 
-    Friend Shared ReadOnly Property CanEnableCommands() As Boolean
+    Friend Shared ReadOnly Property CanEnableExtendedEditing() As Boolean
         Get
             Dim canEnable As Boolean = True
             canEnable = canEnable AndAlso EditorExtension.Editor IsNot Nothing
@@ -254,13 +254,29 @@ Public NotInheritable Class EditorExtension
 
 #End Region
 
-    Private _duringAutoUpdate As Boolean = False  ' TODO: [NIS] Eliminate or at least move to Fields Region above
+#Region "Fields"
+
+    Private _duringAutoUpdate As Boolean = False  ' TODO: [NIS] Eliminate?
+
+#End Region
 
 #Region "Editor Event Handlers"
 
     Private Sub EditEvents_OnChangeFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnChangeFeature
-        
+
         Try
+
+            If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
+
+            If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
+
+            If Not IsORMAPFeature(obj) Then Exit Try
+
+            ' Update the minimum auto-calculated fields
+            UpdateMinimumAutoFields(DirectCast(obj, IFeature))
+
+            If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Try
+
             ' Avoid rentrancy
             If _duringAutoUpdate = False Then
                 _duringAutoUpdate = True
@@ -273,10 +289,6 @@ Public NotInheritable Class EditorExtension
             Dim u As New ESRI.ArcGIS.esriSystem.UID
             Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
             Dim theAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
-
-            'These are the autocalculated fields
-            ' TODO: [NIS] Resolve - UPGRADE_WARNING: Couldn't resolve default property of object obj. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            UpdateAutoFields(DirectCast(obj, IFeature))
 
             Dim theParentID As Integer
             If IsTaxlot(obj) Then
@@ -302,8 +314,10 @@ Public NotInheritable Class EditorExtension
             _duringAutoUpdate = False
 
         Catch ex As Exception
+            MessageBox.Show(ex.Message)
+
+        Finally
             _duringAutoUpdate = False
-            'HandleError(False, "m_pEditorEvents_OnChangeFeature " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl()), Err.Number, Err.Source, Err.Description, 4)
 
         End Try
 
@@ -312,122 +326,129 @@ Public NotInheritable Class EditorExtension
     Private Sub EditEvents_OnCreateFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnCreateFeature
 
         Try
-            ' TODO: [NIS] Rename variables to coding standard
-            Dim sMapNum As String
-            Dim sMapScale As String
-            Dim pMIFlayer As ESRI.ArcGIS.Carto.IFeatureLayer
-            Dim pMIFclass As ESRI.ArcGIS.Geodatabase.IFeatureClass
-            Dim pFeat As ESRI.ArcGIS.Geodatabase.IFeature
-            Dim lAnnoMapNumFld As Integer
-            Dim pAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
-            Dim lParentID As Integer
-            Dim pGeometry As ESRI.ArcGIS.Geometry.IGeometry
-            Dim pEnv As ESRI.ArcGIS.Geometry.IEnvelope
-            Dim pCenter As ESRI.ArcGIS.Geometry.IPoint
-            Dim lMapScaleFld As Integer
-            Dim lMapNumFld As Integer
+
+            If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
+
+            If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
 
             If Not IsORMAPFeature(obj) Then Exit Try
 
-            ' These are the auto-calculated fields
-            UpdateAutoFields(DirectCast(obj, IFeature))
+            ' Update the minimum auto-calculated fields
+            UpdateMinimumAutoFields(DirectCast(obj, IFeature))
+
+            If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Try
+
+            ' TODO: [NIS] Rename variables to coding standard and move to near use
+            Dim theMapNumberVal As String
+            Dim theMapScaleVal As String
+            Dim theMapIndexFLayer As ESRI.ArcGIS.Carto.IFeatureLayer
+            Dim theMapIndexFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
+            Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
+            Dim theAnnoMapNumFldIdx As Integer
+            Dim theAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
+            Dim theParentID As Integer
+            Dim theGeometry As ESRI.ArcGIS.Geometry.IGeometry
+            Dim theEnvelope As ESRI.ArcGIS.Geometry.IEnvelope
+            Dim theCenterPoint As ESRI.ArcGIS.Geometry.IPoint
+            Dim theMapScaleFldIdx As Integer
+            Dim theMapNumberFldIdx As Integer
 
             ' TODO: [NIS] Test this DirectCast.
-            lMapNumFld = (DirectCast(obj, IFeature)).Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
+            theMapNumberFldIdx = (DirectCast(obj, IFeature)).Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
             ' TODO: [NIS] Test this DirectCast.
-            lMapScaleFld = (DirectCast(obj, IFeature)).Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
+            theMapScaleFldIdx = (DirectCast(obj, IFeature)).Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
 
             If IsTaxlot(obj) Then
                 ' Obtain OrmapMapNumber via overlay and calculate other field values.
                 CalculateTaxlotValues(DirectCast(obj, IFeature), SpatialUtilities.FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC))
 
             ElseIf IsAnno(obj) Then
-                pAnnotationFeature = DirectCast(obj, IAnnotationFeature)
+                theAnnotationFeature = DirectCast(obj, IAnnotationFeature)
 
                 'Get the parent feature so mapnumber can be obtained
-                lParentID = pAnnotationFeature.LinkedFeatureID
-                If lParentID > FieldNotFoundIndex Then 'Feature linked
-                    pFeat = GetRelatedObjects(obj)
-                    If pFeat Is Nothing Then Exit Try
+                theParentID = theAnnotationFeature.LinkedFeatureID
+                If theParentID > FieldNotFoundIndex Then 'Feature linked
+                    theFeature = GetRelatedObjects(obj)
+                    If theFeature Is Nothing Then Exit Try
                 Else
                     'Not feature linked anno, so we can use the feature as is
-                    pFeat = DirectCast(obj, IFeature)
+                    theFeature = DirectCast(obj, IFeature)
                 End If
 
                 ' Retrieve the map number and scale from the overlaying map index polygon
-                pGeometry = pFeat.Shape
-                If pGeometry.IsEmpty Then Exit Try
-                pEnv = pGeometry.Envelope
-                pCenter = DirectCast(pEnv, ESRI.ArcGIS.Geometry.IPoint)
-                pGeometry = pCenter 'QI
+                theGeometry = theFeature.Shape
+                If theGeometry.IsEmpty Then Exit Try
+                theEnvelope = theGeometry.Envelope
+                theCenterPoint = DirectCast(theEnvelope, ESRI.ArcGIS.Geometry.IPoint)
+                theGeometry = theCenterPoint 'QI
 
                 ' Capture MapNumber for each anno feature created
                 ' TODO: [NIS] Test use of pFeat instead of obj here.
-                lAnnoMapNumFld = pFeat.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
-                If lAnnoMapNumFld = FieldNotFoundIndex Then Exit Try
+                theAnnoMapNumFldIdx = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
+                If theAnnoMapNumFldIdx = FieldNotFoundIndex Then Exit Try
 
-                pMIFlayer = SpatialUtilities.FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
-                If pMIFlayer Is Nothing Then Exit Try
-                pMIFclass = pMIFlayer.FeatureClass
-                sMapNum = GetValueViaOverlay(pGeometry, pMIFclass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+                theMapIndexFLayer = SpatialUtilities.FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
+                If theMapIndexFLayer Is Nothing Then Exit Try
+                theMapIndexFClass = theMapIndexFLayer.FeatureClass
+                theMapNumberVal = GetValueViaOverlay(theGeometry, theMapIndexFClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
                 ' TODO: [NIS] Test use of pFeat instead of obj here.
-                pFeat.Value(lAnnoMapNumFld) = sMapNum
-                If lMapScaleFld > -1 Then
-                    sMapScale = GetValueViaOverlay(pGeometry, pMIFclass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
-                    If Len(sMapScale) > 0 Then
+                theFeature.Value(theAnnoMapNumFldIdx) = theMapNumberVal
+                If theMapScaleFldIdx > -1 Then
+                    theMapScaleVal = GetValueViaOverlay(theGeometry, theMapIndexFClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+                    If Len(theMapScaleVal) > 0 Then
                         ' TODO: [NIS] Test use of pFeat instead of obj here.
-                        pFeat.Value(lMapScaleFld) = sMapScale
+                        theFeature.Value(theMapScaleFldIdx) = theMapScaleVal
                     Else
                         ' TODO: [NIS] Test use of pFeat instead of obj here.
                         ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-                        pFeat.Value(lMapScaleFld) = System.DBNull.Value
+                        theFeature.Value(theMapScaleFldIdx) = System.DBNull.Value
                     End If
                 End If
                 ' Set size based on mapscale
-                SetAnnoSize(obj, pFeat)
+                SetAnnoSize(obj, theFeature)
             Else
                 ' Update MapScale and mapnumber for all features with a MapScale field (except MapIndex)
-                If lMapScaleFld > -1 And Not IsMapIndex(obj) Then
-                    pFeat = CType(obj, IFeature)
-                    pGeometry = pFeat.Shape
-                    If pGeometry.IsEmpty Then Exit Try
-                    pEnv = pGeometry.Envelope
-                    If pGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryBezier3Curve And pGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryCircularArc And pGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryEllipticArc And pGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryLine And pGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPath And pGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPolygon And pGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPolyline Then
+                If theMapScaleFldIdx > -1 And Not IsMapIndex(obj) Then
+                    theFeature = CType(obj, IFeature)
+                    theGeometry = theFeature.Shape
+                    If theGeometry.IsEmpty Then Exit Try
+                    theEnvelope = theGeometry.Envelope
+                    If theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryBezier3Curve And theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryCircularArc And theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryEllipticArc And theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryLine And theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPath And theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPolygon And theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPolyline Then
                         ' Convert the geometry to a point
-                        pCenter = GetCenterOfEnvelope(pEnv)
-                        pGeometry = pCenter 'QI
+                        theCenterPoint = GetCenterOfEnvelope(theEnvelope)
+                        theGeometry = theCenterPoint 'QI
                     Else
                         ' Use the geometry as-is
                     End If
-                    pMIFlayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
-                    If pMIFlayer Is Nothing Then Exit Try
-                    pMIFclass = pMIFlayer.FeatureClass
-                    sMapScale = GetValueViaOverlay(pGeometry, pMIFclass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
-                    If Len(sMapScale) > 0 Then
+                    theMapIndexFLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
+                    If theMapIndexFLayer Is Nothing Then Exit Try
+                    theMapIndexFClass = theMapIndexFLayer.FeatureClass
+                    theMapScaleVal = GetValueViaOverlay(theGeometry, theMapIndexFClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+                    If Len(theMapScaleVal) > 0 Then
                         ' TODO: [NIS] Test use of pFeat instead of obj here.
-                        pFeat.Value(lMapScaleFld) = sMapScale
+                        theFeature.Value(theMapScaleFldIdx) = theMapScaleVal
                     Else
                         ' TODO: [NIS] Test use of pFeat instead of obj here.
                         ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-                        pFeat.Value(lMapScaleFld) = System.DBNull.Value
+                        theFeature.Value(theMapScaleFldIdx) = System.DBNull.Value
                     End If
                     ' If a dataset with MapNumber, populate it
-                    If lMapNumFld > FieldNotFoundIndex Then
-                        sMapNum = GetValueViaOverlay(pGeometry, pMIFclass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
-                        If Len(sMapNum) > 0 Then
+                    If theMapNumberFldIdx > FieldNotFoundIndex Then
+                        theMapNumberVal = GetValueViaOverlay(theGeometry, theMapIndexFClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+                        If Len(theMapNumberVal) > 0 Then
                             ' TODO: [NIS] Test use of pFeat instead of obj here.
-                            pFeat.Value(lMapNumFld) = sMapNum
+                            theFeature.Value(theMapNumberFldIdx) = theMapNumberVal
                         Else
                             ' TODO: [NIS] Test use of pFeat instead of obj here.
                             ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-                            pFeat.Value(lMapNumFld) = System.DBNull.Value
+                            theFeature.Value(theMapNumberFldIdx) = System.DBNull.Value
                         End If
                     End If
                 End If
             End If
 
         Catch ex As Exception
-            'HandleError(False, "m_pEditorEvents_OnCreateFeature " & c_sModuleFileName & " " & GetErrorLineNumberString(Erl()), Err.Number, Err.Source, Err.Description, 4)
+            MessageBox.Show(ex.Message)
 
         End Try
 
@@ -435,8 +456,8 @@ Public NotInheritable Class EditorExtension
 
     Private Sub EditEvents_OnStartEditing()
         ' Test for a valid ArcGIS license.
-        setHasValidLicense((ValidateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
-                        ValidateLicense(esriLicenseProductCode.esriLicenseProductCodeArcInfo)))
+        setHasValidLicense((validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
+                        validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcInfo)))
 
         ' Test for a valid workspace.
         If EditorExtension.Editor.EditWorkspace.Type = esriWorkspaceType.esriFileSystemWorkspace Then
@@ -465,7 +486,7 @@ Public NotInheritable Class EditorExtension
 #Region "Methods"
 
     ' TODO: [NIS] Test (not sure this how this will work with editor extension)
-    Private Shared Sub SetAccelerator(ByRef acceleratorTable As IAcceleratorTable, _
+    Private Shared Sub setAccelerator(ByRef acceleratorTable As IAcceleratorTable, _
             ByVal classID As UID, ByVal key As Integer, _
             ByVal usesCtrl As Boolean, ByVal usesAlt As Boolean, _
             ByVal usesShift As Boolean)
@@ -481,7 +502,7 @@ Public NotInheritable Class EditorExtension
 
     End Sub
 
-    Private Shared Function ValidateLicense(ByVal requiredProductCode As esriLicenseProductCode) As Boolean
+    Private Shared Function validateLicense(ByVal requiredProductCode As esriLicenseProductCode) As Boolean
         ' Validate the license (e.g. ArcEditor or ArcInfo).
 
         Dim aoInitTestProduct As New AoInitializeClass()
@@ -494,8 +515,7 @@ Public NotInheritable Class EditorExtension
 
 #End Region
 
-#Region "Inherited Class Members"
-    'None
+#Region "Inherited Class Members (none)"
 #End Region
 
 #Region "Implemented Interface Members"
@@ -555,7 +575,7 @@ Public NotInheritable Class EditorExtension
         usesAlt = True
         usesShift = False
         uid.Value = "{" & OrmapTaxlotEditing.LocateFeature.ClassId & "}"
-        SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+        setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
         ' Set TaxlotAssignment accelerator keys to Ctrl + Alt + T
         key = Convert.ToInt32(Keys.T)
@@ -563,7 +583,7 @@ Public NotInheritable Class EditorExtension
         usesAlt = True
         usesShift = False
         uid.Value = "{" & OrmapTaxlotEditing.TaxlotAssignment.ClassId & "}"
-        SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+        setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
         ' Set EditMapIndex accelerator keys to Ctrl + Alt + E
         key = Convert.ToInt32(Keys.E)
@@ -571,7 +591,7 @@ Public NotInheritable Class EditorExtension
         usesAlt = True
         usesShift = False
         uid.Value = "{" & OrmapTaxlotEditing.EditMapIndex.ClassId & "}"
-        SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+        setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
         ' Set CombineTaxlots accelerator keys to Ctrl + Alt + C
         key = Convert.ToInt32(Keys.C)
@@ -579,7 +599,7 @@ Public NotInheritable Class EditorExtension
         usesAlt = True
         usesShift = False
         uid.Value = "{" & OrmapTaxlotEditing.CombineTaxlots.ClassId & "}"
-        SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+        setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
         ' Set AddArrows accelerator keys to Ctrl + Alt + A
         key = Convert.ToInt32(Keys.A)
@@ -587,7 +607,7 @@ Public NotInheritable Class EditorExtension
         usesAlt = True
         usesShift = False
         uid.Value = "{" & OrmapTaxlotEditing.AddArrows.ClassId & "}"
-        SetAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+        setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
     End Sub
 
