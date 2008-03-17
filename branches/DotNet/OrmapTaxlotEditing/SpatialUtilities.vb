@@ -1284,7 +1284,18 @@ Public NotInheritable Class SpatialUtilities
         End Try
     End Function
 
+    Public Shared Sub ZoomToExtent(ByRef pEnv As ESRI.ArcGIS.Geometry.IEnvelope, ByRef pMxDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument)
+        Dim pMap As ESRI.ArcGIS.Carto.IMap
+        Dim pActiveView As ESRI.ArcGIS.Carto.IActiveView
 
+        ' Gets a reference to the current view window
+        pMap = pMxDoc.FocusMap
+        pActiveView = DirectCast(pMap, IActiveView)
+
+        ' Updates the view's extent
+        pActiveView.Extent = pEnv
+        pActiveView.Refresh()
+    End Sub
 #End Region
 
 #Region "Private Members"
