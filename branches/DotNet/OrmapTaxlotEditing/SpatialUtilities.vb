@@ -113,14 +113,14 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
             Return returnValue
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return False
         End Try
     End Function
 
     ''' <summary>
-    ''' Calculates Taxlot values from ORMAPMapnum.
+    ''' Obtains OrmapMapNumber via overlay and calculates other field values.
     ''' </summary>
     ''' <param name="editFeature">A feature from the Taxlot feature class.</param>
     ''' <param name="mapIndexLayer">The Map Index feature layer.</param>
@@ -228,7 +228,7 @@ Public NotInheritable Class SpatialUtilities
 
             ' Taxlot has actual taxlot number.  ORMAPTaxlot requires a 5-digit number, so leading zeros have to be added
             Dim existingTaxlotValue As String = CStr(editFeature.Value(idxTaxlotFld))
-            existingTaxlotValue = StringUtilities.AddLeadingZeros(existingValue, ORMAPNumber.GetORMAP_ORTaxlotFieldLength)
+            existingTaxlotValue = StringUtilities.AddLeadingZeros(existingValue, ORMAPNumber.GetOrmap_OrmapTaxlotFieldLength)
 
             Dim mapTaxlotID As String
             mapTaxlotID = String.Concat(thisORMAPNumberClass.GetORMAPNumber, existingTaxlotValue)
@@ -265,7 +265,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             thisORMAPNumberClass = Nothing
 
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
 
         End Try
@@ -313,7 +313,7 @@ Public NotInheritable Class SpatialUtilities
             End If
 
             Return returnValue
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             ConvertCodeValueDomainToCode = String.Empty
         End Try
@@ -356,7 +356,7 @@ Public NotInheritable Class SpatialUtilities
                 End If 'if domain is valid object
             End If
             Return returnValue
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return String.Empty
         End Try
@@ -403,7 +403,26 @@ Public NotInheritable Class SpatialUtilities
 
             Return returnValue
 
-        Catch ex As ApplicationException
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+            Return Nothing
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Determine the x and y coordinates of the center of envelope, and return them as a Point object.
+    ''' </summary>
+    ''' <param name="envelope">An envelope object of type IEnvelope.</param>
+    ''' <returns>A Point object that represents the center of the envelope.</returns>
+    ''' <remarks></remarks>
+    Public Shared Function GetCenterOfEnvelope(ByRef envelope As IEnvelope) As IPoint
+        Try
+            Dim center As IPoint
+            center = New Point
+            center.X = envelope.XMin + (envelope.XMax - envelope.XMin) / 2
+            center.Y = envelope.YMin + (envelope.YMax - envelope.YMin) / 2
+            Return center
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
@@ -434,7 +453,7 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
             Return returnValue
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return "000"
         End Try
@@ -465,7 +484,7 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
             Return returnValue
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return "0"
         End Try
@@ -502,7 +521,7 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
             Return Nothing
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
@@ -528,13 +547,13 @@ Public NotInheritable Class SpatialUtilities
             thisSelection.SelectionSet.Search(Nothing, False, thisCursor)
             returnValue = DirectCast(thisCursor, IFeatureCursor)
             Return returnValue
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
     End Function
 
-    ' TODO: NIS Take over this function from JWM and refactor (smaller modules).
+    ' TODO: [NIS] Take over this function from JWM and refactor (smaller modules).
     ''' <summary>
     ''' Overlay the passed in feature with a feature class to get a value from 
     ''' the specified field.
@@ -592,7 +611,7 @@ Public NotInheritable Class SpatialUtilities
             Dim thisCurve As ICurve
             Dim thisEnvelope As IEnvelope
             Dim intersectFuzzAmount As Double
-            Const fuzzFactor As Double = 0.05 ' TODO: NIS Re-implement as user setting?
+            Const fuzzFactor As Double = 0.05 ' TODO: [NIS] Re-implement as user setting?
 
             If continueThisProcess Then
                 Select Case theGeometry.GeometryType
@@ -768,7 +787,7 @@ Public NotInheritable Class SpatialUtilities
 
             Return theBestValue
 
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return String.Empty
         End Try
@@ -792,7 +811,7 @@ Public NotInheritable Class SpatialUtilities
             featuresSelected = DirectCast(layer, IFeatureSelection)
             returnValue = (featuresSelected.SelectionSet.Count > 0)
             Return returnValue
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -819,7 +838,7 @@ Public NotInheritable Class SpatialUtilities
                     Return False
                 End If
             End If
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -844,7 +863,7 @@ Public NotInheritable Class SpatialUtilities
             Else
                 Return False
             End If
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -887,7 +906,7 @@ Public NotInheritable Class SpatialUtilities
             returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnno, True) = 0)
             returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True) = 0)
             Return returnValue
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -912,7 +931,7 @@ Public NotInheritable Class SpatialUtilities
             Else
                 Return False
             End If
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -979,7 +998,7 @@ Public NotInheritable Class SpatialUtilities
             thisArcMapDoc.CurrentContentsView.Refresh(0)
 
             Return True
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -998,7 +1017,7 @@ Public NotInheritable Class SpatialUtilities
             Dim returnValue As Integer
             returnValue = featureClass.Fields.FindField(fieldName)
             Return returnValue
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return -1
         End Try
@@ -1056,7 +1075,7 @@ Public NotInheritable Class SpatialUtilities
             End If
 
             Return returnValue
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return String.Empty
         End Try
@@ -1166,35 +1185,37 @@ Public NotInheritable Class SpatialUtilities
                 annoFeature2.Annotation = DirectCast(annoElement, IElement)
             End If
 
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
     End Sub
 
     ''' <summary>
-    ''' Update Auto fields in a feature class.
+    ''' Updates Auto fields in a feature class.
     ''' </summary>
-    ''' <param name="feature"> An object that implements the Ifeature interface.</param>
+    ''' <param name="feature">An object that implements the Ifeature interface.</param>
     ''' <remarks>Update the AutoWho and the AutoDate fields with the current username and date/time, respectively.</remarks>
     Public Shared Sub UpdateAutoFields(ByRef feature As IFeature)
         Try
             If feature Is Nothing Then
                 Exit Try
             End If
+
             Dim indexAutoDateField As Integer
-
             indexAutoDateField = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoDateField)
-
-            If indexAutoDateField > -1 Then
+            If indexAutoDateField > Utilities.FieldNotFoundIndex Then
                 feature.Value(indexAutoDateField) = System.DateTime.Now
             End If
+
             Dim indexAutoWhoField As Integer
             indexAutoWhoField = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoWhoField)
-            If indexAutoWhoField > -1 Then
+            If indexAutoWhoField > Utilities.FieldNotFoundIndex Then
                 feature.Value(indexAutoWhoField) = Utilities.GetUserName
             End If
-        Catch ex As ApplicationException
+
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
+
         End Try
     End Sub
 
@@ -1211,7 +1232,7 @@ Public NotInheritable Class SpatialUtilities
 
             'check for existence of Taxlot layer
             Dim thisTaxlotFeatureLayer As IFeatureLayer
-            thisTaxlotFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
+            thisTaxlotFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.TaxLotFC)
             If thisTaxlotFeatureLayer Is Nothing Then 'TODO: JWM Place strings in resource file and use may use different type of notification
                 MessageBox.Show("Unable to locate the Taxlot layer in Table of Contents." & vbNewLine & _
                                 "This process requires a feature class called " & EditorExtension.TableNamesSettings.TaxLotFC & ".", _
@@ -1247,7 +1268,7 @@ Public NotInheritable Class SpatialUtilities
             Dim whereClause As String = String.Concat(EditorExtension.TaxLotSettings.MapNumberField, "='", mapIndexORMAPValue, "' AND ", EditorExtension.TaxLotSettings.TaxlotField, " = '", taxlotNumber, "'")
             Dim cursor As ICursor
             cursor = AttributeQuery(DirectCast(thisTaxlotFeatureClass, ITable), whereClause)
-            If Not (cursor Is Nothing) And (returnValue = False) Then
+            If Not (cursor Is Nothing) AndAlso (returnValue = False) Then
                 Dim row As IRow
                 row = cursor.NextRow
                 If row Is Nothing Then
@@ -1257,7 +1278,7 @@ Public NotInheritable Class SpatialUtilities
 
             Return returnValue
 
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -1287,7 +1308,7 @@ Public NotInheritable Class SpatialUtilities
             Else
                 Return thisCursor
             End If
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
@@ -1310,7 +1331,7 @@ Public NotInheritable Class SpatialUtilities
             Dim taxlotMapSufTypeValue As String = GetMapSuffixType(theFeature)
             ' Recreate and return the ORMAP Taxlot number
             Return String.Concat(shortORMAPNumber, taxlotMapSufTypeValue, taxlotMapSufNumberValue, taxlotValue)
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return String.Empty
         End Try
@@ -1381,7 +1402,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             Return thisFeatureCursor
 
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
@@ -1406,7 +1427,7 @@ Public NotInheritable Class SpatialUtilities
                 .AddPoint(envelope.UpperLeft)
             End With
             Return thisPolygon
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
@@ -1480,28 +1501,9 @@ Public NotInheritable Class SpatialUtilities
             End If
             Return CDbl(size)
 
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return 10 'default
-        End Try
-    End Function
-
-    ''' <summary>
-    ''' Determine the x and y coordinates of the center of envelope, and return them as a Point object.
-    ''' </summary>
-    ''' <param name="envelope">An envelope object of type IEnvelope.</param>
-    ''' <returns>A Point object that represents the center of the envelope.</returns>
-    ''' <remarks></remarks>
-    Private Shared Function GetCenterOfEnvelope(ByRef envelope As IEnvelope) As IPoint
-        Try
-            Dim center As IPoint
-            center = New Point
-            center.X = envelope.XMin + (envelope.XMax - envelope.XMin) / 2
-            center.Y = envelope.YMin + (envelope.YMax - envelope.YMin) / 2
-            Return center
-        Catch ex As ApplicationException
-            MessageBox.Show(ex.Message)
-            Return Nothing
         End Try
     End Function
 

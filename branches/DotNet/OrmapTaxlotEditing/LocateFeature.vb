@@ -54,7 +54,7 @@ Public NotInheritable Class LocateFeature
     ' None
 #End Region
 
-#Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
+#Region "Built-In Class Members (Constructors, Etc.)"
 
 #Region "Constructors"
 
@@ -114,12 +114,11 @@ Public NotInheritable Class LocateFeature
 
     Public Overrides ReadOnly Property Enabled() As Boolean
         Get
-            Return MyBase.Enabled AndAlso _
-                EditorExtension.Editor IsNot Nothing AndAlso _
-                EditorExtension.Editor.EditState = esriEditState.esriStateEditing AndAlso _
-                EditorExtension.IsValidWorkspace AndAlso _
-                EditorExtension.HasValidLicense AndAlso _
-                EditorExtension.AllowedToEditTaxlots
+            Dim canEnable As Boolean
+            canEnable = EditorExtension.CanEnableCommands
+            ' TODO: [NIS] Implement statemachine on this class (see TaxlotAssignment.vb)
+            'canEnable = canEnable AndAlso State = CommandStateType.Enabled
+            Return canEnable
         End Get
     End Property
 

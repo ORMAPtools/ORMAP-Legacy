@@ -9,12 +9,13 @@ KEY
  S  = Shad
  -  = None/minor
  *  = Done
+ !  = Needs review
 --> = Current focus
 
 PROCESSES
  A    * Project planning.
  A    * Application design.
- A    * Coding standards.
+ A    ! Coding standards.
  A  --> Code review.
  A      Integration testing.
 
@@ -35,12 +36,12 @@ CLASSES & FORMS
  -    * clsRowChanged  -  Obsolete.
 S|N   * clsTaxLotEditingToolbar  -  Port/rewrite.
  S      clsArrows/frmArrows  -  Port/rewrite.
- N    * cmdAutoUpdate  -  Replace with property page and form.
+ N  --> cmdAutoUpdate  -  Replace with EditorExtension edit event handling, etc.
  S  --> cmdLocate/frmLocate  -  Port/rewrite.
  N      clsMapIndex/frmMapIndex  -  Port/rewrite.
- N      cmdTaxlotAssignment/frmTaxlotAssignment  -  Port/rewrite.
+ N  --> cmdTaxlotAssignment/frmTaxlotAssignment  -  Port/rewrite.
  N      cmdTaxlotCombine/frmCombine  -  Port/rewrite.
- J      ORMAPNumber  -  Port/rewrite.
+ J  --> ORMAPNumber  -  Port/rewrite.
 
 RELATED DOCUMENTS
  S    * TaxlotTool.RES  -  Obsolete, replaced with embedded resources.
@@ -69,20 +70,21 @@ BY DEVELOPER
 
  J      globals  -  Obsolete or shared properties of EditorExtension.
  J      FormsCatalog  -  Port/rewrite.
- J      ORMAPNumber  -  Port/rewrite.
+ J  --> ORMAPNumber  -  Port/rewrite.
 
  N    * IniFiles/TaxlotEditing.ini  -  Obsolete, replace by Settings files.
  N    * cmdAutoUpdate  -  Replace with property page and form.
  N    * gpl.rtf  -  Port/rename (updgrade GPL License v2 to v3).
- N  --> clsFieldNames  -  Port/rewrite as static class and/or settings.
+ N    * clsFieldNames  -  Port/rewrite as static class and/or settings.
+ N  --> cmdAutoUpdate  -  Replace with EditorExtension edit event handling, etc.
  N      ErrorHandling  -  Obsolete, replace with Exception Handling app block.
- N      clsMapIndex/frmMapIndex  -  Port/rewrite.
- N      cmdTaxlotAssignment/frmTaxlotAssignment  -  Port/rewrite.
+ N  --> cmdTaxlotAssignment/frmTaxlotAssignment  -  Port/rewrite.
  N      cmdTaxlotCombine/frmCombine  -  Port/rewrite.
+ N      clsMapIndex/frmMapIndex  -  Port/rewrite.
 
 S|N   * clsTaxLotEditingToolbar  -  Port/rewrite.
 
- S    * CatagoryIDs/CategoryInstall  -  Obsolete, replace with .NET versions in other classes.
+ S    * CategoryIDs/CategoryInstall  -  Obsolete, replace with .NET versions in other classes.
  S    * TaxlotTool.RES  -  Obsolete, replaced with embedded resources.
  S    * TaxlotEditing.vbp  -  Obsolete, replace with .NET version.
  S  --> cmdLocate/frmLocate  -  Port/rewrite.

@@ -49,7 +49,7 @@ Public NotInheritable Class OrmapToolbar
     ' None
 #End Region
 
-#Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
+#Region "Built-In Class Members (Constructors, Etc.)"
 
 #Region "Constructors"
 

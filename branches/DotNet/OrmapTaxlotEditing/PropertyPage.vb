@@ -54,7 +54,7 @@ Public NotInheritable Class PropertyPage
 #Region "Class-Level Constants And Enumerations"
 #End Region
 
-#Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
+#Region "Built-In Class Members (Constructors, Etc.)"
 
 #Region "Constructors"
 
@@ -71,7 +71,7 @@ Public NotInheritable Class PropertyPage
 
 #Region "Custom Class Members"
 
-#Region "Fields"
+#Region "Fields (none)"
 #End Region
 
 #Region "Properties"
@@ -85,7 +85,7 @@ Public NotInheritable Class PropertyPage
     End Property
 
     Private Sub SetPageDirty(ByVal value As Boolean)
-        ' TODO: NIS Add validation code?
+        ' TODO: [NIS] Add validation code?
         _pageDirty = value
     End Sub
 
@@ -98,11 +98,11 @@ Public NotInheritable Class PropertyPage
     End Property
 
     Private Sub SetPropertiesPageSite(ByVal value As IComPropertyPageSite)
-        ' TODO: NIS Add validation code?
+        ' TODO: [NIS] Add validation code?
         _propertiesPageSite = value
     End Sub
 
-    Private WithEvents _partnerPropertiesForm As PropertiesForm  ' TODO: NIS Is WithEvents needed here?
+    Private WithEvents _partnerPropertiesForm As PropertiesForm  ' TODO: [NIS] Is WithEvents needed here?
 
     Friend ReadOnly Property PartnerPropertiesForm() As PropertiesForm
         Get
@@ -111,7 +111,7 @@ Public NotInheritable Class PropertyPage
     End Property
 
     Private Sub SetPartnerPropertiesForm(ByVal value As PropertiesForm)
-        ' TODO: NIS Add validation code?
+        ' TODO: [NIS] Add validation code?
         _partnerPropertiesForm = value
     End Sub
 
@@ -164,7 +164,7 @@ Public NotInheritable Class PropertyPage
 
 #End Region
 
-#Region "Methods"
+#Region "Methods (none)"
 #End Region
 
 #End Region
@@ -191,13 +191,13 @@ Public NotInheritable Class PropertyPage
 
     Public ReadOnly Property HelpFile() As String Implements IComPropertyPage.HelpFile
         Get
-            Return Nothing  ' TODO: NIS Implement Help File
+            Return Nothing  ' TODO: [NIS] Implement Help File
         End Get
     End Property
 
     Public ReadOnly Property HelpContextID(ByVal controlID As Integer) As Integer Implements IComPropertyPage.HelpContextID
         Get
-            Return 0  ' TODO: NIS Implement Help File
+            Return 0  ' TODO: [NIS] Implement Help File
         End Get
     End Property
 
@@ -280,7 +280,7 @@ Public NotInheritable Class PropertyPage
     End Sub
 
     Public Sub Cancel() Implements IComPropertyPage.Cancel
-        ' TODO: NIS Implement this?
+        ' TODO: [NIS] Implement this?
     End Sub
 
     Public Sub Deactivate() Implements IComPropertyPage.Deactivate
@@ -299,14 +299,14 @@ Public NotInheritable Class PropertyPage
         ' Note: The Applies() method should have done preliminary checking of 
         ' editor states before this method is called.
 
-        ' TODO: NIS Move (to where)?
+        ' TODO: [NIS] Move (to where)?
         SetPartnerPropertiesForm(New PropertiesForm())
         PartnerPropertiesForm.uxEnableTools.Checked = EditorExtension.AllowedToEditTaxlots
         PartnerPropertiesForm.uxEnableAutoUpdate.Checked = EditorExtension.AllowedToAutoUpdate
         PartnerPropertiesForm.uxMinimumFieldsOption.Checked = Not EditorExtension.AllowedToAutoUpdateAllFields
         PartnerPropertiesForm.uxAllFieldsOption.Checked = EditorExtension.AllowedToAutoUpdateAllFields
 
-        ' Wire up form events.
+        ' Subscribe to form events.
         AddHandler PartnerPropertiesForm.uxEnableTools.CheckedChanged, AddressOf uxEnableTools_CheckedChanged
         AddHandler PartnerPropertiesForm.uxEnableAutoUpdate.CheckedChanged, AddressOf uxEnableAutoUpdate_CheckedChanged
         AddHandler PartnerPropertiesForm.uxSettings.Click, AddressOf uxSettings_Click

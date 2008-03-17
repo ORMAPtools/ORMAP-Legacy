@@ -42,7 +42,7 @@ Imports ESRI.ArcGIS.SystemUI
 Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.ADF.CATIDs
 
-' TODO: NIS Add Standard Regions
+' TODO: [NIS] Add Standard Regions
 
 <ComVisible(False)> _
 Public Class TaxlotAssignmentForm : Inherits System.Windows.Forms.Form

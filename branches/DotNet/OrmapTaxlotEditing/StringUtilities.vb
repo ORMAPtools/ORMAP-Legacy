@@ -59,7 +59,7 @@ Public NotInheritable Class StringUtilities
             Else
                 Return currentString
             End If
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return String.Empty
         End Try
@@ -85,7 +85,7 @@ Public NotInheritable Class StringUtilities
             Else
                 Return String.Empty
             End If
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return String.Empty
         End Try
@@ -96,13 +96,13 @@ Public NotInheritable Class StringUtilities
     ''' </summary>
     ''' <param name="theOrmapMapNumber">The Ormap Map Number string.</param>
     ''' <returns>A string that is a substring of the input.</returns>
-    ''' <remarks>For the purpose of populating OrmapMapTaxlot.</remarks>
-    Public Shared Function OrmapMapNumberNoCountyCode(ByVal theOrmapMapNumber As String) As String
+    ''' <remarks>For the purpose of populating OrmapTaxlot.</remarks>
+    Public Shared Function OrmapMapNumberNoCountyCodeSuffix(ByVal theOrmapMapNumber As String) As String
         Try
             ' Remove two characters (the county code) from the right end of 
             ' the OrmapMapNumber.
             Return Left(theOrmapMapNumber, 20)
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return String.Empty
         End Try

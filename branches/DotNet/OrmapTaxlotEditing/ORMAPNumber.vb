@@ -50,7 +50,7 @@ Imports System.Text
 <ComVisible(False)> _
 Public NotInheritable Class ORMAPNumber
 
-#Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
+#Region "Built-In Class Members (Constructors, Etc.)"
 
 #Region "Constructors"
 
@@ -467,7 +467,7 @@ Public NotInheritable Class ORMAPNumber
     End Function
 
     ''' <summary>
-    ''' Combines MapNumFieldLenth and ORTaxlotFieldLength.
+    ''' Length of the taxlot field.
     ''' </summary>
     ''' <returns>Integer.</returns>
     Public Shared Function GetOrmap_TaxlotFieldLength() As Integer
@@ -475,10 +475,11 @@ Public NotInheritable Class ORMAPNumber
     End Function
 
     ''' <summary>
-    ''' Length of taxlot field.
+    ''' Combines MapNumFieldLenth and OrmapTaxlotFieldLength.
     ''' </summary>
     ''' <returns>Number of characters allowed in this field as integer.</returns>
-    Public Shared Function GetOrmap_ORTaxlotFieldLength() As Integer
+    ''' <remarks>Was ORMAP_TAXLOT_FIELD_LENGTH in previous (VB6) version.</remarks>
+    Public Shared Function GetOrmap_OrmapTaxlotFieldLength() As Integer
         Return (GetOrmap_MapNumFieldLength() + GetOrmap_TaxlotFieldLength())
     End Function
 

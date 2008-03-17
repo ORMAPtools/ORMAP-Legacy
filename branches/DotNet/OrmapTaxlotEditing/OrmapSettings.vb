@@ -35,7 +35,7 @@
 'Date of Last Change: $Date$
 #End Region
 
-' TODO: NIS Implement this class and move code here from the form so as to seperate the UI and business logic layers.
+' TODO: [NIS] Implement this class and move code here from the form so as to seperate the UI and business logic layers.
 
 Imports System.Runtime.InteropServices
 
@@ -45,7 +45,7 @@ Public NotInheritable Class OrmapSettings
 #Region "Class-Level Constants And Enumerations (none)"
 #End Region
 
-#Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
+#Region "Built-In Class Members (Constructors, Etc.)"
 
 #Region "Constructors"
 
@@ -77,7 +77,7 @@ Public NotInheritable Class OrmapSettings
     End Property
 
     Private Sub SetPartnerOrmapSettingsForm(ByVal value As OrmapSettingsForm)
-        ' TODO: NIS Add validation code?
+        ' TODO: [NIS] Add validation code?
         _partnerOrmapSettingsForm = value
     End Sub
 

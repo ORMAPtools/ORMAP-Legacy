@@ -48,7 +48,7 @@ Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
 #Region "Class-Level Constants And Enumerations"
 #End Region
 
-#Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
+#Region "Built-In Class Members (Constructors, Etc.)"
 
 #Region "Constructors"
 

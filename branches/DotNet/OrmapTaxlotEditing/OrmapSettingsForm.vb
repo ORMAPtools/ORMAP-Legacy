@@ -45,7 +45,7 @@ Public Class OrmapSettingsForm
 #Region "Class-Level Constants And Enumerations (none)"
 #End Region
 
-#Region "Built-In Class Members (Properties, Methods, Events, Event Handlers, Delegates, Etc.)"
+#Region "Built-In Class Members (Constructors, Etc.)"
 
 #Region "Constructors"
 

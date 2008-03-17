@@ -152,7 +152,7 @@ Public Class CatalogFileDialog
             End If
             filters.AddFilter(filter, isDefault)
             Return True
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -183,7 +183,7 @@ Public Class CatalogFileDialog
                 thisSelectedObject = selection.Next
             Loop
             Return _colSelection
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return New Collection
         End Try
@@ -204,7 +204,7 @@ Public Class CatalogFileDialog
             selectedObject = _theGxDialog.FinalLocation
             _colSelection.Add(String.Concat(selectedObject.FullName, "\", _theGxDialog.Name))
             Return _colSelection
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return New Collection
         End Try

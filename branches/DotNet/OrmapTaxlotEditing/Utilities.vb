@@ -80,7 +80,7 @@ Public NotInheritable Class Utilities
             Else
                 Return False
             End If
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return False
         End Try
@@ -97,11 +97,12 @@ Public NotInheritable Class Utilities
         Catch fex As FileNotFoundException
             MessageBox.Show("File not Found", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
-        Catch ex As ApplicationException
+        Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return
         End Try
     End Sub
+    
 #End Region
 
 #Region "Private Members (none)"
