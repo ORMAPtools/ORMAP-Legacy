@@ -200,10 +200,11 @@ Partial Class TaxlotAssignmentForm
         Me.Controls.Add(Me.uxTypeLabel)
         Me.Controls.Add(Me.uxType)
         Me.Controls.Add(Me.uxTaxlotNumberingOptions)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "TaxlotAssignmentForm"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Taxlot Assignment"
         Me.TopMost = True
         Me.uxTaxlotNumberingOptions.ResumeLayout(False)

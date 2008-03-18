@@ -47,8 +47,8 @@ Imports ESRI.ArcGIS.ADF.CATIDs
 <ComVisible(False)> _
 Public Class TaxlotAssignmentForm : Inherits System.Windows.Forms.Form
 
-    'Private _application As IApplication
-    '
+    Private _application As IApplication
+
     'Public Sub New()
     '    ' This call is required by the Windows Form Designer.
     '    InitializeComponent()

@@ -129,6 +129,8 @@ Public NotInheritable Class TaxlotAssignment
 
     Private _disabledCursor As System.Drawing.Image
 
+    Private _hasEventHandlers As Boolean = False
+
     ' Initialize document and map objects, and their events for tool reference only
     Private _doc As IDocument
     Private _focusMap As IMap
@@ -150,17 +152,17 @@ Public NotInheritable Class TaxlotAssignment
 
 #Region "Properties"
 
-    Private _state As CommandStateType = CommandStateType.Disabled
+    'Private _state As CommandStateType = CommandStateType.Disabled
 
-    Public ReadOnly Property State() As CommandStateType
-        Get
-            Return _state
-        End Get
-    End Property
+    'Public ReadOnly Property State() As CommandStateType
+    '    Get
+    '        Return _state
+    '    End Get
+    'End Property
 
-    Private Sub setState(ByVal stateType As CommandStateType)
-        _state = stateType
-    End Sub
+    'Private Sub setState(ByVal stateType As CommandStateType)
+    '    _state = stateType
+    'End Sub
 
     'Private _canCheckIfEnabled As Boolean
 
@@ -298,38 +300,38 @@ Public NotInheritable Class TaxlotAssignment
 
 #End Region
 
-#Region "EditEvents Event Handlers"
-
-    Private Sub EditEvents_OnStartEditing() 'Implements ESRI.ArcGIS.Editor.IEditEvents.OnStartEditing
-        ' State Transistion E1
-        TransitionE1()
-    End Sub
-
-    Private Sub EditEvents_OnStopEditing(ByVal save As Boolean) 'Implements ESRI.ArcGIS.Editor.IEditEvents.OnStopEditing
-        ' State Transistion E2
-        TransitionE2()
-    End Sub
-
-#End Region
-
-#Region "ActiveViewEvents Event Handlers"
-
-    Public Sub ActiveViewEvents_FocusMapChanged() 'Implements ESRI.ArcGIS.Carto.IActiveViewEvents.FocusMapChanged
-        ' State Transistion E3
-        TransitionE3()
-    End Sub
-
-    Public Sub ActiveViewEvents_ItemAdded(ByVal Item As Object) 'Implements ESRI.ArcGIS.Carto.IActiveViewEvents.ItemAdded
-        ' State Transistion E3
-        TransitionE3()
-    End Sub
-
-    Public Sub ActiveViewEvents_ItemDeleted(ByVal Item As Object) 'Implements ESRI.ArcGIS.Carto.IActiveViewEvents.ItemDeleted
-        ' State Transistion E3
-        TransitionE3()
-    End Sub
-
-#End Region
+    '#Region "EditEvents Event Handlers"
+    '
+    '    Private Sub EditEvents_OnStartEditing() 'Implements ESRI.ArcGIS.Editor.IEditEvents.OnStartEditing
+    '        ' State Transistion E1
+    '        TransitionE1()
+    '    End Sub
+    '
+    '    Private Sub EditEvents_OnStopEditing(ByVal save As Boolean) 'Implements ESRI.ArcGIS.Editor.IEditEvents.OnStopEditing
+    '        ' State Transistion E2
+    '        TransitionE2()
+    '    End Sub
+    '
+    '#End Region
+    '
+    '#Region "ActiveViewEvents Event Handlers"
+    '
+    '    Public Sub ActiveViewEvents_FocusMapChanged() 'Implements ESRI.ArcGIS.Carto.IActiveViewEvents.FocusMapChanged
+    '        ' State Transistion E3
+    '        TransitionE3()
+    '    End Sub
+    '
+    '    Public Sub ActiveViewEvents_ItemAdded(ByVal Item As Object) 'Implements ESRI.ArcGIS.Carto.IActiveViewEvents.ItemAdded
+    '        ' State Transistion E3
+    '        TransitionE3()
+    '    End Sub
+    '
+    '    Public Sub ActiveViewEvents_ItemDeleted(ByVal Item As Object) 'Implements ESRI.ArcGIS.Carto.IActiveViewEvents.ItemDeleted
+    '        ' State Transistion E3
+    '        TransitionE3()
+    '    End Sub
+    '
+    '#End Region
 
 #End Region
 
@@ -833,85 +835,85 @@ Public NotInheritable Class TaxlotAssignment
 
 #End Region
 
-#Region "State Machine"
-
-    ' TODO: [NIS} Embed URL reference to statechart in the XML help for these methods.
-
-    Private Sub TransitionE1()
-        StateS1_2(StatePassageType.Exiting)
-        CondState1()
-    End Sub
-
-    Private Sub TransitionE2()
-        StateS1_1(StatePassageType.Exiting)
-        StateS1_2(StatePassageType.Entering)
-    End Sub
-
-    Private Sub TransitionE3()
-        StateS1(StatePassageType.Exiting)
-        CondState1()
-    End Sub
-
-    Private Sub StateS1(ByVal statePassage As StatePassageType)
-        Select Case statePassage
-            Case StatePassageType.Entering
-                ' Do actions
-                ' (none)
-                ' Do substate transitions
-                StateS1_2(StatePassageType.Entering)
-            Case StatePassageType.Exiting
-                ' Do actions
-                ' (none)
-                ' Do substate transitions
-                StateS1_1(StatePassageType.Exiting)
-                StateS1_2(StatePassageType.Exiting)
-        End Select
-    End Sub
-
-    Private Sub StateS1_1(ByVal statePassage As StatePassageType)
-        '[Tool Enabled...]
-        Select Case statePassage
-            Case StatePassageType.Entering
-                setState(CommandStateType.Enabled)
-                ' Do actions
-                ' (none)
-                ' Do substate transitions
-                ' (none)
-            Case StatePassageType.Exiting
-                ' Do actions
-                ' (none)
-                ' Do substate transitions
-                ' (none)
-        End Select
-    End Sub
-
-    Private Sub StateS1_2(ByVal statePassage As StatePassageType)
-        '[Tool Disabled...]
-        Select Case statePassage
-            Case StatePassageType.Entering
-                setState(CommandStateType.Disabled)
-                ' Do actions
-                ' (none)
-                ' Do substate transitions
-                ' (none)
-            Case StatePassageType.Exiting
-                ' Do actions
-                ' (none)
-                ' Do substate transitions
-                ' (none)
-        End Select
-    End Sub
-
-    Private Sub CondState1()
-        ' Evaluate condition
-        If HasRequiredData() Then
-            StateS1_1(StatePassageType.Entering)
-        Else
-            StateS1_2(StatePassageType.Entering)
-        End If
-    End Sub
-
-#End Region
+    '#Region "State Machine"
+    '
+    '    ' TODO: [NIS} Embed URL reference to statechart in the XML help for these methods.
+    '
+    '    Private Sub TransitionE1()
+    '        StateS1_2(StatePassageType.Exiting)
+    '        CondState1()
+    '    End Sub
+    '
+    '    Private Sub TransitionE2()
+    '        StateS1_1(StatePassageType.Exiting)
+    '        StateS1_2(StatePassageType.Entering)
+    '    End Sub
+    '
+    '    Private Sub TransitionE3()
+    '        StateS1(StatePassageType.Exiting)
+    '        CondState1()
+    '    End Sub
+    '
+    '    Private Sub StateS1(ByVal statePassage As StatePassageType)
+    '        Select Case statePassage
+    '            Case StatePassageType.Entering
+    '                ' Do actions
+    '                ' (none)
+    '                ' Do substate transitions
+    '                StateS1_2(StatePassageType.Entering)
+    '            Case StatePassageType.Exiting
+    '                ' Do actions
+    '                ' (none)
+    '                ' Do substate transitions
+    '                StateS1_1(StatePassageType.Exiting)
+    '                StateS1_2(StatePassageType.Exiting)
+    '        End Select
+    '    End Sub
+    '
+    '    Private Sub StateS1_1(ByVal statePassage As StatePassageType)
+    '        '[Tool Enabled...]
+    '        Select Case statePassage
+    '            Case StatePassageType.Entering
+    '                setState(CommandStateType.Enabled)
+    '                ' Do actions
+    '                ' (none)
+    '                ' Do substate transitions
+    '                ' (none)
+    '            Case StatePassageType.Exiting
+    '                ' Do actions
+    '                ' (none)
+    '                ' Do substate transitions
+    '                ' (none)
+    '        End Select
+    '    End Sub
+    '
+    '    Private Sub StateS1_2(ByVal statePassage As StatePassageType)
+    '        '[Tool Disabled...]
+    '        Select Case statePassage
+    '            Case StatePassageType.Entering
+    '                setState(CommandStateType.Disabled)
+    '                ' Do actions
+    '                ' (none)
+    '                ' Do substate transitions
+    '                ' (none)
+    '            Case StatePassageType.Exiting
+    '                ' Do actions
+    '                ' (none)
+    '                ' Do substate transitions
+    '                ' (none)
+    '        End Select
+    '    End Sub
+    '
+    '    Private Sub CondState1()
+    '        ' Evaluate condition
+    '        If HasRequiredData() Then
+    '            StateS1_1(StatePassageType.Entering)
+    '        Else
+    '            StateS1_2(StatePassageType.Entering)
+    '        End If
+    '    End Sub
+    '
+    '#End Region
 
 #End Region
 
@@ -919,36 +921,36 @@ Public NotInheritable Class TaxlotAssignment
 
 #Region "Properties"
 
-    Private _hasEventHandlers As Boolean = False
-
     Public Overrides ReadOnly Property Enabled() As Boolean
         Get
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
-            If canEnable Then
-                If Not _hasEventHandlers Then
-                    ' Subscribe to edit events.
-                    AddHandler EditorExtension.EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
-                    AddHandler EditorExtension.EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
-                    ' Subscribe to active view events.
-                    AddHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
-                    AddHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
-                    AddHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
-                    _hasEventHandlers = True
-                End If
-            Else
-                If _hasEventHandlers Then
-                    ' Unsubscribe to edit events.
-                    RemoveHandler EditorExtension.EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
-                    RemoveHandler EditorExtension.EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
-                    ' Unsubscribe to active view events.
-                    RemoveHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
-                    RemoveHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
-                    RemoveHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
-                    _hasEventHandlers = False
-                End If
-            End If
-            canEnable = canEnable AndAlso State = CommandStateType.Enabled
+            'If canEnable Then
+            '    If Not _hasEventHandlers Then
+            '        ' Editing has already started but nothing was listening, so "kick-start" the statemachine 
+            '        EditEvents_OnStartEditing()
+            '        ' Subscribe to edit events.
+            '        AddHandler EditorExtension.EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
+            '        AddHandler EditorExtension.EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
+            '        ' Subscribe to active view events.
+            '        AddHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
+            '        AddHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
+            '        AddHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
+            '        _hasEventHandlers = True
+            '    End If
+            'Else
+            '    If _hasEventHandlers Then
+            '        ' Unsubscribe to edit events.
+            '        RemoveHandler EditorExtension.EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
+            '        RemoveHandler EditorExtension.EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
+            '        ' Unsubscribe to active view events.
+            '        RemoveHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
+            '        RemoveHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
+            '        RemoveHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
+            '        _hasEventHandlers = False
+            '    End If
+            'End If
+            'canEnable = canEnable AndAlso State = CommandStateType.Enabled
             Return canEnable
         End Get
     End Property
@@ -972,6 +974,7 @@ Public NotInheritable Class TaxlotAssignment
             Else
                 PartnerTaxlotAssignmentForm.Show()
             End If
+
         Catch ex As Exception
             ' TODO: [NIS] Add exception handling here
         End Try
@@ -1007,9 +1010,31 @@ Public NotInheritable Class TaxlotAssignment
         End Try
     End Sub
 
+    ''' <summary>
+    ''' This method is called when a mouse button is pressed down, when this tool is active. 
+    ''' </summary>
+    ''' <param name="Button">Specifies which mouse button is pressed; 1 for the left mouse button, 2 for the right mouse button, and 4 for the middle mouse button.</param>
+    ''' <param name="Shift">Specifies an integer corresponding to the state of the SHIFT (bit 0), CTRL (bit 1) and ALT (bit 2) keys. When none, some, or all of these keys are pressed none, some, or all the bits get set. These bits correspond to the values 1, 2, and 4, respectively. For example, if both SHIFT and ALT were pressed, Shift would be 5.</param>
+    ''' <param name="X">The X coordinate, in device units, of the location of the mouse event. See the OnMouseDown Event for more details.</param>
+    ''' <param name="Y">The Y coordinate, in device units, of the location of the mouse event. See the OnMouseDown Event for more details.</param>
+    ''' <remarks></remarks>
     Public Overrides Sub OnMouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
         Try
-            DoToolOperation(Button, X, Y)
+            If Button = 1 Then
+                '[Left button clicked...]
+                If HasRequiredData() Then
+                    DoToolOperation(Button, X, Y)
+                End If
+            ElseIf Button = 2 Then
+                '[Right button clicked...]
+                ' Show and activate the partner form.
+                If PartnerTaxlotAssignmentForm.Visible Then
+                    PartnerTaxlotAssignmentForm.Activate()
+                Else
+                    PartnerTaxlotAssignmentForm.Show()
+                End If
+            End If
+
         Catch ex As Exception
             ' TODO: [NIS] Add exception handling here
         End Try

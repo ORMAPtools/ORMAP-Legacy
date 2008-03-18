@@ -251,7 +251,7 @@ Public NotInheritable Class PropertyPage
 
         ' Get a reference to the editor.
         ' Do not affirm if the editor is not found.
-        Dim editor As IEditor = TryCast(objects.Next(), IEditor)
+        Dim editor As IEditor2 = TryCast(objects.Next(), IEditor2)
         If editor Is Nothing Then
             Return False
         End If
@@ -261,10 +261,11 @@ Public NotInheritable Class PropertyPage
             Return False
         End If
 
-        ' Do not affirm if the user is editing a file-based workspace (e.g. coverages, shapefiles).
-        If editor.EditWorkspace.Type = esriWorkspaceType.esriFileSystemWorkspace Then
-            Return False
-        End If
+        ' TODO: [NIS] Safe to remove? EditorExtension already evaluates this with IsValidWorkspace().
+        '' Do not affirm if the user is editing a file-based workspace (e.g. coverages, shapefiles).
+        'If editor.EditWorkspace.Type = esriWorkspaceType.esriFileSystemWorkspace Then
+        '    Return False
+        'End If
 
         ' Otherwise, affirm.
         Return True

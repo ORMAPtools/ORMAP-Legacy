@@ -115,8 +115,6 @@ Public NotInheritable Class AddArrows
         Get
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
-            ' TODO: [NIS] Implement statemachine on this class (see TaxlotAssignment.vb)
-            'canEnable = canEnable AndAlso State = CommandStateType.Enabled
             Return canEnable
         End Get
     End Property

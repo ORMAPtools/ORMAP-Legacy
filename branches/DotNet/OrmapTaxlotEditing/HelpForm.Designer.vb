@@ -59,6 +59,7 @@ Partial Class HelpForm
         Me.Padding = New System.Windows.Forms.Padding(5)
         Me.ShowIcon = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "ORMAP Taxlot Editing Help - No Topic"
         Me.ResumeLayout(False)
 

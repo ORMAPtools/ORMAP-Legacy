@@ -93,16 +93,13 @@ Public NotInheritable Class CombineTaxlots
 
 #End Region
 
-#Region "Properties"
-    ' None
+#Region "Properties (none)"
 #End Region
 
-#Region "Event Handlers"
-    ' None
+#Region "Event Handlers (none)"
 #End Region
 
-#Region "Methods"
-    ' None
+#Region "Methods (none)"
 #End Region
 
 #End Region
@@ -115,8 +112,6 @@ Public NotInheritable Class CombineTaxlots
         Get
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
-            ' TODO: [NIS] Implement statemachine on this class (see TaxlotAssignment.vb)
-            'canEnable = canEnable AndAlso State = CommandStateType.Enabled
             Return canEnable
         End Get
     End Property

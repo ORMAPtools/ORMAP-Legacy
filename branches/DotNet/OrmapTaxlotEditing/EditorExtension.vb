@@ -91,15 +91,15 @@ Public NotInheritable Class EditorExtension
         _application = value
     End Sub
 
-    Private Shared _editor As IEditor
+    Private Shared _editor As IEditor2
 
-    Friend Shared ReadOnly Property Editor() As IEditor
+    Friend Shared ReadOnly Property Editor() As IEditor2
         Get
             Return _editor
         End Get
     End Property
 
-    Private Sub setEditor(ByVal value As IEditor)
+    Private Sub setEditor(ByVal value As IEditor2)
         ' TODO: [NIS] Add validation code?
         _editor = value
     End Sub
@@ -188,7 +188,7 @@ Public NotInheritable Class EditorExtension
             canEnable = canEnable AndAlso EditorExtension.HasValidLicense
             canEnable = canEnable AndAlso EditorExtension.IsValidWorkspace
             canEnable = canEnable AndAlso EditorExtension.AllowedToEditTaxlots
-            ' TODO: [NIS] Implement statemachine on this class (see TaxlotAssignment)?
+            ' TODO: [NIS] Implement statemachine on this class (see commented code in TaxlotAssignment)?
             Return canEnable
         End Get
     End Property
@@ -461,9 +461,9 @@ Public NotInheritable Class EditorExtension
 
         ' Test for a valid workspace.
         If EditorExtension.Editor.EditWorkspace.Type = esriWorkspaceType.esriFileSystemWorkspace Then
-            SetIsValidWorkspace(False)
+            setIsValidWorkspace(False)
         Else
-            SetIsValidWorkspace(True)
+            setIsValidWorkspace(True)
         End If
         If HasValidLicense AndAlso IsValidWorkspace Then
             ' Subscribe to edit events.
@@ -540,8 +540,8 @@ Public NotInheritable Class EditorExtension
     End Sub
 
     Public Sub Startup(ByRef initializationData As Object) Implements ESRI.ArcGIS.esriSystem.IExtension.Startup
-        If Not initializationData Is Nothing AndAlso TypeOf initializationData Is IEditor Then
-            setEditor(DirectCast(initializationData, IEditor))
+        If Not initializationData Is Nothing AndAlso TypeOf initializationData Is IEditor2 Then
+            setEditor(DirectCast(initializationData, IEditor2))
             setApplication(DirectCast(Editor.Parent, IApplication))
             setEditEvents(DirectCast(EditorExtension.Editor, IEditEvents_Event))
             Dim theMxDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
