@@ -209,13 +209,13 @@ Public NotInheritable Class TaxlotAssignment
     Friend ReadOnly Property PartnerTaxlotAssignmentForm() As TaxlotAssignmentForm
         Get
             If _partnerTaxlotAssignmentForm Is Nothing OrElse _partnerTaxlotAssignmentForm.IsDisposed Then
-                SetPartnerTaxlotAssignmentForm(New TaxlotAssignmentForm())
+                setPartnerTaxlotAssignmentForm(New TaxlotAssignmentForm())
             End If
             Return _partnerTaxlotAssignmentForm
         End Get
     End Property
 
-    Private Sub SetPartnerTaxlotAssignmentForm(ByRef value As TaxlotAssignmentForm)
+    Private Sub setPartnerTaxlotAssignmentForm(ByRef value As TaxlotAssignmentForm)
         If value IsNot Nothing Then
             _partnerTaxlotAssignmentForm = value
             ' Subscribe to partner form events.
@@ -911,6 +911,15 @@ Public NotInheritable Class TaxlotAssignment
         Get
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
+            If canEnable Then
+                ' Subscribe to edit events.
+                AddHandler EditorExtension.EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
+                AddHandler EditorExtension.EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
+                ' Subscribe to active view events.
+                AddHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
+                AddHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
+                AddHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
+            End If
             canEnable = canEnable AndAlso State = CommandStateType.Enabled
             Return canEnable
         End Get
@@ -959,15 +968,16 @@ Public NotInheritable Class TaxlotAssignment
 
                 If MyBase.m_enabled Then
                     ' Set partner form.
-                    SetPartnerTaxlotAssignmentForm(New TaxlotAssignmentForm())
+                    setPartnerTaxlotAssignmentForm(New TaxlotAssignmentForm())
 
-                    ' Subscribe to edit events.
-                    AddHandler EditorExtension.EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
-                    AddHandler EditorExtension.EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
-                    ' Unsubscribe to active view events.
-                    AddHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
-                    AddHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
-                    AddHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
+                    ' TODO: [NIS] Move these from here (can execute before *Events objects are set).
+                    '' Subscribe to edit events.
+                    'AddHandler EditorExtension.EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
+                    'AddHandler EditorExtension.EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
+                    '' Subscribe to active view events.
+                    'AddHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
+                    'AddHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
+                    'AddHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
                 End If
             End If
 
