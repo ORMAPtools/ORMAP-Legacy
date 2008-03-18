@@ -188,7 +188,7 @@ Public NotInheritable Class EditorExtension
             canEnable = canEnable AndAlso EditorExtension.HasValidLicense
             canEnable = canEnable AndAlso EditorExtension.IsValidWorkspace
             canEnable = canEnable AndAlso EditorExtension.AllowedToEditTaxlots
-            'canEnable = canEnable AndAlso State = CommandStateType.Enabled  ' TODO: [NIS] Implement statemachine on this class?
+            ' TODO: [NIS] Implement statemachine on this class (see TaxlotAssignment)?
             Return canEnable
         End Get
     End Property

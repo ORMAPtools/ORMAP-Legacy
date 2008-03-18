@@ -150,7 +150,7 @@ Public NotInheritable Class TaxlotAssignment
 
 #Region "Properties"
 
-    Private _state As CommandStateType
+    Private _state As CommandStateType = CommandStateType.Disabled
 
     Public ReadOnly Property State() As CommandStateType
         Get
@@ -354,14 +354,17 @@ Public NotInheritable Class TaxlotAssignment
         Dim colFieldNames1 As New Collection
         colFieldNames1.Add(fieldName1FC1)
         colFieldNames1.Add(fieldName2FC1)
+        colFieldNames1.Add(fieldName3FC1)
+        colFieldNames1.Add(fieldName4FC1)
+        colFieldNames1.Add(fieldName5FC1)
 
         ' Set up to find the MapIndex feature class fields.
         Dim fcName2 As String = EditorExtension.TableNamesSettings.MapIndexFC
-        Dim fieldName1FC2 As String = "FieldName1"  'TODO: NIS Insert real field name
-        Dim fieldName2FC2 As String = "FieldName2"  'TODO: NIS Insert real field name
+        Dim fieldName1FC2 As String = EditorExtension.MapIndexSettings.MapNumberField
+        Dim fieldName2FC2 As String = EditorExtension.MapIndexSettings.MapScaleField  ' TODO: Does the tool need this field?
         Dim colFieldNames2 As New Collection
-        colFieldNames1.Add(fieldName1FC2)
-        colFieldNames1.Add(fieldName2FC2)
+        colFieldNames2.Add(fieldName1FC2)
+        colFieldNames2.Add(fieldName2FC2)
 
         Dim foundAllFields As Boolean = True 'initial assumption
         Const loadData As Boolean = True
@@ -380,8 +383,8 @@ Public NotInheritable Class TaxlotAssignment
     Private Sub DoToolOperation(ByVal Button As Integer, ByVal X As Integer, ByVal Y As Integer)
 
         Try
-            ' TODO: [NIS] Confirm this .NET enum works with ESRI COM button parameter
-            If (Button <> MouseButtons.Left) Then
+            ' TODO: [NIS] Define button parameters with enum
+            If (Button <> 1) Then
                 ' Exit silently.
                 Exit Try
             End If
@@ -499,6 +502,14 @@ Public NotInheritable Class TaxlotAssignment
                 End If
             End If
 
+            ' TODO: [NIS] Implement this (needs code elsewhere as well).
+            ''------------------------------------------
+            '' Define the MapNumber as a string value.
+            ''------------------------------------------
+            'Dim theExistMapNumberVal As String = String.Empty 'initialize
+            '' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
+            'theExistMapNumberVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLMapNumberFldIdx)), "", theTaxlotFeature.Value(_theTLTaxlotFldIdx)))
+
             '------------------------------------------
             ' Define the Taxlot number (can be a word 
             ' also) as a string value.
@@ -526,8 +537,8 @@ Public NotInheritable Class TaxlotAssignment
                 ' Remove leading Zeros for taxlot number if any exist (CInt conversion will remove them)
                 theNewTLTaxlotNumVal = CStr(CInt(theNewTLTaxlotNumVal))
                 ' Make sure 5-digit number is 5 characters by padding on the left with zeros
-                If Len(theNewTLTaxlotNumVal_5digit) < ORMAPNumber.GetOrmap_OrmapTaxlotFieldLength Then  ' TODO: [NIS] Why not just use 5 here? Other code assumes this length so it should not vary.
-                    Do Until Len(theNewTLTaxlotNumVal_5digit) = ORMAPNumber.GetOrmap_OrmapTaxlotFieldLength
+                If Len(theNewTLTaxlotNumVal_5digit) < ORMAPNumber.GetOrmap_TaxlotFieldLength Then  ' TODO: [NIS] Why NOT just use 5 here? Other code assumes this length so it should not vary.
+                    Do Until Len(theNewTLTaxlotNumVal_5digit) = ORMAPNumber.GetOrmap_TaxlotFieldLength
                         theNewTLTaxlotNumVal_5digit = "0" & theNewTLTaxlotNumVal_5digit
                     Loop
                 End If
@@ -596,6 +607,8 @@ Public NotInheritable Class TaxlotAssignment
                     '     on the left with zeros to make it always a 5-digit number (see comment
                     '     above).
                     theMapTaxlotNumber = Trim(Left(theExistOrmapMapNumberVal, 8)) & theNewTLTaxlotNumVal_5digit
+                    ' TODO: [NIS] Implement this instead of the above line.
+                    'theMapTaxlotNumber = Trim(Left(theExistMapNumberVal, 8)) & theNewTLTaxlotNumVal_5digit
             End Select
 
             '##################################
@@ -699,14 +712,14 @@ Public NotInheritable Class TaxlotAssignment
 
     Private Function hasRequiredFields(ByVal featureClassName As String, ByVal fieldNames As Collection, ByVal loadData As Boolean) As Boolean
 
-        Dim returnValue As Boolean = False 'initial assumption
+        Dim returnValue As Boolean = True 'initial assumption
 
         ' Confirm data layer is present in current map
         Dim theFLayer As IFeatureLayer
 
         theFLayer = FindFeatureLayerByDSName(featureClassName)
 
-        If theFLayer IsNot Nothing Then
+        If theFLayer Is Nothing Then
             If loadData Then
                 '[Load option accepted...]
                 ' Attempt to load and find the taxlot layer in the map document
@@ -733,9 +746,6 @@ Public NotInheritable Class TaxlotAssignment
                 '[Data not present and load option refused...]
                 returnValue = False
             End If
-        Else
-            '[Layer not found...]
-            returnValue = False
         End If
 
         Return returnValue
@@ -825,6 +835,8 @@ Public NotInheritable Class TaxlotAssignment
 
 #Region "State Machine"
 
+    ' TODO: [NIS} Embed URL reference to statechart in the XML help for these methods.
+
     Private Sub TransitionE1()
         StateS1_2(StatePassageType.Exiting)
         CondState1()
@@ -907,18 +919,34 @@ Public NotInheritable Class TaxlotAssignment
 
 #Region "Properties"
 
+    Private _hasEventHandlers As Boolean = False
+
     Public Overrides ReadOnly Property Enabled() As Boolean
         Get
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
             If canEnable Then
-                ' Subscribe to edit events.
-                AddHandler EditorExtension.EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
-                AddHandler EditorExtension.EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
-                ' Subscribe to active view events.
-                AddHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
-                AddHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
-                AddHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
+                If Not _hasEventHandlers Then
+                    ' Subscribe to edit events.
+                    AddHandler EditorExtension.EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
+                    AddHandler EditorExtension.EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
+                    ' Subscribe to active view events.
+                    AddHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
+                    AddHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
+                    AddHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
+                    _hasEventHandlers = True
+                End If
+            Else
+                If _hasEventHandlers Then
+                    ' Unsubscribe to edit events.
+                    RemoveHandler EditorExtension.EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
+                    RemoveHandler EditorExtension.EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
+                    ' Unsubscribe to active view events.
+                    RemoveHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
+                    RemoveHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
+                    RemoveHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
+                    _hasEventHandlers = False
+                End If
             End If
             canEnable = canEnable AndAlso State = CommandStateType.Enabled
             Return canEnable
@@ -969,15 +997,6 @@ Public NotInheritable Class TaxlotAssignment
                 If MyBase.m_enabled Then
                     ' Set partner form.
                     setPartnerTaxlotAssignmentForm(New TaxlotAssignmentForm())
-
-                    ' TODO: [NIS] Move these from here (can execute before *Events objects are set).
-                    '' Subscribe to edit events.
-                    'AddHandler EditorExtension.EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
-                    'AddHandler EditorExtension.EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
-                    '' Subscribe to active view events.
-                    'AddHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
-                    'AddHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
-                    'AddHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
                 End If
             End If
 

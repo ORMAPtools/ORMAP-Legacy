@@ -109,7 +109,7 @@ Public NotInheritable Class ORMAPNumber
         End Get
         Set(ByVal value As String)
             If value.Length <> 2 Then
-                _township = "00"
+                _township = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Township DOES NOT EXIST YET
             Else
                 _township = value
             End If
@@ -151,7 +151,7 @@ Public NotInheritable Class ORMAPNumber
                 Case "N", "S"
                     _townshipDirectional = value
                 Case Else
-                    _townshipDirectional = "N"
+                    _townshipDirectional = EditorExtension.DefaultValuesSettings.TownshipDirection
             End Select
             RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
@@ -168,10 +168,11 @@ Public NotInheritable Class ORMAPNumber
         End Get
         Set(ByVal value As String)
             If value.Length <> 2 Then
-                _range = "01"
+                _range = "01" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Range DOES NOT EXIST YET
             Else
                 _range = value
             End If
+
             RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
     End Property
@@ -190,7 +191,9 @@ Public NotInheritable Class ORMAPNumber
                 Case "0.25", "0.50", "0.75"
                     _partialRangeCode = value.Substring(1, 3) 'Mid(value, 2)
                 Case Else
-                    _partialRangeCode = ".00"
+                    ' TODO: [NIS] Research this - doesn't match the old .ini file
+                    '_partialRangeCode = ".00"
+                    _partialRangeCode = EditorExtension.DefaultValuesSettings.RangePart
             End Select
             RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
@@ -210,7 +213,7 @@ Public NotInheritable Class ORMAPNumber
                 Case "E", "W"
                     _rangeDirectional = value
                 Case Else
-                    _rangeDirectional = "W"
+                    _rangeDirectional = EditorExtension.DefaultValuesSettings.RangeDirection
             End Select
             RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
@@ -229,16 +232,16 @@ Public NotInheritable Class ORMAPNumber
             If IsNumeric(value) Then 'TODO: JWM is there a another way to test for numeric?
                 Select Case CShort(value)
                     Case 0
-                        _section = "00"
+                        _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST YET
                     Case Is < 10
                         _section = "0" & CShort(value)
                     Case Is <= 37
                         _section = value
                     Case Else
-                        _section = "00"
+                        _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST YET
                 End Select
             Else
-                _section = "00"
+                _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST YET
             End If
             RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
@@ -258,7 +261,7 @@ Public NotInheritable Class ORMAPNumber
                 Case "0", "A" To "J"
                     _quarter = value
                 Case Else
-                    _quarter = "0"
+                    _quarter = EditorExtension.DefaultValuesSettings.QuarterSection
             End Select
             RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
@@ -278,7 +281,7 @@ Public NotInheritable Class ORMAPNumber
                 Case "0", "A" To "J"
                     _quarterQuarter = value
                 Case Else
-                    _quarterQuarter = "0"
+                    _quarterQuarter = EditorExtension.DefaultValuesSettings.QuarterQuarterSection
             End Select
             RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
@@ -298,7 +301,7 @@ Public NotInheritable Class ORMAPNumber
                 Case "0", "D", "S", "T"
                     _suffixType = value
                 Case Else
-                    _suffixType = "0"
+                    _suffixType = EditorExtension.DefaultValuesSettings.MapSuffixType
             End Select
             RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
@@ -318,16 +321,16 @@ Public NotInheritable Class ORMAPNumber
             If IsNumeric(value) Then
                 Select Case CShort(value)
                     Case Is < 0
-                        _suffixNumber = "00"
+                        _suffixNumber = EditorExtension.DefaultValuesSettings.MapSuffixNumber
                     Case Is < 1000
                         Dim sb As New StringBuilder("0", 3 - value.Length) 'TODO: TEST/VERIFY THIS
                         sb.Append(value)
                         _suffixNumber = sb.ToString
                     Case Else
-                        _suffixNumber = "00"
+                        _suffixNumber = EditorExtension.DefaultValuesSettings.MapSuffixNumber
                 End Select
             Else
-                _suffixNumber = "00"
+                _suffixNumber = EditorExtension.DefaultValuesSettings.MapSuffixNumber
             End If
             RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
@@ -343,12 +346,10 @@ Public NotInheritable Class ORMAPNumber
             Anomaly = _anomaly
         End Get
         Set(ByVal value As String)
-            If value.Length > 2 Then
-                _anomaly = "00"
+            If value.Length <> 2 Then
+                _anomaly = EditorExtension.DefaultValuesSettings.Anomaly
             Else
-                Dim sb As New StringBuilder("0", 2 - value.Length) 'TODO: TEST/VERIFY THIS
-                sb.Append(value)
-                _anomaly = sb.ToString
+                _anomaly = value
             End If
             RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set
