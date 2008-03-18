@@ -293,7 +293,8 @@ Public NotInheritable Class EditorExtension
             Dim theParentID As Integer
             If IsTaxlot(obj) Then
                 ' Obtain OrmapMapNumber via overlay and calculate other field values.
-                CalculateTaxlotValues(DirectCast(obj, IFeature), SpatialUtilities.FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC))
+                ' TODO: [NIS] Remove comment below and fix CalculateTaxlotValues.
+                'CalculateTaxlotValues(DirectCast(obj, IFeature), SpatialUtilities.FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC))
             ElseIf IsAnno(obj) Then
                 theAnnotationFeature = DirectCast(obj, IAnnotationFeature)
 

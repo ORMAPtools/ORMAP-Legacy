@@ -11,7 +11,7 @@
     <Setting Name="TaxlotNumberAnnoFC" Type="System.String" Scope="User">
       <Value Profile="(Default)">TaxlotNumberAnno</Value>
     </Setting>
-    <Setting Name="TaxlotAcreageAnno" Type="System.String" Scope="User">
+    <Setting Name="TaxlotAcreageAnnoFC" Type="System.String" Scope="User">
       <Value Profile="(Default)">TaxlotAcreageAnno</Value>
     </Setting>
     <Setting Name="Anno0010scaleFC" Type="System.String" Scope="User">

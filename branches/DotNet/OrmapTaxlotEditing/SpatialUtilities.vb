@@ -131,7 +131,7 @@ Public NotInheritable Class SpatialUtilities
 
         Try
             Dim taxlotFClass As IFeatureClass
-            taxlotFClass = DirectCast(editFeature, IFeatureClass)
+            taxlotFClass = DirectCast(editFeature.Class, IFeatureClass)
             'locate map index layer
             mapIndexLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
             If mapIndexLayer Is Nothing Then
@@ -884,27 +884,28 @@ Public NotInheritable Class SpatialUtilities
             Dim thisDataset As IDataset
             thisDataset = DirectCast(thisObjectClass, IDataset)
             Dim datasetName As String = thisDataset.Name
-            'TODO:Verify these EditorExtension values
-            returnValue = String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0010scaleFC, True) = 0
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0020scaleFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0100scaleFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0200scaleFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno2000scaleFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0030scaleFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0040scaleFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0400scaleFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0050scaleFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0800scaleFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.CartographicLinesFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxLotFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.MapIndexFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.PlatsFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.ReferenceLinesFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxCodeFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxCodeAnnoFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxLotLinesFC, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnno, True) = 0)
-            returnValue = returnValue AndAlso (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True) = 0)
+            Const StringMatch As Integer = 0
+            ' Check for a match against any of the ORMAP feature classes.
+            returnValue = (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0010scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0020scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0100scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0200scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno2000scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0030scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0040scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0400scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0050scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0800scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.CartographicLinesFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxLotFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.MapIndexFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.PlatsFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.ReferenceLinesFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxCodeFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxCodeAnnoFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxLotLinesFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True) = StringMatch)
             Return returnValue
         Catch ex As Exception
             MessageBox.Show(ex.Message)
@@ -1156,7 +1157,7 @@ Public NotInheritable Class SpatialUtilities
                 annoDataSet = DirectCast(annoClass, IDataset)
 
                 'If other anno, don't continue
-                If String.Compare(annoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC) <> 0 And String.Compare(annoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnno, True) <> 0 Then
+                If String.Compare(annoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC) <> 0 And String.Compare(annoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True) <> 0 Then
                     Exit Try
                 End If
 
@@ -1456,7 +1457,7 @@ Public NotInheritable Class SpatialUtilities
     Private Shared Function getAnnoSizeByScale(ByVal thisFeatureClassName As String, ByVal scale As Integer) As Double
         Try 'TODO: JWM verify the table names that we are comparing
             Dim size As String
-            If String.Compare(thisFeatureClassName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnno, True) = 0 Then
+            If String.Compare(thisFeatureClassName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True) = 0 Then
                 Select Case scale
                     Case 120
                         size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize00120Scale

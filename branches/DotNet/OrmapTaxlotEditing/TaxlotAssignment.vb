@@ -410,7 +410,7 @@ Public NotInheritable Class TaxlotAssignment
             theGeometry = thePoint 'QI
 
             ' Initialize the feature class and field data
-            initializeData()
+            initializeData()  ' HACK: [NIS] Find better way...
 
             ' Insure the validity of the underlying map index polygon
             Dim theSpatialFilter As ISpatialFilter
@@ -429,7 +429,7 @@ Public NotInheritable Class TaxlotAssignment
             If theMIFeature Is Nothing Then
                 MessageBox.Show("Unable to assign taxlot values to polygons" & vbNewLine & _
                                 "that are not within a Map Index polygon.", _
-                                Me.Name, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                                "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
 
@@ -440,7 +440,7 @@ Public NotInheritable Class TaxlotAssignment
                     If MessageBox.Show("The current Taxlot value (" & Me.NumberStartingFrom & ")" & vbNewLine & _
                                        "is not unique within this MapIndex." & vbNewLine & _
                                        "Attribute feature with value anyway?", _
-                                       Me.Name, MessageBoxButtons.YesNo, _
+                                       "Taxlot Assignment", MessageBoxButtons.YesNo, _
                                        MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.No Then
                         Exit Try
                     End If
@@ -474,7 +474,7 @@ Public NotInheritable Class TaxlotAssignment
                 Else
                     '[No taxlot features are selected...]
                     MessageBox.Show("No taxlot features have been selected.", _
-                                    Me.Name, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                                    "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                     Exit Try
                 End If
             End If
@@ -499,18 +499,17 @@ Public NotInheritable Class TaxlotAssignment
                 If Len(theExistOrmapMapNumberVal) = 0 Then
                     MessageBox.Show("OrmapMapNumber is empty for this taxlot or MapIndex." & vbNewLine & _
                                     "Use the MapIndex tool to populate the OrmapMapNumber field" & vbNewLine & _
-                                    "before using this tool", Me.Name, MessageBoxButtons.OK)
+                                    "before using this tool", "Taxlot Assignment", MessageBoxButtons.OK)
                     Exit Try
                 End If
             End If
 
-            ' TODO: [NIS] Implement this (needs code elsewhere as well).
-            ''------------------------------------------
-            '' Define the MapNumber as a string value.
-            ''------------------------------------------
-            'Dim theExistMapNumberVal As String = String.Empty 'initialize
-            '' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-            'theExistMapNumberVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLMapNumberFldIdx)), "", theTaxlotFeature.Value(_theTLTaxlotFldIdx)))
+            '------------------------------------------
+            ' Define the MapTaxlot as a string value.
+            '------------------------------------------
+            Dim theExistMapTaxlotVal As String = String.Empty 'initialize
+            ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
+            theExistMapTaxlotVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLMapTaxlotFldIdx)), "", theTaxlotFeature.Value(_theTLMapTaxlotFldIdx)))
 
             '------------------------------------------
             ' Define the Taxlot number (can be a word 
@@ -523,7 +522,7 @@ Public NotInheritable Class TaxlotAssignment
             ' Optionally, update the taxlot number field
             If Len(theExistTaxlotNumberVal) > 0 And theExistTaxlotNumberVal <> "0" Then
                 If MessageBox.Show("Taxlot currently has a Taxlot value (" & theExistTaxlotNumberVal & ")." & vbNewLine & _
-                          "Update it?", Me.Name, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.No Then
+                          "Update it?", "Taxlot Assignment", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.No Then
                     Exit Try
                 End If
             End If
@@ -608,7 +607,7 @@ Public NotInheritable Class TaxlotAssignment
                     '     gfn_s_CreateMapTaxlotValue function. Also, in this case, TAXLOT is padded
                     '     on the left with zeros to make it always a 5-digit number (see comment
                     '     above).
-                    theMapTaxlotNumber = Trim(Left(theExistOrmapMapNumberVal, 8)) & theNewTLTaxlotNumVal_5digit
+                    theMapTaxlotNumber = Trim(Left(theExistMapTaxlotVal, 8)) & theNewTLTaxlotNumVal_5digit
                     ' TODO: [NIS] Implement this instead of the above line.
                     'theMapTaxlotNumber = Trim(Left(theExistMapNumberVal, 8)) & theNewTLTaxlotNumVal_5digit
             End Select
@@ -645,7 +644,7 @@ Public NotInheritable Class TaxlotAssignment
             theTaxlotFeature = theTaxlotFCursor.NextFeature
             If Not theTaxlotFeature Is Nothing Then
                 MessageBox.Show("Multiple (""vertical"") features found at this location. This tool can only edit one.", _
-                                Me.Name, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 ' TODO: [NIS] Enhance to handle more than one vertical feature.
             End If
 
