@@ -65,8 +65,210 @@ Public NotInheritable Class StringUtilities
         End Try
     End Function
 
-    Public Shared Function CreateMapTaxlotValue(ByVal mapTaxlotIDValue As String, ByVal formatString As String) As String
-        Return String.Empty 'TODO:jwm flesh this out
+    Public Function CreateMapTaxlotValue(ByVal mapTaxlotIDValue As String, ByVal formatString As String) As String
+
+        If mapTaxlotIDValue Is Nothing OrElse mapTaxlotIDValue.Length = 0 Then
+            Throw New ArgumentNullException("mapTaxlotIDValue")
+        End If
+        If formatString Is Nothing OrElse formatString.Length = 0 Then
+            Throw New ArgumentNullException("formatString")
+        End If
+        If mapTaxlotIDValue.Length < 29 Then
+            Throw New Exception("Invalid arguement length for mapTaxlotValue", Nothing)
+        End If
+        Try
+            Dim countyCode As Short
+            countyCode = CShort(mapTaxlotIDValue.Substring(0, 2))
+
+            Dim hasTownPart As Boolean
+            Dim hasRangePart As Boolean
+            Dim hasAlphaQtr As Boolean = False
+            Dim hasAlphaQtrQtr As Boolean = False
+
+            'flag for half township
+            hasTownPart = (Convert.ToDouble(mapTaxlotIDValue.Substring(4, 3)) > 0)
+            hasRangePart = (Convert.ToDouble(mapTaxlotIDValue.Substring(10, 3)) > 0)
+
+            'flags for section quarters
+            Select Case countyCode
+                Case 1 To 19, 21 To 36
+                    If Not IsNumeric(mapTaxlotIDValue.Substring(16, 1)) Then
+                        hasAlphaQtr = True
+                    End If
+                    If Not IsNumeric(mapTaxlotIDValue.Substring(17, 1)) Then
+                        hasAlphaQtrQtr = True
+                    End If
+            End Select
+
+            'We must adjust the mask for clackamas county if there are no half ranges in the current string
+            If formatString.IndexOf("^"c) > 0 Then
+                If hasRangePart = False Then
+                    formatString = formatString.Remove(formatString.IndexOf("^"c), 1)
+                Else
+                    'if there is a range part the letter Q will be  placed in the position where D sits
+                    formatString = formatString.Remove(formatString.IndexOf("D"c), 1)
+                End If
+            End If
+            'copy of the formatstring
+            Dim maskValues As New StringBuilder(formatString.ToUpper)
+            ' Create a string of spaces to place our results in. This helps a speed up string manipulation a little.
+            Dim formattedResult As New StringBuilder(New String(" ", formatString.Length), formatString.Length)
+
+            Dim positionInMask As Integer
+            Dim characterCode As Integer
+            Dim tokenCount As Integer
+            Dim previousCharInMask As Char
+            Dim hasProcessedParcelId As Boolean = False
+            Dim hasProcessedTownFractional As Boolean = False
+            Dim hasProcessedRangeFractional As Boolean = False
+
+            For charIdx As Integer = 0 To maskValues.Length - 1
+                positionInMask = formatString.IndexOf(maskValues.Chars(charIdx).ToString, charIdx, StringComparison.CurrentCultureIgnoreCase)
+                characterCode = Convert.ToInt32(maskValues.Chars(charIdx))
+                ' Returns how many of these characters appear in the mask
+                Dim c As Char
+                For Each c In formatString
+                    If c.Equals(maskValues.Chars(charIdx)) Then
+                        tokenCount += 1
+                    End If
+                Next c
+
+                Select Case characterCode
+                    Case 68 'D
+                        If String.CompareOrdinal(previousCharInMask, "^") = 0 Then
+                            If String.CompareOrdinal(maskValues.Chars(positionInMask - 2), "T") = 0 Then 'township
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(7, 1))
+                            ElseIf String.CompareOrdinal(maskValues.Chars(positionInMask - 2), "R") = 0 Then 'range
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(13, 1))
+                            End If
+                        Else
+                            If String.CompareOrdinal(previousCharInMask, "T") = 0 Then 'township
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(7, 1))
+                            ElseIf String.CompareOrdinal(previousCharInMask, "R") = 0 Then 'range
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(13, 1))
+                            End If
+                        End If
+                    Case 64 '@
+                        'Formats for the parcel id
+                        If Not hasProcessedParcelId Then
+                            'since we are at the end of the string use Insert
+                            formattedResult.Insert(positionInMask, mapTaxlotIDValue.Substring(24, 5)) 'TODO: JWM verify
+                            hasProcessedParcelId = True
+                        End If
+                    Case 38 '& Using these characters in mask will strip leading zeros from parcel id
+                        If Not hasProcessedParcelId Then '
+                            'since we are at the end of the string use Insert
+                            Dim s As String = New String(mapTaxlotIDValue.Substring(24, 5))
+                            formattedResult.Insert(positionInMask, StripLeadingZeros(s))
+                            hasProcessedParcelId = True
+                        End If
+                    Case 81 'Q
+                        If String.CompareOrdinal(previousCharInMask, "Q") = 0 Then 'qtr qtr
+                            If hasAlphaQtrQtr Then
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(17, 1))
+                            Else
+                                Dim currentORMAPNumValue As String
+                                currentORMAPNumValue = mapTaxlotIDValue.Substring(17, 1).ToUpper
+                                If currentORMAPNumValue Like "[A-D]" Then
+                                    Select Case currentORMAPNumValue
+                                        Case "A"
+                                            formattedResult.Chars(positionInMask) = "A"c
+                                        Case "B"
+                                            formattedResult.Chars(positionInMask) = "B"c
+                                        Case "C"
+                                            formattedResult.Chars(positionInMask) = "C"c
+                                        Case "D"
+                                            formattedResult.Chars(positionInMask) = "D"c
+                                    End Select
+                                Else
+                                    If countyCode <> 3 Then 'Clackamas County wants the space/blank value left in the string NO ZEROES PLEASE
+                                        formattedResult.Chars(positionInMask) = "0"c
+                                    End If
+                                End If
+                            End If
+                        Else 'qtr
+                            If hasAlphaQtr Then
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(16, 1))
+                            Else
+                                Dim currentORMAPNum As String
+                                currentORMAPNum = mapTaxlotIDValue.Substring(16, 1)
+                                If currentORMAPNum Like "[A-D]" Then
+                                    Select Case currentORMAPNum
+                                        Case "A"
+                                            formattedResult.Chars(positionInMask) = "A"c
+                                        Case "B"
+                                            formattedResult.Chars(positionInMask) = "B"c
+                                        Case "C"
+                                            formattedResult.Chars(positionInMask) = "C"c
+                                        Case "D"
+                                            formattedResult.Chars(positionInMask) = "D"c
+                                    End Select
+                                Else
+                                    If countyCode <> 3 Then
+                                        formattedResult.Chars(positionInMask) = "0"c
+                                    End If
+                                End If
+                            End If
+                        End If
+
+                    Case 82 'Range
+                        If String.CompareOrdinal(previousCharInMask, "R") <> 0 Then
+                            If tokenCount > 1 Then
+                                formattedResult.Insert(positionInMask, mapTaxlotIDValue.Substring(8, tokenCount))
+                            Else
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(9, 1))
+                            End If
+                        End If
+                    Case 83 'S section
+                        If String.CompareOrdinal(previousCharInMask, "S") = 0 Then 'second position
+                            formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(15, 1)) 'TODO: JWM verify
+                        Else 'first position
+                            formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(14, 1))
+                        End If
+
+                    Case 84 'T township
+                        If String.CompareOrdinal(previousCharInMask, "T") <> 0 Then
+                            If tokenCount > 1 Then
+                                formattedResult.Insert(positionInMask, mapTaxlotIDValue.Substring(2, tokenCount))
+                            Else
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(3, 1))
+                            End If
+                        End If
+
+                    Case 80 'P fractional parts
+                        If String.CompareOrdinal(previousCharInMask, "T") = 0 Then
+                            If Not hasProcessedRangeFractional Then
+                                formattedResult.Insert(positionInMask, mapTaxlotIDValue.Substring(10, tokenCount))
+                                hasProcessedRangeFractional = True
+                            ElseIf String.CompareOrdinal(previousCharInMask, "R") = 0 Then
+                                If Not hasProcessedTownFractional Then
+                                    formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(4, 1))
+                                    hasProcessedTownFractional = True
+                                End If
+                            End If
+                        End If
+
+                    Case 94 '^ special case for clackamas county
+                        If String.CompareOrdinal(previousCharInMask, "R") = 0 Then
+                            If hasRangePart Then
+                                formattedResult.Chars(positionInMask) = "Q"c
+                            End If
+                        ElseIf String.CompareOrdinal(previousCharInMask, "T") = 0 Then 'fractional part of township
+                            If hasTownPart Then
+                                formattedResult.Chars(positionInMask) = "Q"c
+                            End If
+                        End If
+                End Select
+                previousCharInMask = maskValues.Chars(charIdx)
+                tokenCount = 0
+            Next charIdx
+            Dim returnValue As New String(formattedResult.ToString)
+            Return returnValue
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+            Return String.Empty
+        End Try
+
     End Function
 
     ''' <summary>
@@ -135,29 +337,22 @@ Public NotInheritable Class StringUtilities
     End Function
 
     Private Shared Function stripLeadingZeros(ByRef stringToParse As String) As String
-        Dim inputCharCount As Integer
-        Dim aChar As Char
-        Dim sTemp As StringBuilder
+        Try
+            Dim sb As New StringBuilder(stringToParse)
 
-        inputCharCount = stringToParse.Length
-        'create string of same length
-        sTemp = New StringBuilder(" ", inputCharCount)
-
-        'TODO JWM test this function
-
-        For counter As Integer = 1 To inputCharCount
-            'aChar = Mid(stringToParse, counter, 1)
-            aChar = stringToParse.Chars(counter)
-            If stringToParse.Contains(aChar) Then
-                sTemp.Insert(counter, stringToParse.Substring(counter, inputCharCount - counter))
-                Exit For
-                'If InStr(1, "0", aChar, CompareMethod.Text) < 1 Then 'go past all leading zeros
-                '    Mid(sTemp, counter) = Mid(stringToParse, counter) 'get all remaing chars
-                '    Exit For 'and exit
-                'End If
-            End If
-        Next counter
-        Return sTemp.ToString  ' do not trim off leading spaces
+            For charIdx As Integer = 0 To sb.Length
+                If Char.GetNumericValue(sb.Chars(charIdx)) = 0 Then
+                    sb = sb.Replace(sb.Chars(charIdx), " "c, charIdx, 1)
+                Else
+                    Exit For
+                End If
+            Next charIdx
+			
+            Return sb.ToString  ' do not trim off leading spaces
+        Catch ex As Exception
+			MessageBox.Show(ex.Message)
+            Return String.Empty
+        End Try
     End Function
 
 #End Region
