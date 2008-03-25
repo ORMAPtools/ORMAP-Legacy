@@ -121,7 +121,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>AllTablesSettings.settings</DependentUpon>
     </Compile>
-    <Compile Include="settings\AnnoTableNamesSettings1.Designer.vb">
+    <Compile Include="settings\AnnoTableNamesSettings.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>AnnoTableNamesSettings.settings</DependentUpon>
@@ -229,7 +229,7 @@
     </None>
     <None Include="settings\AnnoTableNamesSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>AnnoTableNamesSettings1.Designer.vb</LastGenOutput>
+      <LastGenOutput>AnnoTableNamesSettings.Designer.vb</LastGenOutput>
     </None>
     <None Include="settings\TaxlotAcreageAnnoSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
