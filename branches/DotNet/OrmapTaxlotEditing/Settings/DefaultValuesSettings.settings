@@ -3,16 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="County" Type="System.String" Scope="User">
-      <Value Profile="(Default)">20</Value>
-    </Setting>
-    <Setting Name="TownshipPart" Type="System.String" Scope="User">
-      <Value Profile="(Default)">.00</Value>
+      <Value Profile="(Default)">3</Value>
     </Setting>
     <Setting Name="TownshipDirection" Type="System.String" Scope="User">
       <Value Profile="(Default)">N</Value>
-    </Setting>
-    <Setting Name="RangePart" Type="System.String" Scope="User">
-      <Value Profile="(Default)">.00</Value>
     </Setting>
     <Setting Name="RangeDirection" Type="System.String" Scope="User">
       <Value Profile="(Default)">E</Value>
@@ -31,6 +25,12 @@
     </Setting>
     <Setting Name="Anomaly" Type="System.String" Scope="User">
       <Value Profile="(Default)">--</Value>
+    </Setting>
+    <Setting Name="TownshipPart" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.00</Value>
+    </Setting>
+    <Setting Name="RangePart" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.00</Value>
     </Setting>
   </Settings>
 </SettingsFile>
