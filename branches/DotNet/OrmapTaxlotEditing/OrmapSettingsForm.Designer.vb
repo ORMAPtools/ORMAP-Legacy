@@ -648,9 +648,9 @@ Partial Class OrmapSettingsForm
         TaxlotAcreageAnnoLabel1.AutoSize = True
         TaxlotAcreageAnnoLabel1.Location = New System.Drawing.Point(13, 328)
         TaxlotAcreageAnnoLabel1.Name = "TaxlotAcreageAnnoLabel1"
-        TaxlotAcreageAnnoLabel1.Size = New System.Drawing.Size(110, 13)
+        TaxlotAcreageAnnoLabel1.Size = New System.Drawing.Size(126, 13)
         TaxlotAcreageAnnoLabel1.TabIndex = 52
-        TaxlotAcreageAnnoLabel1.Text = "Taxlot Acreage Anno:"
+        TaxlotAcreageAnnoLabel1.Text = "Taxlot Acreage Anno FC:"
         '
         'TaxlotNumberAnnoFCLabel1
         '
@@ -2125,7 +2125,7 @@ Partial Class OrmapSettingsForm
         '
         'TaxlotAcreageAnnoTextBox1
         '
-        Me.TaxlotAcreageAnnoTextBox1.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.AnnoTableNamesSettingsBindingSource, "TaxlotAcreageAnno", True))
+        Me.TaxlotAcreageAnnoTextBox1.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.AnnoTableNamesSettingsBindingSource, "TaxlotAcreageAnnoFC", True))
         Me.TaxlotAcreageAnnoTextBox1.Location = New System.Drawing.Point(170, 325)
         Me.TaxlotAcreageAnnoTextBox1.Name = "TaxlotAcreageAnnoTextBox1"
         Me.TaxlotAcreageAnnoTextBox1.Size = New System.Drawing.Size(260, 20)
