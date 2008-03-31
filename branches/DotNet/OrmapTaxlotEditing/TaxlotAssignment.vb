@@ -1001,7 +1001,7 @@ Public NotInheritable Class TaxlotAssignment
             If Button = ESRIMouseButtons.Left Then
                 '[Left button clicked...]
                 If HasRequiredData() Then
-                    DoToolOperation(Button, X, Y)
+                    DoToolOperation(DirectCast(Button, ESRIMouseButtons), X, Y)
                 End If
             ElseIf Button = ESRIMouseButtons.Right Then
                 '[Right button clicked...]

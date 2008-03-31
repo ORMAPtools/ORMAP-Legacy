@@ -51,6 +51,7 @@ Public NotInheritable Class Utilities
     Public Enum ESRIMouseButtons
         Left = 1
         Right = 2
+        Middle = 4
     End Enum
 
     Public Shared Function GetUserName() As String
