@@ -114,7 +114,7 @@ Public NotInheritable Class OrmapToolbar
 
     Public Overrides ReadOnly Property Name() As String
         Get
-            'TODO: NIS Confirm that this choice of name will work well
+            'TODO: [NIS] Confirm that this choice of name will work well
             Return "OrmapToolbar"
         End Get
     End Property

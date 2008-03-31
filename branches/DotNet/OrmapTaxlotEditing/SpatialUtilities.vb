@@ -71,10 +71,10 @@ Public NotInheritable Class SpatialUtilities
     Public Shared Function AddCodesToCombo(ByVal fieldName As String, ByVal fields As IFields, ByRef aComboBox As ComboBox, ByVal currentValue As Object, Optional ByVal allowSpace As Boolean = False) As Boolean
         Dim returnValue As Boolean = False
         Try
-            Dim idxField As Integer = fields.FindField(fieldName)
-            If idxField > -1 Then
+            Dim theFldIdx As Integer = fields.FindField(fieldName)
+            If theFldIdx > -1 Then
                 Dim thisField As IField
-                thisField = fields.Field(idxField)
+                thisField = fields.Field(theFldIdx)
                 Dim thisDomain As IDomain
                 thisDomain = thisField.Domain
                 If Not (thisDomain Is Nothing) Then
@@ -93,9 +93,9 @@ Public NotInheritable Class SpatialUtilities
                                 End If
                             End With
                         End If
-                        For idx As Integer = 0 To codeCount - 1
-                            aComboBox.Items.Add(thisCodedValueDomain.Name(idx))
-                        Next idx
+                        For i As Integer = 0 To codeCount - 1
+                            aComboBox.Items.Add(thisCodedValueDomain.Name(i))
+                        Next i
                         'If current value is null, add an empty string and make it active
                         If TypeOf currentValue Is String Then
                             If currentValue.Equals(String.Empty) Then
@@ -146,32 +146,32 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
 
-            Dim idxOrmapTaxlotNumberFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapTaxlotField)
-            Dim idxOrmapMapNumberFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapMapNumberField)
-            Dim idxMapNumberFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapNumberField)
-            Dim idxCountyFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.CountyField)
-            Dim idxTaxlotFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TaxlotField)
-            Dim idxTownFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipField)
-            Dim idxTownPartFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipPartField)
-            Dim idxTownDirFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipDirectionField)
-            Dim idxRangeFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangeField)
-            Dim idxRangePartFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangePartField)
-            Dim idxRangeDirFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangeDirectionField)
-            Dim idxSectionFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.SectionNumberField)
-            Dim idxQrtrFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.QuarterSectionField)
-            Dim idxQrtrQrtrFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.QuarterQuarterSectionField)
-            Dim idxMapSuffixTypeFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixTypeField)
-            Dim idxMapSuffixNumFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixNumberField)
-            Dim idxSpcIntrstFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.SpecialInterestField)
-            Dim idxMapTaxlotFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapTaxlotField)
-            Dim idxMapAcresFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapAcresField)
-            Dim idxAnomalyFld As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.AnomalyField)
-            'TODO:JWM If any of these index fields are -1 we should bail according to VB6 version
+            Dim theOrmapTaxlotNumberFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapTaxlotField)
+            Dim theOrmapMapNumberFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapMapNumberField)
+            Dim theMapNumberFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapNumberField)
+            Dim theCountyFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.CountyField)
+            Dim theTaxlotFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TaxlotField)
+            Dim theTownFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipField)
+            Dim theTownPartFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipPartField)
+            Dim theTownDirFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipDirectionField)
+            Dim theRangeFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangeField)
+            Dim theRangePartFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangePartField)
+            Dim theRangeDirFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangeDirectionField)
+            Dim theSectionFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.SectionNumberField)
+            Dim theQrtrFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.QuarterSectionField)
+            Dim theQrtrQrtrFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.QuarterQuarterSectionField)
+            Dim theMapSuffixTypeFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixTypeField)
+            Dim theMapSuffixNumFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixNumberField)
+            Dim theSpcIntrstFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.SpecialInterestField)
+            Dim theMapTaxlotFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapTaxlotField)
+            Dim theMapAcresFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapAcresField)
+            Dim theAnomalyFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.AnomalyField)
+            'TODO: JWM If any of these index fields are -1 we should bail according to VB6 version
 
             Dim thisArea As IArea
             thisArea = DirectCast(editFeature.Shape, IArea)
             ' Update Acreage
-            editFeature.Value(idxMapAcresFld) = thisArea.Area / 43560
+            editFeature.Value(theMapAcresFldIdx) = thisArea.Area / 43560
 
             ' Return and evaluate the ORMAP Number from the Map index
             Dim theOrmapNumber As String = GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
@@ -186,49 +186,49 @@ Public NotInheritable Class SpatialUtilities
                 Exit Try
             End If
 
-            editFeature.Value(idxMapNumberFld) = existingMapNumber
+            editFeature.Value(theMapNumberFldIdx) = existingMapNumber
             ' Store components of the ORMAP number in various fields
-            editFeature.Value(idxOrmapMapNumberFld) = thisORMAPNumberClass.GetORMAPMapNumber
+            editFeature.Value(theOrmapMapNumberFldIdx) = thisORMAPNumberClass.GetOrmapMapNumber
 
             Dim existingValue As String = ConvertCodeValueDomainToCode(editFeature.Fields, EditorExtension.TaxLotSettings.CountyField, thisORMAPNumberClass.County)
             If existingValue.Length > 0 AndAlso IsNumeric(existingValue) Then
-                editFeature.Value(idxCountyFld) = CShort(existingValue)
+                editFeature.Value(theCountyFldIdx) = CShort(existingValue)
             Else
-                editFeature.Value(idxCountyFld) = DBNull.Value
+                editFeature.Value(theCountyFldIdx) = DBNull.Value
             End If
             With editFeature
-                .Value(idxTownFld) = CShort(thisORMAPNumberClass.Township)
-                .Value(idxTownPartFld) = CDbl(thisORMAPNumberClass.PartialTownshipCode)
-                .Value(idxTownDirFld) = thisORMAPNumberClass.TownshipDirectional
-                .Value(idxRangeFld) = CShort(thisORMAPNumberClass.Range)
-                .Value(idxRangePartFld) = CDbl(thisORMAPNumberClass.PartialRangeCode)
-                .Value(idxRangeDirFld) = thisORMAPNumberClass.RangeDirectional
-                .Value(idxSectionFld) = CShort(thisORMAPNumberClass.Section)
-                .Value(idxQrtrFld) = thisORMAPNumberClass.Quarter
-                .Value(idxQrtrQrtrFld) = thisORMAPNumberClass.QuarterQuarter
-                .Value(idxMapSuffixTypeFld) = ConvertCodeValueDomainToCode(.Fields, EditorExtension.MapIndexSettings.MapSuffixTypeField, thisORMAPNumberClass.SuffixType)
-                .Value(idxMapSuffixNumFld) = thisORMAPNumberClass.SuffixNumber
-                .Value(idxAnomalyFld) = thisORMAPNumberClass.Anomaly
+                .Value(theTownFldIdx) = CShort(thisORMAPNumberClass.Township)
+                .Value(theTownPartFldIdx) = CDbl(thisORMAPNumberClass.PartialTownshipCode)
+                .Value(theTownDirFldIdx) = thisORMAPNumberClass.TownshipDirectional
+                .Value(theRangeFldIdx) = CShort(thisORMAPNumberClass.Range)
+                .Value(theRangePartFldIdx) = CDbl(thisORMAPNumberClass.PartialRangeCode)
+                .Value(theRangeDirFldIdx) = thisORMAPNumberClass.RangeDirectional
+                .Value(theSectionFldIdx) = CShort(thisORMAPNumberClass.Section)
+                .Value(theQrtrFldIdx) = thisORMAPNumberClass.Quarter
+                .Value(theQrtrQrtrFldIdx) = thisORMAPNumberClass.QuarterQuarter
+                .Value(theMapSuffixTypeFldIdx) = ConvertCodeValueDomainToCode(.Fields, EditorExtension.MapIndexSettings.MapSuffixTypeField, thisORMAPNumberClass.SuffixType)
+                .Value(theMapSuffixNumFldIdx) = thisORMAPNumberClass.SuffixNumber
+                .Value(theAnomalyFldIdx) = thisORMAPNumberClass.Anomaly
             End With
 
-            If IsDBNull(editFeature.Value(idxSpcIntrstFld)) Then
+            If IsDBNull(editFeature.Value(theSpcIntrstFldIdx)) Then
                 existingValue = "00000"
             Else
-                existingValue = CStr(editFeature.Value(idxSpcIntrstFld))
+                existingValue = CStr(editFeature.Value(theSpcIntrstFldIdx))
             End If
             If existingValue.Length <= 5 Then
                 existingValue.PadLeft(5, "0"c)
                 'Old method sExistVal = New String("0", 5 - Len(sExistVal)) & sExistVal
             End If
-            editFeature.Value(idxSpcIntrstFld) = existingValue
+            editFeature.Value(theSpcIntrstFldIdx) = existingValue
 
             ' Recalculate OMTaxlot
-            If IsDBNull(editFeature.Value(idxTaxlotFld)) Then
+            If IsDBNull(editFeature.Value(theTaxlotFldIdx)) Then
                 Exit Try
             End If
 
             ' Taxlot has actual taxlot number.  ORMAPTaxlot requires a 5-digit number, so leading zeros have to be added
-            Dim existingTaxlotValue As String = CStr(editFeature.Value(idxTaxlotFld))
+            Dim existingTaxlotValue As String = CStr(editFeature.Value(theTaxlotFldIdx))
             existingTaxlotValue = AddLeadingZeros(existingValue, ORMAPNumber.GetOrmap_OrmapTaxlotFieldLength)
 
             Dim mapTaxlotID As String
@@ -237,7 +237,7 @@ Public NotInheritable Class SpatialUtilities
             Dim countyCode As Short = CShort(EditorExtension.DefaultValuesSettings.County)
             Select Case countyCode
                 Case 1 To 19, 21 To 36
-                    editFeature.Value(idxTaxlotFld) = CreateMapTaxlotValue(mapTaxlotID, EditorExtension.TaxLotSettings.MapTaxlotFormatMask)
+                    editFeature.Value(theTaxlotFldIdx) = CreateMapTaxlotValue(mapTaxlotID, EditorExtension.TaxLotSettings.MapTaxlotFormatMask)
                 Case 20
                     ' 1.  Lane County uses a 2-digit numeric identifier for ranges.
                     '     Special handling is required for east ranges, where 02E is
@@ -250,19 +250,19 @@ Public NotInheritable Class SpatialUtilities
                     '     above).
                     ' Trim the map number to only the left 8 characters (no spaces)
                     Dim sb As String = existingMapNumber.Trim(CChar(existingMapNumber.Substring(0, 8)))
-                    editFeature.Value(idxTaxlotFld) = String.Concat(sb, existingValue)
+                    editFeature.Value(theTaxlotFldIdx) = String.Concat(sb, existingValue)
             End Select
 
             ' Recalculate ORMAP Taxlot Number
-            If IsDBNull(editFeature.Value(idxOrmapTaxlotNumberFld)) Then
+            If IsDBNull(editFeature.Value(theOrmapTaxlotNumberFldIdx)) Then
                 Exit Try
             End If
             ' Get the current and the new ORMAP Taxlot Numbers
-            Dim existingORMAPTaxlotNumber As String = CStr(editFeature.Value(idxOrmapTaxlotNumberFld))
+            Dim existingORMAPTaxlotNumber As String = CStr(editFeature.Value(theOrmapTaxlotNumberFldIdx))
             Dim newORMAPTaxlotNumber As String = calculateORMAPTaxlotNumber(existingTaxlotValue, editFeature, existingTaxlotValue)
             'If no changes, don't save value
             If String.Compare(existingORMAPTaxlotNumber, newORMAPTaxlotNumber, True) <> 0 Then
-                editFeature.Value(idxOrmapTaxlotNumberFld) = newORMAPTaxlotNumber
+                editFeature.Value(theOrmapTaxlotNumberFldIdx) = newORMAPTaxlotNumber
             End If
             thisORMAPNumberClass = Nothing
 
@@ -442,7 +442,6 @@ Public NotInheritable Class SpatialUtilities
             ' Find MapIndex feature layer
             theMapIndexFLayer = FindFeatureLayerByDSName(.MapIndexFC)
             If theMapIndexFLayer Is Nothing Then
-                ' TODO: [NIS] Raise an exception instead?
                 Return Nothing
             End If
         End With
@@ -459,11 +458,11 @@ Public NotInheritable Class SpatialUtilities
         Dim returnValue As New String("0"c, 3)
 
         Try
-            Dim indexTaxlotMapSuffixFld As Integer
-            indexTaxlotMapSuffixFld = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixNumberField)
-            If indexTaxlotMapSuffixFld > -1 Then
-                If Not IsDBNull(theFeature.Value(indexTaxlotMapSuffixFld)) Then
-                    returnValue = CStr(theFeature.Value(indexTaxlotMapSuffixFld))
+            Dim theTaxlotMapSuffixFldIdx As Integer
+            theTaxlotMapSuffixFldIdx = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixNumberField)
+            If theTaxlotMapSuffixFldIdx > -1 Then
+                If Not IsDBNull(theFeature.Value(theTaxlotMapSuffixFldIdx)) Then
+                    returnValue = CStr(theFeature.Value(theTaxlotMapSuffixFldIdx))
                 End If
                 'verify that it is 3 digits
                 If returnValue.Length < 3 Then
@@ -489,11 +488,11 @@ Public NotInheritable Class SpatialUtilities
     Public Shared Function GetMapSuffixType(ByRef theFeature As IFeature) As String
         Dim returnValue As New String("0"c, 1)
         Try
-            Dim indexTaxlotMapTypeFld As Integer
-            indexTaxlotMapTypeFld = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixTypeField)
-            If indexTaxlotMapTypeFld > -1 Then
-                If Not IsDBNull(theFeature.Value(indexTaxlotMapTypeFld)) Then
-                    returnValue = CStr(theFeature.Value(indexTaxlotMapTypeFld))
+            Dim theTaxlotMapTypeFldIdx As Integer
+            theTaxlotMapTypeFldIdx = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixTypeField)
+            If theTaxlotMapTypeFldIdx > -1 Then
+                If Not IsDBNull(theFeature.Value(theTaxlotMapTypeFldIdx)) Then
+                    returnValue = CStr(theFeature.Value(theTaxlotMapTypeFldIdx))
                 End If
                 'verify that it is one digit
                 If returnValue.Length > 1 Then
@@ -587,7 +586,6 @@ Public NotInheritable Class SpatialUtilities
             ' Find Taxlot feature layer
             theTaxlotFLayer = FindFeatureLayerByDSName(.TaxLotFC)
             If theTaxlotFLayer Is Nothing Then
-                ' TODO: [NIS] Raise an exception instead?
                 Return Nothing
             End If
         End With
@@ -638,8 +636,9 @@ Public NotInheritable Class SpatialUtilities
                         ' Field not found. Try the OID field
                         If overlayFeatureClass.HasOID Then
                             orderBestByFieldIndex = overlayFeatureClass.Fields.FindField(overlayFeatureClass.OIDFieldName)
-                            'TODO: NIS Remove this message or handle better?
-                            MessageBox.Show("Field " & orderBestByFieldName & " not found in " & overlayFeatureClass.AliasName & ". Using " & overlayFeatureClass.OIDFieldName, "Taxlot Editing - Get Value Via Overlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                            'TODO: [NIS] Remove this message or handle better?
+                            MessageBox.Show("Field " & orderBestByFieldName & " not found in " & overlayFeatureClass.AliasName & vbNewLine & _
+                                    ". Using " & overlayFeatureClass.OIDFieldName, "Taxlot Editing - Get Value Via Overlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                         Else
                             continueThisProcess = False
                         End If
@@ -1107,7 +1106,7 @@ Public NotInheritable Class SpatialUtilities
                         domainValue = aRow.Value(fieldIndex)
                         'search domain for the code
                         For domainIndex As Integer = 0 To thisCodedValueDomain.CodeCount - 1
-                            If thisCodedValueDomain.Value(domainIndex).ToString = domainValue.ToString Then 'TODO: NIS Confirm that ToString will work here
+                            If thisCodedValueDomain.Value(domainIndex).ToString = domainValue.ToString Then 'TODO: [NIS] Confirm that ToString will work here
                                 returnValue = thisCodedValueDomain.Name(domainIndex)
                                 Exit For
                             End If
@@ -1178,7 +1177,7 @@ Public NotInheritable Class SpatialUtilities
             Dim mapIndexFeatureClass As IFeatureClass
             mapIndexFeatureClass = mapIndexFeatureLayer.FeatureClass
             'original vb6 code placed the point object as the first parameter. 
-            Dim mapNumber As String = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField) 'TODO:JWM check this
+            Dim mapNumber As String = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField) 'TODO: JWM check this
 
             ' Allow existing anno to be moved without changing MapNumber
             ' Some anno will reside in another Taxlot, but labels the neighboring taxlot
@@ -1243,16 +1242,16 @@ Public NotInheritable Class SpatialUtilities
                 Exit Try
             End If
 
-            Dim indexAutoDateField As Integer
-            indexAutoDateField = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoDateField)
-            If indexAutoDateField > Utilities.FieldNotFoundIndex Then
-                feature.Value(indexAutoDateField) = System.DateTime.Now
+            Dim theAutoDateFldIdx As Integer
+            theAutoDateFldIdx = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoDateField)
+            If theAutoDateFldIdx > Utilities.FieldNotFoundIndex Then
+                feature.Value(theAutoDateFldIdx) = System.DateTime.Now
             End If
 
-            Dim indexAutoWhoField As Integer
-            indexAutoWhoField = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoWhoField)
-            If indexAutoWhoField > Utilities.FieldNotFoundIndex Then
-                feature.Value(indexAutoWhoField) = Utilities.GetUserName
+            Dim theAutoWhoFldIdx As Integer
+            theAutoWhoFldIdx = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoWhoField)
+            If theAutoWhoFldIdx > Utilities.FieldNotFoundIndex Then
+                feature.Value(theAutoWhoFldIdx) = Utilities.GetUserName
             End If
 
         Catch ex As Exception

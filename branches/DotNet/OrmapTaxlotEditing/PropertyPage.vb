@@ -87,7 +87,6 @@ Public NotInheritable Class PropertyPage
     End Property
 
     Private Sub setPageDirty(ByVal value As Boolean)
-        ' TODO: [NIS] Add validation code?
         _pageDirty = value
     End Sub
 
@@ -100,7 +99,6 @@ Public NotInheritable Class PropertyPage
     End Property
 
     Private Sub setPropertiesPageSite(ByVal value As IComPropertyPageSite)
-        ' TODO: [NIS] Add validation code?
         _propertiesPageSite = value
     End Sub
 
@@ -113,7 +111,6 @@ Public NotInheritable Class PropertyPage
     End Property
 
     Private Sub setPartnerPropertiesForm(ByVal value As PropertiesForm)
-        ' TODO: [NIS] Add validation code?
         _partnerPropertiesForm = value
     End Sub
 
@@ -287,12 +284,6 @@ Public NotInheritable Class PropertyPage
             Return False
         End If
 
-        ' TODO: [NIS] Safe to remove? EditorExtension already evaluates this with IsValidWorkspace().
-        '' Do not affirm if the user is editing a file-based workspace (e.g. coverages, shapefiles).
-        'If editor.EditWorkspace.Type = esriWorkspaceType.esriFileSystemWorkspace Then
-        '    Return False
-        'End If
-
         ' Otherwise, affirm.
         Return True
 
@@ -370,7 +361,7 @@ Public NotInheritable Class PropertyPage
         ArcGISCategoryRegistration(registerType)
 
         '
-        ' TODO: Add any COM registration code here
+        ' NOTE: Add any COM registration code here...
         '
     End Sub
 
@@ -380,7 +371,7 @@ Public NotInheritable Class PropertyPage
         ArcGISCategoryUnregistration(registerType)
 
         '
-        ' TODO: Add any COM unregistration code here
+        ' NOTE: Add any COM unregistration code here...
         '
     End Sub
 

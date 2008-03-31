@@ -60,7 +60,7 @@ Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
         '
         InitializeComponent()
 
-        ' TODO: Add any constructor code after InitializeComponent call
+        ' NOTE: Add any constructor code after InitializeComponent call...
 
     End Sub
 

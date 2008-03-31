@@ -191,8 +191,6 @@ Public NotInheritable Class ORMAPNumber
                 Case "0.25", "0.50", "0.75"
                     _partialRangeCode = value.Substring(1, 3) 'Mid(value, 2)
                 Case Else
-                    ' TODO: [NIS] Research this - doesn't match the old .ini file
-                    '_partialRangeCode = ".00"
                     _partialRangeCode = EditorExtension.DefaultValuesSettings.RangePart
             End Select
             RaiseEvent OnChange(Me.GetOrmapNumber)
@@ -229,8 +227,11 @@ Public NotInheritable Class ORMAPNumber
             Section = _section
         End Get
         Set(ByVal value As String)
-            If IsNumeric(value) Then 'TODO: JWM is there a another way to test for numeric?
-                Select Case CShort(value)
+            'If IsNumeric(value) Then 'TODO: JWM is there a another way to test for numeric?
+            Dim valueAsInteger As Integer
+            If Integer.TryParse(value, valueAsInteger) Then
+                'Select Case CInt(value)
+                Select Case valueAsInteger
                     Case 0
                         _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST YET
                     Case Is < 10

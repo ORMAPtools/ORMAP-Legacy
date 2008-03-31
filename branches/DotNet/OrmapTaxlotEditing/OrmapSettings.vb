@@ -79,7 +79,6 @@ Public NotInheritable Class OrmapSettings
     End Property
 
     Private Sub SetPartnerOrmapSettingsForm(ByVal value As OrmapSettingsForm)
-        ' TODO: [NIS] Add validation code?
         _partnerOrmapSettingsForm = value
     End Sub
 

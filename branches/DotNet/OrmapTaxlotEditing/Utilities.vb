@@ -57,7 +57,7 @@ Public NotInheritable Class Utilities
     Public Shared Function GetUserName() As String
         If TypeOf My.User.CurrentPrincipal Is _
         Security.Principal.WindowsPrincipal Then
-            'TODO:ALL Since this a dll need to call My.User.InitializeWithWindowsUser() on initial startup maybe in editorextension startup
+            'TODO: ALL Since this a dll, need to call My.User.InitializeWithWindowsUser() on initial startup maybe in editorextension startup
             ' The application is using Windows authentication.
             ' The name format is DOMAIN\USERNAME.
             Dim parts() As String = Split(My.User.Name, "\")

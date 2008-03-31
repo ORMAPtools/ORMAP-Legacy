@@ -137,7 +137,8 @@ Public NotInheritable Class LocateFeature
             End If
         End If
 
-        ' TODO: Add other initialization code
+        ' NOTE: Add other initialization code here...
+
     End Sub
 
     Public Overrides Sub OnClick()

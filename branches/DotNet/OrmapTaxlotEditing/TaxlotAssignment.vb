@@ -414,7 +414,7 @@ Public NotInheritable Class TaxlotAssignment
             Dim theGeometry As IGeometry = Nothing
 
             thePoint = EditorExtension.Editor.Display.DisplayTransformation.ToMapPoint(X, Y)
-            'TODO: NIS Get rid of this commented line?
+            'TODO: [NIS] Get rid of this commented line?
             'theGeometry = EditorExtension.Editor.CreateSearchShape(thePoint) 'Returns an IEnvelope
             theGeometry = thePoint 'QI
 
@@ -602,7 +602,7 @@ Public NotInheritable Class TaxlotAssignment
             'Note: Special code for Lane County (see comment below).
             Dim theMapTaxlotNumber As String = String.Empty 'initialize
             Dim theDefaultCountyCode As Integer
-            theDefaultCountyCode = CInt(EditorExtension.DefaultValuesSettings.County)  ' TODO: [NIS] Confirm field choice
+            theDefaultCountyCode = CInt(EditorExtension.DefaultValuesSettings.County)
             Select Case theDefaultCountyCode
                 Case 1 To 19, 21 To 36
                     theMapTaxlotNumber = CreateMapTaxlotValue(theExistOrmapMapNumberVal & theNewTLTaxlotNumVal_5digit, (EditorExtension.TaxLotSettings.MapTaxlotFormatMask))
@@ -939,13 +939,6 @@ Public NotInheritable Class TaxlotAssignment
 
     Public Overrides Sub OnClick()
         Try
-            ' TODO: [NIS] Remove this if not needed anymore.
-            '' HACK: [NIS] Don't know why this form is disposed after first use, but 
-            '' this check insures it is available again.
-            'If PartnerTaxlotAssignmentForm.IsDisposed Then
-            '    SetPartnerTaxlotAssignmentForm(New TaxlotAssignmentForm())
-            'End If
-
             ' Show and activate the partner form.
             If PartnerTaxlotAssignmentForm.Visible Then
                 PartnerTaxlotAssignmentForm.Activate()
@@ -954,7 +947,7 @@ Public NotInheritable Class TaxlotAssignment
             End If
 
         Catch ex As Exception
-            ' TODO: [NIS] Add exception handling here
+            MessageBox.Show(ex.Message)
         End Try
     End Sub
 
@@ -981,10 +974,10 @@ Public NotInheritable Class TaxlotAssignment
                 End If
             End If
 
-            ' TODO: Add other initialization code?
+            ' NOTE: Add other initialization code here...
 
         Catch ex As Exception
-            ' TODO: [NIS] Add exception handling here
+            MessageBox.Show(ex.Message)
         End Try
     End Sub
 
@@ -1014,7 +1007,7 @@ Public NotInheritable Class TaxlotAssignment
             End If
 
         Catch ex As Exception
-            ' TODO: [NIS] Add exception handling here
+            MessageBox.Show(ex.Message)
         End Try
     End Sub
 
