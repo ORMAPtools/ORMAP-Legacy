@@ -29,15 +29,18 @@
 
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision: 212 $
 'Date of Last Change: $Date: 2008-03-03 00:31:56 -0800 (Mon, 03 Mar 2008) $
 #End Region
 
+#Region "Imported Namespaces"
 Imports System.Runtime.InteropServices
+#End Region
 
 <ComVisible(False)> _
 Public Class HelpForm
+
 
 End Class

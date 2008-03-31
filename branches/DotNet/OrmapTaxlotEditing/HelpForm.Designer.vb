@@ -22,48 +22,31 @@ Partial Class HelpForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.uxOK = New System.Windows.Forms.Button
-        Me.uxContent = New System.Windows.Forms.RichTextBox
+        Me.WebBrowser1 = New System.Windows.Forms.WebBrowser
         Me.SuspendLayout()
         '
-        'uxOK
+        'WebBrowser1
         '
-        Me.uxOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.uxOK.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.uxOK.Location = New System.Drawing.Point(509, 335)
-        Me.uxOK.Name = "uxOK"
-        Me.uxOK.Size = New System.Drawing.Size(75, 23)
-        Me.uxOK.TabIndex = 2
-        Me.uxOK.Text = "&OK"
-        '
-        'uxContent
-        '
-        Me.uxContent.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.uxContent.BackColor = System.Drawing.SystemColors.Window
-        Me.uxContent.Location = New System.Drawing.Point(8, 8)
-        Me.uxContent.Name = "uxContent"
-        Me.uxContent.Size = New System.Drawing.Size(576, 321)
-        Me.uxContent.TabIndex = 3
-        Me.uxContent.Text = "(No help file loaded.)"
+        Me.WebBrowser1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.WebBrowser1.Location = New System.Drawing.Point(5, 5)
+        Me.WebBrowser1.MinimumSize = New System.Drawing.Size(20, 20)
+        Me.WebBrowser1.Name = "WebBrowser1"
+        Me.WebBrowser1.Size = New System.Drawing.Size(532, 356)
+        Me.WebBrowser1.TabIndex = 4
         '
         'HelpForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(592, 366)
-        Me.Controls.Add(Me.uxOK)
-        Me.Controls.Add(Me.uxContent)
+        Me.ClientSize = New System.Drawing.Size(542, 366)
+        Me.Controls.Add(Me.WebBrowser1)
         Me.Name = "HelpForm"
         Me.Padding = New System.Windows.Forms.Padding(5)
         Me.ShowIcon = False
-        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "ORMAP Taxlot Editing Help - No Topic"
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents uxOK As System.Windows.Forms.Button
-    Friend WithEvents uxContent As System.Windows.Forms.RichTextBox
+    Friend WithEvents WebBrowser1 As System.Windows.Forms.WebBrowser
 End Class

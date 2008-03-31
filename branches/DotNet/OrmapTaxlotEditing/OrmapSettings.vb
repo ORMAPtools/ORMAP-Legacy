@@ -29,7 +29,7 @@
 
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$
 'Date of Last Change: $Date$
@@ -37,7 +37,9 @@
 
 ' TODO: [NIS] Implement this class and move code here from the form so as to seperate the UI and business logic layers.
 
+#Region "Imported Namespaces"
 Imports System.Runtime.InteropServices
+#End Region
 
 <ComVisible(False)> _
 Public NotInheritable Class OrmapSettings

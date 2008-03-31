@@ -29,23 +29,25 @@
 
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$
 'Date of Last Change: $Date$
 #End Region
 
+#Region "Imported Namespaces"
 Imports System
 Imports System.Drawing
 Imports System.Collections
 Imports System.ComponentModel
 Imports System.Windows.Forms
 Imports System.Runtime.InteropServices
+#End Region
 
 <ComVisible(False)> _
 Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
 
-#Region "Class-Level Constants And Enumerations"
+#Region "Class-Level Constants And Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"
@@ -85,21 +87,20 @@ Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
 
 #End Region
 
-#Region "Properties"
+#Region "Properties (none)"
 #End Region
 
-#Region "Event Handlers"
+#Region "Event Handlers (none)"
 #End Region
 
-#Region "Methods"
+#Region "Methods (none)"
 #End Region
 
 #End Region
 
 #Region "Inherited Class Members"
 
-#Region "Properties"
-    ' None
+#Region "Properties (none)"
 #End Region
 
 #Region "Methods"
@@ -120,8 +121,7 @@ Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
 
 #End Region
 
-#Region "Implemented Interface Members"
-    ' None
+#Region "Implemented Interface Members (none)"
 #End Region
 
 #Region "Other Members"

@@ -29,7 +29,7 @@
 
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$
 'Date of Last Change: $Date$
@@ -47,6 +47,11 @@ Public NotInheritable Class Utilities
 
 #Region "Public Members"
     Public Const FieldNotFoundIndex As Integer = -1
+
+    Public Enum ESRIMouseButtons
+        Left = 1
+        Right = 2
+    End Enum
 
     Public Shared Function GetUserName() As String
         If TypeOf My.User.CurrentPrincipal Is _

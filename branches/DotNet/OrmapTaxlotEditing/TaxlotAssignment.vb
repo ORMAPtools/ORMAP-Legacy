@@ -29,12 +29,13 @@
 
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$
 'Date of Last Change: $Date$
 #End Region
 
+#Region "Imported Namespaces"
 Imports System.Drawing
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
@@ -50,6 +51,7 @@ Imports ESRI.ArcGIS.Geometry
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
+#End Region
 
 <ComVisible(True)> _
 <ComClass(TaxlotAssignment.ClassId, TaxlotAssignment.InterfaceId, TaxlotAssignment.EventsId), _
@@ -270,16 +272,21 @@ Public NotInheritable Class TaxlotAssignment
         ' Open a custom help file.
         ' Note: Requires a specific file in the help subdirectory of the application directory.
         Dim filePath As String
-        filePath = My.Application.Info.DirectoryPath & "\help\TaxlotAssignmentHelp.rtf"
+        filePath = My.Application.Info.DirectoryPath & "\help\videos\TaxlotAssignment\TaxlotAssignment.html"
         If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(filePath) Then
-            ' Open help file from the application directory.
+            ' Open the help form.
             Dim helpForm As New HelpForm
-            helpForm.uxContent.LoadFile(filePath, RichTextBoxStreamType.RichText)
             helpForm.Text = "Taxlot Assignment Help"
+            Dim theUri As New System.Uri("file:///" & filePath)
+            helpForm.WebBrowser1.Url = theUri
+            helpForm.Width = 1000
+            helpForm.Height = 740
             helpForm.Show()
         Else
-            MessageBox.Show("No help file available in the directory " & My.Application.Info.DirectoryPath & "\help" & ".")
+            MessageBox.Show("No help file available in the directory " & vbNewLine & _
+                    My.Application.Info.DirectoryPath & "\help\videos\TaxlotAssignment" & ".")
         End If
+
     End Sub
 
     Private Sub uxType_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles TaxlotAssignmentForm.uxType.SelectedValueChanged
@@ -339,6 +346,9 @@ Public NotInheritable Class TaxlotAssignment
 
     Public Function HasRequiredData() As Boolean
 
+        ' TODO: [NIS] Could use a .NET collection type not dependent on the VisualBasic namespace.
+        ' See System.Collection namespace. Take a look at http://forums.devx.com/archive/index.php/t-16828.html.
+
         ' TEMPLATE: Const fcName1 As String = "FeatureClassName1"  'TODO: Insert real fc name
         ' TEMPLATE: Const fieldName1FC1 As String = "FieldName1"  'TODO: Insert real field name
         ' TEMPLATE: Const fieldName2FC1 As String = "FieldName2"  'TODO: Insert real field name
@@ -382,11 +392,10 @@ Public NotInheritable Class TaxlotAssignment
     End Function
 
 
-    Private Sub DoToolOperation(ByVal Button As Integer, ByVal X As Integer, ByVal Y As Integer)
+    Private Sub DoToolOperation(ByVal Button As ESRIMouseButtons, ByVal X As Integer, ByVal Y As Integer)
 
         Try
-            ' TODO: [NIS] Define button parameters with enum
-            If (Button <> 1) Then
+            If (Button <> ESRIMouseButtons.Left) Then
                 ' Exit silently.
                 Exit Try
             End If
@@ -499,7 +508,7 @@ Public NotInheritable Class TaxlotAssignment
                 If Len(theExistOrmapMapNumberVal) = 0 Then
                     MessageBox.Show("OrmapMapNumber is empty for this taxlot or MapIndex." & vbNewLine & _
                                     "Use the MapIndex tool to populate the OrmapMapNumber field" & vbNewLine & _
-                                    "before using this tool", "Taxlot Assignment", MessageBoxButtons.OK)
+                                    "before using this tool", "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                     Exit Try
                 End If
             End If
@@ -604,7 +613,7 @@ Public NotInheritable Class TaxlotAssignment
                     ' 2.  ORMAP standards (OCDES (pg 13); Taxmap Data Model (pg 11)) assert that
                     '     this field should be equal to MAPNUMBER + TAXLOT. In this case, MAPNUMBER
                     '     is already in the right format, thus removing the need for the
-                    '     gfn_s_CreateMapTaxlotValue function. Also, in this case, TAXLOT is padded
+                    '     CreateMapTaxlotValue function. Also, in this case, TAXLOT is padded
                     '     on the left with zeros to make it always a 5-digit number (see comment
                     '     above).
                     theMapTaxlotNumber = Trim(Left(theExistMapTaxlotVal, 8)) & theNewTLTaxlotNumVal_5digit
@@ -753,36 +762,6 @@ Public NotInheritable Class TaxlotAssignment
 
     End Function
 
-    ' TODO: [NIS] Replace with local property
-    Private Function getTaxlotFeatureLayer() As IFeatureLayer
-        ' Find Taxlot feature layer
-        Dim theTaxlotFLayer As IFeatureLayer
-        With EditorExtension.TableNamesSettings
-            ' Find Taxlot feature layer
-            theTaxlotFLayer = FindFeatureLayerByDSName(.TaxLotFC)
-            If theTaxlotFLayer Is Nothing Then
-                ' TODO: [NIS] Raise an exception instead?
-                Return Nothing
-            End If
-        End With
-        Return theTaxlotFLayer
-    End Function
-
-    ' TODO: [NIS] Replace with local property
-    Private Function getMapIndexFeatureLayer() As IFeatureLayer
-        ' Find Map Index feature layer
-        Dim theMapIndexFLayer As IFeatureLayer
-        With EditorExtension.TableNamesSettings
-            ' Find MapIndex feature layer
-            theMapIndexFLayer = FindFeatureLayerByDSName(.MapIndexFC)
-            If theMapIndexFLayer Is Nothing Then
-                ' TODO: [NIS] Raise an exception instead?
-                Return Nothing
-            End If
-        End With
-        Return theMapIndexFLayer
-    End Function
-
     Private Sub initializeData()
 
         ' Initialize document and map objects, and their events for tool reference only
@@ -790,9 +769,9 @@ Public NotInheritable Class TaxlotAssignment
         _focusMap = DirectCast(_doc, IMxDocument).FocusMap
 
         ' Obtain references to feature layer feature classes
-        _theTaxlotFLayer = getTaxlotFeatureLayer()
+        _theTaxlotFLayer = GetTaxlotFeatureLayer()
         _theTaxlotFClass = _theTaxlotFLayer.FeatureClass
-        _theMapIndexFLayer = getMapIndexFeatureLayer()
+        _theMapIndexFLayer = GetMapIndexFeatureLayer()
         _theMapIndexFClass = _theMapIndexFLayer.FeatureClass
 
         ' Get field indexes
@@ -1019,12 +998,12 @@ Public NotInheritable Class TaxlotAssignment
     ''' <remarks></remarks>
     Public Overrides Sub OnMouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
         Try
-            If Button = 1 Then
+            If Button = ESRIMouseButtons.Left Then
                 '[Left button clicked...]
                 If HasRequiredData() Then
                     DoToolOperation(Button, X, Y)
                 End If
-            ElseIf Button = 2 Then
+            ElseIf Button = ESRIMouseButtons.Right Then
                 '[Right button clicked...]
                 ' Show and activate the partner form.
                 If PartnerTaxlotAssignmentForm.Visible Then

@@ -29,7 +29,7 @@
 
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name:$
 'SCC revision number: $Revision:$
 'Date of Last Change: $Date:$
@@ -163,7 +163,7 @@ Public Class CatalogFileDialog
     ''' </summary>
     ''' <returns>  A collection of names of objects that have been selected by the user from the dialog box</returns>
     ''' <remarks></remarks>
-    Public Function ShowOPen() As Collection
+    Public Function ShowOpen() As Collection
         Try
             Dim selection As IEnumGxObject
             Dim thisSelectedObject As IGxObject

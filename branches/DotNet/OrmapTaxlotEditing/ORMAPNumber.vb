@@ -29,7 +29,7 @@
 
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name:$
 'SCC revision number: $Revision:$
 'Date of Last Change: $Date:$

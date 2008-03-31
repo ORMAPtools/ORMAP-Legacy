@@ -29,7 +29,7 @@
 
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$
 'Date of Last Change: $Date$
@@ -45,6 +45,7 @@ Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Geodatabase
 Imports ESRI.ArcGIS.DataSourcesGDB
 Imports ESRI.ArcGIS.Carto
+Imports OrmapTaxlotEditing.StringUtilities
 #End Region
 
 #Region "Class Declaration"
@@ -228,7 +229,7 @@ Public NotInheritable Class SpatialUtilities
 
             ' Taxlot has actual taxlot number.  ORMAPTaxlot requires a 5-digit number, so leading zeros have to be added
             Dim existingTaxlotValue As String = CStr(editFeature.Value(idxTaxlotFld))
-            existingTaxlotValue = StringUtilities.AddLeadingZeros(existingValue, ORMAPNumber.GetOrmap_OrmapTaxlotFieldLength)
+            existingTaxlotValue = AddLeadingZeros(existingValue, ORMAPNumber.GetOrmap_OrmapTaxlotFieldLength)
 
             Dim mapTaxlotID As String
             mapTaxlotID = String.Concat(thisORMAPNumberClass.GetORMAPNumber, existingTaxlotValue)
@@ -236,7 +237,7 @@ Public NotInheritable Class SpatialUtilities
             Dim countyCode As Short = CShort(EditorExtension.DefaultValuesSettings.County)
             Select Case countyCode
                 Case 1 To 19, 21 To 36
-                    editFeature.Value(idxTaxlotFld) = StringUtilities.CreateMapTaxlotValue(mapTaxlotID, EditorExtension.TaxLotSettings.MapTaxlotFormatMask)
+                    editFeature.Value(idxTaxlotFld) = CreateMapTaxlotValue(mapTaxlotID, EditorExtension.TaxLotSettings.MapTaxlotFormatMask)
                 Case 20
                     ' 1.  Lane County uses a 2-digit numeric identifier for ranges.
                     '     Special handling is required for east ranges, where 02E is
@@ -244,7 +245,7 @@ Public NotInheritable Class SpatialUtilities
                     ' 2.  ORMAP standards (OCDES (pg 13); Taxmap Data Model (pg 11)) assert that
                     '     this field should be equal to MAPNUMBER + TAXLOT. In this case, MAPNUMBER
                     '     is already in the right format, thus removing the need for the
-                    '     gfn_s_CreateMapTaxlotValue function. Also, in this case, TAXLOT is padded
+                    '     CreateMapTaxlotValue function. Also, in this case, TAXLOT is padded
                     '     on the left with zeros to make it always a 5-digit number (see comment
                     '     above).
                     ' Trim the map number to only the left 8 characters (no spaces)
@@ -429,6 +430,26 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
+    ''' Get the MapIndex feature layer.
+    ''' </summary>
+    ''' <returns>The MapIndex feature layer.</returns>
+    ''' <remarks>This feature layer may be named something other than "MapIndex", 
+    ''' depending on user settings.</remarks>
+    Public Shared Function GetMapIndexFeatureLayer() As IFeatureLayer
+        ' Find Map Index feature layer
+        Dim theMapIndexFLayer As IFeatureLayer
+        With EditorExtension.TableNamesSettings
+            ' Find MapIndex feature layer
+            theMapIndexFLayer = FindFeatureLayerByDSName(.MapIndexFC)
+            If theMapIndexFLayer Is Nothing Then
+                ' TODO: [NIS] Raise an exception instead?
+                Return Nothing
+            End If
+        End With
+        Return theMapIndexFLayer
+    End Function
+
+    ''' <summary>
     '''  Validate and format a map suffix number.
     ''' </summary>
     ''' <param name="theFeature">An object that supports the IFeature interface.</param>
@@ -551,6 +572,26 @@ Public NotInheritable Class SpatialUtilities
             MessageBox.Show(ex.Message)
             Return Nothing
         End Try
+    End Function
+
+    ''' <summary>
+    ''' Get the Taxlot feature layer.
+    ''' </summary>
+    ''' <returns>The Taxlot feature layer.</returns>
+    ''' <remarks>This feature layer may be named something other than "Taxlot", 
+    ''' depending on user settings.</remarks>
+    Public Shared Function GetTaxlotFeatureLayer() As IFeatureLayer
+        ' Find Taxlot feature layer
+        Dim theTaxlotFLayer As IFeatureLayer
+        With EditorExtension.TableNamesSettings
+            ' Find Taxlot feature layer
+            theTaxlotFLayer = FindFeatureLayerByDSName(.TaxLotFC)
+            If theTaxlotFLayer Is Nothing Then
+                ' TODO: [NIS] Raise an exception instead?
+                Return Nothing
+            End If
+        End With
+        Return theTaxlotFLayer
     End Function
 
     ' TODO: [NIS] Take over this function from JWM and refactor (smaller modules).
@@ -964,7 +1005,7 @@ Public NotInheritable Class SpatialUtilities
                     .SetTitle(String.Concat("Find feature class ", featureClassName, "..."))
                 End If
                 .SetFilter(New ESRI.ArcGIS.Catalog.GxFilterPersonalGeodatabases, True, True)
-                .ShowOPen()
+                .ShowOpen()
             End With
 
             'exit if there is nothing selected

@@ -28,16 +28,19 @@
 ' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #End Region
-#Region "Subversion Keyword expansion"
+
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$
 'Date of Last Change: $Date$
 #End Region
 
+#Region "Imported Namespaces"
 Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.esriSystem
+#End Region
 
 <ComVisible(True)> _
 <ComClass(OrmapToolbar.ClassId, OrmapToolbar.InterfaceId, OrmapToolbar.EventsId), _
@@ -45,8 +48,7 @@ ProgId("ORMAPTaxlotEditing.OrmapToolbar")> _
 Public NotInheritable Class OrmapToolbar
     Inherits BaseToolbar
 
-#Region "Class-Level Constants And Enumerations"
-    ' None
+#Region "Class-Level Constants And Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"
@@ -60,6 +62,8 @@ Public NotInheritable Class OrmapToolbar
     Public Sub New()
 
         ' Define the toolbar by adding items.
+        AddItem("ORMAPTaxlotEditing.AutoUpdateAllToggle")
+        BeginGroup() 'Separator
         AddItem("ORMAPTaxlotEditing.LocateFeature")
         BeginGroup() 'Separator
         AddItem("ORMAPTaxlotEditing.TaxlotAssignment")

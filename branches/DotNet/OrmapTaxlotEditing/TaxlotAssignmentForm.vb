@@ -29,18 +29,20 @@
 
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision: 212 $
 'Date of Last Change: $Date: 2008-03-03 00:31:56 -0800 (Mon, 03 Mar 2008) $
 #End Region
 
+#Region "Imported Namespaces"
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.SystemUI
 Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.ADF.CATIDs
+#End Region
 
 ' TODO: [NIS] Add Standard Regions
 

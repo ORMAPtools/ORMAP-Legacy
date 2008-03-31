@@ -27,7 +27,7 @@
 ' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$
 'Date of Last Change: $Date$
@@ -46,12 +46,12 @@ Public NotInheritable Class StringUtilities
 #Region "Public Members"
 
     ''' <summary>
-    ''' Adds leading zeros if necessary
+    ''' Add leading zeros if necessary.
     ''' </summary>
-    ''' <param name="currentString">The string to pad with zeros</param>
-    ''' <param name="width">The final length of the string</param>
-    ''' <returns>A string of length width characters</returns>
-    ''' <remarks>Creates a string of width characters padded on the left with zeros</remarks>
+    ''' <param name="currentString">The string to pad with zeros.</param>
+    ''' <param name="width">The final length of the string.</param>
+    ''' <returns>A string of length width characters.</returns>
+    ''' <remarks>Creates a string of width characters padded on the left with zeros.</remarks>
     Public Shared Function AddLeadingZeros(ByVal currentString As String, ByVal width As Integer) As String
         Try
             If currentString.Length < width Then
@@ -65,17 +65,27 @@ Public NotInheritable Class StringUtilities
         End Try
     End Function
 
-    Public Function CreateMapTaxlotValue(ByVal mapTaxlotIDValue As String, ByVal formatString As String) As String
+    ''' <summary>
+    ''' Creates a formatted MapTaxlot value using the given format mask.
+    ''' </summary>
+    ''' <param name="mapTaxlotIDValue">The string to format.</param>
+    ''' <param name="formatMask">The format mask to use.</param>
+    ''' <returns>A string formatted to fit the mask.</returns>
+    ''' <remarks>Creates a string formatted to the standards specified 
+    ''' by the format mask specified by the user. This mask is customized 
+    ''' for each county.</remarks>
+    Public Shared Function CreateMapTaxlotValue(ByVal mapTaxlotIDValue As String, ByVal formatMask As String) As String
 
         If mapTaxlotIDValue Is Nothing OrElse mapTaxlotIDValue.Length = 0 Then
             Throw New ArgumentNullException("mapTaxlotIDValue")
         End If
-        If formatString Is Nothing OrElse formatString.Length = 0 Then
-            Throw New ArgumentNullException("formatString")
+        If formatMask Is Nothing OrElse formatMask.Length = 0 Then
+            Throw New ArgumentNullException("formatMask")
         End If
         If mapTaxlotIDValue.Length < 29 Then
-            Throw New Exception("Invalid arguement length for mapTaxlotValue", Nothing)
+            Throw New ArgumentException("Invalid argument length", "mapTaxlotIDValue")
         End If
+
         Try
             Dim countyCode As Short
             countyCode = CShort(mapTaxlotIDValue.Substring(0, 2))
@@ -101,18 +111,19 @@ Public NotInheritable Class StringUtilities
             End Select
 
             'We must adjust the mask for clackamas county if there are no half ranges in the current string
-            If formatString.IndexOf("^"c) > 0 Then
+            If formatMask.IndexOf("^"c) > 0 Then
                 If hasRangePart = False Then
-                    formatString = formatString.Remove(formatString.IndexOf("^"c), 1)
+                    formatMask = formatMask.Remove(formatMask.IndexOf("^"c), 1)
                 Else
                     'if there is a range part the letter Q will be  placed in the position where D sits
-                    formatString = formatString.Remove(formatString.IndexOf("D"c), 1)
+                    formatMask = formatMask.Remove(formatMask.IndexOf("D"c), 1)
                 End If
             End If
             'copy of the formatstring
-            Dim maskValues As New StringBuilder(formatString.ToUpper)
-            ' Create a string of spaces to place our results in. This helps a speed up string manipulation a little.
-            Dim formattedResult As New StringBuilder(New String(" ", formatString.Length), formatString.Length)
+            Dim maskValues As New StringBuilder(formatMask.ToUpper)
+            ' Create a string of spaces (char literal) to place our results in.
+            ' This helps a speed up string manipulation a little.
+            Dim formattedResult As New StringBuilder(New String(" "c, formatMask.Length), formatMask.Length)
 
             Dim positionInMask As Integer
             Dim characterCode As Integer
@@ -123,11 +134,11 @@ Public NotInheritable Class StringUtilities
             Dim hasProcessedRangeFractional As Boolean = False
 
             For charIdx As Integer = 0 To maskValues.Length - 1
-                positionInMask = formatString.IndexOf(maskValues.Chars(charIdx).ToString, charIdx, StringComparison.CurrentCultureIgnoreCase)
+                positionInMask = formatMask.IndexOf(maskValues.Chars(charIdx).ToString, charIdx, StringComparison.CurrentCultureIgnoreCase)
                 characterCode = Convert.ToInt32(maskValues.Chars(charIdx))
                 ' Returns how many of these characters appear in the mask
                 Dim c As Char
-                For Each c In formatString
+                For Each c In formatMask
                     If c.Equals(maskValues.Chars(charIdx)) Then
                         tokenCount += 1
                     End If
@@ -158,8 +169,8 @@ Public NotInheritable Class StringUtilities
                     Case 38 '& Using these characters in mask will strip leading zeros from parcel id
                         If Not hasProcessedParcelId Then '
                             'since we are at the end of the string use Insert
-                            Dim s As String = New String(mapTaxlotIDValue.Substring(24, 5))
-                            formattedResult.Insert(positionInMask, StripLeadingZeros(s))
+                            Dim s As String = mapTaxlotIDValue.Substring(24, 5)
+                            formattedResult.Insert(positionInMask, stripLeadingZeros(s))
                             hasProcessedParcelId = True
                         End If
                     Case 81 'Q
@@ -262,19 +273,21 @@ Public NotInheritable Class StringUtilities
                 previousCharInMask = maskValues.Chars(charIdx)
                 tokenCount = 0
             Next charIdx
-            Dim returnValue As New String(formattedResult.ToString)
+            Dim returnValue As String = formattedResult.ToString
             Return returnValue
+
         Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return String.Empty
+
         End Try
 
     End Function
 
     ''' <summary>
-    ''' Isolate elements of a string
+    ''' Isolate elements of a string.
     ''' </summary>
-    ''' <param name="theWholeString">The string to isolate the substring from</param>
+    ''' <param name="theWholeString">The string to isolate the substring from.</param>
     ''' <param name="lowPart"></param>
     ''' <param name="highPart"></param>
     ''' <returns>A string that is a substring of theWholeString.</returns>
@@ -354,6 +367,13 @@ Public NotInheritable Class StringUtilities
             Return String.Empty
         End Try
     End Function
+
+    ''' <summary>
+    '''Private empty constructor to prevent instantiation.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub New()
+    End Sub
 
 #End Region
 

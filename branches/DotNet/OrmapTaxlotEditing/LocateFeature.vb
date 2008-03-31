@@ -29,12 +29,13 @@
 
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$
 'Date of Last Change: $Date$
 #End Region
 
+#Region "Imported Namespaces"
 Imports System.Drawing
 Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.ADF.BaseClasses
@@ -42,7 +43,7 @@ Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.Framework
-
+#End Region
 
 <ComVisible(True)> _
 <ComClass(LocateFeature.ClassId, LocateFeature.InterfaceId, LocateFeature.EventsId), _

@@ -102,6 +102,7 @@
     </Compile>
     <Compile Include="AddArrows.vb" />
     <Compile Include="CatalogFileDlg.vb" />
+    <Compile Include="AutoUpdateAllToggle.vb" />
     <Compile Include="HelpForm.Designer.vb">
       <DependentUpon>HelpForm.vb</DependentUpon>
     </Compile>
@@ -284,7 +285,7 @@
       <DependentUpon>PropertiesForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="icons\AutoupdateIcon.bmp" />
+    <EmbeddedResource Include="icons\AutoUpdateAllToggle.bmp" />
     <EmbeddedResource Include="icons\LocateFeature.bmp" />
     <EmbeddedResource Include="icons\EditMapIndex.bmp" />
     <EmbeddedResource Include="icons\TaxlotAssignment.bmp" />

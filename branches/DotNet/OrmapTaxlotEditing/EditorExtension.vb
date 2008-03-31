@@ -29,12 +29,13 @@
 
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$
 'Date of Last Change: $Date$
 #End Region
 
+#Region "Imported Namespaces"
 Imports System
 Imports System.Windows.Forms
 Imports System.Runtime.InteropServices
@@ -47,6 +48,7 @@ Imports ESRI.ArcGIS.Framework
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
+#End Region
 
 <ComVisible(True)> _
 <ComClass(EditorExtension.ClassId, EditorExtension.InterfaceId, EditorExtension.EventsId), _
@@ -87,7 +89,6 @@ Public NotInheritable Class EditorExtension
     End Property
 
     Private Sub setApplication(ByVal value As IApplication)
-        ' TODO: [NIS] Add validation code?
         _application = value
     End Sub
 
@@ -100,7 +101,6 @@ Public NotInheritable Class EditorExtension
     End Property
 
     Private Sub setEditor(ByVal value As IEditor2)
-        ' TODO: [NIS] Add validation code?
         _editor = value
     End Sub
 
@@ -113,7 +113,6 @@ Public NotInheritable Class EditorExtension
     End Property
 
     Private Sub setEditEvents(ByVal value As IEditEvents_Event)
-        ' TODO: [NIS] Add validation code?
         _editEvents = value
     End Sub
 
@@ -126,7 +125,6 @@ Public NotInheritable Class EditorExtension
     End Property
 
     Private Sub setActiveViewEvents(ByVal value As IActiveViewEvents_Event)
-        ' TODO: [NIS] Add validation code?
         _activeViewEvents = value
     End Sub
 
@@ -185,10 +183,9 @@ Public NotInheritable Class EditorExtension
         Get
             Dim canEnable As Boolean = True
             canEnable = canEnable AndAlso EditorExtension.Editor IsNot Nothing
+            canEnable = canEnable AndAlso EditorExtension.AllowedToEditTaxlots
             canEnable = canEnable AndAlso EditorExtension.HasValidLicense
             canEnable = canEnable AndAlso EditorExtension.IsValidWorkspace
-            canEnable = canEnable AndAlso EditorExtension.AllowedToEditTaxlots
-            ' TODO: [NIS] Implement statemachine on this class (see commented code in TaxlotAssignment)?
             Return canEnable
         End Get
     End Property
@@ -202,7 +199,6 @@ Public NotInheritable Class EditorExtension
     End Property
 
     Private Sub setHasValidLicense(ByVal value As Boolean)
-        ' TODO: [NIS] Add validation code?
         _hasValidLicense = value
     End Sub
 
@@ -215,7 +211,6 @@ Public NotInheritable Class EditorExtension
     End Property
 
     Private Sub setIsValidWorkspace(ByVal value As Boolean)
-        ' TODO: [NIS] Add validation code?
         _isValidWorkspace = value
     End Sub
 
@@ -262,14 +257,16 @@ Public NotInheritable Class EditorExtension
 
 #Region "Editor Event Handlers"
 
+    ''' <summary>
+    ''' Updates fields based on the feature that was just changed.
+    ''' </summary>
+    ''' <param name="obj">The feature that was just changed.</param>
+    ''' <remarks>Handles EditEvents.OnCreateFeature events.</remarks>
     Private Sub EditEvents_OnChangeFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnChangeFeature
 
         Try
-
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
-
             If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
-
             If Not IsORMAPFeature(obj) Then Exit Try
 
             ' Update the minimum auto-calculated fields
@@ -293,8 +290,8 @@ Public NotInheritable Class EditorExtension
             Dim theParentID As Integer
             If IsTaxlot(obj) Then
                 ' Obtain OrmapMapNumber via overlay and calculate other field values.
-                ' TODO: [NIS] Remove comment below and fix CalculateTaxlotValues.
-                CalculateTaxlotValues(DirectCast(obj, IFeature), SpatialUtilities.FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC))
+                ' TODO: [NIS] Fix CalculateTaxlotValues (JWM?).
+                CalculateTaxlotValues(DirectCast(obj, IFeature), FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC))
             ElseIf IsAnno(obj) Then
                 theAnnotationFeature = DirectCast(obj, IAnnotationFeature)
 
@@ -324,14 +321,16 @@ Public NotInheritable Class EditorExtension
 
     End Sub
 
+    ''' <summary>
+    ''' Updates fields based on the feature that was just created.
+    ''' </summary>
+    ''' <param name="obj">The feature that was just created.</param>
+    ''' <remarks>Handles EditEvents.OnCreateFeature events.</remarks>
     Private Sub EditEvents_OnCreateFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnCreateFeature
 
         Try
-
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
-
             If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
-
             If Not IsORMAPFeature(obj) Then Exit Try
 
             ' Update the minimum auto-calculated fields
@@ -339,34 +338,41 @@ Public NotInheritable Class EditorExtension
 
             If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Try
 
-            ' TODO: [NIS] Rename variables to coding standard and move to near use
-            Dim theMapNumberVal As String
-            Dim theMapScaleVal As String
-            Dim theMapIndexFLayer As ESRI.ArcGIS.Carto.IFeatureLayer
-            Dim theMapIndexFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
-            Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
-            Dim theAnnoMapNumFldIdx As Integer
-            Dim theAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
-            Dim theParentID As Integer
-            Dim theGeometry As ESRI.ArcGIS.Geometry.IGeometry
-            Dim theEnvelope As ESRI.ArcGIS.Geometry.IEnvelope
-            Dim theCenterPoint As ESRI.ArcGIS.Geometry.IPoint
-            Dim theMapScaleFldIdx As Integer
             Dim theMapNumberFldIdx As Integer
-
+            Dim theMapScaleFldIdx As Integer
             ' TODO: [NIS] Test this DirectCast.
             theMapNumberFldIdx = (DirectCast(obj, IFeature)).Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
             ' TODO: [NIS] Test this DirectCast.
             theMapScaleFldIdx = (DirectCast(obj, IFeature)).Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
 
+            Dim theMapIndexFLayer As ESRI.ArcGIS.Carto.IFeatureLayer
+            Dim theMapIndexFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
+            theMapIndexFLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
+            If theMapIndexFLayer Is Nothing Then Exit Try
+            theMapIndexFClass = theMapIndexFLayer.FeatureClass
+
+            Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
+            Dim theGeometry As ESRI.ArcGIS.Geometry.IGeometry
+            Dim theEnvelope As ESRI.ArcGIS.Geometry.IEnvelope
+            Dim theCenterPoint As ESRI.ArcGIS.Geometry.IPoint
+            Dim theMapScaleVal As String
+            Dim theMapNumberVal As String
+
             If IsTaxlot(obj) Then
+                '[Edited object is a ORMAP taxlot feature...]
+
                 ' Obtain OrmapMapNumber via overlay and calculate other field values.
-                CalculateTaxlotValues(DirectCast(obj, IFeature), SpatialUtilities.FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC))
+                theFeature = DirectCast(obj, IFeature)
+                CalculateTaxlotValues(theFeature, theMapIndexFLayer)
 
             ElseIf IsAnno(obj) Then
+                '[Edited object is an ORMAP annotation feature...]
+
+                Dim theAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
                 theAnnotationFeature = DirectCast(obj, IAnnotationFeature)
 
                 'Get the parent feature so mapnumber can be obtained
+                Dim theParentID As Integer
                 theParentID = theAnnotationFeature.LinkedFeatureID
                 If theParentID > FieldNotFoundIndex Then 'Feature linked
                     theFeature = GetRelatedObjects(obj)
@@ -385,12 +391,10 @@ Public NotInheritable Class EditorExtension
 
                 ' Capture MapNumber for each anno feature created
                 ' TODO: [NIS] Test use of pFeat instead of obj here.
+                Dim theAnnoMapNumFldIdx As Integer
                 theAnnoMapNumFldIdx = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
                 If theAnnoMapNumFldIdx = FieldNotFoundIndex Then Exit Try
 
-                theMapIndexFLayer = SpatialUtilities.FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
-                If theMapIndexFLayer Is Nothing Then Exit Try
-                theMapIndexFClass = theMapIndexFLayer.FeatureClass
                 theMapNumberVal = GetValueViaOverlay(theGeometry, theMapIndexFClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
                 ' TODO: [NIS] Test use of pFeat instead of obj here.
                 theFeature.Value(theAnnoMapNumFldIdx) = theMapNumberVal
@@ -408,22 +412,28 @@ Public NotInheritable Class EditorExtension
                 ' Set size based on mapscale
                 SetAnnoSize(obj, theFeature)
             Else
+                '[Edited object is another kind of ORMAP feature (not taxlot or annotation)...]
+
                 ' Update MapScale and mapnumber for all features with a MapScale field (except MapIndex)
                 If theMapScaleFldIdx > -1 And Not IsMapIndex(obj) Then
                     theFeature = CType(obj, IFeature)
                     theGeometry = theFeature.Shape
                     If theGeometry.IsEmpty Then Exit Try
                     theEnvelope = theGeometry.Envelope
-                    If theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryBezier3Curve And theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryCircularArc And theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryEllipticArc And theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryLine And theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPath And theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPolygon And theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPolyline Then
+                    If theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryBezier3Curve And _
+                            theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryCircularArc And _
+                            theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryEllipticArc And _
+                            theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryLine And _
+                            theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPath And _
+                            theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPolygon And _
+                            theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPolyline Then
                         ' Convert the geometry to a point
                         theCenterPoint = GetCenterOfEnvelope(theEnvelope)
                         theGeometry = theCenterPoint 'QI
                     Else
                         ' Use the geometry as-is
                     End If
-                    theMapIndexFLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
-                    If theMapIndexFLayer Is Nothing Then Exit Try
-                    theMapIndexFClass = theMapIndexFLayer.FeatureClass
+
                     theMapScaleVal = GetValueViaOverlay(theGeometry, theMapIndexFClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
                     If Len(theMapScaleVal) > 0 Then
                         ' TODO: [NIS] Test use of pFeat instead of obj here.
@@ -455,33 +465,120 @@ Public NotInheritable Class EditorExtension
 
     End Sub
 
+    ''' <summary>
+    ''' Records in the Cancelled Numbers object class the map number
+    ''' and taxlot number from the feature that was just deleted.
+    ''' </summary>
+    ''' <param name="obj">The feature that was just deleted.</param>
+    ''' <remarks>Handles EditEvents.OnDeleteFeature events.</remarks>
+    Private Sub theEditorEvents_OnDeleteFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnDeleteFeature
+
+        Try
+            If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
+            If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
+            If Not IsORMAPFeature(obj) Then Exit Try
+            If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Try
+
+            ' Variable declarations
+            Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
+            Dim theTaxlotFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
+            Dim theDataSet As ESRI.ArcGIS.Geodatabase.IDataset
+            Dim theWorkspace As ESRI.ArcGIS.Geodatabase.IWorkspace
+            Dim theFeatureWorkspace As ESRI.ArcGIS.Geodatabase.IFeatureWorkspace
+
+            Dim theCancelledNumbersTable As ESRI.ArcGIS.Geodatabase.ITable
+            Dim theRow As ESRI.ArcGIS.Geodatabase.IRow
+
+            If IsTaxlot(obj) Then
+                '[Deleting taxlots...]
+                ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
+
+                ' Get reference to the Cancelled Numbers object table
+                theFeature = DirectCast(obj, IFeature)
+                theTaxlotFClass = DirectCast(theFeature.Class, IFeatureClass)
+                theDataSet = DirectCast(theTaxlotFClass, IDataset)
+                theWorkspace = theDataSet.Workspace
+                theFeatureWorkspace = DirectCast(theWorkspace, IFeatureWorkspace)
+
+                ' Attempt to get a reference to the Cancelled Number table.
+                theCancelledNumbersTable = theFeatureWorkspace.OpenTable(EditorExtension.TableNamesSettings.CancelledNumbersTable)
+                If theCancelledNumbersTable Is Nothing Then Exit Try
+
+                ' Retrieve field positions.
+                Dim theTLTaxlotFldIdx As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+                Dim theTLMapNumberFldIdx As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.MapNumberField)
+                Dim theCNTaxlotFldIdx As Integer = theCancelledNumbersTable.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+                Dim theCNMapNumberFldIdx As Integer = theCancelledNumbersTable.FindField(EditorExtension.TaxLotSettings.MapNumberField)
+
+                ' Confirm that the taxlot field or map number fields do exist in the Taxlot FC.
+                If theCNTaxlotFldIdx = FieldNotFoundIndex Then Exit Try
+                If theCNMapNumberFldIdx = FieldNotFoundIndex Then Exit Try
+
+                ' Confirm that the taxlot field or map number fields do exist in the Cancelled Numbers table.
+                If theCNTaxlotFldIdx = FieldNotFoundIndex Then Exit Try
+                If theCNMapNumberFldIdx = FieldNotFoundIndex Then Exit Try
+
+                'If no null values, copy them to Cancelled numbers
+                ' TODO: [NIS] Resolve - UPGRADE WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
+                If Not IsDBNull(obj.Value(theTLTaxlotFldIdx)) And Not IsDBNull(obj.Value(theTLMapNumberFldIdx)) Then
+                    theRow = theCancelledNumbersTable.CreateRow
+                    If theRow Is Nothing Then Exit Try
+                    theRow.Value(theCNTaxlotFldIdx) = obj.Value(theTLTaxlotFldIdx)
+                    theRow.Value(theCNMapNumberFldIdx) = obj.Value(theTLMapNumberFldIdx)
+                    theRow.Store()
+                End If
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+
+        End Try
+
+    End Sub
+
     Private Sub EditEvents_OnStartEditing()
-        ' Test for a valid ArcGIS license.
-        setHasValidLicense((validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
-                        validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcInfo)))
 
-        ' Test for a valid workspace.
-        If EditorExtension.Editor.EditWorkspace.Type = esriWorkspaceType.esriFileSystemWorkspace Then
-            setIsValidWorkspace(False)
-        Else
-            setIsValidWorkspace(True)
-        End If
-        If HasValidLicense AndAlso IsValidWorkspace Then
-            ' Subscribe to edit events.
-            AddHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
-            AddHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
+        Try
+            ' Test for a valid ArcGIS license.
+            setHasValidLicense((validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
+                            validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcInfo)))
 
-            ' Set up document keyboard accelerators for extension commands.
-            CreateAccelerators()
-        End If
+            ' Test for a valid workspace.
+            If EditorExtension.Editor.EditWorkspace.Type = esriWorkspaceType.esriFileSystemWorkspace Then
+                setIsValidWorkspace(False)
+            Else
+                setIsValidWorkspace(True)
+            End If
+            If HasValidLicense AndAlso IsValidWorkspace Then
+                ' Subscribe to edit events.
+                AddHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
+                AddHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
+
+                ' Set up document keyboard accelerators for extension commands.
+                CreateAccelerators()
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+
+        End Try
+
     End Sub
 
     Private Sub EditEvents_OnStopEditing(ByVal save As Boolean)
-        ' Unsubscribe to edit events.
-        RemoveHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
-        RemoveHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
-    End Sub
 
+        Try
+            ' Unsubscribe to edit events.
+            RemoveHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
+            RemoveHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+
+        End Try
+
+    End Sub
+        
 #End Region
 
 #Region "Methods"

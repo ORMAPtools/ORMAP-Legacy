@@ -29,15 +29,17 @@
 
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$
 'Date of Last Change: $Date$
 #End Region
 
+#Region "Imported Namespaces"
 Imports System.Runtime.InteropServices
 Imports System.Configuration
 Imports System.Windows.Forms
+#End Region
 
 <ComVisible(False)> _
 Public Class OrmapSettingsForm

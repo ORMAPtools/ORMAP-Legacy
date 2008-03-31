@@ -29,12 +29,13 @@
 
 #End Region
 
-#Region "Subversion Keyword expansion"
+#Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
 'SCC revision number: $Revision$
 'Date of Last Change: $Date$
 #End Region
 
+#Region "Imported Namespaces"
 Imports System
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
@@ -44,6 +45,7 @@ Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.Geodatabase
+#End Region
 
 <ComVisible(True)> _
 <ComClass(PropertyPage.ClassId, PropertyPage.InterfaceId, PropertyPage.EventsId), _
@@ -121,6 +123,7 @@ Public NotInheritable Class PropertyPage
 
     Private Sub uxEnableTools_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
 
+        ' Enable the checkbox and option buttons if the parent checkbox is checked
         PartnerPropertiesForm.uxEnableAutoUpdate.Enabled = PartnerPropertiesForm.uxEnableTools.Checked
         PartnerPropertiesForm.uxMinimumFieldsOption.Enabled = PartnerPropertiesForm.uxEnableTools.Checked
         PartnerPropertiesForm.uxAllFieldsOption.Enabled = PartnerPropertiesForm.uxEnableTools.Checked
@@ -136,8 +139,31 @@ Public NotInheritable Class PropertyPage
 
     Private Sub uxEnableAutoUpdate_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
 
+        ' Enable the option buttons if the parent checkbox is checked
         PartnerPropertiesForm.uxMinimumFieldsOption.Enabled = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
         PartnerPropertiesForm.uxAllFieldsOption.Enabled = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
+
+        ' Set dirty flag.
+        setPageDirty(True)
+
+        If Not PropertiesPageSite Is Nothing Then
+            PropertiesPageSite.PageChanged()
+        End If
+
+    End Sub
+
+    Private Sub uxMinimumFieldsOption_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
+
+        ' Set dirty flag.
+        setPageDirty(True)
+
+        If Not PropertiesPageSite Is Nothing Then
+            PropertiesPageSite.PageChanged()
+        End If
+
+    End Sub
+
+    Private Sub uxAllFieldsOption_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
 
         ' Set dirty flag.
         setPageDirty(True)
@@ -273,10 +299,10 @@ Public NotInheritable Class PropertyPage
     End Function
 
     Public Sub Apply() Implements IComPropertyPage.Apply
-        ' Write to the EditorExtension.CanEdit shared (i.e. by all class objects) property
+        ' Write to the EditorExtension shared (i.e. by all class objects) properties
         EditorExtension.AllowedToEditTaxlots = PartnerPropertiesForm.uxEnableTools.Checked
         EditorExtension.AllowedToAutoUpdate = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
-        EditorExtension.AllowedToAutoUpdateAllFields = Not PartnerPropertiesForm.uxAllFieldsOption.Checked
+        EditorExtension.AllowedToAutoUpdateAllFields = PartnerPropertiesForm.uxAllFieldsOption.Checked
         setPageDirty(False)
     End Sub
 
@@ -301,6 +327,7 @@ Public NotInheritable Class PropertyPage
         ' editor states before this method is called.
 
         ' TODO: [NIS] Move (to where)?
+        ' Initialize controls based on properties.
         setPartnerPropertiesForm(New PropertiesForm())
         PartnerPropertiesForm.uxEnableTools.Checked = EditorExtension.AllowedToEditTaxlots
         PartnerPropertiesForm.uxEnableAutoUpdate.Checked = EditorExtension.AllowedToAutoUpdate
@@ -310,6 +337,8 @@ Public NotInheritable Class PropertyPage
         ' Subscribe to form events.
         AddHandler PartnerPropertiesForm.uxEnableTools.CheckedChanged, AddressOf uxEnableTools_CheckedChanged
         AddHandler PartnerPropertiesForm.uxEnableAutoUpdate.CheckedChanged, AddressOf uxEnableAutoUpdate_CheckedChanged
+        AddHandler PartnerPropertiesForm.uxMinimumFieldsOption.CheckedChanged, AddressOf uxMinimumFieldsOption_CheckedChanged
+        AddHandler PartnerPropertiesForm.uxAllFieldsOption.CheckedChanged, AddressOf uxAllFieldsOption_CheckedChanged
         AddHandler PartnerPropertiesForm.uxSettings.Click, AddressOf uxSettings_Click
         AddHandler PartnerPropertiesForm.uxAbout.Click, AddressOf uxAbout_Click
 
