@@ -128,11 +128,11 @@ Public NotInheritable Class SpatialUtilities
     ''' <remarks>Updates the ORMAP fields in <paramref name="editFeature"/> to 
     ''' reflect the current ORMAP Number and Map Number elements in the 
     ''' overlaying <paramref name="mapIndexLayer"/> polygon.</remarks>
-    Public Shared Sub CalculateTaxlotValues(ByRef editFeature As IFeature, ByRef mapIndexLayer As IFeatureLayer)
+    Public Shared Sub CalculateTaxlotValues(ByRef editFeature As ESRI.ArcGIS.Geodatabase.IFeature, ByRef mapIndexLayer As ESRI.ArcGIS.Carto.IFeatureLayer)
 
         Try
-            Dim taxlotFClass As IFeatureClass
-            taxlotFClass = DirectCast(editFeature.Class, IFeatureClass)
+            Dim taxlotFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
+            taxlotFClass = DirectCast(editFeature.Class, ESRI.ArcGIS.Geodatabase.IFeatureClass)
             'locate map index layer
             mapIndexLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
             If mapIndexLayer Is Nothing Then
@@ -167,9 +167,11 @@ Public NotInheritable Class SpatialUtilities
             Dim theMapAcresFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapAcresField)
             Dim theAnomalyFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.AnomalyField)
             'TODO: JWM If any of these index fields are -1 we should bail according to VB6 version
+            'I wonder if we multiplied these values and checked the result for a negative value. Of course if there were an even number of negative values
+            'they would cancel each other out.
 
             Dim thisArea As IArea
-            thisArea = DirectCast(editFeature.Shape, IArea)
+            thisArea = DirectCast(editFeature.Shape, ESRI.ArcGIS.Geometry.IArea)
             ' Update Acreage
             editFeature.Value(theMapAcresFldIdx) = thisArea.Area / 43560
 
@@ -181,12 +183,12 @@ Public NotInheritable Class SpatialUtilities
                 Exit Try
             End If
 
-            Dim existingMapNumber As String = GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
-            If existingMapNumber.Length = 0 Then
+            Dim currentMapNumber As String = GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+            If currentMapNumber.Length = 0 Then
                 Exit Try
             End If
 
-            editFeature.Value(theMapNumberFldIdx) = existingMapNumber
+            editFeature.Value(theMapNumberFldIdx) = currentMapNumber
             ' Store components of the ORMAP number in various fields
             editFeature.Value(theOrmapMapNumberFldIdx) = thisORMAPNumberClass.GetOrmapMapNumber
 
@@ -196,12 +198,13 @@ Public NotInheritable Class SpatialUtilities
             Else
                 editFeature.Value(theCountyFldIdx) = DBNull.Value
             End If
+
             With editFeature
                 .Value(theTownFldIdx) = CShort(thisORMAPNumberClass.Township)
-                .Value(theTownPartFldIdx) = CDbl(thisORMAPNumberClass.PartialTownshipCode)
+                .Value(theTownPartFldIdx) = CSng(thisORMAPNumberClass.PartialTownshipCode)
                 .Value(theTownDirFldIdx) = thisORMAPNumberClass.TownshipDirectional
                 .Value(theRangeFldIdx) = CShort(thisORMAPNumberClass.Range)
-                .Value(theRangePartFldIdx) = CDbl(thisORMAPNumberClass.PartialRangeCode)
+                .Value(theRangePartFldIdx) = CSng(thisORMAPNumberClass.PartialRangeCode)
                 .Value(theRangeDirFldIdx) = thisORMAPNumberClass.RangeDirectional
                 .Value(theSectionFldIdx) = CShort(thisORMAPNumberClass.Section)
                 .Value(theQrtrFldIdx) = thisORMAPNumberClass.Quarter
@@ -216,6 +219,7 @@ Public NotInheritable Class SpatialUtilities
             Else
                 existingValue = CStr(editFeature.Value(theSpcIntrstFldIdx))
             End If
+
             If existingValue.Length <= 5 Then
                 existingValue.PadLeft(5, "0"c)
                 'Old method sExistVal = New String("0", 5 - Len(sExistVal)) & sExistVal
@@ -228,16 +232,16 @@ Public NotInheritable Class SpatialUtilities
             End If
 
             ' Taxlot has actual taxlot number.  ORMAPTaxlot requires a 5-digit number, so leading zeros have to be added
-            Dim existingTaxlotValue As String = CStr(editFeature.Value(theTaxlotFldIdx))
-            existingTaxlotValue = AddLeadingZeros(existingValue, ORMAPNumber.GetOrmap_OrmapTaxlotFieldLength)
+            Dim currrentTaxlotValue As String = CStr(editFeature.Value(theTaxlotFldIdx))
+            currrentTaxlotValue = AddLeadingZeros(currrentTaxlotValue, ORMAPNumber.GetOrmap_TaxlotFieldLength)
 
             Dim mapTaxlotID As String
-            mapTaxlotID = String.Concat(thisORMAPNumberClass.GetORMAPNumber, existingTaxlotValue)
+            mapTaxlotID = String.Concat(thisORMAPNumberClass.GetOrmapNumber, currrentTaxlotValue)
 
             Dim countyCode As Short = CShort(EditorExtension.DefaultValuesSettings.County)
             Select Case countyCode
                 Case 1 To 19, 21 To 36
-                    editFeature.Value(theTaxlotFldIdx) = CreateMapTaxlotValue(mapTaxlotID, EditorExtension.TaxLotSettings.MapTaxlotFormatMask)
+                    editFeature.Value(theTaxlotFldIdx) = GenerateMapTaxlotValue(mapTaxlotID, EditorExtension.TaxLotSettings.MapTaxlotFormatMask)
                 Case 20
                     ' 1.  Lane County uses a 2-digit numeric identifier for ranges.
                     '     Special handling is required for east ranges, where 02E is
@@ -249,7 +253,7 @@ Public NotInheritable Class SpatialUtilities
                     '     on the left with zeros to make it always a 5-digit number (see comment
                     '     above).
                     ' Trim the map number to only the left 8 characters (no spaces)
-                    Dim sb As String = existingMapNumber.Trim(CChar(existingMapNumber.Substring(0, 8)))
+                    Dim sb As String = currentMapNumber.Trim(CChar(currentMapNumber.Substring(0, 8)))
                     editFeature.Value(theTaxlotFldIdx) = String.Concat(sb, existingValue)
             End Select
 
@@ -257,9 +261,9 @@ Public NotInheritable Class SpatialUtilities
             If IsDBNull(editFeature.Value(theOrmapTaxlotNumberFldIdx)) Then
                 Exit Try
             End If
-            ' Get the current and the new ORMAP Taxlot Numbers
-            Dim existingORMAPTaxlotNumber As String = CStr(editFeature.Value(theOrmapTaxlotNumberFldIdx))
-            Dim newORMAPTaxlotNumber As String = calculateORMAPTaxlotNumber(existingTaxlotValue, editFeature, existingTaxlotValue)
+            ' Get the current and the new ORMAP Taxlot Numbers theOrmapTaxlotNumberFldIdx
+            Dim existingORMAPTaxlotNumber As String = CStr(editFeature.Value(theTaxlotFldIdx))
+            Dim newORMAPTaxlotNumber As String = generateORMAPTaxlotNumber(thisORMAPNumberClass.GetOrmapNumber, editFeature, existingORMAPTaxlotNumber)
             'If no changes, don't save value
             If String.Compare(existingORMAPTaxlotNumber, newORMAPTaxlotNumber, True) <> 0 Then
                 editFeature.Value(theOrmapTaxlotNumberFldIdx) = newORMAPTaxlotNumber
@@ -920,7 +924,7 @@ Public NotInheritable Class SpatialUtilities
             Dim returnValue As Boolean = False
             Dim thisObjectClass As IObjectClass
             thisObjectClass = theObject.Class
-
+            'TODO: JWM REFACTOR RETURN ENUM OF TYPE OF FEATURE CLASS
             Dim thisDataset As IDataset
             thisDataset = DirectCast(thisObjectClass, IDataset)
             Dim datasetName As String = thisDataset.Name
@@ -977,8 +981,6 @@ Public NotInheritable Class SpatialUtilities
             Return False
         End Try
     End Function
-
-
 
     ''' <summary>
     ''' Loads the specified feature class into the current map.
@@ -1345,17 +1347,17 @@ Public NotInheritable Class SpatialUtilities
     ''' Return a cursor that represents the results of an attribute query.
     ''' </summary>
     ''' <param name="table">An object that supports the ITable interface.</param>
-    ''' <param name="whereClause">An Sql Where clause.</param>
+    ''' <param name="whereClause">A Sql Where clause without the WHERE.</param>
     ''' <returns>Return a cursor that represents the results of an attribute query.</returns>
-    ''' <remarks>Creates a cursor from table that contains all feature records that meet the criteria in whereClause.</remarks>
+    ''' <remarks>Creates a cursor from table that contains all feature records that meet the criteria in <paramref name="whereClause">whereClause</paramref>.</remarks>
     Private Shared Function attributeQuery(ByRef table As ITable, Optional ByRef whereClause As String = "") As ICursor
         Try
             Dim thisQueryFilter As IQueryFilter
             thisQueryFilter = New QueryFilter
             thisQueryFilter.WhereClause = whereClause
             Dim thisCursor As ICursor
-            thisCursor = Table.Search(thisQueryFilter, False)
-            If Table.RowCount(thisQueryFilter) = 0 Then
+            thisCursor = table.Search(thisQueryFilter, False)
+            If table.RowCount(thisQueryFilter) = 0 Then
                 Return Nothing
             Else
                 Return thisCursor
@@ -1373,12 +1375,13 @@ Public NotInheritable Class SpatialUtilities
     ''' <param name="theFeature">An object that supports the IFeature interface.</param>
     ''' <param name="taxlotValue">A taxlot number.</param>
     ''' <returns>A string that represents an ORMAP number updated with the value from theFeature and taxlotValue.</returns>
-    ''' <remarks>Given an ORMAP Number, sExistOMNum, and feature, pFeat, and a taxlot value, sTLVal.
-    ''' Remove the existing map suffix type and number from ExistingORMAPNumber and replace them with the new values in theFeature and
-    ''' append taxlotValue to form the return value.</remarks>
-    Private Shared Function calculateORMAPTaxlotNumber(ByVal existingORMAPNumber As String, ByRef theFeature As IFeature, ByVal taxlotValue As String) As String
+    ''' <remarks>Given an ORMAP Number, <paramref name="existingORMAPNumber">existingORMAPNumber</paramref>, and feature, <paramref name="theFeature">theFeature</paramref>,
+    ''' and a taxlot value,<paramref name="taxlotValue">taxlotValue</paramref>.
+    ''' Remove the existing map suffix type and number from <paramref name="existingORMAPNumber">existingORMAPNumber</paramref> and replace them with the new values in <paramref name="theFeature">theFeature</paramref> and
+    ''' append <paramref name="taxlotValue">taxlotValue</paramref> to form the return value.</remarks>
+    Private Shared Function generateORMAPTaxlotNumber(ByVal existingORMAPNumber As String, ByRef theFeature As IFeature, ByVal taxlotValue As String) As String
         Try
-            Dim shortORMAPNumber As String = existingORMAPNumber.Substring(0, 20) 'replaces the ShortenOMTLNum function 
+            Dim shortORMAPNumber As String = existingORMAPNumber.Substring(0, 19) 'replaces the ShortenOMTLNum function 
             Dim taxlotMapSufNumberValue As String = GetMapSuffixNum(theFeature)
             Dim taxlotMapSufTypeValue As String = GetMapSuffixType(theFeature)
             ' Recreate and return the ORMAP Taxlot number
