@@ -55,7 +55,10 @@ Public NotInheritable Class StringUtilities
     Public Shared Function AddLeadingZeros(ByVal currentString As String, ByVal width As Integer) As String
         Try
             If currentString.Length < width Then
-                Return currentString.PadLeft(width - currentString.Length, "0"c)
+                Dim sb As New StringBuilder("0", 5)
+                sb.Insert(width - currentString.Length, currentString)
+                Return sb.ToString
+                'Return currentString.PadLeft(width - currentString.Length, "0"c)
             Else
                 Return currentString
             End If
@@ -65,22 +68,13 @@ Public NotInheritable Class StringUtilities
         End Try
     End Function
 
-    ''' <summary>
-    ''' Creates a formatted MapTaxlot value using the given format mask.
-    ''' </summary>
-    ''' <param name="mapTaxlotIDValue">The string to format.</param>
-    ''' <param name="formatMask">The format mask to use.</param>
-    ''' <returns>A string formatted to fit the mask.</returns>
-    ''' <remarks>Creates a string formatted to the standards specified 
-    ''' by the format mask specified by the user. This mask is customized 
-    ''' for each county.</remarks>
-    Public Shared Function CreateMapTaxlotValue(ByVal mapTaxlotIDValue As String, ByVal formatMask As String) As String
+    Public Shared Function GenerateMapTaxlotValue(ByVal mapTaxlotIDValue As String, ByVal formatString As String) As String
 
         If mapTaxlotIDValue Is Nothing OrElse mapTaxlotIDValue.Length = 0 Then
             Throw New ArgumentNullException("mapTaxlotIDValue")
         End If
-        If formatMask Is Nothing OrElse formatMask.Length = 0 Then
-            Throw New ArgumentNullException("formatMask")
+        If formatString Is Nothing OrElse formatString.Length = 0 Then
+            Throw New ArgumentNullException("formatString")
         End If
         If mapTaxlotIDValue.Length < 29 Then
             Throw New ArgumentException("Invalid argument length", "mapTaxlotIDValue")
@@ -111,19 +105,18 @@ Public NotInheritable Class StringUtilities
             End Select
 
             'We must adjust the mask for clackamas county if there are no half ranges in the current string
-            If formatMask.IndexOf("^"c) > 0 Then
+            If formatString.IndexOf("^"c) > 0 Then
                 If hasRangePart = False Then
-                    formatMask = formatMask.Remove(formatMask.IndexOf("^"c), 1)
+                    formatString = formatString.Remove(formatString.IndexOf("^"c), 1)
                 Else
                     'if there is a range part the letter Q will be  placed in the position where D sits
-                    formatMask = formatMask.Remove(formatMask.IndexOf("D"c), 1)
+                    formatString = formatString.Remove(formatString.IndexOf("D"c), 1)
                 End If
             End If
             'copy of the formatstring
-            Dim maskValues As New StringBuilder(formatMask.ToUpper)
-            ' Create a string of spaces (char literal) to place our results in.
-            ' This helps a speed up string manipulation a little.
-            Dim formattedResult As New StringBuilder(New String(" "c, formatMask.Length), formatMask.Length)
+            Dim maskValues As New StringBuilder(formatString.ToUpper)
+            ' Create a string of spaces to place our results in. This helps a speed up string manipulation a little.
+            Dim formattedResult As New StringBuilder(New String(CChar(" "), formatString.Length), formatString.Length)
 
             Dim positionInMask As Integer
             Dim characterCode As Integer
@@ -134,11 +127,11 @@ Public NotInheritable Class StringUtilities
             Dim hasProcessedRangeFractional As Boolean = False
 
             For charIdx As Integer = 0 To maskValues.Length - 1
-                positionInMask = formatMask.IndexOf(maskValues.Chars(charIdx).ToString, charIdx, StringComparison.CurrentCultureIgnoreCase)
+                positionInMask = formatString.IndexOf(maskValues.Chars(charIdx).ToString, charIdx, StringComparison.CurrentCultureIgnoreCase)
                 characterCode = Convert.ToInt32(maskValues.Chars(charIdx))
                 ' Returns how many of these characters appear in the mask
                 Dim c As Char
-                For Each c In formatMask
+                For Each c In formatString
                     If c.Equals(maskValues.Chars(charIdx)) Then
                         tokenCount += 1
                     End If
@@ -169,7 +162,7 @@ Public NotInheritable Class StringUtilities
                     Case 38 '& Using these characters in mask will strip leading zeros from parcel id
                         If Not hasProcessedParcelId Then '
                             'since we are at the end of the string use Insert
-                            Dim s As String = mapTaxlotIDValue.Substring(24, 5)
+                            Dim s As String = New String(CType(mapTaxlotIDValue.Substring(24, 5), Char()))
                             formattedResult.Insert(positionInMask, stripLeadingZeros(s))
                             hasProcessedParcelId = True
                         End If
@@ -273,8 +266,8 @@ Public NotInheritable Class StringUtilities
                 previousCharInMask = maskValues.Chars(charIdx)
                 tokenCount = 0
             Next charIdx
-            Dim returnValue As String = formattedResult.ToString
-            Return returnValue
+
+            Return formattedResult.ToString
 
         Catch ex As Exception
             MessageBox.Show(ex.Message)
@@ -332,8 +325,15 @@ Public NotInheritable Class StringUtilities
     ''' <param name="valueToMask"></param>
     ''' <param name="maskToApply"></param>
     ''' <returns> If a value is passed in that is not numeric then just pass it straight through else return a parcel id with or without leading zeros</returns>
-    ''' <remarks>I use the Format function with user-defined string formats which consist of either all (@) characters or all ampersands</remarks>
-    Private Shared Function createParcelID(ByVal valueToMask As String, ByVal maskToApply As String) As String
+    ''' <remarks></remarks>
+    Private Shared Function generateParcelID(ByVal valueToMask As String, ByVal maskToApply As String) As String
+        If valueToMask.Length = 0 Then
+            Throw New ArgumentNullException("valueToMask")
+        End If
+        If maskToApply.Length = 0 Then
+            Throw New ArgumentNullException("maskToApply")
+        End If
+
         Dim sb As StringBuilder
         If valueToMask.Length = 0 OrElse maskToApply.Length = 0 Then
             Return String.Empty
@@ -341,7 +341,6 @@ Public NotInheritable Class StringUtilities
 
         If IsNumeric(valueToMask) Then
             sb = New StringBuilder(Format(valueToMask, maskToApply), maskToApply.Length)
-
         Else
             sb = New StringBuilder(valueToMask, maskToApply.Length)
         End If
@@ -349,6 +348,12 @@ Public NotInheritable Class StringUtilities
 
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="stringToParse"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Shared Function stripLeadingZeros(ByRef stringToParse As String) As String
         Try
             Dim sb As New StringBuilder(stringToParse)
@@ -360,10 +365,10 @@ Public NotInheritable Class StringUtilities
                     Exit For
                 End If
             Next charIdx
-			
+
             Return sb.ToString  ' do not trim off leading spaces
         Catch ex As Exception
-			MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.Message)
             Return String.Empty
         End Try
     End Function
