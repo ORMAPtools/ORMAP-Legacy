@@ -605,7 +605,7 @@ Public NotInheritable Class TaxlotAssignment
             theDefaultCountyCode = CInt(EditorExtension.DefaultValuesSettings.County)
             Select Case theDefaultCountyCode
                 Case 1 To 19, 21 To 36
-                    theMapTaxlotNumber = CreateMapTaxlotValue(theExistOrmapMapNumberVal & theNewTLTaxlotNumVal_5digit, (EditorExtension.TaxLotSettings.MapTaxlotFormatMask))
+                    theMapTaxlotNumber = GenerateMapTaxlotValue(theExistOrmapMapNumberVal & theNewTLTaxlotNumVal_5digit, (EditorExtension.TaxLotSettings.MapTaxlotFormatMask))
                 Case 20
                     ' 1.  Lane County uses a 2-digit numeric identifier for ranges.
                     '     Special handling is required for east ranges, where 02E is
