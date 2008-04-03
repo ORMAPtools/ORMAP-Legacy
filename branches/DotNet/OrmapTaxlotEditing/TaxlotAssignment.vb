@@ -344,7 +344,7 @@ Public NotInheritable Class TaxlotAssignment
 
 #Region "Methods"
 
-    Public Function HasRequiredData() As Boolean
+    Private Function hasRequiredData() As Boolean
 
         ' TODO: [NIS] Could use a .NET collection type not dependent on the VisualBasic namespace.
         ' See System.Collection namespace. Take a look at http://forums.devx.com/archive/index.php/t-16828.html.
@@ -381,11 +381,11 @@ Public NotInheritable Class TaxlotAssignment
         Dim foundAllFields As Boolean = True 'initial assumption
         Const loadData As Boolean = True
 
-        'TEMPLATE: foundAllFields = foundAllFields AndAlso hasRequiredFields(fcName1, colFieldNames1, loadData)
-        'TEMPLATE: foundAllFields = foundAllFields AndAlso hasRequiredFields(fcName2, colFieldNames2, loadData)
+        'TEMPLATE: foundAllFields = foundAllFields AndAlso HasRequiredFields(fcName1, colFieldNames1, loadData)
+        'TEMPLATE: foundAllFields = foundAllFields AndAlso HasRequiredFields(fcName2, colFieldNames2, loadData)
 
-        foundAllFields = foundAllFields AndAlso hasRequiredFields(fcName1, colFieldNames1, loadData)
-        foundAllFields = foundAllFields AndAlso hasRequiredFields(fcName2, colFieldNames2, loadData)
+        foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(fcName1, colFieldNames1, loadData)
+        foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(fcName2, colFieldNames2, loadData)
 
         Return foundAllFields
 
@@ -685,83 +685,6 @@ Public NotInheritable Class TaxlotAssignment
         End Try
     End Sub
 
-    <ObsoleteAttribute("Use the hasRequiredFields() function instead.", True)> _
-    Private Function hasRequiredFeatureLayers(ByVal featureClassNames As Collection, ByVal loadData As Boolean) As Boolean
-
-        Dim foundAllLayers As Boolean = True  'initial assumption
-
-        For Each fcn As String In featureClassNames
-            ' Confirm layer is present in current map
-            Dim theFLayer As IFeatureLayer
-            theFLayer = FindFeatureLayerByDSName(fcn)
-            If theFLayer IsNot Nothing Then
-                foundAllLayers = True
-            Else
-                If loadData Then
-                    '[Load option accepted...]
-                    ' Attempt to load and find the taxlot layer in the map document
-                    If LoadFCIntoMap(fcn) Then
-                        '[Layer loaded...]
-                        foundAllLayers = True
-                    Else
-                        '[Unable to load the layer...]
-                        foundAllLayers = False
-                        Exit For
-                    End If
-                Else
-                    '[Data not present and load option refused...]
-                    foundAllLayers = False
-                    Exit For
-                End If
-            End If
-        Next fcn
-
-        Return foundAllLayers
-
-    End Function
-
-    Private Function hasRequiredFields(ByVal featureClassName As String, ByVal fieldNames As Collection, ByVal loadData As Boolean) As Boolean
-
-        Dim returnValue As Boolean = True 'initial assumption
-
-        ' Confirm data layer is present in current map
-        Dim theFLayer As IFeatureLayer
-
-        theFLayer = FindFeatureLayerByDSName(featureClassName)
-
-        If theFLayer Is Nothing Then
-            If loadData Then
-                '[Load option accepted...]
-                ' Attempt to load and find the taxlot layer in the map document
-                If LoadFCIntoMap(featureClassName) Then
-                    '[Layer loaded...]
-                    ' Confirm fields are present
-                    Dim foundAllFields As Boolean = True  'initial assumption
-                    Dim fieldIndex As Integer
-                    For Each fn As String In fieldNames
-                        fieldIndex = theFLayer.FeatureClass.FindField(fn)
-                        If fieldIndex <> FieldNotFoundIndex Then
-                            foundAllFields = True
-                        Else
-                            foundAllFields = False
-                            Exit For
-                        End If
-                    Next fn
-                    returnValue = foundAllFields
-                Else
-                    '[Unable to load the layer...]
-                    returnValue = False
-                End If
-            Else
-                '[Data not present and load option refused...]
-                returnValue = False
-            End If
-        End If
-
-        Return returnValue
-
-    End Function
-
     Private Sub initializeData()
 
         ' Initialize document and map objects, and their events for tool reference only
@@ -884,7 +807,7 @@ Public NotInheritable Class TaxlotAssignment
     '
     '    Private Sub CondState1()
     '        ' Evaluate condition
-    '        If HasRequiredData() Then
+    '        If hasRequiredData() Then
     '            StateS1_1(StatePassageType.Entering)
     '        Else
     '            StateS1_2(StatePassageType.Entering)
@@ -993,7 +916,7 @@ Public NotInheritable Class TaxlotAssignment
         Try
             If Button = ESRIMouseButtons.Left Then
                 '[Left button clicked...]
-                If HasRequiredData() Then
+                If hasRequiredData() Then
                     DoToolOperation(DirectCast(Button, ESRIMouseButtons), X, Y)
                 End If
             ElseIf Button = ESRIMouseButtons.Right Then

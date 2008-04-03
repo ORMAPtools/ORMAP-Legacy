@@ -46,6 +46,7 @@ Imports ESRI.ArcGIS.Geodatabase
 Imports ESRI.ArcGIS.DataSourcesGDB
 Imports ESRI.ArcGIS.Carto
 Imports OrmapTaxlotEditing.StringUtilities
+Imports OrmapTaxlotEditing.Utilities
 #End Region
 
 #Region "Class Declaration"
@@ -621,7 +622,7 @@ Public NotInheritable Class SpatialUtilities
                 continueThisProcess = False
             End If
 
-            Dim valueFieldIndex As Integer = Utilities.FieldNotFoundIndex
+            Dim valueFieldIndex As Integer = FieldNotFoundIndex
             If continueThisProcess Then
                 valueFieldIndex = overlayFeatureClass.Fields.FindField(valueFieldName)
                 If valueFieldIndex < 0 Then
@@ -629,7 +630,7 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
 
-            Dim orderBestByFieldIndex As Integer = Utilities.FieldNotFoundIndex
+            Dim orderBestByFieldIndex As Integer = FieldNotFoundIndex
             If continueThisProcess Then
                 If orderBestByFieldName.Length = 0 Then
                     ' Use the value field as the order-by field
@@ -838,10 +839,115 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
+    ''' Finds a feature layer in the table of contents corresponding to the given feature class name
+    ''' and determines if the feature class has the listed fields.
+    ''' </summary>
+    ''' <param name="featureClassName">The name of the feature class to inspect (if found).</param>
+    ''' <param name="fieldNames">A collection of field names to search for.</param>
+    ''' <param name="loadData">A boolean flag. If true, if the feature class is not found, 
+    ''' an attempt is made to find the data and create a layer in the map.</param>
+    ''' <returns><c>True</c> or <c>False</c>.</returns>
+    ''' <remarks></remarks>
+    Public Shared Function FeatureClassHasRequiredFields(ByVal featureClassName As String, ByVal fieldNames As Collection, ByVal loadData As Boolean) As Boolean
+
+        Dim returnValue As Boolean = True 'initial assumption
+
+        ' Confirm data layer is present in current map
+        Dim theFLayer As IFeatureLayer
+
+        theFLayer = FindFeatureLayerByDSName(featureClassName)
+
+        If theFLayer Is Nothing Then
+            If loadData Then
+                '[Load option accepted...]
+                ' Attempt to load and find the taxlot layer in the map document
+                If LoadFCIntoMap(featureClassName) Then
+                    '[Layer loaded...]
+                    theFLayer = FindFeatureLayerByDSName(featureClassName)
+                Else
+                    '[Unable to load the layer...]
+                    returnValue = False
+                End If
+            Else
+                '[Data not present and load option refused...]
+                returnValue = False
+            End If
+        End If
+
+        If theFLayer IsNot Nothing Then
+            ' Confirm fields are present
+            Dim foundAllFields As Boolean = True  'initial assumption
+            Dim fieldIndex As Integer
+            For Each fn As String In fieldNames
+                fieldIndex = theFLayer.FeatureClass.FindField(fn)
+                If fieldIndex <> FieldNotFoundIndex Then
+                    foundAllFields = True
+                Else
+                    foundAllFields = False
+                    Exit For
+                End If
+            Next fn
+            returnValue = foundAllFields
+        End If
+
+        Return returnValue
+
+    End Function
+
+    Public Shared Function TableHasRequiredFields(ByVal tableName As String, ByVal fieldNames As Collection, ByVal loadData As Boolean) As Boolean
+
+        ' TODO: [NIS] (1) Create new called procedure LoadTableIntoMap to handle tables.
+        ' TODO: [NIS] (2) Enable this code.
+
+        Dim returnValue As Boolean = True 'initial assumption
+
+        '' Confirm data layer is present in current map
+        'Dim theTable As ITable
+
+        'theTable = FindTableByDSName(tableName)
+
+        'If theTable Is Nothing Then
+        '    If loadData Then
+        '        '[Load option accepted...]
+        '        ' Attempt to load and find the table in the map document
+        '        If LoadTableIntoMap(tableName) Then
+        '            '[Table loaded...]
+        '            theTable = FindTableByDSName(tableName)
+        '        Else
+        '            '[Unable to load the table...]
+        '            returnValue = False
+        '        End If
+        '    Else
+        '        '[Data not present and load option refused...]
+        '        returnValue = False
+        '    End If
+        'End If
+
+        'If theTable IsNot Nothing Then
+        '    ' Confirm fields are present
+        '    Dim foundAllFields As Boolean = True  'initial assumption
+        '    Dim fieldIndex As Integer
+        '    For Each fn As String In fieldNames
+        '        fieldIndex = theTable.FindField(fn)
+        '        If fieldIndex <> FieldNotFoundIndex Then
+        '            foundAllFields = True
+        '        Else
+        '            foundAllFields = False
+        '            Exit For
+        '        End If
+        '    Next fn
+        '    returnValue = foundAllFields
+        'End If
+
+        Return returnValue
+
+    End Function
+
+    ''' <summary>
     ''' Determines if the feature layer has a selection
     ''' </summary>
     ''' <param name="layer">An object that supports the IFeatureLayer</param>
-    ''' <returns>True or False</returns>
+    ''' <returns><c>True</c> or <c>False</c>.</returns>
     ''' <remarks>Checking the selection set of layer, determine if one, many, or no features are selected.</remarks>
     Public Shared Function HasSelectedFeatures(ByVal layer As IFeatureLayer) As Boolean
         Try
@@ -1141,12 +1247,12 @@ Public NotInheritable Class SpatialUtilities
 
             'Capture MapNumber for each anno feature created
             Dim annoMapNumField As Integer = LocateFields(DirectCast(theObject.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapNumberField)
-            If annoMapNumField = Utilities.FieldNotFoundIndex Then
+            If annoMapNumField = FieldNotFoundIndex Then
                 Exit Try
             End If
 
             Dim fieldIndex As Integer = annoFeature.Fields.FindField("TextString")
-            If fieldIndex = Utilities.FieldNotFoundIndex Then
+            If fieldIndex = FieldNotFoundIndex Then
                 MessageBox.Show("Unable to locate text string field in annotation class. Cannot set size", "Cannot set size", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Try
             End If
@@ -1246,14 +1352,14 @@ Public NotInheritable Class SpatialUtilities
 
             Dim theAutoDateFldIdx As Integer
             theAutoDateFldIdx = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoDateField)
-            If theAutoDateFldIdx > Utilities.FieldNotFoundIndex Then
+            If theAutoDateFldIdx > FieldNotFoundIndex Then
                 feature.Value(theAutoDateFldIdx) = System.DateTime.Now
             End If
 
             Dim theAutoWhoFldIdx As Integer
             theAutoWhoFldIdx = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoWhoField)
-            If theAutoWhoFldIdx > Utilities.FieldNotFoundIndex Then
-                feature.Value(theAutoWhoFldIdx) = Utilities.GetUserName
+            If theAutoWhoFldIdx > FieldNotFoundIndex Then
+                feature.Value(theAutoWhoFldIdx) = GetUserName()
             End If
 
         Catch ex As Exception

@@ -264,6 +264,8 @@ Public NotInheritable Class EditorExtension
     ''' <remarks>Handles EditEvents.OnCreateFeature events.</remarks>
     Private Sub EditEvents_OnChangeFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnChangeFeature
 
+        ' TODO: [NIS] Add code to check for if required data is available (see OnDeleteFeature).
+
         Try
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
             If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
@@ -327,6 +329,8 @@ Public NotInheritable Class EditorExtension
     ''' <param name="obj">The feature that was just created.</param>
     ''' <remarks>Handles EditEvents.OnCreateFeature events.</remarks>
     Private Sub EditEvents_OnCreateFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnCreateFeature
+
+        ' TODO: [NIS] Add code to check for if required data is available (see OnDeleteFeature).
 
         Try
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
@@ -491,42 +495,36 @@ Public NotInheritable Class EditorExtension
 
             If IsTaxlot(obj) Then
                 '[Deleting taxlots...]
-                ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
 
-                ' Get reference to the Cancelled Numbers object table
-                theFeature = DirectCast(obj, IFeature)
-                theTaxlotFClass = DirectCast(theFeature.Class, IFeatureClass)
-                theDataSet = DirectCast(theTaxlotFClass, IDataset)
-                theWorkspace = theDataSet.Workspace
-                theFeatureWorkspace = DirectCast(theWorkspace, IFeatureWorkspace)
+                If hasRequiredDataForOnDeleteFeature() Then
+                    ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
 
-                ' Attempt to get a reference to the Cancelled Number table.
-                theCancelledNumbersTable = theFeatureWorkspace.OpenTable(EditorExtension.TableNamesSettings.CancelledNumbersTable)
-                If theCancelledNumbersTable Is Nothing Then Exit Try
+                    ' Get reference to the Cancelled Numbers object table
+                    theFeature = DirectCast(obj, IFeature)
+                    theTaxlotFClass = DirectCast(theFeature.Class, IFeatureClass)
+                    theDataSet = DirectCast(theTaxlotFClass, IDataset)
+                    theWorkspace = theDataSet.Workspace
+                    theFeatureWorkspace = DirectCast(theWorkspace, IFeatureWorkspace)
 
-                ' Retrieve field positions.
-                Dim theTLTaxlotFldIdx As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-                Dim theTLMapNumberFldIdx As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.MapNumberField)
-                Dim theCNTaxlotFldIdx As Integer = theCancelledNumbersTable.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-                Dim theCNMapNumberFldIdx As Integer = theCancelledNumbersTable.FindField(EditorExtension.TaxLotSettings.MapNumberField)
+                    ' Attempt to get a reference to the Cancelled Number table.
+                    theCancelledNumbersTable = theFeatureWorkspace.OpenTable(EditorExtension.TableNamesSettings.CancelledNumbersTable)
 
-                ' Confirm that the taxlot field or map number fields do exist in the Taxlot FC.
-                If theCNTaxlotFldIdx = FieldNotFoundIndex Then Exit Try
-                If theCNMapNumberFldIdx = FieldNotFoundIndex Then Exit Try
+                    ' Retrieve field positions.
+                    Dim theTLTaxlotFldIdx As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+                    Dim theTLMapNumberFldIdx As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.MapNumberField)
+                    Dim theCNTaxlotFldIdx As Integer = theCancelledNumbersTable.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+                    Dim theCNMapNumberFldIdx As Integer = theCancelledNumbersTable.FindField(EditorExtension.TaxLotSettings.MapNumberField)
 
-                ' Confirm that the taxlot field or map number fields do exist in the Cancelled Numbers table.
-                If theCNTaxlotFldIdx = FieldNotFoundIndex Then Exit Try
-                If theCNMapNumberFldIdx = FieldNotFoundIndex Then Exit Try
-
-                'If no null values, copy them to Cancelled numbers
-                ' TODO: [NIS] Resolve - UPGRADE WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-                If Not IsDBNull(obj.Value(theTLTaxlotFldIdx)) And Not IsDBNull(obj.Value(theTLMapNumberFldIdx)) Then
-                    theRow = theCancelledNumbersTable.CreateRow
-                    If theRow Is Nothing Then Exit Try
-                    theRow.Value(theCNTaxlotFldIdx) = obj.Value(theTLTaxlotFldIdx)
-                    theRow.Value(theCNMapNumberFldIdx) = obj.Value(theTLMapNumberFldIdx)
-                    theRow.Store()
+                    ' If no null values, copy them to Cancelled numbers
+                    ' TODO: [NIS] Resolve - UPGRADE WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
+                    If Not IsDBNull(theFeature.Value(theTLTaxlotFldIdx)) And Not IsDBNull(theFeature.Value(theTLMapNumberFldIdx)) Then
+                        theRow = theCancelledNumbersTable.CreateRow
+                        theRow.Value(theCNTaxlotFldIdx) = theFeature.Value(theTLTaxlotFldIdx)
+                        theRow.Value(theCNMapNumberFldIdx) = theFeature.Value(theTLMapNumberFldIdx)
+                        theRow.Store()
+                    End If
                 End If
+
             End If
 
         Catch ex As Exception
@@ -607,6 +605,49 @@ Public NotInheritable Class EditorExtension
         Dim productCode As esriLicenseProductCode = aoInitTestProduct.InitializedProduct()
 
         Return (productCode = requiredProductCode)
+    End Function
+
+    Private Function hasRequiredDataForOnDeleteFeature() As Boolean
+
+        ' TODO: [NIS] Could use a .NET collection type not dependent on the VisualBasic namespace.
+        ' See System.Collection namespace. Take a look at http://forums.devx.com/archive/index.php/t-16828.html.
+
+        ' TEMPLATE: Const fcName1 As String = "FeatureClassName1"  'TODO: Insert real fc name
+        ' TEMPLATE: Const fieldName1FC1 As String = "FieldName1"  'TODO: Insert real field name
+        ' TEMPLATE: Const fieldName2FC1 As String = "FieldName2"  'TODO: Insert real field name
+        ' TEMPLATE: Dim colFieldNames1 As New Collection
+        ' TEMPLATE: colFieldNames1.Add(fieldName1FC1)
+        ' TEMPLATE: colFieldNames1.Add(fieldName2FC1)
+
+        ' Set up to find the Taxlot feature class fields.
+        Dim fcName As String = EditorExtension.TableNamesSettings.TaxLotFC
+        Dim fieldName1FC As String = EditorExtension.TaxLotSettings.TaxlotField
+        Dim fieldName2FC As String = EditorExtension.TaxLotSettings.MapNumberField
+        Dim colFieldNames1 As New Collection
+        colFieldNames1.Add(fieldName1FC)
+        colFieldNames1.Add(fieldName2FC)
+        
+        ' Set up to find the MapIndex feature class fields.
+        Dim tableName As String = EditorExtension.TableNamesSettings.CancelledNumbersTable
+        ' TODO: [NIS] (1) Add a settings group for CancelledNumbers table field names?
+        ' TODO: [NIS] (2) Use CancelledNumbersSettings instead of TaxLotSettings below?
+        Dim fieldName1Table As String = EditorExtension.TaxLotSettings.TaxlotField
+        Dim fieldName2Table As String = EditorExtension.TaxLotSettings.MapNumberField
+        Dim colFieldNames2 As New Collection
+        colFieldNames2.Add(fieldName1Table)
+        colFieldNames2.Add(fieldName2Table)
+
+        Dim foundAllFields As Boolean = True 'initial assumption
+        Const loadData As Boolean = True
+
+        'TEMPLATE: foundAllFields = foundAllFields AndAlso HasRequiredFields(fcName1, colFieldNames1, loadData)
+        'TEMPLATE: foundAllFields = foundAllFields AndAlso HasRequiredFields(fcName2, colFieldNames2, loadData)
+
+        foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(fcName, colFieldNames1, loadData)
+        foundAllFields = foundAllFields AndAlso TableHasRequiredFields(tableName, colFieldNames2, loadData)
+
+        Return foundAllFields
+
     End Function
 
 #End Region
