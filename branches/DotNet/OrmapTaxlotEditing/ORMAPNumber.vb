@@ -109,7 +109,7 @@ Public NotInheritable Class ORMAPNumber
         End Get
         Set(ByVal value As String)
             If value.Length <> 2 Then
-                _township = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Township DOES NOT EXIST YET
+                _township = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Township DOES NOT EXIST (YET)
             Else
                 _township = value
             End If
@@ -168,7 +168,7 @@ Public NotInheritable Class ORMAPNumber
         End Get
         Set(ByVal value As String)
             If value.Length <> 2 Then
-                _range = "01" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Range DOES NOT EXIST YET
+                _range = "01" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Range DOES NOT EXIST (YET)
             Else
                 _range = value
             End If
@@ -233,16 +233,16 @@ Public NotInheritable Class ORMAPNumber
                 'Select Case CInt(value)
                 Select Case valueAsInteger
                     Case 0
-                        _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST YET
+                        _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST (YET)
                     Case Is < 10
                         _section = "0" & CShort(value)
                     Case Is <= 37
                         _section = value
                     Case Else
-                        _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST YET
+                        _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST (YET)
                 End Select
             Else
-                _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST YET
+                _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST (YET)
             End If
             RaiseEvent OnChange(Me.GetOrmapNumber)
         End Set

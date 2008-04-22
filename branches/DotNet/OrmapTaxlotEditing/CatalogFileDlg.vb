@@ -38,6 +38,7 @@
 #Region "Imported Namespaces"
 Imports ESRI.ArcGIS.CatalogUI
 Imports ESRI.ArcGIS.Catalog
+'Imports System.Collections.Generic
 Imports System.Windows.Forms
 
 #End Region
@@ -48,18 +49,24 @@ Imports System.Windows.Forms
 ''' </summary>
 ''' <remarks></remarks>
 Public Class CatalogFileDialog
+
     'TODO: JWM Would like to remove the dependency on VB.Collection object
+    'NOTE: [NIS] Probably cannot be done. ShowOpen is defined in ArcObjects as returning a Collection.
+
 #Region "Class level fields"
+
     Private _theGxDialog As IGxDialog
     Private _colSelection As Collection
+
 #End Region
+
+#Region "Built-in class members"
 
     Public Sub New()
         MyBase.New()
         _theGxDialog = New GxDialog
         _theGxDialog.RememberLocation = True
         _theGxDialog.AllowMultiSelect = False
-
     End Sub
 
     Protected Overrides Sub Finalize()
@@ -67,7 +74,9 @@ Public Class CatalogFileDialog
         MyBase.Finalize()
     End Sub
 
-#Region "Built-in class members"
+#End Region
+
+#Region "Custom class members"
 
     Public Property Name() As String
         Get
@@ -90,10 +99,6 @@ Public Class CatalogFileDialog
             FinalLocation = _theGxDialog.FinalLocation.FullName
         End Get
     End Property
-
-#End Region
-
-#Region "Custom class members"
 
     Public Const NoSelectedElementIndex As Integer = -1
 
@@ -211,5 +216,6 @@ Public Class CatalogFileDialog
     End Function
 
 #End Region
+
 End Class
 #End Region

@@ -36,14 +36,14 @@
 #End Region
 
 #Region "Imported Namespaces"
-Imports System
-Imports System.Drawing
-Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.Framework
+Imports System
+Imports System.Drawing
+Imports System.Runtime.InteropServices
 #End Region
 
 <ComVisible(True)> _
@@ -82,7 +82,7 @@ Public NotInheritable Class EditMapIndex
             Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
         Catch ex As ArgumentException
-            System.Diagnostics.Trace.WriteLine(ex.Message, "Invalid Bitmap")
+            Trace.WriteLine(ex.Message, "Invalid Bitmap")
         End Try
 
     End Sub

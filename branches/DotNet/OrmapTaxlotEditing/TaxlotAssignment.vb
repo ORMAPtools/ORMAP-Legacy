@@ -36,9 +36,6 @@
 #End Region
 
 #Region "Imported Namespaces"
-Imports System.Drawing
-Imports System.Runtime.InteropServices
-Imports System.Windows.Forms
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
@@ -51,6 +48,11 @@ Imports ESRI.ArcGIS.Geometry
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
+Imports System.Collections.Generic
+Imports System.Drawing
+Imports System.Runtime.InteropServices
+Imports System.Windows.Forms
+
 #End Region
 
 <ComVisible(True)> _
@@ -106,7 +108,7 @@ Public NotInheritable Class TaxlotAssignment
             Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New System.Drawing.Bitmap(Me.GetType(), bitmapResourceName)
         Catch ex As ArgumentException
-            System.Diagnostics.Trace.WriteLine(ex.Message, "Invalid Bitmap")
+            Trace.WriteLine(ex.Message, "Invalid Bitmap")
         End Try
 
         Try
@@ -114,7 +116,7 @@ Public NotInheritable Class TaxlotAssignment
             Dim cursorResourceName As String = Me.GetType().Name + ".cur"
             MyBase.m_cursor = New System.Windows.Forms.Cursor(Me.GetType(), cursorResourceName)
         Catch ex As ArgumentException
-            System.Diagnostics.Trace.WriteLine(ex.Message, "Invalid Cursor")
+            Trace.WriteLine(ex.Message, "Invalid Cursor")
         End Try
 
     End Sub
@@ -346,46 +348,43 @@ Public NotInheritable Class TaxlotAssignment
 
     Private Function hasRequiredData() As Boolean
 
-        ' TODO: [NIS] Could use a .NET collection type not dependent on the VisualBasic namespace.
-        ' See System.Collection namespace. Take a look at http://forums.devx.com/archive/index.php/t-16828.html.
-
-        ' TEMPLATE: Const fcName1 As String = "FeatureClassName1"  'TODO: Insert real fc name
-        ' TEMPLATE: Const fieldName1FC1 As String = "FieldName1"  'TODO: Insert real field name
-        ' TEMPLATE: Const fieldName2FC1 As String = "FieldName2"  'TODO: Insert real field name
-        ' TEMPLATE: Dim colFieldNames1 As New Collection
-        ' TEMPLATE: colFieldNames1.Add(fieldName1FC1)
-        ' TEMPLATE: colFieldNames1.Add(fieldName2FC1)
+        ' TEMPLATE: Const theFCName1 As String = "FeatureClassName1"  'TODO: Insert real fc name
+        ' TEMPLATE: Const theFC1FieldName1 As String = "FieldName1"  'TODO: Insert real field name
+        ' TEMPLATE: Const theFC1Name2 As String = "FieldName2"  'TODO: Insert real field name
+        ' TEMPLATE: Dim theFC1FieldNames As New List(Of String)
+        ' TEMPLATE: theFC1FieldNames.Add(theFC1FieldName1)
+        ' TEMPLATE: colFC1FieldNames.Add(theFC1FieldName2)
 
         ' Set up to find the Taxlot feature class fields.
-        Dim fcName1 As String = EditorExtension.TableNamesSettings.TaxLotFC
-        Dim fieldName1FC1 As String = EditorExtension.TaxLotSettings.OrmapTaxlotField
-        Dim fieldName2FC1 As String = EditorExtension.TaxLotSettings.OrmapMapNumberField
-        Dim fieldName3FC1 As String = EditorExtension.TaxLotSettings.MapTaxlotField
-        Dim fieldName4FC1 As String = EditorExtension.TaxLotSettings.TaxlotField
-        Dim fieldName5FC1 As String = EditorExtension.TaxLotSettings.AnomalyField
-        Dim colFieldNames1 As New Collection
-        colFieldNames1.Add(fieldName1FC1)
-        colFieldNames1.Add(fieldName2FC1)
-        colFieldNames1.Add(fieldName3FC1)
-        colFieldNames1.Add(fieldName4FC1)
-        colFieldNames1.Add(fieldName5FC1)
+        Dim theFCName1 As String = EditorExtension.TableNamesSettings.TaxLotFC
+        Dim theFC1FieldName1 As String = EditorExtension.TaxLotSettings.OrmapTaxlotField
+        Dim theFC1FieldName2 As String = EditorExtension.TaxLotSettings.OrmapMapNumberField
+        Dim theFC1FieldName3 As String = EditorExtension.TaxLotSettings.MapTaxlotField
+        Dim theFC1FieldName4 As String = EditorExtension.TaxLotSettings.TaxlotField
+        Dim theFC1FieldName5 As String = EditorExtension.TaxLotSettings.AnomalyField
+        Dim theFC1FieldNamesList As New List(Of String)
+        theFC1FieldNamesList.Add(theFC1FieldName1)
+        theFC1FieldNamesList.Add(theFC1FieldName2)
+        theFC1FieldNamesList.Add(theFC1FieldName3)
+        theFC1FieldNamesList.Add(theFC1FieldName4)
+        theFC1FieldNamesList.Add(theFC1FieldName5)
 
         ' Set up to find the MapIndex feature class fields.
-        Dim fcName2 As String = EditorExtension.TableNamesSettings.MapIndexFC
-        Dim fieldName1FC2 As String = EditorExtension.MapIndexSettings.MapNumberField
-        Dim fieldName2FC2 As String = EditorExtension.MapIndexSettings.MapScaleField  ' TODO: Does the tool need this field?
-        Dim colFieldNames2 As New Collection
-        colFieldNames2.Add(fieldName1FC2)
-        colFieldNames2.Add(fieldName2FC2)
+        Dim theFCName2 As String = EditorExtension.TableNamesSettings.MapIndexFC
+        Dim theFC2FieldName1 As String = EditorExtension.MapIndexSettings.MapNumberField
+        Dim theFC2FieldName2 As String = EditorExtension.MapIndexSettings.MapScaleField  ' TODO: Does the tool need this field?
+        Dim theFC2FieldNamesList As New List(Of String)
+        theFC2FieldNamesList.Add(theFC2FieldName1)
+        theFC2FieldNamesList.Add(theFC2FieldName2)
 
         Dim foundAllFields As Boolean = True 'initial assumption
-        Const loadData As Boolean = True
+        Const canLoadData As Boolean = True
 
-        'TEMPLATE: foundAllFields = foundAllFields AndAlso HasRequiredFields(fcName1, colFieldNames1, loadData)
-        'TEMPLATE: foundAllFields = foundAllFields AndAlso HasRequiredFields(fcName2, colFieldNames2, loadData)
+        'TEMPLATE: foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(fcName1, colFieldNames1, loadData)
+        'TEMPLATE: foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(fcName2, colFieldNames2, loadData)
 
-        foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(fcName1, colFieldNames1, loadData)
-        foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(fcName2, colFieldNames2, loadData)
+        foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(theFCName1, theFC1FieldNamesList, canLoadData)
+        foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(theFCName2, theFC2FieldNamesList, canLoadData)
 
         Return foundAllFields
 
@@ -489,25 +488,22 @@ Public NotInheritable Class TaxlotAssignment
             End If
 
             '------------------------------------------
-            ' Get the OrmapMapNumber as a string value
+            ' Get the ORMapNumber as a string value
             '------------------------------------------
-            Dim theExistOrmapMapNumberVal As String = String.Empty 'initialize
-            ' Get the current OrmapMapNumber.
-            ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-            theExistOrmapMapNumberVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)), "", theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)))
+            Dim theExistingORMapNumberVal As String = String.Empty 'initialize
+            ' Get the current ORMapNumber.
+            theExistingORMapNumberVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)), "", theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)))
 
-            ' Obtain the OrmapMapNumber from a MapIndex polygon if it is not present.
-            If Len(theExistOrmapMapNumberVal) = 0 Then
-                ' TODO: [NIS] Confirm - "This call will point _theMapIndexFLayer to the MapIndex feature class"
-                CalculateTaxlotValues(theTaxlotFeature, _theMapIndexFLayer)  ' TODO: [NIS] Confirm this function with Jim.
-                ' Get the current ORMAP Number again after the calculate above.
-                ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-                theExistOrmapMapNumberVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)), "", theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)))
+            ' Obtain the ORMapNumber from a MapIndex polygon if it is not present.
+            If Len(theExistingORMapNumberVal) = 0 Then
+                CalculateTaxlotValues(theTaxlotFeature, _theMapIndexFLayer)  ' TODO: [NIS] Confirm with Jim that this function is correct.
+                ' Get the current ORMapNumber again after the calculate above.
+                theExistingORMapNumberVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)), "", theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)))
 
                 ' Stop if there is still no current OrmapMapNumber.
-                If Len(theExistOrmapMapNumberVal) = 0 Then
-                    MessageBox.Show("OrmapMapNumber is empty for this taxlot or MapIndex." & vbNewLine & _
-                                    "Use the MapIndex tool to populate the OrmapMapNumber field" & vbNewLine & _
+                If Len(theExistingORMapNumberVal) = 0 Then
+                    MessageBox.Show("ORMapNumber is empty for this taxlot or MapIndex." & vbNewLine & _
+                                    "Use the MapIndex tool to populate the ORMapNumber field" & vbNewLine & _
                                     "before using this tool", "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                     Exit Try
                 End If
@@ -516,21 +512,19 @@ Public NotInheritable Class TaxlotAssignment
             '------------------------------------------
             ' Define the MapTaxlot as a string value.
             '------------------------------------------
-            Dim theExistMapTaxlotVal As String = String.Empty 'initialize
-            ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-            theExistMapTaxlotVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLMapTaxlotFldIdx)), "", theTaxlotFeature.Value(_theTLMapTaxlotFldIdx)))
+            Dim theExistingMapTaxlotVal As String = String.Empty 'initialize
+            theExistingMapTaxlotVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLMapTaxlotFldIdx)), "", theTaxlotFeature.Value(_theTLMapTaxlotFldIdx)))
 
             '------------------------------------------
             ' Define the Taxlot number (can be a word 
             ' also) as a string value.
             '------------------------------------------
-            Dim theExistTaxlotNumberVal As String = String.Empty 'initialize
-            ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-            theExistTaxlotNumberVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLTaxlotFldIdx)), "", theTaxlotFeature.Value(_theTLTaxlotFldIdx)))
+            Dim theExistingTaxlotNumberVal As String = String.Empty 'initialize
+            theExistingTaxlotNumberVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLTaxlotFldIdx)), "", theTaxlotFeature.Value(_theTLTaxlotFldIdx)))
 
             ' Optionally, update the taxlot number field
-            If Len(theExistTaxlotNumberVal) > 0 And theExistTaxlotNumberVal <> "0" Then
-                If MessageBox.Show("Taxlot currently has a Taxlot value (" & theExistTaxlotNumberVal & ")." & vbNewLine & _
+            If Len(theExistingTaxlotNumberVal) > 0 And theExistingTaxlotNumberVal <> "0" Then
+                If MessageBox.Show("Taxlot currently has a Taxlot value (" & theExistingTaxlotNumberVal & ")." & vbNewLine & _
                           "Update it?", "Taxlot Assignment", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.No Then
                     Exit Try
                 End If
@@ -547,11 +541,7 @@ Public NotInheritable Class TaxlotAssignment
                 ' Remove leading Zeros for taxlot number if any exist (CInt conversion will remove them)
                 theNewTLTaxlotNumVal = CStr(CInt(theNewTLTaxlotNumVal))
                 ' Make sure 5-digit number is 5 characters by padding on the left with zeros
-                If Len(theNewTLTaxlotNumVal_5digit) < ORMAPNumber.GetOrmap_TaxlotFieldLength Then  ' TODO: [NIS] Why NOT just use 5 here? Other code assumes this length so it should not vary.
-                    Do Until Len(theNewTLTaxlotNumVal_5digit) = ORMAPNumber.GetOrmap_TaxlotFieldLength
-                        theNewTLTaxlotNumVal_5digit = "0" & theNewTLTaxlotNumVal_5digit
-                    Loop
-                End If
+                theNewTLTaxlotNumVal_5digit = theNewTLTaxlotNumVal_5digit.PadLeft(ORMAPNumber.GetOrmap_TaxlotFieldLength, "0"c)
             Else
                 '[Taxlot value is a word...]
                 theNewTLTaxlotNumVal = Me.TaxlotType 'Predefined text enum
@@ -567,32 +557,30 @@ Public NotInheritable Class TaxlotAssignment
             theTLMapSuffixTypeVal = GetMapSuffixType(theTaxlotFeature)
             theTLMapSuffixNumVal = GetMapSuffixNum(theTaxlotFeature)
             ' If value is null, use the default
-            ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-            If IsDBNull(theTLMapSuffixTypeVal) Then theTLMapSuffixTypeVal = "0"
-            ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-            If IsDBNull(theTLMapSuffixNumVal) Then theTLMapSuffixNumVal = "000"
+            If IsDBNull(theTLMapSuffixTypeVal) Then theTLMapSuffixTypeVal = EditorExtension.DefaultValuesSettings.MapSuffixType
+            If IsDBNull(theTLMapSuffixNumVal) Then theTLMapSuffixNumVal = EditorExtension.DefaultValuesSettings.MapSuffixNumber
 
             '------------------------------------------
             ' Define the Anomaly from MapIndex
             '------------------------------------------
             Dim theORMAPNumberClass As New ORMAPNumber()
             Dim theAnomalyVal As String = String.Empty
-            If (theORMAPNumberClass.ParseNumber(theExistOrmapMapNumberVal)) Then
+            If (theORMAPNumberClass.ParseNumber(theExistingORMapNumberVal)) Then
                 theAnomalyVal = theORMAPNumberClass.Anomaly
             End If
 
             '------------------------------------------
             ' Put together the OrmapTaxlot (ORTaxlot, 
-            ' NOT to be confused with the Taxlot or 
-            ' MapTaxlot fields) string from its parts.
-            ' Set the value.
+            ' NOT to be confused with the ORMapNum, 
+            ' Taxlot or MapTaxlot fields) string from
+            ' its parts.
             '------------------------------------------
-            Dim theCombinedOrmapTaxlotNumber As String = String.Empty 'initialize
-            theCombinedOrmapTaxlotNumber = theExistOrmapMapNumberVal & theNewTLTaxlotNumVal_5digit
+            Dim theCombinedORTaxlotNumber As String = String.Empty 'initialize
+            theCombinedORTaxlotNumber = theExistingORMapNumberVal & theNewTLTaxlotNumVal_5digit
             ' TODO: [NIS] Find out if this is VB6 pattern is actually the correct pattern...
-            'Dim theShortOrmapMapNumber As String = String.Empty 'initialize
-            'theShortOrmapMapNumber = OrmapMapNumberNoCountyCodeSuffix(theExistOrmapMapNumberVal)
-            'theCombinedOrmapTaxlotNumber = theShortOrmapMapNumber & theTLMapSuffixTypeVal & theTLMapSuffixNumVal & theNewTLTaxlotNumVal_5digit
+            'Dim theShortORMapNumber As String = String.Empty 'initialize
+            'theShortORMapNumber = OrmapMapNumberNoCountyCodeSuffix(theExistOrmapMapNumberVal)
+            'theCombinedORTaxlotNumber = theShortORMapNumber & theTLMapSuffixTypeVal & theTLMapSuffixNumVal & theNewTLTaxlotNumVal_5digit
 
             '------------------------------------------
             ' Define the MapTaxlot (NOT to be confused 
@@ -605,7 +593,7 @@ Public NotInheritable Class TaxlotAssignment
             theDefaultCountyCode = CInt(EditorExtension.DefaultValuesSettings.County)
             Select Case theDefaultCountyCode
                 Case 1 To 19, 21 To 36
-                    theMapTaxlotNumber = GenerateMapTaxlotValue(theExistOrmapMapNumberVal & theNewTLTaxlotNumVal_5digit, (EditorExtension.TaxLotSettings.MapTaxlotFormatMask))
+                    theMapTaxlotNumber = GenerateMapTaxlotValue(theExistingORMapNumberVal & theNewTLTaxlotNumVal_5digit, (EditorExtension.TaxLotSettings.MapTaxlotFormatMask))
                 Case 20
                     ' 1.  Lane County uses a 2-digit numeric identifier for ranges.
                     '     Special handling is required for east ranges, where 02E is
@@ -616,24 +604,23 @@ Public NotInheritable Class TaxlotAssignment
                     '     CreateMapTaxlotValue function. Also, in this case, TAXLOT is padded
                     '     on the left with zeros to make it always a 5-digit number (see comment
                     '     above).
-                    theMapTaxlotNumber = Trim(Left(theExistMapTaxlotVal, 8)) & theNewTLTaxlotNumVal_5digit
-                    ' TODO: [NIS] Implement this instead of the above line.
-                    'theMapTaxlotNumber = Trim(Left(theExistMapNumberVal, 8)) & theNewTLTaxlotNumVal_5digit
+                    theMapTaxlotNumber = Trim(Left(theExistingMapTaxlotVal, 8)) & theNewTLTaxlotNumVal_5digit
             End Select
 
-            '##################################
+            '------------------------------------------
+            ' Make the edits
+            '------------------------------------------
             ' Write the Taxlot value
             theTaxlotFeature.Value(_theTLTaxlotFldIdx) = theNewTLTaxlotNumVal
             ' Write the OrmapTaxlot value
-            theTaxlotFeature.Value(_theTLOrmapTaxlotNumberFldIdx) = theCombinedOrmapTaxlotNumber
+            theTaxlotFeature.Value(_theTLOrmapTaxlotNumberFldIdx) = theCombinedORTaxlotNumber
             ' Write the MapTaxlot value
             theTaxlotFeature.Value(_theTLMapTaxlotFldIdx) = theMapTaxlotNumber
             ' Write the Anomaly value
             theTaxlotFeature.Value(_theTLAnomalyFldIdx) = theAnomalyVal
-            '##################################
-
+            
             '------------------------------------------
-            ' End the edit operation
+            ' End the edit operation (store & stop)
             '------------------------------------------
             theTaxlotFeature.Store()
             EditorExtension.Editor.StopOperation("Assign Taxlot Number (AutoIncrement)")

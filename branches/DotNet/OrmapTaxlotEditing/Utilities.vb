@@ -55,11 +55,13 @@ Public NotInheritable Class Utilities
     End Enum
 
     Public Shared Function GetUserName() As String
+        ' Note: ALL Since this a dll, My.User.InitializeWithWindowsUser()
+        ' is called in EditorExtension.Startup to set this value
         If TypeOf My.User.CurrentPrincipal Is _
-        Security.Principal.WindowsPrincipal Then
-            'TODO: ALL Since this a dll, need to call My.User.InitializeWithWindowsUser() on initial startup maybe in editorextension startup
-            ' The application is using Windows authentication.
-            ' The name format is DOMAIN\USERNAME.
+                Security.Principal.WindowsPrincipal Then
+            '[The application is using Windows authentication...]
+            '[The name format is "DOMAIN\USERNAME"...]
+            ' Parse out USERNAME from DOMAIN\USERNAME pair
             Dim parts() As String = Split(My.User.Name, "\")
             Dim username As String = parts(1)
             Return username

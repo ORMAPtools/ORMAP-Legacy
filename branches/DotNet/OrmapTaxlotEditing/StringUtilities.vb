@@ -55,10 +55,11 @@ Public NotInheritable Class StringUtilities
     Public Shared Function AddLeadingZeros(ByVal currentString As String, ByVal width As Integer) As String
         Try
             If currentString.Length < width Then
-                Dim sb As New StringBuilder("0", 5)
-                sb.Insert(width - currentString.Length, currentString)
-                Return sb.ToString
-                'Return currentString.PadLeft(width - currentString.Length, "0"c)
+                'Dim sb As New StringBuilder("0", 5)
+                'sb.Insert(width - currentString.Length, currentString)
+                'Return sb.ToString
+                'TODO: [NIS] Above code does not work. Ask Jim why PadLeft was not used here for a while...
+                Return currentString.PadLeft(width, "0"c)
             Else
                 Return currentString
             End If

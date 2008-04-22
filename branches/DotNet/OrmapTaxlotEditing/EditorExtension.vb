@@ -36,9 +36,6 @@
 #End Region
 
 #Region "Imported Namespaces"
-Imports System
-Imports System.Windows.Forms
-Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.Carto
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Editor
@@ -48,6 +45,10 @@ Imports ESRI.ArcGIS.Framework
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
+Imports System
+Imports System.Collections.Generic
+Imports System.Windows.Forms
+Imports System.Runtime.InteropServices
 #End Region
 
 <ComVisible(True)> _
@@ -285,7 +286,6 @@ Public NotInheritable Class EditorExtension
             End If
 
             ' Variable declarations
-            Dim u As New ESRI.ArcGIS.esriSystem.UID
             Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
             Dim theAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
 
@@ -310,8 +310,6 @@ Public NotInheritable Class EditorExtension
                 'Set anno size
                 SetAnnoSize(obj, theFeature)
             End If
-
-            _duringAutoUpdate = False
 
         Catch ex As Exception
             MessageBox.Show(ex.Message)
@@ -609,42 +607,39 @@ Public NotInheritable Class EditorExtension
 
     Private Function hasRequiredDataForOnDeleteFeature() As Boolean
 
-        ' TODO: [NIS] Could use a .NET collection type not dependent on the VisualBasic namespace.
-        ' See System.Collection namespace. Take a look at http://forums.devx.com/archive/index.php/t-16828.html.
-
-        ' TEMPLATE: Const fcName1 As String = "FeatureClassName1"  'TODO: Insert real fc name
-        ' TEMPLATE: Const fieldName1FC1 As String = "FieldName1"  'TODO: Insert real field name
-        ' TEMPLATE: Const fieldName2FC1 As String = "FieldName2"  'TODO: Insert real field name
-        ' TEMPLATE: Dim colFieldNames1 As New Collection
-        ' TEMPLATE: colFieldNames1.Add(fieldName1FC1)
-        ' TEMPLATE: colFieldNames1.Add(fieldName2FC1)
+        ' TEMPLATE: Const theFCName1 As String = "FeatureClassName1"  'TODO: Insert real fc name
+        ' TEMPLATE: Const theFC1FieldName1 As String = "FieldName1"  'TODO: Insert real field name
+        ' TEMPLATE: Const theFC1Name2 As String = "FieldName2"  'TODO: Insert real field name
+        ' TEMPLATE: Dim theFC1FieldNames As New List(Of String)
+        ' TEMPLATE: theFC1FieldNames.Add(theFC1FieldName1)
+        ' TEMPLATE: colFC1FieldNames.Add(theFC1FieldName2)
 
         ' Set up to find the Taxlot feature class fields.
-        Dim fcName As String = EditorExtension.TableNamesSettings.TaxLotFC
-        Dim fieldName1FC As String = EditorExtension.TaxLotSettings.TaxlotField
-        Dim fieldName2FC As String = EditorExtension.TaxLotSettings.MapNumberField
-        Dim colFieldNames1 As New Collection
-        colFieldNames1.Add(fieldName1FC)
-        colFieldNames1.Add(fieldName2FC)
-        
+        Dim theFCName As String = EditorExtension.TableNamesSettings.TaxLotFC
+        Dim TheFCFieldName1 As String = EditorExtension.TaxLotSettings.TaxlotField
+        Dim theFCFieldName2 As String = EditorExtension.TaxLotSettings.MapNumberField
+        Dim theFCFieldNames As New List(Of String)
+        theFCFieldNames.Add(TheFCFieldName1)
+        theFCFieldNames.Add(theFCFieldName2)
+
         ' Set up to find the MapIndex feature class fields.
-        Dim tableName As String = EditorExtension.TableNamesSettings.CancelledNumbersTable
+        Dim theTableName As String = EditorExtension.TableNamesSettings.CancelledNumbersTable
         ' TODO: [NIS] (1) Add a settings group for CancelledNumbers table field names?
         ' TODO: [NIS] (2) Use CancelledNumbersSettings instead of TaxLotSettings below?
-        Dim fieldName1Table As String = EditorExtension.TaxLotSettings.TaxlotField
-        Dim fieldName2Table As String = EditorExtension.TaxLotSettings.MapNumberField
-        Dim colFieldNames2 As New Collection
-        colFieldNames2.Add(fieldName1Table)
-        colFieldNames2.Add(fieldName2Table)
+        Dim theTableFieldName1 As String = EditorExtension.TaxLotSettings.TaxlotField
+        Dim theTableFieldName2 As String = EditorExtension.TaxLotSettings.MapNumberField
+        Dim theTableFieldNames As New List(Of String)
+        theTableFieldNames.Add(theTableFieldName1)
+        theTableFieldNames.Add(theTableFieldName2)
 
         Dim foundAllFields As Boolean = True 'initial assumption
-        Const loadData As Boolean = True
+        Const canLoadData As Boolean = True
 
-        'TEMPLATE: foundAllFields = foundAllFields AndAlso HasRequiredFields(fcName1, colFieldNames1, loadData)
-        'TEMPLATE: foundAllFields = foundAllFields AndAlso HasRequiredFields(fcName2, colFieldNames2, loadData)
+        'TEMPLATE: foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(theFCName1, theFC1FieldNames, canLoadData)
+        'TEMPLATE: foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(theFCName2, theFC2FieldNames, canLoadData)
 
-        foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(fcName, colFieldNames1, loadData)
-        foundAllFields = foundAllFields AndAlso TableHasRequiredFields(tableName, colFieldNames2, loadData)
+        foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(theFCName, theFCFieldNames, canLoadData)
+        foundAllFields = foundAllFields AndAlso TableHasRequiredFields(theTableName, theTableFieldNames, canLoadData)
 
         Return foundAllFields
 
@@ -686,6 +681,8 @@ Public NotInheritable Class EditorExtension
             Dim theMxDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
             theMxDoc = DirectCast(EditorExtension.Application.Document, ESRI.ArcGIS.ArcMapUI.IMxDocument)
             setActiveViewEvents(DirectCast(theMxDoc.FocusMap, IActiveViewEvents_Event))  ' TODO: [NIS] Reset this when the focus map changes?
+
+            My.User.InitializeWithWindowsUser()
 
             ' Wire-up the edit events.
             AddHandler EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing

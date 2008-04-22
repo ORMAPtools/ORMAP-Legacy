@@ -78,7 +78,7 @@ Public NotInheritable Class CombineTaxlots
             Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
         Catch ex As ArgumentException
-            System.Diagnostics.Trace.WriteLine(ex.Message, "Invalid Bitmap")
+            Trace.WriteLine(ex.Message, "Invalid Bitmap")
         End Try
 
     End Sub
