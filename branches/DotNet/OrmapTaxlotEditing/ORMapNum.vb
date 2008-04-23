@@ -1,6 +1,6 @@
 #Region "Copyright 2008 ORMAP Tech Group"
 
-' File:  ORMAPNumber.vb
+' File:  ORMapNum.vb
 '
 ' Original Author:  OPET.NET Migration Team (Shad Campbell, James Moore, 
 '                   Nick Seigal)
@@ -44,11 +44,14 @@ Imports System.Text
 
 #Region "Class Declaration"
 ''' <summary>
-''' Encapsulates all elements of an ORMAP number into one class.
+''' Encapsulates all elements of an ORMapNum into one class.
 ''' </summary>
-''' <remarks>Encapsulates all elements of a ORMAP number into one multipurpose class that allows an ORMAP number to be either created or parsed, manipulated, or validated against the current ORMAP number model.</remarks>
+''' <remarks>Encapsulates all elements of a ORMapNum into one 
+''' multipurpose class that allows an ORMapNum to be either 
+''' created or parsed, manipulated, or validated against the 
+''' current ORMapNum model.</remarks>
 <ComVisible(False)> _
-Public NotInheritable Class ORMAPNumber
+Public NotInheritable Class ORMapNum
 
 #Region "Built-In Class Members (Constructors, Etc.)"
 
@@ -93,7 +96,7 @@ Public NotInheritable Class ORMAPNumber
                 Case Is > 2
                     _county = value.Substring(0, 2) 'left(value,2)
             End Select
-            RaiseEvent OnChange(Me.GetOrmapNumber)
+            RaiseEvent OnChange(Me.GetORMapNum)
         End Set
 
     End Property
@@ -113,7 +116,7 @@ Public NotInheritable Class ORMAPNumber
             Else
                 _township = value
             End If
-            RaiseEvent OnChange(Me.GetOrmapNumber)
+            RaiseEvent OnChange(Me.GetORMapNum)
         End Set
     End Property
 
@@ -133,7 +136,7 @@ Public NotInheritable Class ORMAPNumber
                 Case Else
                     _partialTownshipCode = value
             End Select
-            RaiseEvent OnChange(Me.GetOrmapNumber)
+            RaiseEvent OnChange(Me.GetORMapNum)
         End Set
     End Property
 
@@ -153,7 +156,7 @@ Public NotInheritable Class ORMAPNumber
                 Case Else
                     _townshipDirectional = EditorExtension.DefaultValuesSettings.TownshipDirection
             End Select
-            RaiseEvent OnChange(Me.GetOrmapNumber)
+            RaiseEvent OnChange(Me.GetORMapNum)
         End Set
     End Property
 
@@ -173,7 +176,7 @@ Public NotInheritable Class ORMAPNumber
                 _range = value
             End If
 
-            RaiseEvent OnChange(Me.GetOrmapNumber)
+            RaiseEvent OnChange(Me.GetORMapNum)
         End Set
     End Property
 
@@ -193,7 +196,7 @@ Public NotInheritable Class ORMAPNumber
                 Case Else
                     _partialRangeCode = EditorExtension.DefaultValuesSettings.RangePart
             End Select
-            RaiseEvent OnChange(Me.GetOrmapNumber)
+            RaiseEvent OnChange(Me.GetORMapNum)
         End Set
     End Property
 
@@ -213,7 +216,7 @@ Public NotInheritable Class ORMAPNumber
                 Case Else
                     _rangeDirectional = EditorExtension.DefaultValuesSettings.RangeDirection
             End Select
-            RaiseEvent OnChange(Me.GetOrmapNumber)
+            RaiseEvent OnChange(Me.GetORMapNum)
         End Set
     End Property
 
@@ -244,7 +247,7 @@ Public NotInheritable Class ORMAPNumber
             Else
                 _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST (YET)
             End If
-            RaiseEvent OnChange(Me.GetOrmapNumber)
+            RaiseEvent OnChange(Me.GetORMapNum)
         End Set
     End Property
 
@@ -264,7 +267,7 @@ Public NotInheritable Class ORMAPNumber
                 Case Else
                     _quarter = EditorExtension.DefaultValuesSettings.QuarterSection
             End Select
-            RaiseEvent OnChange(Me.GetOrmapNumber)
+            RaiseEvent OnChange(Me.GetORMapNum)
         End Set
     End Property
 
@@ -284,7 +287,7 @@ Public NotInheritable Class ORMAPNumber
                 Case Else
                     _quarterQuarter = EditorExtension.DefaultValuesSettings.QuarterQuarterSection
             End Select
-            RaiseEvent OnChange(Me.GetOrmapNumber)
+            RaiseEvent OnChange(Me.GetORMapNum)
         End Set
     End Property
 
@@ -304,7 +307,7 @@ Public NotInheritable Class ORMAPNumber
                 Case Else
                     _suffixType = EditorExtension.DefaultValuesSettings.MapSuffixType
             End Select
-            RaiseEvent OnChange(Me.GetOrmapNumber)
+            RaiseEvent OnChange(Me.GetORMapNum)
         End Set
     End Property
 
@@ -333,7 +336,7 @@ Public NotInheritable Class ORMAPNumber
             Else
                 _suffixNumber = EditorExtension.DefaultValuesSettings.MapSuffixNumber
             End If
-            RaiseEvent OnChange(Me.GetOrmapNumber)
+            RaiseEvent OnChange(Me.GetORMapNum)
         End Set
     End Property
 
@@ -352,7 +355,7 @@ Public NotInheritable Class ORMAPNumber
             Else
                 _anomaly = value
             End If
-            RaiseEvent OnChange(Me.GetOrmapNumber)
+            RaiseEvent OnChange(Me.GetORMapNum)
         End Set
     End Property
 
@@ -389,7 +392,7 @@ Public NotInheritable Class ORMAPNumber
     ''' </summary>
     Public Function GetOrmapMapNumber() As String
         If IsValidNumber() Then
-            Dim sb As New StringBuilder(_township, ORMAPNumber.GetOrmap_MapNumFieldLength())
+            Dim sb As New StringBuilder(_township, ORMapNum.GetOrmap_MapNumFieldLength())
             sb.Append(_partialTownshipCode)
             sb.Append(_townshipDirectional)
             sb.Append(_range)
@@ -412,10 +415,10 @@ Public NotInheritable Class ORMAPNumber
     ''' ORMAP Number.
     ''' </summary>
     ''' <returns>Returns a properly formatted ORMAP Number.</returns>
-    Public Function GetOrmapNumber() As String
+    Public Function GetORMapNum() As String
         ' Creates a formatted ORMAP Map Number
         If IsValidNumber() Then
-            Dim sb As New StringBuilder(_county, ORMAPNumber.GetOrmap_MapNumFieldLength())
+            Dim sb As New StringBuilder(_county, ORMapNum.GetOrmap_MapNumFieldLength())
             sb.Append(_township)
             sb.Append(_partialTownshipCode)
             sb.Append(_townshipDirectional)

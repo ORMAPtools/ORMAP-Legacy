@@ -39,6 +39,7 @@
 Imports System.Collections.Generic
 Imports System.Windows.Forms
 Imports System.Text
+Imports ESRI.ArcGIS
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Geometry
 Imports ESRI.ArcGIS.esriSystem
@@ -122,14 +123,41 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Obtains OrmapMapNumber via overlay and calculates other field values.
+    ''' Obtains ORMapNum via overlay and calculates other field values.
     ''' </summary>
     ''' <param name="editFeature">A feature from the Taxlot feature class.</param>
     ''' <param name="mapIndexLayer">The Map Index feature layer.</param>
-    ''' <remarks>Updates the ORMAP fields in <paramref name="editFeature"/> to 
-    ''' reflect the current ORMAP Number and Map Number elements in the 
-    ''' overlaying <paramref name="mapIndexLayer"/> polygon.</remarks>
+    ''' <remarks><para>Updates the ORMAP fields in <paramref name="editFeature"/> to 
+    ''' reflect the current ORMapNum and MapNumber values in the 
+    ''' overlaying <paramref name="mapIndexLayer"/> polygon.</para>
+    ''' <para>The following fields are updated:</para>
+    ''' <list type="table">
+    '''   <listheader><term>Field</term><description>Source</description></listheader>
+    '''   <item><term>County</term><description>MapIndex</description></item>
+    '''   <item><term>Town</term><description>MapIndex</description></item>
+    '''   <item><term>TownPart</term><description>MapIndex</description></item>
+    '''   <item><term>TownDir</term><description>MapIndex</description></item>
+    '''   <item><term>Range</term><description>MapIndex</description></item>
+    '''   <item><term>RangePart</term><description>MapIndex</description></item>
+    '''   <item><term>RangeDir</term><description>MapIndex</description></item>
+    '''   <item><term>Section</term><description>MapIndex</description></item>
+    '''   <item><term>Qrtr</term><description>MapIndex</description></item>
+    '''   <item><term>QrtrQrtr</term><description>MapIndex</description></item>
+    '''   <item><term>MapSufType</term><description>MapIndex</description></item>
+    '''   <item><term>MapSufNum</term><description>MapIndex</description></item>
+    '''   <item><term>Anomaly</term><description>MapIndex</description></item>
+    '''   <item><term>MapNumber</term><description>MapIndex</description></item>
+    '''   <item><term>ORMapNum</term><description>MapIndex</description></item>
+    '''   <item><term>Taxlot</term><description>(not updated here)</description></item>
+    '''   <item><term>SpcIntrst</term><description>(not updated here)</description></item>
+    '''   <item><term>MapTaxlot</term><description>Combination of MapIndex.MapNum and current Taxlot</description></item>
+    '''   <item><term>ORTaxlot</term><description>Combination of MapIndex.ORMapNum and current Taxlot</description></item>
+    '''   <item><term>MapAcres</term><description>(feature area / 43560)</description></item>
+    ''' </list>
+    ''' </remarks>
     Public Shared Sub CalculateTaxlotValues(ByRef editFeature As ESRI.ArcGIS.Geodatabase.IFeature, ByRef mapIndexLayer As ESRI.ArcGIS.Carto.IFeatureLayer)
+
+        Dim theORMapNumClass As New ORMapNum()
 
         Try
             Dim taxlotFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
@@ -147,11 +175,7 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
 
-            Dim theORTaxlotFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapTaxlotField)
-            Dim theORMapNumFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapMapNumberField)
-            Dim theMapNumberFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapNumberField)
             Dim theCountyFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.CountyField)
-            Dim theTaxlotFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TaxlotField)
             Dim theTownFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipField)
             Dim theTownPartFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipPartField)
             Dim theTownDirFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipDirectionField)
@@ -161,12 +185,16 @@ Public NotInheritable Class SpatialUtilities
             Dim theSectionFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.SectionNumberField)
             Dim theQrtrFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.QuarterSectionField)
             Dim theQrtrQrtrFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.QuarterQuarterSectionField)
-            Dim theMapSuffixTypeFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixTypeField)
-            Dim theMapSuffixNumFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixNumberField)
+            Dim theMapSufTypeFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixTypeField)
+            Dim theMapSufNumFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixNumberField)
+            Dim theAnomalyFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.AnomalyField)
+            Dim theMapNumberFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapNumberField)
+            Dim theORMapNumFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapMapNumberField)
+            Dim theTaxlotFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TaxlotField)
             Dim theSpcIntrstFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.SpecialInterestField)
             Dim theMapTaxlotFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapTaxlotField)
+            Dim theORTaxlotFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapTaxlotField)
             Dim theMapAcresFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapAcresField)
-            Dim theAnomalyFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.AnomalyField)
             'TODO: JWM If any of these index fields are -1 we should bail according to VB6 version
             'I wonder if we multiplied these values and checked the result for a negative value. Of course if there were an even number of negative values
             'they would cancel each other out.
@@ -200,13 +228,12 @@ Public NotInheritable Class SpatialUtilities
             End If
 
             '------------------------------------------
-            ' Get the ORMapNumber from the MapIndex 
-            ' layer and parse it into the ORMapNumber 
+            ' Get the ORMapNum from the MapIndex 
+            ' layer and parse it into the ORMapNum 
             ' object. Used below for field values.
             '------------------------------------------
-            Dim theORMapNumber As String = GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
-            Dim theORMapNumberClass As New ORMAPNumber()
-            If Not theORMapNumberClass.ParseNumber(theORMapNumber) Then
+            Dim theORMapNum As String = GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+            If Not theORMapNumClass.ParseNumber(theORMapNum) Then
                 ' Exit if parse failed
                 Exit Try
             End If
@@ -216,21 +243,21 @@ Public NotInheritable Class SpatialUtilities
             '------------------------------------------
 
             With editFeature
-                .Value(theCountyFldIdx) = CShort(theORMapNumberClass.County)
-                .Value(theTownFldIdx) = CShort(theORMapNumberClass.Township)
-                .Value(theTownPartFldIdx) = CSng(theORMapNumberClass.PartialTownshipCode)
-                .Value(theTownDirFldIdx) = theORMapNumberClass.TownshipDirectional
-                .Value(theRangeFldIdx) = CShort(theORMapNumberClass.Range)
-                .Value(theRangePartFldIdx) = CSng(theORMapNumberClass.PartialRangeCode)
-                .Value(theRangeDirFldIdx) = theORMapNumberClass.RangeDirectional
-                .Value(theSectionFldIdx) = CShort(theORMapNumberClass.Section)
-                .Value(theQrtrFldIdx) = theORMapNumberClass.Quarter
-                .Value(theQrtrQrtrFldIdx) = theORMapNumberClass.QuarterQuarter
-                .Value(theMapSuffixTypeFldIdx) = theORMapNumberClass.SuffixType
-                .Value(theMapSuffixNumFldIdx) = CLng(theORMapNumberClass.SuffixNumber)
-                .Value(theAnomalyFldIdx) = theORMapNumberClass.Anomaly
+                .Value(theCountyFldIdx) = CShort(theORMapNumClass.County)
+                .Value(theTownFldIdx) = CShort(theORMapNumClass.Township)
+                .Value(theTownPartFldIdx) = CSng(theORMapNumClass.PartialTownshipCode)
+                .Value(theTownDirFldIdx) = theORMapNumClass.TownshipDirectional
+                .Value(theRangeFldIdx) = CShort(theORMapNumClass.Range)
+                .Value(theRangePartFldIdx) = CSng(theORMapNumClass.PartialRangeCode)
+                .Value(theRangeDirFldIdx) = theORMapNumClass.RangeDirectional
+                .Value(theSectionFldIdx) = CShort(theORMapNumClass.Section)
+                .Value(theQrtrFldIdx) = theORMapNumClass.Quarter
+                .Value(theQrtrQrtrFldIdx) = theORMapNumClass.QuarterQuarter
+                .Value(theMapSufTypeFldIdx) = theORMapNumClass.SuffixType
+                .Value(theMapSufNumFldIdx) = CLng(theORMapNumClass.SuffixNumber)
+                .Value(theAnomalyFldIdx) = theORMapNumClass.Anomaly
                 .Value(theMapNumberFldIdx) = theCurrentMapNumber
-                .Value(theORMapNumFldIdx) = theORMapNumberClass.GetOrmapMapNumber
+                .Value(theORMapNumFldIdx) = theORMapNumClass.GetOrmapMapNumber
                 'Taxlot (not updated here)
                 .Value(theSpcIntrstFldIdx) = theCurrentSpecialInterest
                 'MapTaxlot (see below)
@@ -247,10 +274,10 @@ Public NotInheritable Class SpatialUtilities
 
             ' Taxlot has actual taxlot number. ORTaxlot requires a 5-digit number, so leading zeros have to be added.
             Dim theCurrentTaxlotValue As String = CStr(editFeature.Value(theTaxlotFldIdx))
-            theCurrentTaxlotValue = AddLeadingZeros(theCurrentTaxlotValue, ORMAPNumber.GetOrmap_TaxlotFieldLength)
+            theCurrentTaxlotValue = AddLeadingZeros(theCurrentTaxlotValue, ORMapNum.GetOrmap_TaxlotFieldLength)
 
             Dim theNewORTaxlot As String
-            theNewORTaxlot = String.Concat(theORMapNumberClass.GetOrmapNumber, theCurrentTaxlotValue)
+            theNewORTaxlot = String.Concat(theORMapNumClass.GetORMapNum, theCurrentTaxlotValue)
 
             Dim theCountyCode As Short = CShort(EditorExtension.DefaultValuesSettings.County)
             Select Case theCountyCode
@@ -271,25 +298,23 @@ Public NotInheritable Class SpatialUtilities
                     editFeature.Value(theMapTaxlotFldIdx) = String.Concat(sb, theCurrentTaxlotValue)
             End Select
 
-            ' TODO: [NIS] Verify this section
-            ' Recalculate ORTaxlot Number
+            ' Recalculate ORTaxlot
             If IsDBNull(editFeature.Value(theORTaxlotFldIdx)) Then
                 Exit Try
             End If
-            ' Get the current and the new ORMAP Taxlot Numbers
-            Dim theExistingTaxlotNumber As String = CStr(editFeature.Value(theTaxlotFldIdx))
-            Dim theNewORTaxlotNumber As String = generateORMAPTaxlotNumber(theORMapNumberClass.GetOrmapNumber, editFeature, theExistingTaxlotNumber)
+            ' Get the current and the new ORTaxlot Numbers
+            Dim theExistingORTaxlotString As String = CStr(editFeature.Value(theORTaxlotFldIdx))
+            Dim theNewORTaxlotString As String = generateORMAPTaxlotNumber(theORMapNumClass.GetORMapNum, editFeature, theExistingORTaxlotString)
             'If no changes, don't save value
-            If String.Compare(theExistingTaxlotNumber, theNewORTaxlotNumber, True) <> 0 Then
-                editFeature.Value(theORTaxlotFldIdx) = theNewORTaxlotNumber
+            If String.Compare(theExistingORTaxlotString, theNewORTaxlotString, True) <> 0 Then
+                editFeature.Value(theORTaxlotFldIdx) = theNewORTaxlotString
             End If
-            theORMapNumberClass = Nothing
 
         Catch ex As Exception
             MessageBox.Show(ex.Message)
 
         Finally
-
+            theORMapNumClass = Nothing
 
         End Try
     End Sub
@@ -388,16 +413,18 @@ Public NotInheritable Class SpatialUtilities
     ''' <summary>
     ''' Locate a feature layer by its dataset name.
     ''' </summary>
-    ''' <param name="dataSetName">The name of the dataset to find.</param>
+    ''' <param name="datasetName">The name of the dataset to find.</param>
     ''' <returns>A layer object of that supports the IFeatureLayer interface.</returns>
     ''' <remarks>Searches in the TOC recursively (i.e. within group layers). 
-    ''' Returns the first Feature Layer with a matching dataset name.</remarks>
-    Public Shared Function FindFeatureLayerByDSName(ByVal dataSetName As String) As ESRI.ArcGIS.Carto.IFeatureLayer
+    ''' Returns the first feature layer with a matching dataset name.</remarks>
+    Public Shared Function FindFeatureLayerByDSName(ByVal datasetName As String) As ESRI.ArcGIS.Carto.IFeatureLayer
+
+        Dim theMap As IMap = EditorExtension.Editor.Map
+        Dim thisUID As New UID
+
         Try
             Dim returnValue As IFeatureLayer = Nothing
 
-            Dim theMap As IMap = EditorExtension.Editor.Map
-            Dim thisUID As New UID
             ' Get a reference to the feature layers collection of the document. 
             thisUID.Value = "{E156D7E5-22AF-11D3-9F99-00C04F6BC78E}"
             'We want a EnumLayer containing all FeatureLayer objects.
@@ -413,7 +440,7 @@ Public NotInheritable Class SpatialUtilities
             Do While Not (thisFeatureLayer Is Nothing)
                 thisDataSet = DirectCast(thisFeatureLayer.FeatureClass, IDataset)
                 If Not (thisDataSet Is Nothing) Then
-                    If String.Compare(thisDataSet.Name, dataSetName, True) = 0 Then
+                    If String.Compare(thisDataSet.Name, datasetName, True) = 0 Then
                         returnValue = DirectCast(thisFeatureLayer, IFeatureLayer)
                         Exit Do
                     End If
@@ -421,15 +448,58 @@ Public NotInheritable Class SpatialUtilities
                 thisFeatureLayer = DirectCast(theFeatureLayers.Next(), IFeatureLayer)
             Loop
 
+            Return returnValue
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+            Return Nothing
+
+        Finally
             thisUID = Nothing
             theMap = Nothing
+
+        End Try
+
+    End Function
+
+    ''' <summary>
+    ''' Locate a standalone table by its dataset name.
+    ''' </summary>
+    ''' <param name="datasetName">The name of the table to find.</param>
+    ''' <returns>A table object of that supports the ITable interface.</returns>
+    ''' <remarks>Searches in the TOC recursively (i.e. within group layers). 
+    ''' Returns the first table with a matching dataset name.</remarks>
+    Public Shared Function FindStandaloneTableByDSName(ByVal datasetName As String) As IStandaloneTable
+
+        Dim theMap As IMap = EditorExtension.Editor.Map
+
+        Try
+            Dim returnValue As IStandaloneTable = Nothing
+
+            ' Get map as table collection
+            Dim theStandaloneTableCollection As IStandaloneTableCollection
+            theStandaloneTableCollection = DirectCast(theMap, IStandaloneTableCollection)
+
+            Dim theStandaloneTable As IStandaloneTable
+            For t As Integer = 0 To (theStandaloneTableCollection.StandaloneTableCount - 1)
+                theStandaloneTable = theStandaloneTableCollection.StandaloneTable(t)
+                If theStandaloneTable.Name = datasetName Then
+                    returnValue = theStandaloneTable
+                    Exit For
+                End If
+            Next
 
             Return returnValue
 
         Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return Nothing
+
+        Finally
+            theMap = Nothing
+
         End Try
+
     End Function
 
     ''' <summary>
@@ -1105,15 +1175,15 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Loads the specified feature class into the current map.
+    ''' Loads the specified feature class into the current map as a feature layer.
     ''' </summary>
     ''' <param name="featureClassName">The feature class to find.</param>
     ''' <param name="title">An alternate title for the file dialog box.</param>
     ''' <returns><c>True</c> for found and loaded, <c>False</c> for not found and loaded.</returns>
     ''' <remarks>Show a dialog box with title that allows the user to select the 
     ''' personal geodatabase that the <paramref name="featureClassName"/> resides in. 
-    ''' The feature class featureClassName is then loaded in the current map from the 
-    ''' chosen personal geodatabase.</remarks>
+    ''' The feature class is then loaded in the current map from the chosen personal 
+    ''' geodatabase.</remarks>
     Public Shared Function LoadFCIntoMap(ByVal featureClassName As String, Optional ByVal title As String = "") As Boolean
         Try
             Dim thisFileDialog As CatalogFileDialog
@@ -1163,9 +1233,91 @@ Public NotInheritable Class SpatialUtilities
             thisArcMapDoc.CurrentContentsView.Refresh(0)
 
             Return True
+
         Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return False
+
+        End Try
+
+    End Function
+
+    ''' <summary>
+    ''' Loads the specified object class (table) into the current map.
+    ''' </summary>
+    ''' <param name="objectClassName">The object class (table) to find.</param>
+    ''' <param name="title">An alternate title for the file dialog box.</param>
+    ''' <returns><c>True</c> for found and loaded, <c>False</c> for not found and loaded.</returns>
+    ''' <remarks>Show a dialog box with title that allows the user to select the 
+    ''' personal geodatabase that the <paramref name="objectClassName"/> resides in. 
+    ''' The object class is then loaded in the current map from the chosen personal 
+    ''' geodatabase.</remarks>
+    Public Shared Function LoadTableIntoMap(ByVal objectClassName As String, Optional ByVal title As String = "") As Boolean
+
+        ' TODO: [NIS] TEST THIS...
+
+        Try
+            Dim theFileDialog As CatalogFileDialog
+            theFileDialog = New CatalogFileDialog()
+
+            With theFileDialog
+                .SetAllowMultiSelect(True)
+                .SetButtonCaption("Select")
+                If title.Length > 0 Then
+                    .SetTitle(title)
+                Else
+                    .SetTitle(String.Concat("Find object class (table) ", objectClassName, "..."))
+                End If
+                .SetFilter(New ESRI.ArcGIS.Catalog.GxFilterPersonalGeodatabases, True, True)
+                .ShowOpen()
+            End With
+
+            ' Exit if there is nothing selected
+            If theFileDialog.SelectedObject(1) Is Nothing Then
+                Return False
+            End If
+
+            Dim theWorkspaceFactory As IWorkspaceFactory2
+            theWorkspaceFactory = New AccessWorkspaceFactory
+            Dim theWorkSpace As IWorkspace
+            theWorkSpace = theWorkspaceFactory.OpenFromFile(CStr(theFileDialog.SelectedObject(1)), 0)
+
+            Dim theFeatureWorkspace As IFeatureWorkspace
+            theFeatureWorkspace = DirectCast(theWorkSpace, IFeatureWorkspace)
+
+            ' Open the table
+            Dim theTable As Geodatabase.ITable
+            theTable = theFeatureWorkspace.OpenTable(objectClassName)
+
+            Dim theMap As ESRI.ArcGIS.Carto.IMap
+            Dim theArcMapDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
+            theMap = EditorExtension.Editor.Map
+            theArcMapDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
+
+            ' Create a table collection and assign the new table to it
+            Dim theStandaloneTable As IStandaloneTable
+            Dim theStandaloneTableCollection As IStandaloneTableCollection
+            theStandaloneTable = New StandaloneTable
+            theStandaloneTable.Table = theTable
+            theStandaloneTableCollection = DirectCast(theMap, IStandaloneTableCollection)
+            theStandaloneTableCollection.AddStandaloneTable(theStandaloneTable)
+
+            ' Create a new table window for the table
+            Dim theTableWindow As ITableWindow
+            theTableWindow = New TableWindow
+            theTableWindow.Table = theTable
+            theTableWindow.ShowAliasNamesInColumnHeadings = True
+            theTableWindow.Application = EditorExtension.Application
+
+            ' Update the document
+            theArcMapDoc.UpdateContents()
+
+            Return True
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+            Return False
+
         End Try
 
     End Function
@@ -1493,21 +1645,21 @@ Public NotInheritable Class SpatialUtilities
     ''' <summary>
     ''' Calculate ORMAP Taxlot Number when one if its components has changed.
     ''' </summary>
-    ''' <param name="existingORMAPNumber">An ORMAP Number.</param>
+    ''' <param name="existingORMapNum">An ORMAP Number.</param>
     ''' <param name="theFeature">An object that supports the IFeature interface.</param>
     ''' <param name="taxlotValue">A taxlot number.</param>
     ''' <returns>A string that represents an ORMAP number updated with the value from theFeature and taxlotValue.</returns>
-    ''' <remarks>Given an ORMAP Number, <paramref name="existingORMAPNumber">existingORMAPNumber</paramref>, and feature, <paramref name="theFeature">theFeature</paramref>,
+    ''' <remarks>Given an ORMAP Number, <paramref name="existingORMapNum">existingORMapNum</paramref>, and feature, <paramref name="theFeature">theFeature</paramref>,
     ''' and a taxlot value,<paramref name="taxlotValue">taxlotValue</paramref>.
-    ''' Remove the existing map suffix type and number from <paramref name="existingORMAPNumber">existingORMAPNumber</paramref> and replace them with the new values in <paramref name="theFeature">theFeature</paramref> and
+    ''' Remove the existing map suffix type and number from <paramref name="existingORMapNum">existingORMapNum</paramref> and replace them with the new values in <paramref name="theFeature">theFeature</paramref> and
     ''' append <paramref name="taxlotValue">taxlotValue</paramref> to form the return value.</remarks>
-    Private Shared Function generateORMAPTaxlotNumber(ByVal existingORMAPNumber As String, ByRef theFeature As IFeature, ByVal taxlotValue As String) As String
+    Private Shared Function generateORMAPTaxlotNumber(ByVal existingORMapNum As String, ByRef theFeature As IFeature, ByVal taxlotValue As String) As String
         Try
-            Dim shortORMAPNumber As String = existingORMAPNumber.Substring(0, 19) 'replaces the ShortenOMTLNum function 
+            Dim shortORMapNum As String = existingORMapNum.Substring(0, 19) 'replaces the ShortenOMTLNum function 
             Dim taxlotMapSufNumberValue As String = GetMapSuffixNum(theFeature)
             Dim taxlotMapSufTypeValue As String = GetMapSuffixType(theFeature)
             ' Recreate and return the ORMAP Taxlot number
-            Return String.Concat(shortORMAPNumber, taxlotMapSufTypeValue, taxlotMapSufNumberValue, taxlotValue)
+            Return String.Concat(shortORMapNum, taxlotMapSufTypeValue, taxlotMapSufNumberValue, taxlotValue)
         Catch ex As Exception
             MessageBox.Show(ex.Message)
             Return String.Empty

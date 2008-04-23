@@ -59,7 +59,13 @@ Public NotInheritable Class EditorExtension
     Implements IExtensionAccelerators
     Implements IPersistVariant
 
-#Region "Class-Level Constants And Enumerations (none)"
+#Region "Class-Level Constants And Enumerations"
+
+    Public Enum ESRIClassType As Integer
+        FeatureClass = 1
+        ObjectClass = 2
+    End Enum
+
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"
@@ -248,6 +254,30 @@ Public NotInheritable Class EditorExtension
         End Set
     End Property
 
+    Private Shared _hasValidMapIndexData As Boolean = False
+
+    Friend Shared ReadOnly Property HasValidMapIndexData() As Boolean
+        Get
+            Return _hasValidMapIndexData
+        End Get
+    End Property
+
+    Private Sub setHasValidMapIndexData(ByVal value As Boolean)
+        _hasValidMapIndexData = value
+    End Sub
+
+    Private Shared _hasValidTaxlotData As Boolean = False
+
+    Friend Shared ReadOnly Property HasValidTaxlotData() As Boolean
+        Get
+            Return _hasValidTaxlotData
+        End Get
+    End Property
+
+    Private Sub setHasValidTaxlotData(ByVal value As Boolean)
+        _hasValidTaxlotData = value
+    End Sub
+
 #End Region
 
 #Region "Fields"
@@ -255,6 +285,8 @@ Public NotInheritable Class EditorExtension
     Private _duringAutoUpdate As Boolean = False  ' TODO: [NIS] Eliminate?
 
 #End Region
+
+#Region "Event Handlers"
 
 #Region "Editor Event Handlers"
 
@@ -292,7 +324,6 @@ Public NotInheritable Class EditorExtension
             Dim theParentID As Integer
             If IsTaxlot(obj) Then
                 ' Obtain OrmapMapNumber via overlay and calculate other field values.
-                ' TODO: [NIS] Fix CalculateTaxlotValues (JWM?).
                 CalculateTaxlotValues(DirectCast(obj, IFeature), FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC))
             ElseIf IsAnno(obj) Then
                 theAnnotationFeature = DirectCast(obj, IAnnotationFeature)
@@ -545,17 +576,37 @@ Public NotInheritable Class EditorExtension
             Else
                 setIsValidWorkspace(True)
             End If
+
             If HasValidLicense AndAlso IsValidWorkspace Then
+
+                ' Set the Application property
+                setApplication(DirectCast(Editor.Parent, IApplication))
+
+                ' Set active view events object
+                Dim theMxDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
+                theMxDoc = DirectCast(EditorExtension.Application.Document, ESRI.ArcGIS.ArcMapUI.IMxDocument)
+                setActiveViewEvents(DirectCast(theMxDoc.FocusMap, IActiveViewEvents_Event))  ' TODO: [NIS] Reset this when the focus map changes?
+
+                ' Set up document keyboard accelerators for extension commands.
+                CreateAccelerators()
+
                 ' Subscribe to edit events.
                 AddHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
                 AddHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
 
-                ' Set up document keyboard accelerators for extension commands.
-                CreateAccelerators()
+                ' Subscribe to active view events.
+                AddHandler ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
+                AddHandler ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
+                AddHandler ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
+
+                ' Set the valid data properties.
+                setValidDataProperties()
+
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            Debug.WriteLine(ex.ToString)
+            Trace.WriteLine(ex.ToString)
 
         End Try
 
@@ -567,14 +618,45 @@ Public NotInheritable Class EditorExtension
             ' Unsubscribe to edit events.
             RemoveHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
             RemoveHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
+            ' Unsubscribe to active view events.
+            RemoveHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
+            RemoveHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
+            RemoveHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            Debug.WriteLine(ex.ToString)
+            Trace.WriteLine(ex.ToString)
+
+        Finally
+            setApplication(Nothing)
+            setActiveViewEvents(Nothing)
+
+            setHasValidTaxlotData(False)
+            setHasValidMapIndexData(False)
 
         End Try
 
     End Sub
-        
+
+#End Region
+
+#Region "ActiveViewEvents Event Handlers"
+
+    Public Sub ActiveViewEvents_FocusMapChanged() 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.FocusMapChanged
+        ' TODO: [NIS] Determine why this event never fires...
+        setValidDataProperties()
+    End Sub
+
+    Public Sub ActiveViewEvents_ItemAdded(ByVal Item As Object) 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.ItemAdded
+        setValidDataProperties()
+    End Sub
+
+    Public Sub ActiveViewEvents_ItemDeleted(ByVal Item As Object) 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.ItemDeleted
+        setValidDataProperties()
+    End Sub
+
+#End Region
+
 #End Region
 
 #Region "Methods"
@@ -588,10 +670,10 @@ Public NotInheritable Class EditorExtension
 
         Dim accelerator As IAccelerator
 
-        accelerator = acceleratorTable.FindByKey(key, usesCtrl, usesAlt, usesShift)
+        accelerator = AcceleratorTable.FindByKey(key, usesCtrl, usesAlt, usesShift)
         If accelerator Is Nothing Then
             'The clsid of one of the commands in the ext
-            acceleratorTable.Add(classID, key, usesCtrl, usesAlt, usesShift)
+            AcceleratorTable.Add(ClassId, key, usesCtrl, usesAlt, usesShift)
         End If
 
     End Sub
@@ -599,8 +681,8 @@ Public NotInheritable Class EditorExtension
     Private Shared Function validateLicense(ByVal requiredProductCode As esriLicenseProductCode) As Boolean
         ' Validate the license (e.g. ArcEditor or ArcInfo).
 
-        Dim aoInitTestProduct As New AoInitializeClass()
-        Dim productCode As esriLicenseProductCode = aoInitTestProduct.InitializedProduct()
+        Dim theAoInitializeClass As New AoInitializeClass()
+        Dim productCode As esriLicenseProductCode = theAoInitializeClass.InitializedProduct()
 
         Return (productCode = requiredProductCode)
     End Function
@@ -645,6 +727,70 @@ Public NotInheritable Class EditorExtension
 
     End Function
 
+
+    Private Sub setValidDataProperties()
+        setHasValidTaxlotData(CheckData(ESRIClassType.FeatureClass, EditorExtension.TableNamesSettings.TaxLotFC))
+        setHasValidTaxlotData(CheckData(ESRIClassType.FeatureClass, EditorExtension.TableNamesSettings.MapIndexFC))
+    End Sub
+
+    Public Function CheckData(ByVal classType As ESRIClassType, ByVal className As String) As Boolean
+        Dim foundValidData As Boolean = False
+        ' Look for the data in the map
+        If classType = ESRIClassType.FeatureClass Then
+            foundValidData = foundValidData OrElse (Not FindDataLayerInMap(className) Is Nothing)
+        Else 'If classType = ESRIClassType.ObjectClass Then
+            foundValidData = foundValidData OrElse (Not FindDataTableInMap(className) Is Nothing)
+        End If
+        ' Load the data if not found
+        foundValidData = foundValidData OrElse loadOptionSuccessful(classType, className)
+        ' Validate the data if found or loaded
+        foundValidData = foundValidData AndAlso validateData(classType, className)
+        Return foundValidData
+    End Function
+
+    Public Function FindDataLayerInMap(ByVal featureClassName As String) As IFeatureLayer
+        ' Find data layer in the current map
+        Dim theFLayer As IFeatureLayer
+        theFLayer = FindFeatureLayerByDSName(featureClassName)
+        Return theFLayer
+    End Function
+
+    Public Function FindDataTableInMap(ByVal objectClassName As String) As IStandaloneTable
+        ' Find data layer in the current map
+        Dim theStandaloneTable As IStandaloneTable
+        theStandaloneTable = FindStandaloneTableByDSName(objectClassName)
+        Return theStandaloneTable
+    End Function
+
+    Private Function loadOptionSuccessful(ByVal classType As ESRIClassType, ByVal className As String) As Boolean
+        ' Offer load option
+        If MessageBox.Show("Dataset " & className & " not found in the map. Load it?", "Load Data", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.No Then
+            Return loadDataIntoMap(classType, className)
+        Else
+            Return False
+        End If
+    End Function
+
+    Private Function loadDataIntoMap(ByVal classType As ESRIClassType, ByVal className As String) As Boolean
+        ' Attempt to load and find the data in the map document
+        If classType = ESRIClassType.FeatureClass Then
+            Return LoadFCIntoMap(className)
+        Else 'If classType = ESRIClassType.ObjectClass Then
+            Return LoadTableIntoMap(className)
+        End If
+    End Function
+
+    Private Function validateData(ByVal classType As ESRIClassType, ByVal className As String) As Boolean
+        ' TODO: [NIS] Implement this... 
+
+        ' Return true if valid; false if not
+        ' Valid - Right feature type, has required fields (names, types, lengths)
+
+        ' HACK: [NIS] Temporary kludge
+        Return True
+
+    End Function
+
 #End Region
 
 #End Region
@@ -663,30 +809,27 @@ Public NotInheritable Class EditorExtension
     End Property
 
     Public Sub Shutdown() Implements ESRI.ArcGIS.esriSystem.IExtension.Shutdown
-        setApplication(Nothing)
         setEditor(Nothing)
         setEditEvents(Nothing)
-        setActiveViewEvents(Nothing)
 
-        ' Un-wire-up the edit events.
+        ' Unsubscribe to edit events.
         RemoveHandler EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
         RemoveHandler EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
+
     End Sub
 
     Public Sub Startup(ByRef initializationData As Object) Implements ESRI.ArcGIS.esriSystem.IExtension.Startup
         If Not initializationData Is Nothing AndAlso TypeOf initializationData Is IEditor2 Then
+            ' Set the Editor and EditEvents properties.
             setEditor(DirectCast(initializationData, IEditor2))
-            setApplication(DirectCast(Editor.Parent, IApplication))
             setEditEvents(DirectCast(EditorExtension.Editor, IEditEvents_Event))
-            Dim theMxDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
-            theMxDoc = DirectCast(EditorExtension.Application.Document, ESRI.ArcGIS.ArcMapUI.IMxDocument)
-            setActiveViewEvents(DirectCast(theMxDoc.FocusMap, IActiveViewEvents_Event))  ' TODO: [NIS] Reset this when the focus map changes?
 
             My.User.InitializeWithWindowsUser()
 
-            ' Wire-up the edit events.
+            ' Subscribe to edit events.
             AddHandler EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
             AddHandler EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
+
         End If
     End Sub
 

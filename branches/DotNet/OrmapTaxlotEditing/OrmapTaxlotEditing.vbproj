@@ -109,7 +109,7 @@
     <Compile Include="HelpForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ORMAPNumber.vb" />
+    <Compile Include="ORMapNum.vb" />
     <Compile Include="OrmapSettings.vb" />
     <Compile Include="OrmapSettingsForm.Designer.vb">
       <DependentUpon>OrmapSettingsForm.vb</DependentUpon>
@@ -242,7 +242,8 @@
       <LastGenOutput>CartographicLinesSettings.Designer.vb</LastGenOutput>
     </None>
     <None Include="ClassDiagram.cd">
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
     </None>
     <None Include="settings\DefaultValuesSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -53,8 +53,15 @@
     <Position X="0.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>EditorExtension.vb</FileName>
-      <HashCode>AEQQgKlggDhGgAASUATASRQAlgAAIDJGACAkQAJAAAA=</HashCode>
+      <HashCode>AEQQgKligHhGwCATcATAQRQAlghAMDJGAiAgQAJIgBU=</HashCode>
     </TypeIdentifier>
+    <NestedTypes>
+      <Enum Name="OrmapTaxlotEditing.EditorExtension.ESRIClassType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>EditorExtension.vb</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="OrmapTaxlotEditing.LocateFeature">
@@ -73,7 +80,7 @@
     </InheritanceLine>
   </Class>
   <Class Name="OrmapTaxlotEditing.PropertiesForm">
-    <Position X="4.5" Y="8.25" Width="1.5" />
+    <Position X="4.5" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>PropertiesForm.vb</FileName>
       <HashCode>AAAAABBAADAAAAAgAgCAAAACAAABAAAAAAAAAAAAAAA=</HashCode>
@@ -86,7 +93,7 @@
     <Position X="15.5" Y="0.75" Width="2" />
     <TypeIdentifier>
       <FileName>TaxlotAssignment.vb</FileName>
-      <HashCode>AABOAABgACQEEYADIILNSVBCgKGACBAUIKQkDwRCGAU=</HashCode>
+      <HashCode>AABGAAAwAAAEEYADIIDFQFBCgKUACBAEIKBkCwRCAAQ=</HashCode>
     </TypeIdentifier>
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
@@ -135,38 +142,45 @@
     <Position X="17.75" Y="11.5" Width="2" />
     <TypeIdentifier>
       <FileName>TaxlotAssignmentForm.vb</FileName>
-      <HashCode>AAQAAEEAACACAAAAAACAAABCQABAABAAAAQAAAQAAEA=</HashCode>
+      <HashCode>AAQAAEEAACAGAAAAAACAAABCQABAABAAAAQAAAQAAEA=</HashCode>
     </TypeIdentifier>
     <Compartments>
       <Compartment Name="Private" Collapsed="true" />
     </Compartments>
   </Class>
   <Class Name="OrmapTaxlotEditing.StringUtilities">
-    <Position X="2.25" Y="12.25" Width="1.5" />
+    <Position X="2.25" Y="14.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>StringUtilities.vb</FileName>
-      <HashCode>AAAAAABAAEAAAAAAAAAAAAAAAACAAAAAAIAQAACAAAA=</HashCode>
+      <HashCode>AAAAAABAAAABAAAAAAAAAAAAAAAgAAAAAIAAAASAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="OrmapTaxlotEditing.SpatialUtilities">
     <Position X="4" Y="12.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>SpatialUtilities.vb</FileName>
-      <HashCode>AAAIjEABBAGAAEDEAIAAEEABAAAAEQSAEACAAJEgAAA=</HashCode>
+      <HashCode>ACAADEAhAAPBAkTFAAACEEABBABAEASAkADAABAgBAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="OrmapTaxlotEditing.Utilities">
-    <Position X="0.5" Y="12.25" Width="1.5" />
+    <Position X="2.25" Y="12.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>Utilities.vb</FileName>
       <HashCode>AAAAAAAAgAAAAAAABQAAAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
     </TypeIdentifier>
+    <NestedTypes>
+      <Enum Name="OrmapTaxlotEditing.Utilities.ESRIMouseButtons" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Utilities.vb</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
   </Class>
   <Class Name="OrmapTaxlotEditing.HelpForm">
     <Position X="11.5" Y="12.25" Width="1.75" />
     <TypeIdentifier>
       <FileName>HelpForm.vb</FileName>
-      <HashCode>AAAAAAAAACAAAAAAAAiAAAACAAAAAAAAABAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAACAAAAAAIACAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="OrmapTaxlotEditing.CatalogFileDialog">
@@ -183,18 +197,18 @@
       <HashCode>AgACAgAAASAAAAAAAACEAABCgAAAIAAAAAAACAAQEAA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="OrmapTaxlotEditing.ORMAPNumber">
+  <Class Name="OrmapTaxlotEditing.ORMapNum">
     <Position X="5.75" Y="12.25" Width="1.5" />
     <TypeIdentifier>
-      <FileName>ORMAPNumber.vb</FileName>
-      <HashCode>gAAUAIgACQQACAhAEAAAygQCAgEQAABIAACEQcAAghI=</HashCode>
+      <FileName>ORMapNum.vb</FileName>
+      <HashCode>kAAUAIgACQQACABAEAAAygQCAgEQAABIAACEQcAAghI=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="OrmapTaxlotEditing.PropertyPage">
     <Position X="4.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>PropertyPage.vb</FileName>
-      <HashCode>BBCGAgQgRBBAAEBEEADAAMAQgAAECAAEASAgAAZAASA=</HashCode>
+      <HashCode>hBCGAAQgRBBCAEBEEADAAMAQgAAECAAAASAwBAZAASA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>

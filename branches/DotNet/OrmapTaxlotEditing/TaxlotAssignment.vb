@@ -393,6 +393,10 @@ Public NotInheritable Class TaxlotAssignment
 
     Private Sub DoToolOperation(ByVal Button As ESRIMouseButtons, ByVal X As Integer, ByVal Y As Integer)
 
+        ' TODO: [NIS] Refactor (simplify). Can just set Taxlot, then rely on auto-update in EditorExtension for other fields.
+        ' TODO: [NIS] Only execute if EditorExtension.HasValidTaxlotData = True
+        ' TODO: [NIS] Only execute if EditorExtension.HasValidMapIndexData = True
+
         Try
             If (Button <> ESRIMouseButtons.Left) Then
                 ' Exit silently.
@@ -488,22 +492,22 @@ Public NotInheritable Class TaxlotAssignment
             End If
 
             '------------------------------------------
-            ' Get the ORMapNumber as a string value
+            ' Get the ORMapNum as a string value
             '------------------------------------------
-            Dim theExistingORMapNumberVal As String = String.Empty 'initialize
-            ' Get the current ORMapNumber.
-            theExistingORMapNumberVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)), "", theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)))
+            Dim theExistingORMapNumVal As String = String.Empty 'initialize
+            ' Get the current ORMapNum.
+            theExistingORMapNumVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)), "", theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)))
 
-            ' Obtain the ORMapNumber from a MapIndex polygon if it is not present.
-            If Len(theExistingORMapNumberVal) = 0 Then
+            ' Obtain the ORMapNum from a MapIndex polygon if it is not present.
+            If Len(theExistingORMapNumVal) = 0 Then
                 CalculateTaxlotValues(theTaxlotFeature, _theMapIndexFLayer)  ' TODO: [NIS] Confirm with Jim that this function is correct.
-                ' Get the current ORMapNumber again after the calculate above.
-                theExistingORMapNumberVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)), "", theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)))
+                ' Get the current ORMapNum again after the calculate above.
+                theExistingORMapNumVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)), "", theTaxlotFeature.Value(_theTLOrmapMapNumberFldIdx)))
 
                 ' Stop if there is still no current OrmapMapNumber.
-                If Len(theExistingORMapNumberVal) = 0 Then
-                    MessageBox.Show("ORMapNumber is empty for this taxlot or MapIndex." & vbNewLine & _
-                                    "Use the MapIndex tool to populate the ORMapNumber field" & vbNewLine & _
+                If Len(theExistingORMapNumVal) = 0 Then
+                    MessageBox.Show("ORMapNum is empty for this taxlot or MapIndex." & vbNewLine & _
+                                    "Use the MapIndex tool to populate the ORMapNum field" & vbNewLine & _
                                     "before using this tool", "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                     Exit Try
                 End If
@@ -541,7 +545,7 @@ Public NotInheritable Class TaxlotAssignment
                 ' Remove leading Zeros for taxlot number if any exist (CInt conversion will remove them)
                 theNewTLTaxlotNumVal = CStr(CInt(theNewTLTaxlotNumVal))
                 ' Make sure 5-digit number is 5 characters by padding on the left with zeros
-                theNewTLTaxlotNumVal_5digit = theNewTLTaxlotNumVal_5digit.PadLeft(ORMAPNumber.GetOrmap_TaxlotFieldLength, "0"c)
+                theNewTLTaxlotNumVal_5digit = theNewTLTaxlotNumVal_5digit.PadLeft(ORMapNum.GetOrmap_TaxlotFieldLength, "0"c)
             Else
                 '[Taxlot value is a word...]
                 theNewTLTaxlotNumVal = Me.TaxlotType 'Predefined text enum
@@ -563,10 +567,10 @@ Public NotInheritable Class TaxlotAssignment
             '------------------------------------------
             ' Define the Anomaly from MapIndex
             '------------------------------------------
-            Dim theORMAPNumberClass As New ORMAPNumber()
+            Dim theORMapNumClass As New ORMapNum()
             Dim theAnomalyVal As String = String.Empty
-            If (theORMAPNumberClass.ParseNumber(theExistingORMapNumberVal)) Then
-                theAnomalyVal = theORMAPNumberClass.Anomaly
+            If (theORMapNumClass.ParseNumber(theExistingORMapNumVal)) Then
+                theAnomalyVal = theORMapNumClass.Anomaly
             End If
 
             '------------------------------------------
@@ -576,11 +580,11 @@ Public NotInheritable Class TaxlotAssignment
             ' its parts.
             '------------------------------------------
             Dim theCombinedORTaxlotNumber As String = String.Empty 'initialize
-            theCombinedORTaxlotNumber = theExistingORMapNumberVal & theNewTLTaxlotNumVal_5digit
+            theCombinedORTaxlotNumber = theExistingORMapNumVal & theNewTLTaxlotNumVal_5digit
             ' TODO: [NIS] Find out if this is VB6 pattern is actually the correct pattern...
-            'Dim theShortORMapNumber As String = String.Empty 'initialize
-            'theShortORMapNumber = OrmapMapNumberNoCountyCodeSuffix(theExistOrmapMapNumberVal)
-            'theCombinedORTaxlotNumber = theShortORMapNumber & theTLMapSuffixTypeVal & theTLMapSuffixNumVal & theNewTLTaxlotNumVal_5digit
+            'Dim theShortORMapNum As String = String.Empty 'initialize
+            'theShortORMapNum = OrmapMapNumberNoCountyCodeSuffix(theExistOrmapMapNumberVal)
+            'theCombinedORTaxlotNumber = theShortORMapNum & theTLMapSuffixTypeVal & theTLMapSuffixNumVal & theNewTLTaxlotNumVal_5digit
 
             '------------------------------------------
             ' Define the MapTaxlot (NOT to be confused 
@@ -593,7 +597,7 @@ Public NotInheritable Class TaxlotAssignment
             theDefaultCountyCode = CInt(EditorExtension.DefaultValuesSettings.County)
             Select Case theDefaultCountyCode
                 Case 1 To 19, 21 To 36
-                    theMapTaxlotNumber = GenerateMapTaxlotValue(theExistingORMapNumberVal & theNewTLTaxlotNumVal_5digit, (EditorExtension.TaxLotSettings.MapTaxlotFormatMask))
+                    theMapTaxlotNumber = GenerateMapTaxlotValue(theExistingORMapNumVal & theNewTLTaxlotNumVal_5digit, (EditorExtension.TaxLotSettings.MapTaxlotFormatMask))
                 Case 20
                     ' 1.  Lane County uses a 2-digit numeric identifier for ranges.
                     '     Special handling is required for east ranges, where 02E is
