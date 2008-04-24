@@ -36,25 +36,25 @@
 #End Region
 
 #Region "Imported Namespaces"
-Imports System.Collections.Generic
-Imports System.Windows.Forms
-Imports System.Text
 Imports ESRI.ArcGIS
 Imports ESRI.ArcGIS.ArcMapUI
-Imports ESRI.ArcGIS.Geometry
+Imports ESRI.ArcGIS.Carto
+Imports ESRI.ArcGIS.DataSourcesGDB
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Geodatabase
-Imports ESRI.ArcGIS.DataSourcesGDB
-Imports ESRI.ArcGIS.Carto
+Imports ESRI.ArcGIS.Geometry
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
+Imports System.Collections.Generic
+Imports System.Text
+Imports System.Windows.Forms
 #End Region
 
 #Region "Class Declaration"
 ''' <summary>
-'''  General utility class.
+'''  Spatial utility class.
 ''' </summary>
-''' <remarks>Commonly used procedures and functions.</remarks>
+''' <remarks>Commonly used ArcObjects procedures and functions.</remarks>
 Public NotInheritable Class SpatialUtilities
 
 #Region "Custom Class Members"
@@ -117,7 +117,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return False
         End Try
     End Function
@@ -311,7 +311,7 @@ Public NotInheritable Class SpatialUtilities
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
 
         Finally
             theORMapNumClass = Nothing
@@ -362,7 +362,7 @@ Public NotInheritable Class SpatialUtilities
 
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             ConvertCodeValueDomainToCode = String.Empty
         End Try
     End Function
@@ -405,7 +405,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return String.Empty
         End Try
     End Function
@@ -451,7 +451,7 @@ Public NotInheritable Class SpatialUtilities
             Return returnValue
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return Nothing
 
         Finally
@@ -492,7 +492,7 @@ Public NotInheritable Class SpatialUtilities
             Return returnValue
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return Nothing
 
         Finally
@@ -516,7 +516,7 @@ Public NotInheritable Class SpatialUtilities
             center.Y = envelope.YMin + (envelope.YMax - envelope.YMin) / 2
             Return center
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return Nothing
         End Try
     End Function
@@ -566,7 +566,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return "000"
         End Try
     End Function
@@ -596,7 +596,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return "0"
         End Try
     End Function
@@ -633,7 +633,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             Return Nothing
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return Nothing
         End Try
     End Function
@@ -659,7 +659,7 @@ Public NotInheritable Class SpatialUtilities
             returnValue = DirectCast(thisCursor, IFeatureCursor)
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return Nothing
         End Try
     End Function
@@ -683,7 +683,7 @@ Public NotInheritable Class SpatialUtilities
         Return theTaxlotFLayer
     End Function
 
-    ' TODO: [NIS] Take over this function from JWM and refactor (smaller modules).
+    ' TODO: [NIS] Refactor (smaller modules).
     ''' <summary>
     ''' Overlay the passed in feature with a feature class to get a value from 
     ''' the specified field.
@@ -705,13 +705,14 @@ Public NotInheritable Class SpatialUtilities
             continueThisProcess = True 'initialize
 
             If (theGeometry Is Nothing) OrElse (overlayFeatureClass Is Nothing) OrElse (valueFieldName.Length <= 0) Then
+                ' TODO: [NIS] Add assertions here
                 continueThisProcess = False
             End If
 
             Dim valueFieldIndex As Integer = FieldNotFoundIndex
             If continueThisProcess Then
                 valueFieldIndex = overlayFeatureClass.Fields.FindField(valueFieldName)
-                If valueFieldIndex < 0 Then
+                If valueFieldIndex = FieldNotFoundIndex Then
                     continueThisProcess = False
                 End If
             End If
@@ -723,13 +724,14 @@ Public NotInheritable Class SpatialUtilities
                     orderBestByFieldIndex = valueFieldIndex
                 Else
                     orderBestByFieldIndex = overlayFeatureClass.Fields.FindField(orderBestByFieldName)
-                    If orderBestByFieldIndex < 0 Then
+                    If orderBestByFieldIndex = FieldNotFoundIndex Then
                         ' Field not found. Try the OID field
                         If overlayFeatureClass.HasOID Then
                             orderBestByFieldIndex = overlayFeatureClass.Fields.FindField(overlayFeatureClass.OIDFieldName)
-                            'TODO: [NIS] Remove this message or handle better?
-                            MessageBox.Show("Field " & orderBestByFieldName & " not found in " & overlayFeatureClass.AliasName & vbNewLine & _
-                                    ". Using " & overlayFeatureClass.OIDFieldName, "Taxlot Editing - Get Value Via Overlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                            Dim msg As String = "Field " & orderBestByFieldName & " not found in " & overlayFeatureClass.AliasName & vbNewLine & _
+                                    ". Using " & overlayFeatureClass.OIDFieldName
+                            Debug.WriteLine(msg)
+                            Trace.WriteLine(msg)
                         Else
                             continueThisProcess = False
                         End If
@@ -919,7 +921,7 @@ Public NotInheritable Class SpatialUtilities
             Return theBestValue
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return String.Empty
         End Try
     End Function
@@ -982,48 +984,47 @@ Public NotInheritable Class SpatialUtilities
 
     Public Shared Function TableHasRequiredFields(ByVal tableName As String, ByVal fieldNames As List(Of String), ByVal loadData As Boolean) As Boolean
 
-        ' TODO: [NIS] (1) Create new called procedure LoadTableIntoMap to handle tables.
-        ' TODO: [NIS] (2) Enable this code.
+        ' TODO: [NIS] Test this...
 
         Dim returnValue As Boolean = True 'initial assumption
 
-        '' Confirm data layer is present in current map
-        'Dim theTable As ITable
+        ' Confirm data layer is present in current map
+        Dim theTable As ITable
 
-        'theTable = FindTableByDSName(tableName)
+        theTable = FindStandaloneTableByDSName(tableName).Table
 
-        'If theTable Is Nothing Then
-        '    If loadData Then
-        '        '[Load option accepted...]
-        '        ' Attempt to load and find the table in the map document
-        '        If LoadTableIntoMap(tableName) Then
-        '            '[Table loaded...]
-        '            theTable = FindTableByDSName(tableName)
-        '        Else
-        '            '[Unable to load the table...]
-        '            returnValue = False
-        '        End If
-        '    Else
-        '        '[Data not present and load option refused...]
-        '        returnValue = False
-        '    End If
-        'End If
+        If theTable Is Nothing Then
+            If loadData Then
+                '[Load option accepted...]
+                ' Attempt to load and find the table in the map document
+                If LoadTableIntoMap(tableName) Then
+                    '[Table loaded...]
+                    theTable = FindStandaloneTableByDSName(tableName).Table
+                Else
+                    '[Unable to load the table...]
+                    returnValue = False
+                End If
+            Else
+                '[Data not present and load option refused...]
+                returnValue = False
+            End If
+        End If
 
-        'If theTable IsNot Nothing Then
-        '    ' Confirm fields are present
-        '    Dim foundAllFields As Boolean = True  'initial assumption
-        '    Dim fieldIndex As Integer
-        '    For Each fn As String In fieldNames
-        '        fieldIndex = theTable.FindField(fn)
-        '        If fieldIndex <> FieldNotFoundIndex Then
-        '            foundAllFields = True
-        '        Else
-        '            foundAllFields = False
-        '            Exit For
-        '        End If
-        '    Next fn
-        '    returnValue = foundAllFields
-        'End If
+        If theTable IsNot Nothing Then
+            ' Confirm fields are present
+            Dim foundAllFields As Boolean = True  'initial assumption
+            Dim fieldIndex As Integer
+            For Each fn As String In fieldNames
+                fieldIndex = theTable.FindField(fn)
+                If fieldIndex <> FieldNotFoundIndex Then
+                    foundAllFields = True
+                Else
+                    foundAllFields = False
+                    Exit For
+                End If
+            Next fn
+            returnValue = foundAllFields
+        End If
 
         Return returnValue
 
@@ -1048,7 +1049,7 @@ Public NotInheritable Class SpatialUtilities
             returnValue = (featuresSelected.SelectionSet.Count > 0)
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return False
         End Try
     End Function
@@ -1075,7 +1076,7 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return False
         End Try
     End Function
@@ -1100,7 +1101,7 @@ Public NotInheritable Class SpatialUtilities
                 Return False
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return False
         End Try
     End Function
@@ -1124,27 +1125,27 @@ Public NotInheritable Class SpatialUtilities
             ' Check for a match against any of the ORMAP feature classes.
             returnValue = (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0010scaleFC, True) = StringMatch)
             returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0020scaleFC, True) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0100scaleFC, True) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0200scaleFC, True) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno2000scaleFC, True) = StringMatch)
             returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0030scaleFC, True) = StringMatch)
             returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0040scaleFC, True) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0400scaleFC, True) = StringMatch)
             returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0050scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0100scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0200scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0400scaleFC, True) = StringMatch)
             returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0800scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno2000scaleFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxCodeAnnoFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True) = StringMatch)
+            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True) = StringMatch)
             returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.CartographicLinesFC, True) = StringMatch)
             returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxLotFC, True) = StringMatch)
             returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.MapIndexFC, True) = StringMatch)
             returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.PlatsFC, True) = StringMatch)
             returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.ReferenceLinesFC, True) = StringMatch)
             returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxCodeFC, True) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxCodeAnnoFC, True) = StringMatch)
             returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxLotLinesFC, True) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True) = StringMatch)
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return False
         End Try
     End Function
@@ -1169,7 +1170,7 @@ Public NotInheritable Class SpatialUtilities
                 Return False
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return False
         End Try
     End Function
@@ -1235,7 +1236,7 @@ Public NotInheritable Class SpatialUtilities
             Return True
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return False
 
         End Try
@@ -1315,7 +1316,7 @@ Public NotInheritable Class SpatialUtilities
             Return True
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return False
 
         End Try
@@ -1335,7 +1336,7 @@ Public NotInheritable Class SpatialUtilities
             returnValue = featureClass.Fields.FindField(fieldName)
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return -1
         End Try
     End Function
@@ -1393,7 +1394,7 @@ Public NotInheritable Class SpatialUtilities
 
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return String.Empty
         End Try
     End Function
@@ -1431,7 +1432,7 @@ Public NotInheritable Class SpatialUtilities
                 Exit Try
             End If
 
-            theFeature = CType(theObject, IFeature) 'TODO: JWM See if DirectCast would work here
+            theFeature = DirectCast(theObject, IFeature)
             Dim thisGeometry As IGeometry
             thisGeometry = theFeature.Shape
             If thisGeometry.IsEmpty Then
@@ -1453,7 +1454,7 @@ Public NotInheritable Class SpatialUtilities
             Dim mapIndexFeatureClass As IFeatureClass
             mapIndexFeatureClass = mapIndexFeatureLayer.FeatureClass
             'original vb6 code placed the point object as the first parameter. 
-            Dim mapNumber As String = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField) 'TODO: JWM check this
+            Dim mapNumber As String = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
 
             ' Allow existing anno to be moved without changing MapNumber
             ' Some anno will reside in another Taxlot, but labels the neighboring taxlot
@@ -1503,7 +1504,7 @@ Public NotInheritable Class SpatialUtilities
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
         End Try
     End Sub
 
@@ -1531,7 +1532,7 @@ Public NotInheritable Class SpatialUtilities
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
 
         End Try
     End Sub
@@ -1550,7 +1551,7 @@ Public NotInheritable Class SpatialUtilities
             'check for existence of Taxlot layer
             Dim thisTaxlotFeatureLayer As IFeatureLayer
             thisTaxlotFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.TaxLotFC)
-            If thisTaxlotFeatureLayer Is Nothing Then 'TODO: JWM Place strings in resource file and use may use different type of notification
+            If thisTaxlotFeatureLayer Is Nothing Then 'TODO: JWM Place strings in resource file and may use for different type of notification
                 MessageBox.Show("Unable to locate the Taxlot layer in Table of Contents." & vbNewLine & _
                                 "This process requires a feature class called " & EditorExtension.TableNamesSettings.TaxLotFC & ".", _
                                 String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)
@@ -1596,7 +1597,7 @@ Public NotInheritable Class SpatialUtilities
             Return returnValue
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return False
         End Try
     End Function
@@ -1637,7 +1638,7 @@ Public NotInheritable Class SpatialUtilities
                 Return thisCursor
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return Nothing
         End Try
     End Function
@@ -1661,7 +1662,7 @@ Public NotInheritable Class SpatialUtilities
             ' Recreate and return the ORMAP Taxlot number
             Return String.Concat(shortORMapNum, taxlotMapSufTypeValue, taxlotMapSufNumberValue, taxlotValue)
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return String.Empty
         End Try
     End Function
@@ -1732,7 +1733,7 @@ Public NotInheritable Class SpatialUtilities
             Return thisFeatureCursor
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return Nothing
         End Try
     End Function
@@ -1757,7 +1758,7 @@ Public NotInheritable Class SpatialUtilities
             End With
             Return thisPolygon
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return Nothing
         End Try
     End Function
@@ -1831,7 +1832,7 @@ Public NotInheritable Class SpatialUtilities
             Return CDbl(size)
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return 10 'default
 
         End Try

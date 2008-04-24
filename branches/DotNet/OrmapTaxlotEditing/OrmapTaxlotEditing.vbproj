@@ -103,6 +103,7 @@
     <Compile Include="AddArrows.vb" />
     <Compile Include="CatalogFileDlg.vb" />
     <Compile Include="AutoUpdateAllToggle.vb" />
+    <Compile Include="DataMonitor.vb" />
     <Compile Include="HelpForm.Designer.vb">
       <DependentUpon>HelpForm.vb</DependentUpon>
     </Compile>

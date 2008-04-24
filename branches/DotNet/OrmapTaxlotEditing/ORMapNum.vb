@@ -88,7 +88,7 @@ Public NotInheritable Class ORMapNum
             Dim length As Integer = value.Length
             Select Case length
                 Case Is < 2
-                    Dim sb As New StringBuilder("0", 2 - length) 'TODO: TEST/VERIFY THIS
+                    Dim sb As New StringBuilder("0", 2 - length) 'TODO: JWM TEST/VERIFY THIS
                     sb.Append(value)
                     _county = sb.ToString
                 Case 2
@@ -327,7 +327,7 @@ Public NotInheritable Class ORMapNum
                     Case Is < 0
                         _suffixNumber = EditorExtension.DefaultValuesSettings.MapSuffixNumber
                     Case Is < 1000
-                        Dim sb As New StringBuilder("0", 3 - value.Length) 'TODO: TEST/VERIFY THIS
+                        Dim sb As New StringBuilder("0", 3 - value.Length) 'TODO: JWM TEST/VERIFY THIS
                         sb.Append(value)
                         _suffixNumber = sb.ToString
                     Case Else

@@ -89,7 +89,7 @@ Public NotInheritable Class Utilities
                 Return False
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return False
         End Try
     End Function
@@ -106,7 +106,7 @@ Public NotInheritable Class Utilities
             MessageBox.Show("File not Found", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return
         End Try
     End Sub

@@ -42,6 +42,7 @@ Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.Geodatabase
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.Framework
+Imports OrmapTaxlotEditing.DataMonitor
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
@@ -59,13 +60,7 @@ Public NotInheritable Class EditorExtension
     Implements IExtensionAccelerators
     Implements IPersistVariant
 
-#Region "Class-Level Constants And Enumerations"
-
-    Public Enum ESRIClassType As Integer
-        FeatureClass = 1
-        ObjectClass = 2
-    End Enum
-
+#Region "Class-Level Constants And Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"
@@ -254,35 +249,11 @@ Public NotInheritable Class EditorExtension
         End Set
     End Property
 
-    Private Shared _hasValidMapIndexData As Boolean = False
-
-    Friend Shared ReadOnly Property HasValidMapIndexData() As Boolean
-        Get
-            Return _hasValidMapIndexData
-        End Get
-    End Property
-
-    Private Sub setHasValidMapIndexData(ByVal value As Boolean)
-        _hasValidMapIndexData = value
-    End Sub
-
-    Private Shared _hasValidTaxlotData As Boolean = False
-
-    Friend Shared ReadOnly Property HasValidTaxlotData() As Boolean
-        Get
-            Return _hasValidTaxlotData
-        End Get
-    End Property
-
-    Private Sub setHasValidTaxlotData(ByVal value As Boolean)
-        _hasValidTaxlotData = value
-    End Sub
-
 #End Region
 
 #Region "Fields"
 
-    Private _duringAutoUpdate As Boolean = False  ' TODO: [NIS] Eliminate?
+    Private _duringAutoUpdate As Boolean = False
 
 #End Region
 
@@ -343,7 +314,7 @@ Public NotInheritable Class EditorExtension
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
 
         Finally
             _duringAutoUpdate = False
@@ -438,7 +409,6 @@ Public NotInheritable Class EditorExtension
                         theFeature.Value(theMapScaleFldIdx) = theMapScaleVal
                     Else
                         ' TODO: [NIS] Test use of pFeat instead of obj here.
-                        ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
                         theFeature.Value(theMapScaleFldIdx) = System.DBNull.Value
                     End If
                 End If
@@ -473,7 +443,6 @@ Public NotInheritable Class EditorExtension
                         theFeature.Value(theMapScaleFldIdx) = theMapScaleVal
                     Else
                         ' TODO: [NIS] Test use of pFeat instead of obj here.
-                        ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
                         theFeature.Value(theMapScaleFldIdx) = System.DBNull.Value
                     End If
                     ' If a dataset with MapNumber, populate it
@@ -484,7 +453,6 @@ Public NotInheritable Class EditorExtension
                             theFeature.Value(theMapNumberFldIdx) = theMapNumberVal
                         Else
                             ' TODO: [NIS] Test use of pFeat instead of obj here.
-                            ' TODO: [NIS] Resolve - UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
                             theFeature.Value(theMapNumberFldIdx) = System.DBNull.Value
                         End If
                     End If
@@ -492,7 +460,7 @@ Public NotInheritable Class EditorExtension
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
 
         End Try
 
@@ -545,7 +513,6 @@ Public NotInheritable Class EditorExtension
                     Dim theCNMapNumberFldIdx As Integer = theCancelledNumbersTable.FindField(EditorExtension.TaxLotSettings.MapNumberField)
 
                     ' If no null values, copy them to Cancelled numbers
-                    ' TODO: [NIS] Resolve - UPGRADE WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
                     If Not IsDBNull(theFeature.Value(theTLTaxlotFldIdx)) And Not IsDBNull(theFeature.Value(theTLMapNumberFldIdx)) Then
                         theRow = theCancelledNumbersTable.CreateRow
                         theRow.Value(theCNTaxlotFldIdx) = theFeature.Value(theTLTaxlotFldIdx)
@@ -557,7 +524,7 @@ Public NotInheritable Class EditorExtension
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
 
         End Try
 
@@ -600,7 +567,7 @@ Public NotInheritable Class EditorExtension
                 AddHandler ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
 
                 ' Set the valid data properties.
-                setValidDataProperties()
+                SetValidDataProperties()
 
             End If
 
@@ -631,8 +598,8 @@ Public NotInheritable Class EditorExtension
             setApplication(Nothing)
             setActiveViewEvents(Nothing)
 
-            setHasValidTaxlotData(False)
-            setHasValidMapIndexData(False)
+            SetHasValidTaxlotData(False)
+            SetHasValidMapIndexData(False)
 
         End Try
 
@@ -644,15 +611,15 @@ Public NotInheritable Class EditorExtension
 
     Public Sub ActiveViewEvents_FocusMapChanged() 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.FocusMapChanged
         ' TODO: [NIS] Determine why this event never fires...
-        setValidDataProperties()
+        SetValidDataProperties()
     End Sub
 
     Public Sub ActiveViewEvents_ItemAdded(ByVal Item As Object) 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.ItemAdded
-        setValidDataProperties()
+        SetValidDataProperties()
     End Sub
 
     Public Sub ActiveViewEvents_ItemDeleted(ByVal Item As Object) 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.ItemDeleted
-        setValidDataProperties()
+        SetValidDataProperties()
     End Sub
 
 #End Region
@@ -724,70 +691,6 @@ Public NotInheritable Class EditorExtension
         foundAllFields = foundAllFields AndAlso TableHasRequiredFields(theTableName, theTableFieldNames, canLoadData)
 
         Return foundAllFields
-
-    End Function
-
-
-    Private Sub setValidDataProperties()
-        setHasValidTaxlotData(CheckData(ESRIClassType.FeatureClass, EditorExtension.TableNamesSettings.TaxLotFC))
-        setHasValidTaxlotData(CheckData(ESRIClassType.FeatureClass, EditorExtension.TableNamesSettings.MapIndexFC))
-    End Sub
-
-    Public Function CheckData(ByVal classType As ESRIClassType, ByVal className As String) As Boolean
-        Dim foundValidData As Boolean = False
-        ' Look for the data in the map
-        If classType = ESRIClassType.FeatureClass Then
-            foundValidData = foundValidData OrElse (Not FindDataLayerInMap(className) Is Nothing)
-        Else 'If classType = ESRIClassType.ObjectClass Then
-            foundValidData = foundValidData OrElse (Not FindDataTableInMap(className) Is Nothing)
-        End If
-        ' Load the data if not found
-        foundValidData = foundValidData OrElse loadOptionSuccessful(classType, className)
-        ' Validate the data if found or loaded
-        foundValidData = foundValidData AndAlso validateData(classType, className)
-        Return foundValidData
-    End Function
-
-    Public Function FindDataLayerInMap(ByVal featureClassName As String) As IFeatureLayer
-        ' Find data layer in the current map
-        Dim theFLayer As IFeatureLayer
-        theFLayer = FindFeatureLayerByDSName(featureClassName)
-        Return theFLayer
-    End Function
-
-    Public Function FindDataTableInMap(ByVal objectClassName As String) As IStandaloneTable
-        ' Find data layer in the current map
-        Dim theStandaloneTable As IStandaloneTable
-        theStandaloneTable = FindStandaloneTableByDSName(objectClassName)
-        Return theStandaloneTable
-    End Function
-
-    Private Function loadOptionSuccessful(ByVal classType As ESRIClassType, ByVal className As String) As Boolean
-        ' Offer load option
-        If MessageBox.Show("Dataset " & className & " not found in the map. Load it?", "Load Data", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.No Then
-            Return loadDataIntoMap(classType, className)
-        Else
-            Return False
-        End If
-    End Function
-
-    Private Function loadDataIntoMap(ByVal classType As ESRIClassType, ByVal className As String) As Boolean
-        ' Attempt to load and find the data in the map document
-        If classType = ESRIClassType.FeatureClass Then
-            Return LoadFCIntoMap(className)
-        Else 'If classType = ESRIClassType.ObjectClass Then
-            Return LoadTableIntoMap(className)
-        End If
-    End Function
-
-    Private Function validateData(ByVal classType As ESRIClassType, ByVal className As String) As Boolean
-        ' TODO: [NIS] Implement this... 
-
-        ' Return true if valid; false if not
-        ' Valid - Right feature type, has required fields (names, types, lengths)
-
-        ' HACK: [NIS] Temporary kludge
-        Return True
 
     End Function
 

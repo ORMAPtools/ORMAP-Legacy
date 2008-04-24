@@ -50,8 +50,7 @@ Imports System.Windows.Forms
 ''' <remarks></remarks>
 Public Class CatalogFileDialog
 
-    'TODO: JWM Would like to remove the dependency on VB.Collection object
-    'NOTE: [NIS] Probably cannot be done. ShowOpen is defined in ArcObjects as returning a Collection.
+    'TODO: JWM Would like to remove the dependency on VB.Collection object. [NIS] Probably cannot be done. ShowOpen is defined in ArcObjects as returning a Collection.
 
 #Region "Class level fields"
 
@@ -158,7 +157,7 @@ Public Class CatalogFileDialog
             filters.AddFilter(filter, isDefault)
             Return True
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return False
         End Try
     End Function
@@ -189,7 +188,7 @@ Public Class CatalogFileDialog
             Loop
             Return _colSelection
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return New Collection
         End Try
     End Function
@@ -210,7 +209,7 @@ Public Class CatalogFileDialog
             _colSelection.Add(String.Concat(selectedObject.FullName, "\", _theGxDialog.Name))
             Return _colSelection
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
             Return New Collection
         End Try
     End Function
