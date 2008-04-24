@@ -110,6 +110,12 @@
     <Compile Include="HelpForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="LocateFeatureForm.Designer.vb">
+      <DependentUpon>LocateFeatureForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="LocateFeatureForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ORMapNum.vb" />
     <Compile Include="OrmapSettings.vb" />
     <Compile Include="OrmapSettingsForm.Designer.vb">
@@ -212,9 +218,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="help\TaxlotAssignmentHelp.rtf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="My Project\DataSources\AllTablesSettings.datasource" />
     <None Include="My Project\DataSources\AnnoTableNamesSettings.datasource" />
     <None Include="My Project\DataSources\CartographicLinesSettings.datasource" />
@@ -305,6 +308,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>HelpForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LocateFeatureForm.resx">
+      <DependentUpon>LocateFeatureForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="OrmapSettingsForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>OrmapSettingsForm.vb</DependentUpon>
@@ -322,6 +329,9 @@
     <Content Include="license\SOURCE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="help\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
