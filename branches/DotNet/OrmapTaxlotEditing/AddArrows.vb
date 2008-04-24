@@ -44,13 +44,17 @@ Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Framework
+Imports System.Windows.Forms
+Imports OrmapTaxlotEditing.SpatialUtilities
+Imports OrmapTaxlotEditing.StringUtilities
+Imports OrmapTaxlotEditing.Utilities
 #End Region
 
 <ComVisible(True)> _
 <ComClass(AddArrows.ClassId, AddArrows.InterfaceId, AddArrows.EventsId), _
 ProgId("ORMAPTaxlotEditing.AddArrows")> _
 Public NotInheritable Class AddArrows
-    Inherits BaseCommand
+    Inherits BaseTool
 
 #Region "Class-Level Constants And Enumerations"
     ' None
@@ -146,6 +150,23 @@ Public NotInheritable Class AddArrows
         ' TODO: Port AddArrows.OnClick implementation
         System.Windows.Forms.MessageBox.Show("Port AddArrows.OnClick implementation")
     End Sub
+
+
+    'Public Overrides Sub OnMouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
+    '    MessageBox.Show("click")
+    'End Sub
+
+    'Public Overrides Sub OnKeyDown(ByVal keyCode As Integer, ByVal Shift As Integer)
+    '    MyBase.OnKeyDown(keyCode, Shift)
+
+    '    MsgBox(Shift.ToString)
+
+    '    If keyCode = Keys.Tab Then
+    '        MsgBox("keydown")
+    '    End If
+
+    'End Sub
+
 
 #End Region
 

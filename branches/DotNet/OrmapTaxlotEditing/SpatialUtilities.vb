@@ -1602,6 +1602,7 @@ Public NotInheritable Class SpatialUtilities
         End Try
     End Function
 
+    <ObsoleteAttribute("Use the ZoomToEnvelope() function instead.", True)> _
     Public Shared Sub ZoomToExtent(ByRef pEnv As ESRI.ArcGIS.Geometry.IEnvelope, ByRef pMxDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument)
         Dim pMap As ESRI.ArcGIS.Carto.IMap
         Dim pActiveView As ESRI.ArcGIS.Carto.IActiveView
@@ -1614,6 +1615,49 @@ Public NotInheritable Class SpatialUtilities
         pActiveView.Extent = pEnv
         pActiveView.Refresh()
     End Sub
+
+    ''' <summary>
+    ''' Zooms to the given envenlope.
+    ''' </summary>
+    ''' <param name="theEnvelope">The envelope to zoom to.</param>
+    ''' <remarks>Replaces ZoomToExtent sub.  This sub removes the unneeded pMxDoc parameter.</remarks>
+    ''' 
+    Public Shared Sub ZoomToEnvelope(ByRef theEnvelope As IEnvelope)
+
+        Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        Dim theMap As IMap = theArcMapDoc.FocusMap
+        Dim theActiveView As IActiveView = DirectCast(theMap, IActiveView)
+
+        '-- Updates the view's extent
+        theActiveView.Extent = theEnvelope
+        theActiveView.Refresh()
+
+    End Sub
+
+    ''' <summary>
+    ''' Selects a single feature.
+    ''' </summary>
+    ''' <param name="theFeatureLayer">The feature layer containing the feature.</param>
+    ''' <param name="theFeature">The feature to zoom to.</param> 
+    ''' <remarks></remarks>
+    ''' 
+    Public Shared Sub SetSelectedFeature(ByRef theFeatureLayer As IFeatureLayer, ByRef theFeature As IFeature)
+
+        Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        Dim theMap As IMap = theArcMapDoc.FocusMap
+        Dim theActiveView As IActiveView = DirectCast(theMap, IActiveView)
+
+        '-- Select the feature
+        theMap.ClearSelection()
+        theMap.SelectFeature(theFeatureLayer, theFeature)
+        theActiveView.Refresh()
+
+    End Sub
+
+
+
+
+
 #End Region
 
 #Region "Private Members"
