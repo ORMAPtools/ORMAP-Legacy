@@ -33,10 +33,10 @@ CLASSES & FORMS
  S    * CategoryInstall  -  Obsolete, replace with .NET versions in other classes.
  J      CatalogFileDlg  -  Port/rewrite.
  N    ! clsFieldNames  -  Port/rewrite as static class and/or settings.
- J  --> FormsCatalog  -  Port/rewrite.
+ J    * FormsCatalog  -  Obsolete.
  -    * clsRowChanged  -  Obsolete.
 S|N   * clsTaxLotEditingToolbar  -  Port/rewrite.
- S      clsArrows/frmArrows  -  Port/rewrite.
+ S  --> clsArrows/frmArrows  -  Port/rewrite.
  N    ! cmdAutoUpdate  -  Replace with EditorExtension edit event handling, etc.
  S  --> cmdLocate/frmLocate  -  Port/rewrite.
  N      clsMapIndex/frmMapIndex  -  Port/rewrite.
@@ -50,7 +50,7 @@ RELATED DOCUMENTS
  N    * TaxlotEditing.ini  -  Obsolete, replaced by Settings files.
  -    * TaxlotEditing.dll  -  Port (renamed).
  S      TaxlotEditing.reg  -  Obsolete (?), use new deployment styles.
- S      Register.vbs/Unregister.vbs  -  Obsolete (?), use new deployment styles.
+ S      Register.vbs/Unregister.vbs  -  Obsolete, use new deployment.
  N    * gpl.rtf  -  Port/rename (updgrade GPL License v2 to v3).
  N      Arrows_help.rtf, etc.  -  Port/rewrite (in new help delivery format?)
 
@@ -69,7 +69,7 @@ BY DEVELOPER
  J    ! modUtils  -  Port/rewrite (significant effort).
  J    ! basWin32API  -  Obsolete or replace in other classes.
  J    ! globals  -  Obsolete or shared properties of EditorExtension.
- J  --> FormsCatalog  -  Port/rewrite.
+ J    * FormsCatalog  -  Obsolete.
  J    ! ORMAPNumber  -  Port/rewrite.
 
  N    * IniFiles/TaxlotEditing.ini  -  Obsolete, replace by Settings files.
@@ -88,6 +88,6 @@ S|N   * clsTaxLotEditingToolbar  -  Port/rewrite.
  S    * TaxlotTool.RES  -  Obsolete, replaced with embedded resources.
  S    * TaxlotEditing.vbp  -  Obsolete, replace with .NET version.
  S  --> cmdLocate/frmLocate  -  Port/rewrite.
- S      clsArrows/frmArrows  -  Port/rewrite.
- S      TaxlotEditing.reg/Register.vbs/Unregister.vbs  -  Obsolete, use new deployment styles.
+ S  --> clsArrows/frmArrows  -  Port/rewrite.
+ S      TaxlotEditing.reg/Register.vbs/Unregister.vbs  -  Obsolete, use new deployment.
  S      Old Package  - Port to ClickOnce installer.
