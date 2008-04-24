@@ -43,6 +43,12 @@ Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.Framework
+Imports System.Windows.Forms
+Imports ESRI.ArcGIS.Geodatabase
+Imports ESRI.ArcGIS.Carto
+Imports OrmapTaxlotEditing.SpatialUtilities
+Imports OrmapTaxlotEditing.StringUtilities
+Imports OrmapTaxlotEditing.Utilities
 #End Region
 
 <ComVisible(True)> _
@@ -83,6 +89,8 @@ Public NotInheritable Class LocateFeature
 
     End Sub
 
+
+
 #End Region
 
 #End Region
@@ -96,11 +104,94 @@ Public NotInheritable Class LocateFeature
 #End Region
 
 #Region "Properties"
-    ' None
+
+    Private _partnerLocateFeatureForm As LocateFeatureForm
+
+    Friend Property PartnerTaxlotAssignmentForm() As LocateFeatureForm
+        Get
+            Return _partnerLocateFeatureForm
+        End Get
+        Set(ByVal value As LocateFeatureForm)
+            _partnerLocateFeatureForm =  value
+        End Set
+    End Property
+
 #End Region
 
 #Region "Event Handlers"
-    ' None
+
+    Private Sub PartnerTaxlotAssignmentForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.Load
+
+        With PartnerTaxlotAssignmentForm
+
+            If .uxMapnumber.Items.Count = 0 Then '-- Only load the text box the first time the tool is run.
+                Dim mapIndexFClass As IFeatureClass = GetMapIndexFeatureLayer.FeatureClass
+                Dim theQueryFilter As IQueryFilter = New QueryFilter
+                theQueryFilter.SubFields = "DISTINCT(" & EditorExtension.MapIndexSettings.MapNumberField & ")"
+
+                Dim theFeatCursor As IFeatureCursor = mapIndexFClass.Search(theQueryFilter, False)
+                Dim theQueryField As Integer = theFeatCursor.FindField(EditorExtension.MapIndexSettings.MapNumberField)
+                Dim theFeature As IFeature = theFeatCursor.NextFeature
+                Do Until theFeature Is Nothing
+                    .uxMapnumber.Items.Add(theFeature.Value(theQueryField))
+                    theFeature = theFeatCursor.NextFeature
+                Loop
+            End If
+
+        End With
+
+    End Sub
+
+    Private Sub uxFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.uxFind.Click
+
+        Dim mapNumber As String = Nothing
+        Dim taxlot As String = Nothing
+
+        Dim uxMapnumber As ComboBox = PartnerTaxlotAssignmentForm.uxMapnumber
+        If uxMapnumber.FindStringExact(uxMapnumber.Text) = -1 Then
+            MessageBox.Show("Invalid MapNumber.  Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        Else
+            mapNumber = uxMapnumber.Text.Trim
+        End If
+
+        Dim uxTaxlot As TextBox = PartnerTaxlotAssignmentForm.uxTaxlot
+        If uxTaxlot.Enabled And uxTaxlot.Text.Trim <> "" Then
+            taxlot = uxTaxlot.Text.Trim
+        End If
+
+        Dim theQueryFilter As IQueryFilter = New QueryFilter
+        Dim theXFlayer As IFeatureLayer = Nothing '-- Set as either the MapIndex or Taxlot Feature Layer.
+
+        If taxlot Is Nothing Then '-- Must be MapIndex Feature Layer.
+            theXFlayer = GetMapIndexFeatureLayer()
+            theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField
+            theQueryFilter.WhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "]='" & mapNumber & "'"
+        Else '-- Taxlot Feature Layer.
+            theXFlayer = GetTaxlotFeatureLayer()
+            theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField & "," & EditorExtension.TaxLotSettings.TaxlotField
+            theQueryFilter.WhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "]='" & mapNumber & "' and [" & EditorExtension.TaxLotSettings.TaxlotField & "]='" & taxlot & "'"
+        End If
+
+        Dim theXFClass As IFeatureClass = theXFlayer.FeatureClass
+        Dim theFeatCursor As IFeatureCursor = theXFClass.Search(theQueryFilter, False)
+
+        Dim theFeature As IFeature = theFeatCursor.NextFeature()
+
+        If theFeature Is Nothing Then '-- Must be due to invalid taxlot entered into text box.
+            MessageBox.Show("Taxlot does not exist.", "Invalid Taxlot", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
+        Else
+            ZoomToEnvelope(theFeature.Shape.Envelope)
+            SetSelectedFeature(theXFlayer, theFeature)
+        End If
+
+    End Sub
+
+    Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.uxHelp.Click
+        ' TODO [SC] Evaluate help systems and implement.
+        MessageBox.Show("uxHelp clicked")
+    End Sub
+
 #End Region
 
 #Region "Methods"
@@ -132,6 +223,10 @@ Public NotInheritable Class LocateFeature
             'Disable if it is not ArcMap
             If TypeOf hook Is IMxApplication Then
                 MyBase.m_enabled = True
+                PartnerTaxlotAssignmentForm = New LocateFeatureForm
+                AddHandler _partnerLocateFeatureForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
+                AddHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
+                AddHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
             Else
                 MyBase.m_enabled = False
             End If
@@ -142,8 +237,29 @@ Public NotInheritable Class LocateFeature
     End Sub
 
     Public Overrides Sub OnClick()
-        ' TODO: Port LocateFeature.OnClick implementation
-        System.Windows.Forms.MessageBox.Show("Port LocateFeature.OnClick implementation")
+
+        Try
+            Dim theMapIndexFLayer As IFeatureLayer = GetMapIndexFeatureLayer()
+            Dim theTaxlotFLayer As IFeatureLayer = GetTaxlotFeatureLayer()
+
+            If theMapIndexFLayer Is Nothing Then
+                MessageBox.Show("Please Load the " & EditorExtension.TableNamesSettings.MapIndexFC & " feature class into your Table of Contents", "Unable to Find " & EditorExtension.TableNamesSettings.MapIndexFC, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
+                Exit Try
+            End If
+
+            If theTaxlotFLayer Is Nothing Then
+                PartnerTaxlotAssignmentForm.uxTaxlot.Enabled = False
+            Else
+                PartnerTaxlotAssignmentForm.uxTaxlot.Enabled = True
+            End If
+
+            PartnerTaxlotAssignmentForm.ShowDialog()
+
+        Catch ex As Exception
+            ' TODO [SC] Add better exception handling or reporting.
+            MessageBox.Show(ex.Message)
+        End Try
+
     End Sub
 
 #End Region
