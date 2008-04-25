@@ -140,16 +140,29 @@ Public NotInheritable Class DataMonitor
 
 #Region "Methods"
 
-    Friend Shared Sub SetValidDataProperties()
+    Friend Shared Sub ClearValidDataProperties()
         ' MapIndex
+        SetHasValidMapIndexData(False)
+        setMapIndexFeatureLayer(Nothing)
+        ' Taxlots
+        SetHasValidTaxlotData(False)
+        setTaxlotFeatureLayer(Nothing)
+    End Sub
+
+    Friend Shared Sub CheckValidDataProperties()
+        ' MapIndex status and layer properties
         SetHasValidMapIndexData(CheckData(ESRIClassType.FeatureClass, EditorExtension.TableNamesSettings.MapIndexFC))
         If HasValidMapIndexData Then
-            setMapIndexFeatureLayer(FindDataLayerInMap(EditorExtension.TableNamesSettings.MapIndexFC))
+            If MapIndexFeatureLayer Is Nothing Then
+                setMapIndexFeatureLayer(FindDataLayerInMap(EditorExtension.TableNamesSettings.MapIndexFC))
+            End If
         End If
-        ' Taxlots
+        ' Taxlot status and layer properties
         SetHasValidTaxlotData(CheckData(ESRIClassType.FeatureClass, EditorExtension.TableNamesSettings.TaxLotFC))
         If HasValidTaxlotData Then
-            setTaxlotFeatureLayer(FindDataLayerInMap(EditorExtension.TableNamesSettings.TaxLotFC))
+            If TaxlotFeatureLayer Is Nothing Then
+                setTaxlotFeatureLayer(FindDataLayerInMap(EditorExtension.TableNamesSettings.TaxLotFC))
+            End If
         End If
     End Sub
 

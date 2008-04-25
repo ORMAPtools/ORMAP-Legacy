@@ -45,6 +45,7 @@ Imports ESRI.ArcGIS.Geodatabase
 Imports ESRI.ArcGIS.Geometry
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
+Imports OrmapTaxlotEditing.DataMonitor
 Imports System.Collections.Generic
 Imports System.Text
 Imports System.Windows.Forms
@@ -160,6 +161,25 @@ Public NotInheritable Class SpatialUtilities
         Dim theORMapNumClass As New ORMapNum()
 
         Try
+            ' Check for valid data
+            CheckValidDataProperties()
+            If Not HasValidTaxlotData Then
+                MessageBox.Show("Unable to update Taxlot field values." & vbNewLine & _
+                                "Missing data: Valid ORMAP Taxlot layer not found in the map.", _
+                                "Please load this dataset into your map." & vbNewLine & _
+                                "Calculate Taxlot Values", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            End If
+            If Not HasValidMapIndexData Then
+                MessageBox.Show("Unable to update taxlot field values." & vbNewLine & _
+                                "Missing data: Valid ORMAP MapIndex layer not found in the map.", _
+                                "Please load this dataset into your map." & vbNewLine & _
+                                "Calculate Taxlot Values", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            End If
+            If HasValidTaxlotData OrElse HasValidMapIndexData Then
+                Exit Try
+            End If
+
+            ' Get the Taxlot feature class from the feature being edited.
             Dim taxlotFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
             taxlotFClass = DirectCast(editFeature.Class, ESRI.ArcGIS.Geodatabase.IFeatureClass)
 
@@ -926,6 +946,7 @@ Public NotInheritable Class SpatialUtilities
         End Try
     End Function
 
+    ' TODO: [NIS] <ObsoleteAttribute("Use DataMonitor functions instead.", True)> _
     ''' <summary>
     ''' Finds a feature layer in the table of contents corresponding to the given feature class name
     ''' and determines if the feature class has the listed fields.
@@ -982,6 +1003,7 @@ Public NotInheritable Class SpatialUtilities
 
     End Function
 
+    ' TODO: [NIS] <ObsoleteAttribute("Use DataMonitor functions instead.", True)> _
     Public Shared Function TableHasRequiredFields(ByVal tableName As String, ByVal fieldNames As List(Of String), ByVal loadData As Boolean) As Boolean
 
         ' TODO: [NIS] Test this...
@@ -1031,9 +1053,9 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Determines if the feature layer has a selection
+    ''' Determines if the feature layer has a selection.
     ''' </summary>
-    ''' <param name="layer">An object that supports the IFeatureLayer</param>
+    ''' <param name="layer">An object that supports the IFeatureLayer.</param>
     ''' <returns><c>True</c> or <c>False</c>.</returns>
     ''' <remarks>Checking the selection set of layer, determine if one, many, or no features are selected.</remarks>
     Public Shared Function HasSelectedFeatures(ByVal layer As IFeatureLayer) As Boolean
@@ -1422,7 +1444,8 @@ Public NotInheritable Class SpatialUtilities
 
             Dim fieldIndex As Integer = annoFeature.Fields.FindField("TextString")
             If fieldIndex = FieldNotFoundIndex Then
-                MessageBox.Show("Unable to locate text string field in annotation class. Cannot set size", "Cannot set size", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Unable to locate text string field in annotation class." & vbNewLine & _
+                        "Cannot set size", "Set Anno Size", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Try
             End If
 
@@ -1445,14 +1468,26 @@ Public NotInheritable Class SpatialUtilities
             'Dim thisCenter As IPoint
             'thisCenter = GetCenterOfEnvelope(thisEnvelope)
 
-            Dim mapIndexFeatureLayer As IFeatureLayer
-            mapIndexFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
-            If mapIndexFeatureLayer Is Nothing Then
+            ' Check for valid data
+            CheckValidDataProperties()
+            If Not HasValidTaxlotData Then
+                MessageBox.Show("Unable to update Taxlot field values." & vbNewLine & _
+                                "Missing data: Valid ORMAP Taxlot layer not found in the map.", _
+                                "Please load this dataset into your map." & vbNewLine & _
+                                "Set Anno Size", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            End If
+            If Not HasValidMapIndexData Then
+                MessageBox.Show("Unable to update taxlot field values." & vbNewLine & _
+                                "Missing data: Valid ORMAP MapIndex layer not found in the map.", _
+                                "Please load this dataset into your map." & vbNewLine & _
+                                "Set Anno Size", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            End If
+            If HasValidTaxlotData OrElse HasValidMapIndexData Then
                 Exit Try
             End If
 
             Dim mapIndexFeatureClass As IFeatureClass
-            mapIndexFeatureClass = mapIndexFeatureLayer.FeatureClass
+            mapIndexFeatureClass = MapIndexFeatureLayer.FeatureClass
             'original vb6 code placed the point object as the first parameter. 
             Dim mapNumber As String = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
 
@@ -1505,7 +1540,9 @@ Public NotInheritable Class SpatialUtilities
 
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
+
         End Try
+
     End Sub
 
     ''' <summary>
@@ -1538,13 +1575,14 @@ Public NotInheritable Class SpatialUtilities
     End Sub
 
     ''' <summary>
-    ''' Determine the validity of a taxlot number.
+    ''' Determine the local uniqueness of a taxlot number.
     ''' </summary>
     ''' <param name="taxlotNumber">The taxlot value to validate.</param>
     ''' <param name="thisGeometry">The geometry of the feature to check.</param>
     ''' <returns>True or False</returns>
-    ''' <remarks>Determine if the feature represented by thisGeometry with taxlot taxlotNumber is a unique and therefore valid.</remarks>
-    Public Shared Function ValidateTaxlotNumber(ByVal taxlotNumber As String, ByRef thisGeometry As IGeometry) As Boolean
+    ''' <remarks>Determine if the feature represented by thisGeometry has a 
+    ''' taxlot number unique for the corresponding map index.</remarks>
+    Public Shared Function IsTaxlotNumberLocallyUnique(ByVal taxlotNumber As String, ByRef thisGeometry As IGeometry) As Boolean
         Try
             Dim returnValue As Boolean = False
 
