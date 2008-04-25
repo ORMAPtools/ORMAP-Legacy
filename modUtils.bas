@@ -1853,6 +1853,8 @@ End Function
 '                           lity that a centroid is not contained by the
 '                           enclosing polygon, and, possibly the enclosing
 '                           map index.
+'James Moore    4-25-2008 Removed SpecialInt field from this process
+'   see Tracker 1922332 at http://sourceforge.net/tracker/index.php?func=detail&aid=1922332&group_id=151824&atid=782248
 '***************************************************************************
 
 Public Sub CalcTaxlotValues( _
@@ -1885,7 +1887,9 @@ On Error GoTo ErrorHandler
     Dim lTLQQFld As Long
     Dim lTLQtrFld As Long
     Dim lTLSectNumFld As Long
-    Dim lTLSpecInterestFld As Long
+'++ START JWM 04/25/2008 Tracker 1922332++++++++++
+'    Dim lTLSpecInterestFld As Long
+'++ END JWM 04/25/2008 Tracker 1922332++++++++++
     Dim lTLTownFld As Long
     Dim lTLTownDirFld As Long
     Dim lTLTownPartFld As Long
@@ -1980,8 +1984,10 @@ On Error GoTo ErrorHandler
     lTLMapSufNumFld = LocateFields(pTaxlotFClass, g_pFldnames.TLSufNumFN)
     If lTLMapSufNumFld = -1 Then GoTo Process_Exit
     
-    lTLSpecInterestFld = LocateFields(pTaxlotFClass, g_pFldnames.TLSpecInterestFN)
-    If lTLSpecInterestFld = -1 Then GoTo Process_Exit
+    '++ START JWM 04/25/2008 Tracker 1922332++++++++++
+'    lTLSpecInterestFld = LocateFields(pTaxlotFClass, g_pFldnames.TLSpecInterestFN)
+'    If lTLSpecInterestFld = -1 Then GoTo Process_Exit
+    '++ END JWM 04/25/2008 Tracker 1922332++++++++++
     
     lTLMapTaxlotFld = LocateFields(pTaxlotFClass, g_pFldnames.TLMapTaxlotFN)
     If lTLMapTaxlotFld = -1 Then GoTo Process_Exit
@@ -2081,14 +2087,16 @@ On Error GoTo ErrorHandler
     a_pFeat.Value(lTLAnomalyFld) = pORMAPNumber.Anomaly
     
     ' SpecialInterest
-    sExistVal = IIf(IsNull(a_pFeat.Value(lTLSpecInterestFld)), "00000", a_pFeat.Value(lTLSpecInterestFld))
-    If Len(sExistVal) <= 5 Then
-        '++ START JWalton 2/7/2007
-        sExistVal = String(5 - Len(sExistVal), "0") & sExistVal
-        '++ END JWalton 2/7/2007
-    End If
-    a_pFeat.Value(lTLSpecInterestFld) = sExistVal
-    
+'++ START JWM 04/25/2008 Tracker 1922332++++++++++
+'    sExistVal = IIf(IsNull(a_pFeat.Value(lTLSpecInterestFld)), "00000", a_pFeat.Value(lTLSpecInterestFld))
+'    If Len(sExistVal) <= 5 Then
+'        '++ START JWalton 2/7/2007
+'        sExistVal = String(5 - Len(sExistVal), "0") & sExistVal
+'        '++ END JWalton 2/7/2007
+'    End If
+'    a_pFeat.Value(lTLSpecInterestFld) = sExistVal
+'++ END JWM 04/25/2008 Tracker 1922332++++++++++
+
     ' Recalculate OMTaxlot
     If IsNull(a_pFeat.Value(lTaxlotFld)) Then GoTo Process_Exit
     

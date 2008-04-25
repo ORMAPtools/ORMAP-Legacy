@@ -638,7 +638,8 @@ Attribute VB_Exposed = False
 ' Updates:
 '       10/11/2006 -- Added comment headers (JWM)
 '       2/6/2007 -- All inline documentation reviewed/revised (JWalton)
-
+'James Moore    4-25-2008 Removed SpecialInt field
+'   see Tracker 1922332 at http://sourceforge.net/tracker/index.php?func=detail&aid=1922332&group_id=151824&atid=782248
 
 
 Option Explicit
@@ -711,7 +712,9 @@ Private Type TaxlotFieldMap
     Range As Long
     RangeDirectional As Long
     Section As Long
-    SpecialInterest As Long
+'++ START JWM 04/25/2008 Tracker 1922332++++++++++
+'    SpecialInterest As Long
+'++ END JWM 04/25/2008 Tracker 1922332++++++++++
     SuffixNumber As Long
     SuffixType As Long
     Taxlot As Long
@@ -723,27 +726,27 @@ End Type
 
 
 '----------------------------------------------------------------------------
-'Name:                  cmdAssign_Click                                     '
-'Initial Author:        <<Unknown>>                                         '
-'Subsequent Author:     JWalton                                             '
-'Created:               <<Unknown>>                                         '
-'Purpose:       Assign attributes to the current MapIndex polygon           '
-'Description:   Verify that all fields have values entered.  Don't allow    '
-'               changes tobe applied without all values present             '
-'Methods:       Describe any complex details.                               '
-'Inputs:        <<None>>                                                    '
-'Parameters:    <<None>>                                                    '
-'Outputs:       m_pMIFeat                                                   '
-'Returns:       <<N/A>>                                                     '
-'Errors:        This routine raises no known errors.                        '
-'Assumptions:   m_pMIFeat Is Not Nothing                                    '
-'               m_pORMAPNumber Is Not Nothing                               '
-'Updates:                                                                   '
-'       Type any updates here.                                              '
-'Developer:     Date:       Comments:                                       '
-'----------     ------      ---------                                       '
-'James Moore    10/11/2006  Initial creation of this comment section        '
-'JWalton        2/1/2006    Rewritten due to ORMAP Class Object             '
+'Name:                  cmdAssign_Click
+'Initial Author:        <<Unknown>>
+'Subsequent Author:     JWalton
+'Created:               <<Unknown>>
+'Purpose:       Assign attributes to the current MapIndex polygon
+'Description:   Verify that all fields have values entered.  Don't allow
+'               changes tobe applied without all values present
+'Methods:       Describe any complex details.
+'Inputs:        <<None>>
+'Parameters:    <<None>>
+'Outputs:       m_pMIFeat
+'Returns:       <<N/A>>
+'Errors:        This routine raises no known errors.
+'Assumptions:   m_pMIFeat Is Not Nothing
+'               m_pORMAPNumber Is Not Nothing
+'Updates:
+'       Type any updates here.
+'Developer:     Date:       Comments:
+'----------     ------      ---------
+'James Moore    10/11/2006  Initial creation of this comment section
+'JWalton        2/1/2006    Rewritten due to ORMAP Class Object
 '----------------------------------------------------------------------------
 
 Private Sub cmdEditSave_Click()
@@ -1632,6 +1635,8 @@ End Sub
 'Developer:     Date:       Comments:
 '----------     ------      ---------
 'John Walton    2/5/2007    Initial creation
+'James Moore    4-25-2008 Removed SpecialInt field from this process
+'   see Tracker 1922332 at http://sourceforge.net/tracker/index.php?func=detail&aid=1922332&group_id=151824&atid=782248
 '***************************************************************************
 
 
@@ -1699,7 +1704,9 @@ On Error GoTo Err_Handler
         .SuffixType = pTaxlotClassFields.FindField(g_pFldnames.TLSufTypeFN)
         .Township = pTaxlotClassFields.FindField(g_pFldnames.TLTownFN)
         .TownshipDirectional = pTaxlotClassFields.FindField(g_pFldnames.TLTownDirFN)
-        .SpecialInterest = pTaxlotClassFields.FindField(g_pFldnames.TLSpecInterestFN)
+        '++ START JWM 04/25/2008 Tracker 1922332++++++++++
+'        .SpecialInterest = pTaxlotClassFields.FindField(g_pFldnames.TLSpecInterestFN)
+        '++ END JWM 04/25/2008 Tracker 1922332++++++++++
     End With
     Exit Function
     
@@ -2238,6 +2245,8 @@ End Sub
 'Developer:     Date:       Comments:
 '----------     ------      ---------
 'John Walton    2/5/2007    Initial creation
+'James Moore    4-25-2008 Removed SpecialInt field from this process
+'   see Tracker 1922332 at http://sourceforge.net/tracker/index.php?func=detail&aid=1922332&group_id=151824&atid=782248
 '***************************************************************************
 
 Private Function UpdateTaxlots( _
@@ -2251,7 +2260,7 @@ On Error Resume Next
     Dim pArea As esriGeometry.IArea
     Dim pStatBar As esriSystem.IStatusBar
     Dim lCount As Long
-    Dim sSpecialInt As String
+'    Dim sSpecialInt As String
     Dim sTaxlot As String
 
     ' Updates the status bar for the current operation
@@ -2277,13 +2286,15 @@ On Error Resume Next
         End If
         
         ' Gets the formatted special interest value
-        If Not IsNull(pTaxlotFeature.Value(m_pTaxlotFields.SpecialInterest)) Then
-            sSpecialInt = pTaxlotFeature.Value(m_pTaxlotFields.SpecialInterest)
-            sSpecialInt = String(5 - Len(sSpecialInt), "0") & sSpecialInt
-          Else
-            sSpecialInt = "00000"
-        End If
-    
+'++ START JWM 04/25/2008 Tracker 1922332++++++++++
+'        If Not IsNull(pTaxlotFeature.Value(m_pTaxlotFields.SpecialInterest)) Then
+'            sSpecialInt = pTaxlotFeature.Value(m_pTaxlotFields.SpecialInterest)
+'            sSpecialInt = String(5 - Len(sSpecialInt), "0") & sSpecialInt
+'          Else
+'            sSpecialInt = "00000"
+'        End If
+'++ END JWM 04/25/2008 Tracker 1922332++++++++++
+
         '++ START Nick Seigal (LCOG) 11/19/2007
         ' Gets the map number value
         Dim sMapNumber As String
@@ -2335,7 +2346,9 @@ On Error Resume Next
             .Value(m_pTaxlotFields.MapNumber) = pFeature.Value(m_pMapIndexFields.MapNumber)
             .Value(m_pTaxlotFields.OrmapMapNumber) = m_pORMAPNumber.ORMAPNumber
             .Value(m_pTaxlotFields.Taxlot) = CLng(sTaxlot)
-            .Value(m_pTaxlotFields.SpecialInterest) = sSpecialInt
+'++ START JWM 04/25/2008 Tracker 1922332++++++++++
+'            .Value(m_pTaxlotFields.SpecialInterest) = sSpecialInt
+'++ END JWM 04/25/2008++++++++++
             .Value(m_pTaxlotFields.MapTaxlotNumber) = sTLMapTaxlot
             .Value(m_pTaxlotFields.OrmapTaxlotNumber) = m_pORMAPNumber.OrmapTaxlotNumber & sTaxlot
             .Store

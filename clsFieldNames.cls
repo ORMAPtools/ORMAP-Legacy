@@ -63,7 +63,8 @@ Attribute VB_Exposed = True
 ' Updates:
 '       10/11/2006  -- Added this header file (JWM)
 '       2/6/2007 -- All inline documentation reviewed/revised (JWalton)
-
+'James Moore    4-25-2008 Removed SpecialInt field
+'   see Tracker 1922332 at http://sourceforge.net/tracker/index.php?func=detail&aid=1922332&group_id=151824&atid=782248
 
 Option Explicit
 '******************************
@@ -104,7 +105,9 @@ Private m_sTLMapTaxlotFN As String
 '++ START JWM 11/03/2006
 Private m_sTLMapTaxlotFormatString As String
 '++ END JWM 11/03/2006
-Private m_sTLSpecInterestFN As String
+'++ START JWM 04/25/2008 Tracker 1922332++++++++++
+'Private m_sTLSpecInterestFN As String
+'++ END JWM 04/25/2008 Tracker 1922332++++++++++
 Private m_sTLSufNumFN As String
 Private m_sTLSufTypeFN As String
 Private m_sTLMapAcresFN As String
@@ -189,6 +192,8 @@ Private Const m_sIniFile As String = "ormap.ini"
 Private Const m_sSection As String = "GENERAL"
 
 Private Sub Class_Initialize()
+'James Moore    4-25-2008 Removed SpecialInt field from this process
+'   see Tracker 1922332 at http://sourceforge.net/tracker/index.php?func=detail&aid=1922332&group_id=151824&atid=782248
     ' Tests the initialization file
     If Not TestIniFile(app.Path & "\" & m_sIniFile) Then
         MsgBox "Unable to open Inifile at " & app.Path & "\" & m_sIniFile, vbExclamation
@@ -228,7 +233,9 @@ Private Sub Class_Initialize()
     '++ END JWM 11/03/2006
     m_sTLTaxlotFN = ReadIniFile(m_sSection, "TL_TAXLOT")
     m_sTLMapTaxlotFN = ReadIniFile(m_sSection, "TL_MAP_TAXLOT")
-    m_sTLSpecInterestFN = ReadIniFile(m_sSection, "TL_SPEC_INTEREST")
+    '++ START JWM 04/25/2008 Tracker 1922332++++++++++
+'    m_sTLSpecInterestFN = ReadIniFile(m_sSection, "TL_SPEC_INTEREST")
+    '++ END JWM 04/25/2008 Tracker 1922332++++++++++
     m_sTLSufNumFN = ReadIniFile(m_sSection, "TL_MAP_SUF_NUM")
     m_sTLSufTypeFN = ReadIniFile(m_sSection, "TL_MAP_SUF_TYPE")
     m_sTLMapAcresFN = ReadIniFile(m_sSection, "TL_MAPACRES")
@@ -409,9 +416,11 @@ Public Property Get TLSectNumberFN() As String
     TLSectNumberFN = m_sTLSectNumberFN
 End Property
 
-Public Property Get TLSpecInterestFN() As String
-    TLSpecInterestFN = m_sTLSpecInterestFN
-End Property
+'++ START JWM 04/25/2008 Tracker 1922332++++++++++
+'Public Property Get TLSpecInterestFN() As String
+'    TLSpecInterestFN = m_sTLSpecInterestFN
+'End Property
+'++ END JWM 04/25/2008 Tracker 1922332++++++++++
 
 Public Property Get TLSufNumFN() As String
     TLSufNumFN = m_sTLSufNumFN
