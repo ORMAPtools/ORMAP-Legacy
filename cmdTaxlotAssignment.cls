@@ -608,7 +608,7 @@ End Property
 Private Sub ITool_OnMouseDown( _
   ByVal Button As Long, _
   ByVal Shift As Long, _
-  ByVal x As Long, _
+  ByVal X As Long, _
   ByVal Y As Long)
 1
 On Error GoTo ErrorHandler
@@ -672,7 +672,7 @@ On Error GoTo ErrorHandler
     
     ' Create a search shape out of the point that the user clicked
     Set pMap = m_pEditor.Map
-    Set pPoint = m_pEditor.Display.DisplayTransformation.ToMapPoint(x, Y)
+    Set pPoint = m_pEditor.Display.DisplayTransformation.ToMapPoint(X, Y)
     '++ START Nick Seigal (LCOG) 01/08/2008 - Change geometry from an envelope to a point
     'Set pGeometry = m_pEditor.CreateSearchShape(pPoint) 'Returns an IEnvelope
     Set pGeometry = pPoint 'QI
@@ -772,17 +772,12 @@ On Error GoTo ErrorHandler
     If StrComp(m_pFrmTaxlots.PolygonType, "NUMBER", vbTextCompare) = 0 Then
         sNewTLNum = m_pFrmTaxlots.CurrentValue  'User entered number
         '++ END JWalton 2/1/2007
-        sNewTLNum_5digit = sNewTLNum
         ' Make sure number is 5 characters
-        If Len(sNewTLNum_5digit) < ORMAP_TAXLOT_FIELD_LENGTH Then
-            Do Until Len(sNewTLNum_5digit) = ORMAP_TAXLOT_FIELD_LENGTH
-                sNewTLNum_5digit = "0" & sNewTLNum_5digit
-            Loop
-        End If
+        sNewTLNum_5digit = AddLeadingZeros(sNewTLNum, ORMAP_TAXLOT_FIELD_LENGTH)
       Else
         'Remove leading Zeros for taxlot number if any exist
         '++ START JWalton 2/1/2007 Replaced form references to object variable/property references
-        sNewTLNum_5digit = m_pFrmTaxlots.PolygonType         'Predefined selection
+        sNewTLNum_5digit = m_pFrmTaxlots.PolygonType         'Predefined selection  i.e. ROADS, RAILS, WATER, NONTL
         '++ END JWalton 2/1/2007
         sNewTLNum = Replace(sNewTLNum_5digit, "0", "")
     End If
@@ -792,8 +787,6 @@ On Error GoTo ErrorHandler
     'If so, include it in ORMAPtaxlot
     sTLMapSufTypeVal = GetMapSufType(pFeature)
     sTLMapSufNumVal = GetMapSufNum(pFeature)
-    If IsNull(sTLMapSufTypeVal) Then sTLMapSufTypeVal = "0"
-    If IsNull(sTLMapSufNumVal) Then sTLMapSufNumVal = "000"
     '++ END Laura Gordon, November 29, 2005
     pFeature.Value(m_lTLTaxlotFld) = sNewTLNum
     
@@ -890,7 +883,7 @@ End Sub
 Private Sub ITool_OnMouseMove( _
   ByVal Button As Long, _
   ByVal Shift As Long, _
-  ByVal x As Long, _
+  ByVal X As Long, _
   ByVal Y As Long)
 '++START 1/26/2007 JWalton
     ' Not Implemented
@@ -900,7 +893,7 @@ End Sub
 Private Sub ITool_OnMouseUp( _
   ByVal Button As Long, _
   ByVal Shift As Long, _
-  ByVal x As Long, _
+  ByVal X As Long, _
   ByVal Y As Long)
 '++START 1/26/2007 JWalton
     ' Not Implemented
@@ -930,7 +923,7 @@ Private Sub ITool_OnKeyUp( _
 End Sub
  
 Private Function ITool_OnContextMenu( _
-  ByVal x As Long, _
+  ByVal X As Long, _
   ByVal Y As Long) As Boolean
 '++START 1/26/2007 JWalton
     ' Not Implemented
