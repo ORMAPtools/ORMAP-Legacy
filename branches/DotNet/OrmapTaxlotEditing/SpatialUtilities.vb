@@ -161,39 +161,26 @@ Public NotInheritable Class SpatialUtilities
         Dim theORMapNumClass As New ORMapNum()
 
         Try
-            ' Check for valid data
+            ' Check for valid data (will try to load data if not found)
             CheckValidDataProperties()
             If Not HasValidTaxlotData Then
                 MessageBox.Show("Unable to update Taxlot field values." & vbNewLine & _
-                                "Missing data: Valid ORMAP Taxlot layer not found in the map.", _
-                                "Please load this dataset into your map." & vbNewLine & _
+                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
                                 "Calculate Taxlot Values", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Try
             End If
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Unable to update taxlot field values." & vbNewLine & _
-                                "Missing data: Valid ORMAP MapIndex layer not found in the map.", _
-                                "Please load this dataset into your map." & vbNewLine & _
+                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
                                 "Calculate Taxlot Values", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-            End If
-            If HasValidTaxlotData OrElse HasValidMapIndexData Then
                 Exit Try
             End If
-
+            
             ' Get the Taxlot feature class from the feature being edited.
             Dim taxlotFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
             taxlotFClass = DirectCast(editFeature.Class, ESRI.ArcGIS.Geodatabase.IFeatureClass)
-
-            ' Verify the map index layer
-            If mapIndexLayer Is Nothing Then
-                ' Prompt the user for the location of the MapIndex feature class
-                If LoadFCIntoMap(EditorExtension.TableNamesSettings.MapIndexFC, "Locate Database with Map Index") Then
-                    mapIndexLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
-                End If
-                ' Tests for a failure to load the MapIndex feature class
-                If mapIndexLayer Is Nothing Then
-                    Exit Try
-                End If
-            End If
 
             Dim theCountyFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.CountyField)
             Dim theTownFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipField)
@@ -215,9 +202,6 @@ Public NotInheritable Class SpatialUtilities
             Dim theMapTaxlotFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapTaxlotField)
             Dim theORTaxlotFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapTaxlotField)
             Dim theMapAcresFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapAcresField)
-            'TODO: JWM If any of these index fields are -1 we should bail according to VB6 version
-            'I wonder if we multiplied these values and checked the result for a negative value. Of course if there were an even number of negative values
-            'they would cancel each other out.
 
             '------------------------------------------
             ' Set the area
@@ -235,8 +219,10 @@ Public NotInheritable Class SpatialUtilities
             End If
 
             '------------------------------------------
-            ' Reformat Special Interest Code
+            ' Reformat Special Interest Code to exactly
+            ' 5 characters.
             '------------------------------------------
+            ' TODO: [JWM] Jim, Please fix this to match bug fix in VB6 version (Nick).
             Dim theCurrentSpecialInterest As String = "00000"
             If Not IsDBNull(editFeature.Value(theSpcIntrstFldIdx)) Then
                 theCurrentSpecialInterest = CStr(editFeature.Value(theSpcIntrstFldIdx))
@@ -250,7 +236,7 @@ Public NotInheritable Class SpatialUtilities
             '------------------------------------------
             ' Get the ORMapNum from the MapIndex 
             ' layer and parse it into the ORMapNum 
-            ' object. Used below for field values.
+            ' object(used below for field values).
             '------------------------------------------
             Dim theORMapNum As String = GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
             If Not theORMapNumClass.ParseNumber(theORMapNum) Then
@@ -547,6 +533,7 @@ Public NotInheritable Class SpatialUtilities
     ''' <returns>The MapIndex feature layer.</returns>
     ''' <remarks>This feature layer may be named something other than "MapIndex", 
     ''' depending on user settings.</remarks>
+    <ObsoleteAttribute("Use DataMonitor properties instead.", True)> _
     Public Shared Function GetMapIndexFeatureLayer() As IFeatureLayer
         ' Find Map Index feature layer
         Dim theMapIndexFLayer As IFeatureLayer
@@ -690,6 +677,7 @@ Public NotInheritable Class SpatialUtilities
     ''' <returns>The Taxlot feature layer.</returns>
     ''' <remarks>This feature layer may be named something other than "Taxlot", 
     ''' depending on user settings.</remarks>
+    <ObsoleteAttribute("Use DataMonitor propoerties instead.", True)> _
     Public Shared Function GetTaxlotFeatureLayer() As IFeatureLayer
         ' Find Taxlot feature layer
         Dim theTaxlotFLayer As IFeatureLayer
@@ -944,112 +932,6 @@ Public NotInheritable Class SpatialUtilities
             MessageBox.Show(ex.ToString)
             Return String.Empty
         End Try
-    End Function
-
-    ' TODO: [NIS] <ObsoleteAttribute("Use DataMonitor functions instead.", True)> _
-    ''' <summary>
-    ''' Finds a feature layer in the table of contents corresponding to the given feature class name
-    ''' and determines if the feature class has the listed fields.
-    ''' </summary>
-    ''' <param name="featureClassName">The name of the feature class to inspect (if found).</param>
-    ''' <param name="fieldNames">A collection of field names to search for.</param>
-    ''' <param name="loadData">A boolean flag. If true, if the feature class is not found, 
-    ''' an attempt is made to find the data and create a layer in the map.</param>
-    ''' <returns><c>True</c> or <c>False</c>.</returns>
-    ''' <remarks></remarks>
-    Public Shared Function FeatureClassHasRequiredFields(ByVal featureClassName As String, ByVal fieldNames As List(Of String), ByVal loadData As Boolean) As Boolean
-
-        Dim returnValue As Boolean = True 'initial assumption
-
-        ' Confirm data layer is present in current map
-        Dim theFLayer As IFeatureLayer
-
-        theFLayer = FindFeatureLayerByDSName(featureClassName)
-
-        If theFLayer Is Nothing Then
-            If loadData Then
-                '[Load option accepted...]
-                ' Attempt to load and find the taxlot layer in the map document
-                If LoadFCIntoMap(featureClassName) Then
-                    '[Layer loaded...]
-                    theFLayer = FindFeatureLayerByDSName(featureClassName)
-                Else
-                    '[Unable to load the layer...]
-                    returnValue = False
-                End If
-            Else
-                '[Data not present and load option refused...]
-                returnValue = False
-            End If
-        End If
-
-        If theFLayer IsNot Nothing Then
-            ' Confirm fields are present
-            Dim foundAllFields As Boolean = True  'initial assumption
-            Dim fieldIndex As Integer
-            For Each fn As String In fieldNames
-                fieldIndex = theFLayer.FeatureClass.FindField(fn)
-                If fieldIndex <> FieldNotFoundIndex Then
-                    foundAllFields = True
-                Else
-                    foundAllFields = False
-                    Exit For
-                End If
-            Next fn
-            returnValue = foundAllFields
-        End If
-
-        Return returnValue
-
-    End Function
-
-    ' TODO: [NIS] <ObsoleteAttribute("Use DataMonitor functions instead.", True)> _
-    Public Shared Function TableHasRequiredFields(ByVal tableName As String, ByVal fieldNames As List(Of String), ByVal loadData As Boolean) As Boolean
-
-        ' TODO: [NIS] Test this...
-
-        Dim returnValue As Boolean = True 'initial assumption
-
-        ' Confirm data layer is present in current map
-        Dim theTable As ITable
-
-        theTable = FindStandaloneTableByDSName(tableName).Table
-
-        If theTable Is Nothing Then
-            If loadData Then
-                '[Load option accepted...]
-                ' Attempt to load and find the table in the map document
-                If LoadTableIntoMap(tableName) Then
-                    '[Table loaded...]
-                    theTable = FindStandaloneTableByDSName(tableName).Table
-                Else
-                    '[Unable to load the table...]
-                    returnValue = False
-                End If
-            Else
-                '[Data not present and load option refused...]
-                returnValue = False
-            End If
-        End If
-
-        If theTable IsNot Nothing Then
-            ' Confirm fields are present
-            Dim foundAllFields As Boolean = True  'initial assumption
-            Dim fieldIndex As Integer
-            For Each fn As String In fieldNames
-                fieldIndex = theTable.FindField(fn)
-                If fieldIndex <> FieldNotFoundIndex Then
-                    foundAllFields = True
-                Else
-                    foundAllFields = False
-                    Exit For
-                End If
-            Next fn
-            returnValue = foundAllFields
-        End If
-
-        Return returnValue
-
     End Function
 
     ''' <summary>
@@ -1472,20 +1354,19 @@ Public NotInheritable Class SpatialUtilities
             CheckValidDataProperties()
             If Not HasValidTaxlotData Then
                 MessageBox.Show("Unable to update Taxlot field values." & vbNewLine & _
-                                "Missing data: Valid ORMAP Taxlot layer not found in the map.", _
-                                "Please load this dataset into your map." & vbNewLine & _
+                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
                                 "Set Anno Size", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Try
             End If
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Unable to update taxlot field values." & vbNewLine & _
-                                "Missing data: Valid ORMAP MapIndex layer not found in the map.", _
-                                "Please load this dataset into your map." & vbNewLine & _
+                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
                                 "Set Anno Size", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-            End If
-            If HasValidTaxlotData OrElse HasValidMapIndexData Then
                 Exit Try
             End If
-
+            
             Dim mapIndexFeatureClass As IFeatureClass
             mapIndexFeatureClass = MapIndexFeatureLayer.FeatureClass
             'original vb6 code placed the point object as the first parameter. 

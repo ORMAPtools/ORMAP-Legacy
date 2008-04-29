@@ -268,8 +268,6 @@ Public NotInheritable Class EditorExtension
     ''' <remarks>Handles EditEvents.OnCreateFeature events.</remarks>
     Private Sub EditEvents_OnChangeFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnChangeFeature
 
-        ' TODO: [NIS] Add code to check for if required data is available (see OnDeleteFeature).
-
         Try
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
             If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
@@ -288,6 +286,27 @@ Public NotInheritable Class EditorExtension
                 Exit Try
             End If
 
+            ' Note: Must check here for if required data is available
+            ' (in case subroutines called don't check).
+
+            ' Check for valid data (will try to load data if not found).
+            CheckValidDataProperties()
+            If Not HasValidTaxlotData Then
+                MessageBox.Show("Unable to update Taxlot field values." & vbNewLine & _
+                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
+                                "ORMAP Taxlot Editing (OnChangeFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Try
+            End If
+            If Not HasValidMapIndexData Then
+                MessageBox.Show("Unable to update taxlot field values." & vbNewLine & _
+                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
+                                "ORMAP Taxlot Editing (OnChangeFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+
+                Exit Try
+            End If
+            
             ' Variable declarations
             Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
             Dim theAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
@@ -342,21 +361,23 @@ Public NotInheritable Class EditorExtension
 
             If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Try
 
-            ' Check for valid data
+            ' Note: Must check here for if required data is available
+            ' (in case subroutines called don't check).
+
+            ' Check for valid data (will try to load data if not found).
             CheckValidDataProperties()
             If Not HasValidTaxlotData Then
-                MessageBox.Show("Unable to update Taxlot field values." & vbNewLine & _
-                                "Missing data: Valid ORMAP Taxlot layer not found in the map.", _
-                                "Please load this dataset into your map." & vbNewLine & _
+                MessageBox.Show("Unable to populate Taxlot field values." & vbNewLine & _
+                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnCreateFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Try
             End If
             If Not HasValidMapIndexData Then
-                MessageBox.Show("Unable to update taxlot field values." & vbNewLine & _
-                                "Missing data: Valid ORMAP MapIndex layer not found in the map.", _
-                                "Please load this dataset into your map." & vbNewLine & _
+                MessageBox.Show("Unable to populate taxlot field values." & vbNewLine & _
+                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnCreateFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-            End If
-            If HasValidTaxlotData OrElse HasValidMapIndexData Then
                 Exit Try
             End If
 
@@ -494,45 +515,63 @@ Public NotInheritable Class EditorExtension
             If Not IsORMAPFeature(obj) Then Exit Try ' TODO: [NIS] Is this even needed here?
             If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Try
 
+            ' Note: Must check here for if required data is available
+            ' (in case subroutines called don't check).
+
+            ' Check for valid data (will try to load data if not found).
+            CheckValidDataProperties()
+            If Not HasValidTaxlotData Then
+                MessageBox.Show("Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
+                                "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Try
+            End If
+            If Not HasValidMapIndexData Then
+                MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
+                                "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Try
+            End If
+            If Not HasValidCancelledNumbersTableData Then
+                MessageBox.Show("Missing data: Valid ORMAP CancelledNumbersTable not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
+                                "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Try
+            End If
+
             If IsTaxlot(obj) Then
                 '[Deleting taxlots...]
 
-                ' TODO: [NIS] Use new DataMonitor functions instead of hasRequiredDataForOnDeleteFeature().
+                ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
 
-                If hasRequiredDataForOnDeleteFeature() Then
-                    ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
+                Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
+                Dim theTaxlotFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
+                Dim theDataSet As ESRI.ArcGIS.Geodatabase.IDataset
+                Dim theWorkspace As ESRI.ArcGIS.Geodatabase.IWorkspace
+                Dim theFeatureWorkspace As ESRI.ArcGIS.Geodatabase.IFeatureWorkspace
 
-                    Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
-                    Dim theTaxlotFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
-                    Dim theDataSet As ESRI.ArcGIS.Geodatabase.IDataset
-                    Dim theWorkspace As ESRI.ArcGIS.Geodatabase.IWorkspace
-                    Dim theFeatureWorkspace As ESRI.ArcGIS.Geodatabase.IFeatureWorkspace
+                ' Get reference to the Cancelled Numbers object table.
+                Dim theRow As ESRI.ArcGIS.Geodatabase.IRow
+                theFeature = DirectCast(obj, IFeature)
+                theTaxlotFClass = DirectCast(theFeature.Class, IFeatureClass)
+                theDataSet = DirectCast(theTaxlotFClass, IDataset)
+                theWorkspace = theDataSet.Workspace
+                theFeatureWorkspace = DirectCast(theWorkspace, IFeatureWorkspace)
 
-                    ' Get reference to the Cancelled Numbers object table.
-                    Dim theCancelledNumbersTable As ESRI.ArcGIS.Geodatabase.ITable
-                    Dim theRow As ESRI.ArcGIS.Geodatabase.IRow
-                    theFeature = DirectCast(obj, IFeature)
-                    theTaxlotFClass = DirectCast(theFeature.Class, IFeatureClass)
-                    theDataSet = DirectCast(theTaxlotFClass, IDataset)
-                    theWorkspace = theDataSet.Workspace
-                    theFeatureWorkspace = DirectCast(theWorkspace, IFeatureWorkspace)
+                ' Attempt to get a reference to the Cancelled Number table.
+                
+                ' Retrieve field positions.
+                Dim theTLTaxlotFldIdx As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+                Dim theTLMapNumberFldIdx As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.MapNumberField)
+                Dim theCNTaxlotFldIdx As Integer = CancelledNumbersTable.Table.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+                Dim theCNMapNumberFldIdx As Integer = CancelledNumbersTable.Table.FindField(EditorExtension.TaxLotSettings.MapNumberField)
 
-                    ' Attempt to get a reference to the Cancelled Number table.
-                    theCancelledNumbersTable = theFeatureWorkspace.OpenTable(EditorExtension.TableNamesSettings.CancelledNumbersTable)
-
-                    ' Retrieve field positions.
-                    Dim theTLTaxlotFldIdx As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-                    Dim theTLMapNumberFldIdx As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.MapNumberField)
-                    Dim theCNTaxlotFldIdx As Integer = theCancelledNumbersTable.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-                    Dim theCNMapNumberFldIdx As Integer = theCancelledNumbersTable.FindField(EditorExtension.TaxLotSettings.MapNumberField)
-
-                    ' If no null values, copy them to Cancelled numbers
-                    If Not IsDBNull(theFeature.Value(theTLTaxlotFldIdx)) And Not IsDBNull(theFeature.Value(theTLMapNumberFldIdx)) Then
-                        theRow = theCancelledNumbersTable.CreateRow
-                        theRow.Value(theCNTaxlotFldIdx) = theFeature.Value(theTLTaxlotFldIdx)
-                        theRow.Value(theCNMapNumberFldIdx) = theFeature.Value(theTLMapNumberFldIdx)
-                        theRow.Store()
-                    End If
+                ' If no null values, copy them to Cancelled numbers
+                If Not IsDBNull(theFeature.Value(theTLTaxlotFldIdx)) And Not IsDBNull(theFeature.Value(theTLMapNumberFldIdx)) Then
+                    theRow = CancelledNumbersTable.Table.CreateRow
+                    theRow.Value(theCNTaxlotFldIdx) = theFeature.Value(theTLTaxlotFldIdx)
+                    theRow.Value(theCNMapNumberFldIdx) = theFeature.Value(theTLMapNumberFldIdx)
+                    theRow.Store()
                 End If
 
             End If
@@ -666,46 +705,6 @@ Public NotInheritable Class EditorExtension
         Dim productCode As esriLicenseProductCode = theAoInitializeClass.InitializedProduct()
 
         Return (productCode = requiredProductCode)
-    End Function
-
-    Private Function hasRequiredDataForOnDeleteFeature() As Boolean
-
-        ' TEMPLATE: Const theFCName1 As String = "FeatureClassName1"  'TODO: Insert real fc name
-        ' TEMPLATE: Const theFC1FieldName1 As String = "FieldName1"  'TODO: Insert real field name
-        ' TEMPLATE: Const theFC1Name2 As String = "FieldName2"  'TODO: Insert real field name
-        ' TEMPLATE: Dim theFC1FieldNames As New List(Of String)
-        ' TEMPLATE: theFC1FieldNames.Add(theFC1FieldName1)
-        ' TEMPLATE: colFC1FieldNames.Add(theFC1FieldName2)
-
-        ' Set up to find the Taxlot feature class fields.
-        Dim theFCName As String = EditorExtension.TableNamesSettings.TaxLotFC
-        Dim TheFCFieldName1 As String = EditorExtension.TaxLotSettings.TaxlotField
-        Dim theFCFieldName2 As String = EditorExtension.TaxLotSettings.MapNumberField
-        Dim theFCFieldNames As New List(Of String)
-        theFCFieldNames.Add(TheFCFieldName1)
-        theFCFieldNames.Add(theFCFieldName2)
-
-        ' Set up to find the MapIndex feature class fields.
-        Dim theTableName As String = EditorExtension.TableNamesSettings.CancelledNumbersTable
-        ' TODO: [NIS] (1) Add a settings group for CancelledNumbers table field names?
-        ' TODO: [NIS] (2) Use CancelledNumbersSettings instead of TaxLotSettings below?
-        Dim theTableFieldName1 As String = EditorExtension.TaxLotSettings.TaxlotField
-        Dim theTableFieldName2 As String = EditorExtension.TaxLotSettings.MapNumberField
-        Dim theTableFieldNames As New List(Of String)
-        theTableFieldNames.Add(theTableFieldName1)
-        theTableFieldNames.Add(theTableFieldName2)
-
-        Dim foundAllFields As Boolean = True 'initial assumption
-        Const canLoadData As Boolean = True
-
-        'TEMPLATE: foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(theFCName1, theFC1FieldNames, canLoadData)
-        'TEMPLATE: foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(theFCName2, theFC2FieldNames, canLoadData)
-
-        foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(theFCName, theFCFieldNames, canLoadData)
-        foundAllFields = foundAllFields AndAlso TableHasRequiredFields(theTableName, theTableFieldNames, canLoadData)
-
-        Return foundAllFields
-
     End Function
 
 #End Region

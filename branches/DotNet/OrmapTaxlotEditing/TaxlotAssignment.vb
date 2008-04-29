@@ -36,11 +36,13 @@
 #End Region
 
 #Region "Imported Namespaces"
+Imports System.Drawing
+Imports System.Runtime.InteropServices
+Imports System.Windows.Forms
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Carto
-Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.Geodatabase
@@ -49,11 +51,6 @@ Imports OrmapTaxlotEditing.DataMonitor
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
-Imports System.Collections.Generic
-Imports System.Drawing
-Imports System.Runtime.InteropServices
-Imports System.Windows.Forms
-
 #End Region
 
 <ComVisible(True)> _
@@ -136,29 +133,6 @@ Public NotInheritable Class TaxlotAssignment
 
 #Region "Properties"
 
-    'Private _state As CommandStateType = CommandStateType.Disabled
-
-    'Public ReadOnly Property State() As CommandStateType
-    '    Get
-    '        Return _state
-    '    End Get
-    'End Property
-
-    'Private Sub setState(ByVal stateType As CommandStateType)
-    '    _state = stateType
-    'End Sub
-
-    'Private _canCheckIfEnabled As Boolean
-
-    'Public Property CanCheckIfEnabled() As Boolean
-    '    Set(ByVal value As Boolean)
-    '        _canCheckIfEnabled = value
-    '    End Set
-    '    Get
-    '        Return _canCheckIfEnabled
-    '    End Get
-    'End Property
-
     Private _incrementNumber As Integer
 
     Public ReadOnly Property IncrementNumber() As Integer
@@ -190,7 +164,7 @@ Public NotInheritable Class TaxlotAssignment
         End Set
     End Property
 
-    Private WithEvents _partnerTaxlotAssignmentForm As TaxlotAssignmentForm  ' TODO: [NIS] Is WithEvents needed here?
+    Private WithEvents _partnerTaxlotAssignmentForm As TaxlotAssignmentForm
 
     Friend ReadOnly Property PartnerTaxlotAssignmentForm() As TaxlotAssignmentForm
         Get
@@ -214,8 +188,6 @@ Public NotInheritable Class TaxlotAssignment
 #End Region
 
 #Region "Event Handlers"
-
-#Region "Partner Form Event Handlers"
 
     Private Sub PartnerTaxlotAssignmentForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.Load
 
@@ -289,89 +261,9 @@ Public NotInheritable Class TaxlotAssignment
 
 #End Region
 
-    '#Region "EditEvents Event Handlers"
-    '
-    '    Private Sub EditEvents_OnStartEditing() 'Implements ESRI.ArcGIS.Editor.IEditEvents.OnStartEditing
-    '        ' State Transistion E1
-    '        TransitionE1()
-    '    End Sub
-    '
-    '    Private Sub EditEvents_OnStopEditing(ByVal save As Boolean) 'Implements ESRI.ArcGIS.Editor.IEditEvents.OnStopEditing
-    '        ' State Transistion E2
-    '        TransitionE2()
-    '    End Sub
-    '
-    '#End Region
-    '
-    '#Region "ActiveViewEvents Event Handlers"
-    '
-    '    Public Sub ActiveViewEvents_FocusMapChanged() 'Implements ESRI.ArcGIS.Carto.IActiveViewEvents.FocusMapChanged
-    '        ' State Transistion E3
-    '        TransitionE3()
-    '    End Sub
-    '
-    '    Public Sub ActiveViewEvents_ItemAdded(ByVal Item As Object) 'Implements ESRI.ArcGIS.Carto.IActiveViewEvents.ItemAdded
-    '        ' State Transistion E3
-    '        TransitionE3()
-    '    End Sub
-    '
-    '    Public Sub ActiveViewEvents_ItemDeleted(ByVal Item As Object) 'Implements ESRI.ArcGIS.Carto.IActiveViewEvents.ItemDeleted
-    '        ' State Transistion E3
-    '        TransitionE3()
-    '    End Sub
-    '
-    '#End Region
-
-#End Region
-
 #Region "Methods"
 
-    'Private Function hasRequiredData() As Boolean
-
-    '    ' TEMPLATE: Const theFCName1 As String = "FeatureClassName1"  'TODO: Insert real fc name
-    '    ' TEMPLATE: Const theFC1FieldName1 As String = "FieldName1"  'TODO: Insert real field name
-    '    ' TEMPLATE: Const theFC1Name2 As String = "FieldName2"  'TODO: Insert real field name
-    '    ' TEMPLATE: Dim theFC1FieldNames As New List(Of String)
-    '    ' TEMPLATE: theFC1FieldNames.Add(theFC1FieldName1)
-    '    ' TEMPLATE: colFC1FieldNames.Add(theFC1FieldName2)
-
-    '    ' Set up to find the Taxlot feature class fields.
-    '    Dim theFCName1 As String = EditorExtension.TableNamesSettings.TaxLotFC
-    '    Dim theFC1FieldName1 As String = EditorExtension.TaxLotSettings.OrmapTaxlotField
-    '    Dim theFC1FieldName2 As String = EditorExtension.TaxLotSettings.OrmapMapNumberField
-    '    Dim theFC1FieldName3 As String = EditorExtension.TaxLotSettings.MapTaxlotField
-    '    Dim theFC1FieldName4 As String = EditorExtension.TaxLotSettings.TaxlotField
-    '    Dim theFC1FieldName5 As String = EditorExtension.TaxLotSettings.AnomalyField
-    '    Dim theFC1FieldNamesList As New List(Of String)
-    '    theFC1FieldNamesList.Add(theFC1FieldName1)
-    '    theFC1FieldNamesList.Add(theFC1FieldName2)
-    '    theFC1FieldNamesList.Add(theFC1FieldName3)
-    '    theFC1FieldNamesList.Add(theFC1FieldName4)
-    '    theFC1FieldNamesList.Add(theFC1FieldName5)
-
-    '    ' Set up to find the MapIndex feature class fields.
-    '    Dim theFCName2 As String = EditorExtension.TableNamesSettings.MapIndexFC
-    '    Dim theFC2FieldName1 As String = EditorExtension.MapIndexSettings.MapNumberField
-    '    Dim theFC2FieldName2 As String = EditorExtension.MapIndexSettings.MapScaleField  ' TODO: [NIS] Does the tool need this field?
-    '    Dim theFC2FieldNamesList As New List(Of String)
-    '    theFC2FieldNamesList.Add(theFC2FieldName1)
-    '    theFC2FieldNamesList.Add(theFC2FieldName2)
-
-    '    Dim foundAllFields As Boolean = True 'initial assumption
-    '    Const canLoadData As Boolean = True
-
-    '    'TEMPLATE: foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(fcName1, colFieldNames1, loadData)
-    '    'TEMPLATE: foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(fcName2, colFieldNames2, loadData)
-
-    '    foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(theFCName1, theFC1FieldNamesList, canLoadData)
-    '    foundAllFields = foundAllFields AndAlso FeatureClassHasRequiredFields(theFCName2, theFC2FieldNamesList, canLoadData)
-
-    '    Return foundAllFields
-
-    'End Function
-
-
-    Private Sub DoToolOperation(ByVal Button As ESRIMouseButtons, ByVal X As Integer, ByVal Y As Integer)
+    Friend Sub DoToolOperation(ByVal Button As ESRIMouseButtons, ByVal X As Integer, ByVal Y As Integer)
 
         Dim withinOperation As Boolean = False
 
@@ -385,18 +277,19 @@ Public NotInheritable Class TaxlotAssignment
             CheckValidDataProperties()
             If Not HasValidTaxlotData Then
                 MessageBox.Show("Unable to assign taxlot values to polygons." & vbNewLine & _
-                                "Valid Taxlot layer not found in the map.", _
+                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
                                 "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Try
             End If
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Unable to assign taxlot values to polygons." & vbNewLine & _
-                                "Valid MapIndex layer not found in the map.", _
+                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
                                 "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-            End If
-            If HasValidTaxlotData OrElse HasValidMapIndexData Then
                 Exit Try
             End If
-            
+
             ' If taxlot numbering is selected, then make sure value is numeric.
             Dim isTaxlotType As Boolean = (StrComp(Me.TaxlotType, TaxlotAssignment.taxlotNumberTypeTaxlot, CompareMethod.Text) = 0)
             If isTaxlotType Then
@@ -561,132 +454,7 @@ Public NotInheritable Class TaxlotAssignment
         End Try
     End Sub
 
-    'Private Sub initializeData()
-
-    '    ' Obtain references to feature layer feature classes
-    '    _theTaxlotFLayer = GetTaxlotFeatureLayer()
-    '    _theTaxlotFClass = _theTaxlotFLayer.FeatureClass
-    '    _theMapIndexFLayer = GetMapIndexFeatureLayer()
-    '    _theMapIndexFClass = _theMapIndexFLayer.FeatureClass
-
-    '    ' Get field indexes
-    '    With EditorExtension.TaxLotSettings
-
-    '        ' Find the ORMAP Taxlot field index
-    '        _theTLOrmapTaxlotNumberFldIdx = _theTaxlotFClass.FindField(.OrmapTaxlotField)
-    '        If _theTLOrmapTaxlotNumberFldIdx = FieldNotFoundIndex Then
-    '            ' TODO: [NIS] Raise exception?
-    '        End If
-
-    '        ' Find the ORMAP Map Number field index
-    '        _theTLOrmapMapNumberFldIdx = _theTaxlotFClass.FindField(.OrmapMapNumberField)
-    '        If _theTLOrmapMapNumberFldIdx = FieldNotFoundIndex Then
-    '            ' TODO: [NIS] Raise exception?
-    '        End If
-
-    '        ' Find the Map Taxlot field index
-    '        _theTLMapTaxlotFldIdx = _theTaxlotFClass.FindField(.MapTaxlotField)
-    '        If _theTLMapTaxlotFldIdx = FieldNotFoundIndex Then
-    '            ' TODO: [NIS] Raise exception?
-    '        End If
-
-    '        ' Find the Taxlot field index
-    '        _theTLTaxlotFldIdx = _theTaxlotFClass.FindField(.TaxlotField)
-    '        If _theTLTaxlotFldIdx = FieldNotFoundIndex Then
-    '            ' TODO: [NIS] Raise exception?
-    '        End If
-
-    '        ' Find the Anomaly field index
-    '        _theTLAnomalyFldIdx = _theTaxlotFClass.FindField(.AnomalyField)
-    '        If _theTLAnomalyFldIdx = FieldNotFoundIndex Then
-    '            ' TODO: [NIS] Raise exception?
-    '        End If
-
-    '    End With
-
-    'End Sub
-
 #End Region
-
-    '#Region "State Machine"
-    '
-    '    ' TODO: [NIS} Embed URL reference to statechart in the XML help for these methods.
-    '
-    '    Private Sub TransitionE1()
-    '        StateS1_2(StatePassageType.Exiting)
-    '        CondState1()
-    '    End Sub
-    '
-    '    Private Sub TransitionE2()
-    '        StateS1_1(StatePassageType.Exiting)
-    '        StateS1_2(StatePassageType.Entering)
-    '    End Sub
-    '
-    '    Private Sub TransitionE3()
-    '        StateS1(StatePassageType.Exiting)
-    '        CondState1()
-    '    End Sub
-    '
-    '    Private Sub StateS1(ByVal statePassage As StatePassageType)
-    '        Select Case statePassage
-    '            Case StatePassageType.Entering
-    '                ' Do actions
-    '                ' (none)
-    '                ' Do substate transitions
-    '                StateS1_2(StatePassageType.Entering)
-    '            Case StatePassageType.Exiting
-    '                ' Do actions
-    '                ' (none)
-    '                ' Do substate transitions
-    '                StateS1_1(StatePassageType.Exiting)
-    '                StateS1_2(StatePassageType.Exiting)
-    '        End Select
-    '    End Sub
-    '
-    '    Private Sub StateS1_1(ByVal statePassage As StatePassageType)
-    '        '[Tool Enabled...]
-    '        Select Case statePassage
-    '            Case StatePassageType.Entering
-    '                setState(CommandStateType.Enabled)
-    '                ' Do actions
-    '                ' (none)
-    '                ' Do substate transitions
-    '                ' (none)
-    '            Case StatePassageType.Exiting
-    '                ' Do actions
-    '                ' (none)
-    '                ' Do substate transitions
-    '                ' (none)
-    '        End Select
-    '    End Sub
-    '
-    '    Private Sub StateS1_2(ByVal statePassage As StatePassageType)
-    '        '[Tool Disabled...]
-    '        Select Case statePassage
-    '            Case StatePassageType.Entering
-    '                setState(CommandStateType.Disabled)
-    '                ' Do actions
-    '                ' (none)
-    '                ' Do substate transitions
-    '                ' (none)
-    '            Case StatePassageType.Exiting
-    '                ' Do actions
-    '                ' (none)
-    '                ' Do substate transitions
-    '                ' (none)
-    '        End Select
-    '    End Sub
-    '
-    '    Private Sub CondState1()
-    '        ' Evaluate condition
-    '        If hasRequiredData() Then
-    '            StateS1_1(StatePassageType.Entering)
-    '        Else
-    '            StateS1_2(StatePassageType.Entering)
-    '        End If
-    '    End Sub
-    '
-    '#End Region
 
 #End Region
 
@@ -694,6 +462,10 @@ Public NotInheritable Class TaxlotAssignment
 
 #Region "Properties"
 
+    ''' <summary>
+    ''' Called by ArcMap once per second to check if the command is enabled.
+    ''' </summary>
+    ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
     Public Overrides ReadOnly Property Enabled() As Boolean
         Get
             Dim canEnable As Boolean
@@ -717,11 +489,12 @@ Public NotInheritable Class TaxlotAssignment
 
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
+
         End Try
     End Sub
 
     ''' <summary>
-    ''' Occurs when this command is created.
+    ''' Called by ArcMap when this command is created.
     ''' </summary>
     ''' <param name="hook">A generic <c>Object</c> hook to an instance of the application.</param>
     ''' <remarks>The application hook may not point to an <c>IMxApplication</c> object.</remarks>
@@ -747,11 +520,12 @@ Public NotInheritable Class TaxlotAssignment
 
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
+
         End Try
     End Sub
 
     ''' <summary>
-    ''' This method is called when a mouse button is pressed down, when this tool is active. 
+    ''' Called by ArcMap when a mouse button is pressed down (when this tool is active). 
     ''' </summary>
     ''' <param name="Button">Specifies which mouse button is pressed; 1 for the left mouse button, 2 for the right mouse button, and 4 for the middle mouse button.</param>
     ''' <param name="Shift">Specifies an integer corresponding to the state of the SHIFT (bit 0), CTRL (bit 1) and ALT (bit 2) keys. When none, some, or all of these keys are pressed none, some, or all the bits get set. These bits correspond to the values 1, 2, and 4, respectively. For example, if both SHIFT and ALT were pressed, Shift would be 5.</param>

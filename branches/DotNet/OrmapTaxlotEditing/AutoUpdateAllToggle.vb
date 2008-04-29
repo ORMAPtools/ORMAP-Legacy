@@ -42,7 +42,6 @@ Imports System.Windows.Forms
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
-Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.Framework
 #End Region
 
@@ -111,6 +110,10 @@ Public NotInheritable Class AutoUpdateAllToggle
 
 #Region "Properties"
 
+    ''' <summary>
+    ''' Called by ArcMap once per second to check if the command is enabled.
+    ''' </summary>
+    ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
     Public Overrides ReadOnly Property Enabled() As Boolean
         Get
             If EditorExtension.AllowedToAutoUpdateAllFields Then

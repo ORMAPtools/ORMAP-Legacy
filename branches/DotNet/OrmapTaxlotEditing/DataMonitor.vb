@@ -109,6 +109,18 @@ Public NotInheritable Class DataMonitor
         _taxlotFeatureLayer = value
     End Sub
 
+    Private Shared _cancelledNumbersTable As IStandaloneTable
+
+    Friend Shared ReadOnly Property CancelledNumbersTable() As IStandaloneTable
+        Get
+            Return _cancelledNumbersTable
+        End Get
+    End Property
+
+    Private Shared Sub setCancelledNumbersTable(ByVal value As IStandaloneTable)
+        _cancelledNumbersTable = value
+    End Sub
+
     Private Shared _hasValidMapIndexData As Boolean = False
 
     Friend Shared ReadOnly Property HasValidMapIndexData() As Boolean
@@ -133,6 +145,18 @@ Public NotInheritable Class DataMonitor
         _hasValidTaxlotData = value
     End Sub
 
+    Private Shared _hasValidCancelledNumbersTable As Boolean = False
+
+    Friend Shared ReadOnly Property HasValidCancelledNumbersTableData() As Boolean
+        Get
+            Return _hasValidCancelledNumbersTable
+        End Get
+    End Property
+
+    Friend Shared Sub SetHasValidCancelledNumbersTable(ByVal value As Boolean)
+        _hasValidCancelledNumbersTable = value
+    End Sub
+
 #End Region
 
 #Region "Event Handlers (none)"
@@ -147,6 +171,9 @@ Public NotInheritable Class DataMonitor
         ' Taxlots
         SetHasValidTaxlotData(False)
         setTaxlotFeatureLayer(Nothing)
+        ' CancelledNumbers
+        SetHasValidCancelledNumbersTable(False)
+        setCancelledNumbersTable(Nothing)
     End Sub
 
     Friend Shared Sub CheckValidDataProperties()
@@ -162,6 +189,13 @@ Public NotInheritable Class DataMonitor
         If HasValidTaxlotData Then
             If TaxlotFeatureLayer Is Nothing Then
                 setTaxlotFeatureLayer(FindDataLayerInMap(EditorExtension.TableNamesSettings.TaxLotFC))
+            End If
+        End If
+        ' CancelledNumbersTable status and table properties
+        SetHasValidCancelledNumbersTable(CheckData(ESRIClassType.ObjectClass, EditorExtension.TableNamesSettings.CancelledNumbersTable))
+        If HasValidCancelledNumbersTableData Then
+            If CancelledNumbersTable Is Nothing Then
+                setCancelledNumbersTable(FindDataTableInMap(EditorExtension.TableNamesSettings.CancelledNumbersTable))
             End If
         End If
     End Sub
@@ -224,7 +258,7 @@ Public NotInheritable Class DataMonitor
     Private Shared Function validateData(ByVal classType As ESRIClassType, ByVal className As String) As Boolean
 
         Dim isValid As Boolean = False
-        
+
         Try
             If classType = ESRIClassType.FeatureClass Then
 
@@ -302,30 +336,6 @@ Public NotInheritable Class DataMonitor
                 End Select
 
             End If
-
-        Catch ex As Exception
-            MessageBox.Show(ex.ToString)
-
-        End Try
-
-    End Function
-
-    Private Shared Function matchesFieldSettings(ByVal theFeatureClass As IClass, ByVal theSPC As SettingsPropertyCollection) As Boolean
-        Try
-            If theSPC.Count > 0 Then
-                Dim foundAllFields As Boolean = True
-                Dim theSPCEnumerator As System.Collections.IEnumerator = theSPC.GetEnumerator
-                theSPCEnumerator.Reset()
-                While theSPC.GetEnumerator.MoveNext()
-                    Dim x As Object = theSPC.GetEnumerator.Current
-                    foundAllFields = foundAllFields AndAlso (theFeatureClass.FindField(DirectCast(x, SettingsProperty).DefaultValue.ToString) <> FieldNotFoundIndex)
-                End While
-                Return foundAllFields
-            Else
-                '[There are no settings to check...]
-                ' TODO: [NIS] Throw an exception - settings are missing!
-            End If
-            Return False
 
         Catch ex As Exception
             MessageBox.Show(ex.ToString)

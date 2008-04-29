@@ -38,14 +38,14 @@
 #Region "Imported Namespaces"
 Imports System.Drawing
 Imports System.Runtime.InteropServices
+Imports System.Windows.Forms
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
-Imports ESRI.ArcGIS.Editor
-Imports ESRI.ArcGIS.Framework
-Imports System.Windows.Forms
-Imports ESRI.ArcGIS.Geodatabase
 Imports ESRI.ArcGIS.Carto
+Imports ESRI.ArcGIS.Framework
+Imports ESRI.ArcGIS.Geodatabase
+Imports OrmapTaxlotEditing.DataMonitor
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
@@ -57,8 +57,7 @@ ProgId("ORMAPTaxlotEditing.LocateFeature")> _
 Public NotInheritable Class LocateFeature
     Inherits BaseCommand
 
-#Region "Class-Level Constants And Enumerations"
-    ' None
+#Region "Class-Level Constants And Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"
@@ -105,16 +104,23 @@ Public NotInheritable Class LocateFeature
 
 #Region "Properties"
 
-    Private _partnerLocateFeatureForm As LocateFeatureForm
+    Private WithEvents _partnerLocateFeatureForm As LocateFeatureForm
 
-    Friend Property PartnerTaxlotAssignmentForm() As LocateFeatureForm
+    Friend ReadOnly Property PartnerLocateFeatureForm() As LocateFeatureForm
         Get
             Return _partnerLocateFeatureForm
         End Get
-        Set(ByVal value As LocateFeatureForm)
-            _partnerLocateFeatureForm =  value
-        End Set
     End Property
+
+    Private Sub setPartnerLocateFeatureForm(ByRef value As LocateFeatureForm)
+        If value IsNot Nothing Then
+            _partnerLocateFeatureForm = value
+            ' Subscribe to partner form events.
+            AddHandler _partnerLocateFeatureForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
+            AddHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
+            AddHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
+        End If
+    End Sub
 
 #End Region
 
@@ -122,10 +128,10 @@ Public NotInheritable Class LocateFeature
 
     Private Sub PartnerTaxlotAssignmentForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.Load
 
-        With PartnerTaxlotAssignmentForm
+        With PartnerLocateFeatureForm
 
             If .uxMapnumber.Items.Count = 0 Then '-- Only load the text box the first time the tool is run.
-                Dim mapIndexFClass As IFeatureClass = GetMapIndexFeatureLayer.FeatureClass
+                Dim mapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
                 Dim theQueryFilter As IQueryFilter = New QueryFilter
                 theQueryFilter.SubFields = "DISTINCT(" & EditorExtension.MapIndexSettings.MapNumberField & ")"
 
@@ -147,7 +153,7 @@ Public NotInheritable Class LocateFeature
         Dim mapNumber As String = Nothing
         Dim taxlot As String = Nothing
 
-        Dim uxMapnumber As ComboBox = PartnerTaxlotAssignmentForm.uxMapnumber
+        Dim uxMapnumber As ComboBox = PartnerLocateFeatureForm.uxMapnumber
         If uxMapnumber.FindStringExact(uxMapnumber.Text) = -1 Then
             MessageBox.Show("Invalid MapNumber.  Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
@@ -155,7 +161,7 @@ Public NotInheritable Class LocateFeature
             mapNumber = uxMapnumber.Text.Trim
         End If
 
-        Dim uxTaxlot As TextBox = PartnerTaxlotAssignmentForm.uxTaxlot
+        Dim uxTaxlot As TextBox = PartnerLocateFeatureForm.uxTaxlot
         If uxTaxlot.Enabled And uxTaxlot.Text.Trim <> "" Then
             taxlot = uxTaxlot.Text.Trim
         End If
@@ -164,11 +170,11 @@ Public NotInheritable Class LocateFeature
         Dim theXFlayer As IFeatureLayer = Nothing '-- Set as either the MapIndex or Taxlot Feature Layer.
 
         If taxlot Is Nothing Then '-- Must be MapIndex Feature Layer.
-            theXFlayer = GetMapIndexFeatureLayer()
+            theXFlayer = MapIndexFeatureLayer
             theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField
             theQueryFilter.WhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "]='" & mapNumber & "'"
         Else '-- Taxlot Feature Layer.
-            theXFlayer = GetTaxlotFeatureLayer()
+            theXFlayer = MapIndexFeatureLayer
             theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField & "," & EditorExtension.TaxLotSettings.TaxlotField
             theQueryFilter.WhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "]='" & mapNumber & "' and [" & EditorExtension.TaxLotSettings.TaxlotField & "]='" & taxlot & "'"
         End If
@@ -195,7 +201,34 @@ Public NotInheritable Class LocateFeature
 #End Region
 
 #Region "Methods"
-    ' None
+
+    Friend Sub DoButtonOperation()
+
+        Try
+            ' Check for valid data
+            CheckValidDataProperties()
+            If Not HasValidMapIndexData Then
+                MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
+                                "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Try
+            End If
+
+            If Not HasValidTaxlotData Then
+                PartnerLocateFeatureForm.uxTaxlot.Enabled = False
+            Else
+                PartnerLocateFeatureForm.uxTaxlot.Enabled = True
+            End If
+
+            PartnerLocateFeatureForm.ShowDialog()
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+
+        End Try
+
+    End Sub
+
 #End Region
 
 #End Region
@@ -204,6 +237,10 @@ Public NotInheritable Class LocateFeature
 
 #Region "Properties"
 
+    ''' <summary>
+    ''' Called by ArcMap once per second to check if the command is enabled.
+    ''' </summary>
+    ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
     Public Overrides ReadOnly Property Enabled() As Boolean
         Get
             Dim canEnable As Boolean
@@ -216,17 +253,20 @@ Public NotInheritable Class LocateFeature
 
 #Region "Methods"
 
+    ''' <summary>
+    ''' Called by ArcMap when this command is created.
+    ''' </summary>
+    ''' <param name="hook">A generic <c>Object</c> hook to an instance of the application.</param>
+    ''' <remarks>The application hook may not point to an <c>IMxApplication</c> object.</remarks>
     Public Overrides Sub OnCreate(ByVal hook As Object)
+
         If Not hook Is Nothing Then
             _application = DirectCast(hook, IApplication)
 
             'Disable if it is not ArcMap
             If TypeOf hook Is IMxApplication Then
                 MyBase.m_enabled = True
-                PartnerTaxlotAssignmentForm = New LocateFeatureForm
-                AddHandler _partnerLocateFeatureForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
-                AddHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
-                AddHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
+                setPartnerLocateFeatureForm(New LocateFeatureForm)
             Else
                 MyBase.m_enabled = False
             End If
@@ -238,27 +278,7 @@ Public NotInheritable Class LocateFeature
 
     Public Overrides Sub OnClick()
 
-        Try
-            Dim theMapIndexFLayer As IFeatureLayer = GetMapIndexFeatureLayer()
-            Dim theTaxlotFLayer As IFeatureLayer = GetTaxlotFeatureLayer()
-
-            If theMapIndexFLayer Is Nothing Then
-                MessageBox.Show("Please Load the " & EditorExtension.TableNamesSettings.MapIndexFC & " feature class into your Table of Contents", "Unable to Find " & EditorExtension.TableNamesSettings.MapIndexFC, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
-                Exit Try
-            End If
-
-            If theTaxlotFLayer Is Nothing Then
-                PartnerTaxlotAssignmentForm.uxTaxlot.Enabled = False
-            Else
-                PartnerTaxlotAssignmentForm.uxTaxlot.Enabled = True
-            End If
-
-            PartnerTaxlotAssignmentForm.ShowDialog()
-
-        Catch ex As Exception
-            ' TODO [SC] Add better exception handling or reporting.
-            MessageBox.Show(ex.Message)
-        End Try
+        DoButtonOperation()
 
     End Sub
 
@@ -266,8 +286,7 @@ Public NotInheritable Class LocateFeature
 
 #End Region
 
-#Region "Implemented Interface Members"
-    ' None
+#Region "Implemented Interface Members (none)"
 #End Region
 
 #Region "Other Members"

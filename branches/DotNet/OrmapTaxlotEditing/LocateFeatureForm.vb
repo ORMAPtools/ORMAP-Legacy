@@ -35,8 +35,19 @@
 'Date of Last Change: $Date: 2008-03-03 00:31:56 -0800 (Mon, 03 Mar 2008) $
 #End Region
 
-' TODO: [SC] Add Regions
+#Region "Imported Namespaces"
+Imports System.Runtime.InteropServices
+#End Region
 
+<ComVisible(False)> _
 Public Class LocateFeatureForm
+
+    Public Sub New()
+        ' This call is required by the Windows Form Designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
+    End Sub
 
 End Class

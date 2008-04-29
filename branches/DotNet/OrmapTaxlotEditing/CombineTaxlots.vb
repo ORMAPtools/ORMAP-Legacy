@@ -110,6 +110,10 @@ Public NotInheritable Class CombineTaxlots
 
 #Region "Properties"
 
+    ''' <summary>
+    ''' Called by ArcMap once per second to check if the command is enabled.
+    ''' </summary>
+    ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
     Public Overrides ReadOnly Property Enabled() As Boolean
         Get
             Dim canEnable As Boolean

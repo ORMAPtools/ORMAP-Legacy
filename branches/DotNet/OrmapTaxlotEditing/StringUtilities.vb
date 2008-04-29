@@ -58,7 +58,7 @@ Public NotInheritable Class StringUtilities
                 'Dim sb As New StringBuilder("0", 5)
                 'sb.Insert(width - currentString.Length, currentString)
                 'Return sb.ToString
-                'TODO: [NIS] Above code does not work. Ask Jim why PadLeft was not used here for a while...
+                'TODO: [NIS] Above code does not work. Jim, why was PadLeft was not used here for a while?
                 Return currentString.PadLeft(width, "0"c)
             Else
                 Return currentString
