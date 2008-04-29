@@ -1,6 +1,6 @@
 #Region "Copyright 2008 ORMAP Tech Group"
 
-' File:  TaxlotAssignmentForm.vb
+' File:  LocateFeatureForm.vb
 '
 ' Original Author:  OPET.NET Migration Team (Shad Campbell, James Moore, 
 '                   Nick Seigal)
