@@ -554,11 +554,10 @@ Public NotInheritable Class SpatialUtilities
     ''' <returns>A string the represents a properly formatted Map Suffix.</returns>
     ''' <remarks></remarks>
     Public Shared Function GetMapSuffixNum(ByVal theFeature As IFeature) As String
-        Dim returnValue As New String("0"c, 3)
 
         Try
-            Dim theTaxlotMapSuffixFldIdx As Integer
-            theTaxlotMapSuffixFldIdx = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixNumberField)
+            Dim returnValue As New String("0"c, 3)
+            Dim theTaxlotMapSuffixFldIdx As Integer = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixNumberField)
             If theTaxlotMapSuffixFldIdx > -1 Then
                 If Not IsDBNull(theFeature.Value(theTaxlotMapSuffixFldIdx)) Then
                     returnValue = CStr(theFeature.Value(theTaxlotMapSuffixFldIdx))
@@ -585,13 +584,21 @@ Public NotInheritable Class SpatialUtilities
     ''' <returns>A string that represents a properly formatted Map Suffix Type.</returns>
     ''' <remarks>A proper map suffix type is one character.</remarks>
     Public Shared Function GetMapSuffixType(ByRef theFeature As IFeature) As String
-        Dim returnValue As New String("0"c, 1)
         Try
+            Dim returnValue As New String("0"c, 1)
             Dim theTaxlotMapTypeFldIdx As Integer
             theTaxlotMapTypeFldIdx = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixTypeField)
             If theTaxlotMapTypeFldIdx > -1 Then
                 If Not IsDBNull(theFeature.Value(theTaxlotMapTypeFldIdx)) Then
                     returnValue = CStr(theFeature.Value(theTaxlotMapTypeFldIdx))
+                    'verify that it is one digit
+                    If returnValue.Length > 1 Then
+                        returnValue.PadLeft(1, "0"c)
+                    End If
+                    'verify that it is not more than 1 digit
+                    If returnValue.Length > 1 Then
+                        returnValue = returnValue.Substring(0, 1)
+                    End If
                 End If
                 'verify that it is exactly one digit
                 If returnValue.Length < 1 Then
