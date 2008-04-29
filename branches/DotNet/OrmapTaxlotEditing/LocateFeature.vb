@@ -129,10 +129,11 @@ Public NotInheritable Class LocateFeature
     Private Sub PartnerTaxlotAssignmentForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.Load
 
         With PartnerLocateFeatureForm
-
+            
             If .uxMapnumber.Items.Count = 0 Then '-- Only load the text box the first time the tool is run.
                 Dim mapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
                 Dim theQueryFilter As IQueryFilter = New QueryFilter
+                ' TODO: [ALL] Fix WhereClause issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
                 theQueryFilter.SubFields = "DISTINCT(" & EditorExtension.MapIndexSettings.MapNumberField & ")"
 
                 Dim theFeatCursor As IFeatureCursor = mapIndexFClass.Search(theQueryFilter, False)
