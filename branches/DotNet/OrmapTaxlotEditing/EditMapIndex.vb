@@ -78,9 +78,7 @@ Public NotInheritable Class EditMapIndex
         MyBase.m_name = MyBase.m_category & "_EditMapIndex"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
 
         Try
-            ' Set the bitmap based on the name of the class.
-            Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
-            MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
+            MyBase.m_bitmap = My.Resources.ORMAPToolBarResource.EditMapIndex
         Catch ex As ArgumentException
             Trace.WriteLine(ex.Message, "Invalid Bitmap")
         End Try
