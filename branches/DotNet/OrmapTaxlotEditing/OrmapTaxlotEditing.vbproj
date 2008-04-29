@@ -116,6 +116,12 @@
     <Compile Include="LocateFeatureForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="MapIndexForm.Designer.vb">
+      <DependentUpon>MapIndexForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MapIndexForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ORMapNum.vb" />
     <Compile Include="OrmapSettings.vb" />
     <Compile Include="OrmapSettingsForm.Designer.vb">
@@ -123,6 +129,11 @@
     </Compile>
     <Compile Include="OrmapSettingsForm.vb">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ORMAPToolBarResource.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ORMAPToolBarResource.resx</DependentUpon>
     </Compile>
     <Compile Include="settings\AllTablesSettings.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -312,6 +323,10 @@
       <DependentUpon>LocateFeatureForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="MapIndexForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MapIndexForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="OrmapSettingsForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>OrmapSettingsForm.vb</DependentUpon>
@@ -329,6 +344,12 @@
     <Content Include="license\SOURCE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="ORMAPToolBarResource.resx">
+      <SubType>Designer</SubType>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ORMAPToolBarResource.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="help\" />
