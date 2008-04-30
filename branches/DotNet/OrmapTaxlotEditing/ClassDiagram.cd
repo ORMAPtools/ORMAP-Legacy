@@ -2,7 +2,7 @@
 <ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
   <Font Name="Tahoma" Size="8.25" />
   <Comment CommentText="ORMAP Taxlot Editing Toolbar&#xD;&#xA;Copyright 2008 ORMAP Tech Group&#xD;&#xA;&#xD;&#xA;Original Authors:  OPET.NET Migration Team (Shad Campbell, James Moore, Nick Seigal)&#xD;&#xA;&#xD;&#xA;Copyright Holder:  ORMAP Tech Group  &#xD;&#xA;Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at opet-developers@lists.sourceforge.net&#xD;&#xA;&#xD;&#xA;ORMAP Taxlot Editing Toolbar is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.&#xD;&#xA;&#xD;&#xA;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License located in the COPYING.txt file for more details.&#xD;&#xA;&#xD;&#xA;You should have received a copy of the GNU General Public License along with the ORMAP Taxlot Editing Toolbar; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.&#xD;&#xA;">
-    <Position X="7.98" Y="7.33" Height="2.979" Width="5.481" />
+    <Position X="6.042" Y="5.955" Height="2.979" Width="5.481" />
   </Comment>
   <Class Name="OrmapTaxlotEditing.AddArrows">
     <Position X="8.5" Y="0.75" Width="1.5" />
@@ -30,8 +30,20 @@
     <Position X="12" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>EditMapIndex.vb</FileName>
-      <HashCode>AAAAAAAgAAAEAIAAAADAAAACgCAAAAAAACAgAABAAAA=</HashCode>
+      <HashCode>IYAAAAAiAAAEBJEgAADAAAAigDEAAAAEQKAgJABIAAA=</HashCode>
     </TypeIdentifier>
+    <NestedTypes>
+      <Struct Name="OrmapTaxlotEditing.EditMapIndex.TaxlotFieldMap" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>EditMapIndex.vb</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="OrmapTaxlotEditing.EditMapIndex.MapIndexFieldMap" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>EditMapIndex.vb</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
     <InheritanceLine Type="ESRI.ArcGIS.ADF.BaseClasses.BaseCommand" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="19.062" Y="0.75" />
@@ -49,7 +61,7 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="OrmapTaxlotEditing.LocateFeature" Collapsed="true">
+  <Class Name="OrmapTaxlotEditing.LocateFeature">
     <Position X="13.75" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>LocateFeature.vb</FileName>
@@ -74,7 +86,7 @@
       <Compartment Name="Private" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="OrmapTaxlotEditing.TaxlotAssignment" Collapsed="true">
+  <Class Name="OrmapTaxlotEditing.TaxlotAssignment">
     <Position X="15.5" Y="0.75" Width="2" />
     <TypeIdentifier>
       <FileName>TaxlotAssignment.vb</FileName>
