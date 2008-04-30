@@ -36,14 +36,19 @@
 #End Region
 
 #Region "Imported Namespaces"
+Imports System
+Imports System.Drawing
+Imports System.Runtime.InteropServices
+Imports System.Windows.Forms
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.Framework
-Imports System
-Imports System.Drawing
-Imports System.Runtime.InteropServices
+Imports OrmapTaxlotEditing.DataMonitor
+Imports OrmapTaxlotEditing.SpatialUtilities
+Imports OrmapTaxlotEditing.StringUtilities
+Imports OrmapTaxlotEditing.Utilities
 #End Region
 
 <ComVisible(True)> _
@@ -55,8 +60,7 @@ Public NotInheritable Class EditMapIndex
     ' see http://msdn2.microsoft.com/en-us/library/system.idisposable(VS.80).aspx
     'Implements IDisposable 
 
-#Region "Class-Level Constants And Enumerations"
-    ' None
+#Region "Class-Level Constants And Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"
@@ -97,16 +101,20 @@ Public NotInheritable Class EditMapIndex
 
 #End Region
 
-#Region "Properties"
-    ' None
+#Region "Properties (none)"
 #End Region
 
-#Region "Event Handlers"
-    ' None
+#Region "Event Handlers (none)"
 #End Region
 
 #Region "Methods"
-    ' None
+
+    Friend Sub DoButtonOperation()
+
+        ' TODO: JWM Implement this like LocateFeature.DoButtonOperation (Nick).
+
+    End Sub
+
 #End Region
 
 #End Region
@@ -131,6 +139,11 @@ Public NotInheritable Class EditMapIndex
 
 #Region "Methods"
 
+    ''' <summary>
+    ''' Called by ArcMap when this command is created.
+    ''' </summary>
+    ''' <param name="hook">A generic <c>Object</c> hook to an instance of the application.</param>
+    ''' <remarks>The application hook may not point to an <c>IMxApplication</c> object.</remarks>
     Public Overrides Sub OnCreate(ByVal hook As Object)
         If Not hook Is Nothing Then
             _application = DirectCast(hook, IApplication)
@@ -156,8 +169,7 @@ Public NotInheritable Class EditMapIndex
 
 #End Region
 
-#Region "Implemented Interface Members"
-    ' None
+#Region "Implemented Interface Members (none)"
 #End Region
 
 #Region "Other Members"

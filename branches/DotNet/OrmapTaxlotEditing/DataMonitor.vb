@@ -231,7 +231,7 @@ Public NotInheritable Class DataMonitor
 
     Private Shared Function loadOptionSuccessful(ByVal classType As ESRIClassType, ByVal className As String) As Boolean
         ' Offer load option
-        If MessageBox.Show("Dataset " & className & " not found in the map. Load it?", "Load Data", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.No Then
+        If MessageBox.Show("Dataset " & className & " not found in the map. Load it?", "Load Data", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.OK Then
             Return loadDataIntoMap(classType, className)
         Else
             Return False
@@ -257,7 +257,7 @@ Public NotInheritable Class DataMonitor
     ''' and required fields.</remarks>
     Private Shared Function validateData(ByVal classType As ESRIClassType, ByVal className As String) As Boolean
 
-        Dim isValid As Boolean = False
+        Dim isValid As Boolean = False 'initialize
 
         Try
             If classType = ESRIClassType.FeatureClass Then
@@ -265,26 +265,31 @@ Public NotInheritable Class DataMonitor
                 Dim theFeatureClass As IFeatureClass = FindDataLayerInMap(className).FeatureClass
                 Select Case className
                     Case EditorExtension.TableNamesSettings.CartographicLinesFC
-                        isValid = theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolyline
+                        ' TODO: [NIS] MapNumber and MapScale should be added to CartographicLinesSettings.
+                        ' TODO: [NIS] Add MapNumber and MapScale validation here.
+                        isValid = (theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolyline)
                         With EditorExtension.CartographicLinesSettings
                             isValid = isValid AndAlso theFeatureClass.FindField(.LineTypeField) <> FieldNotFoundIndex
                         End With
 
                     Case EditorExtension.TableNamesSettings.MapIndexFC()
-                        isValid = theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolygon
+                        isValid = (theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolygon)
                         With EditorExtension.MapIndexSettings
-                            isValid = isValid AndAlso theFeatureClass.FindField(.CountyField) <> FieldNotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapScaleField) <> FieldNotFoundIndex
                             isValid = isValid AndAlso theFeatureClass.FindField(.MapNumberField) <> FieldNotFoundIndex
                             isValid = isValid AndAlso theFeatureClass.FindField(.OrmapMapNumberField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.MapScaleField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixTypeField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixNumberField) <> FieldNotFoundIndex
+                            ' TODO: [NIS] CityName should be added to MapIndexSettings. See ORMAP spec note from 1/13/06.
+                            ' CityName (not in settings)
                             isValid = isValid AndAlso theFeatureClass.FindField(.PageNumberField) <> FieldNotFoundIndex
                             isValid = isValid AndAlso theFeatureClass.FindField(.ReliabilityCodeField) <> FieldNotFoundIndex
+                            ' TODO: [NIS] County, MapSuffixType and MapSuffixNum should be removed from MapIndexSettings. See ORMAP spec note from 2/10/05.
+                            'isValid = isValid AndAlso theFeatureClass.FindField(.CountyField) <> FieldNotFoundIndex
+                            'isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixTypeField) <> FieldNotFoundIndex
+                            'isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixNumberField) <> FieldNotFoundIndex
                         End With
 
                     Case EditorExtension.TableNamesSettings.TaxLotFC
-                        isValid = theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolygon
+                        isValid = (theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolygon)
                         With EditorExtension.TaxLotSettings
                             isValid = isValid AndAlso theFeatureClass.FindField(.CountyField) <> FieldNotFoundIndex
                             isValid = isValid AndAlso theFeatureClass.FindField(.TownshipField) <> FieldNotFoundIndex
@@ -301,7 +306,6 @@ Public NotInheritable Class DataMonitor
                             isValid = isValid AndAlso theFeatureClass.FindField(.MapNumberField) <> FieldNotFoundIndex
                             isValid = isValid AndAlso theFeatureClass.FindField(.TaxlotField) <> FieldNotFoundIndex
                             isValid = isValid AndAlso theFeatureClass.FindField(.MapTaxlotField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.MapTaxlotFormatMask) <> FieldNotFoundIndex
                             isValid = isValid AndAlso theFeatureClass.FindField(.SpecialInterestField) <> FieldNotFoundIndex
                             isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixNumberField) <> FieldNotFoundIndex
                             isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixTypeField) <> FieldNotFoundIndex
@@ -310,22 +314,39 @@ Public NotInheritable Class DataMonitor
                         End With
 
                     Case EditorExtension.TableNamesSettings.TaxLotLinesFC
-                        isValid = theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolygon
+                        isValid = (theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolygon)
                         With EditorExtension.TaxLotLinesSettings
+                            ' TODO: [NIS] MapNumber and MapScale should be added to TaxLotLinesSettings.
+                            ' TODO: [NIS] Add MapNumber and MapScale validation here.
                             isValid = isValid AndAlso theFeatureClass.FindField(.LineTypeField) <> FieldNotFoundIndex
+                        End With
+                        ' HACK: [NIS] Remove this with block in favor of validation based on TaxLotLinesSettings.
+                        With EditorExtension.MapIndexSettings
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapScaleField) <> FieldNotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapNumberField) <> FieldNotFoundIndex
                         End With
 
                     Case Else
-                        '[Not a class for which shape type matters...]
-                        '[No field names defined in settings...]
+                        '[Not an ORMAP feature class for which shape type matters...]
                         isValid = True
+                        '[No field names defined in settings...]
+                        ' TODO: [NIS] Create other settings files and connect them to the application in various places.
+                        ' TODO: [NIS] MapNumber and MapScale should be added to other settings files.
+                        ' TODO: [NIS] Add MapNumber and MapScale validation here.
+                        ' HACK: [NIS] Remove this with block in favor of validation based on TaxLotLinesSettings.
+                        With EditorExtension.MapIndexSettings
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapScaleField) <> FieldNotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapNumberField) <> FieldNotFoundIndex
+                        End With
                 End Select
 
             Else ' If classType = ESRIClassType.ObjectClass Then
                 Dim theTable As ITable = FindDataTableInMap(className).Table
                 Select Case className
+                    ' HACK: [NIS] Remove this with block in favor of validation based on CancelledNumbersTableSettings (when available).
                     Case EditorExtension.TableNamesSettings.CancelledNumbersTable
-                        ' TODO: [NIS] Use EditorExtension.CancelledNumbersSettings instead (when available)
+                        isValid = True
+                        ' TODO: [NIS] Create CancelledNumbersSettings file and connect it to the application in various places.
                         With EditorExtension.TaxLotSettings
                             isValid = isValid AndAlso theTable.FindField(.TaxlotField) <> FieldNotFoundIndex
                             isValid = isValid AndAlso theTable.FindField(.MapNumberField) <> FieldNotFoundIndex
@@ -336,6 +357,8 @@ Public NotInheritable Class DataMonitor
                 End Select
 
             End If
+
+            Return isValid
 
         Catch ex As Exception
             MessageBox.Show(ex.ToString)

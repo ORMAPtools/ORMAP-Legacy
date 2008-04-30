@@ -119,6 +119,11 @@ Public NotInheritable Class LocateFeature
             AddHandler _partnerLocateFeatureForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
             AddHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
             AddHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
+        Else
+            ' Unsubscribe to partner form events.
+            RemoveHandler _partnerLocateFeatureForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
+            RemoveHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
+            RemoveHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
         End If
     End Sub
 

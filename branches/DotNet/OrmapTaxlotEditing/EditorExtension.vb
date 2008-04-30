@@ -36,6 +36,10 @@
 #End Region
 
 #Region "Imported Namespaces"
+Imports System.Collections.Generic
+Imports system.Drawing
+Imports System.Windows.Forms
+Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.Carto
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Editor
@@ -46,10 +50,6 @@ Imports OrmapTaxlotEditing.DataMonitor
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
-Imports System
-Imports System.Collections.Generic
-Imports System.Windows.Forms
-Imports System.Runtime.InteropServices
 #End Region
 
 <ComVisible(True)> _
@@ -638,6 +638,7 @@ Public NotInheritable Class EditorExtension
             ' Unsubscribe to edit events.
             RemoveHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
             RemoveHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
+
             ' Unsubscribe to active view events.
             RemoveHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
             RemoveHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded

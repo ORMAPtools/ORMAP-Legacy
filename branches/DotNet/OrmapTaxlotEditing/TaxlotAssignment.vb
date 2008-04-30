@@ -182,6 +182,11 @@ Public NotInheritable Class TaxlotAssignment
             AddHandler _partnerTaxlotAssignmentForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
             AddHandler _partnerTaxlotAssignmentForm.uxHelp.Click, AddressOf uxHelp_Click
             AddHandler _partnerTaxlotAssignmentForm.uxType.SelectedValueChanged, AddressOf uxType_SelectedValueChanged
+        Else
+            ' Unsubscribe to partner form events.
+            RemoveHandler _partnerTaxlotAssignmentForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
+            RemoveHandler _partnerTaxlotAssignmentForm.uxHelp.Click, AddressOf uxHelp_Click
+            RemoveHandler _partnerTaxlotAssignmentForm.uxType.SelectedValueChanged, AddressOf uxType_SelectedValueChanged
         End If
     End Sub
 

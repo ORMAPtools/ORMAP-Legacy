@@ -102,7 +102,7 @@ Public NotInheritable Class PropertyPage
         _propertiesPageSite = value
     End Sub
 
-    Private WithEvents _partnerPropertiesForm As PropertiesForm  ' TODO: [NIS] Is WithEvents needed here?
+    Private WithEvents _partnerPropertiesForm As PropertiesForm
 
     Friend ReadOnly Property PartnerPropertiesForm() As PropertiesForm
         Get

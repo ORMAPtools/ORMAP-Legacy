@@ -32,26 +32,31 @@ Partial Class LocateFeatureForm
         Me.uxMapnumber.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
         Me.uxMapnumber.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxMapnumber.FormattingEnabled = True
-        Me.uxMapnumber.Location = New System.Drawing.Point(12, 34)
+        Me.uxMapnumber.Location = New System.Drawing.Point(9, 25)
+        Me.uxMapnumber.Margin = New System.Windows.Forms.Padding(2)
         Me.uxMapnumber.Name = "uxMapnumber"
-        Me.uxMapnumber.Size = New System.Drawing.Size(202, 24)
+        Me.uxMapnumber.Size = New System.Drawing.Size(126, 21)
         Me.uxMapnumber.Sorted = True
         Me.uxMapnumber.TabIndex = 0
         '
         'uxFind
         '
-        Me.uxFind.Location = New System.Drawing.Point(58, 125)
+        Me.uxFind.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.uxFind.Location = New System.Drawing.Point(8, 98)
+        Me.uxFind.Margin = New System.Windows.Forms.Padding(2)
         Me.uxFind.Name = "uxFind"
-        Me.uxFind.Size = New System.Drawing.Size(75, 27)
+        Me.uxFind.Size = New System.Drawing.Size(75, 23)
         Me.uxFind.TabIndex = 2
         Me.uxFind.Text = "Find"
         Me.uxFind.UseVisualStyleBackColor = True
         '
         'uxHelp
         '
-        Me.uxHelp.Location = New System.Drawing.Point(139, 125)
+        Me.uxHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.uxHelp.Location = New System.Drawing.Point(89, 98)
+        Me.uxHelp.Margin = New System.Windows.Forms.Padding(2)
         Me.uxHelp.Name = "uxHelp"
-        Me.uxHelp.Size = New System.Drawing.Size(75, 27)
+        Me.uxHelp.Size = New System.Drawing.Size(75, 23)
         Me.uxHelp.TabIndex = 3
         Me.uxHelp.Text = "Help"
         Me.uxHelp.UseVisualStyleBackColor = True
@@ -59,33 +64,36 @@ Partial Class LocateFeatureForm
         'MapnumberLabel
         '
         Me.MapnumberLabel.AutoSize = True
-        Me.MapnumberLabel.Location = New System.Drawing.Point(9, 14)
+        Me.MapnumberLabel.Location = New System.Drawing.Point(6, 9)
+        Me.MapnumberLabel.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.MapnumberLabel.Name = "MapnumberLabel"
-        Me.MapnumberLabel.Size = New System.Drawing.Size(93, 17)
+        Me.MapnumberLabel.Size = New System.Drawing.Size(71, 13)
         Me.MapnumberLabel.TabIndex = 4
         Me.MapnumberLabel.Text = "Map Number:"
         '
         'TaxlotLabel
         '
         Me.TaxlotLabel.AutoSize = True
-        Me.TaxlotLabel.Location = New System.Drawing.Point(12, 63)
+        Me.TaxlotLabel.Location = New System.Drawing.Point(6, 51)
+        Me.TaxlotLabel.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.TaxlotLabel.Name = "TaxlotLabel"
-        Me.TaxlotLabel.Size = New System.Drawing.Size(50, 17)
+        Me.TaxlotLabel.Size = New System.Drawing.Size(39, 13)
         Me.TaxlotLabel.TabIndex = 5
         Me.TaxlotLabel.Text = "Taxlot:"
         '
         'uxTaxlot
         '
-        Me.uxTaxlot.Location = New System.Drawing.Point(12, 83)
+        Me.uxTaxlot.Location = New System.Drawing.Point(9, 66)
+        Me.uxTaxlot.Margin = New System.Windows.Forms.Padding(2)
         Me.uxTaxlot.Name = "uxTaxlot"
-        Me.uxTaxlot.Size = New System.Drawing.Size(100, 22)
+        Me.uxTaxlot.Size = New System.Drawing.Size(74, 20)
         Me.uxTaxlot.TabIndex = 6
         '
         'LocateFeatureForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(235, 163)
+        Me.ClientSize = New System.Drawing.Size(173, 129)
         Me.Controls.Add(Me.uxFind)
         Me.Controls.Add(Me.uxHelp)
         Me.Controls.Add(Me.uxMapnumber)
@@ -93,6 +101,7 @@ Partial Class LocateFeatureForm
         Me.Controls.Add(Me.TaxlotLabel)
         Me.Controls.Add(Me.MapnumberLabel)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "LocateFeatureForm"
