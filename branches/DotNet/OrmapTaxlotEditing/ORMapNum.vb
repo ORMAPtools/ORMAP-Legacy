@@ -415,6 +415,7 @@ Public NotInheritable Class ORMapNum
     ''' ORMAP Number.
     ''' </summary>
     ''' <returns>Returns a properly formatted ORMAP Number.</returns>
+    ''' <remarks>This function returns the same values as the OrmapTaxlotNumber member function in the VB6 version of ORMAPNumber class</remarks>
     Public Function GetORMapNum() As String
         ' Creates a formatted ORMAP Map Number
         If IsValidNumber() Then
