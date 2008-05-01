@@ -30,7 +30,7 @@
     <Position X="12" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>EditMapIndex.vb</FileName>
-      <HashCode>IYAAAAAiAAAEBJEgAADAAAAigDEAAAAEQKAgJABIAAA=</HashCode>
+      <HashCode>K4BAEAAiAAQEBJFgAADIAgIiiDEAAAAERKAgPABYAAA=</HashCode>
     </TypeIdentifier>
     <NestedTypes>
       <Struct Name="OrmapTaxlotEditing.EditMapIndex.TaxlotFieldMap" Collapsed="true">
