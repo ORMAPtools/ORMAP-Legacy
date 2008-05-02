@@ -47,7 +47,7 @@ Partial Class LocateFeatureForm
         Me.uxFind.Name = "uxFind"
         Me.uxFind.Size = New System.Drawing.Size(75, 23)
         Me.uxFind.TabIndex = 2
-        Me.uxFind.Text = "Find"
+        Me.uxFind.Text = "&Find"
         Me.uxFind.UseVisualStyleBackColor = True
         '
         'uxHelp
@@ -58,7 +58,7 @@ Partial Class LocateFeatureForm
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
         Me.uxHelp.TabIndex = 3
-        Me.uxHelp.Text = "Help"
+        Me.uxHelp.Text = "&Help"
         Me.uxHelp.UseVisualStyleBackColor = True
         '
         'MapnumberLabel
@@ -91,6 +91,7 @@ Partial Class LocateFeatureForm
         '
         'LocateFeatureForm
         '
+        Me.AcceptButton = Me.uxFind
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(173, 129)

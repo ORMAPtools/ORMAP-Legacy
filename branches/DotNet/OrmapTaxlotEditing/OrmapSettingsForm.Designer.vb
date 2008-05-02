@@ -2150,9 +2150,9 @@ Partial Class OrmapSettingsForm
         'uxReload
         '
         Me.uxReload.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.uxReload.Location = New System.Drawing.Point(149, 3)
+        Me.uxReload.Location = New System.Drawing.Point(161, 3)
         Me.uxReload.Name = "uxReload"
-        Me.uxReload.Size = New System.Drawing.Size(67, 23)
+        Me.uxReload.Size = New System.Drawing.Size(73, 23)
         Me.uxReload.TabIndex = 1
         Me.uxReload.Text = "&Reload"
         '
@@ -2162,16 +2162,16 @@ Partial Class OrmapSettingsForm
         Me.uxSave.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.uxSave.Location = New System.Drawing.Point(3, 3)
         Me.uxSave.Name = "uxSave"
-        Me.uxSave.Size = New System.Drawing.Size(67, 23)
+        Me.uxSave.Size = New System.Drawing.Size(73, 23)
         Me.uxSave.TabIndex = 0
         Me.uxSave.Text = "&Save"
         '
         'uxReset
         '
         Me.uxReset.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.uxReset.Location = New System.Drawing.Point(222, 3)
+        Me.uxReset.Location = New System.Drawing.Point(241, 3)
         Me.uxReset.Name = "uxReset"
-        Me.uxReset.Size = New System.Drawing.Size(67, 23)
+        Me.uxReset.Size = New System.Drawing.Size(75, 23)
         Me.uxReset.TabIndex = 2
         Me.uxReset.Text = "Re&set"
         '
@@ -2198,28 +2198,28 @@ Partial Class OrmapSettingsForm
         '
         Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.ColumnCount = 4
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle)
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle)
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle)
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle)
         Me.TableLayoutPanel1.Controls.Add(Me.uxSave, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.uxCancel, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.uxReload, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.uxReset, 3, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(182, 480)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(154, 480)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(293, 29)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(320, 29)
         Me.TableLayoutPanel1.TabIndex = 4
         '
         'uxCancel
         '
         Me.uxCancel.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.uxCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.uxCancel.Location = New System.Drawing.Point(76, 3)
+        Me.uxCancel.Location = New System.Drawing.Point(82, 3)
         Me.uxCancel.Name = "uxCancel"
-        Me.uxCancel.Size = New System.Drawing.Size(67, 23)
+        Me.uxCancel.Size = New System.Drawing.Size(73, 23)
         Me.uxCancel.TabIndex = 3
         Me.uxCancel.Text = "&Cancel"
         '
@@ -2241,8 +2241,10 @@ Partial Class OrmapSettingsForm
         '
         'OrmapSettingsForm
         '
+        Me.AcceptButton = Me.uxSave
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.CancelButton = Me.uxCancel
         Me.ClientSize = New System.Drawing.Size(482, 526)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.BottomToolStripPanel)

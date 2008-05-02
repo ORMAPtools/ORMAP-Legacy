@@ -94,7 +94,7 @@ Public NotInheritable Class EditMapIndex
 
 #Region "Custom Class Members"
 
-    Public Structure TaxlotFieldMap
+    Friend Structure TaxlotFieldMap
         Friend Anomaly As Integer
         Friend County As Integer
         Friend MapAcres As Integer
@@ -117,7 +117,7 @@ Public NotInheritable Class EditMapIndex
         Friend TownshipDirectional As Integer
     End Structure
 
-    Public Structure MapIndexFieldMap
+    Friend Structure MapIndexFieldMap
         Friend MapNumber As Integer
         Friend MapScale As Integer
         Friend ORMAPNumber As Integer

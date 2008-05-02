@@ -188,7 +188,7 @@ Partial Class TaxlotAssignmentForm
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
         Me.uxHelp.TabIndex = 4
-        Me.uxHelp.Text = "Help"
+        Me.uxHelp.Text = "&Help"
         Me.uxHelp.UseVisualStyleBackColor = True
         '
         'TaxlotAssignmentForm
