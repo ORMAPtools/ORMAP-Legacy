@@ -55,7 +55,7 @@ Public NotInheritable Class DataMonitor
 
 #Region "Class-Level Constants And Enumerations"
 
-    Public Enum ESRIClassType As Integer
+    Friend Enum ESRIClassType As Integer
         FeatureClass = 1
         ObjectClass = 2
     End Enum

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<FxCopProject Version="1.35" Name="My FxCop Project">
+<FxCopProject Version="1.36" Name="My FxCop Project">
  <ProjectOptions>
   <SharedProject>True</SharedProject>
   <Stylesheet Apply="False">http://www.gotdotnet.com/team/fxcop//xsl/1.35/FxCopReport.xsl</Stylesheet>
@@ -13,16 +13,17 @@
   <SourceLookup>True</SourceLookup>
   <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
   <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
-  <Spelling Locale="en-us" />
-  <VersionAware>False</VersionAware>
+  <Spelling Locale="en-US" />
   <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
   <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
   <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
   <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
  </ProjectOptions>
  <Targets>
   <AssemblyReferenceDirectories>
    <Directory>C:/Program Files/ArcGIS/DotNet/</Directory>
+   <Directory>C:/Program Files/Microsoft.NET/Primary Interop Assemblies/</Directory>
   </AssemblyReferenceDirectories>
   <Target Name="$(ProjectDir)/bin/Release/OrmapTaxlotEditing.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
@@ -41,65 +42,59 @@
   <Groups />
   <Settings />
  </Rules>
- <FxCopReport Version="1.35">
+ <FxCopReport Version="1.36">
   <Targets>
    <Target Name="$(ProjectDir)/bin/Release/OrmapTaxlotEditing.dll">
     <Modules>
      <Module Name="ormaptaxlotediting.dll">
       <Messages>
-       <Message TypeName="AssembliesShouldDeclareMinimumSecurity" Category="Microsoft.Usage" CheckId="CA2209" Created="2008-02-02 08:16:14Z">
-        <Issue>
-         <Item>OrmapTaxlotEditing</Item>
-        </Issue>
-       </Message>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2008-02-02 08:16:14Z">
-        <Issue Name="NoStrongName">
-         <Item>OrmapTaxlotEditing</Item>
+       <Message TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017" Created="2008-05-02 18:25:50Z">
+        <Issue Name="AttributeTrue" Level="Error">
+         <Item>'OrmapTaxlotEditing.dll'</Item>
         </Issue>
        </Message>
       </Messages>
       <Namespaces>
        <Namespace Name="OrmapTaxlotEditing">
         <Types>
-         <Type Name="AddArrows">
-          <Messages>
-           <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Created="2008-02-02 08:16:14Z" FixCategory="Breaking">
-            <Issue>
-             <Item>OrmapTaxlotEditing.AddArrows</Item>
-             <Item>System.Drawing.Bitmap</Item>
-            </Issue>
-           </Message>
-          </Messages>
+         <Type Name="AboutForm">
           <Members>
-           <Member Name="_application">
+           <Member Name="#AboutForm_Load(System.Object,System.EventArgs)">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'AboutForm.AboutForm_Load(Object, EventArgs)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'AboutForm.AboutForm_Load(Object, EventArgs)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="AddArrows">
+          <Members>
+           <Member Name="#_application">
             <Messages>
              <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>AddArrows._application</Item>
+               <Item>'AddArrows._application'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="ArcGISCategoryRegistration(System.Type):System.Void">
+           <Member Name="#ArcGISCategoryRegistration(System.Type)">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>AddArrows.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>AddArrows.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'AddArrows.ArcGISCategoryRegistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -109,26 +104,13 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="ArcGISCategoryUnregistration(System.Type):System.Void">
+           <Member Name="#ArcGISCategoryUnregistration(System.Type)">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>AddArrows.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>AddArrows.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'AddArrows.ArcGISCategoryUnregistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -138,28 +120,20 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="OnClick():System.Void">
+           <Member Name="#OnClick()">
             <Messages>
-             <Message Id="System.Windows.Forms.MessageBox.Show(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2008-02-07 18:53:15Z">
-              <Issue>
-               <Item>AddArrows.OnClick():Void</Item>
-               <Item>1</Item>
-               <Item>MessageBox.Show(String):DialogResult</Item>
-               <Item>Add AddArrows.OnClick implementation</Item>
-              </Issue>
-             </Message>
              <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-02-07 18:53:15Z">
               <Issue>
-               <Item>AddArrows.OnClick():Void</Item>
+               <Item>'AddArrows.OnClick()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="RegisterFunction(System.Type):System.Void">
+           <Member Name="#RegisterFunction(System.Type)">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>AddArrows.RegisterFunction(Type):Void</Item>
+               <Item>'AddArrows.RegisterFunction(Type)'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -169,17 +143,209 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="UnregisterFunction(System.Type):System.Void">
+           <Member Name="#UnregisterFunction(System.Type)">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>AddArrows.UnregisterFunction(Type):Void</Item>
+               <Item>'AddArrows.UnregisterFunction(Type)'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
                 <Note Id="3" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="AutoUpdateAllToggle">
+          <Members>
+           <Member Name="#_application">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'AutoUpdateAllToggle._application'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ArcGISCategoryRegistration(System.Type)">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'AutoUpdateAllToggle.ArcGISCategoryRegistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ArcGISCategoryUnregistration(System.Type)">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'AutoUpdateAllToggle.ArcGISCategoryUnregistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OnClick()">
+            <Messages>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'AutoUpdateAllToggle.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'AutoUpdateAllToggle.OnClick()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RegisterFunction(System.Type)">
+            <Messages>
+             <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'AutoUpdateAllToggle.RegisterFunction(Type)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="clid1213">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UnregisterFunction(System.Type)">
+            <Messages>
+             <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'AutoUpdateAllToggle.UnregisterFunction(Type)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="clid1213">
+                <Note Id="1" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="CatalogFileDialog">
+          <Members>
+           <Member Name="#Finalize()">
+            <Messages>
+             <Message TypeName="RemoveEmptyFinalizers" Category="Microsoft.Performance" CheckId="CA1821" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'CatalogFileDialog'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SetAllowMultiSelect(System.Boolean)">
+            <Messages>
+             <Message Id="Multi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-05-02 18:25:50Z">
+              <Issue Name="Member">
+               <Item>Multi</Item>
+               <Item>'CatalogFileDialog.SetAllowMultiSelect(Boolean)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SetFilter(ESRI.ArcGIS.Catalog.IGxObjectFilter&amp;)">
+            <Messages>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 22:32:49Z">
+              <Issue Level="CriticalWarning">
+               <Item>'filter'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SetFilter(ESRI.ArcGIS.Catalog.IGxObjectFilter&amp;,System.Boolean&amp;)">
+            <Messages>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 22:32:49Z">
+              <Issue Level="CriticalWarning">
+               <Item>'filter'</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 22:32:49Z">
+              <Issue Certainty="50">
+               <Item>'isDefault'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SetFilter(ESRI.ArcGIS.Catalog.IGxObjectFilter&amp;,System.Boolean&amp;,System.Boolean&amp;)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'CatalogFileDialog.SetFilter(ByRef IGxObjectFilter, ByRef Boolean, ByRef Boolean)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'filter'</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Certainty="50">
+               <Item>'isDefault'</Item>
+              </Issue>
+             </Message>
+             <Message Id="2#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Certainty="50">
+               <Item>'resetAll'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'CatalogFileDialog.SetFilter(ByRef IGxObjectFilter, ByRef Boolean, ByRef Boolean)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SetStartingLocation(System.IntPtr)">
+            <Messages>
+             <Message Id="pointer" TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720" Created="2008-05-02 18:25:50Z">
+              <Issue Name="LanguageIndependentMemberParameter">
+               <Item>'CatalogFileDialog.SetStartingLocation(IntPtr)'</Item>
+               <Item>pointer</Item>
+               <Item>'pointer'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ShowOpen()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'CatalogFileDialog.ShowOpen()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'CatalogFileDialog.ShowOpen()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ShowSave()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'CatalogFileDialog.ShowSave()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'CatalogFileDialog.ShowSave()'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -187,49 +353,35 @@
          </Type>
          <Type Name="CombineTaxlots">
           <Messages>
-           <Message Id="Taxlots" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-07 18:53:15Z">
+           <Message Id="Taxlots" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2008-02-07 18:53:15Z">
             <Issue Name="Type">
              <Item>Taxlots</Item>
-             <Item>OrmapTaxlotEditing.CombineTaxlots</Item>
+             <Item>'CombineTaxlots'</Item>
             </Issue>
-           </Message>
-           <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Created="2008-02-02 08:16:14Z" FixCategory="Breaking">
-            <Issue>
-             <Item>OrmapTaxlotEditing.CombineTaxlots</Item>
-             <Item>System.Drawing.Bitmap</Item>
-            </Issue>
+            <Notes>
+             <User Name="clid1213">
+              <Note Id="4" />
+             </User>
+            </Notes>
            </Message>
           </Messages>
           <Members>
-           <Member Name="_application">
+           <Member Name="#_application">
             <Messages>
              <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>CombineTaxlots._application</Item>
+               <Item>'CombineTaxlots._application'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="ArcGISCategoryRegistration(System.Type):System.Void">
+           <Member Name="#ArcGISCategoryRegistration(System.Type)">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>CombineTaxlots.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>CombineTaxlots.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'CombineTaxlots.ArcGISCategoryRegistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -239,26 +391,13 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="ArcGISCategoryUnregistration(System.Type):System.Void">
+           <Member Name="#ArcGISCategoryUnregistration(System.Type)">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>CombineTaxlots.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>CombineTaxlots.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'CombineTaxlots.ArcGISCategoryUnregistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -268,34 +407,20 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="OnClick():System.Void">
+           <Member Name="#OnClick()">
             <Messages>
-             <Message Id="System.Windows.Forms.MessageBox.Show(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2008-02-07 18:53:15Z">
-              <Issue>
-               <Item>CombineTaxlots.OnClick():Void</Item>
-               <Item>1</Item>
-               <Item>MessageBox.Show(String):DialogResult</Item>
-               <Item>Add CombineTaxlots.OnClick implementation</Item>
-              </Issue>
-             </Message>
-             <Message Id="Taxlots" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Created="2008-02-07 18:53:15Z">
-              <Issue>
-               <Item>Taxlots</Item>
-               <Item>CombineTaxlots</Item>
-              </Issue>
-             </Message>
              <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-02-07 18:53:15Z">
               <Issue>
-               <Item>CombineTaxlots.OnClick():Void</Item>
+               <Item>'CombineTaxlots.OnClick()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="RegisterFunction(System.Type):System.Void">
+           <Member Name="#RegisterFunction(System.Type)">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>CombineTaxlots.RegisterFunction(Type):Void</Item>
+               <Item>'CombineTaxlots.RegisterFunction(Type)'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -305,11 +430,11 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="UnregisterFunction(System.Type):System.Void">
+           <Member Name="#UnregisterFunction(System.Type)">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>CombineTaxlots.UnregisterFunction(Type):Void</Item>
+               <Item>'CombineTaxlots.UnregisterFunction(Type)'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -321,45 +446,67 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="EditMapIndex">
-          <Messages>
-           <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Created="2008-02-02 08:16:14Z" FixCategory="Breaking">
-            <Issue>
-             <Item>OrmapTaxlotEditing.EditMapIndex</Item>
-             <Item>System.Drawing.Bitmap</Item>
-            </Issue>
-           </Message>
-          </Messages>
+         <Type Name="DataMonitor">
           <Members>
-           <Member Name="_application">
+           <Member Name="#.cctor()">
             <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-02-02 08:16:14Z">
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2008-05-02 18:25:50Z">
               <Issue>
-               <Item>EditMapIndex._application</Item>
+               <Item>'DataMonitor.New()'</Item>
+               <Item>'DataMonitor._hasValidCancelledNumbersTable'</Item>
+               <Item>'Boolean'</Item>
+               <Item>false</Item>
+              </Issue>
+              <Issue>
+               <Item>'DataMonitor.New()'</Item>
+               <Item>'DataMonitor._hasValidMapIndexData'</Item>
+               <Item>'Boolean'</Item>
+               <Item>false</Item>
+              </Issue>
+              <Issue>
+               <Item>'DataMonitor.New()'</Item>
+               <Item>'DataMonitor._hasValidTaxlotData'</Item>
+               <Item>'Boolean'</Item>
+               <Item>false</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="ArcGISCategoryRegistration(System.Type):System.Void">
+           <Member Name="#loadOptionSuccessful(OrmapTaxlotEditing.DataMonitor+ESRIClassType,System.String)">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>EditMapIndex.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'DataMonitor.loadOptionSuccessful(DataMonitor.ESRIClassType, String)'</Item>
               </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
              </Message>
+            </Messages>
+           </Member>
+           <Member Name="#validateData(OrmapTaxlotEditing.DataMonitor+ESRIClassType,System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="EditMapIndex">
+          <Members>
+           <Member Name="#ArcGISCategoryRegistration(System.Type)">
+            <Messages>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>EditMapIndex.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'EditMapIndex.ArcGISCategoryRegistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -369,26 +516,13 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="ArcGISCategoryUnregistration(System.Type):System.Void">
+           <Member Name="#ArcGISCategoryUnregistration(System.Type)">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>EditMapIndex.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>EditMapIndex.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'EditMapIndex.ArcGISCategoryUnregistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -398,28 +532,76 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="OnClick():System.Void">
+           <Member Name="#DoButtonOperation()">
             <Messages>
-             <Message Id="System.Windows.Forms.MessageBox.Show(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2008-02-07 18:53:15Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
               <Issue>
-               <Item>EditMapIndex.OnClick():Void</Item>
-               <Item>1</Item>
-               <Item>MessageBox.Show(String):DialogResult</Item>
-               <Item>Add EditMapIndex.OnClick implementation</Item>
+               <Item>'EditMapIndex.DoButtonOperation()'</Item>
+               <Item>'Exception'</Item>
               </Issue>
              </Message>
-             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-02-07 18:53:15Z">
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
               <Issue>
-               <Item>EditMapIndex.OnClick():Void</Item>
+               <Item>'EditMapIndex.DoButtonOperation()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditMapIndex.DoButtonOperation()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="RegisterFunction(System.Type):System.Void">
+           <Member Name="#InitEmpty(ESRI.ArcGIS.Geodatabase.IFields,ESRI.ArcGIS.Geodatabase.IFields)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.InitEmpty(IFields, IFields)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.InitEmpty(IFields, IFields)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#InitForm()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.InitForm()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="thisTable" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.InitForm()'</Item>
+               <Item>'thisTable'</Item>
+               <Item>'ITable'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#InitWithFeature(ESRI.ArcGIS.Geodatabase.IFeature,ESRI.ArcGIS.Geodatabase.IFields,ESRI.ArcGIS.Geodatabase.IFields)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.InitWithFeature(IFeature, IFields, IFields)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.InitWithFeature(IFeature, IFields, IFields)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RegisterFunction(System.Type)">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>EditMapIndex.RegisterFunction(Type):Void</Item>
+               <Item>'EditMapIndex.RegisterFunction(Type)'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -429,17 +611,94 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="UnregisterFunction(System.Type):System.Void">
+           <Member Name="#ResetControls()">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.ResetControls()'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2008-05-02 18:25:50Z">
+              <Issue Name="Local">
+               <Item>'ctl'</Item>
+               <Item>'ComboBox'</Item>
+               <Item>'EditMapIndex.ResetControls()'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToggleControls(System.Boolean)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.ToggleControls(Boolean)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UnregisterFunction(System.Type)">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>EditMapIndex.UnregisterFunction(Type):Void</Item>
+               <Item>'EditMapIndex.UnregisterFunction(Type)'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
                 <Note Id="3" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UpdateTaxlots(ESRI.ArcGIS.Geodatabase.IFeature,ESRI.ArcGIS.Geodatabase.IFeatureClass)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.UpdateTaxlots(IFeature, IFeatureClass)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.UpdateTaxlots(IFeature, IFeatureClass)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="theTaxlotFeatureClass" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-05-02 18:25:50Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'theTaxlotFeatureClass'</Item>
+               <Item>'EditMapIndex.UpdateTaxlots(IFeature, IFeatureClass)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#uxEdit_Click(System.Object,System.EventArgs)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.uxEdit_Click(Object, EventArgs)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.uxEdit_Click(Object, EventArgs)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#uxHelp_Click(System.Object,System.EventArgs)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.uxHelp_Click(Object, EventArgs)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditMapIndex.uxHelp_Click(Object, EventArgs)'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -447,26 +706,13 @@
          </Type>
          <Type Name="EditorExtension">
           <Members>
-           <Member Name="ArcGISCategoryRegistration(System.Type):System.Void">
+           <Member Name="#ArcGISCategoryRegistration(System.Type)">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>EditorExtension.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>EditorExtension.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'EditorExtension.ArcGISCategoryRegistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -476,26 +722,13 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="ArcGISCategoryUnregistration(System.Type):System.Void">
+           <Member Name="#ArcGISCategoryUnregistration(System.Type)">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>EditorExtension.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>EditorExtension.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'EditorExtension.ArcGISCategoryUnregistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -505,24 +738,119 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="HasValidLicense">
-            <Accessors>
-             <Accessor Name="set_HasValidLicense(System.Boolean):System.Void">
-              <Messages>
-               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-02-07 18:53:15Z">
-                <Issue>
-                 <Item>EditorExtension.set_HasValidLicense(Boolean):Void</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
+           <Member Name="#EditEvents_OnChangeFeature(ESRI.ArcGIS.Geodatabase.IObject)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2008-05-02 18:25:50Z">
+              <Issue Name="Parameter">
+               <Item>'obj'</Item>
+               <Item>'IFeature'</Item>
+               <Item>'EditorExtension.EditEvents_OnChangeFeature(IObject)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+              <Issue Name="Parameter">
+               <Item>'obj'</Item>
+               <Item>'IFeature'</Item>
+               <Item>'EditorExtension.EditEvents_OnChangeFeature(IObject)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnChangeFeature(IObject)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnChangeFeature(IObject)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnChangeFeature(IObject)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnChangeFeature(IObject)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
            </Member>
-           <Member Name="RegisterFunction(System.Type):System.Void">
+           <Member Name="#EditEvents_OnCreateFeature(ESRI.ArcGIS.Geodatabase.IObject)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2008-05-02 18:25:50Z">
+              <Issue Name="Parameter">
+               <Item>'obj'</Item>
+               <Item>'IFeature'</Item>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+              <Issue Name="Parameter">
+               <Item>'obj'</Item>
+               <Item>'IFeature'</Item>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+              <Issue Name="Parameter">
+               <Item>'obj'</Item>
+               <Item>'IFeature'</Item>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+              <Issue Name="Parameter">
+               <Item>'obj'</Item>
+               <Item>'IFeature'</Item>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+              <Issue Name="Parameter">
+               <Item>'obj'</Item>
+               <Item>'IFeature'</Item>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#EditEvents_OnStartEditing()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnStartEditing()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#EditEvents_OnStopEditing(System.Boolean)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnStopEditing(Boolean)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RegisterFunction(System.Type)">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>EditorExtension.RegisterFunction(Type):Void</Item>
+               <Item>'EditorExtension.RegisterFunction(Type)'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -532,29 +860,106 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="SetEditEvents(ESRI.ArcGIS.Editor.IEditEvents_Event):System.Void">
+           <Member Name="#setActiveViewEvents(ESRI.ArcGIS.Carto.IActiveViewEvents_Event)">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-02-07 18:53:15Z" FixCategory="NonBreaking">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-05-02 18:25:50Z" FixCategory="NonBreaking">
               <Issue>
-               <Item>EditorExtension.SetEditEvents(IEditEvents_Event):Void</Item>
+               <Item>'EditorExtension.setActiveViewEvents(IActiveViewEvents_Event)'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="SetEditor(ESRI.ArcGIS.Editor.IEditor):System.Void">
+           <Member Name="#setApplication(ESRI.ArcGIS.Framework.IApplication)">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-02-07 18:53:15Z" FixCategory="NonBreaking">
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-05-02 18:25:50Z" FixCategory="NonBreaking">
               <Issue>
-               <Item>EditorExtension.SetEditor(IEditor):Void</Item>
+               <Item>'EditorExtension.setApplication(IApplication)'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="UnregisterFunction(System.Type):System.Void">
+           <Member Name="#setEditEvents(ESRI.ArcGIS.Editor.IEditEvents_Event)">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-05-02 18:25:50Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'EditorExtension.setEditEvents(IEditEvents_Event)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#setEditor(ESRI.ArcGIS.Editor.IEditor2)">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-05-02 18:25:50Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'EditorExtension.setEditor(IEditor2)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#setHasValidLicense(System.Boolean)">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-05-02 18:25:50Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'EditorExtension.setHasValidLicense(Boolean)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#setIsValidWorkspace(System.Boolean)">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-05-02 18:25:50Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'EditorExtension.setIsValidWorkspace(Boolean)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#theEditorEvents_OnDeleteFeature(ESRI.ArcGIS.Geodatabase.IObject)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditorExtension.theEditorEvents_OnDeleteFeature(IObject)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditorExtension.theEditorEvents_OnDeleteFeature(IObject)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-05-02 18:25:50Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'EditorExtension.theEditorEvents_OnDeleteFeature(IObject)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="theFeatureWorkspace" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditorExtension.theEditorEvents_OnDeleteFeature(IObject)'</Item>
+               <Item>'theFeatureWorkspace'</Item>
+               <Item>'IFeatureWorkspace'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'EditorExtension.theEditorEvents_OnDeleteFeature(IObject)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.theEditorEvents_OnDeleteFeature(IObject)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.theEditorEvents_OnDeleteFeature(IObject)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.theEditorEvents_OnDeleteFeature(IObject)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UnregisterFunction(System.Type)">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>EditorExtension.UnregisterFunction(Type):Void</Item>
+               <Item>'EditorExtension.UnregisterFunction(Type)'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -567,124 +972,267 @@
           </Members>
          </Type>
          <Type Name="LocateFeature">
+          <Members>
+           <Member Name="#_application">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-02-02 08:16:14Z">
+              <Issue>
+               <Item>'LocateFeature._application'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ArcGISCategoryRegistration(System.Type)">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
+              <Issue>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'LocateFeature.ArcGISCategoryRegistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
+              </Issue>
+              <Notes>
+               <User Name="nick">
+                <Note Id="2" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ArcGISCategoryUnregistration(System.Type)">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
+              <Issue>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'LocateFeature.ArcGISCategoryUnregistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
+              </Issue>
+              <Notes>
+               <User Name="nick">
+                <Note Id="2" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DoButtonOperation()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'LocateFeature.DoButtonOperation()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'LocateFeature.DoButtonOperation()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'LocateFeature.DoButtonOperation()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RegisterFunction(System.Type)">
+            <Messages>
+             <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
+              <Issue>
+               <Item>'LocateFeature.RegisterFunction(Type)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="nick">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UnregisterFunction(System.Type)">
+            <Messages>
+             <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
+              <Issue>
+               <Item>'LocateFeature.UnregisterFunction(Type)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="nick">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#uxFind_Click(System.Object,System.EventArgs)">
+            <Messages>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'LocateFeature.uxFind_Click(Object, EventArgs)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'LocateFeature.uxFind_Click(Object, EventArgs)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#uxHelp_Click(System.Object,System.EventArgs)">
+            <Messages>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'LocateFeature.uxHelp_Click(Object, EventArgs)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ORMapNum">
           <Messages>
-           <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Created="2008-02-02 08:16:14Z" FixCategory="Breaking">
-            <Issue>
-             <Item>OrmapTaxlotEditing.LocateFeature</Item>
-             <Item>System.Drawing.Bitmap</Item>
+           <Message Id="Num" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-05-02 18:25:50Z">
+            <Issue Name="Type">
+             <Item>Num</Item>
+             <Item>'ORMapNum'</Item>
             </Issue>
            </Message>
           </Messages>
           <Members>
-           <Member Name="_application">
+           <Member Name="#GetOrmap_MapNumFieldLength()">
             <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-02-02 08:16:14Z">
-              <Issue>
-               <Item>LocateFeature._application</Item>
+             <Message Id="Num" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-05-02 18:25:50Z">
+              <Issue Name="Member">
+               <Item>Num</Item>
+               <Item>'ORMapNum.GetOrmap_MapNumFieldLength()'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Created="2008-05-02 18:25:50Z">
+              <Issue Name="Member">
+               <Item>'ORMapNum.GetOrmap_MapNumFieldLength()'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2008-05-02 18:25:50Z">
+              <Issue Certainty="50">
+               <Item>'ORMapNum.GetOrmap_MapNumFieldLength()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="ArcGISCategoryRegistration(System.Type):System.Void">
+           <Member Name="#GetOrmap_OrmapTaxlotFieldLength()">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>LocateFeature.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
-             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue>
-               <Item>LocateFeature.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="2" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="ArcGISCategoryUnregistration(System.Type):System.Void">
-            <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>LocateFeature.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
-             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue>
-               <Item>LocateFeature.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="2" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="OnClick():System.Void">
-            <Messages>
-             <Message Id="System.Windows.Forms.MessageBox.Show(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2008-02-07 18:53:15Z">
-              <Issue>
-               <Item>LocateFeature.OnClick():Void</Item>
-               <Item>1</Item>
-               <Item>MessageBox.Show(String):DialogResult</Item>
-               <Item>Add LocateFeature.OnClick implementation</Item>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Created="2008-05-02 18:25:50Z">
+              <Issue Name="Member">
+               <Item>'ORMapNum.GetOrmap_OrmapTaxlotFieldLength()'</Item>
               </Issue>
              </Message>
-             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-02-07 18:53:15Z">
-              <Issue>
-               <Item>LocateFeature.OnClick():Void</Item>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2008-05-02 18:25:50Z">
+              <Issue Certainty="50">
+               <Item>'ORMapNum.GetOrmap_OrmapTaxlotFieldLength()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="RegisterFunction(System.Type):System.Void">
+           <Member Name="#GetOrmap_TaxlotFieldLength()">
             <Messages>
-             <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue>
-               <Item>LocateFeature.RegisterFunction(Type):Void</Item>
+             <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Created="2008-05-02 18:25:50Z">
+              <Issue Name="Member">
+               <Item>'ORMapNum.GetOrmap_TaxlotFieldLength()'</Item>
               </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="3" />
-               </User>
-              </Notes>
+             </Message>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2008-05-02 18:25:50Z">
+              <Issue Certainty="50">
+               <Item>'ORMapNum.GetOrmap_TaxlotFieldLength()'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="UnregisterFunction(System.Type):System.Void">
+           <Member Name="#GetOrmapMapNumber()">
             <Messages>
-             <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue>
-               <Item>LocateFeature.UnregisterFunction(Type):Void</Item>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2008-05-02 18:25:50Z">
+              <Issue Certainty="50">
+               <Item>'ORMapNum.GetOrmapMapNumber()'</Item>
               </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="3" />
-               </User>
-              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetORMapNum()">
+            <Messages>
+             <Message Id="Num" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-05-02 18:25:50Z">
+              <Issue Name="Member">
+               <Item>Num</Item>
+               <Item>'ORMapNum.GetORMapNum()'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2008-05-02 18:25:50Z">
+              <Issue Certainty="50">
+               <Item>'ORMapNum.GetORMapNum()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Quarter">
+            <Accessors>
+             <Accessor Name="#set_Quarter(System.String)">
+              <Messages>
+               <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2008-05-02 18:25:50Z">
+                <Issue>
+                 <Item>'String.ToUpper()'</Item>
+                 <Item>'ORMapNum.Quarter.Set(String)'</Item>
+                 <Item>'String.ToUpper(CultureInfo)'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#QuarterQuarter">
+            <Accessors>
+             <Accessor Name="#set_QuarterQuarter(System.String)">
+              <Messages>
+               <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2008-05-02 18:25:50Z">
+                <Issue>
+                 <Item>'String.ToUpper()'</Item>
+                 <Item>'ORMapNum.QuarterQuarter.Set(String)'</Item>
+                 <Item>'String.ToUpper(CultureInfo)'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#SuffixType">
+            <Accessors>
+             <Accessor Name="#set_SuffixType(System.String)">
+              <Messages>
+               <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2008-05-02 18:25:50Z">
+                <Issue>
+                 <Item>'String.ToUpper()'</Item>
+                 <Item>'ORMapNum.SuffixType.Set(String)'</Item>
+                 <Item>'String.ToUpper(CultureInfo)'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="OrmapSettings">
+          <Members>
+           <Member Name="#PartnerOrmapSettingsForm">
+            <Accessors>
+             <Accessor Name="#get_PartnerOrmapSettingsForm()">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-05-02 18:25:50Z">
+                <Issue>
+                 <Item>'OrmapSettings.PartnerOrmapSettingsForm.Get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#SetPartnerOrmapSettingsForm(OrmapTaxlotEditing.OrmapSettingsForm)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'OrmapSettings.SetPartnerOrmapSettingsForm(OrmapSettingsForm)'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -693,10 +1241,9 @@
          <Type Name="OrmapToolbar">
           <Messages>
            <Message Id="Toolbar" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2008-02-02 08:16:14Z">
-            <Issue Name="ShouldBeCompoundWord">
+            <Issue Name="TypeShouldBeCompoundWord">
              <Item>Toolbar</Item>
-             <Item>class</Item>
-             <Item>OrmapToolbar</Item>
+             <Item>'OrmapToolbar'</Item>
              <Item>ToolBar</Item>
             </Issue>
             <Notes>
@@ -707,26 +1254,13 @@
            </Message>
           </Messages>
           <Members>
-           <Member Name="ArcGISCategoryRegistration(System.Type):System.Void">
+           <Member Name="#ArcGISCategoryRegistration(System.Type)">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>OrmapToolbar.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>OrmapToolbar.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'OrmapToolbar.ArcGISCategoryRegistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -736,26 +1270,13 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="ArcGISCategoryUnregistration(System.Type):System.Void">
+           <Member Name="#ArcGISCategoryUnregistration(System.Type)">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>OrmapToolbar.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>OrmapToolbar.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'OrmapToolbar.ArcGISCategoryUnregistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -765,11 +1286,11 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="RegisterFunction(System.Type):System.Void">
+           <Member Name="#RegisterFunction(System.Type)">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>OrmapToolbar.RegisterFunction(Type):Void</Item>
+               <Item>'OrmapToolbar.RegisterFunction(Type)'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -779,69 +1300,17 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="UnregisterFunction(System.Type):System.Void">
+           <Member Name="#UnregisterFunction(System.Type)">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>OrmapToolbar.UnregisterFunction(Type):Void</Item>
+               <Item>'OrmapToolbar.UnregisterFunction(Type)'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
                 <Note Id="3" />
                </User>
               </Notes>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="PropertiesForm">
-          <Members>
-           <Member Name="InitializeComponent():System.Void">
-            <Messages>
-             <Message Id="System.Windows.Forms.Control.set_Text(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2008-02-02 08:16:14Z">
-              <Issue>
-               <Item>PropertiesForm.InitializeComponent():Void</Item>
-               <Item>1</Item>
-               <Item>Control.set_Text(String):Void</Item>
-               <Item>All fields</Item>
-              </Issue>
-              <Issue>
-               <Item>PropertiesForm.InitializeComponent():Void</Item>
-               <Item>1</Item>
-               <Item>Control.set_Text(String):Void</Item>
-               <Item>Enable field auto-updates</Item>
-              </Issue>
-              <Issue>
-               <Item>PropertiesForm.InitializeComponent():Void</Item>
-               <Item>1</Item>
-               <Item>Control.set_Text(String):Void</Item>
-               <Item>Enable taxlot editing tools</Item>
-              </Issue>
-              <Issue>
-               <Item>PropertiesForm.InitializeComponent():Void</Item>
-               <Item>1</Item>
-               <Item>Control.set_Text(String):Void</Item>
-               <Item>Minimum fields only (e.g. AUTODATE and AUTOWHO)</Item>
-              </Issue>
-              <Issue>
-               <Item>PropertiesForm.InitializeComponent():Void</Item>
-               <Item>1</Item>
-               <Item>Control.set_Text(String):Void</Item>
-               <Item>PropertiesForm</Item>
-              </Issue>
-              <Issue>
-               <Item>PropertiesForm.InitializeComponent():Void</Item>
-               <Item>1</Item>
-               <Item>Control.set_Text(String):Void</Item>
-               <Item>The ORMAP Taxlot Editing Toolbar gives the user tools to edit taxlots and related features in compliance with the ORMAP standard.</Item>
-              </Issue>
-             </Message>
-             <Message Id="taxlots" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Created="2008-02-07 18:53:15Z">
-              <Issue>
-               <Item>taxlots</Item>
-               <Item>The ORMAP Taxlot Editing Toolbar gives the user tools to edit taxlots and related features in compliance with the ORMAP standard.</Item>
-              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -849,36 +1318,13 @@
          </Type>
          <Type Name="PropertyPage">
           <Members>
-           <Member Name="Applies(ESRI.ArcGIS.esriSystem.ISet):System.Boolean">
+           <Member Name="#ArcGISCategoryRegistration(System.Type)">
             <Messages>
-             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2008-02-02 08:16:14Z">
-              <Issue>
-               <Item>'objects'</Item>
-               <Item>PropertyPage.Applies(ISet):Boolean</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="ArcGISCategoryRegistration(System.Type):System.Void">
-            <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>PropertyPage.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>PropertyPage.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'PropertyPage.ArcGISCategoryRegistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -888,26 +1334,13 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="ArcGISCategoryUnregistration(System.Type):System.Void">
+           <Member Name="#ArcGISCategoryUnregistration(System.Type)">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>PropertyPage.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>PropertyPage.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'PropertyPage.ArcGISCategoryUnregistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -917,7 +1350,7 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="PageSite">
+           <Member Name="#PageSite">
             <Messages>
              <Message TypeName="PropertiesShouldNotBeWriteOnly" Category="Microsoft.Design" CheckId="CA1044" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
@@ -933,45 +1366,1146 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="TaxlotAssignment">
-          <Messages>
-           <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Created="2008-02-02 08:16:14Z" FixCategory="Breaking">
-            <Issue>
-             <Item>OrmapTaxlotEditing.TaxlotAssignment</Item>
-             <Item>System.Drawing.Bitmap</Item>
-            </Issue>
-           </Message>
-          </Messages>
+         <Type Name="SpatialUtilities">
           <Members>
-           <Member Name="_application">
+           <Member Name="#AddCodesToCombo(System.String,ESRI.ArcGIS.Geodatabase.IFields,System.Windows.Forms.ComboBox&amp;,System.Object,System.Boolean)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2008-05-02 18:25:50Z">
+              <Issue Name="Local">
+               <Item>'thisDomain'</Item>
+               <Item>'ICodedValueDomain'</Item>
+               <Item>'SpatialUtilities.AddCodesToCombo(String, IFields, ByRef ComboBox, Object, Boolean)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.AddCodesToCombo(String, IFields, ByRef ComboBox, Object, Boolean)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="2#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'comboBox'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.AddCodesToCombo(String, IFields, ByRef ComboBox, Object, Boolean)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#attributeQuery(ESRI.ArcGIS.Geodatabase.ITable&amp;,System.String&amp;)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.attributeQuery(ByRef ITable, ByRef String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.attributeQuery(ByRef ITable, ByRef String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CalculateTaxlotValues(ESRI.ArcGIS.Geodatabase.IFeature&amp;,ESRI.ArcGIS.Carto.IFeatureLayer&amp;)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.CalculateTaxlotValues(ByRef IFeature, ByRef IFeatureLayer)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'editFeature'</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'mapIndexLayer'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.CalculateTaxlotValues(ByRef IFeature, ByRef IFeatureLayer)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.CalculateTaxlotValues(ByRef IFeature, ByRef IFeatureLayer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.CalculateTaxlotValues(ByRef IFeature, ByRef IFeatureLayer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.CalculateTaxlotValues(ByRef IFeature, ByRef IFeatureLayer)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.CalculateTaxlotValues(ByRef IFeature, ByRef IFeatureLayer)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ConvertCodeValueDomainToCode(ESRI.ArcGIS.Geodatabase.IFields,System.String,System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.ConvertCodeValueDomainToCode(IFields, String, String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.ConvertCodeValueDomainToCode(IFields, String, String)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.ConvertCodeValueDomainToCode(IFields, String, String)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.ConvertCodeValueDomainToCode(IFields, String, String)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ConvertCodeValueDomainToDescription(ESRI.ArcGIS.Geodatabase.IFields,System.String,System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.ConvertCodeValueDomainToDescription(IFields, String, String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.ConvertCodeValueDomainToDescription(IFields, String, String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#doSpatialQuery(ESRI.ArcGIS.Geodatabase.IFeatureClass&amp;,ESRI.ArcGIS.Geometry.IGeometry&amp;,ESRI.ArcGIS.Geodatabase.esriSpatialRelEnum&amp;,System.String&amp;,System.Boolean)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.doSpatialQuery(ByRef IFeatureClass, ByRef IGeometry, ByRef esriSpatialRelEnum, ByRef String, Boolean)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.doSpatialQuery(ByRef IFeatureClass, ByRef IGeometry, ByRef esriSpatialRelEnum, ByRef String, Boolean)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#envelopeToPolygon(ESRI.ArcGIS.Geometry.IEnvelope&amp;)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.envelopeToPolygon(ByRef IEnvelope)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.envelopeToPolygon(ByRef IEnvelope)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#FindFeatureLayerByDSName(System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.FindFeatureLayerByDSName(String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.FindFeatureLayerByDSName(String)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.FindFeatureLayerByDSName(String)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.FindFeatureLayerByDSName(String)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="dataset" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2008-05-02 18:25:50Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'SpatialUtilities.FindFeatureLayerByDSName(String)'</Item>
+               <Item>dataset</Item>
+               <Item>'datasetName'</Item>
+               <Item>dataSet</Item>
+              </Issue>
+              <Notes>
+               <User Name="clid1213">
+                <Note Id="2" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#FindStandaloneTableByDSName(System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.FindStandaloneTableByDSName(String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.FindStandaloneTableByDSName(String)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="dataset" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Excluded" Created="2008-05-02 18:25:50Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'SpatialUtilities.FindStandaloneTableByDSName(String)'</Item>
+               <Item>dataset</Item>
+               <Item>'datasetName'</Item>
+               <Item>dataSet</Item>
+              </Issue>
+              <Notes>
+               <User Name="clid1213">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#generateORMAPTaxlotNumber(System.String,ESRI.ArcGIS.Geodatabase.IFeature&amp;,System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.generateORMAPTaxlotNumber(String, ByRef IFeature, String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.generateORMAPTaxlotNumber(String, ByRef IFeature, String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#getAnnoSizeByScale(System.String,System.Int32)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.getAnnoSizeByScale(String, Integer)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.getAnnoSizeByScale(String, Integer)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.getAnnoSizeByScale(String, Integer)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.getAnnoSizeByScale(String, Integer)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.getAnnoSizeByScale(String, Integer)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.getAnnoSizeByScale(String, Integer)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetCenterOfEnvelope(ESRI.ArcGIS.Geometry.IEnvelope)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 22:38:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetCenterOfEnvelope(IEnvelope)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 22:38:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetCenterOfEnvelope(IEnvelope)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetMapSuffixNumber(ESRI.ArcGIS.Geodatabase.IFeature)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 22:07:06Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetMapSuffixNumber(IFeature)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 22:07:06Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetMapSuffixNumber(IFeature)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetMapSuffixType(ESRI.ArcGIS.Geodatabase.IFeature&amp;)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetMapSuffixType(ByRef IFeature)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'theFeature'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetMapSuffixType(ByRef IFeature)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetRelatedObjects(ESRI.ArcGIS.Geodatabase.IObject)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetRelatedObjects(IObject)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetRelatedObjects(IObject)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetSelectedFeatures(ESRI.ArcGIS.Carto.IFeatureLayer)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetSelectedFeatures(IFeatureLayer)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetSelectedFeatures(IFeatureLayer)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetValueViaOverlay(ESRI.ArcGIS.Geometry.IGeometry&amp;,ESRI.ArcGIS.Geodatabase.IFeatureClass&amp;,System.String)">
+            <Messages>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 22:15:00Z">
+              <Issue Level="CriticalWarning">
+               <Item>'searchGeometry'</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 22:15:00Z">
+              <Issue Level="CriticalWarning">
+               <Item>'overlayFeatureClass'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetValueViaOverlay(ESRI.ArcGIS.Geometry.IGeometry&amp;,ESRI.ArcGIS.Geodatabase.IFeatureClass&amp;,System.String,System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetValueViaOverlay(ByRef IGeometry, ByRef IFeatureClass, String, String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'searchGeometry'</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'overlayFeatureClass'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetValueViaOverlay(ByRef IGeometry, ByRef IFeatureClass, String, String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.GetValueViaOverlay(ByRef IGeometry, ByRef IFeatureClass, String, String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.GetValueViaOverlay(ByRef IGeometry, ByRef IFeatureClass, String, String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.GetValueViaOverlay(ByRef IGeometry, ByRef IFeatureClass, String, String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#HasSelectedFeatures(ESRI.ArcGIS.Carto.IFeatureLayer)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.HasSelectedFeatures(IFeatureLayer)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.HasSelectedFeatures(IFeatureLayer)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsAnno(ESRI.ArcGIS.Geodatabase.IObject)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsAnno(IObject)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsAnno(IObject)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsMapIndex(ESRI.ArcGIS.Geodatabase.IObject)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsMapIndex(IObject)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsMapIndex(IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsMapIndex(IObject)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsMapIndex(IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsOrmapFeature(ESRI.ArcGIS.Geodatabase.IObject&amp;)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 21:54:47Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 21:54:47Z">
+              <Issue Level="CriticalWarning">
+               <Item>'theObject'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2008-05-02 21:54:47Z">
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 21:54:47Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Created="2008-05-02 21:54:47Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsOrmapFeature(ByRef IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsTaxlot(ESRI.ArcGIS.Geodatabase.IObject)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsTaxlot(IObject)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.IsTaxlot(IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsTaxlot(IObject)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsTaxlot(IObject)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsTaxlotNumberLocallyUnique(System.String,ESRI.ArcGIS.Geometry.IGeometry&amp;)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsTaxlotNumberLocallyUnique(String, ByRef IGeometry)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'thisGeometry'</Item>
+              </Issue>
+             </Message>
+             <Message Id="mapIndexFeatureClass" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsTaxlotNumberLocallyUnique(String, ByRef IGeometry)'</Item>
+               <Item>'mapIndexFeatureClass'</Item>
+               <Item>'IFeatureClass'</Item>
+              </Issue>
+             </Message>
+             <Message Id="thisGeometry" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2008-05-02 18:25:50Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'thisGeometry'</Item>
+               <Item>'SpatialUtilities.IsTaxlotNumberLocallyUnique(String, ByRef IGeometry)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsTaxlotNumberLocallyUnique(String, ByRef IGeometry)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsTaxlotNumberLocallyUnique(String, ByRef IGeometry)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsTaxlotNumberLocallyUnique(String, ByRef IGeometry)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#LoadFCIntoMap(System.String,System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.LoadFCIntoMap(String, String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.LoadFCIntoMap(String, String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#LoadTableIntoMap(System.String,System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.LoadTableIntoMap(String, String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.LoadTableIntoMap(String, String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#LocateFields(ESRI.ArcGIS.Geodatabase.IFeatureClass&amp;,System.String&amp;)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.LocateFields(ByRef IFeatureClass, ByRef String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'featureClass'</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'fieldName'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.LocateFields(ByRef IFeatureClass, ByRef String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ReadValue(ESRI.ArcGIS.Geodatabase.IRow&amp;,System.String)">
+            <Messages>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 22:02:20Z">
+              <Issue Level="CriticalWarning">
+               <Item>'row'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ReadValue(ESRI.ArcGIS.Geodatabase.IRow&amp;,System.String,System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.ReadValue(ByRef IRow, String, String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'row'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.ReadValue(ByRef IRow, String, String)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.ReadValue(ByRef IRow, String, String)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.ReadValue(ByRef IRow, String, String)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SetAnnoSize(ESRI.ArcGIS.Geodatabase.IObject&amp;,ESRI.ArcGIS.Geodatabase.IFeature&amp;)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.SetAnnoSize(ByRef IObject, ByRef IFeature)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'theObject'</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'theFeature'</Item>
+              </Issue>
+             </Message>
+             <Message Id="annoObjectClass" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.SetAnnoSize(ByRef IObject, ByRef IFeature)'</Item>
+               <Item>'annoObjectClass'</Item>
+               <Item>'IObjectClass'</Item>
+              </Issue>
+             </Message>
+             <Message Id="thisEnvelope" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.SetAnnoSize(ByRef IObject, ByRef IFeature)'</Item>
+               <Item>'thisEnvelope'</Item>
+               <Item>'IEnvelope'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.SetAnnoSize(ByRef IObject, ByRef IFeature)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'SpatialUtilities.SetAnnoSize(ByRef IObject, ByRef IFeature)'</Item>
+               <Item>'String.Compare(String, String, Boolean, CultureInfo)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.SetAnnoSize(ByRef IObject, ByRef IFeature)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.SetAnnoSize(ByRef IObject, ByRef IFeature)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.SetAnnoSize(ByRef IObject, ByRef IFeature)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.SetAnnoSize(ByRef IObject, ByRef IFeature)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.SetAnnoSize(ByRef IObject, ByRef IFeature)'</Item>
+               <Item>'String.Compare(String, String)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.SetAnnoSize(ByRef IObject, ByRef IFeature)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.SetAnnoSize(ByRef IObject, ByRef IFeature)'</Item>
+               <Item>'String.Compare(String, String, Boolean)'</Item>
+               <Item>'String.Compare(String, String, StringComparison)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SetSelectedFeature(ESRI.ArcGIS.Carto.IFeatureLayer&amp;,ESRI.ArcGIS.Geodatabase.IFeature&amp;)">
+            <Messages>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'theFeatureLayer'</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'theFeature'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UpdateMinimumAutoFields(ESRI.ArcGIS.Geodatabase.IFeature&amp;)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.UpdateMinimumAutoFields(ByRef IFeature)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'feature'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'SpatialUtilities.UpdateMinimumAutoFields(ByRef IFeature)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ZoomToEnvelope(ESRI.ArcGIS.Geometry.IEnvelope&amp;)">
+            <Messages>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2008-05-02 18:25:50Z">
+              <Issue Level="CriticalWarning">
+               <Item>'theEnvelope'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="StringUtilities">
+          <Members>
+           <Member Name="#AddLeadingZeros(System.String,System.Int32)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'StringUtilities.AddLeadingZeros(String, Integer)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="string" TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720" Created="2008-05-02 18:25:50Z">
+              <Issue Name="LanguageIndependentMemberParameter">
+               <Item>'StringUtilities.AddLeadingZeros(String, Integer)'</Item>
+               <Item>String</Item>
+               <Item>'currentString'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'StringUtilities.AddLeadingZeros(String, Integer)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ExtractString(System.String,System.Int32,System.Int32)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'StringUtilities.ExtractString(String, Integer, Integer)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="string" TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720" Created="2008-05-02 18:25:50Z">
+              <Issue Name="LanguageIndependentMemberParameter">
+               <Item>'StringUtilities.ExtractString(String, Integer, Integer)'</Item>
+               <Item>String</Item>
+               <Item>'theWholeString'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'StringUtilities.ExtractString(String, Integer, Integer)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GenerateMapTaxlotValue(System.String,System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="string" TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720" Created="2008-05-02 18:25:50Z">
+              <Issue Name="LanguageIndependentMemberParameter">
+               <Item>'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+               <Item>String</Item>
+               <Item>'formatString'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'String.ToUpper()'</Item>
+               <Item>'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+               <Item>'String.ToUpper(CultureInfo)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'String.ToUpper()'</Item>
+               <Item>'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+               <Item>'String.ToUpper(CultureInfo)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.Convert.ToDouble(System.String)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'Convert.ToDouble(String)'</Item>
+               <Item>'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+               <Item>'Convert.ToDouble(String, IFormatProvider)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'Convert.ToDouble(String)'</Item>
+               <Item>'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+               <Item>'Convert.ToDouble(String, IFormatProvider)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#generateParcelId(System.String,System.String)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-05-02 22:58:57Z">
+              <Issue>
+               <Item>'StringUtilities.generateParcelId(String, String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OrmapMapNumberNoCountyCodeSuffix(System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'StringUtilities.OrmapMapNumberNoCountyCodeSuffix(String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'StringUtilities.OrmapMapNumberNoCountyCodeSuffix(String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#stripLeadingZeros(System.String&amp;)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'StringUtilities.stripLeadingZeros(ByRef String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'StringUtilities.stripLeadingZeros(ByRef String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TaxlotAssignment">
+          <Members>
+           <Member Name="#_application">
             <Messages>
              <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>TaxlotAssignment._application</Item>
+               <Item>'TaxlotAssignment._application'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="ArcGISCategoryRegistration(System.Type):System.Void">
+           <Member Name="#ArcGISCategoryRegistration(System.Type)">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>TaxlotAssignment.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>TaxlotAssignment.ArcGISCategoryRegistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'TaxlotAssignment.ArcGISCategoryRegistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -981,26 +2515,13 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="ArcGISCategoryUnregistration(System.Type):System.Void">
+           <Member Name="#ArcGISCategoryUnregistration(System.Type)">
             <Messages>
-             <Message TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241" Status="Excluded" Created="2008-02-02 08:16:14Z">
-              <Issue Name="MissingSpecifier">
-               <Item>String.Format(String, Object):String</Item>
-               <Item>TaxlotAssignment.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>'stack1'</Item>
-               <Item>HKEY_CLASSES_ROOT\CLSID\{{{0}}}</Item>
-              </Issue>
-              <Notes>
-               <User Name="nick">
-                <Note Id="4" />
-               </User>
-              </Notes>
-             </Message>
              <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>TaxlotAssignment.ArcGISCategoryUnregistration(Type):Void</Item>
-               <Item>System.String.Format(System.String,System.Object)</Item>
-               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'TaxlotAssignment.ArcGISCategoryUnregistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -1010,28 +2531,99 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="OnClick():System.Void">
+           <Member Name="#DoToolOperation(OrmapTaxlotEditing.Utilities+EsriMouseButtons,System.Int32,System.Int32)">
             <Messages>
-             <Message Id="System.Windows.Forms.MessageBox.Show(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2008-02-07 18:53:15Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 22:26:29Z">
               <Issue>
-               <Item>TaxlotAssignment.OnClick():Void</Item>
-               <Item>1</Item>
-               <Item>MessageBox.Show(String):DialogResult</Item>
-               <Item>Add TaxlotAssignment.OnClick implementation</Item>
+               <Item>'TaxlotAssignment.DoToolOperation(Utilities.EsriMouseButtons, Integer, Integer)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Format(System.String,System.Object,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2008-05-02 22:26:29Z">
+              <Issue>
+               <Item>'String.Format(String, Object, Object)'</Item>
+               <Item>'TaxlotAssignment.DoToolOperation(Utilities.EsriMouseButtons, Integer, Integer)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 22:26:29Z">
+              <Issue>
+               <Item>'TaxlotAssignment.DoToolOperation(Utilities.EsriMouseButtons, Integer, Integer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'TaxlotAssignment.DoToolOperation(Utilities.EsriMouseButtons, Integer, Integer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'TaxlotAssignment.DoToolOperation(Utilities.EsriMouseButtons, Integer, Integer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'TaxlotAssignment.DoToolOperation(Utilities.EsriMouseButtons, Integer, Integer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'TaxlotAssignment.DoToolOperation(Utilities.EsriMouseButtons, Integer, Integer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'TaxlotAssignment.DoToolOperation(Utilities.EsriMouseButtons, Integer, Integer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'TaxlotAssignment.DoToolOperation(Utilities.EsriMouseButtons, Integer, Integer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'TaxlotAssignment.DoToolOperation(Utilities.EsriMouseButtons, Integer, Integer)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OnClick()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'TaxlotAssignment.OnClick()'</Item>
+               <Item>'Exception'</Item>
               </Issue>
              </Message>
              <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-02-07 18:53:15Z">
               <Issue>
-               <Item>TaxlotAssignment.OnClick():Void</Item>
+               <Item>'TaxlotAssignment.OnClick()'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="RegisterFunction(System.Type):System.Void">
+           <Member Name="#OnCreate(System.Object)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'TaxlotAssignment.OnCreate(Object)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'TaxlotAssignment.OnCreate(Object)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OnMouseDown(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'TaxlotAssignment.OnMouseDown(Integer, Integer, Integer, Integer)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'TaxlotAssignment.OnMouseDown(Integer, Integer, Integer, Integer)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RegisterFunction(System.Type)">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>TaxlotAssignment.RegisterFunction(Type):Void</Item>
+               <Item>'TaxlotAssignment.RegisterFunction(Type)'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
@@ -1041,17 +2633,147 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="UnregisterFunction(System.Type):System.Void">
+           <Member Name="#UnregisterFunction(System.Type)">
             <Messages>
              <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Status="Excluded" Created="2008-02-02 08:16:14Z">
               <Issue>
-               <Item>TaxlotAssignment.UnregisterFunction(Type):Void</Item>
+               <Item>'TaxlotAssignment.UnregisterFunction(Type)'</Item>
               </Issue>
               <Notes>
                <User Name="nick">
                 <Note Id="3" />
                </User>
               </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#uxHelp_Click(System.Object,System.EventArgs)">
+            <Messages>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'TaxlotAssignment.uxHelp_Click(Object, EventArgs)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Utilities">
+          <Members>
+           <Member Name="#FileExists(System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'Utilities.FileExists(String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'Utilities.FileExists(String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#StartDoc(System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'Utilities.StartDoc(String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2008-05-02 18:25:50Z">
+              <Issue>
+               <Item>'Utilities.StartDoc(String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'Utilities.StartDoc(String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="OrmapTaxlotEditing.My">
+        <Types>
+         <Type Name="MyApplication">
+          <Messages>
+           <Message TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812" Status="Excluded" Created="2008-05-02 18:25:50Z">
+            <Issue>
+             <Item>'MyApplication'</Item>
+            </Issue>
+            <Notes>
+             <User Name="clid1213">
+              <Note Id="5" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="MyComputer">
+          <Messages>
+           <Message TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812" Status="Excluded" Created="2008-05-02 18:25:50Z">
+            <Issue>
+             <Item>'MyComputer'</Item>
+            </Issue>
+            <Notes>
+             <User Name="clid1213">
+              <Note Id="6" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="MyProject">
+          <Members>
+           <Member Name="#Computer">
+            <Accessors>
+             <Accessor Name="#get_Computer()">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-05-02 18:25:50Z">
+                <Issue>
+                 <Item>'MyProject.Computer.Get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#WebServices">
+            <Accessors>
+             <Accessor Name="#get_WebServices()">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2008-05-02 18:25:50Z">
+                <Issue>
+                 <Item>'MyProject.WebServices.Get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="MyProject+MyWebServices">
+          <Members>
+           <Member Name="#Dispose__Instance__`1(!!0&amp;)">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-05-02 18:25:50Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'MyProject.MyWebServices.Dispose__Instance__(Of T)(ByRef T)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetType()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-05-02 18:25:50Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'MyProject.MyWebServices.GetType()'</Item>
+              </Issue>
              </Message>
             </Messages>
            </Member>
@@ -1060,67 +2782,124 @@
         </Types>
        </Namespace>
       </Namespaces>
+      <Resources>
+       <Resource Name="OrmapTaxlotEditing.AboutForm.resources">
+        <Messages>
+         <Message Id="Toolbar" TypeName="ResourceStringCompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1701" Created="2008-05-02 18:25:50Z">
+          <Issue Name="StringResourceShouldBeCompoundWord">
+           <Item>'OrmapTaxlotEditing.AboutForm.resx'</Item>
+           <Item>RichTextBox1.Text</Item>
+           <Item>Toolbar</Item>
+           <Item>ORMAP Taxlot Editing Toolbar is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.&#xA;&#xA;This program is distributed in the hope tha...</Item>
+           <Item>ToolBar</Item>
+          </Issue>
+          <Issue Name="StringResourceShouldBeCompoundWord">
+           <Item>'OrmapTaxlotEditing.AboutForm.resx'</Item>
+           <Item>RichTextBox1.Text</Item>
+           <Item>Toolbar</Item>
+           <Item>ORMAP Taxlot Editing Toolbar is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.&#xA;&#xA;This program is distributed in the hope tha...</Item>
+           <Item>ToolBar</Item>
+          </Issue>
+         </Message>
+        </Messages>
+       </Resource>
+      </Resources>
      </Module>
     </Modules>
    </Target>
   </Targets>
   <Notes>
+   <User Name="clid1213">
+    <Note Id="0" Modified="2008-05-02 21:13:14Z">ESRI ArcGIS Component Category Registrar generated code cannot be altered to meet rule.</Note>
+    <Note Id="1" Modified="2008-05-02 21:13:19Z">ESRI ArcGIS Component Category Registrar generated code cannot be altered to meet rule.</Note>
+    <Note Id="2" Modified="2008-05-02 21:14:23Z">"Dataset" is common ESRI usage (e.g. IDataset).</Note>
+    <Note Id="3" Modified="2008-05-02 21:14:43Z">"Dataset" is common ESRI usage (e.g. IDataset).</Note>
+    <Note Id="4" Modified="2008-05-02 22:25:05Z">"Taxlots" is common alternate usage for "tax lots".</Note>
+    <Note Id="5" Modified="2008-05-02 22:51:05Z">Class generated by runtime.</Note>
+    <Note Id="6" Modified="2008-05-02 22:51:21Z">Class generated by runtime.</Note>
+   </User>
    <User Name="nick">
     <Note Id="0" Modified="2008-02-02 08:59:24Z">"Toolbar" is common ESRI usage (e.g. IToolbar and BaseToolbar).</Note>
     <Note Id="1" Modified="2008-02-02 09:11:54Z">This property implements an ESRI ArcGIS WriteOnly property</Note>
     <Note Id="2" Modified="2008-02-02 09:14:34Z">ESRI ArcGIS Component Category Registrar generated code cannot be altered to meet rule.</Note>
     <Note Id="3" Modified="2008-02-02 11:02:33Z">ESRI ArcGIS Component Category Registrar generated code cannot be altered to meet rule.</Note>
-    <Note Id="4" Modified="2008-02-02 11:26:11Z">ESRI ArcGIS Component Category Registrar generated code cannot be altered to meet rule.</Note>
    </User>
   </Notes>
   <Rules>
-   <Rule TypeName="AssembliesShouldDeclareMinimumSecurity" Category="Microsoft.Usage" CheckId="CA2209">
-    <Resolution Name="Default">No valid permission requests were found for assembly '{0}'. You should always specify the minimum security permissions using SecurityAction.RequestMinimum.</Resolution>
-   </Rule>
-   <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
-    <Resolution Name="NoStrongName">Sign '{0}' with a strong name key.</Resolution>
-   </Rule>
    <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
-    <Resolution Name="Default">'{0}' appears to have no upstream public or protected callers.</Resolution>
+    <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812">
+    <Resolution Name="Default">{0} is an internal class that is apparently never instantiated. If so, remove the code from the assembly. If this class is intended to contain only static methods, consider adding a private constructor to prevent the compiler from generating a default constructor.</Resolution>
    </Rule>
    <Rule TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823">
-    <Resolution Name="Default">It appears that field '{0}' is never used or is only ever assigned to. Use this field or remove it.</Resolution>
-   </Rule>
-   <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
-    <Resolution Name="ShouldBeCompoundWord">The discrete term '{0}' in {1} '{2}' should be expressed as a compound term, '{3}'.</Resolution>
+    <Resolution Name="Default">It appears that field {0} is never used or is only ever assigned to. Use this field or remove it.</Resolution>
    </Rule>
    <Rule TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411">
-    <Resolution Name="Default">Change the accessibility of {0}, a Com registration function, to private.</Resolution>
+    <Resolution Name="Default">Change the accessibility of {0}, a COM registration function, to private.</Resolution>
    </Rule>
-   <Rule TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303">
-    <Resolution Name="Default">{0} passes a literal as parameter {1} of a call to {2}. Retrieve the following string argument from a resource table instead: '{3}'</Resolution>
+   <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+    <Resolution Name="MemberParameterShouldBeCompoundWord">In member {0}, the discrete term '{1}' in parameter name {2} should be expressed as a compound word, '{3}'.</Resolution>
+    <Resolution Name="TypeShouldBeCompoundWord">The discrete term '{0}' in type name {1} should be expressed as a compound word, '{2}'.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800">
+    <Resolution Name="Local">{0}, a variable, is cast to type {1} multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
+    <Resolution Name="Parameter">{0}, a parameter, is cast to type {1} multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031">
+    <Resolution Name="Default">Modify {0} to catch a more specific exception than {1} or rethrow the exception.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805">
+    <Resolution Name="Default">{0} initializes field {1} of type {2} to {3}. Remove this initialization because it will be done automatically by the runtime.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045">
+    <Resolution Name="Default">Consider a design that does not require that {0} be a reference parameter.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
-    <Resolution Name="Type">Correct the spelling of the unrecognized token '{0}' in type name '{1}'.</Resolution>
+    <Resolution Name="Member">Correct the spelling of '{0}' in member name {1} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+    <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
    </Rule>
-   <Rule TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204">
-    <Resolution Name="Default">Correct the spelling of the unrecognized token '{0}' in the literal '{1}'.</Resolution>
+   <Rule TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720">
+    <Resolution Name="LanguageIndependentMemberParameter">In member {0}, consider replacing the data type identifier '{1}' in parameter name {2} with a more generic term, such as 'value'.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707">
+    <Resolution Name="Member">Remove the underscores from member name {0}.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017">
+    <Resolution Name="AttributeTrue">Consider changing the ComVisible attribute on {0} to false, and opting in at the type level.</Resolution>
    </Rule>
    <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
-    <Resolution Name="Default">The 'this' parameter (or 'Me' in VB) of {0} is never used. Mark the member as static (or Shared in VB) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
+    <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
    </Rule>
    <Rule TypeName="PropertiesShouldNotBeWriteOnly" Category="Microsoft.Design" CheckId="CA1044">
     <Resolution Name="Default">Add a property getter to '{0}'.</Resolution>
    </Rule>
-   <Rule TypeName="ProvideCorrectArgumentsToFormattingMethods" Category="Microsoft.Usage" CheckId="CA2241">
-    <Resolution Name="MissingSpecifier">A call to {0} in {1} does not appear to provide a format specifier for argument {2}. The complete format string provided is '{3}'.</Resolution>
+   <Rule TypeName="RemoveEmptyFinalizers" Category="Microsoft.Performance" CheckId="CA1821">
+    <Resolution Name="Default">{0} implements a finalizer that only calls conditionally emitted methods or the base type finalizer. Remove the finalizer or ensure that it is only conditionally compiled into the assembly. If this violation occurs against a finalizer that is entirely wrapped in a conditionally-emitted block of code, suppress this message.</Resolution>
+   </Rule>
+   <Rule TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804">
+    <Resolution Name="Default">{0} declares a variable, {1}, of type {2}, which is never used or is only assigned to. Use this variable or remove it.</Resolution>
+   </Rule>
+   <Rule TypeName="ResourceStringCompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1701">
+    <Resolution Name="StringResourceShouldBeCompoundWord">In resource {0}, referenced by name '{1}' the discrete term '{2}' in string value '{3}' should be expressed as a compound word. If '{2}' refers to an API identifier, case it as '{4}', otherwise split it into two words separated by a space.</Resolution>
+   </Rule>
+   <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
+    <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304">
+    <Resolution Name="Default">Because the behavior of {0} could vary based on the current user's locale settings, replace this call in {1} with a call to {2}. If the result of {2} will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'CultureInfo' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Resolution>
    </Rule>
    <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
-    <Resolution Name="Default">{0} makes a call to {1} that does not explicitly provide an IFormatProvider. This should be replaced with a call to {2}.</Resolution>
+    <Resolution Name="Default">Because the behavior of {0} could vary based on the current user's locale settings, replace this call in {1} with a call to {2}. If the result of {2} will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Resolution>
    </Rule>
    <Rule TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300">
-    <Resolution Name="Default">Change {0} to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Resolution>
+    <Resolution Name="Default">Change {0} to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control.</Resolution>
    </Rule>
-   <Rule TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001">
-    <Resolution Name="Default">Implement IDisposable on '{0}' as it instantiates members of the following IDisposable types: {1}</Resolution>
+   <Rule TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307">
+    <Resolution Name="Default">{0} makes a call to {1} that does not explicitly provide a StringComparison. This should be replaced with a call to {2}.</Resolution>
    </Rule>
-   <Rule TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062">
-    <Resolution Name="Default">Validate parameter {0} passed to externally visible method {1}.</Resolution>
+   <Rule TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024">
+    <Resolution Name="Default">Change {0} to a property if appropriate.</Resolution>
    </Rule>
   </Rules>
  </FxCopReport>

@@ -102,12 +102,21 @@ Public Class CatalogFileDialog
     Public Const NoSelectedElementIndex As Integer = -1
 
     ''' <summary>
-    ''' Retrieve an item selected from a file dialog box
+    ''' Retrieve an item selected from a file dialog box.
     ''' </summary>
-    ''' <param name="selection"></param>
-    ''' <returns></returns>
-    ''' <remarks>Return the nth selected element from the most recent file save/open dialog request</remarks>
-    Public Function SelectedObject(Optional ByVal selection As Integer = NoSelectedElementIndex) As Object
+    ''' <returns>A file object.</returns>
+    ''' <remarks>Return the nth selected element from the most recent file save/open dialog request.</remarks>
+    Public Overloads Function SelectedObject() As Object
+        Return SelectedObject(NoSelectedElementIndex)
+    End Function
+
+    ''' <summary>
+    ''' Retrieve an item selected from a file dialog box.
+    ''' </summary>
+    ''' <param name="selection">Preselect a file from the list.</param>
+    ''' <returns>A file object.</returns>
+    ''' <remarks>Return the nth selected element from the most recent file save/open dialog request.</remarks>
+    Public Overloads Function SelectedObject(ByVal selection As Integer) As Object
         If selection > _colSelection.Count Then
             Return String.Empty
         ElseIf selection = NoSelectedElementIndex Then
@@ -140,14 +149,35 @@ Public Class CatalogFileDialog
     End Sub
 
     ''' <summary>
-    ''' Simplify adding a filter to the file dialog box
+    ''' Simplify adding a filter to the file dialog box.
     ''' </summary>
-    ''' <param name="filter">An ArcObject defined object filter</param>
-    ''' <param name="isDefault">Indicates if the filter should be the default filter</param>
-    ''' <param name="resetAll">Indicates whether or not all of the current filters should be cleared</param>
-    ''' <returns></returns>
-    ''' <remarks>Adds a ESRI ArcCatalog defined filter to a file dialog box filter list</remarks>
-    Public Function SetFilter(ByRef filter As IGxObjectFilter, Optional ByRef isDefault As Boolean = False, Optional ByRef resetAll As Boolean = True) As Boolean
+    ''' <param name="filter">An ArcObject defined object filter.</param>
+    ''' <returns><c>True</c> if successful;<c>False</c> if error.</returns>
+    ''' <remarks>Adds a ESRI ArcCatalog defined filter to a file dialog box filter list.</remarks>
+    Public Overloads Function SetFilter(ByRef filter As IGxObjectFilter) As Boolean
+        Return SetFilter(filter, False, True)
+    End Function
+
+    ''' <summary>
+    ''' Simplify adding a filter to the file dialog box.
+    ''' </summary>
+    ''' <param name="filter">An ArcObject defined object filter.</param>
+    ''' <param name="isDefault">Indicates if the filter should be the default filter.</param>
+    ''' <returns><c>True</c> if successful;<c>False</c> if error.</returns>
+    ''' <remarks>Adds a ESRI ArcCatalog defined filter to a file dialog box filter list.</remarks>
+    Public Overloads Function SetFilter(ByRef filter As IGxObjectFilter, ByRef isDefault As Boolean) As Boolean
+        Return SetFilter(filter, isDefault, True)
+    End Function
+
+    ''' <summary>
+    ''' Simplify adding a filter to the file dialog box.
+    ''' </summary>
+    ''' <param name="filter">An ArcObject defined object filter.</param>
+    ''' <param name="isDefault">Indicates if the filter should be the default filter.</param>
+    ''' <param name="resetAll">Indicates whether or not all of the current filters should be cleared.</param>
+    ''' <returns><c>True</c> if successful;<c>False</c> if error.</returns>
+    ''' <remarks>Adds a ESRI ArcCatalog defined filter to a file dialog box filter list.</remarks>
+    Public Overloads Function SetFilter(ByRef filter As IGxObjectFilter, ByRef isDefault As Boolean, ByRef resetAll As Boolean) As Boolean
         Try
             Dim filters As IGxObjectFilterCollection
             filters = DirectCast(_theGxDialog, IGxObjectFilterCollection)

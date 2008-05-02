@@ -87,12 +87,12 @@ Public NotInheritable Class SpatialUtilities
     ''' </summary>
     ''' <param name="fieldName">Name of the field to draw the domain from.</param>
     ''' <param name="fields">The fields collection that contains <paramref name="fieldName">fieldName</paramref>.</param>
-    ''' <param name="aComboBox">The combobox to populate.</param>
+    ''' <param name="comboBox">The combobox to populate.</param>
     ''' <param name="currentValue">The current value of the field.</param>
     ''' <param name="allowSpace">Allow a space/null entry in the list.</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Shared Function AddCodesToCombo(ByVal fieldName As String, ByVal fields As IFields, ByRef aComboBox As ComboBox, ByVal currentValue As Object, Optional ByVal allowSpace As Boolean = False) As Boolean
+    Public Shared Function AddCodesToCombo(ByVal fieldName As String, ByVal fields As IFields, ByRef comboBox As ComboBox, ByVal currentValue As Object, ByVal allowSpace As Boolean) As Boolean
         Dim returnValue As Boolean = False
         Try
             Dim theFieldIndex As Integer = fields.FindField(fieldName)
@@ -107,7 +107,7 @@ Public NotInheritable Class SpatialUtilities
                         thisCodedValueDomain = DirectCast(thisDomain, ICodedValueDomain)
                         Dim codeCount As Integer = thisCodedValueDomain.CodeCount
                         If Not allowSpace Then
-                            With aComboBox
+                            With comboBox
                                 If .Items.Count > 0 Then
                                     'find the blank
                                     Dim textPosition As Integer = .FindStringExact(String.Empty, -1) 'HACK: JWM this is my best guess on how to find null string
@@ -118,19 +118,19 @@ Public NotInheritable Class SpatialUtilities
                             End With
                         End If
                         For i As Integer = 0 To codeCount - 1
-                            aComboBox.Items.Add(thisCodedValueDomain.Name(i))
+                            comboBox.Items.Add(thisCodedValueDomain.Name(i))
                         Next i
                         'If current value is null, add an empty string and make it active
                         If TypeOf currentValue Is String Then
                             If currentValue.Equals(String.Empty) Then
                                 If allowSpace Then
-                                    aComboBox.Items.Add(String.Empty)
-                                    aComboBox.SelectedIndex = aComboBox.FindStringExact(String.Empty, 0)
+                                    comboBox.Items.Add(String.Empty)
+                                    comboBox.SelectedIndex = comboBox.FindStringExact(String.Empty, 0)
                                 Else
-                                    aComboBox.SelectedIndex = 0
+                                    comboBox.SelectedIndex = 0
                                 End If
                             Else 'Otherwise, select the existing value from the list
-                                aComboBox.SelectedIndex = aComboBox.FindStringExact(CStr(currentValue), 0)
+                                comboBox.SelectedIndex = comboBox.FindStringExact(CStr(currentValue), 0)
                             End If
                             returnValue = True
                         End If 'if a valid domain
@@ -535,7 +535,7 @@ Public NotInheritable Class SpatialUtilities
     ''' <param name="envelope">An envelope object of type IEnvelope.</param>
     ''' <returns>A Point object that represents the center of the envelope.</returns>
     ''' <remarks></remarks>
-    Public Shared Function GetCenterOfEnvelope(ByRef envelope As IEnvelope) As IPoint
+    Public Shared Function GetCenterOfEnvelope(ByVal envelope As IEnvelope) As IPoint
         Try
             Dim center As IPoint
             center = New Point
@@ -571,21 +571,21 @@ Public NotInheritable Class SpatialUtilities
     ''' <summary>
     '''  Validate and format a map suffix number.
     ''' </summary>
-    ''' <param name="theFeature">An object that supports the IFeature interface.</param>
+    ''' <param name="feature">An object that supports the IFeature interface.</param>
     ''' <returns>A string the represents a properly formatted Map Suffix.</returns>
     ''' <remarks></remarks>
-    Public Shared Function GetMapSuffixNum(ByVal theFeature As IFeature) As String
+    Public Shared Function GetMapSuffixNumber(ByVal feature As IFeature) As String
 
         Try
             Dim returnValue As New String("0"c, 3)
-            Dim theTaxlotMapSuffixFieldIndex As Integer = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixNumberField)
+            Dim theTaxlotMapSuffixFieldIndex As Integer = LocateFields(DirectCast(feature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixNumberField)
             If theTaxlotMapSuffixFieldIndex > -1 Then
-                If Not IsDBNull(theFeature.Value(theTaxlotMapSuffixFieldIndex)) Then
-                    returnValue = CStr(theFeature.Value(theTaxlotMapSuffixFieldIndex))
+                If Not IsDBNull(feature.Value(theTaxlotMapSuffixFieldIndex)) Then
+                    returnValue = CStr(feature.Value(theTaxlotMapSuffixFieldIndex))
                 End If
                 'verify that it is exactly 3 digits
                 If returnValue.Length < 3 Then
-                    returnValue.PadLeft(3, "0"c)
+                    returnValue = returnValue.PadLeft(3, "0"c)
                 End If
                 If returnValue.Length > 3 Then
                     returnValue = returnValue.Substring(0, 3)
@@ -614,7 +614,7 @@ Public NotInheritable Class SpatialUtilities
                     returnValue = CStr(theFeature.Value(theTaxlotMapTypeFieldIndex))
                     'verify that it is one digit
                     If returnValue.Length > 1 Then
-                        returnValue.PadLeft(1, "0"c)
+                        returnValue = returnValue.PadLeft(1, "0"c)
                     End If
                     'verify that it is not more than 1 digit
                     If returnValue.Length > 1 Then
@@ -719,28 +719,48 @@ Public NotInheritable Class SpatialUtilities
         Return theTaxlotFLayer
     End Function
 
-    ' TODO: [NIS] Refactor (smaller modules).
     ''' <summary>
     ''' Overlay the passed in feature with a feature class to get a value from 
     ''' the specified field.
     ''' </summary>
-    ''' <param name="theGeometry">The search geometry.</param>
+    ''' <param name="searchGeometry">The search geometry.</param>
     ''' <param name="overlayFeatureClass">Overlaying feature class.</param>
     ''' <param name="valueFieldName">Name of field to return value for.</param>
-    ''' <param name="orderBestByFieldName">Name of field to order by in the 
-    ''' case of a tie in area/length of intersection.</param>
-    ''' <returns>Returns the value from the specified field (<paramref>valueFieldName</paramref>) as a string.</returns>
+    ''' <returns>Returns the value from the specified field (<paramref>valueFieldName</paramref>) 
+    ''' as a string.</returns>
     ''' <remarks>Gets the target feature with the largest area of intersection 
     ''' with the geometry and gets its value from the field, or, if tied (unikely 
     ''' but possible), then gets the best (lowest) value from the field, based 
     ''' on the order by field value.</remarks>
-    Public Shared Function GetValueViaOverlay(ByRef theGeometry As IGeometry, ByRef overlayFeatureClass As IFeatureClass, ByVal valueFieldName As String, Optional ByVal orderBestByFieldName As String = "") As String
+    Public Overloads Shared Function GetValueViaOverlay(ByRef searchGeometry As IGeometry, ByRef overlayFeatureClass As IFeatureClass, ByVal valueFieldName As String) As String
+        Return GetValueViaOverlay(searchGeometry, overlayFeatureClass, valueFieldName, "")
+    End Function
+
+    ''' <summary>
+    ''' Overlay the passed in feature with a feature class to get a value from 
+    ''' the specified field.
+    ''' </summary>
+    ''' <param name="searchGeometry">The search geometry.</param>
+    ''' <param name="overlayFeatureClass">Overlaying feature class.</param>
+    ''' <param name="valueFieldName">Name of field to return value for.</param>
+    ''' <param name="orderBestByFieldName">Name of field to order by in the 
+    ''' case of a tie in area/length of intersection.</param>
+    ''' <returns>Returns the value from the specified field (<paramref>valueFieldName</paramref>) 
+    ''' as a string.</returns>
+    ''' <remarks>Gets the target feature with the largest area of intersection 
+    ''' with the geometry and gets its value from the field, or, if tied (unikely 
+    ''' but possible), then gets the best (lowest) value from the field, based 
+    ''' on the order by field value.</remarks>
+    Public Overloads Shared Function GetValueViaOverlay(ByRef searchGeometry As IGeometry, ByRef overlayFeatureClass As IFeatureClass, ByVal valueFieldName As String, ByVal orderBestByFieldName As String) As String
+
+        ' TODO: [NIS] Refactor (smaller modules).
+
         Try
             Dim continueThisProcess As Boolean
 
             continueThisProcess = True 'initialize
 
-            If (theGeometry Is Nothing) OrElse (overlayFeatureClass Is Nothing) OrElse (valueFieldName.Length <= 0) Then
+            If (searchGeometry Is Nothing) OrElse (overlayFeatureClass Is Nothing) OrElse (valueFieldName.Length <= 0) Then
                 ' TODO: [NIS] Add assertions here
                 continueThisProcess = False
             End If
@@ -783,18 +803,18 @@ Public NotInheritable Class SpatialUtilities
             Const fuzzFactor As Double = 0.05 ' TODO: [NIS] Re-implement as user setting?
 
             If continueThisProcess Then
-                Select Case theGeometry.GeometryType
+                Select Case searchGeometry.GeometryType
                     Case esriGeometryType.esriGeometryPolygon
-                        thisPolygon = DirectCast(theGeometry, IPolygon)
+                        thisPolygon = DirectCast(searchGeometry, IPolygon)
                         thisArea = DirectCast(thisPolygon, IArea)
                         intersectFuzzAmount = thisArea.Area * fuzzFactor
 
                     Case esriGeometryType.esriGeometryPolyline, esriGeometryType.esriGeometryLine, esriGeometryType.esriGeometryBezier3Curve, esriGeometryType.esriGeometryCircularArc, esriGeometryType.esriGeometryEllipticArc, esriGeometryType.esriGeometryPath
-                        thisCurve = DirectCast(theGeometry, ICurve)
+                        thisCurve = DirectCast(searchGeometry, ICurve)
                         intersectFuzzAmount = thisCurve.Length * fuzzFactor
 
                     Case esriGeometryType.esriGeometryEnvelope
-                        thisEnvelope = DirectCast(theGeometry, IEnvelope)
+                        thisEnvelope = DirectCast(searchGeometry, IEnvelope)
                         thisPolygon = envelopeToPolygon(thisEnvelope)
                         thisArea = DirectCast(thisPolygon, IArea)
                         intersectFuzzAmount = thisArea.Area * fuzzFactor
@@ -814,7 +834,7 @@ Public NotInheritable Class SpatialUtilities
                 Dim largestIntersectArea As Double = 0
                 Dim longestIntersectLength As Double = 0
 
-                theOverlayFeatureCursor = doSpatialQuery(overlayFeatureClass, theGeometry, esriSpatialRelEnum.esriSpatialRelIntersects)
+                theOverlayFeatureCursor = doSpatialQuery(overlayFeatureClass, searchGeometry, esriSpatialRelEnum.esriSpatialRelIntersects)
                 If theOverlayFeatureCursor IsNot Nothing Then
                     anOverlayFeature = theOverlayFeatureCursor.NextFeature
                     Dim topoOperator As ITopologicalOperator
@@ -828,12 +848,12 @@ Public NotInheritable Class SpatialUtilities
                             topoOperator.Simplify()
                         End If
 
-                        Select Case theGeometry.GeometryType
+                        Select Case searchGeometry.GeometryType
 
                             Case esriGeometryType.esriGeometryEnvelope, esriGeometryType.esriGeometryPolygon
                                 ' Determine if the target feature has the largest area of intersection with the
                                 ' current source feature. Set flags used below.
-                                intersectGeometry = topoOperator.Intersect(theGeometry, esriGeometryDimension.esriGeometry2Dimension)
+                                intersectGeometry = topoOperator.Intersect(searchGeometry, esriGeometryDimension.esriGeometry2Dimension)
                                 If Not intersectGeometry.IsEmpty Then
                                     thisPolygon = DirectCast(intersectGeometry, IPolygon)
                                     thisArea = DirectCast(thisPolygon, IArea)
@@ -864,7 +884,7 @@ Public NotInheritable Class SpatialUtilities
                             Case esriGeometryType.esriGeometryLine, esriGeometryType.esriGeometryPolyline
                                 ' Determine if the target feature has the longest length of intersection with the
                                 ' current source feature. Set flags used below.
-                                intersectGeometry = topoOperator.Intersect(theGeometry, esriGeometryDimension.esriGeometry1Dimension)
+                                intersectGeometry = topoOperator.Intersect(searchGeometry, esriGeometryDimension.esriGeometry1Dimension)
                                 If Not intersectGeometry.IsEmpty Then
                                     thisCurve = DirectCast(intersectGeometry, ICurve)
                                     Dim intersectLength As Double
@@ -914,7 +934,7 @@ Public NotInheritable Class SpatialUtilities
                     Dim theBestOrderByValue As String = ""
 
                     Dim whereClause As String = String.Concat(overlayFeatureClass.OIDFieldName, " in (", candidateKeysToDelimitedString(dictCandidates), ")")
-                    theOverlayFeatureCursor = doSpatialQuery(overlayFeatureClass, theGeometry, esriSpatialRelEnum.esriSpatialRelIntersects, whereClause)
+                    theOverlayFeatureCursor = doSpatialQuery(overlayFeatureClass, searchGeometry, esriSpatialRelEnum.esriSpatialRelIntersects, whereClause)
                     If Not (theOverlayFeatureCursor Is Nothing) Then
                         anOverlayFeature = theOverlayFeatureCursor.NextFeature
                         While Not (anOverlayFeature Is Nothing)
@@ -1044,7 +1064,7 @@ Public NotInheritable Class SpatialUtilities
     ''' <param name="theObject">A valid initialized geodatabase object</param>
     ''' <returns>True or False</returns>
     ''' <remarks></remarks>
-    Public Shared Function IsORMAPFeature(ByRef theObject As IObject) As Boolean
+    Public Shared Function IsOrmapFeature(ByRef theObject As IObject) As Boolean
         Try
             Dim returnValue As Boolean = False
             Dim thisObjectClass As IObjectClass
@@ -1111,13 +1131,26 @@ Public NotInheritable Class SpatialUtilities
     ''' Loads the specified feature class into the current map as a feature layer.
     ''' </summary>
     ''' <param name="featureClassName">The feature class to find.</param>
-    ''' <param name="title">An alternate title for the file dialog box.</param>
     ''' <returns><c>True</c> for found and loaded, <c>False</c> for not found and loaded.</returns>
     ''' <remarks>Show a dialog box with title that allows the user to select the 
     ''' personal geodatabase that the <paramref name="featureClassName"/> resides in. 
     ''' The feature class is then loaded in the current map from the chosen personal 
     ''' geodatabase.</remarks>
-    Public Shared Function LoadFCIntoMap(ByVal featureClassName As String, Optional ByVal title As String = "") As Boolean
+    Public Overloads Shared Function LoadFCIntoMap(ByVal featureClassName As String) As Boolean
+        Return LoadFCIntoMap(featureClassName, "")
+    End Function
+
+    ''' <summary>
+    ''' Loads the specified feature class into the current map as a feature layer.
+    ''' </summary>
+    ''' <param name="featureClassName">The feature class to find.</param>
+    ''' <param name="dialogTitle">An alternate title for the file dialog box.</param>
+    ''' <returns><c>True</c> for found and loaded, <c>False</c> for not found and loaded.</returns>
+    ''' <remarks>Show a dialog box with title that allows the user to select the 
+    ''' personal geodatabase that the <paramref name="featureClassName"/> resides in. 
+    ''' The feature class is then loaded in the current map from the chosen personal 
+    ''' geodatabase.</remarks>
+    Public Overloads Shared Function LoadFCIntoMap(ByVal featureClassName As String, ByVal dialogTitle As String) As Boolean
         Try
             Dim thisFileDialog As CatalogFileDialog
             thisFileDialog = New CatalogFileDialog()
@@ -1125,8 +1158,8 @@ Public NotInheritable Class SpatialUtilities
             With thisFileDialog
                 .SetAllowMultiSelect(True)
                 .SetButtonCaption("Select")
-                If title.Length > 0 Then
-                    .SetTitle(title)
+                If dialogTitle.Length > 0 Then
+                    .SetTitle(dialogTitle)
                 Else
                     .SetTitle(String.Concat("Find feature class ", featureClassName, "..."))
                 End If
@@ -1179,13 +1212,26 @@ Public NotInheritable Class SpatialUtilities
     ''' Loads the specified object class (table) into the current map.
     ''' </summary>
     ''' <param name="objectClassName">The object class (table) to find.</param>
-    ''' <param name="title">An alternate title for the file dialog box.</param>
     ''' <returns><c>True</c> for found and loaded, <c>False</c> for not found and loaded.</returns>
     ''' <remarks>Show a dialog box with title that allows the user to select the 
     ''' personal geodatabase that the <paramref name="objectClassName"/> resides in. 
     ''' The object class is then loaded in the current map from the chosen personal 
     ''' geodatabase.</remarks>
-    Public Shared Function LoadTableIntoMap(ByVal objectClassName As String, Optional ByVal title As String = "") As Boolean
+    Public Overloads Shared Function LoadTableIntoMap(ByVal objectClassName As String) As Boolean
+        Return LoadTableIntoMap(objectClassName, "")
+    End Function
+
+    ''' <summary>
+    ''' Loads the specified object class (table) into the current map.
+    ''' </summary>
+    ''' <param name="objectClassName">The object class (table) to find.</param>
+    ''' <param name="dialogTitle">An alternate title for the file dialog box.</param>
+    ''' <returns><c>True</c> for found and loaded, <c>False</c> for not found and loaded.</returns>
+    ''' <remarks>Show a dialog box with title that allows the user to select the 
+    ''' personal geodatabase that the <paramref name="objectClassName"/> resides in. 
+    ''' The object class is then loaded in the current map from the chosen personal 
+    ''' geodatabase.</remarks>
+    Public Overloads Shared Function LoadTableIntoMap(ByVal objectClassName As String, ByVal dialogTitle As String) As Boolean
 
         ' TODO: [NIS] TEST THIS...
 
@@ -1196,8 +1242,8 @@ Public NotInheritable Class SpatialUtilities
             With theFileDialog
                 .SetAllowMultiSelect(True)
                 .SetButtonCaption("Select")
-                If title.Length > 0 Then
-                    .SetTitle(title)
+                If dialogTitle.Length > 0 Then
+                    .SetTitle(dialogTitle)
                 Else
                     .SetTitle(String.Concat("Find object class (table) ", objectClassName, "..."))
                 End If
@@ -1276,34 +1322,47 @@ Public NotInheritable Class SpatialUtilities
     ''' <summary>
     ''' Reads a value from a row, given a field name.
     ''' </summary>
-    ''' <param name="aRow">An object that implements the IRow interface.</param>
+    ''' <param name="row">An object that implements the IRow interface.</param>
+    ''' <param name="fieldName">A field that exists in row.</param>
+    ''' <returns>A string containing the coded name.</returns>
+    ''' <remarks>Reads the value of a field with a domain and translates 
+    ''' the value from the coded value to the coded name.</remarks>
+    Public Overloads Shared Function ReadValue(ByRef row As IRow, ByVal fieldName As String) As String
+        Return ReadValue(row, fieldName, "")
+    End Function
+
+    ''' <summary>
+    ''' Reads a value from a row, given a field name.
+    ''' </summary>
+    ''' <param name="row">An object that implements the IRow interface.</param>
     ''' <param name="fieldName">A field that exists in row.</param>
     ''' <param name="dataType">A string value indicating data type of the field.</param>
-    ''' <returns></returns>
-    ''' <remarks>Reads the value of a field with a domain and translates the value from the coded value to the coded name.</remarks>
-    Public Shared Function ReadValue(ByRef aRow As IRow, ByVal fieldName As String, Optional ByVal dataType As String = "") As String
+    ''' <returns>A string containing the coded name.</returns>
+    ''' <remarks>Reads the value of a field with a domain and translates 
+    ''' the value from the coded value to the coded name.</remarks>
+    Public Overloads Shared Function ReadValue(ByRef row As IRow, ByVal fieldName As String, ByVal dataType As String) As String
         Try
             Dim fieldIndex As Integer
             Dim returnValue As String = ""
 
-            fieldIndex = aRow.Fields.FindField(fieldName)
+            fieldIndex = row.Fields.FindField(fieldName)
             If fieldIndex > -1 Then
                 If String.Compare(dataType, "date", True) = 0 Then
-                    If IsDBNull(aRow.Value(fieldIndex)) Then
+                    If IsDBNull(row.Value(fieldIndex)) Then
                         returnValue = CStr(System.DateTime.Today)
                     Else
-                        returnValue = CStr(aRow.Value(fieldIndex))
+                        returnValue = CStr(row.Value(fieldIndex))
                     End If
                 Else
-                    If IsDBNull(aRow.Value(fieldIndex)) Then
+                    If IsDBNull(row.Value(fieldIndex)) Then
                         returnValue = String.Empty
                     Else
-                        returnValue = CStr(aRow.Value(fieldIndex))
+                        returnValue = CStr(row.Value(fieldIndex))
                     End If
                 End If
                 'Determine if a Domain Field
                 Dim field As IField
-                field = aRow.Fields.Field(fieldIndex)
+                field = row.Fields.Field(fieldIndex)
                 Dim domain As IDomain
                 domain = field.Domain
                 If Not domain Is Nothing Then
@@ -1312,7 +1371,7 @@ Public NotInheritable Class SpatialUtilities
                         Dim thisCodedValueDomain As ICodedValueDomain
                         thisCodedValueDomain = DirectCast(domain, ICodedValueDomain)
                         Dim domainValue As Object
-                        domainValue = aRow.Value(fieldIndex)
+                        domainValue = row.Value(fieldIndex)
                         'search domain for the code
                         For domainIndex As Integer = 0 To thisCodedValueDomain.CodeCount - 1
                             If thisCodedValueDomain.Value(domainIndex).ToString = domainValue.ToString Then 'TODO: [NIS] Confirm that ToString will work here
@@ -1648,7 +1707,7 @@ Public NotInheritable Class SpatialUtilities
     Private Shared Function generateORMAPTaxlotNumber(ByVal existingORMapNum As String, ByRef theFeature As IFeature, ByVal taxlotValue As String) As String
         Try
             Dim shortORMapNum As String = existingORMapNum.Substring(0, 19) 'replaces the ShortenOMTLNum function 
-            Dim taxlotMapSufNumberValue As String = GetMapSuffixNum(theFeature)
+            Dim taxlotMapSufNumberValue As String = GetMapSuffixNumber(theFeature)
             Dim taxlotMapSufTypeValue As String = GetMapSuffixType(theFeature)
             ' Recreate and return the ORMAP Taxlot number
             Return String.Concat(shortORMapNum, taxlotMapSufTypeValue, taxlotMapSufNumberValue, taxlotValue)

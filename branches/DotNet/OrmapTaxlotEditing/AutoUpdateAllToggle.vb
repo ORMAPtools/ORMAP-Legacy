@@ -179,7 +179,7 @@ Public NotInheritable Class AutoUpdateAllToggle
 
 #Region "IDisposable Interface Implementation"
 
-    Private _isDuringDispose As Boolean = False ' Used to track whether Dispose() has been called and is in progress.
+    Private _isDuringDispose As Boolean ' Used to track whether Dispose() has been called and is in progress.
 
     ''' <summary>
     ''' Dispose of managed and unmanaged resources.
@@ -195,7 +195,7 @@ Public NotInheritable Class AutoUpdateAllToggle
     ''' runtime from inside the finalizer and you should not reference 
     ''' other objects. Only unmanaged resources can be disposed.</para>
     ''' </remarks>
-    Protected Sub Dispose(ByVal disposing As Boolean)
+    Friend Sub Dispose(ByVal disposing As Boolean)
         ' Check to see if Dispose has already been called.
         If Not Me._isDuringDispose Then
 

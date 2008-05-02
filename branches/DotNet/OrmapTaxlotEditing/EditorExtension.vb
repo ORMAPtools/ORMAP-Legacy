@@ -253,7 +253,7 @@ Public NotInheritable Class EditorExtension
 
 #Region "Fields"
 
-    Private _duringAutoUpdate As Boolean = False
+    Private _isDuringAutoUpdate As Boolean
 
 #End Region
 
@@ -271,7 +271,7 @@ Public NotInheritable Class EditorExtension
         Try
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
             If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
-            If Not IsORMAPFeature(obj) Then Exit Try
+            If Not IsOrmapFeature(obj) Then Exit Try
 
             ' Update the minimum auto-calculated fields
             UpdateMinimumAutoFields(DirectCast(obj, IFeature))
@@ -279,8 +279,8 @@ Public NotInheritable Class EditorExtension
             If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Try
 
             ' Avoid rentrancy
-            If _duringAutoUpdate = False Then
-                _duringAutoUpdate = True
+            If _isDuringAutoUpdate = False Then
+                _isDuringAutoUpdate = True
             Else
                 Throw New InvalidOperationException("Already in AutoUpdate mode. Cannot initiate AutoUpdate.")
                 Exit Try
@@ -306,7 +306,7 @@ Public NotInheritable Class EditorExtension
 
                 Exit Try
             End If
-            
+
             ' Variable declarations
             Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
             Dim theAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
@@ -336,7 +336,7 @@ Public NotInheritable Class EditorExtension
             MessageBox.Show(ex.ToString)
 
         Finally
-            _duringAutoUpdate = False
+            _isDuringAutoUpdate = False
 
         End Try
 
@@ -354,7 +354,7 @@ Public NotInheritable Class EditorExtension
         Try
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
             If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
-            If Not IsORMAPFeature(obj) Then Exit Try
+            If Not IsOrmapFeature(obj) Then Exit Try
 
             ' Update the minimum auto-calculated fields
             UpdateMinimumAutoFields(DirectCast(obj, IFeature))
@@ -512,7 +512,7 @@ Public NotInheritable Class EditorExtension
         Try
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
             If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
-            If Not IsORMAPFeature(obj) Then Exit Try ' TODO: [NIS] Is this even needed here?
+            If Not IsOrmapFeature(obj) Then Exit Try ' TODO: [NIS] Is this even needed here?
             If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Try
 
             ' Note: Must check here for if required data is available

@@ -138,10 +138,12 @@ Public NotInheritable Class AddArrows
 
     Public Overrides Sub OnCreate(ByVal hook As Object)
         If Not hook Is Nothing Then
-            _application = DirectCast(hook, IApplication)
 
-            'Disable if it is not ArcMap
+            'Disable tool if parent application is not ArcMap
             If TypeOf hook Is IMxApplication Then
+                _application = DirectCast(hook, IApplication)
+                ' TODO: [SC] Create the form, property and set__ procedure. (Nick)
+                'setPartnerAddArrowsForm(New AddArrowsForm())
                 MyBase.m_enabled = True
             Else
                 MyBase.m_enabled = False
@@ -182,7 +184,7 @@ Public NotInheritable Class AddArrows
 
 #Region "IDisposable Interface Implementation"
 
-    Private _isDuringDispose As Boolean = False ' Used to track whether Dispose() has been called and is in progress.
+    Private _isDuringDispose As Boolean ' Used to track whether Dispose() has been called and is in progress.
 
     ''' <summary>
     ''' Dispose of managed and unmanaged resources.
@@ -198,7 +200,7 @@ Public NotInheritable Class AddArrows
     ''' runtime from inside the finalizer and you should not reference 
     ''' other objects. Only unmanaged resources can be disposed.</para>
     ''' </remarks>
-    Protected Sub Dispose(ByVal disposing As Boolean)
+    Friend Sub Dispose(ByVal disposing As Boolean)
         ' Check to see if Dispose has already been called.
         If Not Me._isDuringDispose Then
 

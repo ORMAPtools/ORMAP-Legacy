@@ -70,7 +70,7 @@ Public NotInheritable Class ORMapNum
 #End Region
 
 #Region "Events"
-    Public Event OnChange(ByVal sender As Object, ByVal e As EventArgs)
+    Friend Event OnChange(ByVal sender As Object, ByVal e As EventArgs)
 #End Region
 
 #Region "Properties"

@@ -50,6 +50,7 @@ Imports ESRI.ArcGIS.Framework
 ProgId("ORMAPTaxlotEditing.CombineTaxlots")> _
 Public NotInheritable Class CombineTaxlots
     Inherits BaseCommand
+    Implements IDisposable
 
 #Region "Class-Level Constants And Enumerations"
     ' None
@@ -75,8 +76,8 @@ Public NotInheritable Class CombineTaxlots
 
         Try
             ' Set the bitmap based on the name of the class.
-            Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
-            MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
+            _bitmapResourceName = Me.GetType().Name + ".bmp"
+            MyBase.m_bitmap = New Bitmap(Me.GetType(), _bitmapResourceName)
         Catch ex As ArgumentException
             Trace.WriteLine(ex.Message, "Invalid Bitmap")
         End Try
@@ -92,6 +93,7 @@ Public NotInheritable Class CombineTaxlots
 #Region "Fields"
 
     Private _application As IApplication
+    Private _bitmapResourceName As String
 
 #End Region
 
@@ -128,10 +130,10 @@ Public NotInheritable Class CombineTaxlots
 
     Public Overrides Sub OnCreate(ByVal hook As Object)
         If Not hook Is Nothing Then
-            _application = CType(hook, IApplication)
 
             'Disable if it is not ArcMap
             If TypeOf hook Is IMxApplication Then
+                _application = CType(hook, IApplication)
                 MyBase.m_enabled = True
             Else
                 MyBase.m_enabled = False
@@ -152,7 +154,68 @@ Public NotInheritable Class CombineTaxlots
 #End Region
 
 #Region "Implemented Interface Members"
-    ' None
+
+#Region "IDisposable Interface Implementation"
+
+    Private _isDuringDispose As Boolean ' Used to track whether Dispose() has been called and is in progress.
+
+    ''' <summary>
+    ''' Dispose of managed and unmanaged resources.
+    ''' </summary>
+    ''' <param name="disposing">True or False.</param>
+    ''' <remarks>
+    ''' <para>Member of System::IDisposable.</para>
+    ''' <para>Dispose executes in two distinct scenarios. 
+    ''' If disposing equals true, the method has been called directly
+    ''' or indirectly by a user's code. Managed and unmanaged resources
+    ''' can be disposed.</para>
+    ''' <para>If disposing equals false, the method has been called by the 
+    ''' runtime from inside the finalizer and you should not reference 
+    ''' other objects. Only unmanaged resources can be disposed.</para>
+    ''' </remarks>
+    Friend Sub Dispose(ByVal disposing As Boolean)
+        ' Check to see if Dispose has already been called.
+        If Not Me._isDuringDispose Then
+
+            ' Flag that disposing is in progress.
+            Me._isDuringDispose = True
+
+            If disposing Then
+                ' Free managed resources when explicitly called.
+
+                ' Dispose managed resources here.
+                '   e.g. component.Dispose()
+
+            End If
+
+            ' Free "native" (shared unmanaged) resources, whether 
+            ' explicitly called or called by the runtime.
+
+            ' Call the appropriate methods to clean up 
+            ' unmanaged resources here.
+            _bitmapResourceName = Nothing
+            MyBase.m_bitmap = Nothing
+
+            ' Flag that disposing has been finished.
+            _isDuringDispose = False
+
+        End If
+
+    End Sub
+
+#Region " IDisposable Support "
+
+    ' This code added by Visual Basic to correctly implement the disposable pattern.
+    Public Sub Dispose() Implements IDisposable.Dispose
+        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        Dispose(True)
+        GC.SuppressFinalize(Me)
+    End Sub
+
+#End Region
+
+#End Region
+
 #End Region
 
 #Region "Other Members"

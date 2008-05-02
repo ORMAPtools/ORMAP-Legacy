@@ -90,21 +90,21 @@ Public NotInheritable Class StringUtilities
         End Try
     End Function
 
-    Public Shared Function GenerateMapTaxlotValue(ByVal mapTaxlotIDValue As String, ByVal formatString As String) As String
+    Public Shared Function GenerateMapTaxlotValue(ByVal mapTaxlotIdValue As String, ByVal formatString As String) As String
 
-        If mapTaxlotIDValue Is Nothing OrElse mapTaxlotIDValue.Length = 0 Then
-            Throw New ArgumentNullException("mapTaxlotIDValue")
+        If mapTaxlotIdValue Is Nothing OrElse mapTaxlotIdValue.Length = 0 Then
+            Throw New ArgumentNullException("mapTaxlotIdValue")
         End If
         If formatString Is Nothing OrElse formatString.Length = 0 Then
             Throw New ArgumentNullException("formatString")
         End If
-        If mapTaxlotIDValue.Length < 29 Then
-            Throw New ArgumentException("Invalid argument length", "mapTaxlotIDValue")
+        If mapTaxlotIdValue.Length < 29 Then
+            Throw New ArgumentException("Invalid argument length", "mapTaxlotIdValue")
         End If
 
         Try
             Dim countyCode As Short
-            countyCode = CShort(mapTaxlotIDValue.Substring(0, 2))
+            countyCode = CShort(mapTaxlotIdValue.Substring(0, 2))
 
             Dim hasTownPart As Boolean
             Dim hasRangePart As Boolean
@@ -112,16 +112,16 @@ Public NotInheritable Class StringUtilities
             Dim hasAlphaQtrQtr As Boolean = False
 
             'flag for half township
-            hasTownPart = (Convert.ToDouble(mapTaxlotIDValue.Substring(4, 3)) > 0)
-            hasRangePart = (Convert.ToDouble(mapTaxlotIDValue.Substring(10, 3)) > 0)
+            hasTownPart = (Convert.ToDouble(mapTaxlotIdValue.Substring(4, 3)) > 0)
+            hasRangePart = (Convert.ToDouble(mapTaxlotIdValue.Substring(10, 3)) > 0)
 
             'flags for section quarters
             Select Case countyCode
                 Case 1 To 19, 21 To 36
-                    If Not IsNumeric(mapTaxlotIDValue.Substring(16, 1)) Then
+                    If Not IsNumeric(mapTaxlotIdValue.Substring(16, 1)) Then
                         hasAlphaQtr = True
                     End If
-                    If Not IsNumeric(mapTaxlotIDValue.Substring(17, 1)) Then
+                    If Not IsNumeric(mapTaxlotIdValue.Substring(17, 1)) Then
                         hasAlphaQtrQtr = True
                     End If
             End Select
@@ -163,38 +163,38 @@ Public NotInheritable Class StringUtilities
                     Case 68 'D
                         If String.CompareOrdinal(previousCharInMask, "^") = 0 Then
                             If String.CompareOrdinal(maskValues.Chars(positionInMask - 2), "T") = 0 Then 'township
-                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(7, 1))
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(7, 1))
                             ElseIf String.CompareOrdinal(maskValues.Chars(positionInMask - 2), "R") = 0 Then 'range
-                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(13, 1))
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(13, 1))
                             End If
                         Else
                             If String.CompareOrdinal(previousCharInMask, "T") = 0 Then 'township
-                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(7, 1))
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(7, 1))
                             ElseIf String.CompareOrdinal(previousCharInMask, "R") = 0 Then 'range
-                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(13, 1))
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(13, 1))
                             End If
                         End If
                     Case 64 '@
                         'Formats for the parcel id
                         If Not hasProcessedParcelId Then
                             'since we are at the end of the string use Insert
-                            formattedResult.Insert(positionInMask, mapTaxlotIDValue.Substring(24, 5)) 'TODO: JWM verify
+                            formattedResult.Insert(positionInMask, mapTaxlotIdValue.Substring(24, 5)) 'TODO: JWM verify
                             hasProcessedParcelId = True
                         End If
                     Case 38 '& Using these characters in mask will strip leading zeros from parcel id
                         If Not hasProcessedParcelId Then '
                             'since we are at the end of the string use Insert
-                            Dim s As String = New String(CType(mapTaxlotIDValue.Substring(24, 5), Char()))
+                            Dim s As String = New String(CType(mapTaxlotIdValue.Substring(24, 5), Char()))
                             formattedResult.Insert(positionInMask, stripLeadingZeros(s))
                             hasProcessedParcelId = True
                         End If
                     Case 81 'Q
                         If String.CompareOrdinal(previousCharInMask, "Q") = 0 Then 'qtr qtr
                             If hasAlphaQtrQtr Then
-                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(17, 1))
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(17, 1))
                             Else
                                 Dim currentORMAPNumValue As String
-                                currentORMAPNumValue = mapTaxlotIDValue.Substring(17, 1).ToUpper
+                                currentORMAPNumValue = mapTaxlotIdValue.Substring(17, 1).ToUpper
                                 If currentORMAPNumValue Like "[A-D]" Then
                                     Select Case currentORMAPNumValue
                                         Case "A"
@@ -214,10 +214,10 @@ Public NotInheritable Class StringUtilities
                             End If
                         Else 'qtr
                             If hasAlphaQtr Then
-                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(16, 1))
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(16, 1))
                             Else
                                 Dim currentORMAPNum As String
-                                currentORMAPNum = mapTaxlotIDValue.Substring(16, 1)
+                                currentORMAPNum = mapTaxlotIdValue.Substring(16, 1)
                                 If currentORMAPNum Like "[A-D]" Then
                                     Select Case currentORMAPNum
                                         Case "A"
@@ -240,35 +240,35 @@ Public NotInheritable Class StringUtilities
                     Case 82 'Range
                         If String.CompareOrdinal(previousCharInMask, "R") <> 0 Then
                             If tokenCount > 1 Then
-                                formattedResult.Insert(positionInMask, mapTaxlotIDValue.Substring(8, tokenCount))
+                                formattedResult.Insert(positionInMask, mapTaxlotIdValue.Substring(8, tokenCount))
                             Else
-                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(9, 1))
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(9, 1))
                             End If
                         End If
                     Case 83 'S section
                         If String.CompareOrdinal(previousCharInMask, "S") = 0 Then 'second position
-                            formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(15, 1)) 'TODO: JWM verify
+                            formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(15, 1)) 'TODO: JWM verify
                         Else 'first position
-                            formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(14, 1))
+                            formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(14, 1))
                         End If
 
                     Case 84 'T township
                         If String.CompareOrdinal(previousCharInMask, "T") <> 0 Then
                             If tokenCount > 1 Then
-                                formattedResult.Insert(positionInMask, mapTaxlotIDValue.Substring(2, tokenCount))
+                                formattedResult.Insert(positionInMask, mapTaxlotIdValue.Substring(2, tokenCount))
                             Else
-                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(3, 1))
+                                formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(3, 1))
                             End If
                         End If
 
                     Case 80 'P fractional parts
                         If String.CompareOrdinal(previousCharInMask, "T") = 0 Then
                             If Not hasProcessedRangeFractional Then
-                                formattedResult.Insert(positionInMask, mapTaxlotIDValue.Substring(10, tokenCount))
+                                formattedResult.Insert(positionInMask, mapTaxlotIdValue.Substring(10, tokenCount))
                                 hasProcessedRangeFractional = True
                             ElseIf String.CompareOrdinal(previousCharInMask, "R") = 0 Then
                                 If Not hasProcessedTownFractional Then
-                                    formattedResult.Chars(positionInMask) = CChar(mapTaxlotIDValue.Substring(4, 1))
+                                    formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(4, 1))
                                     hasProcessedTownFractional = True
                                 End If
                             End If
@@ -341,6 +341,8 @@ Public NotInheritable Class StringUtilities
 #End Region
 
 #Region "Private Members"
+
+    ' TODO: JWM This is not used. Remove? (Nick)
     ''' <summary>
     ''' Create a parcel ID from a mask.
     ''' </summary>
@@ -348,7 +350,7 @@ Public NotInheritable Class StringUtilities
     ''' <param name="maskToApply"></param>
     ''' <returns> If a value is passed in that is not numeric then just pass it straight through else return a parcel id with or without leading zeros</returns>
     ''' <remarks></remarks>
-    Private Shared Function generateParcelID(ByVal valueToMask As String, ByVal maskToApply As String) As String
+    Private Shared Function generateParcelId(ByVal valueToMask As String, ByVal maskToApply As String) As String
         If valueToMask.Length = 0 Then
             Throw New ArgumentNullException("valueToMask")
         End If

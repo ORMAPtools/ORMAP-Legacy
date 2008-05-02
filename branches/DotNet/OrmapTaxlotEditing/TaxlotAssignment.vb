@@ -261,12 +261,12 @@ Public NotInheritable Class TaxlotAssignment
 
 #Region "Methods"
 
-    Friend Sub DoToolOperation(ByVal Button As ESRIMouseButtons, ByVal X As Integer, ByVal Y As Integer)
+    Friend Sub DoToolOperation(ByVal Button As EsriMouseButtons, ByVal X As Integer, ByVal Y As Integer)
 
         Dim withinOperation As Boolean = False
 
         Try
-            If (Button <> ESRIMouseButtons.Left) Then
+            If (Button <> EsriMouseButtons.Left) Then
                 ' Exit silently.
                 Exit Try
             End If
@@ -499,19 +499,16 @@ Public NotInheritable Class TaxlotAssignment
     Public Overrides Sub OnCreate(ByVal hook As Object)
         Try
             If Not hook Is Nothing Then
-                _application = DirectCast(hook, IApplication)
 
                 'Disable tool if parent application is not ArcMap
                 If TypeOf hook Is IMxApplication Then
+                    _application = DirectCast(hook, IApplication)
+                    setPartnerTaxlotAssignmentForm(New TaxlotAssignmentForm())
                     MyBase.m_enabled = True
                 Else
                     MyBase.m_enabled = False
                 End If
 
-                If MyBase.m_enabled Then
-                    ' Set partner form.
-                    setPartnerTaxlotAssignmentForm(New TaxlotAssignmentForm())
-                End If
             End If
 
             ' NOTE: Add other initialization code here...
@@ -532,10 +529,10 @@ Public NotInheritable Class TaxlotAssignment
     ''' <remarks></remarks>
     Public Overrides Sub OnMouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
         Try
-            If Button = ESRIMouseButtons.Left Then
+            If Button = EsriMouseButtons.Left Then
                 '[Left button clicked...]
-                DoToolOperation(DirectCast(Button, ESRIMouseButtons), X, Y)
-            ElseIf Button = ESRIMouseButtons.Right Then
+                DoToolOperation(DirectCast(Button, EsriMouseButtons), X, Y)
+            ElseIf Button = EsriMouseButtons.Right Then
                 '[Right button clicked...]
                 ' Show and activate the partner form.
                 If PartnerTaxlotAssignmentForm.Visible Then
@@ -558,7 +555,7 @@ Public NotInheritable Class TaxlotAssignment
 
 #Region "IDisposable Interface Implementation"
 
-    Private _isDuringDispose As Boolean = False ' Used to track whether Dispose() has been called and is in progress.
+    Private _isDuringDispose As Boolean ' Used to track whether Dispose() has been called and is in progress.
 
     ''' <summary>
     ''' Dispose of managed and unmanaged resources.
@@ -574,7 +571,7 @@ Public NotInheritable Class TaxlotAssignment
     ''' runtime from inside the finalizer and you should not reference 
     ''' other objects. Only unmanaged resources can be disposed.</para>
     ''' </remarks>
-    Protected Sub Dispose(ByVal disposing As Boolean)
+    Friend Sub Dispose(ByVal disposing As Boolean)
         ' Check to see if Dispose has already been called.
         If Not Me._isDuringDispose Then
 

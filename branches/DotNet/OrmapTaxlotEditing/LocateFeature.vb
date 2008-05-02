@@ -108,6 +108,9 @@ Public NotInheritable Class LocateFeature
 
     Friend ReadOnly Property PartnerLocateFeatureForm() As LocateFeatureForm
         Get
+            If _partnerLocateFeatureForm Is Nothing OrElse _partnerLocateFeatureForm.IsDisposed Then
+                setPartnerLocateFeatureForm(New LocateFeatureForm())
+            End If
             Return _partnerLocateFeatureForm
         End Get
     End Property
@@ -265,14 +268,13 @@ Public NotInheritable Class LocateFeature
     ''' <param name="hook">A generic <c>Object</c> hook to an instance of the application.</param>
     ''' <remarks>The application hook may not point to an <c>IMxApplication</c> object.</remarks>
     Public Overrides Sub OnCreate(ByVal hook As Object)
-
         If Not hook Is Nothing Then
-            _application = DirectCast(hook, IApplication)
 
-            'Disable if it is not ArcMap
+            'Disable tool if parent application is not ArcMap
             If TypeOf hook Is IMxApplication Then
+                _application = DirectCast(hook, IApplication)
+                setPartnerLocateFeatureForm(New LocateFeatureForm())
                 MyBase.m_enabled = True
-                setPartnerLocateFeatureForm(New LocateFeatureForm)
             Else
                 MyBase.m_enabled = False
             End If
@@ -296,7 +298,7 @@ Public NotInheritable Class LocateFeature
 
 #Region "IDisposable Interface Implementation"
 
-    Private _isDuringDispose As Boolean = False ' Used to track whether Dispose() has been called and is in progress.
+    Private _isDuringDispose As Boolean ' Used to track whether Dispose() has been called and is in progress.
 
     ''' <summary>
     ''' Dispose of managed and unmanaged resources.
@@ -312,7 +314,7 @@ Public NotInheritable Class LocateFeature
     ''' runtime from inside the finalizer and you should not reference 
     ''' other objects. Only unmanaged resources can be disposed.</para>
     ''' </remarks>
-    Protected Sub Dispose(ByVal disposing As Boolean)
+    Friend Sub Dispose(ByVal disposing As Boolean)
         ' Check to see if Dispose has already been called.
         If Not Me._isDuringDispose Then
 

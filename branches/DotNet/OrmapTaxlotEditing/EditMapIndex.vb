@@ -146,13 +146,6 @@ Public NotInheritable Class EditMapIndex
 #End Region
 
 #Region "Properties "
-    Private WithEvents _partnerMapIndexForm As MapIndexForm
-
-    Friend ReadOnly Property PartnerMapIndexForm() As MapIndexForm
-        Get
-            Return _partnerMapIndexForm
-        End Get
-    End Property
 
     Public Property EditingState() As Boolean
         Get
@@ -162,7 +155,19 @@ Public NotInheritable Class EditMapIndex
             _editingState = value
         End Set
     End Property
-    Private Sub setPartnerLocateFeatureForm(ByRef value As MapIndexForm)
+
+    Private WithEvents _partnerMapIndexForm As MapIndexForm
+
+    Friend ReadOnly Property PartnerMapIndexForm() As MapIndexForm
+        Get
+            If _partnerMapIndexForm Is Nothing OrElse _partnerMapIndexForm.IsDisposed Then
+                setPartnerMapIndexForm(New MapIndexForm())
+            End If
+            Return _partnerMapIndexForm
+        End Get
+    End Property
+
+    Private Sub setPartnerMapIndexForm(ByRef value As MapIndexForm)
         If value IsNot Nothing Then
             _partnerMapIndexForm = value
             ' Subscribe to partner form events.
@@ -791,10 +796,11 @@ Public NotInheritable Class EditMapIndex
     ''' <remarks>The application hook may not point to an <c>IMxApplication</c> object.</remarks>
     Public Overrides Sub OnCreate(ByVal hook As Object)
         If Not hook Is Nothing Then
-            _application = DirectCast(hook, IApplication)
 
             'Disable if it is not ArcMap
             If TypeOf hook Is IMxApplication Then
+                _application = DirectCast(hook, IApplication)
+                setPartnerMapIndexForm(New MapIndexForm())
                 MyBase.m_enabled = True
             Else
                 MyBase.m_enabled = False
@@ -822,7 +828,7 @@ Public NotInheritable Class EditMapIndex
 
 #Region "IDisposable Interface Implementation"
 
-    Private _isDuringDispose As Boolean = False ' Used to track whether Dispose() has been called and is in progress.
+    Private _isDuringDispose As Boolean ' Used to track whether Dispose() has been called and is in progress.
 
     ''' <summary>
     ''' Dispose of managed and unmanaged resources.
@@ -838,7 +844,7 @@ Public NotInheritable Class EditMapIndex
     ''' runtime from inside the finalizer and you should not reference 
     ''' other objects. Only unmanaged resources can be disposed.</para>
     ''' </remarks>
-    Protected Sub Dispose(ByVal disposing As Boolean)
+    Friend Sub Dispose(ByVal disposing As Boolean)
         ' Check to see if Dispose has already been called.
         If Not Me._isDuringDispose Then
 
