@@ -810,8 +810,8 @@ Public NotInheritable Class EditMapIndex
         'System.Windows.Forms.MessageBox.Show("Add EditMapIndex.OnClick implementation")
     End Sub
 
-    Sub ORMAPNumber_OnChange(ByVal newNumber As String) Handles _ormapNumber.OnChange
-        PartnerMapIndexForm.uxORMAPNumberLabel.Text = newNumber
+    Sub ORMAPNumber_OnChange(ByVal sender As Object, ByVal e As EventArgs) Handles _ormapNumber.OnChange
+        PartnerMapIndexForm.uxORMAPNumberLabel.Text = _ormapNumber.GetORMapNum
     End Sub
 
 #End Region

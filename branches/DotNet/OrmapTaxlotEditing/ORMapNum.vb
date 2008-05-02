@@ -70,7 +70,7 @@ Public NotInheritable Class ORMapNum
 #End Region
 
 #Region "Events"
-    Public Event OnChange(ByVal newNumber As String)
+    Public Event OnChange(ByVal sender As Object, ByVal e As EventArgs)
 #End Region
 
 #Region "Properties"
@@ -96,7 +96,7 @@ Public NotInheritable Class ORMapNum
                 Case Is > 2
                     _county = value.Substring(0, 2) 'left(value,2)
             End Select
-            RaiseEvent OnChange(Me.GetORMapNum)
+            RaiseEvent OnChange(Me, New EventArgs)
         End Set
 
     End Property
@@ -116,7 +116,7 @@ Public NotInheritable Class ORMapNum
             Else
                 _township = value
             End If
-            RaiseEvent OnChange(Me.GetORMapNum)
+            RaiseEvent OnChange(Me, New EventArgs)
         End Set
     End Property
 
@@ -136,7 +136,7 @@ Public NotInheritable Class ORMapNum
                 Case Else
                     _partialTownshipCode = value
             End Select
-            RaiseEvent OnChange(Me.GetORMapNum)
+            RaiseEvent OnChange(Me, New EventArgs)
         End Set
     End Property
 
@@ -156,7 +156,7 @@ Public NotInheritable Class ORMapNum
                 Case Else
                     _townshipDirectional = EditorExtension.DefaultValuesSettings.TownshipDirection
             End Select
-            RaiseEvent OnChange(Me.GetORMapNum)
+            RaiseEvent OnChange(Me, New EventArgs)
         End Set
     End Property
 
@@ -176,7 +176,7 @@ Public NotInheritable Class ORMapNum
                 _range = value
             End If
 
-            RaiseEvent OnChange(Me.GetORMapNum)
+            RaiseEvent OnChange(Me, New EventArgs)
         End Set
     End Property
 
@@ -196,7 +196,7 @@ Public NotInheritable Class ORMapNum
                 Case Else
                     _partialRangeCode = EditorExtension.DefaultValuesSettings.RangePart
             End Select
-            RaiseEvent OnChange(Me.GetORMapNum)
+            RaiseEvent OnChange(Me, New EventArgs)
         End Set
     End Property
 
@@ -216,7 +216,7 @@ Public NotInheritable Class ORMapNum
                 Case Else
                     _rangeDirectional = EditorExtension.DefaultValuesSettings.RangeDirection
             End Select
-            RaiseEvent OnChange(Me.GetORMapNum)
+            RaiseEvent OnChange(Me, New EventArgs)
         End Set
     End Property
 
@@ -247,7 +247,7 @@ Public NotInheritable Class ORMapNum
             Else
                 _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST (YET)
             End If
-            RaiseEvent OnChange(Me.GetORMapNum)
+            RaiseEvent OnChange(Me, New EventArgs)
         End Set
     End Property
 
@@ -267,7 +267,7 @@ Public NotInheritable Class ORMapNum
                 Case Else
                     _quarter = EditorExtension.DefaultValuesSettings.QuarterSection
             End Select
-            RaiseEvent OnChange(Me.GetORMapNum)
+            RaiseEvent OnChange(Me, New EventArgs)
         End Set
     End Property
 
@@ -287,7 +287,7 @@ Public NotInheritable Class ORMapNum
                 Case Else
                     _quarterQuarter = EditorExtension.DefaultValuesSettings.QuarterQuarterSection
             End Select
-            RaiseEvent OnChange(Me.GetORMapNum)
+            RaiseEvent OnChange(Me, New EventArgs)
         End Set
     End Property
 
@@ -307,7 +307,7 @@ Public NotInheritable Class ORMapNum
                 Case Else
                     _suffixType = EditorExtension.DefaultValuesSettings.MapSuffixType
             End Select
-            RaiseEvent OnChange(Me.GetORMapNum)
+            RaiseEvent OnChange(Me, New EventArgs)
         End Set
     End Property
 
@@ -336,7 +336,7 @@ Public NotInheritable Class ORMapNum
             Else
                 _suffixNumber = EditorExtension.DefaultValuesSettings.MapSuffixNumber
             End If
-            RaiseEvent OnChange(Me.GetORMapNum)
+            RaiseEvent OnChange(Me, New EventArgs)
         End Set
     End Property
 
@@ -355,7 +355,7 @@ Public NotInheritable Class ORMapNum
             Else
                 _anomaly = value
             End If
-            RaiseEvent OnChange(Me.GetORMapNum)
+            RaiseEvent OnChange(Me, New EventArgs)
         End Set
     End Property
 
