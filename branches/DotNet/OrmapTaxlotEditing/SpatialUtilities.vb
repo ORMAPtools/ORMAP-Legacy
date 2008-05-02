@@ -1474,7 +1474,7 @@ Public NotInheritable Class SpatialUtilities
             Dim theAutoWhoFieldIndex As Integer
             theAutoWhoFieldIndex = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoWhoField)
             If theAutoWhoFieldIndex > FieldNotFoundIndex Then
-                feature.Value(theAutoWhoFieldIndex) = GetUserName()
+                feature.Value(theAutoWhoFieldIndex) = UserName()
             End If
 
         Catch ex As Exception

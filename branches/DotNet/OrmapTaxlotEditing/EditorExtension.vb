@@ -717,7 +717,7 @@ Public NotInheritable Class EditorExtension
 
 #Region "Implemented Interface Members"
 
-#Region "IExtension Interface Implementations"
+#Region "IExtension Interface Implementation"
 
     Public ReadOnly Property Name() As String Implements ESRI.ArcGIS.esriSystem.IExtension.Name
         Get
@@ -752,7 +752,7 @@ Public NotInheritable Class EditorExtension
 
 #End Region
 
-#Region "IExtensionAccelerators Interface Implementations"
+#Region "IExtensionAccelerators Interface Implementation"
 
     Public Sub CreateAccelerators() Implements ESRI.ArcGIS.esriSystem.IExtensionAccelerators.CreateAccelerators
         ' Create the keyboard accelerators for this extension.
@@ -809,7 +809,7 @@ Public NotInheritable Class EditorExtension
 
 #End Region
 
-#Region "IPersistVariant Interface Implementations"
+#Region "IPersistVariant Interface Implementation"
 
     Public ReadOnly Property ID() As ESRI.ArcGIS.esriSystem.UID Implements ESRI.ArcGIS.esriSystem.IPersistVariant.ID
         Get

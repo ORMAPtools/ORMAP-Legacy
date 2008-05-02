@@ -241,7 +241,6 @@
     <None Include="My Project\DataSources\TaxLotLinesSettings.datasource" />
     <None Include="My Project\DataSources\TaxlotNumberAnnoSettings.datasource" />
     <None Include="My Project\DataSources\TaxLotSettings.datasource" />
-    <None Include="OrmapTaxlotEditiing.snk" />
     <None Include="OrmapTaxlotEditing.snk" />
     <None Include="settings\AllTablesSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

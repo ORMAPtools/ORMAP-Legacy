@@ -75,22 +75,30 @@ Public NotInheritable Class Utilities
         Middle = 4
     End Enum
 
-    Public Shared Function GetUserName() As String
-        ' Note: ALL Since this a dll, My.User.InitializeWithWindowsUser()
-        ' is called in EditorExtension.Startup to set this value
-        If TypeOf My.User.CurrentPrincipal Is _
-                Security.Principal.WindowsPrincipal Then
-            '[The application is using Windows authentication...]
-            '[The name format is "DOMAIN\USERNAME"...]
-            ' Parse out USERNAME from DOMAIN\USERNAME pair
-            Dim parts() As String = Split(My.User.Name, "\")
-            Dim username As String = parts(1)
-            Return username
-        Else
-            ' The application is using custom authentication.
-            Return My.User.Name
-        End If
-    End Function
+    ''' <summary>
+    ''' Stores the current computer user name.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A username string.</returns>
+    ''' <remarks></remarks>
+    Public Shared ReadOnly Property UserName() As String
+        Get
+            ' Note: ALL Since this a dll, My.User.InitializeWithWindowsUser()
+            ' is called in EditorExtension.Startup to set this value
+            If TypeOf My.User.CurrentPrincipal Is _
+                    Security.Principal.WindowsPrincipal Then
+                '[The application is using Windows authentication...]
+                '[The name format is "DOMAIN\USERNAME"...]
+                ' Parse out USERNAME from DOMAIN\USERNAME pair
+                Dim parts() As String = Split(My.User.Name, "\")
+                Dim name As String = parts(1)
+                Return name
+            Else
+                ' The application is using custom authentication.
+                Return My.User.Name
+            End If
+        End Get
+    End Property
 
     ''' <summary>
     ''' Determine file existence
@@ -131,7 +139,7 @@ Public NotInheritable Class Utilities
             Return
         End Try
     End Sub
-    
+
 #End Region
 
 #Region "Private Members (none)"
