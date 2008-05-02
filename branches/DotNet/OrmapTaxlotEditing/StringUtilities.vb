@@ -41,6 +41,27 @@ Imports System.Text
 #Region "Class Declaration"
 Public NotInheritable Class StringUtilities
 
+#Region "Built-In Class Members (Constructors, Etc.)"
+
+#Region "Constructors"
+
+    ''' <summary>
+    ''' Private empty constructor to prevent instantiation.
+    ''' </summary>
+    ''' <remarks>This class follows the singleton pattern and thus has a 
+    ''' private constructor and all shared members. Instances of types 
+    ''' that define only shared members do not need to be created, so no
+    ''' constructor should be needed. However, many compilers will 
+    ''' automatically add a public default constructor if no constructor 
+    ''' is specified. To prevent this an empty private constructor is 
+    ''' added.</remarks>
+    Private Sub New()
+    End Sub
+
+#End Region
+
+#End Region
+
 #Region "Custom Class Members"
 
 #Region "Public Members"
@@ -127,13 +148,13 @@ Public NotInheritable Class StringUtilities
             Dim hasProcessedTownFractional As Boolean = False
             Dim hasProcessedRangeFractional As Boolean = False
 
-            For charIdx As Integer = 0 To maskValues.Length - 1
-                positionInMask = formatString.IndexOf(maskValues.Chars(charIdx).ToString, charIdx, StringComparison.CurrentCultureIgnoreCase)
-                characterCode = Convert.ToInt32(maskValues.Chars(charIdx))
+            For charIndex As Integer = 0 To maskValues.Length - 1
+                positionInMask = formatString.IndexOf(maskValues.Chars(charIndex).ToString, charIndex, StringComparison.CurrentCultureIgnoreCase)
+                characterCode = Convert.ToInt32(maskValues.Chars(charIndex))
                 ' Returns how many of these characters appear in the mask
                 Dim c As Char
                 For Each c In formatString
-                    If c.Equals(maskValues.Chars(charIdx)) Then
+                    If c.Equals(maskValues.Chars(charIndex)) Then
                         tokenCount += 1
                     End If
                 Next c
@@ -264,9 +285,9 @@ Public NotInheritable Class StringUtilities
                             End If
                         End If
                 End Select
-                previousCharInMask = maskValues.Chars(charIdx)
+                previousCharInMask = maskValues.Chars(charIndex)
                 tokenCount = 0
-            Next charIdx
+            Next charIndex
 
             Return formattedResult.ToString
 
@@ -359,13 +380,13 @@ Public NotInheritable Class StringUtilities
         Try
             Dim sb As New StringBuilder(stringToParse)
 
-            For charIdx As Integer = 0 To sb.Length
-                If Char.GetNumericValue(sb.Chars(charIdx)) = 0 Then
-                    sb = sb.Replace(sb.Chars(charIdx), " "c, charIdx, 1)
+            For charIndex As Integer = 0 To sb.Length
+                If Char.GetNumericValue(sb.Chars(charIndex)) = 0 Then
+                    sb = sb.Replace(sb.Chars(charIndex), " "c, charIndex, 1)
                 Else
                     Exit For
                 End If
-            Next charIdx
+            Next charIndex
 
             Return sb.ToString  ' do not trim off leading spaces
         Catch ex As Exception
@@ -373,13 +394,6 @@ Public NotInheritable Class StringUtilities
             Return String.Empty
         End Try
     End Function
-
-    ''' <summary>
-    '''Private empty constructor to prevent instantiation.
-    ''' </summary>
-    ''' <remarks></remarks>
-    Private Sub New()
-    End Sub
 
 #End Region
 

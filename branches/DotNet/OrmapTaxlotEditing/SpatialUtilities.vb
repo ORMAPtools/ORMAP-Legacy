@@ -58,6 +58,27 @@ Imports System.Windows.Forms
 ''' <remarks>Commonly used ArcObjects procedures and functions.</remarks>
 Public NotInheritable Class SpatialUtilities
 
+#Region "Built-In Class Members (Constructors, Etc.)"
+
+#Region "Constructors"
+
+    ''' <summary>
+    ''' Private empty constructor to prevent instantiation.
+    ''' </summary>
+    ''' <remarks>This class follows the singleton pattern and thus has a 
+    ''' private constructor and all shared members. Instances of types 
+    ''' that define only shared members do not need to be created, so no
+    ''' constructor should be needed. However, many compilers will 
+    ''' automatically add a public default constructor if no constructor 
+    ''' is specified. To prevent this an empty private constructor is 
+    ''' added.</remarks>
+    Private Sub New()
+    End Sub
+
+#End Region
+
+#End Region
+
 #Region "Custom Class Members"
 
 #Region "Public Members"
@@ -74,10 +95,10 @@ Public NotInheritable Class SpatialUtilities
     Public Shared Function AddCodesToCombo(ByVal fieldName As String, ByVal fields As IFields, ByRef aComboBox As ComboBox, ByVal currentValue As Object, Optional ByVal allowSpace As Boolean = False) As Boolean
         Dim returnValue As Boolean = False
         Try
-            Dim theFldIdx As Integer = fields.FindField(fieldName)
-            If theFldIdx > -1 Then
+            Dim theFieldIndex As Integer = fields.FindField(fieldName)
+            If theFieldIndex > -1 Then
                 Dim thisField As IField
-                thisField = fields.Field(theFldIdx)
+                thisField = fields.Field(theFieldIndex)
                 Dim thisDomain As IDomain
                 thisDomain = thisField.Domain
                 If Not (thisDomain Is Nothing) Then
@@ -177,31 +198,31 @@ Public NotInheritable Class SpatialUtilities
                                 "Calculate Taxlot Values", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
-            
+
             ' Get the Taxlot feature class from the feature being edited.
             Dim taxlotFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
             taxlotFClass = DirectCast(editFeature.Class, ESRI.ArcGIS.Geodatabase.IFeatureClass)
 
-            Dim theCountyFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.CountyField)
-            Dim theTownFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipField)
-            Dim theTownPartFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipPartField)
-            Dim theTownDirFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipDirectionField)
-            Dim theRangeFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangeField)
-            Dim theRangePartFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangePartField)
-            Dim theRangeDirFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangeDirectionField)
-            Dim theSectionFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.SectionNumberField)
-            Dim theQrtrFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.QuarterSectionField)
-            Dim theQrtrQrtrFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.QuarterQuarterSectionField)
-            Dim theMapSufTypeFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixTypeField)
-            Dim theMapSufNumFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixNumberField)
-            Dim theAnomalyFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.AnomalyField)
-            Dim theMapNumberFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapNumberField)
-            Dim theORMapNumFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapMapNumberField)
-            Dim theTaxlotFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TaxlotField)
-            Dim theSpcIntrstFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.SpecialInterestField)
-            Dim theMapTaxlotFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapTaxlotField)
-            Dim theORTaxlotFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapTaxlotField)
-            Dim theMapAcresFldIdx As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapAcresField)
+            Dim theCountyFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.CountyField)
+            Dim theTownFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipField)
+            Dim theTownPartFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipPartField)
+            Dim theTownDirFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TownshipDirectionField)
+            Dim theRangeFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangeField)
+            Dim theRangePartFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangePartField)
+            Dim theRangeDirFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.RangeDirectionField)
+            Dim theSectionFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.SectionNumberField)
+            Dim theQrtrFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.QuarterSectionField)
+            Dim theQrtrQrtrFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.QuarterQuarterSectionField)
+            Dim theMapSufTypeFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixTypeField)
+            Dim theMapSufNumFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapSuffixNumberField)
+            Dim theAnomalyFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.AnomalyField)
+            Dim theMapNumberFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapNumberField)
+            Dim theORMapNumFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapMapNumberField)
+            Dim theTaxlotFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.TaxlotField)
+            Dim theSpcIntrstFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.SpecialInterestField)
+            Dim theMapTaxlotFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapTaxlotField)
+            Dim theORTaxlotFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.OrmapTaxlotField)
+            Dim theMapAcresFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapAcresField)
 
             '------------------------------------------
             ' Set the area
@@ -224,8 +245,8 @@ Public NotInheritable Class SpatialUtilities
             '------------------------------------------
             ' TODO: [JWM] Jim, Please fix this to match bug fix in VB6 version (Nick).
             Dim theCurrentSpecialInterest As String = "00000"
-            If Not IsDBNull(editFeature.Value(theSpcIntrstFldIdx)) Then
-                theCurrentSpecialInterest = CStr(editFeature.Value(theSpcIntrstFldIdx))
+            If Not IsDBNull(editFeature.Value(theSpcIntrstFieldIndex)) Then
+                theCurrentSpecialInterest = CStr(editFeature.Value(theSpcIntrstFieldIndex))
                 If theCurrentSpecialInterest.Length < 5 Then
                     theCurrentSpecialInterest = theCurrentSpecialInterest.PadLeft(5, "0"c)
                 ElseIf theCurrentSpecialInterest.Length > 5 Then
@@ -249,37 +270,37 @@ Public NotInheritable Class SpatialUtilities
             '------------------------------------------
 
             With editFeature
-                .Value(theCountyFldIdx) = CShort(theORMapNumClass.County)
-                .Value(theTownFldIdx) = CShort(theORMapNumClass.Township)
-                .Value(theTownPartFldIdx) = CSng(theORMapNumClass.PartialTownshipCode)
-                .Value(theTownDirFldIdx) = theORMapNumClass.TownshipDirectional
-                .Value(theRangeFldIdx) = CShort(theORMapNumClass.Range)
-                .Value(theRangePartFldIdx) = CSng(theORMapNumClass.PartialRangeCode)
-                .Value(theRangeDirFldIdx) = theORMapNumClass.RangeDirectional
-                .Value(theSectionFldIdx) = CShort(theORMapNumClass.Section)
-                .Value(theQrtrFldIdx) = theORMapNumClass.Quarter
-                .Value(theQrtrQrtrFldIdx) = theORMapNumClass.QuarterQuarter
-                .Value(theMapSufTypeFldIdx) = theORMapNumClass.SuffixType
-                .Value(theMapSufNumFldIdx) = CLng(theORMapNumClass.SuffixNumber)
-                .Value(theAnomalyFldIdx) = theORMapNumClass.Anomaly
-                .Value(theMapNumberFldIdx) = theCurrentMapNumber
-                .Value(theORMapNumFldIdx) = theORMapNumClass.GetOrmapMapNumber
+                .Value(theCountyFieldIndex) = CShort(theORMapNumClass.County)
+                .Value(theTownFieldIndex) = CShort(theORMapNumClass.Township)
+                .Value(theTownPartFieldIndex) = CSng(theORMapNumClass.PartialTownshipCode)
+                .Value(theTownDirFieldIndex) = theORMapNumClass.TownshipDirectional
+                .Value(theRangeFieldIndex) = CShort(theORMapNumClass.Range)
+                .Value(theRangePartFieldIndex) = CSng(theORMapNumClass.PartialRangeCode)
+                .Value(theRangeDirFieldIndex) = theORMapNumClass.RangeDirectional
+                .Value(theSectionFieldIndex) = CShort(theORMapNumClass.Section)
+                .Value(theQrtrFieldIndex) = theORMapNumClass.Quarter
+                .Value(theQrtrQrtrFieldIndex) = theORMapNumClass.QuarterQuarter
+                .Value(theMapSufTypeFieldIndex) = theORMapNumClass.SuffixType
+                .Value(theMapSufNumFieldIndex) = CLng(theORMapNumClass.SuffixNumber)
+                .Value(theAnomalyFieldIndex) = theORMapNumClass.Anomaly
+                .Value(theMapNumberFieldIndex) = theCurrentMapNumber
+                .Value(theORMapNumFieldIndex) = theORMapNumClass.GetOrmapMapNumber
                 'Taxlot (not updated here)
-                .Value(theSpcIntrstFldIdx) = theCurrentSpecialInterest
+                .Value(theSpcIntrstFieldIndex) = theCurrentSpecialInterest
                 'MapTaxlot (see below)
                 'ORTaxlot (see below)
-                .Value(theMapAcresFldIdx) = theArea.Area / 43560
+                .Value(theMapAcresFieldIndex) = theArea.Area / 43560
             End With
 
             '------------------------------------------
             ' Recalculate ORTaxlot
             '------------------------------------------
-            If IsDBNull(editFeature.Value(theTaxlotFldIdx)) Then
+            If IsDBNull(editFeature.Value(theTaxlotFieldIndex)) Then
                 Exit Try
             End If
 
             ' Taxlot has actual taxlot number. ORTaxlot requires a 5-digit number, so leading zeros have to be added.
-            Dim theCurrentTaxlotValue As String = CStr(editFeature.Value(theTaxlotFldIdx))
+            Dim theCurrentTaxlotValue As String = CStr(editFeature.Value(theTaxlotFieldIndex))
             theCurrentTaxlotValue = AddLeadingZeros(theCurrentTaxlotValue, ORMapNum.GetOrmap_TaxlotFieldLength)
 
             Dim theNewORTaxlot As String
@@ -288,7 +309,7 @@ Public NotInheritable Class SpatialUtilities
             Dim theCountyCode As Short = CShort(EditorExtension.DefaultValuesSettings.County)
             Select Case theCountyCode
                 Case 1 To 19, 21 To 36
-                    editFeature.Value(theMapTaxlotFldIdx) = GenerateMapTaxlotValue(theNewORTaxlot, EditorExtension.TaxLotSettings.MapTaxlotFormatMask)
+                    editFeature.Value(theMapTaxlotFieldIndex) = GenerateMapTaxlotValue(theNewORTaxlot, EditorExtension.TaxLotSettings.MapTaxlotFormatMask)
                 Case 20
                     ' 1.  Lane County uses a 2-digit numeric identifier for ranges.
                     '     Special handling is required for east ranges, where 02E is
@@ -301,19 +322,19 @@ Public NotInheritable Class SpatialUtilities
                     '     above).
                     ' Trim the map number to only the left 8 characters (no spaces)
                     Dim sb As String = theCurrentMapNumber.Trim(CChar(theCurrentMapNumber.Substring(0, 8)))
-                    editFeature.Value(theMapTaxlotFldIdx) = String.Concat(sb, theCurrentTaxlotValue)
+                    editFeature.Value(theMapTaxlotFieldIndex) = String.Concat(sb, theCurrentTaxlotValue)
             End Select
 
             ' Recalculate ORTaxlot
-            If IsDBNull(editFeature.Value(theORTaxlotFldIdx)) Then
+            If IsDBNull(editFeature.Value(theORTaxlotFieldIndex)) Then
                 Exit Try
             End If
             ' Get the current and the new ORTaxlot Numbers
-            Dim theExistingORTaxlotString As String = CStr(editFeature.Value(theORTaxlotFldIdx))
+            Dim theExistingORTaxlotString As String = CStr(editFeature.Value(theORTaxlotFieldIndex))
             Dim theNewORTaxlotString As String = generateORMAPTaxlotNumber(theORMapNumClass.GetORMapNum, editFeature, theExistingORTaxlotString)
             'If no changes, don't save value
             If String.Compare(theExistingORTaxlotString, theNewORTaxlotString, True) <> 0 Then
-                editFeature.Value(theORTaxlotFldIdx) = theNewORTaxlotString
+                editFeature.Value(theORTaxlotFieldIndex) = theNewORTaxlotString
             End If
 
         Catch ex As Exception
@@ -557,10 +578,10 @@ Public NotInheritable Class SpatialUtilities
 
         Try
             Dim returnValue As New String("0"c, 3)
-            Dim theTaxlotMapSuffixFldIdx As Integer = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixNumberField)
-            If theTaxlotMapSuffixFldIdx > -1 Then
-                If Not IsDBNull(theFeature.Value(theTaxlotMapSuffixFldIdx)) Then
-                    returnValue = CStr(theFeature.Value(theTaxlotMapSuffixFldIdx))
+            Dim theTaxlotMapSuffixFieldIndex As Integer = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixNumberField)
+            If theTaxlotMapSuffixFieldIndex > -1 Then
+                If Not IsDBNull(theFeature.Value(theTaxlotMapSuffixFieldIndex)) Then
+                    returnValue = CStr(theFeature.Value(theTaxlotMapSuffixFieldIndex))
                 End If
                 'verify that it is exactly 3 digits
                 If returnValue.Length < 3 Then
@@ -586,11 +607,11 @@ Public NotInheritable Class SpatialUtilities
     Public Shared Function GetMapSuffixType(ByRef theFeature As IFeature) As String
         Try
             Dim returnValue As New String("0"c, 1)
-            Dim theTaxlotMapTypeFldIdx As Integer
-            theTaxlotMapTypeFldIdx = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixTypeField)
-            If theTaxlotMapTypeFldIdx > -1 Then
-                If Not IsDBNull(theFeature.Value(theTaxlotMapTypeFldIdx)) Then
-                    returnValue = CStr(theFeature.Value(theTaxlotMapTypeFldIdx))
+            Dim theTaxlotMapTypeFieldIndex As Integer
+            theTaxlotMapTypeFieldIndex = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixTypeField)
+            If theTaxlotMapTypeFieldIndex > -1 Then
+                If Not IsDBNull(theFeature.Value(theTaxlotMapTypeFieldIndex)) Then
+                    returnValue = CStr(theFeature.Value(theTaxlotMapTypeFieldIndex))
                     'verify that it is one digit
                     If returnValue.Length > 1 Then
                         returnValue.PadLeft(1, "0"c)
@@ -1373,7 +1394,7 @@ Public NotInheritable Class SpatialUtilities
                                 "Set Anno Size", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
-            
+
             Dim mapIndexFeatureClass As IFeatureClass
             mapIndexFeatureClass = MapIndexFeatureLayer.FeatureClass
             'original vb6 code placed the point object as the first parameter. 
@@ -1444,16 +1465,16 @@ Public NotInheritable Class SpatialUtilities
                 Exit Try
             End If
 
-            Dim theAutoDateFldIdx As Integer
-            theAutoDateFldIdx = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoDateField)
-            If theAutoDateFldIdx > FieldNotFoundIndex Then
-                feature.Value(theAutoDateFldIdx) = System.DateTime.Now
+            Dim theAutoDateFieldIndex As Integer
+            theAutoDateFieldIndex = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoDateField)
+            If theAutoDateFieldIndex > FieldNotFoundIndex Then
+                feature.Value(theAutoDateFieldIndex) = System.DateTime.Now
             End If
 
-            Dim theAutoWhoFldIdx As Integer
-            theAutoWhoFldIdx = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoWhoField)
-            If theAutoWhoFldIdx > FieldNotFoundIndex Then
-                feature.Value(theAutoWhoFldIdx) = GetUserName()
+            Dim theAutoWhoFieldIndex As Integer
+            theAutoWhoFieldIndex = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoWhoField)
+            If theAutoWhoFieldIndex > FieldNotFoundIndex Then
+                feature.Value(theAutoWhoFieldIndex) = GetUserName()
             End If
 
         Catch ex As Exception
@@ -1807,13 +1828,6 @@ Public NotInheritable Class SpatialUtilities
 
         End Try
     End Function
-
-    ''' <summary>
-    '''Private empty constructor to prevent instantiation.
-    ''' </summary>
-    ''' <remarks></remarks>
-    Private Sub New()
-    End Sub
 
 #End Region
 

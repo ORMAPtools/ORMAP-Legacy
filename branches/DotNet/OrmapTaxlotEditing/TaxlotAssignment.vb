@@ -71,16 +71,6 @@ Public NotInheritable Class TaxlotAssignment
 
     Private Const defaultCommand As String = "esriArcMapUI.SelectTool"
 
-    Private Enum StatePassageType As Integer
-        Entering = 1
-        Exiting = 2
-    End Enum
-
-    Public Enum CommandStateType As Integer
-        Enabled = 11
-        Disabled = 12
-    End Enum
-
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"
@@ -381,27 +371,27 @@ Public NotInheritable Class TaxlotAssignment
             '------------------------------------------
             ' Define the new Taxlot string value.
             '------------------------------------------
-            Dim theExistingTaxlotVal As String = String.Empty 'initialize
-            Dim theTLTaxlotFldIdx As Integer = DataMonitor.TaxlotFeatureLayer.FeatureClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-            theExistingTaxlotVal = CStr(IIf(IsDBNull(theTaxlotFeature.Value(theTLTaxlotFldIdx)), "", theTaxlotFeature.Value(theTLTaxlotFldIdx)))
+            Dim theExistingTaxlot As String = String.Empty 'initialize
+            Dim theTLTaxlotFieldIndex As Integer = DataMonitor.TaxlotFeatureLayer.FeatureClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+            theExistingTaxlot = CStr(IIf(IsDBNull(theTaxlotFeature.Value(theTLTaxlotFieldIndex)), "", theTaxlotFeature.Value(theTLTaxlotFieldIndex)))
 
             ' Check with user before updating Taxlot field
-            If Len(theExistingTaxlotVal) > 0 And theExistingTaxlotVal <> "0" Then
-                If MessageBox.Show("Taxlot currently has a Taxlot value (" & theExistingTaxlotVal & ")." & vbNewLine & _
+            If Len(theExistingTaxlot) > 0 And theExistingTaxlot <> "0" Then
+                If MessageBox.Show("Taxlot currently has a Taxlot value (" & theExistingTaxlot & ")." & vbNewLine & _
                           "Update it?", "Taxlot Assignment", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.No Then
                     Exit Try
                 End If
             End If
 
-            Dim theNewTLTaxlotNumVal As String = String.Empty 'initialize
+            Dim theNewTLTaxlotNum As String = String.Empty 'initialize
             If isTaxlotType Then
                 '[Taxlot value is a number...]
-                theNewTLTaxlotNumVal = CStr(Me.NumberStartingFrom) 'User entered number
+                theNewTLTaxlotNum = CStr(Me.NumberStartingFrom) 'User entered number
                 ' Remove leading Zeros for taxlot number if any exist (CInt conversion will remove them)
-                theNewTLTaxlotNumVal = CStr(CInt(theNewTLTaxlotNumVal))
+                theNewTLTaxlotNum = CStr(CInt(theNewTLTaxlotNum))
             Else
                 '[Taxlot value is a word...]
-                theNewTLTaxlotNumVal = Me.TaxlotType 'Predefined text enum
+                theNewTLTaxlotNum = Me.TaxlotType 'Predefined text enum
             End If
 
             '------------------------------------------

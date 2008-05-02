@@ -383,19 +383,19 @@ Public NotInheritable Class EditorExtension
 
             ' TODO: [NIS] Move this code to within the below logic
 
-            Dim theMapNumberFldIdx As Integer
-            Dim theMapScaleFldIdx As Integer
+            Dim theMapNumberFieldIndex As Integer
+            Dim theMapScaleFieldIndex As Integer
             ' TODO: [NIS] Test this DirectCast.
-            theMapNumberFldIdx = (DirectCast(obj, IFeature)).Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
+            theMapNumberFieldIndex = (DirectCast(obj, IFeature)).Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
             ' TODO: [NIS] Test this DirectCast.
-            theMapScaleFldIdx = (DirectCast(obj, IFeature)).Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
+            theMapScaleFieldIndex = (DirectCast(obj, IFeature)).Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
 
             Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
             Dim theGeometry As ESRI.ArcGIS.Geometry.IGeometry
             Dim theEnvelope As ESRI.ArcGIS.Geometry.IEnvelope
             Dim theCenterPoint As ESRI.ArcGIS.Geometry.IPoint
-            Dim theMapScaleVal As String
-            Dim theMapNumberVal As String
+            Dim theMapScale As String
+            Dim theMapNumber As String
 
             If IsTaxlot(obj) Then
                 '[Edited object is a ORMAP taxlot feature...]
@@ -430,21 +430,21 @@ Public NotInheritable Class EditorExtension
 
                 ' Capture MapNumber for each anno feature created
                 ' TODO: [NIS] Test use of pFeat instead of obj here.
-                Dim theAnnoMapNumFldIdx As Integer
-                theAnnoMapNumFldIdx = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
-                If theAnnoMapNumFldIdx = FieldNotFoundIndex Then Exit Try
+                Dim theAnnoMapNumFieldIndex As Integer
+                theAnnoMapNumFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
+                If theAnnoMapNumFieldIndex = FieldNotFoundIndex Then Exit Try
 
-                theMapNumberVal = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+                theMapNumber = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
                 ' TODO: [NIS] Test use of pFeat instead of obj here.
-                theFeature.Value(theAnnoMapNumFldIdx) = theMapNumberVal
-                If theMapScaleFldIdx > FieldNotFoundIndex Then
-                    theMapScaleVal = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
-                    If Len(theMapScaleVal) > 0 Then
+                theFeature.Value(theAnnoMapNumFieldIndex) = theMapNumber
+                If theMapScaleFieldIndex > FieldNotFoundIndex Then
+                    theMapScale = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+                    If Len(theMapScale) > 0 Then
                         ' TODO: [NIS] Test use of pFeat instead of obj here.
-                        theFeature.Value(theMapScaleFldIdx) = theMapScaleVal
+                        theFeature.Value(theMapScaleFieldIndex) = theMapScale
                     Else
                         ' TODO: [NIS] Test use of pFeat instead of obj here.
-                        theFeature.Value(theMapScaleFldIdx) = System.DBNull.Value
+                        theFeature.Value(theMapScaleFieldIndex) = System.DBNull.Value
                     End If
                 End If
                 ' Set size based on mapscale
@@ -453,7 +453,7 @@ Public NotInheritable Class EditorExtension
                 '[Edited object is another kind of ORMAP feature (not taxlot or annotation)...]
 
                 ' Update MapScale and mapnumber for all features with a MapScale field (except MapIndex)
-                If theMapScaleFldIdx > FieldNotFoundIndex And Not IsMapIndex(obj) Then
+                If theMapScaleFieldIndex > FieldNotFoundIndex And Not IsMapIndex(obj) Then
                     theFeature = CType(obj, IFeature)
                     theGeometry = theFeature.Shape
                     If theGeometry.IsEmpty Then Exit Try
@@ -472,23 +472,23 @@ Public NotInheritable Class EditorExtension
                         ' Use the geometry as-is
                     End If
 
-                    theMapScaleVal = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
-                    If Len(theMapScaleVal) > 0 Then
+                    theMapScale = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+                    If Len(theMapScale) > 0 Then
                         ' TODO: [NIS] Test use of pFeat instead of obj here.
-                        theFeature.Value(theMapScaleFldIdx) = theMapScaleVal
+                        theFeature.Value(theMapScaleFieldIndex) = theMapScale
                     Else
                         ' TODO: [NIS] Test use of pFeat instead of obj here.
-                        theFeature.Value(theMapScaleFldIdx) = System.DBNull.Value
+                        theFeature.Value(theMapScaleFieldIndex) = System.DBNull.Value
                     End If
                     ' If a dataset with MapNumber, populate it
-                    If theMapNumberFldIdx > FieldNotFoundIndex Then
-                        theMapNumberVal = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
-                        If Len(theMapNumberVal) > 0 Then
+                    If theMapNumberFieldIndex > FieldNotFoundIndex Then
+                        theMapNumber = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+                        If Len(theMapNumber) > 0 Then
                             ' TODO: [NIS] Test use of pFeat instead of obj here.
-                            theFeature.Value(theMapNumberFldIdx) = theMapNumberVal
+                            theFeature.Value(theMapNumberFieldIndex) = theMapNumber
                         Else
                             ' TODO: [NIS] Test use of pFeat instead of obj here.
-                            theFeature.Value(theMapNumberFldIdx) = System.DBNull.Value
+                            theFeature.Value(theMapNumberFieldIndex) = System.DBNull.Value
                         End If
                     End If
                 End If
@@ -559,18 +559,18 @@ Public NotInheritable Class EditorExtension
                 theFeatureWorkspace = DirectCast(theWorkspace, IFeatureWorkspace)
 
                 ' Attempt to get a reference to the Cancelled Number table.
-                
+
                 ' Retrieve field positions.
-                Dim theTLTaxlotFldIdx As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-                Dim theTLMapNumberFldIdx As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.MapNumberField)
-                Dim theCNTaxlotFldIdx As Integer = CancelledNumbersTable.Table.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-                Dim theCNMapNumberFldIdx As Integer = CancelledNumbersTable.Table.FindField(EditorExtension.TaxLotSettings.MapNumberField)
+                Dim theTLTaxlotFieldIndex As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+                Dim theTLMapNumberFieldIndex As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.MapNumberField)
+                Dim theCNTaxlotFieldIndex As Integer = CancelledNumbersTable.Table.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+                Dim theCNMapNumberFieldIndex As Integer = CancelledNumbersTable.Table.FindField(EditorExtension.TaxLotSettings.MapNumberField)
 
                 ' If no null values, copy them to Cancelled numbers
-                If Not IsDBNull(theFeature.Value(theTLTaxlotFldIdx)) And Not IsDBNull(theFeature.Value(theTLMapNumberFldIdx)) Then
+                If Not IsDBNull(theFeature.Value(theTLTaxlotFieldIndex)) And Not IsDBNull(theFeature.Value(theTLMapNumberFieldIndex)) Then
                     theRow = CancelledNumbersTable.Table.CreateRow
-                    theRow.Value(theCNTaxlotFldIdx) = theFeature.Value(theTLTaxlotFldIdx)
-                    theRow.Value(theCNMapNumberFldIdx) = theFeature.Value(theTLMapNumberFldIdx)
+                    theRow.Value(theCNTaxlotFieldIndex) = theFeature.Value(theTLTaxlotFieldIndex)
+                    theRow.Value(theCNMapNumberFieldIndex) = theFeature.Value(theTLMapNumberFieldIndex)
                     theRow.Store()
                 End If
 

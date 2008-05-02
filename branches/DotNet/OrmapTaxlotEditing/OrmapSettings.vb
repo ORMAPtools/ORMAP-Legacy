@@ -52,16 +52,22 @@ Public NotInheritable Class OrmapSettings
 #Region "Constructors"
 
     ''' <summary>
-    ''' OrmapSettings constructor.
+    ''' Private empty constructor to prevent instantiation.
     ''' </summary>
     ''' <remarks>This class follows the singleton pattern and thus has a 
-    ''' private constructor and all shared members.</remarks>
+    ''' private constructor and all shared members. Instances of types 
+    ''' that define only shared members do not need to be created, so no
+    ''' constructor should be needed. However, many compilers will 
+    ''' automatically add a public default constructor if no constructor 
+    ''' is specified. To prevent this an empty private constructor is 
+    ''' added.</remarks>
     Private Sub New()
     End Sub
 
 #End Region
 
 #End Region
+
 
 #Region "Custom Class Members"
 

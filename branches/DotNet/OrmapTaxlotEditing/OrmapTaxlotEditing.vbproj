@@ -11,6 +11,8 @@
     <AssemblyName>OrmapTaxlotEditing</AssemblyName>
     <MyType>Windows</MyType>
     <OptionStrict>On</OptionStrict>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>OrmapTaxlotEditing.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -239,6 +241,8 @@
     <None Include="My Project\DataSources\TaxLotLinesSettings.datasource" />
     <None Include="My Project\DataSources\TaxlotNumberAnnoSettings.datasource" />
     <None Include="My Project\DataSources\TaxLotSettings.datasource" />
+    <None Include="OrmapTaxlotEditiing.snk" />
+    <None Include="OrmapTaxlotEditing.snk" />
     <None Include="settings\AllTablesSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>AllTablesSettings.Designer.vb</LastGenOutput>
