@@ -30,7 +30,7 @@
     <Position X="12" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>EditMapIndex.vb</FileName>
-      <HashCode>K4BAEAAiAAQEBJFgAADIAgIiiDEAAAAERKAgPABYAAA=</HashCode>
+      <HashCode>K4BAEAAiAAUEBJFgAADIAgIiiDEAAAAERKAgPABYIAI=</HashCode>
     </TypeIdentifier>
     <NestedTypes>
       <Struct Name="OrmapTaxlotEditing.EditMapIndex.TaxlotFieldMap" Collapsed="true">
@@ -226,5 +226,12 @@
     <Position X="2.5" Y="4" Width="1.5" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="OrmapTaxlotEditing.MapIndexForm" Collapsed="true">
+    <Position X="12" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>MapIndexForm.vb</FileName>
+      <HashCode>JgCAiAAIAjGIAABgAAGASMEHcIkAEAQAAigEAQCIOAU=</HashCode>
+    </TypeIdentifier>
   </Class>
 </ClassDiagram>

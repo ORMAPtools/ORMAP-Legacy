@@ -187,7 +187,7 @@ Public Class CatalogFileDialog
             filters.AddFilter(filter, isDefault)
             Return True
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            Trace.WriteLine(ex.ToString)
             Return False
         End Try
     End Function
@@ -218,7 +218,7 @@ Public Class CatalogFileDialog
             Loop
             Return _colSelection
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            Trace.WriteLine(ex.ToString)
             Return New Collection
         End Try
     End Function
@@ -239,7 +239,7 @@ Public Class CatalogFileDialog
             _colSelection.Add(String.Concat(selectedObject.FullName, "\", _theGxDialog.Name))
             Return _colSelection
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            Trace.WriteLine(ex.ToString)
             Return New Collection
         End Try
     End Function

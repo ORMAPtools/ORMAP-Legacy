@@ -40,7 +40,7 @@ Imports System.Runtime.InteropServices
 #End Region
 
 <ComVisible(False)> _
-Public Class MapIndexForm : Inherits System.Windows.Forms.Form
+Public Class EditMapIndexForm : Inherits System.Windows.Forms.Form
     Public Sub New()
         ' This call is required by the Windows Form Designer.
         InitializeComponent()

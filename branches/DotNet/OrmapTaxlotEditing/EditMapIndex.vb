@@ -141,7 +141,7 @@ Public NotInheritable Class EditMapIndex
     Private WithEvents _ormapNumber As ORMapNum
     Private _mapIndexFields As MapIndexFieldMap
     Private _taxlotFields As TaxlotFieldMap
-    Private _editingState As Boolean
+    Private _editingState As Boolean = False
 
 #End Region
 
@@ -173,6 +173,7 @@ Public NotInheritable Class EditMapIndex
             ' Subscribe to partner form events.
             AddHandler _partnerMapIndexForm.Load, AddressOf PartnerMapIndexForm_Load
             AddHandler _partnerMapIndexForm.uxEdit.Click, AddressOf uxEdit_Click
+            AddHandler _partnerMapIndexForm.uxHelp.Click, AddressOf uxHelp_Click
             AddHandler _partnerMapIndexForm.uxQuit.Click, AddressOf uxQuit_Click
             AddHandler _partnerMapIndexForm.uxCounty.Click, AddressOf uxCounty_Click
             AddHandler _partnerMapIndexForm.uxTownship.Click, AddressOf uxTown_Click
@@ -192,6 +193,7 @@ Public NotInheritable Class EditMapIndex
             RemoveHandler _partnerMapIndexForm.Load, AddressOf PartnerMapIndexForm_Load
             RemoveHandler _partnerMapIndexForm.uxEdit.Click, AddressOf uxEdit_Click
             RemoveHandler _partnerMapIndexForm.uxQuit.Click, AddressOf uxQuit_Click
+            RemoveHandler _partnerMapIndexForm.uxHelp.Click, AddressOf uxHelp_Click
             RemoveHandler _partnerMapIndexForm.uxCounty.Click, AddressOf uxCounty_Click
             RemoveHandler _partnerMapIndexForm.uxTownship.Click, AddressOf uxTown_Click
             RemoveHandler _partnerMapIndexForm.uxTownshipPartial.Click, AddressOf uxTownPart_Click
@@ -469,11 +471,10 @@ Public NotInheritable Class EditMapIndex
             Else
                 PartnerMapIndexForm.uxEdit.Enabled = True
             End If
-
             PartnerMapIndexForm.ShowDialog()
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            Trace.WriteLine(ex.Message)
 
         End Try
 
@@ -802,6 +803,7 @@ Public NotInheritable Class EditMapIndex
                 _application = DirectCast(hook, IApplication)
                 setPartnerMapIndexForm(New MapIndexForm())
                 MyBase.m_enabled = True
+                setPartnerEditMapIndexForm(New EditMapIndexForm)
             Else
                 MyBase.m_enabled = False
             End If

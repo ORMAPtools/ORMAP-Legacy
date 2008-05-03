@@ -79,7 +79,7 @@ Public NotInheritable Class StringUtilities
                 'Dim sb As New StringBuilder("0", 5)
                 'sb.Insert(width - currentString.Length, currentString)
                 'Return sb.ToString
-                'TODO: [NIS] Above code does not work. Jim, why was PadLeft was not used here for a while?
+                'TODO: [NIS] Above code does not work. Jim, why was PadLeft was not used here for a while? [JWM] I started with the StringBuilder and finally settled on Padleft.
                 Return currentString.PadLeft(width, "0"c)
             Else
                 Return currentString
@@ -207,7 +207,7 @@ Public NotInheritable Class StringUtilities
                                             formattedResult.Chars(positionInMask) = "D"c
                                     End Select
                                 Else
-                                    If countyCode <> 3 Then 'Clackamas County wants the space/blank value left in the string NO ZEROES PLEASE
+                                    If countyCode <> 3 Or countyCode <> 22 Then 'Clackamas County, Linn county wants the space/blank value left in the string NO ZEROES PLEASE
                                         formattedResult.Chars(positionInMask) = "0"c
                                     End If
                                 End If
@@ -230,7 +230,7 @@ Public NotInheritable Class StringUtilities
                                             formattedResult.Chars(positionInMask) = "D"c
                                     End Select
                                 Else
-                                    If countyCode <> 3 Then
+                                    If countyCode <> 3 Or countyCode <> 22 Then 'Clackamas County, Linn county wants the space/blank value left in the string NO ZEROES PLEASE
                                         formattedResult.Chars(positionInMask) = "0"c
                                     End If
                                 End If
@@ -308,7 +308,7 @@ Public NotInheritable Class StringUtilities
     ''' <returns>A string that is a substring of theWholeString.</returns>
     ''' <remarks></remarks>
     Public Shared Function ExtractString(ByVal theWholeString As String, ByVal lowPart As Integer, ByVal highPart As Integer) As String
-        Try 'HACK: JWM Probably can be replaced with String.Substring()
+        Try
             If lowPart <= highPart Then
                 'Return Mid(theWholeString, lowPart, highPart - lowPart + 1)
                 Return theWholeString.Substring(lowPart, highPart - lowPart + 1)

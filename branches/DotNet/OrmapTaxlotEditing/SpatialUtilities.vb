@@ -171,7 +171,6 @@ Public NotInheritable Class SpatialUtilities
     '''   <item><term>MapNumber</term><description>MapIndex</description></item>
     '''   <item><term>ORMapNum</term><description>MapIndex</description></item>
     '''   <item><term>Taxlot</term><description>(not updated here)</description></item>
-    '''   <item><term>SpcIntrst</term><description>(not updated here)</description></item>
     '''   <item><term>MapTaxlot</term><description>Combination of MapIndex.MapNum and current Taxlot</description></item>
     '''   <item><term>ORTaxlot</term><description>Combination of MapIndex.ORMapNum and current Taxlot</description></item>
     '''   <item><term>MapAcres</term><description>(feature area / 43560)</description></item>
@@ -243,17 +242,17 @@ Public NotInheritable Class SpatialUtilities
             ' Reformat Special Interest Code to exactly
             ' 5 characters.
             '------------------------------------------
-            ' TODO: [JWM] Jim, Please fix this to match bug fix in VB6 version (Nick).
-            Dim theCurrentSpecialInterest As String = "00000"
-            If Not IsDBNull(editFeature.Value(theSpcIntrstFieldIndex)) Then
-                theCurrentSpecialInterest = CStr(editFeature.Value(theSpcIntrstFieldIndex))
-                If theCurrentSpecialInterest.Length < 5 Then
-                    theCurrentSpecialInterest = theCurrentSpecialInterest.PadLeft(5, "0"c)
-                ElseIf theCurrentSpecialInterest.Length > 5 Then
-                    theCurrentSpecialInterest = theCurrentSpecialInterest.Substring(0, 5)
-                End If
-            End If
-
+            'SFBUG START JWM 05/02/2008 Sourceforge Tracker 1922332 ++++++++++
+            'Dim theCurrentSpecialInterest As String = "00000"
+            'If Not IsDBNull(editFeature.Value(theSpcIntrstFldIdx)) Then
+            '    theCurrentSpecialInterest = CStr(editFeature.Value(theSpcIntrstFldIdx))
+            '    If theCurrentSpecialInterest.Length < 5 Then
+            '        theCurrentSpecialInterest = theCurrentSpecialInterest.PadLeft(5, "0"c)
+            '    ElseIf theCurrentSpecialInterest.Length > 5 Then
+            '        theCurrentSpecialInterest = theCurrentSpecialInterest.Substring(0, 5)
+            '    End If
+            'End If
+            '++ END JWM 05/02/2008 Sourceforge Tracker 1922332 ++++++++++
             '------------------------------------------
             ' Get the ORMapNum from the MapIndex 
             ' layer and parse it into the ORMapNum 
@@ -286,7 +285,9 @@ Public NotInheritable Class SpatialUtilities
                 .Value(theMapNumberFieldIndex) = theCurrentMapNumber
                 .Value(theORMapNumFieldIndex) = theORMapNumClass.GetOrmapMapNumber
                 'Taxlot (not updated here)
-                .Value(theSpcIntrstFieldIndex) = theCurrentSpecialInterest
+                'SFBUG START JWM 05/02/2008 Sourceforge Tracker 1922332 ++++++++++
+                '.Value(theSpcIntrstFldIdx) = theCurrentSpecialInterest
+                'END JWM 05/02/2008 Sourceforge Tracker 1922332 ++++++++++
                 'MapTaxlot (see below)
                 'ORTaxlot (see below)
                 .Value(theMapAcresFieldIndex) = theArea.Area / 43560
@@ -1171,7 +1172,7 @@ Public NotInheritable Class SpatialUtilities
             If thisFileDialog.SelectedObject(1) Is Nothing Then
                 Return False
             End If
-
+            'TODO [JWM] Figure out what type of workspace to open. It won't always be a personal geodatabase
             Dim thisWorkspaceFactory As IWorkspaceFactory2
             thisWorkspaceFactory = New AccessWorkspaceFactory
             Dim thisWorkSpace As IWorkspace
@@ -1247,19 +1248,34 @@ Public NotInheritable Class SpatialUtilities
                 Else
                     .SetTitle(String.Concat("Find object class (table) ", objectClassName, "..."))
                 End If
-                .SetFilter(New ESRI.ArcGIS.Catalog.GxFilterPersonalGeodatabases, True, True)
+                .SetFilter(New ESRI.ArcGIS.Catalog.GxFilterPersonalGeodatabases, False, False)
+                .SetFilter(New ESRI.ArcGIS.Catalog.GxFilterGeoDatasets, False, False)
+                .SetFilter(New ESRI.ArcGIS.Catalog.GxFilterFGDBTables, False, False)
+                .SetFilter(New ESRI.ArcGIS.Catalog.GxFilterSDETables, False, False)
                 .ShowOpen()
             End With
 
             ' Exit if there is nothing selected
             If theFileDialog.SelectedObject(1) Is Nothing Then
                 Return False
+                Exit Try
+            End If
+            'TODO [JWM] Figure out what type of workspace to open 
+            Dim theWorkspaceFactory As IWorkspaceFactory2
+            Dim isPersonal As Boolean = False
+            theWorkspaceFactory = New SdeWorkspaceFactory
+            Dim theWorkSpace As IWorkspace
+
+            If theWorkspaceFactory.IsWorkspace(theFileDialog.SelectedObject(1).ToString) Then
+                isPersonal = False
+            Else
+                isPersonal = True
             End If
 
-            Dim theWorkspaceFactory As IWorkspaceFactory2
-            theWorkspaceFactory = New AccessWorkspaceFactory
-            Dim theWorkSpace As IWorkspace
-            theWorkSpace = theWorkspaceFactory.OpenFromFile(CStr(theFileDialog.SelectedObject(1)), 0)
+            If isPersonal Then
+                theWorkspaceFactory = New AccessWorkspaceFactory
+            End If
+            theWorkSpace = theWorkspaceFactory.OpenFromFile(theFileDialog.SelectedObject(1).ToString, 0)
 
             Dim theFeatureWorkspace As IFeatureWorkspace
             theFeatureWorkspace = DirectCast(theWorkSpace, IFeatureWorkspace)
@@ -1582,14 +1598,21 @@ Public NotInheritable Class SpatialUtilities
 
             ' Checks for the existence of a current ORMAP Number and Taxlot number
             Dim mapIndexORMAPValue As String = String.Empty
-            'mapIndexORMAPValue= getValueViaOverlay() 'TODO: JWM Flesh getValueViaOverlay function out
+            mapIndexORMAPValue = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField) 'TODO: verify
             If mapIndexORMAPValue.Length = 0 Then
                 returnValue = True
             End If
 
             'Make sure this number is unique within taxlots with this OM number
             'TODO: JWM check these EditorExtension values
-            Dim whereClause As String = String.Concat(EditorExtension.TaxLotSettings.MapNumberField, "='", mapIndexORMAPValue, "' AND ", EditorExtension.TaxLotSettings.TaxlotField, " = '", taxlotNumber, "'")
+            'HACK [JWM] Figure out the sql syntax
+            Dim ds As IDataset = thisTaxlotFeatureClass.FeatureDataset
+            Dim ws As IWorkspace = ds.Workspace
+            Dim syntax As ISQLSyntax = DirectCast(ws, ISQLSyntax)
+            Dim delimiterPrefix As String = syntax.GetSpecialCharacter(esriSQLSpecialCharacters.esriSQL_DelimitedIdentifierPrefix)
+            Dim delimiterSuffix As String = syntax.GetSpecialCharacter(esriSQLSpecialCharacters.esriSQL_DelimitedIdentifierSuffix)
+
+            Dim whereClause As String = String.Concat(delimiterPrefix, EditorExtension.TaxLotSettings.MapNumberField, delimiterSuffix, "='", mapIndexORMAPValue, "' AND ", delimiterPrefix, EditorExtension.TaxLotSettings.TaxlotField, delimiterSuffix, " = '", taxlotNumber, "'")
             Dim cursor As ICursor
             cursor = attributeQuery(DirectCast(thisTaxlotFeatureClass, ITable), whereClause)
             If Not (cursor Is Nothing) AndAlso (returnValue = False) Then
@@ -1659,10 +1682,6 @@ Public NotInheritable Class SpatialUtilities
         theActiveView.Refresh()
 
     End Sub
-
-
-
-
 
 #End Region
 

@@ -51,6 +51,7 @@ ProgId("ORMAPTaxlotEditing.CombineTaxlots")> _
 Public NotInheritable Class CombineTaxlots
     Inherits BaseCommand
     Implements IDisposable
+    'TODO: [JWM]SEE http://sourceforge.net/tracker/index.php?func=detail&aid=1951096&group_id=151824&atid=782251
 
 #Region "Class-Level Constants And Enumerations"
     ' None

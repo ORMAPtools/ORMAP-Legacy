@@ -1,5 +1,5 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class MapIndexForm
+Partial Class EditMapIndexForm
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -473,7 +473,7 @@ Partial Class MapIndexForm
         Me.uxQuit.Text = "&Quit"
         Me.uxQuit.UseVisualStyleBackColor = True
         '
-        'MapIndexForm
+        'EditMapIndexForm
         '
         Me.AcceptButton = Me.uxEdit
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -488,8 +488,14 @@ Partial Class MapIndexForm
         Me.Controls.Add(Me.uxSectionGroupBox)
         Me.Controls.Add(Me.uxRangeGroupBox)
         Me.Controls.Add(Me.uxTownshipGroupBox)
-        Me.Name = "MapIndexForm"
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
+        Me.Name = "EditMapIndexForm"
+        Me.ShowIcon = False
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Edit Map Index"
+        Me.TopMost = True
         Me.uxTownshipGroupBox.ResumeLayout(False)
         Me.uxTownshipGroupBox.PerformLayout()
         Me.uxRangeGroupBox.ResumeLayout(False)
