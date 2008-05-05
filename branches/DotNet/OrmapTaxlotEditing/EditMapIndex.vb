@@ -156,18 +156,18 @@ Public NotInheritable Class EditMapIndex
         End Set
     End Property
 
-    Private WithEvents _partnerMapIndexForm As MapIndexForm
+    Private WithEvents _partnerMapIndexForm As EditMapIndexForm
 
-    Friend ReadOnly Property PartnerMapIndexForm() As MapIndexForm
+    Friend ReadOnly Property PartnerMapIndexForm() As EditMapIndexForm
         Get
             If _partnerMapIndexForm Is Nothing OrElse _partnerMapIndexForm.IsDisposed Then
-                setPartnerMapIndexForm(New MapIndexForm())
+                setPartnerEditMapIndexForm(New EditMapIndexForm())
             End If
             Return _partnerMapIndexForm
         End Get
     End Property
 
-    Private Sub setPartnerMapIndexForm(ByRef value As MapIndexForm)
+    Private Sub setPartnerEditMapIndexForm(ByRef value As EditMapIndexForm)
         If value IsNot Nothing Then
             _partnerMapIndexForm = value
             ' Subscribe to partner form events.
@@ -801,7 +801,7 @@ Public NotInheritable Class EditMapIndex
             'Disable if it is not ArcMap
             If TypeOf hook Is IMxApplication Then
                 _application = DirectCast(hook, IApplication)
-                setPartnerMapIndexForm(New MapIndexForm())
+                setPartnerEditMapIndexForm(New EditMapIndexForm())
                 MyBase.m_enabled = True
                 setPartnerEditMapIndexForm(New EditMapIndexForm)
             Else
