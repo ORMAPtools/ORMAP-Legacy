@@ -2259,7 +2259,6 @@ On Error Resume Next
     Dim pSpatQry As esriGeoDatabase.ISpatialFilter
     Dim pArea As esriGeometry.IArea
     Dim pStatBar As esriSystem.IStatusBar
-    Dim lCount As Long
 '    Dim sSpecialInt As String
     Dim sTaxlot As String
 
@@ -2276,13 +2275,12 @@ On Error Resume Next
     ' Loops through the selected features
     Set pTaxlotFeature = pFeatSel.NextFeature
     Do While Not pTaxlotFeature Is Nothing
-        lCount = lCount + 1
         ' Gets the formatted taxlot value
         If Not IsNull(pTaxlotFeature.Value(m_pTaxlotFields.Taxlot)) Then
             sTaxlot = pTaxlotFeature.Value(m_pTaxlotFields.Taxlot)
-            sTaxlot = String(5 - Len(sTaxlot), "0") & sTaxlot
+            sTaxlot = AddLeadingZeros(sTaxlot, ORMAP_TAXLOT_FIELD_LENGTH)
           Else
-            sTaxlot = "00000"
+            sTaxlot = String(ORMAP_TAXLOT_FIELD_LENGTH, "0")
         End If
         
         ' Gets the formatted special interest value
