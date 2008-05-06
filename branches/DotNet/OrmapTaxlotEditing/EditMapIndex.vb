@@ -141,7 +141,7 @@ Public NotInheritable Class EditMapIndex
     Private WithEvents _ormapNumber As ORMapNum
     Private _mapIndexFields As MapIndexFieldMap
     Private _taxlotFields As TaxlotFieldMap
-    Private _editingState As Boolean = False
+    Private _editingState As Boolean
 
 #End Region
 
@@ -167,7 +167,7 @@ Public NotInheritable Class EditMapIndex
         End Get
     End Property
 
-    Private Sub setPartnerEditMapIndexForm(ByRef value As EditMapIndexForm)
+    Private Sub setPartnerEditMapIndexForm(ByVal value As EditMapIndexForm)
         If value IsNot Nothing Then
             _partnerMapIndexForm = value
             ' Subscribe to partner form events.
@@ -458,7 +458,7 @@ Public NotInheritable Class EditMapIndex
 
         Try
             ' Check for valid data
-            CheckValidDataProperties()
+            CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
                                 "Please load this dataset into your map.", _
@@ -466,6 +466,7 @@ Public NotInheritable Class EditMapIndex
                 Exit Try
             End If
 
+            CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
                 PartnerMapIndexForm.uxEdit.Enabled = False
             Else
@@ -543,7 +544,7 @@ Public NotInheritable Class EditMapIndex
             End If
             _mapIndexFeature = thisFeatureCursor.NextFeature
 
-            Dim thisTable As ITable = _mapIndexFeature.Table
+            'NOT USED - Dim thisTable As ITable = _mapIndexFeature.Table
             Dim thisRow As IRow = _mapIndexFeature.Table.GetRow(_mapIndexFeature.OID)
 
             'TODO jwm validate this method of retrieving values
@@ -679,25 +680,24 @@ Public NotInheritable Class EditMapIndex
     Private Sub ResetControls()
 
         Dim ctl As System.Windows.Forms.Control
-        Dim cmb As System.Windows.Forms.ComboBox
 
         For Each ctl In PartnerMapIndexForm.Controls
             If TypeOf ctl Is TextBox Then
                 ctl.Text = ""
             ElseIf TypeOf ctl Is ComboBox Then
-                cmb = CType(ctl, ComboBox)
+                Dim cmb As System.Windows.Forms.ComboBox = DirectCast(ctl, ComboBox)
                 'PartnerMapIndexForm.uxCounty.Items.Clear()
                 cmb.Items.Clear()
             End If
         Next
     End Sub
 
-    Private Function UpdateTaxlots(ByVal theFeature As IFeature, ByVal theTaxlotFeatureClass As IFeatureClass) As Boolean
+    Private Function UpdateTaxlots(ByVal theMapIndexFeature As IFeature) As Boolean
         Try
             _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Updating underlyling taxlot features..."
             ' Finds any taxlots that are underneath the map index polygon
             Dim thisSpatialQuery As ISpatialFilter = New SpatialFilter
-            thisSpatialQuery.Geometry = theFeature.ShapeCopy
+            thisSpatialQuery.Geometry = theMapIndexFeature.ShapeCopy
             thisSpatialQuery.SpatialRel = esriSpatialRelEnum.esriSpatialRelContains
             Dim thisFeatureSelection As IFeatureCursor = _taxlotFeatureClass.Update(thisSpatialQuery, False)
             'loop through the selected features
@@ -707,7 +707,7 @@ Public NotInheritable Class EditMapIndex
             Do While Not thisTaxlotFeature Is Nothing
                 'gets the formatted taxlot value
                 If Not IsDBNull(thisTaxlotFeature.Value(_taxlotFields.Taxlot)) Then
-                    taxlot = AddLeadingZeros(CStr(thisTaxlotFeature.Value(_taxlotFields.Taxlot)), ORMapNum.GetOrmap_TaxlotFieldLength)
+                    taxlot = AddLeadingZeros(CStr(thisTaxlotFeature.Value(_taxlotFields.Taxlot)), ORMapNum.GetTaxlotFieldLength)
                 Else
                     taxlot = "00000"
                 End If
@@ -745,7 +745,7 @@ Public NotInheritable Class EditMapIndex
                     .Value(_taxlotFields.SuffixType) = _ormapNumber.SuffixType
                     .Value(_taxlotFields.SuffixNumber) = _ormapNumber.SuffixNumber
                     .Value(_taxlotFields.Anomaly) = _ormapNumber.Anomaly
-                    .Value(_taxlotFields.MapNumber) = theFeature.Value(_mapIndexFields.MapNumber)
+                    .Value(_taxlotFields.MapNumber) = theMapIndexFeature.Value(_mapIndexFields.MapNumber)
                     .Value(_taxlotFields.OrmapMapNumber) = _ormapNumber.GetOrmapMapNumber
                     .Value(_taxlotFields.Taxlot) = CInt(taxlot)
                     'special interest used to go here

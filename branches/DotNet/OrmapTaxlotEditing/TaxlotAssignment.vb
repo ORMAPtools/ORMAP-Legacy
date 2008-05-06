@@ -37,6 +37,7 @@
 
 #Region "Imported Namespaces"
 Imports System.Drawing
+Imports System.Globalization
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
 Imports ESRI.ArcGIS.ADF.BaseClasses
@@ -130,7 +131,20 @@ Public NotInheritable Class TaxlotAssignment
 
     Public ReadOnly Property IncrementNumber() As Integer
         Get
-            _incrementNumber = CInt(PartnerTaxlotAssignmentForm.uxType.SelectedItem.ToString)
+            Select Case True
+                Case PartnerTaxlotAssignmentForm.uxIncrementByNone.Checked
+                    _incrementNumber = 0
+                Case PartnerTaxlotAssignmentForm.uxIncrementBy1.Checked
+                    _incrementNumber = 1
+                Case PartnerTaxlotAssignmentForm.uxIncrementBy10.Checked
+                    _incrementNumber = 10
+                Case PartnerTaxlotAssignmentForm.uxIncrementBy100.Checked
+                    _incrementNumber = 100
+                Case PartnerTaxlotAssignmentForm.uxIncrementBy1000.Checked
+                    _incrementNumber = 1000
+                Case Else
+                    _incrementNumber = 0
+            End Select
             Return _incrementNumber
         End Get
     End Property
@@ -168,7 +182,7 @@ Public NotInheritable Class TaxlotAssignment
         End Get
     End Property
 
-    Private Sub setPartnerTaxlotAssignmentForm(ByRef value As TaxlotAssignmentForm)
+    Private Sub setPartnerTaxlotAssignmentForm(ByVal value As TaxlotAssignmentForm)
         If value IsNot Nothing Then
             _partnerTaxlotAssignmentForm = value
             ' Subscribe to partner form events.
@@ -272,7 +286,7 @@ Public NotInheritable Class TaxlotAssignment
             End If
 
             ' Check for valid data
-            CheckValidDataProperties()
+            CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
                 MessageBox.Show("Unable to assign taxlot values to polygons." & vbNewLine & _
                                 "Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
@@ -280,6 +294,7 @@ Public NotInheritable Class TaxlotAssignment
                                 "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
+            CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Unable to assign taxlot values to polygons." & vbNewLine & _
                                 "Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
@@ -292,7 +307,7 @@ Public NotInheritable Class TaxlotAssignment
             Dim isTaxlotType As Boolean = (StrComp(Me.TaxlotType, TaxlotAssignment.taxlotNumberTypeTaxlot, CompareMethod.Text) = 0)
             If isTaxlotType Then
                 If Not IsNumeric(Me.NumberStartingFrom) Then
-                    Throw New InvalidOperationException(String.Format("Expected a number for {0}, got {1}.", "me.NumberStartingFrom", Me.NumberStartingFrom)) ' TODO: [NIS] Find a better exception.
+                    Throw New InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Expected a number for {0}, got {1}.", "me.NumberStartingFrom", Me.NumberStartingFrom)) ' TODO: [NIS] Find a better exception.
                 End If
             End If
 
@@ -396,6 +411,14 @@ Public NotInheritable Class TaxlotAssignment
                 '[Taxlot value is a word...]
                 theNewTLTaxlotNum = Me.TaxlotType 'Predefined text enum
             End If
+
+            '------------------------------------------
+            ' Set the new value
+            '------------------------------------------
+
+            Debug.Assert(theTaxlotFeature.Fields.Field(theTLTaxlotFieldIndex).Length >= theNewTLTaxlotNum.ToString.Length, "theTaxlotFeature.Fields.Field(theTLTaxlotFieldIndex).Length >= theNewTLTaxlotNum.ToString.Length")
+
+            theTaxlotFeature.Value(theTLTaxlotFieldIndex) = theNewTLTaxlotNum
 
             '------------------------------------------
             ' End the edit operation (store & stop)

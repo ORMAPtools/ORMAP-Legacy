@@ -115,7 +115,7 @@ Public NotInheritable Class LocateFeature
         End Get
     End Property
 
-    Private Sub setPartnerLocateFeatureForm(ByRef value As LocateFeatureForm)
+    Private Sub setPartnerLocateFeatureForm(ByVal value As LocateFeatureForm)
         If value IsNot Nothing Then
             _partnerLocateFeatureForm = value
             ' Subscribe to partner form events.
@@ -214,8 +214,9 @@ Public NotInheritable Class LocateFeature
     Friend Sub DoButtonOperation()
 
         Try
-            ' Check for valid data
-            CheckValidDataProperties()
+            ' Check for valid data.
+
+            CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
                                 "Please load this dataset into your map.", _
@@ -223,6 +224,7 @@ Public NotInheritable Class LocateFeature
                 Exit Try
             End If
 
+            CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
                 PartnerLocateFeatureForm.uxTaxlot.Enabled = False
             Else

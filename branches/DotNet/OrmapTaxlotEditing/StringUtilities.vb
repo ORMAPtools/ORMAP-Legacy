@@ -34,6 +34,7 @@
 #End Region
 
 #Region "Imported Namespaces"
+Imports System.Globalization
 Imports System.Windows.Forms
 Imports System.Text
 #End Region
@@ -69,20 +70,20 @@ Public NotInheritable Class StringUtilities
     ''' <summary>
     ''' Add leading zeros if necessary.
     ''' </summary>
-    ''' <param name="currentString">The string to pad with zeros.</param>
+    ''' <param name="currentValue">The string to pad with zeros.</param>
     ''' <param name="width">The final length of the string.</param>
     ''' <returns>A string of length width characters.</returns>
     ''' <remarks>Creates a string of width characters padded on the left with zeros.</remarks>
-    Public Shared Function AddLeadingZeros(ByVal currentString As String, ByVal width As Integer) As String
+    Public Shared Function AddLeadingZeros(ByVal currentValue As String, ByVal width As Integer) As String
         Try
-            If currentString.Length < width Then
+            If currentValue.Length < width Then
                 'Dim sb As New StringBuilder("0", 5)
                 'sb.Insert(width - currentString.Length, currentString)
                 'Return sb.ToString
                 'TODO: [NIS] Above code does not work. Jim, why was PadLeft was not used here for a while? [JWM] I started with the StringBuilder and finally settled on Padleft.
-                Return currentString.PadLeft(width, "0"c)
+                Return currentValue.PadLeft(width, "0"c)
             Else
-                Return currentString
+                Return currentValue
             End If
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
@@ -90,13 +91,13 @@ Public NotInheritable Class StringUtilities
         End Try
     End Function
 
-    Public Shared Function GenerateMapTaxlotValue(ByVal mapTaxlotIdValue As String, ByVal formatString As String) As String
+    Public Shared Function GenerateMapTaxlotValue(ByVal mapTaxlotIdValue As String, ByVal format As String) As String
 
         If mapTaxlotIdValue Is Nothing OrElse mapTaxlotIdValue.Length = 0 Then
             Throw New ArgumentNullException("mapTaxlotIdValue")
         End If
-        If formatString Is Nothing OrElse formatString.Length = 0 Then
-            Throw New ArgumentNullException("formatString")
+        If format Is Nothing OrElse format.Length = 0 Then
+            Throw New ArgumentNullException("format")
         End If
         If mapTaxlotIdValue.Length < 29 Then
             Throw New ArgumentException("Invalid argument length", "mapTaxlotIdValue")
@@ -112,8 +113,8 @@ Public NotInheritable Class StringUtilities
             Dim hasAlphaQtrQtr As Boolean = False
 
             'flag for half township
-            hasTownPart = (Convert.ToDouble(mapTaxlotIdValue.Substring(4, 3)) > 0)
-            hasRangePart = (Convert.ToDouble(mapTaxlotIdValue.Substring(10, 3)) > 0)
+            hasTownPart = (Convert.ToDouble(mapTaxlotIdValue.Substring(4, 3), CultureInfo.CurrentCulture) > 0)
+            hasRangePart = (Convert.ToDouble(mapTaxlotIdValue.Substring(10, 3), CultureInfo.CurrentCulture) > 0)
 
             'flags for section quarters
             Select Case countyCode
@@ -127,18 +128,18 @@ Public NotInheritable Class StringUtilities
             End Select
 
             'We must adjust the mask for clackamas county if there are no half ranges in the current string
-            If formatString.IndexOf("^"c) > 0 Then
+            If format.IndexOf("^"c) > 0 Then
                 If hasRangePart = False Then
-                    formatString = formatString.Remove(formatString.IndexOf("^"c), 1)
+                    format = format.Remove(format.IndexOf("^"c), 1)
                 Else
                     'if there is a range part the letter Q will be  placed in the position where D sits
-                    formatString = formatString.Remove(formatString.IndexOf("D"c), 1)
+                    format = format.Remove(format.IndexOf("D"c), 1)
                 End If
             End If
             'copy of the formatstring
-            Dim maskValues As New StringBuilder(formatString.ToUpper)
+            Dim maskValues As New StringBuilder(format.ToUpper(CultureInfo.CurrentCulture))
             ' Create a string of spaces to place our results in. This helps a speed up string manipulation a little.
-            Dim formattedResult As New StringBuilder(New String(CChar(" "), formatString.Length), formatString.Length)
+            Dim formattedResult As New StringBuilder(New String(CChar(" "), format.Length), format.Length)
 
             Dim positionInMask As Integer
             Dim characterCode As Integer
@@ -149,11 +150,11 @@ Public NotInheritable Class StringUtilities
             Dim hasProcessedRangeFractional As Boolean = False
 
             For charIndex As Integer = 0 To maskValues.Length - 1
-                positionInMask = formatString.IndexOf(maskValues.Chars(charIndex).ToString, charIndex, StringComparison.CurrentCultureIgnoreCase)
+                positionInMask = format.IndexOf(maskValues.Chars(charIndex).ToString, charIndex, StringComparison.CurrentCultureIgnoreCase)
                 characterCode = Convert.ToInt32(maskValues.Chars(charIndex))
                 ' Returns how many of these characters appear in the mask
                 Dim c As Char
-                For Each c In formatString
+                For Each c In format
                     If c.Equals(maskValues.Chars(charIndex)) Then
                         tokenCount += 1
                     End If
@@ -194,7 +195,7 @@ Public NotInheritable Class StringUtilities
                                 formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(17, 1))
                             Else
                                 Dim currentORMAPNumValue As String
-                                currentORMAPNumValue = mapTaxlotIdValue.Substring(17, 1).ToUpper
+                                currentORMAPNumValue = mapTaxlotIdValue.Substring(17, 1).ToUpper(CultureInfo.CurrentCulture)
                                 If currentORMAPNumValue Like "[A-D]" Then
                                     Select Case currentORMAPNumValue
                                         Case "A"
@@ -302,16 +303,16 @@ Public NotInheritable Class StringUtilities
     ''' <summary>
     ''' Isolate elements of a string.
     ''' </summary>
-    ''' <param name="theWholeString">The string to isolate the substring from.</param>
+    ''' <param name="whole">The string to isolate the substring from.</param>
     ''' <param name="lowPart"></param>
     ''' <param name="highPart"></param>
     ''' <returns>A string that is a substring of theWholeString.</returns>
     ''' <remarks></remarks>
-    Public Shared Function ExtractString(ByVal theWholeString As String, ByVal lowPart As Integer, ByVal highPart As Integer) As String
+    Public Shared Function ExtractString(ByVal whole As String, ByVal lowPart As Integer, ByVal highPart As Integer) As String
         Try
             If lowPart <= highPart Then
                 'Return Mid(theWholeString, lowPart, highPart - lowPart + 1)
-                Return theWholeString.Substring(lowPart, highPart - lowPart + 1)
+                Return whole.Substring(lowPart, highPart - lowPart + 1)
             Else
                 Return String.Empty
             End If
@@ -378,7 +379,7 @@ Public NotInheritable Class StringUtilities
     ''' <param name="stringToParse"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Private Shared Function stripLeadingZeros(ByRef stringToParse As String) As String
+    Private Shared Function stripLeadingZeros(ByVal stringToParse As String) As String
         Try
             Dim sb As New StringBuilder(stringToParse)
 

@@ -126,7 +126,7 @@ Public NotInheritable Class DataMonitor
         _cancelledNumbersTable = value
     End Sub
 
-    Private Shared _hasValidMapIndexData As Boolean = False
+    Private Shared _hasValidMapIndexData As Boolean
 
     Friend Shared ReadOnly Property HasValidMapIndexData() As Boolean
         Get
@@ -138,7 +138,7 @@ Public NotInheritable Class DataMonitor
         _hasValidMapIndexData = value
     End Sub
 
-    Private Shared _hasValidTaxlotData As Boolean = False
+    Private Shared _hasValidTaxlotData As Boolean
 
     Friend Shared ReadOnly Property HasValidTaxlotData() As Boolean
         Get
@@ -150,7 +150,7 @@ Public NotInheritable Class DataMonitor
         _hasValidTaxlotData = value
     End Sub
 
-    Private Shared _hasValidCancelledNumbersTable As Boolean = False
+    Private Shared _hasValidCancelledNumbersTable As Boolean
 
     Friend Shared ReadOnly Property HasValidCancelledNumbersTableData() As Boolean
         Get
@@ -181,7 +181,26 @@ Public NotInheritable Class DataMonitor
         setCancelledNumbersTable(Nothing)
     End Sub
 
-    Friend Shared Sub CheckValidDataProperties()
+    Friend Shared Sub CheckAllValidDataProperties()
+        ' MapIndex status and layer properties
+        CheckValidMapIndexDataProperties()
+        ' Taxlot status and layer properties
+        CheckValidTaxlotDataProperties()
+        ' CancelledNumbersTable status and table properties
+        CheckValidCancelledNumbersTableDataProperties()
+    End Sub
+
+    Friend Shared Sub CheckValidTaxlotDataProperties()
+        ' MapIndex status and layer properties
+        SetHasValidTaxlotData(CheckData(ESRIClassType.FeatureClass, EditorExtension.TableNamesSettings.TaxLotFC))
+        If HasValidTaxlotData Then
+            If TaxlotFeatureLayer Is Nothing Then
+                setTaxlotFeatureLayer(FindDataLayerInMap(EditorExtension.TableNamesSettings.TaxLotFC))
+            End If
+        End If
+    End Sub
+
+    Friend Shared Sub CheckValidMapIndexDataProperties()
         ' MapIndex status and layer properties
         SetHasValidMapIndexData(CheckData(ESRIClassType.FeatureClass, EditorExtension.TableNamesSettings.MapIndexFC))
         If HasValidMapIndexData Then
@@ -189,13 +208,9 @@ Public NotInheritable Class DataMonitor
                 setMapIndexFeatureLayer(FindDataLayerInMap(EditorExtension.TableNamesSettings.MapIndexFC))
             End If
         End If
-        ' Taxlot status and layer properties
-        SetHasValidTaxlotData(CheckData(ESRIClassType.FeatureClass, EditorExtension.TableNamesSettings.TaxLotFC))
-        If HasValidTaxlotData Then
-            If TaxlotFeatureLayer Is Nothing Then
-                setTaxlotFeatureLayer(FindDataLayerInMap(EditorExtension.TableNamesSettings.TaxLotFC))
-            End If
-        End If
+    End Sub
+
+    Friend Shared Sub CheckValidCancelledNumbersTableDataProperties()
         ' CancelledNumbersTable status and table properties
         SetHasValidCancelledNumbersTable(CheckData(ESRIClassType.ObjectClass, EditorExtension.TableNamesSettings.CancelledNumbersTable))
         If HasValidCancelledNumbersTableData Then

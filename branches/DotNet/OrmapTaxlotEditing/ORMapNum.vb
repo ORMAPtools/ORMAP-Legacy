@@ -36,10 +36,9 @@
 #End Region
 
 #Region "Imported Namespaces"
-
+Imports system.Globalization
 Imports System.Runtime.InteropServices
 Imports System.Text
-
 #End Region
 
 #Region "Class Declaration"
@@ -261,7 +260,7 @@ Public NotInheritable Class ORMapNum
             Quarter = _quarter
         End Get
         Set(ByVal value As String)
-            Select Case value.ToUpper
+            Select Case value.ToUpper(CultureInfo.CurrentCulture)
                 Case "0", "A" To "J"
                     _quarter = value
                 Case Else
@@ -281,7 +280,7 @@ Public NotInheritable Class ORMapNum
             QuarterQuarter = _quarterQuarter
         End Get
         Set(ByVal value As String)
-            Select Case value.ToUpper
+            Select Case value.ToUpper(CultureInfo.CurrentCulture)
                 Case "0", "A" To "J"
                     _quarterQuarter = value
                 Case Else
@@ -301,7 +300,7 @@ Public NotInheritable Class ORMapNum
             SuffixType = _suffixType
         End Get
         Set(ByVal value As String)
-            Select Case value.ToUpper
+            Select Case value.ToUpper(CultureInfo.CurrentCulture)
                 Case "0", "D", "S", "T"
                     _suffixType = value
                 Case Else
@@ -368,7 +367,7 @@ Public NotInheritable Class ORMapNum
     ''' </summary>
     Public Function ParseNumber(ByVal number As String) As Boolean
         Dim returnValue As Boolean = False
-        If number.Length >= GetOrmap_MapNumFieldLength() Then
+        If number.Length >= GetMapNumFieldLength() Then
             Me.County = number.Substring(0, 2)
             Me.Township = number.Substring(2, 2)
             Me.PartialTownshipCode = number.Substring(4, 3)
@@ -392,7 +391,7 @@ Public NotInheritable Class ORMapNum
     ''' </summary>
     Public Function GetOrmapMapNumber() As String
         If IsValidNumber() Then
-            Dim sb As New StringBuilder(_township, ORMapNum.GetOrmap_MapNumFieldLength())
+            Dim sb As New StringBuilder(_township, ORMapNum.GetMapNumFieldLength())
             sb.Append(_partialTownshipCode)
             sb.Append(_townshipDirectional)
             sb.Append(_range)
@@ -412,14 +411,14 @@ Public NotInheritable Class ORMapNum
     End Function
 
     ''' <summary>
-    ''' ORMAP Number.
+    ''' Get OR Map Number (ORMapNum field).
     ''' </summary>
-    ''' <returns>Returns a properly formatted ORMAP Number.</returns>
+    ''' <returns>Returns a properly formatted OR Map Number.</returns>
     ''' <remarks>This function returns the same values as the OrmapTaxlotNumber member function in the VB6 version of ORMAPNumber class</remarks>
     Public Function GetORMapNum() As String
         ' Creates a formatted ORMAP Map Number
         If IsValidNumber() Then
-            Dim sb As New StringBuilder(_county, ORMapNum.GetOrmap_MapNumFieldLength())
+            Dim sb As New StringBuilder(_county, ORMapNum.GetMapNumFieldLength())
             sb.Append(_township)
             sb.Append(_partialTownshipCode)
             sb.Append(_townshipDirectional)
@@ -468,7 +467,7 @@ Public NotInheritable Class ORMapNum
     ''' Length of ORMAPMapNum field
     ''' </summary>
     ''' <returns>Number of characters allowed in this field as integer.</returns>
-    Public Shared Function GetOrmap_MapNumFieldLength() As Integer
+    Public Shared Function GetMapNumFieldLength() As Integer
         Return 24
     End Function
 
@@ -476,7 +475,7 @@ Public NotInheritable Class ORMapNum
     ''' Length of the taxlot field.
     ''' </summary>
     ''' <returns>Integer.</returns>
-    Public Shared Function GetOrmap_TaxlotFieldLength() As Integer
+    Public Shared Function GetTaxlotFieldLength() As Integer
         Return 5
     End Function
 
@@ -485,8 +484,8 @@ Public NotInheritable Class ORMapNum
     ''' </summary>
     ''' <returns>Number of characters allowed in this field as integer.</returns>
     ''' <remarks>Was ORMAP_TAXLOT_FIELD_LENGTH in previous (VB6) version.</remarks>
-    Public Shared Function GetOrmap_OrmapTaxlotFieldLength() As Integer
-        Return (GetOrmap_MapNumFieldLength() + GetOrmap_TaxlotFieldLength())
+    Public Shared Function GetORTaxlotFieldLength() As Integer
+        Return (GetMapNumFieldLength() + GetTaxlotFieldLength())
     End Function
 
 #End Region

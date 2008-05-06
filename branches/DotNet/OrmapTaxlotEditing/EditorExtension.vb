@@ -90,7 +90,7 @@ Public NotInheritable Class EditorExtension
         End Get
     End Property
 
-    Private Sub setApplication(ByVal value As IApplication)
+    Private Shared Sub setApplication(ByVal value As IApplication)
         _application = value
     End Sub
 
@@ -102,7 +102,7 @@ Public NotInheritable Class EditorExtension
         End Get
     End Property
 
-    Private Sub setEditor(ByVal value As IEditor2)
+    Private Shared Sub setEditor(ByVal value As IEditor2)
         _editor = value
     End Sub
 
@@ -114,7 +114,7 @@ Public NotInheritable Class EditorExtension
         End Get
     End Property
 
-    Private Sub setEditEvents(ByVal value As IEditEvents_Event)
+    Private Shared Sub setEditEvents(ByVal value As IEditEvents_Event)
         _editEvents = value
     End Sub
 
@@ -126,7 +126,7 @@ Public NotInheritable Class EditorExtension
         End Get
     End Property
 
-    Private Sub setActiveViewEvents(ByVal value As IActiveViewEvents_Event)
+    Private Shared Sub setActiveViewEvents(ByVal value As IActiveViewEvents_Event)
         _activeViewEvents = value
     End Sub
 
@@ -200,7 +200,7 @@ Public NotInheritable Class EditorExtension
         End Get
     End Property
 
-    Private Sub setHasValidLicense(ByVal value As Boolean)
+    Private Shared Sub setHasValidLicense(ByVal value As Boolean)
         _hasValidLicense = value
     End Sub
 
@@ -212,7 +212,7 @@ Public NotInheritable Class EditorExtension
         End Get
     End Property
 
-    Private Sub setIsValidWorkspace(ByVal value As Boolean)
+    Private Shared Sub setIsValidWorkspace(ByVal value As Boolean)
         _isValidWorkspace = value
     End Sub
 
@@ -290,7 +290,7 @@ Public NotInheritable Class EditorExtension
             ' (in case subroutines called don't check).
 
             ' Check for valid data (will try to load data if not found).
-            CheckValidDataProperties()
+            CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
                 MessageBox.Show("Unable to update Taxlot field values." & vbNewLine & _
                                 "Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
@@ -298,6 +298,7 @@ Public NotInheritable Class EditorExtension
                                 "ORMAP Taxlot Editing (OnChangeFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
+            CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Unable to update taxlot field values." & vbNewLine & _
                                 "Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
@@ -307,29 +308,18 @@ Public NotInheritable Class EditorExtension
                 Exit Try
             End If
 
-            ' Variable declarations
-            Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
-            Dim theAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
-
-            Dim theParentID As Integer
             If IsTaxlot(obj) Then
+                '[Edited object is a ORMAP taxlot feature...]
+
                 ' Obtain OrmapMapNumber via overlay and calculate other field values.
                 CalculateTaxlotValues(DirectCast(obj, IFeature), FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC))
+
             ElseIf IsAnno(obj) Then
-                theAnnotationFeature = DirectCast(obj, IAnnotationFeature)
+                '[Edited object is an ORMAP annotation feature...]
 
-                'Get the parent feature so mapnumber can be obtained
-                theParentID = theAnnotationFeature.LinkedFeatureID
-                If theParentID > -1 Then 'Feature linked
-                    theFeature = GetRelatedObjects(obj)
-                    If theFeature Is Nothing Then Exit Try
-                Else
-                    'Not feature linked anno, so we can use the feature as is
-                    theFeature = DirectCast(obj, IFeature)
-                End If
+                ' Set anno size based on the map scale.
+                SetAnnoSize(obj)
 
-                'Set anno size
-                SetAnnoSize(obj, theFeature)
             End If
 
         Catch ex As Exception
@@ -349,8 +339,6 @@ Public NotInheritable Class EditorExtension
     ''' <remarks>Handles EditEvents.OnCreateFeature events.</remarks>
     Private Sub EditEvents_OnCreateFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnCreateFeature
 
-        ' TODO: [NIS] Add code to check for if required data is available (see OnDeleteFeature).
-
         Try
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
             If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
@@ -365,7 +353,7 @@ Public NotInheritable Class EditorExtension
             ' (in case subroutines called don't check).
 
             ' Check for valid data (will try to load data if not found).
-            CheckValidDataProperties()
+            CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
                 MessageBox.Show("Unable to populate Taxlot field values." & vbNewLine & _
                                 "Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
@@ -373,6 +361,7 @@ Public NotInheritable Class EditorExtension
                                 "ORMAP Taxlot Editing (OnCreateFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
+            CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Unable to populate taxlot field values." & vbNewLine & _
                                 "Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
@@ -381,36 +370,32 @@ Public NotInheritable Class EditorExtension
                 Exit Try
             End If
 
-            ' TODO: [NIS] Move this code to within the below logic
-
-            Dim theMapNumberFieldIndex As Integer
-            Dim theMapScaleFieldIndex As Integer
-            ' TODO: [NIS] Test this DirectCast.
-            theMapNumberFieldIndex = (DirectCast(obj, IFeature)).Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
-            ' TODO: [NIS] Test this DirectCast.
-            theMapScaleFieldIndex = (DirectCast(obj, IFeature)).Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
-
+            ' Get the feature
             Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
+            theFeature = DirectCast(obj, IFeature)
+
+            ' Get the feature geometry
             Dim theGeometry As ESRI.ArcGIS.Geometry.IGeometry
-            Dim theEnvelope As ESRI.ArcGIS.Geometry.IEnvelope
-            Dim theCenterPoint As ESRI.ArcGIS.Geometry.IPoint
-            Dim theMapScale As String
-            Dim theMapNumber As String
+            theGeometry = theFeature.Shape
+            If theGeometry.IsEmpty Then
+                Exit Try
+            End If
 
             If IsTaxlot(obj) Then
                 '[Edited object is a ORMAP taxlot feature...]
 
                 ' Obtain OrmapMapNumber via overlay and calculate other field values.
-                theFeature = DirectCast(obj, IFeature)
                 CalculateTaxlotValues(theFeature, MapIndexFeatureLayer)
 
             ElseIf IsAnno(obj) Then
                 '[Edited object is an ORMAP annotation feature...]
+                ' Update MapScale, MapNumber and Anno Size:
 
+                ' Get the annotation feature.
                 Dim theAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
-                theAnnotationFeature = DirectCast(obj, IAnnotationFeature)
+                theAnnotationFeature = DirectCast(theFeature, IAnnotationFeature)
 
-                'Get the parent feature so mapnumber can be obtained
+                'Get the parent feature
                 Dim theParentID As Integer
                 theParentID = theAnnotationFeature.LinkedFeatureID
                 If theParentID > FieldNotFoundIndex Then 'Feature linked
@@ -418,80 +403,19 @@ Public NotInheritable Class EditorExtension
                     If theFeature Is Nothing Then Exit Try
                 Else
                     'Not feature linked anno, so we can use the feature as is
-                    theFeature = DirectCast(obj, IFeature)
+
                 End If
 
-                ' Retrieve the map number and scale from the overlaying map index polygon
-                theGeometry = theFeature.Shape
-                If theGeometry.IsEmpty Then Exit Try
-                theEnvelope = theGeometry.Envelope
-                theCenterPoint = DirectCast(theEnvelope, ESRI.ArcGIS.Geometry.IPoint)
-                theGeometry = theCenterPoint 'QI
+                setMapIndexAndScale(obj, theFeature, theGeometry)
 
-                ' Capture MapNumber for each anno feature created
-                ' TODO: [NIS] Test use of pFeat instead of obj here.
-                Dim theAnnoMapNumFieldIndex As Integer
-                theAnnoMapNumFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
-                If theAnnoMapNumFieldIndex = FieldNotFoundIndex Then Exit Try
-
-                theMapNumber = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
-                ' TODO: [NIS] Test use of pFeat instead of obj here.
-                theFeature.Value(theAnnoMapNumFieldIndex) = theMapNumber
-                If theMapScaleFieldIndex > FieldNotFoundIndex Then
-                    theMapScale = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
-                    If Len(theMapScale) > 0 Then
-                        ' TODO: [NIS] Test use of pFeat instead of obj here.
-                        theFeature.Value(theMapScaleFieldIndex) = theMapScale
-                    Else
-                        ' TODO: [NIS] Test use of pFeat instead of obj here.
-                        theFeature.Value(theMapScaleFieldIndex) = System.DBNull.Value
-                    End If
-                End If
-                ' Set size based on mapscale
-                SetAnnoSize(obj, theFeature)
+                ' Set anno size based on the map scale.
+                SetAnnoSize(obj)
             Else
                 '[Edited object is another kind of ORMAP feature (not taxlot or annotation)...]
+                ' Update MapScale and MapNumber (except for on the MapIndex feature class):
 
-                ' Update MapScale and mapnumber for all features with a MapScale field (except MapIndex)
-                If theMapScaleFieldIndex > FieldNotFoundIndex And Not IsMapIndex(obj) Then
-                    theFeature = CType(obj, IFeature)
-                    theGeometry = theFeature.Shape
-                    If theGeometry.IsEmpty Then Exit Try
-                    theEnvelope = theGeometry.Envelope
-                    If theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryBezier3Curve And _
-                            theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryCircularArc And _
-                            theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryEllipticArc And _
-                            theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryLine And _
-                            theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPath And _
-                            theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPolygon And _
-                            theGeometry.GeometryType <> ESRI.ArcGIS.Geometry.esriGeometryType.esriGeometryPolyline Then
-                        ' Convert the geometry to a point
-                        theCenterPoint = GetCenterOfEnvelope(theEnvelope)
-                        theGeometry = theCenterPoint 'QI
-                    Else
-                        ' Use the geometry as-is
-                    End If
+                setMapIndexAndScale(obj, theFeature, theGeometry)
 
-                    theMapScale = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
-                    If Len(theMapScale) > 0 Then
-                        ' TODO: [NIS] Test use of pFeat instead of obj here.
-                        theFeature.Value(theMapScaleFieldIndex) = theMapScale
-                    Else
-                        ' TODO: [NIS] Test use of pFeat instead of obj here.
-                        theFeature.Value(theMapScaleFieldIndex) = System.DBNull.Value
-                    End If
-                    ' If a dataset with MapNumber, populate it
-                    If theMapNumberFieldIndex > FieldNotFoundIndex Then
-                        theMapNumber = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
-                        If Len(theMapNumber) > 0 Then
-                            ' TODO: [NIS] Test use of pFeat instead of obj here.
-                            theFeature.Value(theMapNumberFieldIndex) = theMapNumber
-                        Else
-                            ' TODO: [NIS] Test use of pFeat instead of obj here.
-                            theFeature.Value(theMapNumberFieldIndex) = System.DBNull.Value
-                        End If
-                    End If
-                End If
             End If
 
         Catch ex As Exception
@@ -507,7 +431,7 @@ Public NotInheritable Class EditorExtension
     ''' </summary>
     ''' <param name="obj">The feature that was just deleted.</param>
     ''' <remarks>Handles EditEvents.OnDeleteFeature events.</remarks>
-    Private Sub theEditorEvents_OnDeleteFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnDeleteFeature
+    Private Sub EditEvents_OnDeleteFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnDeleteFeature
 
         Try
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
@@ -519,19 +443,21 @@ Public NotInheritable Class EditorExtension
             ' (in case subroutines called don't check).
 
             ' Check for valid data (will try to load data if not found).
-            CheckValidDataProperties()
+            CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
                 MessageBox.Show("Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
+            CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
+            CheckValidCancelledNumbersTableDataProperties()
             If Not HasValidCancelledNumbersTableData Then
                 MessageBox.Show("Missing data: Valid ORMAP CancelledNumbersTable not found in the map." & vbNewLine & _
                                 "Please load this dataset into your map.", _
@@ -546,17 +472,17 @@ Public NotInheritable Class EditorExtension
 
                 Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
                 Dim theTaxlotFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
-                Dim theDataSet As ESRI.ArcGIS.Geodatabase.IDataset
-                Dim theWorkspace As ESRI.ArcGIS.Geodatabase.IWorkspace
-                Dim theFeatureWorkspace As ESRI.ArcGIS.Geodatabase.IFeatureWorkspace
+                'NOT USED - Dim theDataSet As ESRI.ArcGIS.Geodatabase.IDataset
+                'NOT USED - Dim theWorkspace As ESRI.ArcGIS.Geodatabase.IWorkspace
+                'NOT USED - Dim theFeatureWorkspace As ESRI.ArcGIS.Geodatabase.IFeatureWorkspace
 
                 ' Get reference to the Cancelled Numbers object table.
                 Dim theRow As ESRI.ArcGIS.Geodatabase.IRow
                 theFeature = DirectCast(obj, IFeature)
                 theTaxlotFClass = DirectCast(theFeature.Class, IFeatureClass)
-                theDataSet = DirectCast(theTaxlotFClass, IDataset)
-                theWorkspace = theDataSet.Workspace
-                theFeatureWorkspace = DirectCast(theWorkspace, IFeatureWorkspace)
+                'NOT USED - theDataSet = DirectCast(theTaxlotFClass, IDataset)
+                'NOT USED - theWorkspace = theDataSet.Workspace
+                'NOT USED - theFeatureWorkspace = DirectCast(theWorkspace, IFeatureWorkspace)
 
                 ' Attempt to get a reference to the Cancelled Number table.
 
@@ -613,6 +539,7 @@ Public NotInheritable Class EditorExtension
                 ' Subscribe to edit events.
                 AddHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
                 AddHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
+                AddHandler EditEvents.OnDeleteFeature, AddressOf EditEvents_OnDeleteFeature
 
                 ' Subscribe to active view events.
                 AddHandler ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
@@ -638,6 +565,7 @@ Public NotInheritable Class EditorExtension
             ' Unsubscribe to edit events.
             RemoveHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
             RemoveHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
+            RemoveHandler EditEvents.OnDeleteFeature, AddressOf EditEvents_OnDeleteFeature
 
             ' Unsubscribe to active view events.
             RemoveHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
@@ -683,7 +611,7 @@ Public NotInheritable Class EditorExtension
 #Region "Methods"
 
     ' TODO: [NIS] Test (not sure this how this will work with editor extension)
-    Private Shared Sub setAccelerator(ByRef acceleratorTable As IAcceleratorTable, _
+    Private Shared Sub setAccelerator(ByVal acceleratorTable As IAcceleratorTable, _
             ByVal classID As UID, ByVal key As Integer, _
             ByVal usesCtrl As Boolean, ByVal usesAlt As Boolean, _
             ByVal usesShift As Boolean)
@@ -691,10 +619,10 @@ Public NotInheritable Class EditorExtension
 
         Dim accelerator As IAccelerator
 
-        accelerator = AcceleratorTable.FindByKey(key, usesCtrl, usesAlt, usesShift)
+        accelerator = acceleratorTable.FindByKey(key, usesCtrl, usesAlt, usesShift)
         If accelerator Is Nothing Then
             'The clsid of one of the commands in the ext
-            AcceleratorTable.Add(ClassId, key, usesCtrl, usesAlt, usesShift)
+            acceleratorTable.Add(classID, key, usesCtrl, usesAlt, usesShift)
         End If
 
     End Sub
@@ -707,6 +635,43 @@ Public NotInheritable Class EditorExtension
 
         Return (productCode = requiredProductCode)
     End Function
+
+    Private Shared Sub setMapIndexAndScale(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject, ByVal theFeature As ESRI.ArcGIS.Geodatabase.IFeature, ByVal theGeometry As ESRI.ArcGIS.Geometry.IGeometry)
+        ' Set the map index (if the field exists) to the Map Index map index for the feature location:
+
+        Dim theMapScale As String
+        Dim theMapNumber As String
+
+        ' Get the Map Index map number field index.
+        Dim theMapNumFieldIndex As Integer
+        theMapNumFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
+        If theMapNumFieldIndex > FieldNotFoundIndex And Not IsMapIndex(obj) Then
+            ' Get the Map Index map number for the location of the new feature.
+            theMapNumber = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+            ' Set the feature map number.
+            If Len(theMapNumber) > 0 Then
+                theFeature.Value(theMapNumFieldIndex) = theMapNumber
+            Else
+                theFeature.Value(theMapNumFieldIndex) = System.DBNull.Value
+            End If
+        End If
+
+        ' Set the map scale (if the field exists) to the Map Index map scale for the feature location:
+
+        ' Get the Map Index map scale field index.
+        Dim theMapScaleFieldIndex As Integer
+        theMapScaleFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
+        If theMapScaleFieldIndex > FieldNotFoundIndex And Not IsMapIndex(obj) Then
+            ' Get the Map Index map scale for the location of the new feature.
+            theMapScale = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+            ' Set the feature map scale.
+            If Len(theMapScale) > 0 Then
+                theFeature.Value(theMapScaleFieldIndex) = theMapScale
+            Else
+                theFeature.Value(theMapScaleFieldIndex) = System.DBNull.Value
+            End If
+        End If
+    End Sub
 
 #End Region
 

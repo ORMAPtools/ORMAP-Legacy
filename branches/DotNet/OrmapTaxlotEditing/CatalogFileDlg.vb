@@ -68,10 +68,11 @@ Public Class CatalogFileDialog
         _theGxDialog.AllowMultiSelect = False
     End Sub
 
-    Protected Overrides Sub Finalize()
-        _theGxDialog = Nothing
-        MyBase.Finalize()
-    End Sub
+    ' See: http://msdn2.microsoft.com/bb264476(VS.90).aspx  
+    'Protected Overrides Sub Finalize()
+    '    _theGxDialog = Nothing
+    '    MyBase.Finalize()
+    'End Sub
 
 #End Region
 
@@ -117,10 +118,8 @@ Public Class CatalogFileDialog
     ''' <returns>A file object.</returns>
     ''' <remarks>Return the nth selected element from the most recent file save/open dialog request.</remarks>
     Public Overloads Function SelectedObject(ByVal selection As Integer) As Object
-        If selection > _colSelection.Count Then
-            Return String.Empty
-        ElseIf selection = NoSelectedElementIndex Then
-            Return _colSelection
+        If selection > _colSelection.Count OrElse selection = NoSelectedElementIndex Then
+            Return Nothing
         Else
             Return _colSelection.Item(selection)
         End If
@@ -138,10 +137,10 @@ Public Class CatalogFileDialog
     ''' <summary>
     ''' Initial file path for either open or save dialog boxes
     ''' </summary>
-    ''' <param name="pointer"></param>
+    ''' <param name="location"></param>
     ''' <remarks></remarks>
-    Public Sub SetStartingLocation(ByVal pointer As System.IntPtr)
-        _theGxDialog.StartingLocation = pointer
+    Public Sub SetStartingLocation(ByVal location As System.IntPtr)
+        _theGxDialog.StartingLocation = location
     End Sub
 
     Public Sub SetTitle(ByVal title As String)
@@ -154,7 +153,7 @@ Public Class CatalogFileDialog
     ''' <param name="filter">An ArcObject defined object filter.</param>
     ''' <returns><c>True</c> if successful;<c>False</c> if error.</returns>
     ''' <remarks>Adds a ESRI ArcCatalog defined filter to a file dialog box filter list.</remarks>
-    Public Overloads Function SetFilter(ByRef filter As IGxObjectFilter) As Boolean
+    Public Overloads Function SetFilter(ByVal filter As IGxObjectFilter) As Boolean
         Return SetFilter(filter, False, True)
     End Function
 
@@ -165,7 +164,7 @@ Public Class CatalogFileDialog
     ''' <param name="isDefault">Indicates if the filter should be the default filter.</param>
     ''' <returns><c>True</c> if successful;<c>False</c> if error.</returns>
     ''' <remarks>Adds a ESRI ArcCatalog defined filter to a file dialog box filter list.</remarks>
-    Public Overloads Function SetFilter(ByRef filter As IGxObjectFilter, ByRef isDefault As Boolean) As Boolean
+    Public Overloads Function SetFilter(ByVal filter As IGxObjectFilter, ByVal isDefault As Boolean) As Boolean
         Return SetFilter(filter, isDefault, True)
     End Function
 
@@ -177,7 +176,7 @@ Public Class CatalogFileDialog
     ''' <param name="resetAll">Indicates whether or not all of the current filters should be cleared.</param>
     ''' <returns><c>True</c> if successful;<c>False</c> if error.</returns>
     ''' <remarks>Adds a ESRI ArcCatalog defined filter to a file dialog box filter list.</remarks>
-    Public Overloads Function SetFilter(ByRef filter As IGxObjectFilter, ByRef isDefault As Boolean, ByRef resetAll As Boolean) As Boolean
+    Public Overloads Function SetFilter(ByVal filter As IGxObjectFilter, ByVal isDefault As Boolean, ByVal resetAll As Boolean) As Boolean
         Try
             Dim filters As IGxObjectFilterCollection
             filters = DirectCast(_theGxDialog, IGxObjectFilterCollection)
