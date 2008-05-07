@@ -169,7 +169,7 @@ Public NotInheritable Class DataMonitor
 
 #Region "Methods"
 
-    Friend Shared Sub ClearValidDataProperties()
+    Friend Shared Sub ClearAllValidDataProperties()
         ' MapIndex
         SetHasValidMapIndexData(False)
         setMapIndexFeatureLayer(Nothing)

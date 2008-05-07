@@ -105,6 +105,12 @@
     <Compile Include="AddArrows.vb" />
     <Compile Include="CatalogFileDlg.vb" />
     <Compile Include="AutoUpdateAllToggle.vb" />
+    <Compile Include="CombineTaxlotsForm.Designer.vb">
+      <DependentUpon>CombineTaxlotsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CombineTaxlotsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="DataMonitor.vb" />
     <Compile Include="HelpForm.Designer.vb">
       <DependentUpon>HelpForm.vb</DependentUpon>
@@ -347,6 +353,10 @@
     <Content Include="license\SOURCE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="CombineTaxlotsForm.resx">
+      <DependentUpon>CombineTaxlotsForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ORMAPToolBarResource.resx">
       <SubType>Designer</SubType>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>

@@ -44,6 +44,7 @@ Imports ESRI.ArcGIS.Carto
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.Geodatabase
+Imports ESRI.ArcGIS.Geometry
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.Framework
 Imports OrmapTaxlotEditing.DataMonitor
@@ -470,35 +471,31 @@ Public NotInheritable Class EditorExtension
 
                 ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
 
-                Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
-                Dim theTaxlotFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
-                'NOT USED - Dim theDataSet As ESRI.ArcGIS.Geodatabase.IDataset
-                'NOT USED - Dim theWorkspace As ESRI.ArcGIS.Geodatabase.IWorkspace
-                'NOT USED - Dim theFeatureWorkspace As ESRI.ArcGIS.Geodatabase.IFeatureWorkspace
-
-                ' Get reference to the Cancelled Numbers object table.
-                Dim theRow As ESRI.ArcGIS.Geodatabase.IRow
-                theFeature = DirectCast(obj, IFeature)
-                theTaxlotFClass = DirectCast(theFeature.Class, IFeatureClass)
-                'NOT USED - theDataSet = DirectCast(theTaxlotFClass, IDataset)
-                'NOT USED - theWorkspace = theDataSet.Workspace
-                'NOT USED - theFeatureWorkspace = DirectCast(theWorkspace, IFeatureWorkspace)
-
-                ' Attempt to get a reference to the Cancelled Number table.
-
                 ' Retrieve field positions.
-                Dim theTLTaxlotFieldIndex As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-                Dim theTLMapNumberFieldIndex As Integer = theTaxlotFClass.FindField(EditorExtension.TaxLotSettings.MapNumberField)
+                Dim theTLTaxlotFieldIndex As Integer = TaxlotFeatureLayer.FeatureClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+                Dim theTLMapNumberFieldIndex As Integer = TaxlotFeatureLayer.FeatureClass.FindField(EditorExtension.TaxLotSettings.MapNumberField)
                 Dim theCNTaxlotFieldIndex As Integer = CancelledNumbersTable.Table.FindField(EditorExtension.TaxLotSettings.TaxlotField)
                 Dim theCNMapNumberFieldIndex As Integer = CancelledNumbersTable.Table.FindField(EditorExtension.TaxLotSettings.MapNumberField)
 
+                Dim theFeature As IFeature = DirectCast(obj, IFeature)
+                
                 ' If no null values, copy them to Cancelled numbers
                 If Not IsDBNull(theFeature.Value(theTLTaxlotFieldIndex)) And Not IsDBNull(theFeature.Value(theTLMapNumberFieldIndex)) Then
-                    theRow = CancelledNumbersTable.Table.CreateRow
-                    theRow.Value(theCNTaxlotFieldIndex) = theFeature.Value(theTLTaxlotFieldIndex)
-                    theRow.Value(theCNMapNumberFieldIndex) = theFeature.Value(theTLMapNumberFieldIndex)
-                    theRow.Store()
+
+                    ' Taxlots will send their numbers to the CancelledNumbers table 
+                    ' ONLY if they are unique in the map at the time of deletion.
+                    Dim theTaxlotNumber As String = CStr(theFeature.Value(theTLTaxlotFieldIndex))
+                    Dim theArea As IArea = DirectCast(theFeature.Shape, IArea)
+                    If IsTaxlotNumberLocallyUnique(theTaxlotNumber, theArea.Centroid) Then
+                        Dim theRow As ESRI.ArcGIS.Geodatabase.IRow
+                        theRow = CancelledNumbersTable.Table.CreateRow
+                        theRow.Value(theCNTaxlotFieldIndex) = theFeature.Value(theTLTaxlotFieldIndex)
+                        theRow.Value(theCNMapNumberFieldIndex) = theFeature.Value(theTLMapNumberFieldIndex)
+                        theRow.Store()
+                    End If
+
                 End If
+
 
             End If
 
@@ -547,7 +544,7 @@ Public NotInheritable Class EditorExtension
                 AddHandler ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
 
                 ' Set the valid data properties.
-                ClearValidDataProperties()
+                ClearAllValidDataProperties()
 
             End If
 
@@ -593,15 +590,15 @@ Public NotInheritable Class EditorExtension
 
     Public Sub ActiveViewEvents_FocusMapChanged() 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.FocusMapChanged
         ' TODO: [NIS] Determine why this event never fires...
-        ClearValidDataProperties()
+        ClearAllValidDataProperties()
     End Sub
 
     Public Sub ActiveViewEvents_ItemAdded(ByVal Item As Object) 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.ItemAdded
-        ClearValidDataProperties()
+        ClearAllValidDataProperties()
     End Sub
 
     Public Sub ActiveViewEvents_ItemDeleted(ByVal Item As Object) 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.ItemDeleted
-        ClearValidDataProperties()
+        ClearAllValidDataProperties()
     End Sub
 
 #End Region

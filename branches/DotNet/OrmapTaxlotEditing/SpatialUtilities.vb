@@ -855,7 +855,7 @@ Public NotInheritable Class SpatialUtilities
                 Dim largestIntersectArea As Double = 0
                 Dim longestIntersectLength As Double = 0
 
-                theOverlayFeatureCursor = doSpatialQuery(overlayFeatureClass, searchGeometry, esriSpatialRelEnum.esriSpatialRelIntersects)
+                theOverlayFeatureCursor = DoSpatialQuery(overlayFeatureClass, searchGeometry, esriSpatialRelEnum.esriSpatialRelIntersects)
                 If theOverlayFeatureCursor IsNot Nothing Then
                     anOverlayFeature = theOverlayFeatureCursor.NextFeature
                     Dim topoOperator As ITopologicalOperator
@@ -955,7 +955,7 @@ Public NotInheritable Class SpatialUtilities
                     Dim theBestOrderByValue As String = ""
 
                     Dim whereClause As String = String.Concat(overlayFeatureClass.OIDFieldName, " in (", candidateKeysToDelimitedString(dictCandidates), ")")
-                    theOverlayFeatureCursor = doSpatialQuery(overlayFeatureClass, searchGeometry, esriSpatialRelEnum.esriSpatialRelIntersects, whereClause)
+                    theOverlayFeatureCursor = DoSpatialQuery(overlayFeatureClass, searchGeometry, esriSpatialRelEnum.esriSpatialRelIntersects, whereClause)
                     If Not (theOverlayFeatureCursor Is Nothing) Then
                         anOverlayFeature = theOverlayFeatureCursor.NextFeature
                         While Not (anOverlayFeature Is Nothing)
@@ -1475,7 +1475,7 @@ Public NotInheritable Class SpatialUtilities
             If theGeometry.IsEmpty Then
                 Exit Try
             End If
-            
+
             ' Update the annotation size to reflect current mapscale...
 
             ' Get the Map Index map scale
@@ -1769,12 +1769,14 @@ Public NotInheritable Class SpatialUtilities
     ''' <param name="isUpdateable">Read/Write state of the return cursor.</param>
     ''' <returns>Returns a feature cursor that represents the results of the spatial query.</returns>
     ''' <remarks>Given a feature class, <paramref name="inFeatureClass">inFeatureClass</paramref>, 
-    ''' a search geometry,<paramref name=" searchGeometry">searchGeometry</paramref> , a spatial relationship,<paramref name=" spatialRelation">spatialRelation</paramref> , 
+    ''' a search geometry,<paramref name=" searchGeometry">searchGeometry</paramref> , 
+    ''' a spatial relationship,<paramref name=" spatialRelation">spatialRelation</paramref> , 
     ''' an Sql search statement, <paramref name=" whereClause">whereClause</paramref>,
     ''' and whether or not the returned cursor should be updateable, <paramref name=" isUpdateable">IsUpdateable</paramref>.
     ''' Perform a spatial query <paramref name="infeatureClass">inFeatureClass</paramref> where feature
-    ''' which meet criteria whereClause have a relationship of spatialRelation to searchGeometry. The returned cursor is updatable if IsUpdateable is True.</remarks>
-    Private Shared Function doSpatialQuery(ByVal inFeatureClass As IFeatureClass, ByVal searchGeometry As IGeometry, ByVal spatialRelation As ESRI.ArcGIS.Geodatabase.esriSpatialRelEnum, Optional ByVal whereClause As String = "", Optional ByVal isUpdateable As Boolean = False) As IFeatureCursor
+    ''' which meet criteria whereClause have a relationship of spatialRelation to searchGeometry. 
+    ''' The returned cursor is updatable if IsUpdateable is True.</remarks>
+    Public Shared Function DoSpatialQuery(ByVal inFeatureClass As IFeatureClass, ByVal searchGeometry As IGeometry, ByVal spatialRelation As esriSpatialRelEnum, Optional ByVal whereClause As String = "", Optional ByVal isUpdateable As Boolean = False) As IFeatureCursor
         Try
             Dim thisSpatialFilter As ISpatialFilter
             thisSpatialFilter = New SpatialFilter

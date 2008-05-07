@@ -692,7 +692,7 @@ Public NotInheritable Class EditMapIndex
         Next
     End Sub
 
-    Private Function UpdateTaxlots(ByVal theMapIndexFeature As IFeature) As Boolean
+    Private Function updateTaxlots(ByVal theMapIndexFeature As IFeature) As Boolean
         Try
             _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Updating underlyling taxlot features..."
             ' Finds any taxlots that are underneath the map index polygon
@@ -815,7 +815,6 @@ Public NotInheritable Class EditMapIndex
 
     Public Overrides Sub OnClick()
         DoButtonOperation()
-        'System.Windows.Forms.MessageBox.Show("Add EditMapIndex.OnClick implementation")
     End Sub
 
     Sub ORMAPNumber_OnChange(ByVal sender As Object, ByVal e As EventArgs) Handles _ormapNumber.OnChange

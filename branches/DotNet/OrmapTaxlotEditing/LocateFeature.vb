@@ -138,17 +138,18 @@ Public NotInheritable Class LocateFeature
 
         With PartnerLocateFeatureForm
 
-            If .uxMapnumber.Items.Count = 0 Then '-- Only load the text box the first time the tool is run.
+            If .uxMapNumber.Items.Count = 0 Then '-- Only load the text box the first time the tool is run.
                 Dim mapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
                 Dim theQueryFilter As IQueryFilter = New QueryFilter
+                theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField
                 ' TODO: [ALL] Fix WhereClause issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
-                theQueryFilter.SubFields = "DISTINCT(" & EditorExtension.MapIndexSettings.MapNumberField & ")"
+                theQueryFilter.WhereClause = "DISTINCT(" & EditorExtension.MapIndexSettings.MapNumberField & ")"
 
                 Dim theFeatCursor As IFeatureCursor = mapIndexFClass.Search(theQueryFilter, False)
                 Dim theQueryField As Integer = theFeatCursor.FindField(EditorExtension.MapIndexSettings.MapNumberField)
                 Dim theFeature As IFeature = theFeatCursor.NextFeature
                 Do Until theFeature Is Nothing
-                    .uxMapnumber.Items.Add(theFeature.Value(theQueryField))
+                    .uxMapNumber.Items.Add(theFeature.Value(theQueryField))
                     theFeature = theFeatCursor.NextFeature
                 Loop
             End If
@@ -162,7 +163,7 @@ Public NotInheritable Class LocateFeature
         Dim mapNumber As String = Nothing
         Dim taxlot As String = Nothing
 
-        Dim uxMapnumber As ComboBox = PartnerLocateFeatureForm.uxMapnumber
+        Dim uxMapnumber As ComboBox = PartnerLocateFeatureForm.uxMapNumber
         If uxMapnumber.FindStringExact(uxMapnumber.Text) = -1 Then
             MessageBox.Show("Invalid MapNumber.  Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
@@ -214,6 +215,10 @@ Public NotInheritable Class LocateFeature
     Friend Sub DoButtonOperation()
 
         Try
+            PartnerLocateFeatureForm.uxMapNumber.Enabled = False
+            PartnerLocateFeatureForm.uxTaxlot.Enabled = False
+            PartnerLocateFeatureForm.uxFind.Enabled = False
+
             ' Check for valid data.
 
             CheckValidMapIndexDataProperties()
@@ -221,14 +226,17 @@ Public NotInheritable Class LocateFeature
                 MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
                                 "Please load this dataset into your map.", _
                                 "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
+            Else
+                PartnerLocateFeatureForm.uxMapNumber.Enabled = True
+                PartnerLocateFeatureForm.uxFind.Enabled = True
             End If
 
             CheckValidTaxlotDataProperties()
-            If Not HasValidTaxlotData Then
-                PartnerLocateFeatureForm.uxTaxlot.Enabled = False
-            Else
+            If HasValidTaxlotData Then
                 PartnerLocateFeatureForm.uxTaxlot.Enabled = True
+            Else
+                PartnerLocateFeatureForm.uxTaxlot.Enabled = False
             End If
 
             PartnerLocateFeatureForm.ShowDialog()
