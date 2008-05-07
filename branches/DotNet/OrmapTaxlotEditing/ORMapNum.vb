@@ -57,6 +57,20 @@ Public NotInheritable Class ORMapNum
 #Region "Constructors"
 
     Public Sub New()
+        _county = String.Empty
+        _township = String.Empty
+        _partialRangeCode = String.Empty
+        _partialTownshipCode = String.Empty
+        _townshipDirectional = String.Empty
+        _range = String.Empty
+        _rangeDirectional = String.Empty
+        _section = String.Empty
+        _quarter = String.Empty
+        _quarterQuarter = String.Empty
+        _suffixType = String.Empty
+        _suffixNumber = String.Empty
+        _anomaly = String.Empty
+
     End Sub
 
 #End Region
@@ -446,20 +460,19 @@ Public NotInheritable Class ORMapNum
     ''' <returns>Boolean value representing the Valid status of the number.</returns>
     Public Function IsValidNumber() As Boolean
         Dim returnValue As Boolean = True
-
-        returnValue = returnValue And _county.Length > 0
-        returnValue = returnValue And _township.Length > 0
-        returnValue = returnValue And _partialTownshipCode.Length > 0
-        returnValue = returnValue And _townshipDirectional.Length > 0
-        returnValue = returnValue And _range.Length > 0
-        returnValue = returnValue And _partialRangeCode.Length > 0
-        returnValue = returnValue And _rangeDirectional.Length > 0
-        returnValue = returnValue And _section.Length > 0
-        returnValue = returnValue And _quarter.Length > 0
-        returnValue = returnValue And _quarterQuarter.Length > 0
-        returnValue = returnValue And _suffixType.Length > 0
-        returnValue = returnValue And _suffixNumber.Length > 0
-        returnValue = returnValue And _anomaly.Length > 0
+        returnValue = returnValue AndAlso _county.Length > 0
+        returnValue = returnValue AndAlso _township.Length > 0
+        returnValue = returnValue AndAlso _partialTownshipCode.Length > 0
+        returnValue = returnValue AndAlso _townshipDirectional.Length > 0
+        returnValue = returnValue AndAlso _range.Length > 0
+        returnValue = returnValue AndAlso _partialRangeCode.Length > 0
+        returnValue = returnValue AndAlso _rangeDirectional.Length > 0
+        returnValue = returnValue AndAlso _section.Length > 0
+        returnValue = returnValue AndAlso _quarter.Length > 0
+        returnValue = returnValue AndAlso _quarterQuarter.Length > 0
+        returnValue = returnValue AndAlso _suffixType.Length > 0
+        returnValue = returnValue AndAlso _suffixNumber.Length > 0
+        returnValue = returnValue AndAlso _anomaly.Length > 0
         Return returnValue
     End Function
 
@@ -480,7 +493,7 @@ Public NotInheritable Class ORMapNum
     End Function
 
     ''' <summary>
-    ''' Combines MapNumFieldLenth and OrmapTaxlotFieldLength.
+    ''' Combines MapNumFieldLength and OrmapTaxlotFieldLength.
     ''' </summary>
     ''' <returns>Number of characters allowed in this field as integer.</returns>
     ''' <remarks>Was ORMAP_TAXLOT_FIELD_LENGTH in previous (VB6) version.</remarks>

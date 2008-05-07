@@ -219,7 +219,7 @@ Partial Class EditMapIndexForm
         'uxSectionQtrQtrLabel
         '
         Me.uxSectionQtrQtrLabel.AutoSize = True
-        Me.uxSectionQtrQtrLabel.Location = New System.Drawing.Point(6, 67)
+        Me.uxSectionQtrQtrLabel.Location = New System.Drawing.Point(2, 67)
         Me.uxSectionQtrQtrLabel.Name = "uxSectionQtrQtrLabel"
         Me.uxSectionQtrQtrLabel.Size = New System.Drawing.Size(95, 13)
         Me.uxSectionQtrQtrLabel.TabIndex = 5

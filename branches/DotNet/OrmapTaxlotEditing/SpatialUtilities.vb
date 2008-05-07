@@ -429,7 +429,7 @@ Public NotInheritable Class SpatialUtilities
     ''' <remarks></remarks>
     Public Shared Function ConvertCodeValueDomainToDescription(ByVal fields As IFields, ByVal fieldName As String, ByVal codedValue As String) As String
         Try
-            Dim returnValue As String = ""
+            Dim returnValue As String = String.Empty
             Dim fieldIndex As Integer
             fieldIndex = fields.FindField(fieldName)
             If fieldIndex > -1 Then
