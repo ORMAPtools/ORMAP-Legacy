@@ -714,6 +714,7 @@ Public NotInheritable Class SpatialUtilities
             thisSelection.SelectionSet.Search(Nothing, False, thisCursor)
             returnValue = DirectCast(thisCursor, IFeatureCursor)
             Return returnValue
+
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
             Return Nothing

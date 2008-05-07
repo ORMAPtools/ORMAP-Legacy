@@ -142,7 +142,8 @@ Public NotInheritable Class CombineTaxlots
 
             With PartnerCombineTaxlotsForm
 
-                If .uxTaxlotNumber.Items.Count = 0 Then
+                'Populate multi-value controls
+                If .uxNewTaxlotNumber.Items.Count = 0 Then
                     ' Get a list of distinct taxlot numbers for the set of taxlots to be combined.
                     Dim theCurrentTaxlotSelection As IFeatureSelection = DirectCast(TaxlotFeatureLayer, IFeatureSelection)
 
@@ -150,18 +151,21 @@ Public NotInheritable Class CombineTaxlots
 
                     Dim theQueryFilter As IQueryFilter = New QueryFilter
                     theQueryFilter.SubFields = EditorExtension.TaxLotSettings.TaxlotField
-                    ' TODO: [ALL] Fix WhereClause issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
-                    theQueryFilter.WhereClause = "DISTINCT(" & EditorExtension.TaxLotSettings.TaxlotField & ")"
+                    ' TODO: [ALL] Fix WhereClause syntax issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
+                    'theQueryFilter.WhereClause = "DISTINCT(" & EditorExtension.TaxLotSettings.TaxlotField & ")"
 
                     Dim theCursor As ICursor = Nothing
                     theCurrentTaxlotSelection.SelectionSet.Search(theQueryFilter, True, theCursor)
                     Dim theQueryField As Integer = theCursor.FindField(EditorExtension.TaxLotSettings.TaxlotField)
                     Dim theRow As IRow = theCursor.NextRow
                     Do Until theRow Is Nothing
-                        .uxTaxlotNumber.Items.Add(theRow.Value(theQueryField))
+                        .uxNewTaxlotNumber.Items.Add(theRow.Value(theQueryField))
                         theRow = theCursor.NextRow
                     Loop
                 End If
+
+                ' Set control defaults
+                .uxNewTaxlotNumber.SelectedIndex = 0
 
             End With
 
@@ -173,16 +177,10 @@ Public NotInheritable Class CombineTaxlots
 
         ' Get the user-entered or selected taxlot.
         Dim theTaxlotNumber As String = Nothing
-        Dim uxTaxlotNumber As ComboBox = PartnerCombineTaxlotsForm.uxTaxlotNumber
-        If uxTaxlotNumber.FindStringExact(uxTaxlotNumber.Text) = -1 Then
-            MessageBox.Show("Invalid Taxlot number. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        Else
-            theTaxlotNumber = uxTaxlotNumber.Text.Trim
-        End If
-
-        ' TODO: [JWM] See http://sourceforge.net/tracker/index.php?func=detail&aid=1951096&group_id=151824&atid=782251
-        ' TODO: [NIS] The user will be warned if the taxlot number selected is not unique in
+        Dim uxNewTaxlotNumber As ComboBox = PartnerCombineTaxlotsForm.uxNewTaxlotNumber
+        theTaxlotNumber = uxNewTaxlotNumber.Text.Trim
+       
+        ' NOTE: The user will be warned if the taxlot number selected is not unique in
         ' the current map, but the combine will still be allowed.
 
         ' Verify that within this map index, this taxlot number is unique.
@@ -190,10 +188,12 @@ Public NotInheritable Class CombineTaxlots
 
         ' Get the selected taxlot from the set of taxlots to be combined.
         Dim theFeature As IFeature = getSelectedTaxlotFromSet(theTaxlotNumber)
-        Dim theArea As IArea
-        theArea = DirectCast(theFeature.Shape, IArea)
-
-        If Not IsTaxlotNumberLocallyUnique(theTaxlotNumber, theArea.Centroid) Then
+        'Dim theArea As IArea
+        'theArea = CType(theFeature.Shape, IArea)
+        'If Not IsTaxlotNumberLocallyUnique(theTaxlotNumber, theArea.Centroid) Then
+        '
+        'End If
+        If Not IsTaxlotNumberLocallyUnique(theTaxlotNumber, theFeature.Shape) Then
             If MessageBox.Show("The current Taxlot value (" & theTaxlotNumber & ") is not unique within this MapIndex. " & _
                     "Continue the combine process anyway?", _
                     "Combine Taxlots", MessageBoxButtons.OKCancel, _
@@ -223,33 +223,46 @@ Public NotInheritable Class CombineTaxlots
     Friend Sub DoButtonOperation()
 
         Try
-            PartnerCombineTaxlotsForm.uxTaxlotNumber.Enabled = False
+            PartnerCombineTaxlotsForm.uxNewTaxlotNumber.Enabled = False
             PartnerCombineTaxlotsForm.uxCombine.Enabled = False
 
-            ' Check for valid data.
-
+            ' Check for valid data
             CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
                 MessageBox.Show("Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
                                 "Please load this dataset into your map.", _
                                 "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
+            End If
+            CheckValidMapIndexDataProperties()
+            If Not HasValidMapIndexData Then
+                MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
+                                "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Sub
+            End If
+            CheckValidCancelledNumbersTableDataProperties()
+            If Not HasValidCancelledNumbersTableData Then
+                MessageBox.Show("Missing data: Valid ORMAP CancelledNumbersTable not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
+                                "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Sub
+            End If
+
+            If HasSelectedFeatures(TaxlotFeatureLayer) Then
+                ' Allow the user to select the new combined taxlot number from the list.
+                PartnerCombineTaxlotsForm.uxNewTaxlotNumber.Enabled = True
+                PartnerCombineTaxlotsForm.uxCombine.Enabled = True
             Else
-                If HasSelectedFeatures(TaxlotFeatureLayer) Then
-                    ' Allow the user to select the new combined taxlot number from the list.
-                    PartnerCombineTaxlotsForm.uxTaxlotNumber.Enabled = True
-                    PartnerCombineTaxlotsForm.uxCombine.Enabled = True
-                Else
-                    PartnerCombineTaxlotsForm.uxTaxlotNumber.Enabled = False
-                    PartnerCombineTaxlotsForm.uxCombine.Enabled = False
-                    Exit Sub
-                End If
+                PartnerCombineTaxlotsForm.uxNewTaxlotNumber.Enabled = False
+                PartnerCombineTaxlotsForm.uxCombine.Enabled = False
+                Exit Sub
             End If
 
             PartnerCombineTaxlotsForm.ShowDialog()
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
 
         End Try
 
@@ -261,18 +274,19 @@ Public NotInheritable Class CombineTaxlots
         Dim theCurrentTaxlotSelection As IFeatureSelection = DirectCast(TaxlotFeatureLayer, IFeatureSelection)
 
         Dim theQueryFilter As IQueryFilter = New QueryFilter
-        theQueryFilter.SubFields = EditorExtension.TaxLotSettings.TaxlotField
-        ' TODO: [ALL] Fix WhereClause issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
-        theQueryFilter.WhereClause = EditorExtension.TaxLotSettings.TaxlotField & " = " & theTaxlotNumber
+        theQueryFilter.SubFields = "*"
+        ' TODO: [ALL] Fix WhereClause syntax issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
+        theQueryFilter.WhereClause = EditorExtension.TaxLotSettings.TaxlotField & " = '" & theTaxlotNumber & "'"
 
         Dim theCursor As ICursor = Nothing
-        theCurrentTaxlotSelection.SelectionSet.Search(theQueryFilter, True, theCursor)
+        theCurrentTaxlotSelection.SelectionSet.Search(theQueryFilter, False, theCursor)
         Dim theQueryField As Integer = theCursor.FindField(EditorExtension.TaxLotSettings.TaxlotField)
         Dim theRow As IRow = theCursor.NextRow
+        Dim theFeature As IFeature = Nothing
         Do Until theRow Is Nothing
+            theFeature = DirectCast(theRow, IFeature)
             theRow = theCursor.NextRow
         Loop
-        Dim theFeature As IFeature = DirectCast(theRow, IFeature)
 
         Return theFeature
 
@@ -331,6 +345,8 @@ Public NotInheritable Class CombineTaxlots
 
     Private Sub combine(ByVal theTaxlotNumber As String)
 
+        Dim withinEditOperation As Boolean = False
+
         Try
 
             ' NOTE: Taxlots are already selected and the new combined taxlot number is known at this point.
@@ -363,6 +379,22 @@ Public NotInheritable Class CombineTaxlots
             If theWorkspaceEdit.IsBeingEdited Then
 
                 Dim theSelectedFeaturesCursor As IFeatureCursor
+                Dim theFields As IFields
+                Dim thisSelectedFeature As IFeature
+                Dim theFeatureCount As Integer
+                Dim thisPolygon As IPolygon
+                Dim thisArea As IArea = Nothing
+                Dim thisCurve As ICurve = Nothing
+                Dim theAreaSum As Double = 0
+                Dim theLengthSum As Double = 0
+
+                Dim theKeepFeature As IFeature = getSelectedTaxlotFromSet(theTaxlotNumber)
+
+                ' Create a new feature to be the merge feature
+                Dim theNewFeature As IFeature
+                'NOT USED ANY MORE - theNewFeature = theTaxlotFClass.CreateFeature
+                theNewFeature = theKeepFeature
+
                 theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer) 'Make sure more than one selected
 
                 If Not theSelectedFeaturesCursor Is Nothing Then
@@ -371,41 +403,13 @@ Public NotInheritable Class CombineTaxlots
                     ' Merge the features, evaluate the merge rules 
                     ' and assign values to fields appropriately.
                     '----------------------------------------
-                    Dim theKeepFeature As IFeature = getSelectedTaxlotFromSet(theTaxlotNumber)
 
                     ' Start edit operation
                     EditorExtension.Editor.StartOperation()
-
-                    ' Create a new feature to be the merge feature
-                    Dim theNewFeature As IFeature
-                    'NOT USED ANY MORE - theNewFeature = theTaxlotFClass.CreateFeature
-                    theNewFeature = theKeepFeature
-
-                    ' Extract the default subtype from the feature's class.
-                    ' Initialize the default values for the new feature.
-                    Dim theSubtypes As ISubtypes
-                    Dim theDefaultSubtypeCode As Integer
-                    theSubtypes = DirectCast(theNewFeature.Class, ISubtypes)
-                    theDefaultSubtypeCode = theSubtypes.DefaultSubtypeCode
-
-                    ' Merge policy
-                    Dim theRowSubtypes As IRowSubtypes
-                    theRowSubtypes = CType(theNewFeature, IRowSubtypes)
-                    theRowSubtypes.InitDefaultValues()
-                    Dim theSubtypeCode As Integer = theRowSubtypes.SubtypeCode
+                    withinEditOperation = True
 
                     ' Get the first feature
-                    Dim theFields As IFields
-                    Dim thisSelectedFeature As IFeature
                     thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
-                    theFields = theTaxlotFClass.Fields
-
-                    Dim theFeatureCount As Integer
-                    Dim thisPolygon As IPolygon
-                    Dim thisArea As IArea = Nothing
-                    Dim thisCurve As ICurve = Nothing
-                    Dim theAreaSum As Double = 0
-                    Dim theLengthSum As Double = 0
 
                     ' TODO: [NIS] Create these procedures and call instead of first Do...Loop below.
                     'If NeedsAreaForDomain(thisSelectedFeature) Then
@@ -439,12 +443,34 @@ Public NotInheritable Class CombineTaxlots
                         thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
                         theFeatureCount += 1
                     Loop Until thisSelectedFeature Is Nothing
+                End If
 
+                theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer) 'Make sure more than one selected
+
+                If Not theSelectedFeaturesCursor Is Nothing Then
                     '- - - - - - - - - - - - - - - - - - - -
                     ' Build the combined feature and set its attributes
                     ' (based on merge rules, if present):
                     '- - - - - - - - - - - - - - - - - - - -
+
+                    ' Extract the default subtype from the feature's class.
+                    ' Initialize the default values for the new feature.
+                    Dim theSubtypes As ISubtypes
+                    Dim theDefaultSubtypeCode As Integer
+                    theSubtypes = DirectCast(theNewFeature.Class, ISubtypes)
+                    theDefaultSubtypeCode = theSubtypes.DefaultSubtypeCode
+
+                    ' Merge policy
+                    Dim theRowSubtypes As IRowSubtypes
+                    theRowSubtypes = CType(theNewFeature, IRowSubtypes)
+                    theRowSubtypes.InitDefaultValues()
+                    Dim theSubtypeCode As Integer = theRowSubtypes.SubtypeCode
+
                     Dim theOutputGeometry As IGeometry = Nothing
+
+                    thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
+
+                    theFields = theTaxlotFClass.Fields
 
                     theFeatureCount = 1
                     Do
@@ -523,7 +549,7 @@ Public NotInheritable Class CombineTaxlots
                     Loop Until thisSelectedFeature Is Nothing
 
                     ' Set the new feature geametry to the combined geometry.
-                    theNewFeature.Shape = theOutputGeometry
+                    theNewFeature.Shape = theOutputGeometry ' TODO: [NIS] URGENT - Fix error here...
 
                     ' Set the new combined taxlot number.
                     theNewFeature.Value(theTaxlotFieldIndex) = theTaxlotNumber
@@ -583,12 +609,19 @@ Public NotInheritable Class CombineTaxlots
                     End If
 
                     ' Finish edit operation
-                    EditorExtension.Editor.StopOperation(("Taxlots Combined"))
+                    EditorExtension.Editor.StopOperation("Combine Taxlots")
+                    withinEditOperation = False
+
                 End If
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
+            If withinEditOperation Then
+                ' Abort any ongoing edit operations
+                EditorExtension.Editor.AbortOperation()
+                withinEditOperation = False
+            End If
 
         End Try
 

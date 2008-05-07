@@ -19,24 +19,24 @@ Partial Class CombineTaxlotsForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.uxTaxlots = New System.Windows.Forms.ComboBox
+        Me.uxNewTaxlotNumber = New System.Windows.Forms.ComboBox
         Me.uxCombine = New System.Windows.Forms.Button
         Me.uxHelp = New System.Windows.Forms.Button
         Me.NewTaxlotNumberLabel = New System.Windows.Forms.Label
         Me.SuspendLayout()
         '
-        'uxTaxlots
+        'uxNewTaxlotNumber
         '
-        Me.uxTaxlots.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
-        Me.uxTaxlots.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
-        Me.uxTaxlots.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.uxTaxlots.FormattingEnabled = True
-        Me.uxTaxlots.Location = New System.Drawing.Point(9, 25)
-        Me.uxTaxlots.Margin = New System.Windows.Forms.Padding(2)
-        Me.uxTaxlots.Name = "uxTaxlots"
-        Me.uxTaxlots.Size = New System.Drawing.Size(103, 21)
-        Me.uxTaxlots.Sorted = True
-        Me.uxTaxlots.TabIndex = 0
+        Me.uxNewTaxlotNumber.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
+        Me.uxNewTaxlotNumber.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
+        Me.uxNewTaxlotNumber.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.uxNewTaxlotNumber.FormattingEnabled = True
+        Me.uxNewTaxlotNumber.Location = New System.Drawing.Point(9, 25)
+        Me.uxNewTaxlotNumber.Margin = New System.Windows.Forms.Padding(2)
+        Me.uxNewTaxlotNumber.Name = "uxNewTaxlotNumber"
+        Me.uxNewTaxlotNumber.Size = New System.Drawing.Size(103, 21)
+        Me.uxNewTaxlotNumber.Sorted = True
+        Me.uxNewTaxlotNumber.TabIndex = 0
         '
         'uxCombine
         '
@@ -78,7 +78,7 @@ Partial Class CombineTaxlotsForm
         Me.ClientSize = New System.Drawing.Size(173, 86)
         Me.Controls.Add(Me.uxCombine)
         Me.Controls.Add(Me.uxHelp)
-        Me.Controls.Add(Me.uxTaxlots)
+        Me.Controls.Add(Me.uxNewTaxlotNumber)
         Me.Controls.Add(Me.NewTaxlotNumberLabel)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Margin = New System.Windows.Forms.Padding(2)
@@ -93,7 +93,7 @@ Partial Class CombineTaxlotsForm
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents uxTaxlots As System.Windows.Forms.ComboBox
+    Friend WithEvents uxNewTaxlotNumber As System.Windows.Forms.ComboBox
     Friend WithEvents uxCombine As System.Windows.Forms.Button
     Friend WithEvents uxHelp As System.Windows.Forms.Button
     Friend WithEvents NewTaxlotNumberLabel As System.Windows.Forms.Label

@@ -85,6 +85,12 @@ Public NotInheritable Class EditorExtension
 
     Private Shared _application As IApplication
 
+    ''' <summary>
+    ''' The ArcMap Application associated with the Editor object.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>An object that supports <c>IApplication</c>.</returns>
+    ''' <remarks></remarks>
     Friend Shared ReadOnly Property Application() As IApplication
         Get
             Return _application
@@ -96,7 +102,12 @@ Public NotInheritable Class EditorExtension
     End Sub
 
     Private Shared _editor As IEditor2
-
+    ''' <summary>
+    ''' The ArcMap Editor object.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>An object that supports <c>IEditor2</c>.</returns>
+    ''' <remarks></remarks>
     Friend Shared ReadOnly Property Editor() As IEditor2
         Get
             Return _editor
@@ -109,6 +120,12 @@ Public NotInheritable Class EditorExtension
 
     Private Shared _editEvents As IEditEvents_Event
 
+    ''' <summary>
+    ''' The ArcMap EditEvents object associated with the Editor.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>An object that supports <c>IEditEvents_Event</c>.</returns>
+    ''' <remarks></remarks>
     Friend Shared ReadOnly Property EditEvents() As IEditEvents_Event
         Get
             Return _editEvents
@@ -121,6 +138,12 @@ Public NotInheritable Class EditorExtension
 
     Private Shared _activeViewEvents As IActiveViewEvents_Event
 
+    ''' <summary>
+    ''' The ArcMap ActiveViewEvents object.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>An object that supports <c>IActiveViewEvents_Event</c>.</returns>
+    ''' <remarks></remarks>
     Friend Shared ReadOnly Property ActiveViewEvents() As IActiveViewEvents_Event
         Get
             Return _activeViewEvents
@@ -131,57 +154,132 @@ Public NotInheritable Class EditorExtension
         _activeViewEvents = value
     End Sub
 
+    ''' <summary>
+    ''' The ORMAP TableNamesSettings object.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A <c>TableNamesSettings</c> object.</returns>
+    ''' <remarks>The object contains all settings for ORMAP table names.</remarks>
     Friend Shared ReadOnly Property TableNamesSettings() As TableNamesSettings
         Get
             Return New TableNamesSettings
         End Get
     End Property
+
+    ''' <summary>
+    ''' The ORMAP AnnoTableNamesSettings object.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>An <c>AnnoTableNamesSettings</c> object.</returns>
+    ''' <remarks>The object contains all settings for ORMAP anno table names.</remarks>
     Friend Shared ReadOnly Property AnnoTableNamesSettings() As AnnoTableNamesSettings
         Get
             Return New AnnoTableNamesSettings
         End Get
     End Property
+
+    ''' <summary>
+    ''' The ORMAP AllTablesSettings object.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A <c>AllTablesSettings</c> object.</returns>
+    ''' <remarks>The object contains all field name settings for all ORMAP tables.</remarks>
     Friend Shared ReadOnly Property AllTablesSettings() As AllTablesSettings
         Get
             Return New AllTablesSettings
         End Get
     End Property
+
+    ''' <summary>
+    ''' The ORMAP MapIndexSettings object.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A <c>MapIndexSettings</c> object.</returns>
+    ''' <remarks>The object contains all field name settings for the ORMAP MapIndex table.</remarks>
     Friend Shared ReadOnly Property MapIndexSettings() As MapIndexSettings
         Get
             Return New MapIndexSettings
         End Get
     End Property
+
+    ''' <summary>
+    ''' The ORMAP TaxlotSettings object.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A <c>TaxLotSettings</c> object.</returns>
+    ''' <remarks>The object contains all field name settings for the ORMAP Taxlot table.</remarks>
     Friend Shared ReadOnly Property TaxLotSettings() As TaxLotSettings
         Get
             Return New TaxLotSettings
         End Get
     End Property
+
+    ''' <summary>
+    ''' The ORMAP TaxLotLinesSettings object.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A <c>TaxLotLinesSettings</c> object.</returns>
+    ''' <remarks>The object contains all field name settings for the ORMAP TaxLotLines table.</remarks>
     Friend Shared ReadOnly Property TaxLotLinesSettings() As TaxLotLinesSettings
         Get
             Return New TaxLotLinesSettings
         End Get
     End Property
+
+    ''' <summary>
+    ''' The ORMAP CartographicLinesSettings object.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A <c>CartographicLinesSettings</c> object.</returns>
+    ''' <remarks>The object contains all field name settings for the ORMAP CartographicLines table.</remarks>
     Friend Shared ReadOnly Property CartographicLinesSettings() As CartographicLinesSettings
         Get
             Return New CartographicLinesSettings
         End Get
     End Property
+
+    ''' <summary>
+    ''' The ORMAP TaxlotAcreageAnnoSettings object.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A <c>TaxlotAcreageAnnoSettings</c> object.</returns>
+    ''' <remarks>The object contains all field name settings for the ORMAP TaxlotAcreageAnno table.</remarks>
     Friend Shared ReadOnly Property TaxlotAcreageAnnoSettings() As TaxlotAcreageAnnoSettings
         Get
             Return New TaxlotAcreageAnnoSettings
         End Get
     End Property
+
+    ''' <summary>
+    ''' The ORMAP TaxlotNumberAnnoSettings object.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A <c>TaxlotNumberAnnoSettings</c> object.</returns>
+    ''' <remarks>The object contains all field name settings for the ORMAP TaxlotNumberAnno table.</remarks>
     Friend Shared ReadOnly Property TaxlotNumberAnnoSettings() As TaxlotNumberAnnoSettings
         Get
             Return New TaxlotNumberAnnoSettings
         End Get
     End Property
+
+    ''' <summary>
+    ''' The ORMAP DefaultValuesSettings object.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A <c>DefaultValuesSettings</c> object.</returns>
+    ''' <remarks>The object contains all field name settings for the ORMAP DefaultValues table.</remarks>
     Friend Shared ReadOnly Property DefaultValuesSettings() As DefaultValuesSettings
         Get
             Return New DefaultValuesSettings
         End Get
     End Property
 
+    ''' <summary>
+    ''' Can enable the set of ORMAP taxlot tools. 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns><c>True</c> or <c>False</c>.</returns>
+    ''' <remarks></remarks>
     Friend Shared ReadOnly Property CanEnableExtendedEditing() As Boolean
         Get
             Dim canEnable As Boolean = True
@@ -195,6 +293,12 @@ Public NotInheritable Class EditorExtension
 
     Private Shared _hasValidLicense As Boolean '= False
 
+    ''' <summary>
+    ''' Has a valid ArcMap license level. 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns><c>True</c> or <c>False</c>.</returns>
+    ''' <remarks></remarks>
     Friend Shared ReadOnly Property HasValidLicense() As Boolean
         Get
             Return _hasValidLicense
@@ -207,6 +311,12 @@ Public NotInheritable Class EditorExtension
 
     Private Shared _isValidWorkspace As Boolean '= False
 
+    ''' <summary>
+    ''' Is a valid workspace. 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns><c>True</c> or <c>False</c>.</returns>
+    ''' <remarks></remarks>
     Friend Shared ReadOnly Property IsValidWorkspace() As Boolean
         Get
             Return _isValidWorkspace
@@ -219,6 +329,12 @@ Public NotInheritable Class EditorExtension
 
     Private Shared _allowedToEditTaxlots As Boolean = True
 
+    ''' <summary>
+    ''' Allowed to enable the set of ORMAP taxlot tools. 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns><c>True</c> or <c>False</c>.</returns>
+    ''' <remarks>Tools may not be enabled still (see <see>CanEnableExtendedEditing</see>).</remarks>
     Friend Shared Property AllowedToEditTaxlots() As Boolean
         Get
             Return _allowedToEditTaxlots
@@ -230,6 +346,12 @@ Public NotInheritable Class EditorExtension
 
     Private Shared _allowedToAutoUpdate As Boolean = True
 
+    ''' <summary>
+    ''' Allowed to auto-update fields on edit events when the ORMAP taxlot tools are allowed. 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns><c>True</c> or <c>False</c>.</returns>
+    ''' <remarks>Some field auto-updates may not be enabled still (see <see>AllowedToAutoUpdateAllFields</see>).</remarks>
     Friend Shared Property AllowedToAutoUpdate() As Boolean
         Get
             Return _allowedToAutoUpdate
@@ -241,6 +363,15 @@ Public NotInheritable Class EditorExtension
 
     Private Shared _allowedToAutoUpdateAllFields As Boolean = True
 
+    ''' <summary>
+    ''' Allowed to auto-update all fields on edit events 
+    ''' when the ORMAP taxlot tools are allowed. 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns><c>True</c> or <c>False</c>.</returns>
+    ''' <remarks>If true, field auto-updates are enabled 
+    ''' for the maximum set of fields; If false, just the 
+    ''' minimum set are auto-updated.</remarks>
     Friend Shared Property AllowedToAutoUpdateAllFields() As Boolean
         Get
             Return _allowedToAutoUpdateAllFields

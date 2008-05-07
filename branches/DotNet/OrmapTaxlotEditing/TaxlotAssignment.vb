@@ -277,7 +277,7 @@ Public NotInheritable Class TaxlotAssignment
 
     Friend Sub DoToolOperation(ByVal Button As EsriMouseButtons, ByVal X As Integer, ByVal Y As Integer)
 
-        Dim withinOperation As Boolean = False
+        Dim withinEditOperation As Boolean = False
 
         Try
             If (Button <> EsriMouseButtons.Left) Then
@@ -377,7 +377,7 @@ Public NotInheritable Class TaxlotAssignment
                 If theTaxlotFeature IsNot Nothing Then
                     '[At least one taxlot feature is selected...]
                     EditorExtension.Editor.StartOperation()
-                    withinOperation = True
+                    withinEditOperation = True
                 Else
                     '[No taxlot features are selected...]
                     MessageBox.Show("No Taxlot features have been selected.", _
@@ -425,7 +425,7 @@ Public NotInheritable Class TaxlotAssignment
             '------------------------------------------
             theTaxlotFeature.Store()
             EditorExtension.Editor.StopOperation("Assign Taxlot Number (AutoIncrement)")
-            withinOperation = False
+            withinEditOperation = False
 
             '------------------------------------------
             ' AutoIncrement if taxlot number type
@@ -456,10 +456,10 @@ Public NotInheritable Class TaxlotAssignment
                                          esriViewDrawPhase.esriViewGraphicSelection, Nothing, Nothing)
 
         Catch ex As Exception
-            If withinOperation Then
+            If withinEditOperation Then
                 ' Abort any ongoing edit operations
                 EditorExtension.Editor.AbortOperation()
-                withinOperation = False
+                withinEditOperation = False
             End If
 
             MessageBox.Show(ex.ToString)

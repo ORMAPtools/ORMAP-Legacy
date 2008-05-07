@@ -138,12 +138,13 @@ Public NotInheritable Class LocateFeature
 
         With PartnerLocateFeatureForm
 
+            'Populate multi-value controls
             If .uxMapNumber.Items.Count = 0 Then '-- Only load the text box the first time the tool is run.
                 Dim mapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
                 Dim theQueryFilter As IQueryFilter = New QueryFilter
                 theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField
-                ' TODO: [ALL] Fix WhereClause issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
-                theQueryFilter.WhereClause = "DISTINCT(" & EditorExtension.MapIndexSettings.MapNumberField & ")"
+                ' TODO: [ALL] Fix WhereClause syntax issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
+                'theQueryFilter.WhereClause = "DISTINCT(" & EditorExtension.MapIndexSettings.MapNumberField & ")"
 
                 Dim theFeatCursor As IFeatureCursor = mapIndexFClass.Search(theQueryFilter, False)
                 Dim theQueryField As Integer = theFeatCursor.FindField(EditorExtension.MapIndexSettings.MapNumberField)
@@ -153,6 +154,9 @@ Public NotInheritable Class LocateFeature
                     theFeature = theFeatCursor.NextFeature
                 Loop
             End If
+
+            ' Set control defaults
+            .uxMapNumber.SelectedIndex = 0
 
         End With
 
@@ -242,7 +246,7 @@ Public NotInheritable Class LocateFeature
             PartnerLocateFeatureForm.ShowDialog()
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.ToString)
 
         End Try
 
