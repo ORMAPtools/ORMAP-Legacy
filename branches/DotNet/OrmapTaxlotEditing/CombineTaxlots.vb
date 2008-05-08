@@ -194,7 +194,7 @@ Public NotInheritable Class CombineTaxlots
         '
         'End If
         If Not IsTaxlotNumberLocallyUnique(theTaxlotNumber, theFeature.Shape) Then
-            If MessageBox.Show("The current Taxlot value (" & theTaxlotNumber & ") is not unique within this MapIndex. " & _
+            If MessageBox.Show("The current Taxlot value (" & theTaxlotNumber & ") is not unique within this MapIndex. " & vbNewLine & _
                     "Continue the combine process anyway?", _
                     "Combine Taxlots", MessageBoxButtons.OKCancel, _
                     MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.Cancel Then
@@ -271,6 +271,7 @@ Public NotInheritable Class CombineTaxlots
     Private Shared Function getSelectedTaxlotFromSet(ByVal theTaxlotNumber As String) As IFeature
 
         ' Get the selected taxlot from the set of taxlots to be combined.
+
         Dim theCurrentTaxlotSelection As IFeatureSelection = DirectCast(TaxlotFeatureLayer, IFeatureSelection)
 
         Dim theQueryFilter As IQueryFilter = New QueryFilter
@@ -390,10 +391,6 @@ Public NotInheritable Class CombineTaxlots
 
                 Dim theKeepFeature As IFeature = getSelectedTaxlotFromSet(theTaxlotNumber)
 
-                ' Create a new feature to be the merge feature
-                Dim theNewFeature As IFeature
-                'NOT USED ANY MORE - theNewFeature = theTaxlotFClass.CreateFeature
-                theNewFeature = theKeepFeature
 
                 theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer) 'Make sure more than one selected
 
@@ -423,7 +420,6 @@ Public NotInheritable Class CombineTaxlots
                     ' Add up areas or lengths for the selected features,
                     ' depending on feature geometry type:
                     '- - - - - - - - - - - - - - - - - - - -
-                    theFeatureCount = 1
                     Do
                         Select Case thisSelectedFeature.Shape.GeometryType
                             Case esriGeometryType.esriGeometryPolygon
@@ -441,9 +437,20 @@ Public NotInheritable Class CombineTaxlots
                         End Select
 
                         thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
-                        theFeatureCount += 1
                     Loop Until thisSelectedFeature Is Nothing
                 End If
+
+                thisSelectedFeature = Nothing
+                theSelectedFeaturesCursor = Nothing
+
+                'REMOVE THE EXTRACTED FEATURE FROM THE ORIGINAL SELECTION SET
+                Dim theCurrentTaxlotSelection As IFeatureSelection = DirectCast(TaxlotFeatureLayer, IFeatureSelection)
+                Dim theOidList() As Integer
+                ReDim theOidList(0) ' TODO: [NIS] this should be (0)
+                theOidList(0) = theKeepFeature.OID
+                theCurrentTaxlotSelection.SelectionSet.RemoveList(1, theOidList(0))
+                theCurrentTaxlotSelection.SelectionChanged()
+                DirectCast(EditorExtension.Editor.Map, IActiveView).PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, Nothing, Nothing)
 
                 theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer) 'Make sure more than one selected
 
@@ -457,12 +464,12 @@ Public NotInheritable Class CombineTaxlots
                     ' Initialize the default values for the new feature.
                     Dim theSubtypes As ISubtypes
                     Dim theDefaultSubtypeCode As Integer
-                    theSubtypes = DirectCast(theNewFeature.Class, ISubtypes)
+                    theSubtypes = DirectCast(theKeepFeature.Class, ISubtypes)
                     theDefaultSubtypeCode = theSubtypes.DefaultSubtypeCode
 
                     ' Merge policy
                     Dim theRowSubtypes As IRowSubtypes
-                    theRowSubtypes = CType(theNewFeature, IRowSubtypes)
+                    theRowSubtypes = CType(theKeepFeature, IRowSubtypes)
                     theRowSubtypes.InitDefaultValues()
                     Dim theSubtypeCode As Integer = theRowSubtypes.SubtypeCode
 
@@ -473,9 +480,9 @@ Public NotInheritable Class CombineTaxlots
                     theFields = theTaxlotFClass.Fields
 
                     theFeatureCount = 1
-                    Do
+                    Do Until thisSelectedFeature Is Nothing
                         ' Get the selected feature's geometry
-                        Dim theGeometry As ESRI.ArcGIS.Geometry.IGeometry
+                        Dim theGeometry As IGeometry
                         theGeometry = thisSelectedFeature.ShapeCopy
                         If theFeatureCount = 1 Then
                             '[The first feature...]
@@ -483,8 +490,8 @@ Public NotInheritable Class CombineTaxlots
                         Else
                             '[Not the first feature...]
                             ' Merge the geometry of the features
-                            Dim theTopoOperator As ESRI.ArcGIS.Geometry.ITopologicalOperator
-                            theTopoOperator = DirectCast(theOutputGeometry, ESRI.ArcGIS.Geometry.ITopologicalOperator)
+                            Dim theTopoOperator As ITopologicalOperator
+                            theTopoOperator = DirectCast(theOutputGeometry, ITopologicalOperator)
                             theOutputGeometry = theTopoOperator.Union(theGeometry)
                         End If
 
@@ -516,46 +523,44 @@ Public NotInheritable Class CombineTaxlots
 
                                     Case esriMergePolicyType.esriMPTSumValues 'Sum values
                                         If theFeatureCount = 1 Then
-                                            theNewFeature.Value(thisFieldIndex) = 0 'initialize the first one
+                                            theKeepFeature.Value(thisFieldIndex) = 0 'initialize the first one
                                         End If
-                                        addByDataType(theNewFeature, thisSelectedFeature, thisFieldIndex)
+                                        addByDataType(theKeepFeature, thisSelectedFeature, thisFieldIndex)
 
                                     Case esriMergePolicyType.esriMPTAreaWeighted 'Area/length weighted average
                                         If theFeatureCount = 1 Then
-                                            theNewFeature.Value(thisFieldIndex) = 0 'initialize the first one
+                                            theKeepFeature.Value(thisFieldIndex) = 0 'initialize the first one
                                         End If
-                                        areaWeightedAddByDataType(theNewFeature, thisSelectedFeature, thisArea, thisCurve, theAreaSum, theLengthSum, thisFieldIndex)
+                                        areaWeightedAddByDataType(theKeepFeature, thisSelectedFeature, thisArea, thisCurve, theAreaSum, theLengthSum, thisFieldIndex)
 
                                     Case Else 'If no merge policy, just take one of the existing values
-                                        theNewFeature.Value(thisFieldIndex) = thisSelectedFeature.Value(thisFieldIndex)
+                                        theKeepFeature.Value(thisFieldIndex) = thisSelectedFeature.Value(thisFieldIndex)
 
                                 End Select 'do not need a case for default value as it is set above
                             Else 'If not a domain, copy the existing value
-                                If theNewFeature.Fields.Field(thisFieldIndex).Editable Then 'Don't attempt to copy objectid or other non-editable field
-                                    theNewFeature.Value(thisFieldIndex) = thisSelectedFeature.Value(thisFieldIndex)
+                                If theKeepFeature.Fields.Field(thisFieldIndex).Editable Then 'Don't attempt to copy objectid or other non-editable field
+                                    theKeepFeature.Value(thisFieldIndex) = thisSelectedFeature.Value(thisFieldIndex)
                                 End If
                             End If
                         Next thisFieldIndex
 
-                        If CStr(thisSelectedFeature.Value(theTaxlotFieldIndex)) = theTaxlotNumber Then
-                            'Cannot delete the feature that is being kept so skip it
-                        Else
-                            thisSelectedFeature.Delete()
+                        If thisSelectedFeature.OID <> theKeepFeature.OID Then
+                            theSelectedFeaturesCursor.DeleteFeature()
                         End If
 
                         thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
                         theFeatureCount += 1
 
-                    Loop Until thisSelectedFeature Is Nothing
+                    Loop
 
                     ' Set the new feature geametry to the combined geometry.
-                    theNewFeature.Shape = theOutputGeometry ' TODO: [NIS] URGENT - Fix error here...
+                    theKeepFeature.Shape = theOutputGeometry
 
                     ' Set the new combined taxlot number.
-                    theNewFeature.Value(theTaxlotFieldIndex) = theTaxlotNumber
+                    theKeepFeature.Value(theTaxlotFieldIndex) = theTaxlotNumber
 
                     ' Store the feature edits.
-                    theNewFeature.Store()
+                    theKeepFeature.Store()
 
                     ' Select the new feature:
 
@@ -564,14 +569,14 @@ Public NotInheritable Class CombineTaxlots
                     theMxDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
                     theMap = theMxDoc.FocusMap
                     theMap.ClearSelection()
-                    theMap.SelectFeature(TaxlotFeatureLayer, theNewFeature)
+                    theMap.SelectFeature(TaxlotFeatureLayer, theKeepFeature)
 
                     ' Refresh the display area of the new feature:
 
                     Dim theInvalidArea As IInvalidArea
                     theInvalidArea = New InvalidArea
                     theInvalidArea.Display = EditorExtension.Editor.Display
-                    theInvalidArea.Add(theNewFeature)
+                    theInvalidArea.Add(theKeepFeature)
                     theInvalidArea.Invalidate(CShort(esriScreenCache.esriAllScreenCaches))
 
                     '- - - - - - - - - - - - - - - - - - - -
@@ -589,7 +594,7 @@ Public NotInheritable Class CombineTaxlots
                         theLineTypeFieldIndex = LocateFields(theReferenceLinesFClass, EditorExtension.TaxLotLinesSettings.LineTypeField)
 
                         Dim theCombinedGeom As ESRI.ArcGIS.Geometry.IGeometry
-                        theCombinedGeom = theNewFeature.Shape
+                        theCombinedGeom = theKeepFeature.Shape
 
                         Dim theTaxlotLinesFCursor As IFeatureCursor
                         theTaxlotLinesFCursor = DoSpatialQuery(theTaxlotLinesFClass, theCombinedGeom, esriSpatialRelEnum.esriSpatialRelContains, "", True)
