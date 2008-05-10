@@ -180,27 +180,21 @@ Public NotInheritable Class CombineTaxlots
         Dim uxNewTaxlotNumber As ComboBox = PartnerCombineTaxlotsForm.uxNewTaxlotNumber
         theTaxlotNumber = uxNewTaxlotNumber.Text.Trim
        
-        ' NOTE: The user will be warned if the taxlot number selected is not unique in
-        ' the current map, but the combine will still be allowed.
-
-        ' Verify that within this map index, this taxlot number is unique.
-        ' If not unique, give user option to quit.
-
         ' Get the selected taxlot from the set of taxlots to be combined.
         Dim theFeature As IFeature = getSelectedTaxlotFromSet(theTaxlotNumber)
-        'Dim theArea As IArea
-        'theArea = CType(theFeature.Shape, IArea)
-        'If Not IsTaxlotNumberLocallyUnique(theTaxlotNumber, theArea.Centroid) Then
-        '
+
+        ' TODO: [NIS] Remove or replace unique check that allows one (currently allows NONE).
+        '' Verify that within this map index, this taxlot number is unique.
+        '' If not unique, give user option to quit.
+
+        'If Not IsTaxlotNumberLocallyUnique(theTaxlotNumber, theFeature.Shape) Then
+        '    If MessageBox.Show("The current Taxlot value (" & theTaxlotNumber & ") is not unique within this MapIndex. " & vbNewLine & _
+        '            "Continue the combine process anyway?", _
+        '            "Combine Taxlots", MessageBoxButtons.OKCancel, _
+        '            MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.Cancel Then
+        '        Exit Sub
+        '    End If
         'End If
-        If Not IsTaxlotNumberLocallyUnique(theTaxlotNumber, theFeature.Shape) Then
-            If MessageBox.Show("The current Taxlot value (" & theTaxlotNumber & ") is not unique within this MapIndex. " & vbNewLine & _
-                    "Continue the combine process anyway?", _
-                    "Combine Taxlots", MessageBoxButtons.OKCancel, _
-                    MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.Cancel Then
-                Exit Sub
-            End If
-        End If
 
         combine(theTaxlotNumber)
         ' Note: Only the removed taxlots will send their numbers to
@@ -226,7 +220,9 @@ Public NotInheritable Class CombineTaxlots
             PartnerCombineTaxlotsForm.uxNewTaxlotNumber.Enabled = False
             PartnerCombineTaxlotsForm.uxCombine.Enabled = False
 
+            '---------------------------------------
             ' Check for valid data
+            '---------------------------------------
             CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
                 MessageBox.Show("Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
@@ -248,9 +244,24 @@ Public NotInheritable Class CombineTaxlots
                                 "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
+            CheckValidTaxlotLinesDataProperties()
+            If Not HasValidTaxlotLinesData Then
+                MessageBox.Show("Missing data: Valid ORMAP TaxlotLines layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
+                                "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Sub
+            End If
+            CheckValidReferenceLinesDataProperties()
+            If Not HasValidReferenceLinesData Then
+                MessageBox.Show("Missing data: Valid ORMAP ReferenceLines layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
+                                "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Sub
+            End If
 
             If HasSelectedFeatures(TaxlotFeatureLayer) Then
-                ' Allow the user to select the new combined taxlot number from the list.
+                ' Enable controls to allow the user to select 
+                ' the new combined taxlot number from the list.
                 PartnerCombineTaxlotsForm.uxNewTaxlotNumber.Enabled = True
                 PartnerCombineTaxlotsForm.uxCombine.Enabled = True
             Else
@@ -268,30 +279,273 @@ Public NotInheritable Class CombineTaxlots
 
     End Sub
 
-    Private Shared Function getSelectedTaxlotFromSet(ByVal theTaxlotNumber As String) As IFeature
+    Private Sub combine(ByVal theTaxlotNumber As String)
 
-        ' Get the selected taxlot from the set of taxlots to be combined.
+        Dim withinEditOperation As Boolean = False
 
-        Dim theCurrentTaxlotSelection As IFeatureSelection = DirectCast(TaxlotFeatureLayer, IFeatureSelection)
+        Try
 
-        Dim theQueryFilter As IQueryFilter = New QueryFilter
-        theQueryFilter.SubFields = "*"
-        ' TODO: [ALL] Fix WhereClause syntax issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
-        theQueryFilter.WhereClause = EditorExtension.TaxLotSettings.TaxlotField & " = '" & theTaxlotNumber & "'"
+            ' NOTE: Taxlots are already selected and the new combined taxlot number is known at this point.
 
-        Dim theCursor As ICursor = Nothing
-        theCurrentTaxlotSelection.SelectionSet.Search(theQueryFilter, False, theCursor)
-        Dim theQueryField As Integer = theCursor.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-        Dim theRow As IRow = theCursor.NextRow
-        Dim theFeature As IFeature = Nothing
-        Do Until theRow Is Nothing
-            theFeature = DirectCast(theRow, IFeature)
-            theRow = theCursor.NextRow
-        Loop
+            Dim theTaxlotFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
+            Dim theTaxlotFieldIndex As Integer
+            Dim theTaxlotDataset As ESRI.ArcGIS.Geodatabase.IDataset
 
-        Return theFeature
+            theTaxlotFClass = TaxlotFeatureLayer.FeatureClass
+            theTaxlotFieldIndex = LocateFields(TaxlotFeatureLayer.FeatureClass, EditorExtension.TaxLotSettings.TaxlotField)
+            theTaxlotDataset = DirectCast(theTaxlotFClass, IDataset)
 
-    End Function
+            ' Find the Reference Lines feature class to insert any deleted lines in:
+
+            'Dim theReferenceLinesFeatureWorkspace As IFeatureWorkspace
+            'Dim theReferenceLinesFClass As IFeatureClass
+            'theReferenceLinesFeatureWorkspace = DirectCast(theTaxlotDataset.Workspace, IFeatureWorkspace)
+            'theReferenceLinesFClass = theReferenceLinesFeatureWorkspace.OpenFeatureClass(EditorExtension.TableNamesSettings.ReferenceLinesFC)
+            'If theReferenceLinesFClass Is Nothing Then
+            '    'If feature class not present, don't move lines
+            '    MessageBox.Show("Unable to locate Reference Lines feature class.", _
+            '            "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            '    Exit Try
+            'End If
+
+            ' Combine taxlots:
+
+            Dim theWorkspaceEdit As IWorkspaceEdit
+            theWorkspaceEdit = DirectCast(theTaxlotDataset.Workspace, IWorkspaceEdit)
+
+            If theWorkspaceEdit.IsBeingEdited Then
+
+                Dim theSelectedFeaturesCursor As IFeatureCursor
+                Dim theFields As IFields
+                Dim thisSelectedFeature As IFeature
+                Dim theFeatureCount As Integer
+                Dim thisPolygon As IPolygon
+                Dim thisArea As IArea = Nothing
+                Dim thisCurve As ICurve = Nothing
+                Dim theAreaSum As Double = 0
+                Dim theLengthSum As Double = 0
+
+                Dim theKeepFeature As IFeature = getSelectedTaxlotFromSet(theTaxlotNumber)
+
+                '---------------------------------------
+                ' Start edit operation.
+                '---------------------------------------
+                EditorExtension.Editor.StartOperation()
+                withinEditOperation = True
+
+                '---------------------------------------
+                ' Add up areas or lengths for the 
+                ' selected features, depending on 
+                ' feature geometry type.
+                '---------------------------------------
+                theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer) 'Make sure more than one selected
+
+                If Not theSelectedFeaturesCursor Is Nothing Then
+
+                    ' Get the first feature
+                    thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
+
+                    ' TODO: [NIS] ENHANCEMENT: Create these procedures and call instead of first Do...Loop below.
+                    'If NeedsAreaForDomain(thisSelectedFeature) Then
+                    '    theAreaSum = GetAreaSum(theSelectedFeaturesCursor)
+                    'End If
+                    'If NeedsLengthForDomain(thisSelectedFeature) Then
+                    '    theLengthSum = GetLengthSum(theSelectedFeaturesCursor)
+                    'End If
+
+                    Do
+                        Select Case thisSelectedFeature.Shape.GeometryType
+                            Case esriGeometryType.esriGeometryPolygon
+                                thisPolygon = DirectCast(thisSelectedFeature.Shape, IPolygon)
+                                thisArea = DirectCast(thisPolygon, IArea)
+                                theAreaSum += thisArea.Area
+
+                            Case esriGeometryType.esriGeometryPolyline, esriGeometryType.esriGeometryLine, esriGeometryType.esriGeometryBezier3Curve, esriGeometryType.esriGeometryCircularArc, esriGeometryType.esriGeometryEllipticArc, esriGeometryType.esriGeometryPath
+                                thisCurve = DirectCast(thisSelectedFeature.Shape, ICurve)
+                                theLengthSum += thisCurve.Length
+
+                            Case Else
+                                Throw New Exception("Invalid geometry type: " & thisSelectedFeature.Shape.GeometryType.ToString)
+
+                        End Select
+
+                        thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
+                    Loop Until thisSelectedFeature Is Nothing
+
+                End If
+
+                '---------------------------------------
+                ' Clear feature cursor variables (first time).
+                '---------------------------------------
+                theSelectedFeaturesCursor = Nothing
+                thisSelectedFeature = Nothing
+
+                '---------------------------------------
+                ' Build the combined feature and set its 
+                ' attributes (based on merge rules, if 
+                ' present)
+                '---------------------------------------
+                Dim theOutputGeometry As IGeometry = theKeepFeature.ShapeCopy
+
+                theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer) 'Make sure more than one selected
+
+                If Not theSelectedFeaturesCursor Is Nothing Then
+
+                    ' Extract the default subtype from the feature's class.
+                    ' Initialize the default values for the new feature.
+                    Dim theSubtypes As ISubtypes
+                    Dim theDefaultSubtypeCode As Integer
+                    theSubtypes = DirectCast(theKeepFeature.Class, ISubtypes)
+                    theDefaultSubtypeCode = theSubtypes.DefaultSubtypeCode
+
+                    ' Merge policy
+                    Dim theRowSubtypes As IRowSubtypes
+                    theRowSubtypes = CType(theKeepFeature, IRowSubtypes)
+                    theRowSubtypes.InitDefaultValues()
+                    Dim theSubtypeCode As Integer = theRowSubtypes.SubtypeCode
+
+                    thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
+                    theFields = theTaxlotFClass.Fields
+                    theFeatureCount = 1
+
+                    Do Until thisSelectedFeature Is Nothing
+                        ' Get the selected feature's geometry
+                        Dim theGeometry As IGeometry
+                        theGeometry = thisSelectedFeature.ShapeCopy
+
+                        ' Merge the geometry of the features
+                        Dim theTopoOperator As ITopologicalOperator
+                        theTopoOperator = DirectCast(theOutputGeometry, ITopologicalOperator)
+                        theOutputGeometry = theTopoOperator.Union(theGeometry)
+
+                        Select Case thisSelectedFeature.Shape.GeometryType
+                            Case esriGeometryType.esriGeometryPolygon
+                                thisPolygon = DirectCast(thisSelectedFeature.Shape, IPolygon)
+                                thisArea = DirectCast(thisPolygon, IArea)
+
+                            Case esriGeometryType.esriGeometryPolyline, esriGeometryType.esriGeometryLine, esriGeometryType.esriGeometryBezier3Curve, esriGeometryType.esriGeometryCircularArc, esriGeometryType.esriGeometryEllipticArc, esriGeometryType.esriGeometryPath
+                                thisCurve = DirectCast(thisSelectedFeature.Shape, ICurve)
+
+                            Case Else
+                                ' Will have been caught already above
+
+                        End Select
+
+                        ' Go through each field. 
+                        ' If it has a domain associated with it, then evaluate the merge policy:
+
+                        For thisFieldIndex As Integer = 0 To (theFields.FieldCount - 1)
+
+                            Dim theField As IField
+                            Dim theDomain As IDomain
+                            theField = theFields.Field(thisFieldIndex)
+                            theDomain = theSubtypes.Domain(theSubtypeCode, theField.Name)
+
+                            If Not theDomain Is Nothing Then
+                                Select Case theDomain.MergePolicy
+
+                                    Case esriMergePolicyType.esriMPTSumValues 'Sum values
+                                        If theFeatureCount = 1 Then
+                                            theKeepFeature.Value(thisFieldIndex) = 0 'initialize the first one
+                                        End If
+                                        addByDataType(theKeepFeature, thisSelectedFeature, thisFieldIndex)
+
+                                    Case esriMergePolicyType.esriMPTAreaWeighted 'Area/length weighted average
+                                        If theFeatureCount = 1 Then
+                                            theKeepFeature.Value(thisFieldIndex) = 0 'initialize the first one
+                                        End If
+                                        areaWeightedAddByDataType(theKeepFeature, thisSelectedFeature, thisArea, thisCurve, theAreaSum, theLengthSum, thisFieldIndex)
+
+                                    Case Else 'If no merge policy, just take one of the existing values
+                                        theKeepFeature.Value(thisFieldIndex) = thisSelectedFeature.Value(thisFieldIndex)
+
+                                End Select 'do not need a case for default value as it is set above
+                            Else 'If not a domain, copy the existing value
+                                If theKeepFeature.Fields.Field(thisFieldIndex).Editable Then 'Don't attempt to copy objectid or other non-editable field
+                                    theKeepFeature.Value(thisFieldIndex) = thisSelectedFeature.Value(thisFieldIndex)
+                                End If
+                            End If
+                        Next thisFieldIndex
+
+                        thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
+                        theFeatureCount += 1
+
+                    Loop
+
+                End If
+
+                '---------------------------------------
+                ' Clear the feature cursor variables (second time).
+                '---------------------------------------
+                theSelectedFeaturesCursor = Nothing
+                thisSelectedFeature = Nothing
+
+                '---------------------------------------
+                ' Delete all the combined features other
+                ' than the kept feature.
+                '---------------------------------------
+                deleteUnneededFeatures(theKeepFeature)
+
+                '---------------------------------------
+                ' Set the new feature geometry to the
+                ' combined geometry.
+                '---------------------------------------
+                theKeepFeature.Shape = theOutputGeometry
+
+                '---------------------------------------
+                ' Set the new combined taxlot number.
+                '---------------------------------------
+                theKeepFeature.Value(theTaxlotFieldIndex) = theTaxlotNumber
+
+                '---------------------------------------
+                ' Store the feature edits.
+                '---------------------------------------
+                theKeepFeature.Store()
+
+                '---------------------------------------
+                ' Select the new feature:
+                '---------------------------------------
+                Dim theMxDoc As IMxDocument
+                Dim theMap As IMap
+                theMxDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
+                theMap = theMxDoc.FocusMap
+                theMap.ClearSelection()
+                theMap.SelectFeature(TaxlotFeatureLayer, theKeepFeature)
+
+                '---------------------------------------
+                ' Refresh the display area of the new feature:
+                '---------------------------------------
+                Dim theInvalidArea As IInvalidArea
+                theInvalidArea = New InvalidArea
+                theInvalidArea.Display = EditorExtension.Editor.Display
+                theInvalidArea.Add(theKeepFeature)
+                theInvalidArea.Invalidate(CShort(esriScreenCache.esriAllScreenCaches))
+
+                '---------------------------------------
+                ' Move deleted taxlot lines to Reference Lines,
+                ' line type 33 (historical):
+                '---------------------------------------
+                moveDeletedLines(theKeepFeature)
+
+                '---------------------------------------
+                ' Finish edit operation.
+                '---------------------------------------
+                EditorExtension.Editor.StopOperation("Combine Taxlots")
+                withinEditOperation = False
+
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString)
+            If withinEditOperation Then
+                ' Abort any ongoing edit operations
+                EditorExtension.Editor.AbortOperation()
+                withinEditOperation = False
+            End If
+
+        End Try
+
+    End Sub
 
     Private Shared Sub addByDataType(ByVal theNewFeature As IFeature, ByVal thisSelectedFeature As IFeature, ByVal thisFieldIndex As Integer)
 
@@ -344,292 +598,92 @@ Public NotInheritable Class CombineTaxlots
 
     End Sub
 
-    Private Sub combine(ByVal theTaxlotNumber As String)
-
-        Dim withinEditOperation As Boolean = False
-
-        Try
-
-            ' NOTE: Taxlots are already selected and the new combined taxlot number is known at this point.
-
-            Dim theTaxlotFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
-            Dim theTaxlotFieldIndex As Integer
-            Dim theTaxlotDataset As ESRI.ArcGIS.Geodatabase.IDataset
-
-            theTaxlotFClass = TaxlotFeatureLayer.FeatureClass
-            theTaxlotFieldIndex = LocateFields(TaxlotFeatureLayer.FeatureClass, EditorExtension.TaxLotSettings.TaxlotField)
-            theTaxlotDataset = DirectCast(theTaxlotFClass, IDataset)
-
-            ' Find the Reference Lines feature class to insert any deleted lines:
-
-            Dim theReferenceLinesFeatureWorkspace As ESRI.ArcGIS.Geodatabase.IFeatureWorkspace
-            Dim theReferenceLinesFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
-            theReferenceLinesFeatureWorkspace = DirectCast(theTaxlotDataset.Workspace, IFeatureWorkspace)
-            theReferenceLinesFClass = theReferenceLinesFeatureWorkspace.OpenFeatureClass(EditorExtension.TableNamesSettings.ReferenceLinesFC)
-            If theReferenceLinesFClass Is Nothing Then
-                'If feature class not present, don't move lines
-                MessageBox.Show("Unable to locate Reference Lines feature class.", "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
-            End If
-
-            ' Combine taxlots:
-
-            Dim theWorkspaceEdit As ESRI.ArcGIS.Geodatabase.IWorkspaceEdit
-            theWorkspaceEdit = DirectCast(theTaxlotDataset.Workspace, IWorkspaceEdit)
-
-            If theWorkspaceEdit.IsBeingEdited Then
-
-                Dim theSelectedFeaturesCursor As IFeatureCursor
-                Dim theFields As IFields
-                Dim thisSelectedFeature As IFeature
-                Dim theFeatureCount As Integer
-                Dim thisPolygon As IPolygon
-                Dim thisArea As IArea = Nothing
-                Dim thisCurve As ICurve = Nothing
-                Dim theAreaSum As Double = 0
-                Dim theLengthSum As Double = 0
-
-                Dim theKeepFeature As IFeature = getSelectedTaxlotFromSet(theTaxlotNumber)
-
-
-                theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer) 'Make sure more than one selected
-
-                If Not theSelectedFeaturesCursor Is Nothing Then
-
-                    '----------------------------------------
-                    ' Merge the features, evaluate the merge rules 
-                    ' and assign values to fields appropriately.
-                    '----------------------------------------
-
-                    ' Start edit operation
-                    EditorExtension.Editor.StartOperation()
-                    withinEditOperation = True
-
-                    ' Get the first feature
-                    thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
-
-                    ' TODO: [NIS] Create these procedures and call instead of first Do...Loop below.
-                    'If NeedsAreaForDomain(thisSelectedFeature) Then
-                    '    theAreaSum = GetAreaSum(theSelectedFeaturesCursor)
-                    'End If
-                    'If NeedsLengthForDomain(thisSelectedFeature) Then
-                    '    theLengthSum = GetLengthSum(theSelectedFeaturesCursor)
-                    'End If
-
-                    '- - - - - - - - - - - - - - - - - - - -
-                    ' Add up areas or lengths for the selected features,
-                    ' depending on feature geometry type:
-                    '- - - - - - - - - - - - - - - - - - - -
-                    Do
-                        Select Case thisSelectedFeature.Shape.GeometryType
-                            Case esriGeometryType.esriGeometryPolygon
-                                thisPolygon = DirectCast(thisSelectedFeature.Shape, IPolygon)
-                                thisArea = DirectCast(thisPolygon, IArea)
-                                theAreaSum += thisArea.Area
-
-                            Case esriGeometryType.esriGeometryPolyline, esriGeometryType.esriGeometryLine, esriGeometryType.esriGeometryBezier3Curve, esriGeometryType.esriGeometryCircularArc, esriGeometryType.esriGeometryEllipticArc, esriGeometryType.esriGeometryPath
-                                thisCurve = DirectCast(thisSelectedFeature.Shape, ICurve)
-                                theLengthSum += thisCurve.Length
-
-                            Case Else
-                                Throw New Exception("Invalid geometry type: " & thisSelectedFeature.Shape.GeometryType.ToString)
-
-                        End Select
-
-                        thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
-                    Loop Until thisSelectedFeature Is Nothing
-                End If
-
-                thisSelectedFeature = Nothing
-                theSelectedFeaturesCursor = Nothing
-
-                'REMOVE THE EXTRACTED FEATURE FROM THE ORIGINAL SELECTION SET
-                Dim theCurrentTaxlotSelection As IFeatureSelection = DirectCast(TaxlotFeatureLayer, IFeatureSelection)
-                Dim theOidList() As Integer
-                ReDim theOidList(0) ' TODO: [NIS] this should be (0)
-                theOidList(0) = theKeepFeature.OID
-                theCurrentTaxlotSelection.SelectionSet.RemoveList(1, theOidList(0))
-                theCurrentTaxlotSelection.SelectionChanged()
-                DirectCast(EditorExtension.Editor.Map, IActiveView).PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, Nothing, Nothing)
-
-                theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer) 'Make sure more than one selected
-
-                If Not theSelectedFeaturesCursor Is Nothing Then
-                    '- - - - - - - - - - - - - - - - - - - -
-                    ' Build the combined feature and set its attributes
-                    ' (based on merge rules, if present):
-                    '- - - - - - - - - - - - - - - - - - - -
-
-                    ' Extract the default subtype from the feature's class.
-                    ' Initialize the default values for the new feature.
-                    Dim theSubtypes As ISubtypes
-                    Dim theDefaultSubtypeCode As Integer
-                    theSubtypes = DirectCast(theKeepFeature.Class, ISubtypes)
-                    theDefaultSubtypeCode = theSubtypes.DefaultSubtypeCode
-
-                    ' Merge policy
-                    Dim theRowSubtypes As IRowSubtypes
-                    theRowSubtypes = CType(theKeepFeature, IRowSubtypes)
-                    theRowSubtypes.InitDefaultValues()
-                    Dim theSubtypeCode As Integer = theRowSubtypes.SubtypeCode
-
-                    Dim theOutputGeometry As IGeometry = Nothing
-
-                    thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
-
-                    theFields = theTaxlotFClass.Fields
-
-                    theFeatureCount = 1
-                    Do Until thisSelectedFeature Is Nothing
-                        ' Get the selected feature's geometry
-                        Dim theGeometry As IGeometry
-                        theGeometry = thisSelectedFeature.ShapeCopy
-                        If theFeatureCount = 1 Then
-                            '[The first feature...]
-                            theOutputGeometry = theGeometry
-                        Else
-                            '[Not the first feature...]
-                            ' Merge the geometry of the features
-                            Dim theTopoOperator As ITopologicalOperator
-                            theTopoOperator = DirectCast(theOutputGeometry, ITopologicalOperator)
-                            theOutputGeometry = theTopoOperator.Union(theGeometry)
-                        End If
-
-                        Select Case thisSelectedFeature.Shape.GeometryType
-                            Case esriGeometryType.esriGeometryPolygon
-                                thisPolygon = DirectCast(thisSelectedFeature.Shape, IPolygon)
-                                thisArea = DirectCast(thisPolygon, IArea)
-
-                            Case esriGeometryType.esriGeometryPolyline, esriGeometryType.esriGeometryLine, esriGeometryType.esriGeometryBezier3Curve, esriGeometryType.esriGeometryCircularArc, esriGeometryType.esriGeometryEllipticArc, esriGeometryType.esriGeometryPath
-                                thisCurve = DirectCast(thisSelectedFeature.Shape, ICurve)
-
-                            Case Else
-                                ' Will have been caught already above
-
-                        End Select
-
-                        ' Go through each field. 
-                        ' If it has a domain associated with it, then evaluate the merge policy:
-
-                        For thisFieldIndex As Integer = 0 To (theFields.FieldCount - 1)
-
-                            Dim theField As IField
-                            Dim theDomain As IDomain
-                            theField = theFields.Field(thisFieldIndex)
-                            theDomain = theSubtypes.Domain(theSubtypeCode, theField.Name)
-
-                            If Not theDomain Is Nothing Then
-                                Select Case theDomain.MergePolicy
-
-                                    Case esriMergePolicyType.esriMPTSumValues 'Sum values
-                                        If theFeatureCount = 1 Then
-                                            theKeepFeature.Value(thisFieldIndex) = 0 'initialize the first one
-                                        End If
-                                        addByDataType(theKeepFeature, thisSelectedFeature, thisFieldIndex)
-
-                                    Case esriMergePolicyType.esriMPTAreaWeighted 'Area/length weighted average
-                                        If theFeatureCount = 1 Then
-                                            theKeepFeature.Value(thisFieldIndex) = 0 'initialize the first one
-                                        End If
-                                        areaWeightedAddByDataType(theKeepFeature, thisSelectedFeature, thisArea, thisCurve, theAreaSum, theLengthSum, thisFieldIndex)
-
-                                    Case Else 'If no merge policy, just take one of the existing values
-                                        theKeepFeature.Value(thisFieldIndex) = thisSelectedFeature.Value(thisFieldIndex)
-
-                                End Select 'do not need a case for default value as it is set above
-                            Else 'If not a domain, copy the existing value
-                                If theKeepFeature.Fields.Field(thisFieldIndex).Editable Then 'Don't attempt to copy objectid or other non-editable field
-                                    theKeepFeature.Value(thisFieldIndex) = thisSelectedFeature.Value(thisFieldIndex)
-                                End If
-                            End If
-                        Next thisFieldIndex
-
-                        If thisSelectedFeature.OID <> theKeepFeature.OID Then
-                            theSelectedFeaturesCursor.DeleteFeature()
-                        End If
-
-                        thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
-                        theFeatureCount += 1
-
-                    Loop
-
-                    ' Set the new feature geametry to the combined geometry.
-                    theKeepFeature.Shape = theOutputGeometry
-
-                    ' Set the new combined taxlot number.
-                    theKeepFeature.Value(theTaxlotFieldIndex) = theTaxlotNumber
-
-                    ' Store the feature edits.
-                    theKeepFeature.Store()
-
-                    ' Select the new feature:
-
-                    Dim theMxDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
-                    Dim theMap As ESRI.ArcGIS.Carto.IMap
-                    theMxDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
-                    theMap = theMxDoc.FocusMap
-                    theMap.ClearSelection()
-                    theMap.SelectFeature(TaxlotFeatureLayer, theKeepFeature)
-
-                    ' Refresh the display area of the new feature:
-
-                    Dim theInvalidArea As IInvalidArea
-                    theInvalidArea = New InvalidArea
-                    theInvalidArea.Display = EditorExtension.Editor.Display
-                    theInvalidArea.Add(theKeepFeature)
-                    theInvalidArea.Invalidate(CShort(esriScreenCache.esriAllScreenCaches))
-
-                    '- - - - - - - - - - - - - - - - - - - -
-                    ' Move deleted taxlot lines to Reference Lines,
-                    ' line type 33 (historical):
-                    '- - - - - - - - - - - - - - - - - - - -
-                    Dim theTaxlotLinesLayer As ESRI.ArcGIS.Carto.IFeatureLayer
-                    theTaxlotLinesLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.TaxLotLinesFC)
-                    If Not theTaxlotLinesLayer Is Nothing Then
-                        Dim theTaxlotLinesFClass As ESRI.ArcGIS.Geodatabase.IFeatureClass
-                        theTaxlotLinesFClass = theTaxlotLinesLayer.FeatureClass
-
-                        Dim theLineTypeFieldIndex As Integer
-
-                        theLineTypeFieldIndex = LocateFields(theReferenceLinesFClass, EditorExtension.TaxLotLinesSettings.LineTypeField)
-
-                        Dim theCombinedGeom As ESRI.ArcGIS.Geometry.IGeometry
-                        theCombinedGeom = theKeepFeature.Shape
-
-                        Dim theTaxlotLinesFCursor As IFeatureCursor
-                        theTaxlotLinesFCursor = DoSpatialQuery(theTaxlotLinesFClass, theCombinedGeom, esriSpatialRelEnum.esriSpatialRelContains, "", True)
-                        If Not theTaxlotLinesFCursor Is Nothing Then
-                            Dim thisLineFeature As IFeature
-                            thisLineFeature = theTaxlotLinesFCursor.NextFeature
-                            Do While Not thisLineFeature Is Nothing
-                                Dim thisNewLineFeature As ESRI.ArcGIS.Geodatabase.IFeature
-                                thisNewLineFeature = theReferenceLinesFClass.CreateFeature
-                                thisNewLineFeature.Shape = thisLineFeature.ShapeCopy
-                                thisNewLineFeature.Value(theLineTypeFieldIndex) = 33
-                                thisNewLineFeature.Store()
-                                theTaxlotLinesFCursor.DeleteFeature()
-                                thisLineFeature = theTaxlotLinesFCursor.NextFeature
-                            Loop
-                        End If
-                    End If
-
-                    ' Finish edit operation
-                    EditorExtension.Editor.StopOperation("Combine Taxlots")
-                    withinEditOperation = False
-
-                End If
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show(ex.ToString)
-            If withinEditOperation Then
-                ' Abort any ongoing edit operations
-                EditorExtension.Editor.AbortOperation()
-                withinEditOperation = False
-            End If
-
-        End Try
-
+    Private Shared Sub deleteUnneededFeatures(ByVal theKeepFeature As IFeature)
+        Dim theSelectedFeaturesCursor As IFeatureCursor
+        Dim thisSelectedFeature As IFeature
+        '---------------------------------------
+        ' Remove the kept feature from the
+        ' original selection set.
+        '---------------------------------------
+        Dim theCurrentTaxlotSelection As IFeatureSelection = DirectCast(TaxlotFeatureLayer, IFeatureSelection)
+        Dim theOidList() As Integer
+        ReDim theOidList(0)
+        theOidList(0) = theKeepFeature.OID
+        theCurrentTaxlotSelection.SelectionSet.RemoveList(1, theOidList(0))
+        theCurrentTaxlotSelection.SelectionChanged()
+        Dim theSelectionEvents As ISelectionEvents = DirectCast(EditorExtension.Editor.Map, ISelectionEvents)
+        theSelectionEvents.SelectionChanged()
+        DirectCast(EditorExtension.Editor.Map, IActiveView).PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, Nothing, Nothing)
+
+        '---------------------------------------
+        ' Delete all the other features.
+        '---------------------------------------
+        theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer)
+        If Not theSelectedFeaturesCursor Is Nothing Then
+            thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
+            Do Until thisSelectedFeature Is Nothing
+                thisSelectedFeature.Delete()
+                thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
+            Loop
+        End If
+
+    End Sub
+
+    Private Shared Function getSelectedTaxlotFromSet(ByVal theTaxlotNumber As String) As IFeature
+
+        ' Get the selected taxlot from the set of taxlots to be combined.
+
+        Dim theCurrentTaxlotSelection As IFeatureSelection = DirectCast(TaxlotFeatureLayer, IFeatureSelection)
+
+        Dim theQueryFilter As IQueryFilter = New QueryFilter
+        theQueryFilter.SubFields = "*"
+        ' TODO: [ALL] Fix WhereClause syntax issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
+        theQueryFilter.WhereClause = EditorExtension.TaxLotSettings.TaxlotField & " = '" & theTaxlotNumber & "'"
+
+        Dim theCursor As ICursor = Nothing
+        theCurrentTaxlotSelection.SelectionSet.Search(theQueryFilter, False, theCursor)
+        Dim theQueryField As Integer = theCursor.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+        Dim theRow As IRow = theCursor.NextRow
+        Dim theFeature As IFeature = Nothing
+        Do Until theRow Is Nothing
+            theFeature = DirectCast(theRow, IFeature)
+            theRow = theCursor.NextRow
+        Loop
+
+        Return theFeature
+
+    End Function
+
+    Private Shared Sub moveDeletedLines(ByVal theKeepFeature As IFeature)
+        '---------------------------------------
+        ' Move deleted taxlot lines to Reference Lines,
+        ' line type 33 (historical):
+        '---------------------------------------
+        Dim theTaxlotLinesFClass As IFeatureClass
+        theTaxlotLinesFClass = TaxlotLinesFeatureLayer.FeatureClass
+
+        Dim theLineTypeFieldIndex As Integer
+
+        theLineTypeFieldIndex = LocateFields(ReferenceLinesFeatureLayer.FeatureClass, EditorExtension.TaxLotLinesSettings.LineTypeField)
+
+        Dim theCombinedGeom As IGeometry
+        theCombinedGeom = theKeepFeature.Shape
+
+        Dim theTaxlotLinesFCursor As IFeatureCursor
+        theTaxlotLinesFCursor = DoSpatialQuery(theTaxlotLinesFClass, theCombinedGeom, esriSpatialRelEnum.esriSpatialRelContains, "", True)
+        If Not theTaxlotLinesFCursor Is Nothing Then
+            Dim thisLineFeature As IFeature
+            thisLineFeature = theTaxlotLinesFCursor.NextFeature
+            Do While Not thisLineFeature Is Nothing
+                Dim thisNewLineFeature As IFeature
+                thisNewLineFeature = ReferenceLinesFeatureLayer.FeatureClass.CreateFeature
+                thisNewLineFeature.Shape = thisLineFeature.ShapeCopy
+                thisNewLineFeature.Value(theLineTypeFieldIndex) = 33
+                thisNewLineFeature.Store()
+                theTaxlotLinesFCursor.DeleteFeature()
+                thisLineFeature = theTaxlotLinesFCursor.NextFeature
+            Loop
+        End If
     End Sub
 
 #End Region

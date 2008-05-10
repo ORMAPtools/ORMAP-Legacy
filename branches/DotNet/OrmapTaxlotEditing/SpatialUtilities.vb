@@ -1560,10 +1560,15 @@ Public NotInheritable Class SpatialUtilities
     ''' </summary>
     ''' <param name="taxlotNumber">The taxlot value to validate.</param>
     ''' <param name="thisGeometry">The geometry of the feature to check.</param>
+    ''' <param name="allowOneInstance">Allow one instance in the map or none.</param>
     ''' <returns>True or False</returns>
-    ''' <remarks>Determine if the feature represented by thisGeometry has a 
-    ''' taxlot number unique for the corresponding map index.</remarks>
-    Public Shared Function IsTaxlotNumberLocallyUnique(ByVal taxlotNumber As String, ByVal thisGeometry As IGeometry) As Boolean
+    ''' <remarks>
+    ''' <para>Determine if the feature represented by thisGeometry has a 
+    ''' taxlot number unique for the corresponding map index.</para>
+    ''' <para>Unique can be defined eithe as not being present at all 
+    ''' or having only one match present.</para>
+    ''' </remarks>
+    Public Shared Function IsTaxlotNumberLocallyUnique(ByVal taxlotNumber As String, ByVal thisGeometry As IGeometry, ByVal allowOneInstance As Boolean) As Boolean
         Try
             Dim returnValue As Boolean = False
 
@@ -1610,13 +1615,28 @@ Public NotInheritable Class SpatialUtilities
             Dim delimiterSuffix As String = syntax.GetSpecialCharacter(esriSQLSpecialCharacters.esriSQL_DelimitedIdentifierSuffix)
 
             Dim whereClause As String = String.Concat(delimiterPrefix, EditorExtension.TaxLotSettings.MapNumberField, delimiterSuffix, "='", mapIndexORMAPValue, "' AND ", delimiterPrefix, EditorExtension.TaxLotSettings.TaxlotField, delimiterSuffix, " = '", taxlotNumber, "'")
+            Dim n As Integer = 0
             Dim cursor As ICursor
             cursor = attributeQuery(DirectCast(thisTaxlotFeatureClass, ITable), whereClause)
             If Not (cursor Is Nothing) AndAlso (returnValue = False) Then
                 Dim row As IRow
                 row = cursor.NextRow
                 If row Is Nothing Then
+                    n += 1
+                End If
+            End If
+
+            If allowOneInstance Then
+                If n < 2 Then
                     returnValue = True
+                Else
+                    returnValue = False
+                End If
+            Else
+                If n < 1 Then
+                    returnValue = True
+                Else
+                    returnValue = False
                 End If
             End If
 
@@ -1625,7 +1645,9 @@ Public NotInheritable Class SpatialUtilities
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
             Return False
+
         End Try
+
     End Function
 
     <ObsoleteAttribute("Use the ZoomToEnvelope() function instead.", True)> _

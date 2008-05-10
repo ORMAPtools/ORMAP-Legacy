@@ -342,7 +342,7 @@ Public NotInheritable Class TaxlotAssignment
             ' Verify the uniqueness of the specified taxlot number (if taxlot type input).
             If isTaxlotType Then
                 '[Taxlot value is a number...]
-                If Not IsTaxlotNumberLocallyUnique(CStr(Me.NumberStartingFrom), theGeometry) Then  ' TODO: [NIS] Confirm this function with Jim.
+                If Not IsTaxlotNumberLocallyUnique(CStr(Me.NumberStartingFrom), theGeometry, False) Then  ' TODO: [NIS] Confirm this function with Jim.
                     If MessageBox.Show("The current Taxlot value (" & Me.NumberStartingFrom & ")" & vbNewLine & _
                                        "is not unique within this MapIndex." & vbNewLine & _
                                        "Attribute feature with value anyway?", _

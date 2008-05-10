@@ -617,7 +617,7 @@ Public NotInheritable Class EditorExtension
                     ' ONLY if they are unique in the map at the time of deletion.
                     Dim theTaxlotNumber As String = CStr(theFeature.Value(theTLTaxlotFieldIndex))
                     Dim theArea As IArea = DirectCast(theFeature.Shape, IArea)
-                    If IsTaxlotNumberLocallyUnique(theTaxlotNumber, theArea.Centroid) Then
+                    If IsTaxlotNumberLocallyUnique(theTaxlotNumber, theArea.Centroid, True) Then
                         Dim theRow As ESRI.ArcGIS.Geodatabase.IRow
                         theRow = CancelledNumbersTable.Table.CreateRow
                         theRow.Value(theCNTaxlotFieldIndex) = theFeature.Value(theTLTaxlotFieldIndex)

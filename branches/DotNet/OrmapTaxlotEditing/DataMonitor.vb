@@ -90,76 +90,104 @@ Public NotInheritable Class DataMonitor
 
 #Region "Properties"
 
-    Private Shared _mapIndexFeatureLayer As IFeatureLayer
-
-    Friend Shared ReadOnly Property MapIndexFeatureLayer() As IFeatureLayer
-        Get
-            Return _mapIndexFeatureLayer
-        End Get
-    End Property
-
-    Private Shared Sub setMapIndexFeatureLayer(ByVal value As IFeatureLayer)
-        _mapIndexFeatureLayer = value
-    End Sub
-
     Private Shared _taxlotFeatureLayer As IFeatureLayer
-
     Friend Shared ReadOnly Property TaxlotFeatureLayer() As IFeatureLayer
         Get
             Return _taxlotFeatureLayer
         End Get
     End Property
-
     Private Shared Sub setTaxlotFeatureLayer(ByVal value As IFeatureLayer)
         _taxlotFeatureLayer = value
     End Sub
 
-    Private Shared _cancelledNumbersTable As IStandaloneTable
+    Private Shared _mapIndexFeatureLayer As IFeatureLayer
+    Friend Shared ReadOnly Property MapIndexFeatureLayer() As IFeatureLayer
+        Get
+            Return _mapIndexFeatureLayer
+        End Get
+    End Property
+    Private Shared Sub setMapIndexFeatureLayer(ByVal value As IFeatureLayer)
+        _mapIndexFeatureLayer = value
+    End Sub
 
+    Private Shared _cancelledNumbersTable As IStandaloneTable
     Friend Shared ReadOnly Property CancelledNumbersTable() As IStandaloneTable
         Get
             Return _cancelledNumbersTable
         End Get
     End Property
-
     Private Shared Sub setCancelledNumbersTable(ByVal value As IStandaloneTable)
         _cancelledNumbersTable = value
     End Sub
 
-    Private Shared _hasValidMapIndexData As Boolean
+    Private Shared _taxlotLinesFeatureLayer As IFeatureLayer
+    Friend Shared ReadOnly Property TaxlotLinesFeatureLayer() As IFeatureLayer
+        Get
+            Return _taxlotLinesFeatureLayer
+        End Get
+    End Property
+    Private Shared Sub setTaxlotLinesFeatureLayer(ByVal value As IFeatureLayer)
+        _taxlotLinesFeatureLayer = value
+    End Sub
 
+    Private Shared _referenceLinesFeatureLayer As IFeatureLayer
+    Friend Shared ReadOnly Property ReferenceLinesFeatureLayer() As IFeatureLayer
+        Get
+            Return _referenceLinesFeatureLayer
+        End Get
+    End Property
+    Private Shared Sub setReferenceLinesFeatureLayer(ByVal value As IFeatureLayer)
+        _referenceLinesFeatureLayer = value
+    End Sub
+
+    Private Shared _hasValidMapIndexData As Boolean
     Friend Shared ReadOnly Property HasValidMapIndexData() As Boolean
         Get
             Return _hasValidMapIndexData
         End Get
     End Property
-
     Friend Shared Sub SetHasValidMapIndexData(ByVal value As Boolean)
         _hasValidMapIndexData = value
     End Sub
 
     Private Shared _hasValidTaxlotData As Boolean
-
     Friend Shared ReadOnly Property HasValidTaxlotData() As Boolean
         Get
             Return _hasValidTaxlotData
         End Get
     End Property
-
     Friend Shared Sub SetHasValidTaxlotData(ByVal value As Boolean)
         _hasValidTaxlotData = value
     End Sub
 
-    Private Shared _hasValidCancelledNumbersTable As Boolean
-
+    Private Shared _hasValidCancelledNumbersTableData As Boolean
     Friend Shared ReadOnly Property HasValidCancelledNumbersTableData() As Boolean
         Get
-            Return _hasValidCancelledNumbersTable
+            Return _hasValidCancelledNumbersTableData
         End Get
     End Property
+    Friend Shared Sub SetHasValidCancelledNumbersTableData(ByVal value As Boolean)
+        _hasValidCancelledNumbersTableData = value
+    End Sub
 
-    Friend Shared Sub SetHasValidCancelledNumbersTable(ByVal value As Boolean)
-        _hasValidCancelledNumbersTable = value
+    Private Shared _hasValidTaxlotLinesData As Boolean
+    Friend Shared ReadOnly Property HasValidTaxlotLinesData() As Boolean
+        Get
+            Return _hasValidTaxlotLinesData
+        End Get
+    End Property
+    Friend Shared Sub SetHasValidTaxlotLinesData(ByVal value As Boolean)
+        _hasValidTaxlotLinesData = value
+    End Sub
+
+    Private Shared _hasValidReferenceLinesData As Boolean
+    Friend Shared ReadOnly Property HasValidReferenceLinesData() As Boolean
+        Get
+            Return _hasValidReferenceLinesData
+        End Get
+    End Property
+    Friend Shared Sub SetHasValidReferenceLinesData(ByVal value As Boolean)
+        _hasValidReferenceLinesData = value
     End Sub
 
 #End Region
@@ -170,28 +198,38 @@ Public NotInheritable Class DataMonitor
 #Region "Methods"
 
     Friend Shared Sub ClearAllValidDataProperties()
-        ' MapIndex
-        SetHasValidMapIndexData(False)
-        setMapIndexFeatureLayer(Nothing)
         ' Taxlots
         SetHasValidTaxlotData(False)
         setTaxlotFeatureLayer(Nothing)
+
+        ' MapIndex
+        SetHasValidMapIndexData(False)
+        setMapIndexFeatureLayer(Nothing)
+
         ' CancelledNumbers
-        SetHasValidCancelledNumbersTable(False)
+        SetHasValidCancelledNumbersTableData(False)
         setCancelledNumbersTable(Nothing)
+
+        ' TaxlotLines
+        SetHasValidTaxlotLinesData(False)
+        setTaxlotLinesFeatureLayer(Nothing)
+
+        ' ReferenceLines
+        SetHasValidReferenceLinesData(False)
+        setReferenceLinesFeatureLayer(Nothing)
     End Sub
 
     Friend Shared Sub CheckAllValidDataProperties()
-        ' MapIndex status and layer properties
-        CheckValidMapIndexDataProperties()
         ' Taxlot status and layer properties
         CheckValidTaxlotDataProperties()
+        ' MapIndex status and layer properties
+        CheckValidMapIndexDataProperties()
         ' CancelledNumbersTable status and table properties
         CheckValidCancelledNumbersTableDataProperties()
     End Sub
 
     Friend Shared Sub CheckValidTaxlotDataProperties()
-        ' MapIndex status and layer properties
+        ' Taxlot status and layer properties
         SetHasValidTaxlotData(CheckData(ESRIClassType.FeatureClass, EditorExtension.TableNamesSettings.TaxLotFC))
         If HasValidTaxlotData Then
             If TaxlotFeatureLayer Is Nothing Then
@@ -212,10 +250,30 @@ Public NotInheritable Class DataMonitor
 
     Friend Shared Sub CheckValidCancelledNumbersTableDataProperties()
         ' CancelledNumbersTable status and table properties
-        SetHasValidCancelledNumbersTable(CheckData(ESRIClassType.ObjectClass, EditorExtension.TableNamesSettings.CancelledNumbersTable))
+        SetHasValidCancelledNumbersTableData(CheckData(ESRIClassType.ObjectClass, EditorExtension.TableNamesSettings.CancelledNumbersTable))
         If HasValidCancelledNumbersTableData Then
             If CancelledNumbersTable Is Nothing Then
                 setCancelledNumbersTable(FindDataTableInMap(EditorExtension.TableNamesSettings.CancelledNumbersTable))
+            End If
+        End If
+    End Sub
+
+    Friend Shared Sub CheckValidTaxlotLinesDataProperties()
+        ' TaxlotLines status and layer properties
+        SetHasValidTaxlotLinesData(CheckData(ESRIClassType.FeatureClass, EditorExtension.TableNamesSettings.TaxLotLinesFC))
+        If HasValidTaxlotLinesData Then
+            If TaxlotLinesFeatureLayer Is Nothing Then
+                setTaxlotLinesFeatureLayer(FindDataLayerInMap(EditorExtension.TableNamesSettings.TaxLotLinesFC))
+            End If
+        End If
+    End Sub
+
+    Friend Shared Sub CheckValidReferenceLinesDataProperties()
+        ' ReferenceLines status and layer properties
+        SetHasValidReferenceLinesData(CheckData(ESRIClassType.FeatureClass, EditorExtension.TableNamesSettings.ReferenceLinesFC))
+        If HasValidReferenceLinesData Then
+            If ReferenceLinesFeatureLayer Is Nothing Then
+                setReferenceLinesFeatureLayer(FindDataLayerInMap(EditorExtension.TableNamesSettings.ReferenceLinesFC))
             End If
         End If
     End Sub
