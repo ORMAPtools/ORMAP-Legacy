@@ -43,8 +43,10 @@ Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Carto
+Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.Geodatabase
+Imports ESRI.ArcGIS.Geometry
 Imports OrmapTaxlotEditing.DataMonitor
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
@@ -141,18 +143,22 @@ Public NotInheritable Class LocateFeature
             'Populate multi-value controls
             If .uxMapNumber.Items.Count = 0 Then '-- Only load the text box the first time the tool is run.
                 Dim mapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
+
                 Dim theQueryFilter As IQueryFilter = New QueryFilter
                 theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField
-                ' TODO: [ALL] Fix WhereClause syntax issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
-                'theQueryFilter.WhereClause = "DISTINCT(" & EditorExtension.MapIndexSettings.MapNumberField & ")"
 
                 Dim theFeatCursor As IFeatureCursor = mapIndexFClass.Search(theQueryFilter, False)
-                Dim theQueryField As Integer = theFeatCursor.FindField(EditorExtension.MapIndexSettings.MapNumberField)
-                Dim theFeature As IFeature = theFeatCursor.NextFeature
-                Do Until theFeature Is Nothing
-                    .uxMapNumber.Items.Add(theFeature.Value(theQueryField))
-                    theFeature = theFeatCursor.NextFeature
+                Dim theDataStats As IDataStatistics = New DataStatistics
+                Dim theDataStatsEnum As IEnumerator
+                With theDataStats
+                    .Cursor = DirectCast(theFeatCursor, ICursor)
+                    .Field = EditorExtension.MapIndexSettings.MapNumberField
+                    theDataStatsEnum = CType(.UniqueValues, IEnumerator)
+                End With
+                Do Until theDataStatsEnum.MoveNext = False
+                    .uxMapNumber.Items.Add(theDataStatsEnum.Current.ToString)
                 Loop
+
             End If
 
             ' Set control defaults
@@ -183,26 +189,35 @@ Public NotInheritable Class LocateFeature
         Dim theQueryFilter As IQueryFilter = New QueryFilter
         Dim theXFlayer As IFeatureLayer = Nothing '-- Set as either the MapIndex or Taxlot Feature Layer.
 
+        Dim theWhereClause As String
+
+        ' TODO: [ALL] Fix WhereClause syntax issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
         If taxlot Is Nothing Then '-- Must be MapIndex Feature Layer.
             theXFlayer = MapIndexFeatureLayer
             theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField
-            theQueryFilter.WhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "]='" & mapNumber & "'"
+            theWhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "]='" & mapNumber & "'"
         Else '-- Taxlot Feature Layer.
             theXFlayer = MapIndexFeatureLayer
             theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField & "," & EditorExtension.TaxLotSettings.TaxlotField
-            theQueryFilter.WhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "]='" & mapNumber & "' and [" & EditorExtension.TaxLotSettings.TaxlotField & "]='" & taxlot & "'"
+            theWhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "]='" & mapNumber & "' and [" & EditorExtension.TaxLotSettings.TaxlotField & "]='" & taxlot & "'"
         End If
+
+        theQueryFilter.WhereClause = formatWhereClause(theWhereClause, theXFlayer)
 
         Dim theXFClass As IFeatureClass = theXFlayer.FeatureClass
         Dim theFeatCursor As IFeatureCursor = theXFClass.Search(theQueryFilter, False)
+        Dim thisFeature As IFeature = theFeatCursor.NextFeature()
 
-        Dim theFeature As IFeature = theFeatCursor.NextFeature()
-
-        If theFeature Is Nothing Then '-- Must be due to invalid taxlot entered into text box.
+        If thisFeature Is Nothing Then '-- Must be due to invalid taxlot entered into text box.
             MessageBox.Show("Taxlot does not exist.", "Invalid Taxlot", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
         Else
-            ZoomToEnvelope(theFeature.Shape.Envelope)
-            SetSelectedFeature(theXFlayer, theFeature)
+            Dim theEnvelope As IEnvelope = thisFeature.Shape.Envelope
+            Do Until thisFeature Is Nothing
+                theEnvelope.Union(thisFeature.Shape.Envelope)
+                thisFeature = theFeatCursor.NextFeature
+            Loop
+            ZoomToEnvelope(theEnvelope)
+            SetSelectedFeature(theXFlayer, thisFeature)
         End If
 
     End Sub

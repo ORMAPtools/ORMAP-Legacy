@@ -1702,6 +1702,34 @@ Public NotInheritable Class SpatialUtilities
 
     End Sub
 
+    ''' <summary>
+    ''' Formats a WhereClause based upon the data source.  Input format should be based on the personal geodatabase.
+    ''' </summary>
+    ''' <param name="whereClause">The original WhereClause written for a personal geodatabase (ie with brackets "[") </param>
+    ''' <param name="theFeatureLayer">The Feature Layer for which the WhereClause is being generated </param>
+    ''' <returns>A String.</returns>
+    ''' <remarks></remarks>
+    Public Shared Function formatWhereClause(ByVal whereClause As String, ByVal theFeatureLayer As IFeatureLayer) As String
+
+        Dim pDataLayer As IDataLayer2 = CType(theFeatureLayer, IDataLayer2)
+        Dim pDatasetName As IDatasetName = CType(pDataLayer.DataSourceName, IDatasetName)
+        Dim theWorkspaceCategory As String = pDatasetName.WorkspaceName.Category.ToString
+
+        'TODO: SC - This select statement is not a "best practice"... needs to be fixed for error handling. 
+        Dim formattedWhereClause As String = ""
+        Select Case theWorkspaceCategory
+            Case "File Geodatabase"
+                formattedWhereClause = whereClause.Replace("[", """").Replace("]", """")
+            Case "Personal Geodatabase"
+                formattedWhereClause = whereClause
+            Case "Spatial Database Connection"
+                formattedWhereClause = whereClause.Replace("[", "").Replace("]", "")
+
+        End Select
+        Return formattedWhereClause
+
+    End Function
+
 #End Region
 
 #Region "Private Members"

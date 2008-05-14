@@ -103,6 +103,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AddArrows.vb" />
+    <Compile Include="AddArrowsForm.Designer.vb">
+      <DependentUpon>AddArrowsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AddArrowsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="CatalogFileDlg.vb" />
     <Compile Include="AutoUpdateAllToggle.vb" />
     <Compile Include="CombineTaxlotsForm.Designer.vb">
