@@ -50,6 +50,10 @@ Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
 #End Region
 
+
+'-- LOOK INTO USING IToolControl AND A COMBOBOX INSTEAD OF THE FORM METHOD...
+
+
 <ComVisible(True)> _
 <ComClass(AddArrows.ClassId, AddArrows.InterfaceId, AddArrows.EventsId), _
 ProgId("ORMAPTaxlotEditing.AddArrows")> _
