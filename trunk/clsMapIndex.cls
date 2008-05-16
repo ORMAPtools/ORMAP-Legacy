@@ -595,7 +595,6 @@ End Sub
 
 Private Sub m_pViewEvents_ItemDeleted(ByVal Item As Variant)
     ' Variable declarations
-    Dim pFeatClass As esriCarto.IFeatureLayer
     Dim sName As String
     
     ' Determines if this class is either the Map Index or Taxlot feature class
