@@ -103,8 +103,8 @@ Public NotInheritable Class SpatialUtilities
                 thisField = fields.Field(theFieldIndex)
                 Dim thisDomain As IDomain
                 thisDomain = thisField.Domain
-                If Not (thisDomain Is Nothing) Then
-                    If TypeOf thisDomain Is ICodedValueDomain Then
+                If thisDomain IsNot Nothing Then
+                    If thisDomain.Type = esriDomainType.esriDTCodedValue Then
                         Dim thisCodedValueDomain As ICodedValueDomain
                         thisCodedValueDomain = DirectCast(thisDomain, ICodedValueDomain)
                         Dim codeCount As Integer = thisCodedValueDomain.CodeCount
@@ -381,7 +381,7 @@ Public NotInheritable Class SpatialUtilities
     Public Shared Function ConvertCodeValueDomainToCode(ByVal fields As IFields, ByVal fieldName As String, ByVal codedValue As String) As String
         Try
             Dim fieldIndex As Integer
-            Dim returnValue As String = ""
+            Dim returnValue As String = String.Empty
 
             If (fields Is Nothing) OrElse Not (TypeOf fields Is IFields) Then
                 Return returnValue
@@ -391,16 +391,15 @@ Public NotInheritable Class SpatialUtilities
             If fieldIndex > -1 Then
                 Dim field As IField
                 field = fields.Field(fieldIndex)
-                Dim domain As ICodedValueDomain
-                domain = DirectCast(field.Domain, ICodedValueDomain)
+                Dim domain As IDomain = field.Domain
 
-                If Not (domain Is Nothing) Then
-                    If TypeOf domain Is ICodedValueDomain Then
+                If domain IsNot Nothing Then
+                    If domain.Type = esriDomainType.esriDTCodedValue Then
                         Dim thisCodedValueDomain As ICodedValueDomain
-                        thisCodedValueDomain = domain
+                        thisCodedValueDomain = DirectCast(domain, ICodedValueDomain)
                         For domainIndex As Integer = 0 To thisCodedValueDomain.CodeCount - 1
                             If String.Compare(thisCodedValueDomain.Name(domainIndex), codedValue, True, CultureInfo.CurrentCulture) = 0 Then
-                                returnValue = CStr(thisCodedValueDomain.Value(domainIndex))
+                                returnValue = thisCodedValueDomain.Value(domainIndex).ToString
                             End If
                         Next domainIndex
                     Else
@@ -436,20 +435,23 @@ Public NotInheritable Class SpatialUtilities
                 Dim field As IField
                 field = fields.Field(fieldIndex)
 
-                Dim domain As ICodedValueDomain
-                domain = DirectCast(field.Domain, ICodedValueDomain)
-                If Not (domain Is Nothing) Then
-                    If TypeOf domain Is ICodedValueDomain Then
-                        Dim codedValueDomain As ICodedValueDomain
-                        codedValueDomain = domain
+                Dim domain As IDomain = field.Domain
+                If domain IsNot Nothing Then
+                    If domain.Type = esriDomainType.esriDTCodedValue Then
+                        Dim codedValueDomain As ICodedValueDomain = DirectCast(domain, ICodedValueDomain)
                         For domainIndex As Integer = 0 To codedValueDomain.CodeCount - 1
-                            If codedValueDomain.Name(domainIndex) = codedValue Then
+                            'In the vb6 version the code was comparing an object to a variant to get the result. We don't have that luxury.
+                            'codedValueDomain.Value is an object
+                            If String.Compare(codedValueDomain.Value(domainIndex).ToString, codedValue, True, CultureInfo.CurrentCulture) = 0 Then
                                 returnValue = codedValueDomain.Name(domainIndex)
                             End If
                         Next domainIndex
                     Else
                         returnValue = codedValue 'if range domain return the value
                     End If
+                Else
+                    Return codedValue
+                    Exit Try
                 End If 'if domain is valid object
             End If
             Return returnValue
@@ -487,8 +489,8 @@ Public NotInheritable Class SpatialUtilities
             Dim thisDataSet As IDataset
 
             Do While Not (thisFeatureLayer Is Nothing)
-                thisDataSet = DirectCast(thisFeatureLayer.FeatureClass, IDataset)
-                If Not (thisDataSet Is Nothing) Then
+                thisDataSet = TryCast(thisFeatureLayer.FeatureClass, IDataset)
+                If thisDataSet IsNot Nothing Then
                     If String.Compare(thisDataSet.Name, datasetName, True, CultureInfo.CurrentCulture) = 0 Then
                         returnValue = DirectCast(thisFeatureLayer, IFeatureLayer)
                         Exit Do
@@ -703,17 +705,16 @@ Public NotInheritable Class SpatialUtilities
     ''' returns a feature cursor with the selected features in it.</remarks>
     Public Shared Function GetSelectedFeatures(ByVal layer As IFeatureLayer) As IFeatureCursor
         Try
-            If Not TypeOf layer Is IFeatureLayer Then
-                Return Nothing
-            End If
-
-            Dim thisSelection As IFeatureSelection
-            thisSelection = DirectCast(layer, IFeatureSelection)
+            Dim thisSelection As IFeatureSelection = DirectCast(layer, IFeatureSelection)
             Dim returnValue As IFeatureCursor
             Dim thisCursor As ICursor = Nothing
             thisSelection.SelectionSet.Search(Nothing, False, thisCursor)
-            returnValue = DirectCast(thisCursor, IFeatureCursor)
-            Return returnValue
+            If thisSelection.SelectionSet.Count > 0 Then
+                returnValue = DirectCast(thisCursor, IFeatureCursor)
+                Return returnValue
+            Else
+                Return Nothing
+            End If
 
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
@@ -1378,7 +1379,7 @@ Public NotInheritable Class SpatialUtilities
     Public Overloads Shared Function ReadValue(ByVal row As IRow, ByVal fieldName As String, ByVal dataType As String) As String
         Try
             Dim fieldIndex As Integer
-            Dim returnValue As String = ""
+            Dim returnValue As String = String.Empty
 
             fieldIndex = row.Fields.FindField(fieldName)
             If fieldIndex > -1 Then
@@ -1409,7 +1410,7 @@ Public NotInheritable Class SpatialUtilities
                         domainValue = row.Value(fieldIndex)
                         'search domain for the code
                         For domainIndex As Integer = 0 To thisCodedValueDomain.CodeCount - 1
-                            If thisCodedValueDomain.Value(domainIndex).ToString = domainValue.ToString Then 'TODO: [NIS] Confirm that ToString will work here
+                            If String.Compare(thisCodedValueDomain.Value(domainIndex).ToString, domainValue.ToString, True, CultureInfo.CurrentCulture) = 0 Then
                                 returnValue = thisCodedValueDomain.Name(domainIndex)
                                 Exit For
                             End If
@@ -1600,13 +1601,12 @@ Public NotInheritable Class SpatialUtilities
 
             ' Checks for the existence of a current ORMAP Number and Taxlot number
             Dim mapIndexORMAPValue As String = String.Empty
-            mapIndexORMAPValue = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField) 'TODO: verify
+            mapIndexORMAPValue = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
             If mapIndexORMAPValue.Length = 0 Then
                 returnValue = True
             End If
 
             'Make sure this number is unique within taxlots with this OM number
-            'TODO: JWM check these EditorExtension values
             'HACK [JWM] Figure out the sql syntax
             Dim ds As IDataset = thisTaxlotFeatureClass.FeatureDataset
             Dim ws As IWorkspace = ds.Workspace
@@ -1716,7 +1716,7 @@ Public NotInheritable Class SpatialUtilities
         Dim theWorkspaceCategory As String = pDatasetName.WorkspaceName.Category.ToString
 
         'TODO: SC - This select statement is not a "best practice"... needs to be fixed for error handling. 
-        Dim formattedWhereClause As String = ""
+        Dim formattedWhereClause As String = String.Empty
         Select Case theWorkspaceCategory
             Case "File Geodatabase"
                 formattedWhereClause = whereClause.Replace("[", """").Replace("]", """")
@@ -1891,7 +1891,7 @@ Public NotInheritable Class SpatialUtilities
     ''' Defaults at size 5 is the <paramref name="scale">scale</paramref> is invalid, and size 10 if
     ''' <paramref name="thisFeatureClassName">thisFeatureClassName</paramref> is not Taxlot Acreage Annotation or Taxlot Number Annotation.</remarks>
     Private Shared Function getAnnoSizeByScale(ByVal thisFeatureClassName As String, ByVal scale As Integer) As Double
-        Try 'TODO: JWM verify the table names that we are comparing
+        Try
             Dim size As String
             If String.Compare(thisFeatureClassName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True, CultureInfo.CurrentCulture) = 0 Then
                 Select Case scale

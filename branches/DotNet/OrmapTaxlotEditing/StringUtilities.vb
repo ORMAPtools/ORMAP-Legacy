@@ -343,36 +343,6 @@ Public NotInheritable Class StringUtilities
 
 #Region "Private Members"
 
-    ' TODO: JWM This is not used. Remove? (Nick)
-    ''' <summary>
-    ''' Create a parcel ID from a mask.
-    ''' </summary>
-    ''' <param name="valueToMask"></param>
-    ''' <param name="maskToApply"></param>
-    ''' <returns> If a value is passed in that is not numeric then just pass it straight through else return a parcel id with or without leading zeros</returns>
-    ''' <remarks></remarks>
-    Private Shared Function generateParcelId(ByVal valueToMask As String, ByVal maskToApply As String) As String
-        If valueToMask.Length = 0 Then
-            Throw New ArgumentNullException("valueToMask")
-        End If
-        If maskToApply.Length = 0 Then
-            Throw New ArgumentNullException("maskToApply")
-        End If
-
-        Dim sb As StringBuilder
-        If valueToMask.Length = 0 OrElse maskToApply.Length = 0 Then
-            Return String.Empty
-        End If
-
-        If IsNumeric(valueToMask) Then
-            sb = New StringBuilder(Format(valueToMask, maskToApply), maskToApply.Length)
-        Else
-            sb = New StringBuilder(valueToMask, maskToApply.Length)
-        End If
-        Return sb.ToString
-
-    End Function
-
     ''' <summary>
     ''' 
     ''' </summary>

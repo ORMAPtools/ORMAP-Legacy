@@ -139,7 +139,6 @@ Public NotInheritable Class Utilities
             Return
         End Try
     End Sub
-
 #End Region
 
 #Region "Private Members (none)"

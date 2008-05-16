@@ -335,12 +335,12 @@ Public NotInheritable Class ORMapNum
         End Get
         Set(ByVal value As String)
 
-            If IsNumeric(value) Then
+            If IsNumeric(value) AndAlso value.Length > 0 Then
                 Select Case CShort(value)
-                    Case Is < 0
+                    Case Is <= 0
                         _suffixNumber = EditorExtension.DefaultValuesSettings.MapSuffixNumber
                     Case Is < 1000
-                        Dim sb As New StringBuilder("0", 3 - value.Length) 'TODO: JWM TEST/VERIFY THIS
+                        Dim sb As New StringBuilder("0", 3 - value.Length)
                         sb.Append(value)
                         _suffixNumber = sb.ToString
                     Case Else

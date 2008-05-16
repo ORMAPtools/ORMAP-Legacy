@@ -50,8 +50,6 @@ Imports System.Windows.Forms
 ''' <remarks></remarks>
 Public Class CatalogFileDialog
 
-    'TODO: JWM Would like to remove the dependency on VB.Collection object. [NIS] Probably cannot be done. ShowOpen is defined in ArcObjects as returning a Collection.
-
 #Region "Class level fields"
 
     Private _theGxDialog As IGxDialog

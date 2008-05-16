@@ -140,7 +140,6 @@ Public NotInheritable Class EditMapIndex
     Private _taxlotFields As TaxlotFieldMap
     Private _editingState As Boolean
     Private WithEvents _partnerMapIndexForm As EditMapIndexForm
-
 #End Region
 
 #Region "Properties "
@@ -168,41 +167,46 @@ Public NotInheritable Class EditMapIndex
         If value IsNot Nothing Then
             _partnerMapIndexForm = value
             ' Subscribe to partner form events.
-            AddHandler _partnerMapIndexForm.uxEdit.Click, AddressOf Me.uxEdit_Click
-            AddHandler _partnerMapIndexForm.uxHelp.Click, AddressOf Me.uxHelp_Click
-            AddHandler _partnerMapIndexForm.uxQuit.Click, AddressOf Me.uxQuit_Click
-            AddHandler _partnerMapIndexForm.uxCounty.Click, AddressOf Me.uxCounty_Click
-            AddHandler _partnerMapIndexForm.uxTownship.Click, AddressOf Me.uxTownship_Click
-            AddHandler _partnerMapIndexForm.uxTownshipPartial.Click, AddressOf Me.uxTownshipPartial_Click
-            AddHandler _partnerMapIndexForm.uxTownshipDirectional.Click, AddressOf Me.uxTownshipDirectional_Click
-            AddHandler _partnerMapIndexForm.uxRange.Click, AddressOf Me.uxRange_Click
-            AddHandler _partnerMapIndexForm.uxRangePartial.Click, AddressOf Me.uxRangePartial_Click
-            AddHandler _partnerMapIndexForm.uxRangeDirectional.Click, AddressOf Me.uxRangeDirectional_Click
-            AddHandler _partnerMapIndexForm.uxSection.Click, AddressOf Me.uxSection_Click
-            AddHandler _partnerMapIndexForm.uxSectionQtr.Click, AddressOf Me.uxSectionQtr_Click
-            AddHandler _partnerMapIndexForm.uxSectionQtrQtr.Click, AddressOf Me.uxSectionQrtrQrtr_Click
-            AddHandler _partnerMapIndexForm.uxSuffixType.Click, AddressOf Me.uxSuffixType_Click
-            AddHandler _partnerMapIndexForm.uxSuffixNumber.TextChanged, AddressOf Me.uxSuffixNumber_TextChanged
-            AddHandler _partnerMapIndexForm.uxAnomaly.TextChanged, AddressOf Me.uxAnomaly_TextChanged
+            With _partnerMapIndexForm
+                AddHandler .uxEdit.Click, AddressOf Me.uxEdit_Click
+                AddHandler .uxHelp.Click, AddressOf Me.uxHelp_Click
+                AddHandler .uxQuit.Click, AddressOf Me.uxQuit_Click
+                AddHandler .uxCounty.Click, AddressOf Me.uxCounty_Click
+                AddHandler .uxTownship.Click, AddressOf Me.uxTownship_Click
+                AddHandler .uxTownshipPartial.Click, AddressOf Me.uxTownshipPartial_Click
+                AddHandler .uxTownshipDirectional.Click, AddressOf Me.uxTownshipDirectional_Click
+                AddHandler .uxRange.Click, AddressOf Me.uxRange_Click
+                AddHandler .uxRangePartial.Click, AddressOf Me.uxRangePartial_Click
+                AddHandler .uxRangeDirectional.Click, AddressOf Me.uxRangeDirectional_Click
+                AddHandler .uxSection.Click, AddressOf Me.uxSection_Click
+                AddHandler .uxSectionQtr.Click, AddressOf Me.uxSectionQtr_Click
+                AddHandler .uxSectionQtrQtr.Click, AddressOf Me.uxSectionQrtrQrtr_Click
+                AddHandler .uxSuffixType.Click, AddressOf Me.uxSuffixType_Click
+                AddHandler .uxSuffixNumber.TextChanged, AddressOf Me.uxSuffixNumber_TextChanged
+                AddHandler .uxAnomaly.TextChanged, AddressOf Me.uxAnomaly_TextChanged
+            End With
         Else
             ' Unsubscribe to partner form events.
-            RemoveHandler _partnerMapIndexForm.uxEdit.Click, AddressOf Me.uxEdit_Click
-            RemoveHandler _partnerMapIndexForm.uxQuit.Click, AddressOf Me.uxQuit_Click
-            RemoveHandler _partnerMapIndexForm.uxHelp.Click, AddressOf Me.uxHelp_Click
-            RemoveHandler _partnerMapIndexForm.uxCounty.Click, AddressOf Me.uxCounty_Click
-            RemoveHandler _partnerMapIndexForm.uxTownship.Click, AddressOf Me.uxTownship_Click
-            RemoveHandler _partnerMapIndexForm.uxTownshipPartial.Click, AddressOf Me.uxTownshipPartial_Click
-            RemoveHandler _partnerMapIndexForm.uxTownshipDirectional.Click, AddressOf Me.uxTownshipDirectional_Click
-            RemoveHandler _partnerMapIndexForm.uxRange.Click, AddressOf Me.uxRange_Click
-            RemoveHandler _partnerMapIndexForm.uxRangePartial.Click, AddressOf Me.uxRangePartial_Click
-            RemoveHandler _partnerMapIndexForm.uxRangeDirectional.Click, AddressOf Me.uxRangeDirectional_Click
-            RemoveHandler _partnerMapIndexForm.uxSection.Click, AddressOf Me.uxSection_Click
-            RemoveHandler _partnerMapIndexForm.uxSectionQtr.Click, AddressOf Me.uxSectionQtr_Click
-            RemoveHandler _partnerMapIndexForm.uxSectionQtrQtr.Click, AddressOf Me.uxSectionQrtrQrtr_Click
-            RemoveHandler _partnerMapIndexForm.uxSuffixType.Click, AddressOf Me.uxSuffixType_Click
-            RemoveHandler _partnerMapIndexForm.uxSuffixNumber.TextChanged, AddressOf Me.uxSuffixNumber_TextChanged
-            RemoveHandler _partnerMapIndexForm.uxAnomaly.TextChanged, AddressOf Me.uxAnomaly_TextChanged
+            With _partnerMapIndexForm
+                RemoveHandler .uxEdit.Click, AddressOf Me.uxEdit_Click
+                RemoveHandler .uxQuit.Click, AddressOf Me.uxQuit_Click
+                RemoveHandler .uxHelp.Click, AddressOf Me.uxHelp_Click
+                RemoveHandler .uxCounty.Click, AddressOf Me.uxCounty_Click
+                RemoveHandler .uxTownship.Click, AddressOf Me.uxTownship_Click
+                RemoveHandler .uxTownshipPartial.Click, AddressOf Me.uxTownshipPartial_Click
+                RemoveHandler .uxTownshipDirectional.Click, AddressOf Me.uxTownshipDirectional_Click
+                RemoveHandler .uxRange.Click, AddressOf Me.uxRange_Click
+                RemoveHandler .uxRangePartial.Click, AddressOf Me.uxRangePartial_Click
+                RemoveHandler .uxRangeDirectional.Click, AddressOf Me.uxRangeDirectional_Click
+                RemoveHandler .uxSection.Click, AddressOf Me.uxSection_Click
+                RemoveHandler .uxSectionQtr.Click, AddressOf Me.uxSectionQtr_Click
+                RemoveHandler .uxSectionQtrQtr.Click, AddressOf Me.uxSectionQrtrQrtr_Click
+                RemoveHandler .uxSuffixType.Click, AddressOf Me.uxSuffixType_Click
+                RemoveHandler .uxSuffixNumber.TextChanged, AddressOf Me.uxSuffixNumber_TextChanged
+                RemoveHandler .uxAnomaly.TextChanged, AddressOf Me.uxAnomaly_TextChanged
+            End With
         End If
+
     End Sub
 
 #End Region
@@ -221,14 +225,14 @@ Public NotInheritable Class EditMapIndex
 
     Private Sub uxEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        Dim thisDataSet As IDataset = DataMonitor.MapIndexFeatureLayer.FeatureClass.FeatureDataset
-        Dim thisEditWorkSpace As IWorkspaceEdit = DirectCast(thisDataSet.Workspace, IWorkspaceEdit)
+        Dim theFC As IFeatureClass = DataMonitor.MapIndexFeatureLayer.FeatureClass
+        Dim thisDataset As IFeatureDataset = theFC.FeatureDataset
+        'TODO [ALL] This cast throws a fatal error. Appears that there is no dataset associated with this FeatureClass. The mapindex feature class does not have a valid featuredataset. Need to get a workspace object. 
+        Dim thisEditWorkSpace As IWorkspaceEdit = TryCast(thisDataset.Workspace, IWorkspaceEdit)
 
         Try
-            Dim validData As Boolean
-
             If EditingState = True Then
-                validData = True
+                Dim validData As Boolean = True
                 validData = validData And (Len(PartnerMapIndexForm.uxReliability.Text) <> 0)
                 validData = validData And (Len(PartnerMapIndexForm.uxScale.Text) <> 0)
                 validData = validData And (Len(PartnerMapIndexForm.uxMapNumber.Text) <> 0)
@@ -239,58 +243,59 @@ Public NotInheritable Class EditMapIndex
                     MessageBox.Show("All fields must be filled in before assigning", "Invalid data", MessageBoxButtons.OK)
                     Exit Try
                 End If
+                If thisEditWorkSpace IsNot Nothing Then
+                    'Begin edit process
+                    thisEditWorkSpace.StartEditOperation()
+                    'update form caption
+                    With _partnerMapIndexForm
+                        .Text = "Map Index (Map Feature: " & _ormapNumber.GetORMapNum & ")"
+                        'mapnumber
+                        _mapIndexFeature.Value(_mapIndexFields.MapNumber) = .uxMapNumber.Text
+                        'reliability
+                        Dim value As String = ConvertCodeValueDomainToCode(_mapIndexFeature.Fields, EditorExtension.MapIndexSettings.ReliabilityCodeField, .uxReliability.Text)
+                        Dim valueAsInteger As Integer
 
-                'Begin edit process
-                thisEditWorkSpace.StartEditOperation()
-                'update form caption
-                With PartnerMapIndexForm
-                    .Text = "Map Index (Map Feature: " & _ormapNumber.GetORMapNum & ")"
-                    'mapnumber
-                    _mapIndexFeature.Value(_mapIndexFields.MapNumber) = .uxMapNumber.Text
-                    'reliability
-                    Dim value As String = ConvertCodeValueDomainToCode(_mapIndexFeature.Fields, EditorExtension.MapIndexSettings.ReliabilityCodeField, .uxReliability.Text)
-                    Dim valueAsInteger As Integer
-
-                    If Integer.TryParse(value, valueAsInteger) Then
-                        _mapIndexFeature.Value(_mapIndexFields.Reliability) = valueAsInteger
-                    Else
-                        _mapIndexFeature.Value(_mapIndexFields.Reliability) = DBNull.Value
-                    End If
-                    'scale
-                    value = ConvertCodeValueDomainToCode(_mapIndexFeature.Fields, EditorExtension.MapIndexSettings.MapScaleField, .uxScale.Text)
-                    If Integer.TryParse(value, valueAsInteger) Then
-                        _mapIndexFeature.Value(_mapIndexFields.MapScale) = valueAsInteger
-                    Else
-                        _mapIndexFeature.Value(_mapIndexFields.MapScale) = DBNull.Value
-                    End If
-                    'Page
-                    value = .uxPage.Text
-                    If Integer.TryParse(value, valueAsInteger) Then
-                        _mapIndexFeature.Value(_mapIndexFields.Page) = valueAsInteger
-                    Else
-                        _mapIndexFeature.Value(_mapIndexFields.Page) = DBNull.Value
-                    End If
-                    'ORMAP Number
-                    _mapIndexFeature.Value(_mapIndexFields.ORMAPNumber) = _ormapNumber.GetORMapNum
-                    'store the edited feature
-                    _mapIndexFeature.Store()
-                    'Update all taxlot polygons that underlie this one
-                    'UpdateTaxlots
-                    'Finalize this edit
-                    thisEditWorkSpace.StopEditOperation()
-                End With 'PartnerMapindexForm
+                        If Integer.TryParse(value, valueAsInteger) Then
+                            _mapIndexFeature.Value(_mapIndexFields.Reliability) = valueAsInteger
+                        Else
+                            _mapIndexFeature.Value(_mapIndexFields.Reliability) = DBNull.Value
+                        End If
+                        'scale
+                        value = ConvertCodeValueDomainToCode(_mapIndexFeature.Fields, EditorExtension.MapIndexSettings.MapScaleField, .uxScale.Text)
+                        If Integer.TryParse(value, valueAsInteger) Then
+                            _mapIndexFeature.Value(_mapIndexFields.MapScale) = valueAsInteger
+                        Else
+                            _mapIndexFeature.Value(_mapIndexFields.MapScale) = DBNull.Value
+                        End If
+                        'Page
+                        value = .uxPage.Text
+                        If Integer.TryParse(value, valueAsInteger) Then
+                            _mapIndexFeature.Value(_mapIndexFields.Page) = valueAsInteger
+                        Else
+                            _mapIndexFeature.Value(_mapIndexFields.Page) = DBNull.Value
+                        End If
+                        'ORMAP Number
+                        _mapIndexFeature.Value(_mapIndexFields.ORMAPNumber) = _ormapNumber.GetORMapNum
+                        'store the edited feature
+                        _mapIndexFeature.Store()
+                        'Update all taxlot polygons that underlie this one
+                        updateTaxlots(_mapIndexFeature)
+                        'Finalize this edit
+                        thisEditWorkSpace.StopEditOperation()
+                    End With 'PartnerMapindexForm
+                End If
             End If 'Editing state = true
             'toggle form options after update
-            EditingState = Not EditingState
+            EditingState = False
             ToggleControls(EditingState)
             'update form caption
             PartnerMapIndexForm.Text = "Map Index (" & _ormapNumber.GetORMapNum & ")"
 
         Catch ex As Exception
-            Trace.WriteLine(ex.ToString)
             If thisEditWorkSpace.IsBeingEdited Then
                 thisEditWorkSpace.AbortEditOperation()
             End If
+            Trace.WriteLine(ex.ToString)
         End Try
     End Sub
 
@@ -314,138 +319,161 @@ Public NotInheritable Class EditMapIndex
         'object that raised the event.
         '_ormapNumber.County = sender.selectedtext
 
-        _ormapNumber.County = PartnerMapIndexForm.uxCounty.SelectedText
+        _ormapNumber.County = _partnerMapIndexForm.uxCounty.SelectedText
         If EditingState = True Then
-            PartnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
+            _partnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
         Else
-            PartnerMapIndexForm.uxEdit.Enabled = True
+            _partnerMapIndexForm.uxEdit.Enabled = True
         End If
     End Sub
 
     Private Sub uxTownship_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        _ormapNumber.Township = PartnerMapIndexForm.uxTownship.SelectedText
+        _ormapNumber.Township = _partnerMapIndexForm.uxTownship.SelectedText
         If EditingState = True Then
-            PartnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
+            _partnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
         Else
-            PartnerMapIndexForm.uxEdit.Enabled = True
+            _partnerMapIndexForm.uxEdit.Enabled = True
         End If
     End Sub
 
     Private Sub uxTownshipPartial_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        _ormapNumber.PartialTownshipCode = PartnerMapIndexForm.uxTownshipPartial.SelectedText
+        _ormapNumber.PartialTownshipCode = _partnerMapIndexForm.uxTownshipPartial.SelectedText
         If EditingState = True Then
-            PartnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
+            _partnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
         Else
-            PartnerMapIndexForm.uxEdit.Enabled = True
+            _partnerMapIndexForm.uxEdit.Enabled = True
         End If
     End Sub
 
     Private Sub uxTownshipDirectional_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        _ormapNumber.TownshipDirectional = PartnerMapIndexForm.uxTownshipDirectional.SelectedText
+        _ormapNumber.TownshipDirectional = _partnerMapIndexForm.uxTownshipDirectional.SelectedText
         If EditingState = True Then
-            PartnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
+            _partnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
         Else
-            PartnerMapIndexForm.uxEdit.Enabled = True
+            _partnerMapIndexForm.uxEdit.Enabled = True
         End If
     End Sub
 
     Private Sub uxRange_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        _ormapNumber.Range = PartnerMapIndexForm.uxRange.SelectedText
+        _ormapNumber.Range = _partnerMapIndexForm.uxRange.SelectedText
         If EditingState = True Then
-            PartnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
+            _partnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
         Else
-            PartnerMapIndexForm.uxEdit.Enabled = True
+            _partnerMapIndexForm.uxEdit.Enabled = True
         End If
     End Sub
 
     Private Sub uxRangePartial_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        _ormapNumber.PartialRangeCode = PartnerMapIndexForm.uxRangePartial.SelectedText
+        _ormapNumber.PartialRangeCode = _partnerMapIndexForm.uxRangePartial.SelectedText
         If EditingState = True Then
-            PartnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
+            _partnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
         Else
-            PartnerMapIndexForm.uxEdit.Enabled = True
+            _partnerMapIndexForm.uxEdit.Enabled = True
         End If
     End Sub
 
     Private Sub uxRangeDirectional_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        _ormapNumber.RangeDirectional = PartnerMapIndexForm.uxRangeDirectional.SelectedText
+        _ormapNumber.RangeDirectional = _partnerMapIndexForm.uxRangeDirectional.SelectedText
         If EditingState = True Then
-            PartnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
+            _partnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
         Else
-            PartnerMapIndexForm.uxEdit.Enabled = True
+            _partnerMapIndexForm.uxEdit.Enabled = True
         End If
     End Sub
 
     Private Sub uxSection_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        _ormapNumber.Section = PartnerMapIndexForm.uxSection.SelectedText
+        _ormapNumber.Section = _partnerMapIndexForm.uxSection.SelectedText
         If EditingState = True Then
-            PartnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
+            _partnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
         Else
-            PartnerMapIndexForm.uxEdit.Enabled = True
+            _partnerMapIndexForm.uxEdit.Enabled = True
         End If
     End Sub
 
     Private Sub uxSectionQtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        _ormapNumber.Quarter = PartnerMapIndexForm.uxSectionQtr.SelectedText
+        _ormapNumber.Quarter = _partnerMapIndexForm.uxSectionQtr.SelectedText
         If EditingState = True Then
-            PartnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
+            _partnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
         Else
-            PartnerMapIndexForm.uxEdit.Enabled = True
+            _partnerMapIndexForm.uxEdit.Enabled = True
         End If
     End Sub
 
     Private Sub uxSectionQrtrQrtr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        _ormapNumber.QuarterQuarter = PartnerMapIndexForm.uxSectionQtrQtr.SelectedText
+        _ormapNumber.QuarterQuarter = _partnerMapIndexForm.uxSectionQtrQtr.SelectedText
         If EditingState = True Then
-            PartnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
+            _partnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
         Else
-            PartnerMapIndexForm.uxEdit.Enabled = True
+            _partnerMapIndexForm.uxEdit.Enabled = True
         End If
     End Sub
 
     Private Sub uxSuffixType_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        _ormapNumber.SuffixType = ConvertCodeValueDomainToCode(DataMonitor.TaxlotFeatureLayer.FeatureClass.Fields, EditorExtension.TaxLotSettings.MapSuffixTypeField, PartnerMapIndexForm.uxSuffixType.SelectedText)
+        _ormapNumber.SuffixType = ConvertCodeValueDomainToCode(DataMonitor.TaxlotFeatureLayer.FeatureClass.Fields, EditorExtension.TaxLotSettings.MapSuffixTypeField, _partnerMapIndexForm.uxSuffixType.SelectedText)
         If EditingState = True Then
-            PartnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
+            _partnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
         Else
-            PartnerMapIndexForm.uxEdit.Enabled = True
+            _partnerMapIndexForm.uxEdit.Enabled = True
         End If
     End Sub
 
     Private Sub uxSuffixNumber_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        _ormapNumber.SuffixNumber = PartnerMapIndexForm.uxSuffixNumber.Text
+        _ormapNumber.SuffixNumber = _partnerMapIndexForm.uxSuffixNumber.Text
         If EditingState = True Then
-            PartnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
+            _partnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
         Else
-            PartnerMapIndexForm.uxEdit.Enabled = True
+            _partnerMapIndexForm.uxEdit.Enabled = True
         End If
     End Sub
 
     Private Sub uxAnomaly_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        _ormapNumber.Anomaly = PartnerMapIndexForm.uxAnomaly.Text
+        _ormapNumber.Anomaly = _partnerMapIndexForm.uxAnomaly.Text
         If EditingState = True Then
-            PartnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
+            _partnerMapIndexForm.uxEdit.Enabled = _ormapNumber.IsValidNumber
         Else
-            PartnerMapIndexForm.uxEdit.Enabled = True
+            _partnerMapIndexForm.uxEdit.Enabled = True
         End If
     End Sub
 
 #End Region
 
 #Region "Methods"
+    Private Sub clearTextBoxes(ByVal container As Control)
+        Dim ctl As Control
+        For Each ctl In container.Controls
+            Dim textbox As TextBox = TryCast(ctl, TextBox)
+            If textbox IsNot Nothing Then
+                textbox.Text = String.Empty
+            End If
+            If ctl.Controls.Count > 0 Then
+                ClearTextBoxes(ctl)
+            End If
+        Next
+    End Sub
 
+    Private Sub clearComboBoxes(ByVal container As Control)
+        For Each ctl As Control In container.Controls
+            Dim combobox As ComboBox = TryCast(ctl, ComboBox)
+            If combobox IsNot Nothing Then
+                combobox.Items.Clear()
+            End If
+            If ctl.Controls.Count > 0 Then
+                ClearComboBoxes(ctl)
+            End If
+        Next
+    End Sub
     Friend Sub DoButtonOperation()
 
         Try
@@ -460,12 +488,12 @@ Public NotInheritable Class EditMapIndex
 
             CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
-                PartnerMapIndexForm.uxEdit.Enabled = False
+                _partnerMapIndexForm.uxEdit.Enabled = False
             Else
-                PartnerMapIndexForm.uxEdit.Enabled = True
+                _partnerMapIndexForm.uxEdit.Enabled = True
             End If
             If Me.InitForm Then
-                PartnerMapIndexForm.ShowDialog()
+                _partnerMapIndexForm.ShowDialog()
             End If
 
         Catch ex As Exception
@@ -510,17 +538,23 @@ Public NotInheritable Class EditMapIndex
 
     Private Sub ToggleControls(ByVal state As Boolean)
         Try
-            Dim ctl As System.Windows.Forms.Control
-            For Each ctl In PartnerMapIndexForm.Controls
+            For Each ctl As Control In PartnerMapIndexForm.Controls
                 If TypeOf ctl Is ComboBox Or TypeOf ctl Is TextBox Then
                     ctl.Enabled = state
                 End If
+                If ctl.Controls.Count > 0 Then
+                    For Each subControl As Control In ctl.Controls
+                        If TypeOf subControl Is TextBox Or TypeOf subControl Is ComboBox Then
+                            subControl.Enabled = state
+                        End If
+                    Next
+                End If
             Next
 
-            With PartnerMapIndexForm
+            With _partnerMapIndexForm
                 If EditingState = True Then
                     .uxEdit.Text = "&Save"
-                    .uxQuit.Text = "Cancel"
+                    .uxQuit.Text = "&Cancel"
                 Else
                     .uxEdit.Text = "&Edit"
                     .uxQuit.Text = "&Quit"
@@ -533,19 +567,21 @@ Public NotInheritable Class EditMapIndex
 
     Private Function InitForm() As Boolean
         Try
-
+            'this call always returns a featurecursor even though nothing is selected
             Dim thisFeatureCursor As IFeatureCursor = GetSelectedFeatures(DataMonitor.MapIndexFeatureLayer)
+
             If thisFeatureCursor Is Nothing Then
                 Return False
                 Exit Try
             End If
             _mapIndexFeature = thisFeatureCursor.NextFeature
-
-            Dim thisRow As IRow = _mapIndexFeature.Table.GetRow(_mapIndexFeature.OID)
+            Dim thisRow As IRow
+            'TODO jwm the assignment below does not work without a selected feature 
+            thisRow = _mapIndexFeature.Table.GetRow(_mapIndexFeature.OID)
 
             _ormapNumber = New ORMapNum
-            'TODO jwm validate this method of retrieving values
             _ormapNumber.ParseNumber(ReadValue(thisRow, EditorExtension.MapIndexSettings.OrmapMapNumberField))
+
             If Not _ormapNumber.IsValidNumber Then
                 InitForm = InitEmpty(DataMonitor.MapIndexFeatureLayer.FeatureClass.Fields, DataMonitor.TaxlotFeatureLayer.FeatureClass.Fields)
                 ToggleControls(True)
@@ -554,7 +590,7 @@ Public NotInheritable Class EditMapIndex
                 InitForm = InitWithFeature(_mapIndexFeature, DataMonitor.MapIndexFeatureLayer.FeatureClass.Fields, DataMonitor.TaxlotFeatureLayer.FeatureClass.Fields)
             End If
 
-            With PartnerMapIndexForm
+            With _partnerMapIndexForm
                 .uxORMAPNumberGroupBox.Text = "Map Index (" & _ormapNumber.GetORMapNum & ")"
                 .uxORMAPNumberLabel.Text = _ormapNumber.GetORMapNum
                 .Refresh()
@@ -565,12 +601,19 @@ Public NotInheritable Class EditMapIndex
         End Try
     End Function
 
+    ''' <summary>
+    ''' Initialize the form for a new selection
+    ''' </summary>
+    ''' <param name="mapIndexFields"></param>
+    ''' <param name="taxlotFields"></param>
+    ''' <returns></returns>
+    ''' <remarks>Clear the form and set default value for fields in accordance with a selection that has no values set</remarks>
     Private Function InitEmpty(ByVal mapIndexFields As IFields, ByVal taxlotFields As IFields) As Boolean
         Try
             _ormapNumber = New ORMapNum
             ResetControls()
             With _ormapNumber
-                .County = EditorExtension.DefaultValuesSettings.County
+                .County = Integer.Parse(EditorExtension.DefaultValuesSettings.County).ToString
                 .Township = String.Empty
                 .TownshipDirectional = EditorExtension.DefaultValuesSettings.TownshipDirection
                 .PartialTownshipCode = EditorExtension.DefaultValuesSettings.TownshipPart
@@ -584,14 +627,14 @@ Public NotInheritable Class EditMapIndex
                 .SuffixType = EditorExtension.DefaultValuesSettings.MapSuffixType
                 .Anomaly = EditorExtension.DefaultValuesSettings.Anomaly
             End With
-            With PartnerMapIndexForm
+            With _partnerMapIndexForm
                 .Text = "Map Index (Map Feature: <Not Attributed>)"
                 'reliability
                 AddCodesToCombo(EditorExtension.MapIndexSettings.ReliabilityCodeField, mapIndexFields, .uxReliability, "", True)
                 'scale
                 AddCodesToCombo(EditorExtension.MapIndexSettings.MapScaleField, mapIndexFields, .uxScale, "", True)
                 'county
-                AddCodesToCombo(EditorExtension.TaxLotSettings.CountyField, taxlotFields, .uxCounty, ConvertCodeValueDomainToDescription(taxlotFields, EditorExtension.TaxLotSettings.CountyField, _ormapNumber.County), True)
+                AddCodesToCombo(EditorExtension.TaxLotSettings.CountyField, taxlotFields, .uxCounty, ConvertCodeValueDomainToDescription(taxlotFields, EditorExtension.TaxLotSettings.CountyField, Integer.Parse(_ormapNumber.County).ToString), True)
                 'township
                 AddCodesToCombo(EditorExtension.TaxLotSettings.TownshipDirectionField, taxlotFields, .uxTownship, _ormapNumber.Township, True)
                 'partial township code
@@ -631,7 +674,7 @@ Public NotInheritable Class EditMapIndex
 
             Dim thisRow As IRow = feature.Table.GetRow(feature.OID)
 
-            With PartnerMapIndexForm
+            With _partnerMapIndexForm
                 .Text = "Map Index (Map Feature: " & _ormapNumber.GetORMapNum
                 .uxMapNumber.Text = ReadValue(thisRow, EditorExtension.MapIndexSettings.MapNumberField)
                 'reliability
@@ -641,7 +684,7 @@ Public NotInheritable Class EditMapIndex
                 'Page
                 .uxPage.Text = ReadValue(thisRow, EditorExtension.MapIndexSettings.PageNumberField)
                 'county
-                AddCodesToCombo(EditorExtension.MapIndexSettings.CountyField, taxlotFields, .uxCounty, ConvertCodeValueDomainToDescription(taxlotFields, EditorExtension.TaxLotSettings.CountyField, _ormapNumber.County), True)
+                AddCodesToCombo(EditorExtension.MapIndexSettings.CountyField, taxlotFields, .uxCounty, ConvertCodeValueDomainToDescription(taxlotFields, EditorExtension.TaxLotSettings.CountyField, Integer.Parse(_ormapNumber.County).ToString), True)
                 'township
                 AddCodesToCombo(EditorExtension.TaxLotSettings.TownshipField, taxlotFields, .uxTownship, _ormapNumber.Township, True)
                 'Partial township code
@@ -675,18 +718,9 @@ Public NotInheritable Class EditMapIndex
     End Function
 
     Private Sub ResetControls()
+        clearComboBoxes(_partnerMapIndexForm)
+        clearTextBoxes(_partnerMapIndexForm)
 
-        Dim ctl As System.Windows.Forms.Control
-        'TODO JWM since controls are in Groupbox this code does not see them
-        For Each ctl In PartnerMapIndexForm.Controls
-            If TypeOf ctl Is TextBox Then
-                ctl.Text = ""
-            ElseIf TypeOf ctl Is ComboBox Then
-                Dim cmb As System.Windows.Forms.ComboBox = DirectCast(ctl, ComboBox)
-                'PartnerMapIndexForm.uxCounty.Items.Clear()
-                cmb.Items.Clear()
-            End If
-        Next
     End Sub
 
     Private Function updateTaxlots(ByVal theMapIndexFeature As IFeature) As Boolean
@@ -813,11 +847,13 @@ Public NotInheritable Class EditMapIndex
         DoButtonOperation()
     End Sub
 
+
 #End Region
 
 #End Region
 
 #Region "Implemented Interface Members"
+
 
 #Region "IDisposable Interface Implementation"
 
@@ -938,7 +974,7 @@ Public NotInheritable Class EditMapIndex
 
 #End Region
 
-    
+
 End Class
 
 
