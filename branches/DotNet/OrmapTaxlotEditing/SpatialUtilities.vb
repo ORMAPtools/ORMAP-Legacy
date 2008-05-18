@@ -37,6 +37,7 @@
 
 #Region "Imported Namespaces"
 Imports System.Collections.Generic
+Imports System.Environment
 Imports System.Globalization
 Imports System.Text
 Imports System.Windows.Forms
@@ -186,16 +187,16 @@ Public NotInheritable Class SpatialUtilities
             ' Check for valid data (will try to load data if not found)
             CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
-                MessageBox.Show("Unable to update Taxlot field values." & vbNewLine & _
-                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Unable to update Taxlot field values." & NewLine & _
+                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Calculate Taxlot Values", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
-                MessageBox.Show("Unable to update taxlot field values." & vbNewLine & _
-                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Unable to update taxlot field values." & NewLine & _
+                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Calculate Taxlot Values", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
@@ -776,15 +777,18 @@ Public NotInheritable Class SpatialUtilities
     ''' on the order by field value.</remarks>
     Public Overloads Shared Function GetValueViaOverlay(ByVal searchGeometry As IGeometry, ByVal overlayFeatureClass As IFeatureClass, ByVal valueFieldName As String, ByVal orderBestByFieldName As String) As String
 
-        ' TODO: [NIS] Refactor (smaller modules).
+        ' ENHANCE: [NIS] Refactor (smaller modules).
 
         Try
             Dim continueThisProcess As Boolean
 
             continueThisProcess = True 'initialize
 
+            Debug.Assert(searchGeometry Is Nothing, "GetValueViaOverlay", "searchGeometry Is Nothing")
+            Debug.Assert(overlayFeatureClass Is Nothing, "GetValueViaOverlay", "searchGeometry Is Nothing")
+            Debug.Assert(valueFieldName Is Nothing, "GetValueViaOverlay", "searchGeometry Is Nothing")
+
             If (searchGeometry Is Nothing) OrElse (overlayFeatureClass Is Nothing) OrElse (valueFieldName.Length <= 0) Then
-                ' TODO: [NIS] Add assertions here
                 continueThisProcess = False
             End If
 
@@ -807,7 +811,7 @@ Public NotInheritable Class SpatialUtilities
                         ' Field not found. Try the OID field
                         If overlayFeatureClass.HasOID Then
                             orderBestByFieldIndex = overlayFeatureClass.Fields.FindField(overlayFeatureClass.OIDFieldName)
-                            Dim msg As String = "Field " & orderBestByFieldName & " not found in " & overlayFeatureClass.AliasName & vbNewLine & _
+                            Dim msg As String = "Field " & orderBestByFieldName & " not found in " & overlayFeatureClass.AliasName & NewLine & _
                                     ". Using " & overlayFeatureClass.OIDFieldName
                             Debug.WriteLine(msg)
                             Trace.WriteLine(msg)
@@ -823,7 +827,7 @@ Public NotInheritable Class SpatialUtilities
             Dim thisCurve As ICurve
             Dim thisEnvelope As IEnvelope
             Dim intersectFuzzAmount As Double
-            Const fuzzFactor As Double = 0.05 ' TODO: [NIS] Re-implement as user setting?
+            Const fuzzFactor As Double = 0.05 ' ENHANCE: [NIS] Re-implement as user setting?
 
             If continueThisProcess Then
                 Select Case searchGeometry.GeometryType
@@ -976,7 +980,7 @@ Public NotInheritable Class SpatialUtilities
                                         aValue = CStr(anOverlayFeature.Value(valueFieldIndex))
                                         theBestValue = aValue
                                     Else
-                                        MessageBox.Show("The field " & anOverlayFeature.Fields.Field(valueFieldIndex).Name & " contains a Null" & vbNewLine & "for the feature with OID=" & anOverlayFeature.OID & ".", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                        MessageBox.Show("The field " & anOverlayFeature.Fields.Field(valueFieldIndex).Name & " contains a Null" & NewLine & "for the feature with OID=" & anOverlayFeature.OID & ".", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                                     End If
                                 End If
                             Else
@@ -986,14 +990,14 @@ Public NotInheritable Class SpatialUtilities
                                     aValue = CStr(anOverlayFeature.Value(valueFieldIndex))
                                     theBestValue = aValue
                                 Else
-                                    MessageBox.Show("The field " & anOverlayFeature.Fields.Field(valueFieldIndex).Name & " contains a Null" & vbNewLine & "for the feature with OID=" & anOverlayFeature.OID & ".", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                    MessageBox.Show("The field " & anOverlayFeature.Fields.Field(valueFieldIndex).Name & " contains a Null" & NewLine & "for the feature with OID=" & anOverlayFeature.OID & ".", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                                 End If
                                 Exit While
                             End If 'dictCandidates.count > 1
                         End While
                     End If 'featurecursor is not nothing
                 Else
-                    MessageBox.Show("No " & overlayFeatureClass.AliasName & "features found " & vbNewLine & " which intersect this feature.", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    MessageBox.Show("No " & overlayFeatureClass.AliasName & "features found " & NewLine & " which intersect this feature.", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 End If 'dictionary count > zero
             End If 'continueThisProcess 
 
@@ -1006,21 +1010,24 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Determines if the feature layer has a selection.
+    ''' Determines if the feature layer has a selection of sufficient size.
     ''' </summary>
-    ''' <param name="layer">An object that supports the IFeatureLayer.</param>
+    ''' <param name="inLayer">An object that supports the IFeatureLayer.</param>
+    ''' <param name="inMinimumCount">An integer representing the minimum number 
+    ''' of features that must be selected to return True.</param>
     ''' <returns><c>True</c> or <c>False</c>.</returns>
-    ''' <remarks>Checking the selection set of layer, determine if one, many, or no features are selected.</remarks>
-    Public Shared Function HasSelectedFeatures(ByVal layer As IFeatureLayer) As Boolean
+    ''' <remarks>Checking the selection set of layer, determine if one, many, 
+    ''' or no features are selected.</remarks>
+    Public Shared Function HasSelectedFeatureCount(ByVal inLayer As IFeatureLayer, ByVal inMinimumCount As Integer) As Boolean
         Try
             Dim returnValue As Boolean = False
-            If (layer Is Nothing) Or Not (TypeOf layer Is IFeatureLayer) Then
+            If (inLayer Is Nothing) Or Not (TypeOf inLayer Is IFeatureLayer) Then
                 Return returnValue
             End If
 
             ' How many are selected?
             Dim featuresSelected As IFeatureSelection
-            featuresSelected = DirectCast(layer, IFeatureSelection)
+            featuresSelected = DirectCast(inLayer, IFeatureSelection)
             returnValue = (featuresSelected.SelectionSet.Count > 0)
             Return returnValue
         Catch ex As Exception
@@ -1088,11 +1095,11 @@ Public NotInheritable Class SpatialUtilities
     ''' <returns>True or False</returns>
     ''' <remarks></remarks>
     Public Shared Function IsOrmapFeature(ByVal theObject As IObject) As Boolean
+        ' ENHANCE: JWM Refactor to return enum of ORMAP feature class type
         Try
             Dim returnValue As Boolean = False
             Dim thisObjectClass As IObjectClass
             thisObjectClass = theObject.Class
-            'TODO: JWM REFACTOR RETURN ENUM OF TYPE OF FEATURE CLASS
             Dim thisDataset As IDataset
             thisDataset = DirectCast(thisObjectClass, IDataset)
             Dim datasetName As String = thisDataset.Name
@@ -1190,15 +1197,16 @@ Public NotInheritable Class SpatialUtilities
                 .ShowOpen()
             End With
 
-            'exit if there is nothing selected
+            ' Exit if there is nothing selected
             If thisFileDialog.SelectedObject(1) Is Nothing Then
                 Return False
             End If
-            'TODO [JWM] Figure out what type of workspace to open. It won't always be a personal geodatabase
-            Dim thisWorkspaceFactory As IWorkspaceFactory2
-            thisWorkspaceFactory = New AccessWorkspaceFactory
-            Dim thisWorkSpace As IWorkspace
-            thisWorkSpace = thisWorkspaceFactory.OpenFromFile(CStr(thisFileDialog.SelectedObject(1)), 0)
+
+            Dim thisWorkSpace As IWorkspace = getWorkspace(thisFileDialog)
+            ' Exit if the file selected is not in a valid workspace
+            If thisWorkSpace Is Nothing Then
+                Return False
+            End If
 
             Dim thisFeatureWorkspace As IFeatureWorkspace
             thisFeatureWorkspace = DirectCast(thisWorkSpace, IFeatureWorkspace)
@@ -1206,18 +1214,18 @@ Public NotInheritable Class SpatialUtilities
             Dim thisFeatureClass As IFeatureClass
             thisFeatureClass = thisFeatureWorkspace.OpenFeatureClass(featureClassName)
 
-            Dim thisFeatureLayer As New ESRI.ArcGIS.Carto.FeatureLayer
+            Dim thisFeatureLayer As New FeatureLayer
             thisFeatureLayer.FeatureClass = thisFeatureClass
 
             Dim thisDataSet As IDataset
             thisDataSet = DirectCast(thisFeatureClass, IDataset)
             thisFeatureLayer.Name = thisDataSet.Name
 
-            Dim thisMap As ESRI.ArcGIS.Carto.IMap
+            Dim thisMap As IMap
             thisMap = EditorExtension.Editor.Map
             thisMap.AddLayer(thisFeatureLayer)
 
-            Dim thisArcMapDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
+            Dim thisArcMapDoc As IMxDocument
             thisArcMapDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
             thisArcMapDoc.CurrentContentsView.Refresh(0)
 
@@ -1255,8 +1263,6 @@ Public NotInheritable Class SpatialUtilities
     ''' The object class is then loaded in the current map from the chosen data source.</remarks>
     Public Overloads Shared Function LoadTableIntoMap(ByVal objectClassName As String, ByVal dialogTitle As String) As Boolean
 
-        ' TODO: [NIS] TEST THIS...
-
         Try
             Dim theFileDialog As CatalogFileDialog
             theFileDialog = New CatalogFileDialog()
@@ -1269,10 +1275,10 @@ Public NotInheritable Class SpatialUtilities
                 Else
                     .SetTitle(String.Concat("Find object class (table) ", objectClassName, "..."))
                 End If
-                .SetFilter(New GxFilterTables, True, True)
-                '.SetFilter(New GxFilterFGDBTables, False, False)
-                '.SetFilter(New GxFilterPGDBTables, False, False)
-                '.SetFilter(New GxFilterSDETables, False, False)
+                '.SetFilter(New GxFilterTables, True, True)
+                .SetFilter(New GxFilterPGDBTables, True, True)
+                .SetFilter(New GxFilterSDETables, False, False)
+                .SetFilter(New GxFilterFGDBTables, False, False)
                 .ShowOpen()
             End With
 
@@ -1280,22 +1286,12 @@ Public NotInheritable Class SpatialUtilities
             If theFileDialog.SelectedObject(1) Is Nothing Then
                 Return False
             End If
-            'TODO [JWM] Figure out what type of workspace to open 
-            Dim theWorkspaceFactory As IWorkspaceFactory2
-            Dim isPersonal As Boolean = False
-            theWorkspaceFactory = New SdeWorkspaceFactory
-            Dim theWorkSpace As IWorkspace
 
-            'If theWorkspaceFactory.IsWorkspace(theFileDialog.SelectedObject(1).ToString) Then
-            '    isPersonal = False
-            'Else
-            '    isPersonal = True
-            'End If
-
-            'If isPersonal Then
-            '    theWorkspaceFactory = New AccessWorkspaceFactory
-            'End If
-            theWorkSpace = theWorkspaceFactory.OpenFromFile(theFileDialog.SelectedObject(1).ToString, EditorExtension.Application.hWnd)
+            Dim theWorkSpace As IWorkspace = getWorkspace(theFileDialog)
+            ' Exit if the file selected is not in a valid workspace
+            If theWorkSpace Is Nothing Then
+                Return False
+            End If
 
             Dim theFeatureWorkspace As IFeatureWorkspace
             theFeatureWorkspace = DirectCast(theWorkSpace, IFeatureWorkspace)
@@ -1460,8 +1456,8 @@ Public NotInheritable Class SpatialUtilities
 
             ' Check for valid data
             If Not HasValidMapIndexData Then
-                MessageBox.Show("Unable to set annotation size." & vbNewLine & _
-                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Unable to set annotation size." & NewLine & _
+                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Set Anno Size", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
@@ -1512,7 +1508,7 @@ Public NotInheritable Class SpatialUtilities
 
                 theTextSymbol.Size = theAnnotationSize
 
-                ' TODO: [NIS] TEST: Do we need to wrap this back together?
+                ' TEST: [NIS] Do we need to wrap this back together (as was done in VB6 code)?
                 'theTextElement.Symbol = theTextSymbol
                 'theCartoElement = DirectCast(theTextElement, IElement)
                 'theAnnoElement = DirectCast(theCartoElement, IAnnotationElement)
@@ -1547,7 +1543,7 @@ Public NotInheritable Class SpatialUtilities
             Dim theAutoWhoFieldIndex As Integer
             theAutoWhoFieldIndex = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoWhoField)
             If theAutoWhoFieldIndex > FieldNotFoundIndex Then
-                feature.Value(theAutoWhoFieldIndex) = UserName()
+                feature.Value(theAutoWhoFieldIndex) = OrmapTaxlotEditing.Utilities.UserName()
             End If
 
         Catch ex As Exception
@@ -1576,8 +1572,8 @@ Public NotInheritable Class SpatialUtilities
             'check for existence of Taxlot layer
             Dim thisTaxlotFeatureLayer As IFeatureLayer
             thisTaxlotFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.TaxLotFC)
-            If thisTaxlotFeatureLayer Is Nothing Then 'TODO: JWM Place strings in resource file and may use for different type of notification
-                MessageBox.Show("Unable to locate the Taxlot layer in Table of Contents." & vbNewLine & _
+            If thisTaxlotFeatureLayer Is Nothing Then ' TODO: JWM Place strings in resource file and may use for different type of notification
+                MessageBox.Show("Unable to locate the Taxlot layer in Table of Contents." & NewLine & _
                                 "This process requires a feature class called " & EditorExtension.TableNamesSettings.TaxLotFC & ".", _
                                 String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Return returnValue
@@ -1590,7 +1586,7 @@ Public NotInheritable Class SpatialUtilities
             Dim mapIndexFeatureLayer As IFeatureLayer
             mapIndexFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
             If mapIndexFeatureLayer Is Nothing Then
-                MessageBox.Show("Unable to locate the MapIndex layer in Table of Contents." & vbNewLine & _
+                MessageBox.Show("Unable to locate the MapIndex layer in Table of Contents." & NewLine & _
                                 "This process requires a feature class called " & EditorExtension.TableNamesSettings.MapIndexFC & ".", _
                                 String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Return returnValue
@@ -1606,6 +1602,8 @@ Public NotInheritable Class SpatialUtilities
                 returnValue = True
             End If
 
+            ' Make sure this number is unique within taxlots with this OM number
+            Dim whereClause As String = formatWhereClause(String.Concat("[", EditorExtension.TaxLotSettings.MapNumberField, "]", " = '", mapIndexORMAPValue, "' AND ", "[", EditorExtension.TaxLotSettings.TaxlotField, "]", " = '", taxlotNumber, "'"), thisTaxlotFeatureClass)
             'Make sure this number is unique within taxlots with this OM number
             'HACK [JWM] Figure out the sql syntax
             Dim ds As IDataset = thisTaxlotFeatureClass.FeatureDataset
@@ -1701,6 +1699,30 @@ Public NotInheritable Class SpatialUtilities
         theActiveView.Refresh()
 
     End Sub
+
+    ''' <summary>
+    ''' Formats a WhereClause based upon the data source. Input format should be based on the personal geodatabase.
+    ''' </summary>
+    ''' <param name="inWhereClause">The original WhereClause written for a personal geodatabase (i.e. with bracket 
+    ''' field name delimiters: "[fieldname]").</param>
+    ''' <param name="inFeatureClass">The Feature Class for which the WhereClause is being generated.</param>
+    ''' <returns>A String containing the formatted where clause.</returns>
+    ''' <remarks>See EDN (http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm) 
+    ''' for more information on where clause syntax flavors.</remarks>
+    Public Shared Function formatWhereClause(ByVal inWhereClause As String, ByVal inFeatureClass As IFeatureClass) As String
+
+        Dim theDataset As IDataset = inFeatureClass.FeatureDataset
+        Dim theWorkspace As IWorkspace = theDataset.Workspace
+        Dim theSQLSyntax As ISQLSyntax = DirectCast(theWorkspace, ISQLSyntax)
+        Dim theDelimiterPrefix As String = theSQLSyntax.GetSpecialCharacter(esriSQLSpecialCharacters.esriSQL_DelimitedIdentifierPrefix)
+        Dim theDelimiterSuffix As String = theSQLSyntax.GetSpecialCharacter(esriSQLSpecialCharacters.esriSQL_DelimitedIdentifierSuffix)
+
+        Dim formattedWhereClause As String = String.Empty
+        formattedWhereClause = inWhereClause.Replace("[", theDelimiterPrefix).Replace("]", theDelimiterSuffix)
+
+        Return formattedWhereClause
+
+    End Function
 
     ''' <summary>
     ''' Formats a WhereClause based upon the data source.  Input format should be based on the personal geodatabase.
@@ -1879,6 +1901,48 @@ Public NotInheritable Class SpatialUtilities
             MessageBox.Show(ex.ToString)
             Return Nothing
         End Try
+    End Function
+
+    ''' <summary>
+    ''' Figure out what type of workspace to open. It won't always be a personal geodatabase.
+    ''' </summary>
+    ''' <param name="thisFileDialog"></param>
+    ''' <returns>An object implementing IWorkspace.</returns>
+    ''' <remarks>Valid workspaces:
+    ''' <list type="bullet">
+    ''' <item><description>Geodatabases that are local to your machine, e.g. a File Geodatabase or a Personal Geodatabase stored in an Access file</description></item>
+    ''' <item><description>Geodatabases that require a remote connection. e.g. ArcSDE</description></item>
+    ''' </list>
+    ''' </remarks>
+    Private Shared Function getWorkspace(ByVal thisFileDialog As CatalogFileDialog) As IWorkspace
+        ' HACK: [NIS] Is there a better way to find the correct workspace type?
+        Dim thisWorkSpace As IWorkspace = Nothing
+        Dim thisAccessWorkspaceFactory As IWorkspaceFactory2 = New AccessWorkspaceFactory
+        Dim thisSdeWorkspaceFactory As IWorkspaceFactory2 = New SdeWorkspaceFactory
+        Dim thisFileGDBWorkspaceFactory As IWorkspaceFactory2 = New FileGDBWorkspaceFactory
+        Try
+            Dim thisFileDialogSelectedObject As String = CStr(thisFileDialog.SelectedObject(1))
+            Dim theParentPath As String = My.Computer.FileSystem.GetParentPath(thisFileDialogSelectedObject) 'Geodatabase or feature dataset
+            Dim theGrandParentPath As String = My.Computer.FileSystem.GetParentPath(theParentPath) 'Needed if parent is a feature dataset
+            If thisAccessWorkspaceFactory.IsWorkspace(theParentPath) Then
+                thisWorkSpace = thisAccessWorkspaceFactory.OpenFromFile(theParentPath, 0)
+            ElseIf thisAccessWorkspaceFactory.IsWorkspace(theGrandParentPath) Then
+                thisWorkSpace = thisAccessWorkspaceFactory.OpenFromFile(theGrandParentPath, 0)
+            ElseIf thisSdeWorkspaceFactory.IsWorkspace(theParentPath) Then
+                thisWorkSpace = thisSdeWorkspaceFactory.OpenFromFile(theParentPath, 0)
+            ElseIf thisSdeWorkspaceFactory.IsWorkspace(theGrandParentPath) Then
+                thisWorkSpace = thisSdeWorkspaceFactory.OpenFromFile(theParentPath, 0)
+            ElseIf thisFileGDBWorkspaceFactory.IsWorkspace(theParentPath) Then
+                thisWorkSpace = thisFileGDBWorkspaceFactory.OpenFromFile(theParentPath, 0)
+            ElseIf thisFileGDBWorkspaceFactory.IsWorkspace(theGrandParentPath) Then
+                thisWorkSpace = thisFileGDBWorkspaceFactory.OpenFromFile(theParentPath, 0)
+            End If
+        Catch ex As Exception
+            thisWorkSpace = Nothing
+        End Try
+
+        Return thisWorkSpace
+
     End Function
 
     ''' <summary>

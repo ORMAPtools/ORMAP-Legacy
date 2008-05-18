@@ -119,70 +119,82 @@ Public NotInheritable Class PropertyPage
 #Region "Event Handlers"
 
     Private Sub uxEnableTools_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
+        Try
+            ' Enable the checkbox and option buttons if the parent checkbox is checked
+            PartnerPropertiesForm.uxEnableAutoUpdate.Enabled = PartnerPropertiesForm.uxEnableTools.Checked
+            PartnerPropertiesForm.uxMinimumFieldsOption.Enabled = PartnerPropertiesForm.uxEnableTools.Checked
+            PartnerPropertiesForm.uxAllFieldsOption.Enabled = PartnerPropertiesForm.uxEnableTools.Checked
 
-        ' Enable the checkbox and option buttons if the parent checkbox is checked
-        PartnerPropertiesForm.uxEnableAutoUpdate.Enabled = PartnerPropertiesForm.uxEnableTools.Checked
-        PartnerPropertiesForm.uxMinimumFieldsOption.Enabled = PartnerPropertiesForm.uxEnableTools.Checked
-        PartnerPropertiesForm.uxAllFieldsOption.Enabled = PartnerPropertiesForm.uxEnableTools.Checked
+            ' Set dirty flag.
+            setPageDirty(True)
 
-        ' Set dirty flag.
-        setPageDirty(True)
-
-        If Not PropertiesPageSite Is Nothing Then
-            PropertiesPageSite.PageChanged()
-        End If
-
+            If Not PropertiesPageSite Is Nothing Then
+                PropertiesPageSite.PageChanged()
+            End If
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
     Private Sub uxEnableAutoUpdate_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
+        Try
+            ' Enable the option buttons if the parent checkbox is checked
+            PartnerPropertiesForm.uxMinimumFieldsOption.Enabled = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
+            PartnerPropertiesForm.uxAllFieldsOption.Enabled = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
 
-        ' Enable the option buttons if the parent checkbox is checked
-        PartnerPropertiesForm.uxMinimumFieldsOption.Enabled = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
-        PartnerPropertiesForm.uxAllFieldsOption.Enabled = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
+            ' Set dirty flag.
+            setPageDirty(True)
 
-        ' Set dirty flag.
-        setPageDirty(True)
-
-        If Not PropertiesPageSite Is Nothing Then
-            PropertiesPageSite.PageChanged()
-        End If
-
+            If Not PropertiesPageSite Is Nothing Then
+                PropertiesPageSite.PageChanged()
+            End If
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
     Private Sub uxMinimumFieldsOption_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
+        Try
+            ' Set dirty flag.
+            setPageDirty(True)
 
-        ' Set dirty flag.
-        setPageDirty(True)
-
-        If Not PropertiesPageSite Is Nothing Then
-            PropertiesPageSite.PageChanged()
-        End If
-
+            If Not PropertiesPageSite Is Nothing Then
+                PropertiesPageSite.PageChanged()
+            End If
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
     Private Sub uxAllFieldsOption_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
+        Try
+            ' Set dirty flag.
+            setPageDirty(True)
 
-        ' Set dirty flag.
-        setPageDirty(True)
-
-        If Not PropertiesPageSite Is Nothing Then
-            PropertiesPageSite.PageChanged()
-        End If
-
+            If Not PropertiesPageSite Is Nothing Then
+                PropertiesPageSite.PageChanged()
+            End If
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
     Private Sub uxSettings_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-        Dim settingsForm As New OrmapSettingsForm
-        settingsForm.ShowDialog(DirectCast(sender, Control).FindForm)
-
+        Try
+            Dim settingsForm As New OrmapSettingsForm
+            settingsForm.ShowDialog(DirectCast(sender, Control).FindForm)
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
     Private Sub uxAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-        Dim aboutForm As New AboutForm
-        aboutForm.ShowDialog(DirectCast(sender, Control).FindForm)
-
+        Try
+            Dim aboutForm As New AboutForm
+            aboutForm.ShowDialog(DirectCast(sender, Control).FindForm)
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
 #End Region
@@ -265,78 +277,104 @@ Public NotInheritable Class PropertyPage
     End Function
 
     Public Function Applies(ByVal objects As ESRI.ArcGIS.esriSystem.ISet) As Boolean Implements IComPropertyPage.Applies
+        Try
+            ' Do not affirm if the objects list is empty.
+            If objects Is Nothing OrElse objects.Count = 0 Then
+                Return False
+            End If
+            objects.Reset()
 
-        ' Do not affirm if the objects list is empty.
-        If objects Is Nothing OrElse objects.Count = 0 Then
-            Return False
-        End If
-        objects.Reset()
+            ' Get a reference to the editor.
+            ' Do not affirm if the editor is not found.
+            Dim editor As IEditor2 = TryCast(objects.Next(), IEditor2)
+            If editor Is Nothing Then
+                Return False
+            End If
 
-        ' Get a reference to the editor.
-        ' Do not affirm if the editor is not found.
-        Dim editor As IEditor2 = TryCast(objects.Next(), IEditor2)
-        If editor Is Nothing Then
-            Return False
-        End If
+            ' Do not affirm if the user is not editing.
+            If editor.EditState <> esriEditState.esriStateEditing Then
+                Return False
+            End If
 
-        ' Do not affirm if the user is not editing.
-        If editor.EditState <> esriEditState.esriStateEditing Then
-            Return False
-        End If
+            ' Otherwise, affirm.
+            Return True
 
-        ' Otherwise, affirm.
-        Return True
-
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Function
 
     Public Sub Apply() Implements IComPropertyPage.Apply
-        ' Write to the EditorExtension shared (i.e. by all class objects) properties
-        EditorExtension.AllowedToEditTaxlots = PartnerPropertiesForm.uxEnableTools.Checked
-        EditorExtension.AllowedToAutoUpdate = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
-        EditorExtension.AllowedToAutoUpdateAllFields = PartnerPropertiesForm.uxAllFieldsOption.Checked
-        setPageDirty(False)
+        Try
+            ' Write to the EditorExtension shared (i.e. by all class objects) properties
+            EditorExtension.AllowedToEditTaxlots = PartnerPropertiesForm.uxEnableTools.Checked
+            EditorExtension.AllowedToAutoUpdate = PartnerPropertiesForm.uxEnableAutoUpdate.Checked
+            EditorExtension.AllowedToAutoUpdateAllFields = PartnerPropertiesForm.uxAllFieldsOption.Checked
+            setPageDirty(False)
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
     Public Sub Cancel() Implements IComPropertyPage.Cancel
-        ' TODO: [NIS] Implement this?
+        Try
+            ' TODO: [NIS] Implement this?
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
     Public Sub Deactivate() Implements IComPropertyPage.Deactivate
-        If Not _partnerPropertiesForm Is Nothing Then
-            PartnerPropertiesForm.Dispose()
-        End If
-        setPartnerPropertiesForm(Nothing)
-        setPropertiesPageSite(Nothing)
+        Try
+            If Not _partnerPropertiesForm Is Nothing Then
+                PartnerPropertiesForm.Dispose()
+            End If
+            setPartnerPropertiesForm(Nothing)
+            setPropertiesPageSite(Nothing)
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
     Public Sub Hide() Implements IComPropertyPage.Hide
-        PartnerPropertiesForm.Hide()
+        Try
+            PartnerPropertiesForm.Hide()
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
     Public Sub SetObjects(ByVal objects As ESRI.ArcGIS.esriSystem.ISet) Implements IComPropertyPage.SetObjects
-        ' Note: The Applies() method should have done preliminary checking of 
-        ' editor states before this method is called.
+        Try
+            ' Note: The Applies() method should have done preliminary checking of 
+            ' editor states before this method is called.
 
-        ' TODO: [NIS] Move (to where)?
-        ' Initialize controls based on properties.
-        setPartnerPropertiesForm(New PropertiesForm())
-        PartnerPropertiesForm.uxEnableTools.Checked = EditorExtension.AllowedToEditTaxlots
-        PartnerPropertiesForm.uxEnableAutoUpdate.Checked = EditorExtension.AllowedToAutoUpdate
-        PartnerPropertiesForm.uxMinimumFieldsOption.Checked = Not EditorExtension.AllowedToAutoUpdateAllFields
-        PartnerPropertiesForm.uxAllFieldsOption.Checked = EditorExtension.AllowedToAutoUpdateAllFields
+            ' ENHANCE: [NIS] Move (to where)?
+            ' Initialize controls based on properties.
+            setPartnerPropertiesForm(New PropertiesForm())
+            PartnerPropertiesForm.uxEnableTools.Checked = EditorExtension.AllowedToEditTaxlots
+            PartnerPropertiesForm.uxEnableAutoUpdate.Checked = EditorExtension.AllowedToAutoUpdate
+            PartnerPropertiesForm.uxMinimumFieldsOption.Checked = Not EditorExtension.AllowedToAutoUpdateAllFields
+            PartnerPropertiesForm.uxAllFieldsOption.Checked = EditorExtension.AllowedToAutoUpdateAllFields
 
-        ' Subscribe to form events.
-        AddHandler PartnerPropertiesForm.uxEnableTools.CheckedChanged, AddressOf uxEnableTools_CheckedChanged
-        AddHandler PartnerPropertiesForm.uxEnableAutoUpdate.CheckedChanged, AddressOf uxEnableAutoUpdate_CheckedChanged
-        AddHandler PartnerPropertiesForm.uxMinimumFieldsOption.CheckedChanged, AddressOf uxMinimumFieldsOption_CheckedChanged
-        AddHandler PartnerPropertiesForm.uxAllFieldsOption.CheckedChanged, AddressOf uxAllFieldsOption_CheckedChanged
-        AddHandler PartnerPropertiesForm.uxSettings.Click, AddressOf uxSettings_Click
-        AddHandler PartnerPropertiesForm.uxAbout.Click, AddressOf uxAbout_Click
-
+            ' Subscribe to form events.
+            AddHandler PartnerPropertiesForm.uxEnableTools.CheckedChanged, AddressOf uxEnableTools_CheckedChanged
+            AddHandler PartnerPropertiesForm.uxEnableAutoUpdate.CheckedChanged, AddressOf uxEnableAutoUpdate_CheckedChanged
+            AddHandler PartnerPropertiesForm.uxMinimumFieldsOption.CheckedChanged, AddressOf uxMinimumFieldsOption_CheckedChanged
+            AddHandler PartnerPropertiesForm.uxAllFieldsOption.CheckedChanged, AddressOf uxAllFieldsOption_CheckedChanged
+            AddHandler PartnerPropertiesForm.uxSettings.Click, AddressOf uxSettings_Click
+            AddHandler PartnerPropertiesForm.uxAbout.Click, AddressOf uxAbout_Click
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
     Public Sub Show() Implements IComPropertyPage.Show
-        PartnerPropertiesForm.Show()
+        Try
+            PartnerPropertiesForm.Show()
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
 #End Region

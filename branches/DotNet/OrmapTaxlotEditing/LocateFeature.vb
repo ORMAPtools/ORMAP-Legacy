@@ -37,8 +37,10 @@
 
 #Region "Imported Namespaces"
 Imports System.Drawing
+Imports System.Environment
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
+Imports Microsoft.Practices.EnterpriseLibrary.ExceptionHandling
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
@@ -86,7 +88,10 @@ Public NotInheritable Class LocateFeature
             _bitmapResourceName = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), _bitmapResourceName)
         Catch ex As ArgumentException
-            Trace.WriteLine(ex.Message, "Invalid Bitmap")
+            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Log Only Policy")
+            If (rethrow) Then
+                Throw
+            End If
         End Try
 
     End Sub
@@ -140,7 +145,7 @@ Public NotInheritable Class LocateFeature
 
         With PartnerLocateFeatureForm
 
-            'Populate multi-value controls
+            ' Populate multi-value controls
             If .uxMapNumber.Items.Count = 0 Then '-- Only load the text box the first time the tool is run.
                 Dim mapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
 
@@ -191,7 +196,8 @@ Public NotInheritable Class LocateFeature
 
         Dim theWhereClause As String
 
-        ' TODO: [ALL] Fix WhereClause syntax issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
+        Dim theWhereClause As String
+
         If taxlot Is Nothing Then '-- Must be MapIndex Feature Layer.
             theXFlayer = MapIndexFeatureLayer
             theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField
@@ -201,6 +207,8 @@ Public NotInheritable Class LocateFeature
             theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField & "," & EditorExtension.TaxLotSettings.TaxlotField
             theWhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "]='" & mapNumber & "' and [" & EditorExtension.TaxLotSettings.TaxlotField & "]='" & taxlot & "'"
         End If
+
+        theQueryFilter.WhereClause = formatWhereClause(theWhereClause, theXFlayer.FeatureClass)
 
         theQueryFilter.WhereClause = formatWhereClause(theWhereClause, theXFlayer)
 
@@ -223,8 +231,8 @@ Public NotInheritable Class LocateFeature
     End Sub
 
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.uxHelp.Click
-        ' TODO [SC] Evaluate help systems and implement.
-        MessageBox.Show("uxHelp clicked")
+        ' TODO: [ALL] Evaluate help systems and implement.
+        MessageBox.Show("Sorry. Help not implemented at this time.")
     End Sub
 
 #End Region
@@ -242,7 +250,7 @@ Public NotInheritable Class LocateFeature
 
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
-                MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub

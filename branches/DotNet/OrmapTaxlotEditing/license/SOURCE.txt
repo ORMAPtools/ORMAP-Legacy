@@ -3,8 +3,8 @@ Copyright 2008 ORMAP Tech Group
 Version 2, January 8, 2008
 
 Tag for this file: $Name$
-SCC revision number: $Revision:$
-Date of Last Change: $Date:$
+SCC revision number: $Revision$
+Date of Last Change: $Date$
 
 
 

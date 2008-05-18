@@ -101,7 +101,7 @@ Public NotInheritable Class ORMapNum
             Dim length As Integer = value.Length
             Select Case length
                 Case Is < 2
-                    Dim sb As New StringBuilder("0", 2 - length) 'TODO: JWM TEST/VERIFY THIS
+                    Dim sb As New StringBuilder("0", 2 - length) ' TODO: JWM verify
                     sb.Append(value)
                     _county = sb.ToString
                 Case 2
@@ -125,7 +125,7 @@ Public NotInheritable Class ORMapNum
         End Get
         Set(ByVal value As String)
             If value.Length <> 2 Then
-                _township = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Township DOES NOT EXIST (YET)
+                _township = "00" ' ENHANCE: [NIS] Add Township to EditorExtension.DefaultValuesSettings and use here.
             Else
                 _township = value
             End If
@@ -184,7 +184,7 @@ Public NotInheritable Class ORMapNum
         End Get
         Set(ByVal value As String)
             If value.Length <> 2 Then
-                _range = "01" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Range DOES NOT EXIST (YET)
+                _range = "01" ' ENHANCE: [NIS] Add Range to EditorExtension.DefaultValuesSettings and use here.
             Else
                 _range = value
             End If
@@ -243,22 +243,22 @@ Public NotInheritable Class ORMapNum
             Section = _section
         End Get
         Set(ByVal value As String)
-            'If IsNumeric(value) Then 'TODO: JWM is there a another way to test for numeric?
+            'If IsNumeric(value) Then ' TODO: JWM is there a another way to test for numeric?
             Dim valueAsInteger As Integer
             If Integer.TryParse(value, valueAsInteger) Then
                 'Select Case CInt(value)
                 Select Case valueAsInteger
                     Case 0
-                        _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST (YET)
+                        _section = "00" ' ENHANCE: [NIS] Add Section to EditorExtension.DefaultValuesSettings and use here.
                     Case Is < 10
                         _section = "0" & CShort(value)
                     Case Is <= 37
                         _section = value
                     Case Else
-                        _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST (YET)
+                        _section = "00" ' ENHANCE: [NIS] Add Section to EditorExtension.DefaultValuesSettings and use here.
                 End Select
             Else
-                _section = "00" ' TODO: [NIS] EditorExtension.DefaultValuesSettings.Section DOES NOT EXIST (YET)
+                _section = "00" ' ENHANCE: [NIS] Add Section to EditorExtension.DefaultValuesSettings and use here.
             End If
             RaiseEvent OnChange(Me, New EventArgs)
         End Set

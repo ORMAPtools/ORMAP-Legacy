@@ -38,8 +38,11 @@
 #Region "Imported Namespaces"
 Imports System.Collections.Generic
 Imports system.Drawing
+Imports System.Environment
+Imports System.Text
 Imports System.Windows.Forms
 Imports System.Runtime.InteropServices
+Imports Microsoft.Practices.EnterpriseLibrary.ExceptionHandling
 Imports ESRI.ArcGIS.Carto
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Editor
@@ -424,16 +427,16 @@ Public NotInheritable Class EditorExtension
             ' Check for valid data (will try to load data if not found).
             CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
-                MessageBox.Show("Unable to update Taxlot field values." & vbNewLine & _
-                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Unable to update Taxlot field values." & NewLine & _
+                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnChangeFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
-                MessageBox.Show("Unable to update taxlot field values." & vbNewLine & _
-                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Unable to update taxlot field values." & NewLine & _
+                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnChangeFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
 
@@ -455,7 +458,7 @@ Public NotInheritable Class EditorExtension
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            ProcessUnhandledException(ex)
 
         Finally
             _isDuringAutoUpdate = False
@@ -487,16 +490,16 @@ Public NotInheritable Class EditorExtension
             ' Check for valid data (will try to load data if not found).
             CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
-                MessageBox.Show("Unable to populate Taxlot field values." & vbNewLine & _
-                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Unable to populate Taxlot field values." & NewLine & _
+                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnCreateFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
-                MessageBox.Show("Unable to populate taxlot field values." & vbNewLine & _
-                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Unable to populate taxlot field values." & NewLine & _
+                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnCreateFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
@@ -551,7 +554,7 @@ Public NotInheritable Class EditorExtension
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            ProcessUnhandledException(ex)
 
         End Try
 
@@ -568,7 +571,7 @@ Public NotInheritable Class EditorExtension
         Try
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
             If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
-            If Not IsOrmapFeature(obj) Then Exit Try ' TODO: [NIS] Is this even needed here?
+            If Not IsOrmapFeature(obj) Then Exit Try ' TODO: [NIS] Is this even needed here anymore?
             If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Try
 
             ' Note: Must check here for if required data is available
@@ -577,21 +580,21 @@ Public NotInheritable Class EditorExtension
             ' Check for valid data (will try to load data if not found).
             CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
-                MessageBox.Show("Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
-                MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
             CheckValidCancelledNumbersTableDataProperties()
             If Not HasValidCancelledNumbersTableData Then
-                MessageBox.Show("Missing data: Valid ORMAP CancelledNumbersTable not found in the map." & vbNewLine & _
+                MessageBox.Show("Missing data: Valid ORMAP CancelledNumbersTable not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
@@ -609,7 +612,7 @@ Public NotInheritable Class EditorExtension
                 Dim theCNMapNumberFieldIndex As Integer = CancelledNumbersTable.Table.FindField(EditorExtension.TaxLotSettings.MapNumberField)
 
                 Dim theFeature As IFeature = DirectCast(obj, IFeature)
-                
+
                 ' If no null values, copy them to Cancelled numbers
                 If Not IsDBNull(theFeature.Value(theTLTaxlotFieldIndex)) And Not IsDBNull(theFeature.Value(theTLMapNumberFieldIndex)) Then
 
@@ -631,7 +634,7 @@ Public NotInheritable Class EditorExtension
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            ProcessUnhandledException(ex)
 
         End Try
 
@@ -639,15 +642,20 @@ Public NotInheritable Class EditorExtension
 
     Private Sub EditEvents_OnStartEditing()
 
+        Trace.WriteLine("Started Editing")
+
         Try
-            ' Test for a valid ArcGIS license.
+            ' Check for a valid ArcGIS license.
             setHasValidLicense((validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
                             validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcInfo)))
 
-            ' Test for a valid workspace.
+            ' Check for a valid workspace.
             If EditorExtension.Editor.EditWorkspace.Type = esriWorkspaceType.esriFileSystemWorkspace Then
+                'esriFileSystemWorkspace: File-based workspaces. e.g. coverages, shapefiles 
                 setIsValidWorkspace(False)
             Else
+                'esriLocalDatabaseWorkspace: Geodatabases that are local to your machine, e.g. a File Geodatabase or a Personal Geodatabase stored in an Access file
+                'esriRemoteDatabaseWorkspace: Geodatabases that require a remote connection. e.g. ArcSDE, OLE DB
                 setIsValidWorkspace(True)
             End If
 
@@ -680,14 +688,17 @@ Public NotInheritable Class EditorExtension
             End If
 
         Catch ex As Exception
-            Debug.WriteLine(ex.ToString)
-            Trace.WriteLine(ex.ToString)
+            'Debug.WriteLine(ex.ToString)
+            'Trace.WriteLine(ex.ToString)
+            ProcessUnhandledException(ex)
 
         End Try
 
     End Sub
 
     Private Sub EditEvents_OnStopEditing(ByVal save As Boolean)
+
+        Trace.WriteLine("Stopped Editing")
 
         Try
             ' Unsubscribe to edit events.
@@ -701,8 +712,9 @@ Public NotInheritable Class EditorExtension
             RemoveHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
 
         Catch ex As Exception
-            Debug.WriteLine(ex.ToString)
-            Trace.WriteLine(ex.ToString)
+            'Debug.WriteLine(ex.ToString)
+            'Trace.WriteLine(ex.ToString)
+            ProcessUnhandledException(ex)
 
         Finally
             setApplication(Nothing)
@@ -721,15 +733,30 @@ Public NotInheritable Class EditorExtension
 
     Public Sub ActiveViewEvents_FocusMapChanged() 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.FocusMapChanged
         ' TODO: [NIS] Determine why this event never fires...
-        ClearAllValidDataProperties()
+        Try
+            ClearAllValidDataProperties()
+        Catch ex As Exception
+            ProcessUnhandledException(ex)
+        End Try
+
     End Sub
 
     Public Sub ActiveViewEvents_ItemAdded(ByVal Item As Object) 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.ItemAdded
-        ClearAllValidDataProperties()
+        Try
+            ClearAllValidDataProperties()
+        Catch ex As Exception
+            ProcessUnhandledException(ex)
+        End Try
+
     End Sub
 
     Public Sub ActiveViewEvents_ItemDeleted(ByVal Item As Object) 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.ItemDeleted
-        ClearAllValidDataProperties()
+        Try
+            ClearAllValidDataProperties()
+        Catch ex As Exception
+            ProcessUnhandledException(ex)
+        End Try
+
     End Sub
 
 #End Region
@@ -738,7 +765,7 @@ Public NotInheritable Class EditorExtension
 
 #Region "Methods"
 
-    ' TODO: [NIS] Test (not sure this how this will work with editor extension)
+    ' TEST: [NIS] Not sure these accelerators will work with an editor extension.
     Private Shared Sub setAccelerator(ByVal acceleratorTable As IAcceleratorTable, _
             ByVal classID As UID, ByVal key As Integer, _
             ByVal usesCtrl As Boolean, ByVal usesAlt As Boolean, _
@@ -755,8 +782,13 @@ Public NotInheritable Class EditorExtension
 
     End Sub
 
+    ''' <summary>
+    ''' Validate the license (e.g. ArcEditor or ArcInfo).
+    ''' </summary>
+    ''' <param name="requiredProductCode"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Shared Function validateLicense(ByVal requiredProductCode As esriLicenseProductCode) As Boolean
-        ' Validate the license (e.g. ArcEditor or ArcInfo).
 
         Dim theAoInitializeClass As New AoInitializeClass()
         Dim productCode As esriLicenseProductCode = theAoInitializeClass.InitializedProduct()
@@ -764,8 +796,14 @@ Public NotInheritable Class EditorExtension
         Return (productCode = requiredProductCode)
     End Function
 
-    Private Shared Sub setMapIndexAndScale(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject, ByVal theFeature As ESRI.ArcGIS.Geodatabase.IFeature, ByVal theGeometry As ESRI.ArcGIS.Geometry.IGeometry)
-        ' Set the map index (if the field exists) to the Map Index map index for the feature location:
+    ''' <summary>
+    ''' Set the map index (if the field exists) to the Map Index map index for the feature location.
+    ''' </summary>
+    ''' <param name="obj"></param>
+    ''' <param name="theFeature"></param>
+    ''' <param name="theGeometry"></param>
+    ''' <remarks></remarks>
+    Private Shared Sub setMapIndexAndScale(ByVal obj As IObject, ByVal theFeature As IFeature, ByVal theGeometry As IGeometry)
 
         Dim theMapScale As String
         Dim theMapNumber As String
@@ -801,6 +839,38 @@ Public NotInheritable Class EditorExtension
         End If
     End Sub
 
+    ''' <summary>
+    ''' Process any unhandled exceptions that occur in the application.
+    ''' This code is called by all UI entry points in the application (e.g. button click events)
+    ''' when an unhandled exception occurs.
+    ''' You could also achieve this by handling the Application.ThreadException event, however
+    ''' the VS2005 debugger will break before this event is called.
+    ''' </summary>
+    ''' <param name="ex">The unhandled exception</param>
+    ''' <remarks></remarks>
+    Friend Shared Sub ProcessUnhandledException(ByVal ex As Exception)
+        ' An unhandled exception occured somewhere in the application.
+        ' Let the 'Global Policy' handler have a try at handling it.
+        Try
+            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Global Policy")
+            If (rethrow) Then
+                ' Something has gone very wrong - exit the extension.
+                Exit Sub
+            End If
+        Catch
+            Dim sb As New System.Text.StringBuilder()
+            sb.Append("An unexpected error occured while calling HandleException with policy 'Global Policy'.")
+            sb.Append(" Please check the event log for details about the exception.")
+            sb.Append(NewLine)
+            sb.Append(NewLine)
+
+            MessageBox.Show(sb.ToString, "ORMAP Taxlot Editing Error", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+
+            Exit Sub
+        End Try
+
+    End Sub
+
 #End Region
 
 #End Region
@@ -819,84 +889,107 @@ Public NotInheritable Class EditorExtension
     End Property
 
     Public Sub Shutdown() Implements ESRI.ArcGIS.esriSystem.IExtension.Shutdown
-        setEditor(Nothing)
-        setEditEvents(Nothing)
+        Try
+            setEditor(Nothing)
+            setEditEvents(Nothing)
 
-        ' Unsubscribe to edit events.
-        RemoveHandler EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
-        RemoveHandler EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
+            ' Unsubscribe to edit events.
+            RemoveHandler EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
+            RemoveHandler EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
 
+        Catch ex As Exception
+            ProcessUnhandledException(ex)
+
+        End Try
     End Sub
 
     Public Sub Startup(ByRef initializationData As Object) Implements ESRI.ArcGIS.esriSystem.IExtension.Startup
-        If Not initializationData Is Nothing AndAlso TypeOf initializationData Is IEditor2 Then
-            ' Set the Editor and EditEvents properties.
-            setEditor(DirectCast(initializationData, IEditor2))
-            setEditEvents(DirectCast(EditorExtension.Editor, IEditEvents_Event))
+        Try
+            If Not initializationData Is Nothing AndAlso TypeOf initializationData Is IEditor2 Then
+                ' Set the Editor and EditEvents properties.
+                setEditor(DirectCast(initializationData, IEditor2))
+                setEditEvents(DirectCast(EditorExtension.Editor, IEditEvents_Event))
 
-            My.User.InitializeWithWindowsUser()
+                My.User.InitializeWithWindowsUser()
 
-            ' Subscribe to edit events.
-            AddHandler EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
-            AddHandler EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
+                ' Subscribe to edit events.
+                AddHandler EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
+                AddHandler EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
 
-        End If
+            End If
+
+        Catch ex As Exception
+            ProcessUnhandledException(ex)
+
+        End Try
+
     End Sub
 
 #End Region
 
 #Region "IExtensionAccelerators Interface Implementation"
 
+    ''' <summary>
+    ''' Create the keyboard accelerators for this extension.
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub CreateAccelerators() Implements ESRI.ArcGIS.esriSystem.IExtensionAccelerators.CreateAccelerators
-        ' Create the keyboard accelerators for this extension.
-        ' TODO: [NIS] Test this (not sure this will work with an editor extension)
-        Dim key As Integer
-        Dim usesCtrl As Boolean
-        Dim usesAlt As Boolean
-        Dim usesShift As Boolean
-        Dim uid As New UID
-        Dim doc As IDocument = EditorExtension.Application.Document
-        Dim acceleratorTable As IAcceleratorTable = doc.Accelerators
 
-        ' Set LocateFeature accelerator keys to Ctrl + Alt + L
-        key = Convert.ToInt32(Keys.L)
-        usesCtrl = True
-        usesAlt = True
-        usesShift = False
-        uid.Value = "{" & OrmapTaxlotEditing.LocateFeature.ClassId & "}"
-        setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+        ' TEST: [NIS] Not sure these accelerators will work with an editor extension.
 
-        ' Set TaxlotAssignment accelerator keys to Ctrl + Alt + T
-        key = Convert.ToInt32(Keys.T)
-        usesCtrl = True
-        usesAlt = True
-        usesShift = False
-        uid.Value = "{" & OrmapTaxlotEditing.TaxlotAssignment.ClassId & "}"
-        setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+        Try
+            Dim key As Integer
+            Dim usesCtrl As Boolean
+            Dim usesAlt As Boolean
+            Dim usesShift As Boolean
+            Dim uid As New UID
+            Dim doc As IDocument = EditorExtension.Application.Document
+            Dim acceleratorTable As IAcceleratorTable = doc.Accelerators
 
-        ' Set EditMapIndex accelerator keys to Ctrl + Alt + E
-        key = Convert.ToInt32(Keys.E)
-        usesCtrl = True
-        usesAlt = True
-        usesShift = False
-        uid.Value = "{" & OrmapTaxlotEditing.EditMapIndex.ClassId & "}"
-        setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+            ' Set LocateFeature accelerator keys to Ctrl + Alt + L
+            key = Convert.ToInt32(Keys.L)
+            usesCtrl = True
+            usesAlt = True
+            usesShift = False
+            uid.Value = "{" & OrmapTaxlotEditing.LocateFeature.ClassId & "}"
+            setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
-        ' Set CombineTaxlots accelerator keys to Ctrl + Alt + C
-        key = Convert.ToInt32(Keys.C)
-        usesCtrl = True
-        usesAlt = True
-        usesShift = False
-        uid.Value = "{" & OrmapTaxlotEditing.CombineTaxlots.ClassId & "}"
-        setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+            ' Set TaxlotAssignment accelerator keys to Ctrl + Alt + T
+            key = Convert.ToInt32(Keys.T)
+            usesCtrl = True
+            usesAlt = True
+            usesShift = False
+            uid.Value = "{" & OrmapTaxlotEditing.TaxlotAssignment.ClassId & "}"
+            setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
-        ' Set AddArrows accelerator keys to Ctrl + Alt + A
-        key = Convert.ToInt32(Keys.A)
-        usesCtrl = True
-        usesAlt = True
-        usesShift = False
-        uid.Value = "{" & OrmapTaxlotEditing.AddArrows.ClassId & "}"
-        setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+            ' Set EditMapIndex accelerator keys to Ctrl + Alt + E
+            key = Convert.ToInt32(Keys.E)
+            usesCtrl = True
+            usesAlt = True
+            usesShift = False
+            uid.Value = "{" & OrmapTaxlotEditing.EditMapIndex.ClassId & "}"
+            setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+
+            ' Set CombineTaxlots accelerator keys to Ctrl + Alt + C
+            key = Convert.ToInt32(Keys.C)
+            usesCtrl = True
+            usesAlt = True
+            usesShift = False
+            uid.Value = "{" & OrmapTaxlotEditing.CombineTaxlots.ClassId & "}"
+            setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+
+            ' Set AddArrows accelerator keys to Ctrl + Alt + A
+            key = Convert.ToInt32(Keys.A)
+            usesCtrl = True
+            usesAlt = True
+            usesShift = False
+            uid.Value = "{" & OrmapTaxlotEditing.AddArrows.ClassId & "}"
+            setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
+
+        Catch ex As Exception
+            ProcessUnhandledException(ex)
+
+        End Try
 
     End Sub
 
@@ -907,32 +1000,45 @@ Public NotInheritable Class EditorExtension
     Public ReadOnly Property ID() As ESRI.ArcGIS.esriSystem.UID Implements ESRI.ArcGIS.esriSystem.IPersistVariant.ID
         Get
             Dim uid As New UIDClass()
-            uid.Value = "{" & OrmapTaxlotEditing.EditorExtension.ClassId & "}"
+            Try
+                uid.Value = "{" & OrmapTaxlotEditing.EditorExtension.ClassId & "}"
+
+            Catch ex As Exception
+                ProcessUnhandledException(ex)
+            End Try
             Return uid
         End Get
     End Property
 
     Public Sub Load(ByVal Stream As ESRI.ArcGIS.esriSystem.IVariantStream) Implements ESRI.ArcGIS.esriSystem.IPersistVariant.Load
 
-        If Stream Is Nothing Then
-            Throw New ArgumentNullException("Stream")
-        End If
+        Try
+            If Stream Is Nothing Then
+                Throw New ArgumentNullException("Stream")
+            End If
 
-        AllowedToEditTaxlots = CBool(Stream.Read())
-        AllowedToAutoUpdate = CBool(Stream.Read())
-        AllowedToAutoUpdateAllFields = CBool(Stream.Read())
+            AllowedToEditTaxlots = CBool(Stream.Read())
+            AllowedToAutoUpdate = CBool(Stream.Read())
+            AllowedToAutoUpdateAllFields = CBool(Stream.Read())
+        Catch ex As Exception
+            ProcessUnhandledException(ex)
+        End Try
 
     End Sub
 
     Public Sub Save(ByVal Stream As ESRI.ArcGIS.esriSystem.IVariantStream) Implements ESRI.ArcGIS.esriSystem.IPersistVariant.Save
 
-        If Stream Is Nothing Then
-            Throw New ArgumentNullException("Stream")
-        End If
+        Try
+            If Stream Is Nothing Then
+                Throw New ArgumentNullException("Stream")
+            End If
 
-        Stream.Write(AllowedToEditTaxlots)
-        Stream.Write(AllowedToAutoUpdate)
-        Stream.Write(AllowedToAutoUpdateAllFields)
+            Stream.Write(AllowedToEditTaxlots)
+            Stream.Write(AllowedToAutoUpdate)
+            Stream.Write(AllowedToAutoUpdateAllFields)
+        Catch ex As Exception
+            ProcessUnhandledException(ex)
+        End Try
 
     End Sub
 

@@ -84,20 +84,16 @@ Public NotInheritable Class OrmapToolbar
 
 #Region "Custom Class Members"
 
-#Region "Fields"
-    ' None
+#Region "Fields (none)"
 #End Region
 
-#Region "Properties"
-    ' None
+#Region "Properties (none)"
 #End Region
 
-#Region "Event Handlers"
-    ' None
+#Region "Event Handlers (none)"
 #End Region
 
-#Region "Methods"
-    ' None
+#Region "Methods (none)"
 #End Region
 
 #End Region
@@ -114,21 +110,19 @@ Public NotInheritable Class OrmapToolbar
 
     Public Overrides ReadOnly Property Name() As String
         Get
-            'TODO: [NIS] Confirm that this choice of name will work well
+            'TEST: [NIS] Confirm that this choice of name will work well in ArcMap UI.
             Return "OrmapToolbar"
         End Get
     End Property
 
 #End Region
 
-#Region "Methods"
-    ' None
+#Region "Methods (none)"
 #End Region
 
 #End Region
 
-#Region "Implemented Interface Members"
-    ' None
+#Region "Implemented Interface Members (none)"
 #End Region
 
 #Region "Other Members"

@@ -887,7 +887,7 @@ Partial Class OrmapSettingsForm
         SectionNumberFieldLabel.Text = "Section Number Field:"
         '
         'SpecialInterestFieldLabel
-        'TODO JWM Should this be removed also? see http://sourceforge.net/tracker/index.php?func=detail&aid=1922332&group_id=151824&atid=782248
+        '
         SpecialInterestFieldLabel.AutoSize = True
         SpecialInterestFieldLabel.Location = New System.Drawing.Point(13, 432)
         SpecialInterestFieldLabel.Name = "SpecialInterestFieldLabel"

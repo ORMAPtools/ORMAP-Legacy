@@ -45,7 +45,8 @@ Imports System.Runtime.InteropServices
 #End Region
 
 <ComVisible(False)> _
-Friend NotInheritable Class PropertiesForm : Inherits System.Windows.Forms.Form
+Friend NotInheritable Class PropertiesForm
+    Inherits System.Windows.Forms.Form
 
 #Region "Class-Level Constants And Enumerations (none)"
 #End Region

@@ -37,8 +37,10 @@
 
 #Region "Imported Namespaces"
 Imports System.Drawing
+Imports System.Environment
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
+Imports Microsoft.Practices.EnterpriseLibrary.ExceptionHandling
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
@@ -79,7 +81,10 @@ Public NotInheritable Class AutoUpdateAllToggle
             _bitmapResourceName = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), _bitmapResourceName)
         Catch ex As ArgumentException
-            Trace.WriteLine(ex.Message, "Invalid Bitmap")
+            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Log Only Policy")
+            If (rethrow) Then
+                Throw
+            End If
         End Try
 
     End Sub
@@ -131,7 +136,11 @@ Public NotInheritable Class AutoUpdateAllToggle
 
     Public Overrides ReadOnly Property Checked() As Boolean
         Get
-            Return MyBase.Checked
+            Try
+                Return MyBase.Checked
+            Catch ex As Exception
+                EditorExtension.ProcessUnhandledException(ex)
+            End Try
         End Get
     End Property
 
@@ -140,35 +149,42 @@ Public NotInheritable Class AutoUpdateAllToggle
 #Region "Methods"
 
     Public Overrides Sub OnCreate(ByVal hook As Object)
-        If Not hook Is Nothing Then
-            _application = DirectCast(hook, IApplication)
+        Try
+            If Not hook Is Nothing Then
+                _application = DirectCast(hook, IApplication)
 
-            'Disable if it is not ArcMap
-            If TypeOf hook Is IMxApplication Then
-                MyBase.m_enabled = True
-            Else
-                MyBase.m_enabled = False
+                'Disable if it is not ArcMap
+                If TypeOf hook Is IMxApplication Then
+                    MyBase.m_enabled = True
+                Else
+                    MyBase.m_enabled = False
+                End If
             End If
-        End If
 
-        ' NOTE: Add other initialization code here...
-
+            ' NOTE: Add other initialization code here...
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
     Public Overrides Sub OnClick()
-        ' Toggle the checked state of the button.
-        MyBase.m_checked = Not MyBase.m_checked
-        ' Synch up the extension-level flag for auto updates.
-        EditorExtension.AllowedToAutoUpdateAllFields = MyBase.m_checked
-        If EditorExtension.AllowedToAutoUpdateAllFields Then
-            MessageBox.Show("Auto update of taxlot fields is ON. The minimum fields" & vbNewLine & _
-                    " (e.g. autodate, autowho) will be updated, as well as all taxlot fields.", _
-                    "Auto Update All Toggle", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        Else
-            MessageBox.Show("Auto update of taxlot fields is OFF. Only the minimum fields" & vbNewLine & _
-                    "(e.g. autodate, autowho) will be updated.", _
-                    "Auto Update All Toggle", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        End If
+        Try
+            ' Toggle the checked state of the button.
+            MyBase.m_checked = Not MyBase.m_checked
+            ' Synch up the extension-level flag for auto updates.
+            EditorExtension.AllowedToAutoUpdateAllFields = MyBase.m_checked
+            If EditorExtension.AllowedToAutoUpdateAllFields Then
+                MessageBox.Show("Auto update of taxlot fields is ON. The minimum fields" & NewLine & _
+                        " (e.g. autodate, autowho) will be updated, as well as all taxlot fields.", _
+                        "Auto Update All Toggle", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Else
+                MessageBox.Show("Auto update of taxlot fields is OFF. Only the minimum fields" & NewLine & _
+                        "(e.g. autodate, autowho) will be updated.", _
+                        "Auto Update All Toggle", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End If
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
 #End Region
@@ -196,33 +212,36 @@ Public NotInheritable Class AutoUpdateAllToggle
     ''' other objects. Only unmanaged resources can be disposed.</para>
     ''' </remarks>
     Friend Sub Dispose(ByVal disposing As Boolean)
-        ' Check to see if Dispose has already been called.
-        If Not Me._isDuringDispose Then
+        Try
+            ' Check to see if Dispose has already been called.
+            If Not Me._isDuringDispose Then
 
-            ' Flag that disposing is in progress.
-            Me._isDuringDispose = True
+                ' Flag that disposing is in progress.
+                Me._isDuringDispose = True
 
-            If disposing Then
-                ' Free managed resources when explicitly called.
+                If disposing Then
+                    ' Free managed resources when explicitly called.
 
-                ' Dispose managed resources here.
-                '   e.g. component.Dispose()
+                    ' Dispose managed resources here.
+                    '   e.g. component.Dispose()
+
+                End If
+
+                ' Free "native" (shared unmanaged) resources, whether 
+                ' explicitly called or called by the runtime.
+
+                ' Call the appropriate methods to clean up 
+                ' unmanaged resources here.
+                _bitmapResourceName = Nothing
+                MyBase.m_bitmap = Nothing
+
+                ' Flag that disposing has been finished.
+                _isDuringDispose = False
 
             End If
-
-            ' Free "native" (shared unmanaged) resources, whether 
-            ' explicitly called or called by the runtime.
-
-            ' Call the appropriate methods to clean up 
-            ' unmanaged resources here.
-            _bitmapResourceName = Nothing
-            MyBase.m_bitmap = Nothing
-
-            ' Flag that disposing has been finished.
-            _isDuringDispose = False
-
-        End If
-
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
 #Region " IDisposable Support "

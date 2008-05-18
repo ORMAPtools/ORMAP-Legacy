@@ -36,11 +36,11 @@
 #End Region
 
 #Region "Imported Namespaces"
+Imports System.Collections
+Imports System.Windows.Forms
+Imports Microsoft.Practices.EnterpriseLibrary.ExceptionHandling
 Imports ESRI.ArcGIS.CatalogUI
 Imports ESRI.ArcGIS.Catalog
-'Imports System.Collections.Generic
-Imports System.Windows.Forms
-
 #End Region
 
 #Region "Class declaration"
@@ -50,10 +50,12 @@ Imports System.Windows.Forms
 ''' <remarks></remarks>
 Public Class CatalogFileDialog
 
+    ' TEST: [NIS] Use of System.Collections.ArrayList instead of VB.Collection object.
+
 #Region "Class level fields"
 
     Private _theGxDialog As IGxDialog
-    Private _colSelection As Collection
+    Private _selectionList As ArrayList
 
 #End Region
 
@@ -61,11 +63,16 @@ Public Class CatalogFileDialog
 
     Public Sub New()
         MyBase.New()
-        _theGxDialog = New GxDialog
-        _theGxDialog.RememberLocation = True
-        _theGxDialog.AllowMultiSelect = False
+        Try
+            _theGxDialog = New GxDialog
+            _theGxDialog.RememberLocation = True
+            _theGxDialog.AllowMultiSelect = False
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
+    ' TODO: JWM Add or remove.
     ' See: http://msdn2.microsoft.com/bb264476(VS.90).aspx  
     'Protected Overrides Sub Finalize()
     '    _theGxDialog = Nothing
@@ -116,10 +123,10 @@ Public Class CatalogFileDialog
     ''' <returns>A file object.</returns>
     ''' <remarks>Return the nth selected element from the most recent file save/open dialog request.</remarks>
     Public Overloads Function SelectedObject(ByVal selection As Integer) As Object
-        If selection > _colSelection.Count OrElse selection = NoSelectedElementIndex Then
+        If selection > _selectionList.Count OrElse selection = NoSelectedElementIndex Then
             Return Nothing
         Else
-            Return _colSelection.Item(selection)
+            Return _selectionList.Item(selection)
         End If
     End Function
 
@@ -194,29 +201,32 @@ Public Class CatalogFileDialog
     ''' </summary>
     ''' <returns>  A collection of names of objects that have been selected by the user from the dialog box</returns>
     ''' <remarks></remarks>
-    Public Function ShowOpen() As Collection
+    Public Function ShowOpen() As ArrayList
         Try
             Dim selection As IEnumGxObject
             Dim thisSelectedObject As IGxObject
             selection = New GxObjectArray
 
-            _colSelection = New Collection
+            _selectionList = New ArrayList
 
             If Not _theGxDialog.DoModalOpen(EditorExtension.Application.hWnd, selection) Then
                 'need to return a empty collection
-                Return New Collection
+                Return New ArrayList
             End If
 
             selection.Reset()
             thisSelectedObject = selection.Next
             Do While Not thisSelectedObject Is Nothing
-                _colSelection.Add(thisSelectedObject.FullName)
+                _selectionList.Add(thisSelectedObject.FullName)
                 thisSelectedObject = selection.Next
             Loop
-            Return _colSelection
+            Return _selectionList
         Catch ex As Exception
-            Trace.WriteLine(ex.ToString)
-            Return New Collection
+            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Global Policy")
+            If (rethrow) Then
+                Throw
+            End If
+            Return New ArrayList
         End Try
     End Function
 
@@ -225,19 +235,22 @@ Public Class CatalogFileDialog
     ''' </summary>
     ''' <returns>A collection holding the full path that is a concatenation of the final path and the specified name</returns>
     ''' <remarks></remarks>
-    Public Function ShowSave() As Collection
+    Public Function ShowSave() As ArrayList
         Try
             If Not _theGxDialog.DoModalSave(EditorExtension.Application.hWnd) Then
                 ' Return an empty collection
-                Return New Collection
+                Return New ArrayList
             End If
             Dim selectedObject As IGxObject
             selectedObject = _theGxDialog.FinalLocation
-            _colSelection.Add(String.Concat(selectedObject.FullName, "\", _theGxDialog.Name))
-            Return _colSelection
+            _selectionList.Add(String.Concat(selectedObject.FullName, "\", _theGxDialog.Name))
+            Return _selectionList
         Catch ex As Exception
-            Trace.WriteLine(ex.ToString)
-            Return New Collection
+            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Global Policy")
+            If (rethrow) Then
+                Throw
+            End If
+            Return New ArrayList
         End Try
     End Function
 

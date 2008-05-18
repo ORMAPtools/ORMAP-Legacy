@@ -38,13 +38,13 @@
 #Region "Imported Namespaces"
 Imports System.Drawing
 Imports System.Runtime.InteropServices
+Imports System.Windows.Forms
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Framework
-Imports System.Windows.Forms
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
@@ -106,16 +106,13 @@ Public NotInheritable Class AddArrows
 
 #End Region
 
-#Region "Properties"
-    ' None
+#Region "Properties (none)"
 #End Region
 
-#Region "Event Handlers"
-    ' None
+#Region "Event Handlers (none)"
 #End Region
 
-#Region "Methods"
-    ' None
+#Region "Methods (none)"
 #End Region
 
 #End Region
@@ -130,9 +127,13 @@ Public NotInheritable Class AddArrows
     ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
     Public Overrides ReadOnly Property Enabled() As Boolean
         Get
-            Dim canEnable As Boolean
-            canEnable = EditorExtension.CanEnableExtendedEditing
-            Return canEnable
+            Try
+                Dim canEnable As Boolean
+                canEnable = EditorExtension.CanEnableExtendedEditing
+                Return canEnable
+            Catch ex As Exception
+                EditorExtension.ProcessUnhandledException(ex)
+            End Try
         End Get
     End Property
 
@@ -141,26 +142,34 @@ Public NotInheritable Class AddArrows
 #Region "Methods"
 
     Public Overrides Sub OnCreate(ByVal hook As Object)
-        If Not hook Is Nothing Then
+        Try
+            If Not hook Is Nothing Then
 
-            'Disable tool if parent application is not ArcMap
-            If TypeOf hook Is IMxApplication Then
-                _application = DirectCast(hook, IApplication)
-                ' TODO: [SC] Create the form, property and set__ procedure. (Nick)
-                'setPartnerAddArrowsForm(New AddArrowsForm())
-                MyBase.m_enabled = True
-            Else
-                MyBase.m_enabled = False
+                'Disable tool if parent application is not ArcMap
+                If TypeOf hook Is IMxApplication Then
+                    _application = DirectCast(hook, IApplication)
+                    ' TODO: [SC] Create the form, property and set__ procedure. (Nick)
+                    'setPartnerAddArrowsForm(New AddArrowsForm())
+                    MyBase.m_enabled = True
+                Else
+                    MyBase.m_enabled = False
+                End If
             End If
-        End If
 
-        ' NOTE: Add other initialization code here...
+            ' NOTE: Add other initialization code here...
 
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
     Public Overrides Sub OnClick()
-        ' TODO: Port AddArrows.OnClick implementation
-        System.Windows.Forms.MessageBox.Show("Port AddArrows.OnClick implementation")
+        Try
+            ' TODO: [SC] Port AddArrows.OnClick implementation
+            System.Windows.Forms.MessageBox.Show("Port AddArrows.OnClick implementation")
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
 
@@ -205,33 +214,36 @@ Public NotInheritable Class AddArrows
     ''' other objects. Only unmanaged resources can be disposed.</para>
     ''' </remarks>
     Friend Sub Dispose(ByVal disposing As Boolean)
-        ' Check to see if Dispose has already been called.
-        If Not Me._isDuringDispose Then
+        Try
+            ' Check to see if Dispose has already been called.
+            If Not Me._isDuringDispose Then
 
-            ' Flag that disposing is in progress.
-            Me._isDuringDispose = True
+                ' Flag that disposing is in progress.
+                Me._isDuringDispose = True
 
-            If disposing Then
-                ' Free managed resources when explicitly called.
+                If disposing Then
+                    ' Free managed resources when explicitly called.
 
-                ' Dispose managed resources here.
-                '   e.g. component.Dispose()
+                    ' Dispose managed resources here.
+                    '   e.g. component.Dispose()
+
+                End If
+
+                ' Free "native" (shared unmanaged) resources, whether 
+                ' explicitly called or called by the runtime.
+
+                ' Call the appropriate methods to clean up 
+                ' unmanaged resources here.
+                _bitmapResourceName = Nothing
+                MyBase.m_bitmap = Nothing
+
+                ' Flag that disposing has been finished.
+                _isDuringDispose = False
 
             End If
-
-            ' Free "native" (shared unmanaged) resources, whether 
-            ' explicitly called or called by the runtime.
-
-            ' Call the appropriate methods to clean up 
-            ' unmanaged resources here.
-            _bitmapResourceName = Nothing
-            MyBase.m_bitmap = Nothing
-
-            ' Flag that disposing has been finished.
-            _isDuringDispose = False
-
-        End If
-
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
 #Region " IDisposable Support "

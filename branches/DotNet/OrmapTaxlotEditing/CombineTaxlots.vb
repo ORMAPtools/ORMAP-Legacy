@@ -37,8 +37,10 @@
 
 #Region "Imported Namespaces"
 Imports System.Drawing
+Imports System.Environment
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
+Imports Microsoft.Practices.EnterpriseLibrary.ExceptionHandling
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
@@ -86,7 +88,10 @@ Public NotInheritable Class CombineTaxlots
             _bitmapResourceName = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), _bitmapResourceName)
         Catch ex As ArgumentException
-            Trace.WriteLine(ex.Message, "Invalid Bitmap")
+            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Log Only Policy")
+            If (rethrow) Then
+                Throw
+            End If
         End Try
 
     End Sub
@@ -138,29 +143,33 @@ Public NotInheritable Class CombineTaxlots
 
     Private Sub PartnerTaxlotAssignmentForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.Load
 
-        If HasSelectedFeatures(TaxlotFeatureLayer) Then
+        If HasSelectedFeatureCount(TaxlotFeatureLayer, 1) Then
 
             With PartnerCombineTaxlotsForm
 
-                'Populate multi-value controls
+                ' Populate multi-value controls
                 If .uxNewTaxlotNumber.Items.Count = 0 Then
                     ' Get a list of distinct taxlot numbers for the set of taxlots to be combined.
                     Dim theCurrentTaxlotSelection As IFeatureSelection = DirectCast(TaxlotFeatureLayer, IFeatureSelection)
 
-                    ' TODO: [NIS] Escape with error message in the case where selected features span tax maps...
+                    ' ENHANCE: [NIS] Escape with error message in the case where selected features span tax maps...
 
                     Dim theQueryFilter As IQueryFilter = New QueryFilter
                     theQueryFilter.SubFields = EditorExtension.TaxLotSettings.TaxlotField
-                    ' TODO: [ALL] Fix WhereClause syntax issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
-                    'theQueryFilter.WhereClause = "DISTINCT(" & EditorExtension.TaxLotSettings.TaxlotField & ")"
 
                     Dim theCursor As ICursor = Nothing
                     theCurrentTaxlotSelection.SelectionSet.Search(theQueryFilter, True, theCursor)
-                    Dim theQueryField As Integer = theCursor.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-                    Dim theRow As IRow = theCursor.NextRow
-                    Do Until theRow Is Nothing
-                        .uxNewTaxlotNumber.Items.Add(theRow.Value(theQueryField))
-                        theRow = theCursor.NextRow
+
+                    Dim theDataStats As IDataStatistics = New DataStatistics
+                    Dim theDataStatsEnum As IEnumerator
+                    With theDataStats
+                        .Cursor = theCursor
+                        .Field = EditorExtension.TaxLotSettings.TaxlotField
+                        theDataStatsEnum = CType(.UniqueValues, IEnumerator)
+                    End With
+
+                    Do Until theDataStatsEnum.MoveNext = False
+                        .uxNewTaxlotNumber.Items.Add(theDataStatsEnum.Current.ToString)
                     Loop
                 End If
 
@@ -179,16 +188,22 @@ Public NotInheritable Class CombineTaxlots
         Dim theTaxlotNumber As String = Nothing
         Dim uxNewTaxlotNumber As ComboBox = PartnerCombineTaxlotsForm.uxNewTaxlotNumber
         theTaxlotNumber = uxNewTaxlotNumber.Text.Trim
-       
+
         ' Get the selected taxlot from the set of taxlots to be combined.
         Dim theFeature As IFeature = getSelectedTaxlotFromSet(theTaxlotNumber)
 
-        ' TODO: [NIS] Remove or replace unique check that allows one (currently allows NONE).
-        '' Verify that within this map index, this taxlot number is unique.
-        '' If not unique, give user option to quit.
+        If PartnerCombineTaxlotsForm.Modal Then
+            ' Modal form is closed automatically by the 
+            ' uxCombine.DialogResult = OK property. 
+        Else
+            PartnerCombineTaxlotsForm.Close()
+        End If
 
-        'If Not IsTaxlotNumberLocallyUnique(theTaxlotNumber, theFeature.Shape) Then
-        '    If MessageBox.Show("The current Taxlot value (" & theTaxlotNumber & ") is not unique within this MapIndex. " & vbNewLine & _
+        ' Verify that within this map index, this existing taxlot number is unique.
+        ' If not unique, give user option to quit.
+
+        'If Not IsTaxlotNumberLocallyUnique(theTaxlotNumber, theFeature.Shape, True) Then
+        '    If MessageBox.Show("The current Taxlot value (" & theTaxlotNumber & ") is not unique within this MapIndex. " & NewLine & _
         '            "Continue the combine process anyway?", _
         '            "Combine Taxlots", MessageBoxButtons.OKCancel, _
         '            MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.Cancel Then
@@ -201,12 +216,10 @@ Public NotInheritable Class CombineTaxlots
         ' the CancelledNumbers table and only if they are unique 
         ' in the map at the time of deletion.
 
-        PartnerCombineTaxlotsForm.Close()
-
     End Sub
 
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.uxHelp.Click
-        ' TODO [NIS] Evaluate help systems and implement.
+        ' TODO: [ALL] Evaluate help systems and implement.
         MessageBox.Show("Sorry. Help not implemented at this time.")
     End Sub
 
@@ -225,46 +238,49 @@ Public NotInheritable Class CombineTaxlots
             '---------------------------------------
             CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
-                MessageBox.Show("Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
-                MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
             CheckValidCancelledNumbersTableDataProperties()
             If Not HasValidCancelledNumbersTableData Then
-                MessageBox.Show("Missing data: Valid ORMAP CancelledNumbersTable not found in the map." & vbNewLine & _
+                MessageBox.Show("Missing data: Valid ORMAP CancelledNumbersTable not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
             CheckValidTaxlotLinesDataProperties()
             If Not HasValidTaxlotLinesData Then
-                MessageBox.Show("Missing data: Valid ORMAP TaxlotLines layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Missing data: Valid ORMAP TaxlotLines layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
             CheckValidReferenceLinesDataProperties()
             If Not HasValidReferenceLinesData Then
-                MessageBox.Show("Missing data: Valid ORMAP ReferenceLines layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Missing data: Valid ORMAP ReferenceLines layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
 
-            If HasSelectedFeatures(TaxlotFeatureLayer) Then
+            If HasSelectedFeatureCount(TaxlotFeatureLayer, 2) Then
                 ' Enable controls to allow the user to select 
                 ' the new combined taxlot number from the list.
                 PartnerCombineTaxlotsForm.uxNewTaxlotNumber.Enabled = True
                 PartnerCombineTaxlotsForm.uxCombine.Enabled = True
             Else
+                MessageBox.Show("No features selected in the Taxlot layer." & NewLine & _
+                                "Please select at least two features.", _
+                                "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 PartnerCombineTaxlotsForm.uxNewTaxlotNumber.Enabled = False
                 PartnerCombineTaxlotsForm.uxCombine.Enabled = False
                 Exit Sub
@@ -318,7 +334,6 @@ Public NotInheritable Class CombineTaxlots
                 Dim theSelectedFeaturesCursor As IFeatureCursor
                 Dim theFields As IFields
                 Dim thisSelectedFeature As IFeature
-                Dim theFeatureCount As Integer
                 Dim thisPolygon As IPolygon
                 Dim thisArea As IArea = Nothing
                 Dim thisCurve As ICurve = Nothing
@@ -345,7 +360,7 @@ Public NotInheritable Class CombineTaxlots
                     ' Get the first feature
                     thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
 
-                    ' TODO: [NIS] ENHANCEMENT: Create these procedures and call instead of first Do...Loop below.
+                    ' ENHANCE: [NIS] Create these procedures and call instead of first Do...Loop below.
                     'If NeedsAreaForDomain(thisSelectedFeature) Then
                     '    theAreaSum = GetAreaSum(theSelectedFeaturesCursor)
                     'End If
@@ -406,8 +421,9 @@ Public NotInheritable Class CombineTaxlots
 
                     thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
                     theFields = theTaxlotFClass.Fields
-                    theFeatureCount = 1
 
+                    Dim theFeatureCount As Integer
+                    theFeatureCount = 1
                     Do Until thisSelectedFeature Is Nothing
                         ' Get the selected feature's geometry
                         Dim theGeometry As IGeometry
@@ -416,7 +432,10 @@ Public NotInheritable Class CombineTaxlots
                         ' Merge the geometry of the features
                         Dim theTopoOperator As ITopologicalOperator
                         theTopoOperator = DirectCast(theOutputGeometry, ITopologicalOperator)
+                        If Not theTopoOperator.IsSimple Then theTopoOperator.Simplify()
+
                         theOutputGeometry = theTopoOperator.Union(theGeometry)
+                        If Not theTopoOperator.IsSimple Then theTopoOperator.Simplify()
 
                         Select Case thisSelectedFeature.Shape.GeometryType
                             Case esriGeometryType.esriGeometryPolygon
@@ -481,12 +500,6 @@ Public NotInheritable Class CombineTaxlots
                 thisSelectedFeature = Nothing
 
                 '---------------------------------------
-                ' Delete all the combined features other
-                ' than the kept feature.
-                '---------------------------------------
-                deleteUnneededFeatures(theKeepFeature)
-
-                '---------------------------------------
                 ' Set the new feature geometry to the
                 ' combined geometry.
                 '---------------------------------------
@@ -501,6 +514,12 @@ Public NotInheritable Class CombineTaxlots
                 ' Store the feature edits.
                 '---------------------------------------
                 theKeepFeature.Store()
+
+                '---------------------------------------
+                ' Delete all the combined features other
+                ' than the kept feature.
+                '---------------------------------------
+                deleteUnneededFeatures(theKeepFeature)
 
                 '---------------------------------------
                 ' Select the new feature:
@@ -637,8 +656,8 @@ Public NotInheritable Class CombineTaxlots
 
         Dim theQueryFilter As IQueryFilter = New QueryFilter
         theQueryFilter.SubFields = "*"
-        ' TODO: [ALL] Fix WhereClause syntax issues (see http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase//IQueryFilter_WhereClause.htm).
-        theQueryFilter.WhereClause = EditorExtension.TaxLotSettings.TaxlotField & " = '" & theTaxlotNumber & "'"
+        Dim theSQL As String = "[" & EditorExtension.TaxLotSettings.TaxlotField & "] = '" & theTaxlotNumber & "'"
+        theQueryFilter.WhereClause = formatWhereClause(theSQL, TaxlotFeatureLayer.FeatureClass)
 
         Dim theCursor As ICursor = Nothing
         theCurrentTaxlotSelection.SelectionSet.Search(theQueryFilter, False, theCursor)
@@ -864,6 +883,7 @@ Public NotInheritable Class CombineTaxlots
 #End Region
 
 End Class
+
 
 
 

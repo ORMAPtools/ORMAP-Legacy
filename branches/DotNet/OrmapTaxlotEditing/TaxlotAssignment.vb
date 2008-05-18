@@ -37,9 +37,11 @@
 
 #Region "Imported Namespaces"
 Imports System.Drawing
+Imports System.Environment
 Imports System.Globalization
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
+Imports Microsoft.Practices.EnterpriseLibrary.ExceptionHandling
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
@@ -98,7 +100,10 @@ Public NotInheritable Class TaxlotAssignment
             _bitmapResourceName = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), _bitmapResourceName)
         Catch ex As ArgumentException
-            Trace.WriteLine(ex.Message, "Invalid Bitmap")
+            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Log Only Policy")
+            If (rethrow) Then
+                Throw
+            End If
         End Try
 
         Try
@@ -106,7 +111,10 @@ Public NotInheritable Class TaxlotAssignment
             _cursorResourceName = Me.GetType().Name + ".cur"
             MyBase.m_cursor = New System.Windows.Forms.Cursor(Me.GetType(), _cursorResourceName)
         Catch ex As ArgumentException
-            Trace.WriteLine(ex.Message, "Invalid Cursor")
+            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Log Only Policy")
+            If (rethrow) Then
+                Throw
+            End If
         End Try
 
     End Sub
@@ -249,7 +257,7 @@ Public NotInheritable Class TaxlotAssignment
             helpForm.Height = 740
             helpForm.Show()
         Else
-            MessageBox.Show("No help file available in the directory " & vbNewLine & _
+            MessageBox.Show("No help file available in the directory " & NewLine & _
                     My.Application.Info.DirectoryPath & "\help\videos\TaxlotAssignment" & ".")
         End If
 
@@ -288,16 +296,16 @@ Public NotInheritable Class TaxlotAssignment
             ' Check for valid data
             CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
-                MessageBox.Show("Unable to assign taxlot values to polygons." & vbNewLine & _
-                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Unable to assign taxlot values to polygons." & NewLine & _
+                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             End If
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
-                MessageBox.Show("Unable to assign taxlot values to polygons." & vbNewLine & _
-                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                MessageBox.Show("Unable to assign taxlot values to polygons." & NewLine & _
+                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
@@ -307,7 +315,7 @@ Public NotInheritable Class TaxlotAssignment
             Dim isTaxlotType As Boolean = (StrComp(Me.TaxlotType, TaxlotAssignment.taxlotNumberTypeTaxlot, CompareMethod.Text) = 0)
             If isTaxlotType Then
                 If Not IsNumeric(Me.NumberStartingFrom) Then
-                    Throw New InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Expected a number for {0}, got {1}.", "me.NumberStartingFrom", Me.NumberStartingFrom)) ' TODO: [NIS] Find a better exception.
+                    Throw New InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Expected a number for {0}, got {1}.", "NumberStartingFrom", Me.NumberStartingFrom)) ' TODO: [NIS] Find a better exception.
                 End If
             End If
 
@@ -333,7 +341,7 @@ Public NotInheritable Class TaxlotAssignment
             theMIFCursor = DataMonitor.MapIndexFeatureLayer.FeatureClass.Search(theSpatialFilter, False)
             theMIFeature = theMIFCursor.NextFeature
             If theMIFeature Is Nothing Then
-                MessageBox.Show("Unable to assign taxlot values to polygons" & vbNewLine & _
+                MessageBox.Show("Unable to assign taxlot values to polygons" & NewLine & _
                                 "that are not within a MapIndex polygon.", _
                                 "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
@@ -342,9 +350,9 @@ Public NotInheritable Class TaxlotAssignment
             ' Verify the uniqueness of the specified taxlot number (if taxlot type input).
             If isTaxlotType Then
                 '[Taxlot value is a number...]
-                If Not IsTaxlotNumberLocallyUnique(CStr(Me.NumberStartingFrom), theGeometry, False) Then  ' TODO: [NIS] Confirm this function with Jim.
-                    If MessageBox.Show("The current Taxlot value (" & Me.NumberStartingFrom & ")" & vbNewLine & _
-                                       "is not unique within this MapIndex." & vbNewLine & _
+                If Not IsTaxlotNumberLocallyUnique(CStr(Me.NumberStartingFrom), theGeometry, False) Then
+                    If MessageBox.Show("The current Taxlot value (" & Me.NumberStartingFrom & ")" & NewLine & _
+                                       "is not unique within this MapIndex." & NewLine & _
                                        "Attribute feature with value anyway?", _
                                        "Taxlot Assignment", MessageBoxButtons.YesNo, _
                                        MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.No Then
@@ -395,7 +403,7 @@ Public NotInheritable Class TaxlotAssignment
 
             ' Check with user before updating Taxlot field
             If Len(theExistingTaxlot) > 0 And theExistingTaxlot <> "0" Then
-                If MessageBox.Show("Taxlot currently has a Taxlot value (" & theExistingTaxlot & ")." & vbNewLine & _
+                If MessageBox.Show("Taxlot currently has a Taxlot value (" & theExistingTaxlot & ")." & NewLine & _
                           "Update it?", "Taxlot Assignment", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.No Then
                     Exit Try
                 End If
@@ -696,7 +704,3 @@ Public NotInheritable Class TaxlotAssignment
 #End Region
 
 End Class
-
-
-
-

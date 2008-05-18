@@ -674,6 +674,6 @@ Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
 
 Tag for this file: $Name$
-SCC revision number: $Revision:$
-Date of Last Change: $Date:$
+SCC revision number: $Revision$
+Date of Last Change: $Date$
 

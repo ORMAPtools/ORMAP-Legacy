@@ -48,7 +48,7 @@
       <Value Profile="(Default)">MapTaxlot</Value>
     </Setting>
     <Setting Name="MapTaxlotFormatMask" Type="System.String" Scope="User">
-      <Value Profile="(Default)">TR^DSSQQ@@@@@</Value>
+      <Value Profile="(Default)">TTRRSSQQ@@@@@</Value>
     </Setting>
     <Setting Name="SpecialInterestField" Type="System.String" Scope="User">
       <Value Profile="(Default)">SpecialInt</Value>

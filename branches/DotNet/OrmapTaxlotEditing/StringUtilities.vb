@@ -77,10 +77,6 @@ Public NotInheritable Class StringUtilities
     Public Shared Function AddLeadingZeros(ByVal currentValue As String, ByVal width As Integer) As String
         Try
             If currentValue.Length < width Then
-                'Dim sb As New StringBuilder("0", 5)
-                'sb.Insert(width - currentString.Length, currentString)
-                'Return sb.ToString
-                'TODO: [NIS] Above code does not work. Jim, why was PadLeft was not used here for a while? [JWM] I started with the StringBuilder and finally settled on Padleft.
                 Return currentValue.PadLeft(width, "0"c)
             Else
                 Return currentValue
@@ -179,7 +175,7 @@ Public NotInheritable Class StringUtilities
                         'Formats for the parcel id
                         If Not hasProcessedParcelId Then
                             'since we are at the end of the string use Insert
-                            formattedResult.Insert(positionInMask, mapTaxlotIdValue.Substring(24, 5)) 'TODO: JWM verify
+                            formattedResult.Insert(positionInMask, mapTaxlotIdValue.Substring(24, 5)) ' TODO: JWM verify
                             hasProcessedParcelId = True
                         End If
                     Case 38 '& Using these characters in mask will strip leading zeros from parcel id
@@ -248,7 +244,7 @@ Public NotInheritable Class StringUtilities
                         End If
                     Case 83 'S section
                         If String.CompareOrdinal(previousCharInMask, "S") = 0 Then 'second position
-                            formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(15, 1)) 'TODO: JWM verify
+                            formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(15, 1)) ' TODO: JWM verify
                         Else 'first position
                             formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(14, 1))
                         End If
