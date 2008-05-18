@@ -278,7 +278,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>TaxlotAcreageAnnoSettings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="App.Config" />
+    <None Include="app.config" />
     <None Include="settings\CartographicLinesSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>CartographicLinesSettings.Designer.vb</LastGenOutput>

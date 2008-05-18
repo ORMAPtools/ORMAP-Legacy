@@ -236,7 +236,7 @@ Public NotInheritable Class EditMapIndex
         Dim theEditWorkSpace As IWorkspaceEdit = TryCast(theMapIndexDataset.Workspace, IWorkspaceEdit)
 
         Try
-            If EditingState = True Then
+            If EditingState Then
                 Dim validData As Boolean = True
                 validData = validData And (Len(PartnerEditMapIndexForm.uxReliability.Text) <> 0)
                 validData = validData And (Len(PartnerEditMapIndexForm.uxScale.Text) <> 0)
@@ -244,21 +244,13 @@ Public NotInheritable Class EditMapIndex
                 validData = validData And (Len(PartnerEditMapIndexForm.uxPage.Text) <> 0)
                 validData = validData And _ormapNumber.IsValidNumber
 
-                If validData = False Then
+                If Not validData Then
                     MessageBox.Show("Invalid data. All fields must be filled in before assigning.", "Edit Map Index", MessageBoxButtons.OK)
                     Exit Try
                 End If
                 If theEditWorkSpace IsNot Nothing Then
                     ' Begin edit process
                     theEditWorkSpace.StartEditOperation()
-
-
-
-
-
-
-
-
 
                     With PartnerEditMapIndexForm
                         ' Update form caption
@@ -306,12 +298,7 @@ Public NotInheritable Class EditMapIndex
                     theEditWorkSpace.StopEditOperation()
 
                 End If
-            End If 'Editing state = true
-
-
-
-
-
+            End If 'EditingState = True
 
             ' Toggle form options after update
             EditingState = False
@@ -483,6 +470,7 @@ Public NotInheritable Class EditMapIndex
     Friend Sub DoButtonOperation()
 
         Try
+
             ' Check for valid data
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
@@ -490,10 +478,22 @@ Public NotInheritable Class EditMapIndex
                                 "Please load this dataset into your map.", _
                                 "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
+            Else
+                ' TODO: [ALL] Why does this return false when one or more features are selected?
+                'If Not HasSelectedFeatureCount(MapIndexFeatureLayer, 1) Then
+                ' HACK: [NIS] This will get past the problem for now...
+                If Not (EditorExtension.Editor.EditSelection.Next.Class Is MapIndexFeatureLayer.FeatureClass) Then
+
+                    MessageBox.Show("No features selected in the MapIndex layer." & NewLine & _
+                                    "Please select a feature.", _
+                                    "Edit Map Index", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    Exit Try
+                End If
             End If
 
             CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
+                ' Enable control to allow the user to edit the ORMapIndex.
                 PartnerEditMapIndexForm.uxEdit.Enabled = False
             Else
                 PartnerEditMapIndexForm.uxEdit.Enabled = True
@@ -574,39 +574,38 @@ Public NotInheritable Class EditMapIndex
     End Sub
 
     Private Function initForm() As Boolean
-        Try
-            'this call always returns a featurecursor even though nothing is selected
-            Dim thisFeatureCursor As IFeatureCursor = GetSelectedFeatures(DataMonitor.MapIndexFeatureLayer)
+        ' HACK: [NIS] GetSelectedFeatures does not seem to work for the MapIndex feature layer.
+        'Dim thisFeatureCursor As IFeatureCursor = GetSelectedFeatures(DataMonitor.MapIndexFeatureLayer)
+        '
+        'If thisFeatureCursor Is Nothing Then
+        '    Return False
+        'End If
+        '_mapIndexFeature = thisFeatureCursor.NextFeature
+        _mapIndexFeature = EditorExtension.Editor.EditSelection.Next
 
-            If thisFeatureCursor Is Nothing Then
-                Return False
-                Exit Try
-            End If
-            _mapIndexFeature = thisFeatureCursor.NextFeature
-            Dim thisRow As IRow
-            ' TODO: JWM the assignment below does not work without a selected feature 
-            thisRow = _mapIndexFeature.Table.GetRow(_mapIndexFeature.OID)
+        If _mapIndexFeature Is Nothing Then
+            Return False
+        End If
+        Dim thisRow As IRow
+        thisRow = _mapIndexFeature.Table.GetRow(_mapIndexFeature.OID)
 
-            _ormapNumber = New ORMapNum
-            _ormapNumber.ParseNumber(ReadValue(thisRow, EditorExtension.MapIndexSettings.OrmapMapNumberField))
+        _ormapNumber = New ORMapNum
+        _ormapNumber.ParseNumber(ReadValue(thisRow, EditorExtension.MapIndexSettings.OrmapMapNumberField))
 
-            If Not _ormapNumber.IsValidNumber Then
-                initForm = initEmpty(DataMonitor.MapIndexFeatureLayer.FeatureClass.Fields, DataMonitor.TaxlotFeatureLayer.FeatureClass.Fields)
-                toggleControls(True)
-                EditingState = True
-            Else
-                initForm = initWithFeature(_mapIndexFeature, DataMonitor.MapIndexFeatureLayer.FeatureClass.Fields, DataMonitor.TaxlotFeatureLayer.FeatureClass.Fields)
-            End If
+        If Not _ormapNumber.IsValidNumber Then
+            initForm = initEmpty(DataMonitor.MapIndexFeatureLayer.FeatureClass.Fields, DataMonitor.TaxlotFeatureLayer.FeatureClass.Fields)
+            toggleControls(True)
+            EditingState = True
+        Else
+            initForm = initWithFeature(_mapIndexFeature, DataMonitor.MapIndexFeatureLayer.FeatureClass.Fields, DataMonitor.TaxlotFeatureLayer.FeatureClass.Fields)
+        End If
 
-            With PartnerEditMapIndexForm
-                .uxORMAPNumberGroupBox.Text = "Map Index (" & _ormapNumber.GetORMapNum & ")"
-                .uxORMAPNumberLabel.Text = _ormapNumber.GetORMapNum
-                .Refresh()
-            End With
+        With PartnerEditMapIndexForm
+            .uxORMAPNumberGroupBox.Text = "Map Index (" & _ormapNumber.GetORMapNum & ")"
+            .uxORMAPNumberLabel.Text = _ormapNumber.GetORMapNum
+            .Refresh()
+        End With
 
-        Catch ex As Exception
-            Trace.WriteLine(ex.ToString)
-        End Try
     End Function
 
     ''' <summary>

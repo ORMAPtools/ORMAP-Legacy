@@ -196,8 +196,6 @@ Public NotInheritable Class LocateFeature
 
         Dim theWhereClause As String
 
-        Dim theWhereClause As String
-
         If taxlot Is Nothing Then '-- Must be MapIndex Feature Layer.
             theXFlayer = MapIndexFeatureLayer
             theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField
@@ -305,26 +303,33 @@ Public NotInheritable Class LocateFeature
     ''' <param name="hook">A generic <c>Object</c> hook to an instance of the application.</param>
     ''' <remarks>The application hook may not point to an <c>IMxApplication</c> object.</remarks>
     Public Overrides Sub OnCreate(ByVal hook As Object)
-        If Not hook Is Nothing Then
 
-            'Disable tool if parent application is not ArcMap
-            If TypeOf hook Is IMxApplication Then
-                _application = DirectCast(hook, IApplication)
-                setPartnerLocateFeatureForm(New LocateFeatureForm())
-                MyBase.m_enabled = True
-            Else
-                MyBase.m_enabled = False
+        Try
+            If Not hook Is Nothing Then
+
+                'Disable tool if parent application is not ArcMap
+                If TypeOf hook Is IMxApplication Then
+                    _application = DirectCast(hook, IApplication)
+                    setPartnerLocateFeatureForm(New LocateFeatureForm())
+                    MyBase.m_enabled = True
+                Else
+                    MyBase.m_enabled = False
+                End If
             End If
-        End If
 
-        ' NOTE: Add other initialization code here...
+            ' NOTE: Add other initialization code here...
 
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
     Public Overrides Sub OnClick()
-
-        DoButtonOperation()
-
+        Try
+            DoButtonOperation()
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
     End Sub
 
 #End Region

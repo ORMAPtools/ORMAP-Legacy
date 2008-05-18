@@ -859,14 +859,19 @@ Public NotInheritable Class EditorExtension
             End If
         Catch
             Dim sb As New System.Text.StringBuilder()
-            sb.Append("An unexpected error occured while calling HandleException with policy 'Global Policy'.")
-            sb.Append(" Please check the event log for details about the exception.")
+            sb.Append("An unexpected error occured while calling HandleException with policy 'Global Policy'." & NewLine)
+            'sb.Append(" Please check the event log for details about the exception.")
             sb.Append(NewLine)
             sb.Append(NewLine)
-
+            sb.Append("UNHANDLED EXCEPTION CALL STACK:")
+            sb.Append(NewLine)
+            sb.Append(ex.ToString)
+            sb.Append(NewLine)
+            sb.Append(NewLine)
+            sb.Append("Please contact technical support.")
+            sb.Append(NewLine)
+            sb.Append("[Press Ctrl+C on your keyboard to copy this message to the Windows clipboard.]")
             MessageBox.Show(sb.ToString, "ORMAP Taxlot Editing Error", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-
-            Exit Sub
         End Try
 
     End Sub
@@ -890,12 +895,12 @@ Public NotInheritable Class EditorExtension
 
     Public Sub Shutdown() Implements ESRI.ArcGIS.esriSystem.IExtension.Shutdown
         Try
-            setEditor(Nothing)
-            setEditEvents(Nothing)
-
             ' Unsubscribe to edit events.
             RemoveHandler EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
             RemoveHandler EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
+
+            setEditor(Nothing)
+            setEditEvents(Nothing)
 
         Catch ex As Exception
             ProcessUnhandledException(ex)

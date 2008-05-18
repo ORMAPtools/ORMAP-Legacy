@@ -404,7 +404,7 @@ Public NotInheritable Class TaxlotAssignment
             ' Check with user before updating Taxlot field
             If Len(theExistingTaxlot) > 0 And theExistingTaxlot <> "0" Then
                 If MessageBox.Show("Taxlot currently has a Taxlot value (" & theExistingTaxlot & ")." & NewLine & _
-                          "Update it?", "Taxlot Assignment", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.No Then
+                          "Update it?", "Taxlot Assignment", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.No Then
                     Exit Try
                 End If
             End If
@@ -470,14 +470,14 @@ Public NotInheritable Class TaxlotAssignment
                 withinEditOperation = False
             End If
 
-            MessageBox.Show(ex.ToString)
+            Throw
 
         Finally
             ' Insure that this tool keeps the focus
             Dim theUID As New UID
             Dim theCmdItem As ICommandItem
-            theUID.Value = Me.Name
-            theCmdItem = EditorExtension.Application.Document.CommandBars.Find(theUID, True, False)
+            theUID.Value = "{" & TaxlotAssignment.ClassId & "}" ' "OrmapTaxlotEditing.TaxlotAssignment"
+            theCmdItem = EditorExtension.Application.Document.CommandBars.Find(theUID, False, False)
             EditorExtension.Application.CurrentTool = theCmdItem
 
         End Try
@@ -517,8 +517,7 @@ Public NotInheritable Class TaxlotAssignment
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
-
+            EditorExtension.ProcessUnhandledException(ex)
         End Try
     End Sub
 
@@ -545,8 +544,7 @@ Public NotInheritable Class TaxlotAssignment
             ' NOTE: Add other initialization code here...
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
-
+            EditorExtension.ProcessUnhandledException(ex)
         End Try
     End Sub
 
@@ -574,7 +572,7 @@ Public NotInheritable Class TaxlotAssignment
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
         End Try
     End Sub
 

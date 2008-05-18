@@ -704,23 +704,25 @@ Public NotInheritable Class SpatialUtilities
     ''' <returns>An object that supports the <c>IFeatureCursor</c> interface.</returns>
     ''' <remarks>References the currently selected features in layer, and 
     ''' returns a feature cursor with the selected features in it.</remarks>
-    Public Shared Function GetSelectedFeatures(ByVal layer As IFeatureLayer) As IFeatureCursor
-        Try
-            Dim thisSelection As IFeatureSelection = DirectCast(layer, IFeatureSelection)
-            Dim returnValue As IFeatureCursor
-            Dim thisCursor As ICursor = Nothing
-            thisSelection.SelectionSet.Search(Nothing, False, thisCursor)
-            If thisSelection.SelectionSet.Count > 0 Then
-                returnValue = DirectCast(thisCursor, IFeatureCursor)
-                Return returnValue
-            Else
-                Return Nothing
-            End If
+    Public Shared Function GetSelectedFeatures(ByRef layer As IFeatureLayer) As IFeatureCursor
+        Dim returnValue As IFeatureCursor = Nothing
 
-        Catch ex As Exception
-            MessageBox.Show(ex.ToString)
-            Return Nothing
-        End Try
+        Dim theFeatureSelection As IFeatureSelection = DirectCast(layer, IFeatureSelection)
+        Dim theSelectionSet As ISelectionSet
+        theSelectionSet = theFeatureSelection.SelectionSet
+
+        If theSelectionSet.Count > 0 Then
+            Dim thisCursor As ICursor = Nothing
+            theSelectionSet.Search(Nothing, False, thisCursor)
+            If theSelectionSet.Count > 0 Then
+                returnValue = DirectCast(thisCursor, IFeatureCursor)
+            Else
+                returnValue = Nothing
+            End If
+        End If
+
+        Return returnValue
+
     End Function
 
     ''' <summary>
@@ -784,9 +786,10 @@ Public NotInheritable Class SpatialUtilities
 
             continueThisProcess = True 'initialize
 
-            Debug.Assert(searchGeometry Is Nothing, "GetValueViaOverlay", "searchGeometry Is Nothing")
-            Debug.Assert(overlayFeatureClass Is Nothing, "GetValueViaOverlay", "searchGeometry Is Nothing")
-            Debug.Assert(valueFieldName Is Nothing, "GetValueViaOverlay", "searchGeometry Is Nothing")
+            Debug.Assert(Not searchGeometry Is Nothing, "GetValueViaOverlay", "searchGeometry Is Nothing")
+            Debug.Assert(Not overlayFeatureClass Is Nothing, "GetValueViaOverlay", "overlayFeatureClass Is Nothing")
+            Debug.Assert(Not valueFieldName = "", "GetValueViaOverlay", "valueFieldName is empty")
+            Debug.Assert(Not orderBestByFieldName = "", "GetValueViaOverlay", "orderBestByFieldName is empty")
 
             If (searchGeometry Is Nothing) OrElse (overlayFeatureClass Is Nothing) OrElse (valueFieldName.Length <= 0) Then
                 continueThisProcess = False
@@ -1028,7 +1031,7 @@ Public NotInheritable Class SpatialUtilities
             ' How many are selected?
             Dim featuresSelected As IFeatureSelection
             featuresSelected = DirectCast(inLayer, IFeatureSelection)
-            returnValue = (featuresSelected.SelectionSet.Count > 0)
+            returnValue = (featuresSelected.SelectionSet.Count >= inMinimumCount)
             Return returnValue
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
@@ -1604,15 +1607,6 @@ Public NotInheritable Class SpatialUtilities
 
             ' Make sure this number is unique within taxlots with this OM number
             Dim whereClause As String = formatWhereClause(String.Concat("[", EditorExtension.TaxLotSettings.MapNumberField, "]", " = '", mapIndexORMAPValue, "' AND ", "[", EditorExtension.TaxLotSettings.TaxlotField, "]", " = '", taxlotNumber, "'"), thisTaxlotFeatureClass)
-            'Make sure this number is unique within taxlots with this OM number
-            'HACK [JWM] Figure out the sql syntax
-            Dim ds As IDataset = thisTaxlotFeatureClass.FeatureDataset
-            Dim ws As IWorkspace = ds.Workspace
-            Dim syntax As ISQLSyntax = DirectCast(ws, ISQLSyntax)
-            Dim delimiterPrefix As String = syntax.GetSpecialCharacter(esriSQLSpecialCharacters.esriSQL_DelimitedIdentifierPrefix)
-            Dim delimiterSuffix As String = syntax.GetSpecialCharacter(esriSQLSpecialCharacters.esriSQL_DelimitedIdentifierSuffix)
-
-            Dim whereClause As String = String.Concat(delimiterPrefix, EditorExtension.TaxLotSettings.MapNumberField, delimiterSuffix, "='", mapIndexORMAPValue, "' AND ", delimiterPrefix, EditorExtension.TaxLotSettings.TaxlotField, delimiterSuffix, " = '", taxlotNumber, "'")
             Dim n As Integer = 0
             Dim cursor As ICursor
             cursor = attributeQuery(DirectCast(thisTaxlotFeatureClass, ITable), whereClause)
@@ -1737,7 +1731,7 @@ Public NotInheritable Class SpatialUtilities
         Dim pDatasetName As IDatasetName = CType(pDataLayer.DataSourceName, IDatasetName)
         Dim theWorkspaceCategory As String = pDatasetName.WorkspaceName.Category.ToString
 
-        'TODO: SC - This select statement is not a "best practice"... needs to be fixed for error handling. 
+        'TODO: [SC] This select statement is not a "best practice"... needs to be fixed for error handling. 
         Dim formattedWhereClause As String = String.Empty
         Select Case theWorkspaceCategory
             Case "File Geodatabase"

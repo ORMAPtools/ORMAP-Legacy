@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="County" Type="System.String" Scope="User">
-      <Value Profile="(Default)">20</Value>
+      <Value Profile="(Default)">3</Value>
     </Setting>
     <Setting Name="TownshipDirection" Type="System.String" Scope="User">
       <Value Profile="(Default)">N</Value>

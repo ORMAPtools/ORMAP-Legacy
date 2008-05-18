@@ -98,7 +98,7 @@ Public NotInheritable Class DataMonitor
             Return _taxlotFeatureLayer
         End Get
     End Property
-    Private Shared Sub setTaxlotFeatureLayer(ByVal value As IFeatureLayer)
+    Private Shared Sub setTaxlotFeatureLayer(ByRef value As IFeatureLayer)
         _taxlotFeatureLayer = value
     End Sub
 
@@ -108,7 +108,7 @@ Public NotInheritable Class DataMonitor
             Return _mapIndexFeatureLayer
         End Get
     End Property
-    Private Shared Sub setMapIndexFeatureLayer(ByVal value As IFeatureLayer)
+    Private Shared Sub setMapIndexFeatureLayer(ByRef value As IFeatureLayer)
         _mapIndexFeatureLayer = value
     End Sub
 
@@ -118,7 +118,7 @@ Public NotInheritable Class DataMonitor
             Return _cancelledNumbersTable
         End Get
     End Property
-    Private Shared Sub setCancelledNumbersTable(ByVal value As IStandaloneTable)
+    Private Shared Sub setCancelledNumbersTable(ByRef value As IStandaloneTable)
         _cancelledNumbersTable = value
     End Sub
 
@@ -128,7 +128,7 @@ Public NotInheritable Class DataMonitor
             Return _taxlotLinesFeatureLayer
         End Get
     End Property
-    Private Shared Sub setTaxlotLinesFeatureLayer(ByVal value As IFeatureLayer)
+    Private Shared Sub setTaxlotLinesFeatureLayer(ByRef value As IFeatureLayer)
         _taxlotLinesFeatureLayer = value
     End Sub
 
@@ -138,7 +138,7 @@ Public NotInheritable Class DataMonitor
             Return _referenceLinesFeatureLayer
         End Get
     End Property
-    Private Shared Sub setReferenceLinesFeatureLayer(ByVal value As IFeatureLayer)
+    Private Shared Sub setReferenceLinesFeatureLayer(ByRef value As IFeatureLayer)
         _referenceLinesFeatureLayer = value
     End Sub
 
