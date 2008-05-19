@@ -42,6 +42,7 @@ Imports System.Environment
 Imports System.Text
 Imports System.Windows.Forms
 Imports System.Runtime.InteropServices
+Imports Microsoft.Practices
 Imports Microsoft.Practices.EnterpriseLibrary.ExceptionHandling
 Imports ESRI.ArcGIS.Carto
 Imports ESRI.ArcGIS.esriSystem
@@ -642,8 +643,6 @@ Public NotInheritable Class EditorExtension
 
     Private Sub EditEvents_OnStartEditing()
 
-        Trace.WriteLine("Started Editing")
-
         Try
             ' Check for a valid ArcGIS license.
             setHasValidLicense((validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
@@ -698,18 +697,20 @@ Public NotInheritable Class EditorExtension
 
     Private Sub EditEvents_OnStopEditing(ByVal save As Boolean)
 
-        Trace.WriteLine("Stopped Editing")
-
         Try
-            ' Unsubscribe to edit events.
-            RemoveHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
-            RemoveHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
-            RemoveHandler EditEvents.OnDeleteFeature, AddressOf EditEvents_OnDeleteFeature
+            If HasValidLicense AndAlso IsValidWorkspace Then
 
-            ' Unsubscribe to active view events.
-            RemoveHandler EditorExtension.ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
-            RemoveHandler EditorExtension.ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
-            RemoveHandler EditorExtension.ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
+                ' Unsubscribe to edit events.
+                RemoveHandler EditEvents.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
+                RemoveHandler EditEvents.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
+                RemoveHandler EditEvents.OnDeleteFeature, AddressOf EditEvents_OnDeleteFeature
+
+                ' Unsubscribe to active view events.
+                RemoveHandler ActiveViewEvents.FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
+                RemoveHandler ActiveViewEvents.ItemAdded, AddressOf ActiveViewEvents_ItemAdded
+                RemoveHandler ActiveViewEvents.ItemDeleted, AddressOf ActiveViewEvents_ItemDeleted
+
+            End If
 
         Catch ex As Exception
             'Debug.WriteLine(ex.ToString)
