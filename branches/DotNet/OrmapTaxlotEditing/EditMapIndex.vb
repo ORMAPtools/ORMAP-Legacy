@@ -479,16 +479,37 @@ Public NotInheritable Class EditMapIndex
                                 "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Try
             Else
-                ' TODO: [ALL] Why does this return false when one or more features are selected?
+                ' TODO: [ALL] Why does this return false when one or more MapIndex features are selected?
                 'If Not HasSelectedFeatureCount(MapIndexFeatureLayer, 1) Then
                 ' HACK: [NIS] This will get past the problem for now...
-                If Not (EditorExtension.Editor.EditSelection.Next.Class Is MapIndexFeatureLayer.FeatureClass) Then
-
-                    MessageBox.Show("No features selected in the MapIndex layer." & NewLine & _
-                                    "Please select a feature.", _
-                                    "Edit Map Index", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                    Exit Try
-                End If
+                Dim theEnumFeature As IEnumFeature
+                Dim theFeature As IFeature
+                Dim n As Integer = 0 'The MapIndex feature count
+                theEnumFeature = EditorExtension.Editor.EditSelection
+                theFeature = theEnumFeature.Next
+                Do While (Not theFeature Is Nothing)
+                    If theFeature.Class Is DataMonitor.MapIndexFeatureLayer.FeatureClass Then
+                        n += 1
+                        If n = 1 Then
+                            _mapIndexFeature = theFeature
+                        End If
+                    End If
+                    theFeature = theEnumFeature.Next
+                Loop
+                Select Case n 'The MapIndex feature count
+                    Case 1
+                        ' Do nothing, this is what we want.
+                    Case 0
+                        MessageBox.Show("No features selected in the MapIndex layer." & NewLine & _
+                                        "Please select one MapIndex feature.", _
+                                        "Edit Map Index", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                        Exit Try
+                    Case Else
+                        MessageBox.Show(CStr(n) & " features selected in the MapIndex layer." & NewLine & _
+                                        "Please select just one MapIndex feature.", _
+                                        "Edit Map Index", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                        Exit Try
+                End Select
             End If
 
             CheckValidTaxlotDataProperties()
@@ -573,6 +594,18 @@ Public NotInheritable Class EditMapIndex
         End Try
     End Sub
 
+    Private Sub LoopThruSelection()
+        Dim pEnumFeat As IEnumFeature
+        Dim pFeat As IFeature
+
+        pEnumFeat = EditorExtension.Editor.EditSelection
+        pFeat = pEnumFeat.Next
+        Do While (Not pFeat Is Nothing)
+            Debug.Print(CStr(pFeat.Value(1)))
+            pFeat = pEnumFeat.Next
+        Loop
+    End Sub
+
     Private Function initForm() As Boolean
         ' HACK: [NIS] GetSelectedFeatures does not seem to work for the MapIndex feature layer.
         'Dim thisFeatureCursor As IFeatureCursor = GetSelectedFeatures(DataMonitor.MapIndexFeatureLayer)
@@ -581,23 +614,21 @@ Public NotInheritable Class EditMapIndex
         '    Return False
         'End If
         '_mapIndexFeature = thisFeatureCursor.NextFeature
-        _mapIndexFeature = EditorExtension.Editor.EditSelection.Next
 
-        If _mapIndexFeature Is Nothing Then
+        Dim theRow As IRow = _mapIndexFeature.Table.GetRow(_mapIndexFeature.OID)
+        If theRow Is Nothing Then
             Return False
         End If
-        Dim thisRow As IRow
-        thisRow = _mapIndexFeature.Table.GetRow(_mapIndexFeature.OID)
 
         _ormapNumber = New ORMapNum
-        _ormapNumber.ParseNumber(ReadValue(thisRow, EditorExtension.MapIndexSettings.OrmapMapNumberField))
+        _ormapNumber.ParseNumber(ReadValue(theRow, EditorExtension.MapIndexSettings.OrmapMapNumberField))
 
-        If Not _ormapNumber.IsValidNumber Then
+        If _ormapNumber.IsValidNumber Then
+            initForm = initWithFeature(_mapIndexFeature, DataMonitor.MapIndexFeatureLayer.FeatureClass.Fields, DataMonitor.TaxlotFeatureLayer.FeatureClass.Fields)
+        Else
             initForm = initEmpty(DataMonitor.MapIndexFeatureLayer.FeatureClass.Fields, DataMonitor.TaxlotFeatureLayer.FeatureClass.Fields)
             toggleControls(True)
             EditingState = True
-        Else
-            initForm = initWithFeature(_mapIndexFeature, DataMonitor.MapIndexFeatureLayer.FeatureClass.Fields, DataMonitor.TaxlotFeatureLayer.FeatureClass.Fields)
         End If
 
         With PartnerEditMapIndexForm
