@@ -223,6 +223,7 @@ Public NotInheritable Class EditMapIndex
     Private Sub PartnerMapIndexForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles _partnerEditMapIndexForm.Load
         initializeFieldPositions()
         toggleControls(False)
+        EditingState = False
     End Sub
 
     Sub ORMAPNumber_OnChange(ByVal sender As Object, ByVal e As EventArgs) Handles _ormapNumber.OnChange
@@ -293,7 +294,8 @@ Public NotInheritable Class EditMapIndex
                         _mapIndexFeature.Store()
 
                     End With 'PartnerMapindexForm
-
+                    ' Update all taxlot polygons that underlie this polygon
+                    updateTaxlots(_mapIndexFeature)
                     ' Finalize this edit
                     theEditWorkSpace.StopEditOperation()
 
@@ -301,7 +303,7 @@ Public NotInheritable Class EditMapIndex
             End If 'EditingState = True
 
             ' Toggle form options after update
-            EditingState = False
+            EditingState = Not EditingState
             toggleControls(EditingState)
 
             ' Update form caption
@@ -580,7 +582,7 @@ Public NotInheritable Class EditMapIndex
             Next
 
             With PartnerEditMapIndexForm
-                If EditingState = True Then
+                If state = True Then
                     .uxEdit.Text = "&Save"
                     .uxQuit.Text = "&Cancel"
                 Else
@@ -630,13 +632,23 @@ Public NotInheritable Class EditMapIndex
             toggleControls(True)
             EditingState = True
         End If
+            If Not _ormapNumber.IsValidNumber Then
+                initForm = initEmpty(DataMonitor.MapIndexFeatureLayer.FeatureClass.Fields, DataMonitor.TaxlotFeatureLayer.FeatureClass.Fields)
+                toggleControls(True)
+                EditingState = True
+            Else
+                initForm = initWithFeature(_mapIndexFeature, DataMonitor.MapIndexFeatureLayer.FeatureClass.Fields, DataMonitor.TaxlotFeatureLayer.FeatureClass.Fields)
+            End If
 
-        With PartnerEditMapIndexForm
-            .uxORMAPNumberGroupBox.Text = "Map Index (" & _ormapNumber.GetORMapNum & ")"
-            .uxORMAPNumberLabel.Text = _ormapNumber.GetORMapNum
-            .Refresh()
-        End With
-
+            With PartnerEditMapIndexForm
+                .uxORMAPNumberGroupBox.Text = "Map Index (" & _ormapNumber.GetORMapNum & ")"
+                .uxORMAPNumberLabel.Text = _ormapNumber.GetORMapNum
+                .Refresh()
+            End With
+        Catch ex As Exception
+            Trace.WriteLine(ex.ToString)
+            Return False
+        End Try
     End Function
 
     ''' <summary>
@@ -648,8 +660,8 @@ Public NotInheritable Class EditMapIndex
     ''' <remarks>Clear the form and set default value for fields in accordance with a selection that has no values set</remarks>
     Private Function initEmpty(ByVal mapIndexFields As IFields, ByVal taxlotFields As IFields) As Boolean
         Try
-            resetControls(PartnerEditMapIndexForm.Controls, True)
-
+            'resetControls(PartnerEditMapIndexForm.Controls, True)
+            resetControls(PartnerEditMapIndexForm)
             _ormapNumber = New ORMapNum
             With _ormapNumber
                 .County = Integer.Parse(EditorExtension.DefaultValuesSettings.County).ToString
@@ -676,7 +688,7 @@ Public NotInheritable Class EditMapIndex
                 'county
                 AddCodesToCombo(EditorExtension.TaxLotSettings.CountyField, taxlotFields, .uxCounty, ConvertCodeValueDomainToDescription(taxlotFields, EditorExtension.TaxLotSettings.CountyField, Integer.Parse(_ormapNumber.County).ToString), True)
                 'township
-                AddCodesToCombo(EditorExtension.TaxLotSettings.TownshipDirectionField, taxlotFields, .uxTownship, _ormapNumber.Township, True)
+                AddCodesToCombo(EditorExtension.TaxLotSettings.TownshipField, taxlotFields, .uxTownship, _ormapNumber.Township, True)
                 'partial township code
                 AddCodesToCombo(EditorExtension.TaxLotSettings.TownshipPartField, taxlotFields, .uxTownshipPartial, ConvertCodeValueDomainToDescription(taxlotFields, EditorExtension.TaxLotSettings.TownshipPartField, _ormapNumber.PartialTownshipCode), True)
                 'township directional
@@ -711,9 +723,9 @@ Public NotInheritable Class EditMapIndex
     Private Function initWithFeature(ByVal feature As IFeature, ByVal mapIndexFields As IFields, ByVal taxlotFields As IFields) As Boolean
         Try
             Dim thisRow As IRow = feature.Table.GetRow(feature.OID)
-
+            resetControls(PartnerEditMapIndexForm)
             With PartnerEditMapIndexForm
-                resetControls(.Controls, True)
+                'resetControls(.Controls, True)
 
                 .Text = "Map Index (Map Feature: " & _ormapNumber.GetORMapNum
                 .uxMapNumber.Text = ReadValue(thisRow, EditorExtension.MapIndexSettings.MapNumberField)
@@ -757,26 +769,40 @@ Public NotInheritable Class EditMapIndex
 
     End Function
 
-    Private Overloads Sub resetControls(ByVal inControls As ControlCollection)
-        resetControls(inControls, True)
-    End Sub
+    'Private Overloads Sub resetControls(ByVal inControls As ControlCollection)
+    '    'resetControls(inControls, True)
+    'End Sub
 
-    Private Overloads Sub resetControls(ByVal inControls As ControlCollection, ByVal inRecursive As Boolean)
+    'Private Overloads Sub resetControls(ByVal inControls As ControlCollection, ByVal inRecursive As Boolean)
 
+    '    Dim ctl As Control
+    '    For Each ctl In inControls
+    '        If TypeOf ctl Is IContainerControl Then
+    '            resetControls(ctl.Controls, inRecursive)
+    '        ElseIf TypeOf ctl Is TextBox Then
+    '            ctl.Text = ""
+    '        ElseIf TypeOf ctl Is ComboBox Then
+    '            Dim cmb As ComboBox = DirectCast(ctl, ComboBox)
+    '            cmb.Items.Clear()
+    '        End If
+    '    Next ctl
+
+    'End Sub
+    Private Sub resetControls(ByVal container As Control)
         Dim ctl As Control
-        For Each ctl In inControls
-            If TypeOf ctl Is IContainerControl Then
-                resetControls(ctl.Controls, inRecursive)
-            ElseIf TypeOf ctl Is TextBox Then
-                ctl.Text = ""
-            ElseIf TypeOf ctl Is ComboBox Then
-                Dim cmb As ComboBox = DirectCast(ctl, ComboBox)
-                cmb.Items.Clear()
+        For Each ctl In container.Controls
+            Dim textbox As TextBox = TryCast(ctl, TextBox)
+            Dim combobx As ComboBox = TryCast(ctl, ComboBox)
+            If textbox IsNot Nothing Then
+                textbox.Text = String.Empty
+            ElseIf combobx IsNot Nothing Then
+                combobx.Items.Clear()
+            End If
+            If ctl.Controls.Count > 0 Then
+                resetControls(ctl)
             End If
         Next ctl
-
     End Sub
-
     Private Function updateTaxlots(ByVal theMapIndexFeature As IFeature) As Boolean
         Try
             _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Updating underlyling taxlot features..."
@@ -830,7 +856,7 @@ Public NotInheritable Class EditMapIndex
                     .Value(_taxlotFields.SuffixType) = _ormapNumber.SuffixType
                     .Value(_taxlotFields.SuffixNumber) = _ormapNumber.SuffixNumber
                     .Value(_taxlotFields.Anomaly) = _ormapNumber.Anomaly
-                    .Value(_taxlotFields.MapNumber) = theMapIndexFeature.Value(_mapIndexFields.MapNumber)
+                    .Value(_taxlotFields.MapNumber) = theMapIndexFeature.Value(_mapIndexFields.MapNumber) 'DEBUG: This thows an error
                     .Value(_taxlotFields.OrmapMapNumber) = _ormapNumber.GetOrmapMapNumber
                     .Value(_taxlotFields.Taxlot) = CInt(taxlot)
                     'special interest used to go here
