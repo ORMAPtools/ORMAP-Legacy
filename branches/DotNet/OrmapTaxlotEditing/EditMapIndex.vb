@@ -291,8 +291,6 @@ Public NotInheritable Class EditMapIndex
                         ' Update form caption
                         .Text = "Map Index (Map Feature: " & _ormapNumber.GetORMapNum & ")"
 
-                        ' Update all taxlot polygons that underlie this one
-
                         ' Set MapNumber
                         _mapIndexFeature.Value(_mapIndexFields.MapNumber) = .uxMapNumber.Text
 
@@ -335,13 +333,11 @@ Public NotInheritable Class EditMapIndex
 
                 End If
             End If 'EditingState = True
-
+            ' Update form caption
+            PartnerEditMapIndexForm.Text = "Map Index (" & _ormapNumber.GetORMapNum & ")"
             ' Toggle form options after update
             EditingState = Not EditingState
             toggleControls(EditingState)
-
-            ' Update form caption
-            PartnerEditMapIndexForm.Text = "Map Index (" & _ormapNumber.GetORMapNum & ")"
 
         Catch ex As Exception
             If theEditWorkSpace.IsBeingEdited Then
@@ -887,9 +883,7 @@ Public NotInheritable Class EditMapIndex
                     .Value(_taxlotFields.SuffixType) = _ormapNumber.SuffixType
                     .Value(_taxlotFields.SuffixNumber) = _ormapNumber.SuffixNumber
                     .Value(_taxlotFields.Anomaly) = _ormapNumber.Anomaly
-                    .Value(_taxlotFields.MapNumber) = theMapIndexFeature.Value(_mapIndexFields.MapNumber) 'DEBUG: This throws an error
-                    'System.Runtime.InteropServices.COMException (0x80040658): Field is not editable.
-                    'at ESRI.ArcGIS.Geodatabase.IFeature.set_Value(Int32 Index, Object Value)
+                    .Value(_taxlotFields.MapNumber) = theMapIndexFeature.Value(_mapIndexFields.MapNumber)
                     .Value(_taxlotFields.OrmapMapNumber) = _ormapNumber.GetOrmapMapNumber
                     .Value(_taxlotFields.Taxlot) = CInt(taxlot)
                     'special interest used to go here

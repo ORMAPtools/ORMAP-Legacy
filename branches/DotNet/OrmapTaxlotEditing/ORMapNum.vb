@@ -101,7 +101,7 @@ Public NotInheritable Class ORMapNum
             Dim length As Integer = value.Length
             Select Case length
                 Case Is < 2
-                    Dim sb As New StringBuilder("0", 2 - length) ' TODO: JWM verify
+                    Dim sb As New StringBuilder("0", 2 - length)
                     sb.Append(value)
                     _county = sb.ToString
                 Case 2

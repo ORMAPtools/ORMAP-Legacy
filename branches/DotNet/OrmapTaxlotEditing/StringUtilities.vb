@@ -87,6 +87,13 @@ Public NotInheritable Class StringUtilities
         End Try
     End Function
 
+    ''' <summary>
+    '''  Use the ORMapTaxlot value to create a MapTaxlot value based on a formatting mask.
+    ''' </summary>
+    ''' <param name="mapTaxlotIdValue">The ORTaxlot value</param>
+    ''' <param name="format">The formatting mask as defined for each county</param>
+    ''' <returns>A formatted string that can be used as parcel ID or/and as a MapTaxlot value</returns>
+    ''' <remarks></remarks>
     Public Shared Function GenerateMapTaxlotValue(ByVal mapTaxlotIdValue As String, ByVal format As String) As String
 
         If mapTaxlotIdValue Is Nothing OrElse mapTaxlotIdValue.Length = 0 Then
@@ -148,11 +155,11 @@ Public NotInheritable Class StringUtilities
             For charIndex As Integer = 0 To maskValues.Length - 1
                 positionInMask = format.IndexOf(maskValues.Chars(charIndex).ToString, charIndex, StringComparison.CurrentCultureIgnoreCase)
                 characterCode = Convert.ToInt32(maskValues.Chars(charIndex))
-                ' Returns how many of these characters appear in the mask
+
                 Dim c As Char
                 For Each c In format
                     If c.Equals(maskValues.Chars(charIndex)) Then
-                        tokenCount += 1
+                        tokenCount += 1 ' Returns how many of these characters appear in the mask
                     End If
                 Next c
 
@@ -189,20 +196,11 @@ Public NotInheritable Class StringUtilities
                         If String.CompareOrdinal(previousCharInMask, "Q") = 0 Then 'qtr qtr
                             If hasAlphaQtrQtr Then
                                 formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(17, 1))
-                            Else
+                            Else 'it is not alphabetical could be a number or a space
                                 Dim currentORMAPNumValue As String
                                 currentORMAPNumValue = mapTaxlotIdValue.Substring(17, 1).ToUpper(CultureInfo.CurrentCulture)
-                                If currentORMAPNumValue Like "[A-D]" Then
-                                    Select Case currentORMAPNumValue
-                                        Case "A"
-                                            formattedResult.Chars(positionInMask) = "A"c
-                                        Case "B"
-                                            formattedResult.Chars(positionInMask) = "B"c
-                                        Case "C"
-                                            formattedResult.Chars(positionInMask) = "C"c
-                                        Case "D"
-                                            formattedResult.Chars(positionInMask) = "D"c
-                                    End Select
+                                If currentORMAPNumValue Like "[A-J]" Then
+                                    formattedResult.Chars(positionInMask) = CChar(currentORMAPNumValue)
                                 Else
                                     If countyCode <> 3 Or countyCode <> 22 Then 'Clackamas County, Linn county wants the space/blank value left in the string NO ZEROES PLEASE
                                         formattedResult.Chars(positionInMask) = "0"c
@@ -212,20 +210,11 @@ Public NotInheritable Class StringUtilities
                         Else 'qtr
                             If hasAlphaQtr Then
                                 formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(16, 1))
-                            Else
+                            Else 'it is not alphabetical could be a number or a space
                                 Dim currentORMAPNum As String
                                 currentORMAPNum = mapTaxlotIdValue.Substring(16, 1)
-                                If currentORMAPNum Like "[A-D]" Then
-                                    Select Case currentORMAPNum
-                                        Case "A"
-                                            formattedResult.Chars(positionInMask) = "A"c
-                                        Case "B"
-                                            formattedResult.Chars(positionInMask) = "B"c
-                                        Case "C"
-                                            formattedResult.Chars(positionInMask) = "C"c
-                                        Case "D"
-                                            formattedResult.Chars(positionInMask) = "D"c
-                                    End Select
+                                If currentORMAPNum Like "[A-J]" Then
+                                    formattedResult.Chars(positionInMask) = CChar(currentORMAPNum)
                                 Else
                                     If countyCode <> 3 Or countyCode <> 22 Then 'Clackamas County, Linn county wants the space/blank value left in the string NO ZEROES PLEASE
                                         formattedResult.Chars(positionInMask) = "0"c
