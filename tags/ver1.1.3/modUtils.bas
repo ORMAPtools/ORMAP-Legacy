@@ -3457,7 +3457,7 @@ On Error GoTo gfn_s_CreateMapTaxlotValue_Error
                         If sCurrORMapNumValue Like "[A-D]" Then
                             Mid$(sFormattedString, iPosCharMaskForward, 1) = Switch(sCurrORMapNumValue = "A", 1, sCurrORMapNumValue = "B", 2, sCurrORMapNumValue = "C", 3, sCurrORMapNumValue = "D", 4)
                         Else
-                            If iCountyCode <> 3 Or iCountyCode <> 22 Then '++ START JWM 11/01/2007 4/24/08 Clackamas County, Linn County wants the space/blank value left in the string NO ZEROES PLEASE++++++++++
+                            If iCountyCode <> 3 And iCountyCode <> 22 Then '++ START JWM 11/01/2007 4/24/08 Clackamas County, Linn County wants the space/blank value left in the string NO ZEROES PLEASE++++++++++
                                 Mid$(sFormattedString, iPosCharMaskForward, 1) = Chr$(48) 'ZERO
                             End If
                         End If
@@ -3470,7 +3470,7 @@ On Error GoTo gfn_s_CreateMapTaxlotValue_Error
                         If sCurrORMapNumValue Like "[A-D]" Then
                             Mid$(sFormattedString, iPosCharMaskForward, 1) = Switch(sCurrORMapNumValue = "A", 1, sCurrORMapNumValue = "B", 2, sCurrORMapNumValue = "C", 3, sCurrORMapNumValue = "D", 4)
                         Else
-                            If iCountyCode <> 3 Or iCountyCode <> 22 Then '++ END JWM 11/01/2007 4/24/08 ++++++++++
+                            If iCountyCode <> 3 And iCountyCode <> 22 Then '++ END JWM 11/01/2007 4/24/08 ++++++++++
                                 Mid$(sFormattedString, iPosCharMaskForward, 1) = Chr$(48) 'ZERO
                             End If
                         End If
