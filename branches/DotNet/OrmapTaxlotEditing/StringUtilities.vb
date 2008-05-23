@@ -202,7 +202,7 @@ Public NotInheritable Class StringUtilities
                                 If currentORMAPNumValue Like "[A-J]" Then
                                     formattedResult.Chars(positionInMask) = CChar(currentORMAPNumValue)
                                 Else
-                                    If countyCode <> 3 Or countyCode <> 22 Then 'Clackamas County, Linn county wants the space/blank value left in the string NO ZEROES PLEASE
+                                    If countyCode <> 3 And countyCode <> 22 Then 'Clackamas County, Linn county wants the space/blank value left in the string NO ZEROES PLEASE
                                         formattedResult.Chars(positionInMask) = "0"c
                                     End If
                                 End If
@@ -216,7 +216,7 @@ Public NotInheritable Class StringUtilities
                                 If currentORMAPNum Like "[A-J]" Then
                                     formattedResult.Chars(positionInMask) = CChar(currentORMAPNum)
                                 Else
-                                    If countyCode <> 3 Or countyCode <> 22 Then 'Clackamas County, Linn county wants the space/blank value left in the string NO ZEROES PLEASE
+                                    If countyCode <> 3 And countyCode <> 22 Then 'Clackamas County, Linn county wants the space/blank value left in the string NO ZEROES PLEASE
                                         formattedResult.Chars(positionInMask) = "0"c
                                     End If
                                 End If
