@@ -870,7 +870,7 @@ Private Sub cmdHelp_Click()
     Dim sFilePath As String
     '++ END JWalton 2/6/2007    Dim sFilePath As String
     
-    sFilePath = app.Path & "\" & "MapIndex_help.rtf"
+    sFilePath = App.Path & "\" & "MapIndex_help.rtf"
     If FileExists(sFilePath) Then
 '++ START JWM 10/16/2006 using new method to open help file
         basUtilities.gsb_StartDoc Me.hwnd, sFilePath
@@ -1690,6 +1690,9 @@ On Error GoTo Err_Handler
         .Taxlot = pTaxlotClassFields.FindField(g_pFldnames.TLTaxlotFN)
         .Anomaly = pTaxlotClassFields.FindField(g_pFldnames.TLAnomalyFN)
         .County = pTaxlotClassFields.FindField(g_pFldnames.TLCountyFN)
+'++ START JWM 05/22/2008++ added by jwm since it was needed by updatetaxlots ++++++++
+        .MapNumber = pTaxlotClassFields.FindField(g_pFldnames.TLMapNumberFN)
+'++ END JWM 05/22/2008++++++++++
         .OrmapMapNumber = pTaxlotClassFields.FindField(g_pFldnames.TLOrmapMapNumberFN)
         .OrmapTaxlotNumber = pTaxlotClassFields.FindField(g_pFldnames.TLOrmapTaxlotFN)
         .MapTaxlotNumber = pTaxlotClassFields.FindField(g_pFldnames.TLMapTaxlotFN)
