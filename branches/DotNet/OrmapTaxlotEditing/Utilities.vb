@@ -67,7 +67,7 @@ Public NotInheritable Class Utilities
 #Region "Custom Class Members"
 
 #Region "Public Members"
-    Public Const FieldNotFoundIndex As Integer = -1
+    Public Const NotFoundIndex As Integer = -1
 
     Friend Enum EsriMouseButtons
         Left = 1

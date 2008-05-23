@@ -365,6 +365,8 @@ Public NotInheritable Class TaxlotAssignment
             ' The Update Operation Starts Here...
             '=====================================
 
+            _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Updating taxlot feature..."
+
             '------------------------------------------
             ' Get the taxlot feature to update.
             ' If found, start the feature update operation.
@@ -463,11 +465,14 @@ Public NotInheritable Class TaxlotAssignment
                                          esriViewDrawPhase.esriViewGraphics Or _
                                          esriViewDrawPhase.esriViewGraphicSelection, Nothing, Nothing)
 
+            _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Taxlot feature updated"
+
         Catch ex As Exception
             If withinEditOperation Then
                 ' Abort any ongoing edit operations
                 EditorExtension.Editor.AbortOperation()
                 withinEditOperation = False
+                _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Taxlot feature update aborted"
             End If
 
             Throw

@@ -288,6 +288,7 @@ Public NotInheritable Class EditorExtension
         Get
             Dim canEnable As Boolean = True
             canEnable = canEnable AndAlso EditorExtension.Editor IsNot Nothing
+            canEnable = canEnable AndAlso EditorExtension.Editor.EditState = esriEditState.esriStateEditing
             canEnable = canEnable AndAlso EditorExtension.AllowedToEditTaxlots
             canEnable = canEnable AndAlso EditorExtension.HasValidLicense
             canEnable = canEnable AndAlso EditorExtension.IsValidWorkspace
@@ -534,7 +535,7 @@ Public NotInheritable Class EditorExtension
                 'Get the parent feature
                 Dim theParentID As Integer
                 theParentID = theAnnotationFeature.LinkedFeatureID
-                If theParentID > FieldNotFoundIndex Then 'Feature linked
+                If theParentID > NotFoundIndex Then 'Feature linked
                     theFeature = GetRelatedObjects(obj)
                     If theFeature Is Nothing Then Exit Try
                 Else
@@ -812,7 +813,7 @@ Public NotInheritable Class EditorExtension
         ' Get the Map Index map number field index.
         Dim theMapNumFieldIndex As Integer
         theMapNumFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
-        If theMapNumFieldIndex > FieldNotFoundIndex And Not IsMapIndex(obj) Then
+        If theMapNumFieldIndex > NotFoundIndex And Not IsMapIndex(obj) Then
             ' Get the Map Index map number for the location of the new feature.
             theMapNumber = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
             ' Set the feature map number.
@@ -828,7 +829,7 @@ Public NotInheritable Class EditorExtension
         ' Get the Map Index map scale field index.
         Dim theMapScaleFieldIndex As Integer
         theMapScaleFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
-        If theMapScaleFieldIndex > FieldNotFoundIndex And Not IsMapIndex(obj) Then
+        If theMapScaleFieldIndex > NotFoundIndex And Not IsMapIndex(obj) Then
             ' Get the Map Index map scale for the location of the new feature.
             theMapScale = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
             ' Set the feature map scale.

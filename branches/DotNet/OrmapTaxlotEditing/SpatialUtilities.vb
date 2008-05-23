@@ -88,58 +88,87 @@ Public NotInheritable Class SpatialUtilities
     ''' <summary>
     ''' Add the descriptive values from each domain to the drop down comboboxes.
     ''' </summary>
-    ''' <param name="fieldName">Name of the field to draw the domain from.</param>
-    ''' <param name="fields">The fields collection that contains <paramref name="fieldName">fieldName</paramref>.</param>
-    ''' <param name="comboBox">The combobox to populate.</param>
-    ''' <param name="currentValue">The current value of the field.</param>
+    ''' <param name="inFieldName">Name of the field to draw the domain from.</param>
+    ''' <param name="inFeatureClass">The feature class whose fields collection contains 
+    ''' <paramref name="inFieldName">fieldName</paramref>.</param>
+    ''' <param name="inComboBox">The combobox to populate.</param>
+    ''' <param name="inCurrentValue">The current value of the field.</param>
     ''' <param name="allowSpace">Allow a space/null entry in the list.</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Shared Function AddCodesToCombo(ByVal fieldName As String, ByVal fields As IFields, ByVal comboBox As ComboBox, ByVal currentValue As Object, ByVal allowSpace As Boolean) As Boolean
+    Public Shared Function AddCodesToCombo(ByVal inFieldName As String, ByVal inFeatureClass As IFeatureClass, ByVal inComboBox As ComboBox, ByVal inCurrentValue As Object, ByVal allowSpace As Boolean) As Boolean
         Dim returnValue As Boolean = False
         Try
-            Dim theFieldIndex As Integer = fields.FindField(fieldName)
-            If theFieldIndex > -1 Then
-                Dim thisField As IField
-                thisField = fields.Field(theFieldIndex)
-                Dim thisDomain As IDomain
-                thisDomain = thisField.Domain
-                If thisDomain IsNot Nothing Then
-                    If thisDomain.Type = esriDomainType.esriDTCodedValue Then
-                        Dim thisCodedValueDomain As ICodedValueDomain
-                        thisCodedValueDomain = DirectCast(thisDomain, ICodedValueDomain)
-                        Dim codeCount As Integer = thisCodedValueDomain.CodeCount
-                        If Not allowSpace Then
-                            With comboBox
-                                If .Items.Count > 0 Then
-                                    'find the blank
-                                    Dim textPosition As Integer = .FindStringExact(String.Empty, -1) 'HACK: JWM this is my best guess on how to find null string
-                                    If textPosition > -1 Then
-                                        .Items.RemoveAt(textPosition)
-                                    End If
-                                End If
-                            End With
-                        End If
-                        For i As Integer = 0 To codeCount - 1
-                            comboBox.Items.Add(thisCodedValueDomain.Name(i))
-                        Next i
-                        'If current value is null, add an empty string and make it active
-                        If TypeOf currentValue Is String Then
-                            If currentValue.Equals(String.Empty) Then
-                                If allowSpace Then
-                                    comboBox.Items.Add(String.Empty)
-                                    comboBox.SelectedIndex = comboBox.FindStringExact(String.Empty, 0)
-                                Else
-                                    comboBox.SelectedIndex = 0
-                                End If
-                            Else 'Otherwise, select the existing value from the list
-                                comboBox.SelectedIndex = comboBox.FindStringExact(CStr(currentValue), 0)
-                            End If
-                            returnValue = True
-                        End If 'if a valid domain
-                    End If 'field not found
-                End If
+            Dim theFieldIndex As Integer = inFeatureClass.Fields.FindField(inFieldName)
+            If theFieldIndex = NotFoundIndex Then
+                '[Field not found...]
+                Return False
             End If
+            Dim theField As IField
+            theField = inFeatureClass.Fields.Field(theFieldIndex)
+
+            Dim theDomain As IDomain
+            theDomain = theField.Domain
+            If theDomain Is Nothing Then
+                '[Not a valid domain...]
+                Return False
+            End If
+
+            If theDomain.Type = esriDomainType.esriDTCodedValue Then
+                ' Populate the list
+                Dim theCodedValueDomain As ICodedValueDomain
+                theCodedValueDomain = DirectCast(theDomain, ICodedValueDomain)
+                Dim codeCount As Integer = theCodedValueDomain.CodeCount
+                For i As Integer = 0 To codeCount - 1
+                    inComboBox.Items.Add(theCodedValueDomain.Name(i))
+                Next i
+                ' Remove spaces if directed to.
+                If Not allowSpace Then
+                    With inComboBox
+                        If .Items.Count > 0 Then
+                            'find the blank
+                            Dim textPosition As Integer = .FindStringExact(String.Empty, -1) 'HACK: JWM this is my best guess on how to find null string
+                            If textPosition > NotFoundIndex Then
+                                .Items.RemoveAt(textPosition)
+                            End If
+                        End If
+                    End With
+                End If
+                ' Set the current list index.
+                If TypeOf inCurrentValue Is String Then
+                    ' Select the existing value from the list
+                    inComboBox.SelectedIndex = inComboBox.FindStringExact(CStr(inCurrentValue), 0)
+                    If inComboBox.SelectedIndex = NotFoundIndex Then
+                        If inCurrentValue.Equals(String.Empty) AndAlso allowSpace Then
+                            ' Add the empty string as an item
+                            inComboBox.Items.Insert(0, String.Empty)
+                        End If
+                        ' Select the first item
+                        inComboBox.SelectedIndex = 0
+                    End If
+                End If
+
+                returnValue = True
+            Else
+                ' ENHANCE: Get unique values from the table for this field and add to combo list (?)
+
+                Dim theQueryFilter As IQueryFilter = New QueryFilter
+                theQueryFilter.SubFields = inFieldName
+
+                Dim theFeatCursor As IFeatureCursor = inFeatureClass.Search(theQueryFilter, False)
+                Dim theDataStats As IDataStatistics = New DataStatistics
+                Dim theDataStatsEnum As IEnumerator
+                With theDataStats
+                    .Cursor = DirectCast(theFeatCursor, ICursor)
+                    .Field = inFieldName
+                    theDataStatsEnum = CType(.UniqueValues, IEnumerator)
+                End With
+                Do Until theDataStatsEnum.MoveNext = False
+                    inComboBox.Items.Add(theDataStatsEnum.Current.ToString)
+                Loop
+
+            End If
+
             Return returnValue
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
@@ -795,22 +824,22 @@ Public NotInheritable Class SpatialUtilities
                 continueThisProcess = False
             End If
 
-            Dim valueFieldIndex As Integer = FieldNotFoundIndex
+            Dim valueFieldIndex As Integer = NotFoundIndex
             If continueThisProcess Then
                 valueFieldIndex = overlayFeatureClass.Fields.FindField(valueFieldName)
-                If valueFieldIndex = FieldNotFoundIndex Then
+                If valueFieldIndex = NotFoundIndex Then
                     continueThisProcess = False
                 End If
             End If
 
-            Dim orderBestByFieldIndex As Integer = FieldNotFoundIndex
+            Dim orderBestByFieldIndex As Integer = NotFoundIndex
             If continueThisProcess Then
                 If orderBestByFieldName.Length = 0 Then
                     ' Use the value field as the order-by field
                     orderBestByFieldIndex = valueFieldIndex
                 Else
                     orderBestByFieldIndex = overlayFeatureClass.Fields.FindField(orderBestByFieldName)
-                    If orderBestByFieldIndex = FieldNotFoundIndex Then
+                    If orderBestByFieldIndex = NotFoundIndex Then
                         ' Field not found. Try the OID field
                         If overlayFeatureClass.HasOID Then
                             orderBestByFieldIndex = overlayFeatureClass.Fields.FindField(overlayFeatureClass.OIDFieldName)
@@ -1539,13 +1568,13 @@ Public NotInheritable Class SpatialUtilities
 
             Dim theAutoDateFieldIndex As Integer
             theAutoDateFieldIndex = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoDateField)
-            If theAutoDateFieldIndex > FieldNotFoundIndex Then
+            If theAutoDateFieldIndex > NotFoundIndex Then
                 feature.Value(theAutoDateFieldIndex) = System.DateTime.Now
             End If
 
             Dim theAutoWhoFieldIndex As Integer
             theAutoWhoFieldIndex = feature.Fields.FindField(EditorExtension.AllTablesSettings.AutoWhoField)
-            If theAutoWhoFieldIndex > FieldNotFoundIndex Then
+            If theAutoWhoFieldIndex > NotFoundIndex Then
                 feature.Value(theAutoWhoFieldIndex) = OrmapTaxlotEditing.Utilities.UserName()
             End If
 

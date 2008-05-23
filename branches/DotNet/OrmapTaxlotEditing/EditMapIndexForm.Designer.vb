@@ -38,7 +38,7 @@ Partial Class EditMapIndexForm
         Me.uxSectionQtrLabel = New System.Windows.Forms.Label
         Me.uxSectionLabel = New System.Windows.Forms.Label
         Me.uxSectionQtrQtr = New System.Windows.Forms.ComboBox
-        Me.uxSectionQtr = New System.Windows.Forms.ComboBox
+        Me.uxSectionQuarter = New System.Windows.Forms.ComboBox
         Me.uxSection = New System.Windows.Forms.ComboBox
         Me.uxMapInfoGroupBox = New System.Windows.Forms.GroupBox
         Me.uxAnomalyLabel = New System.Windows.Forms.Label
@@ -72,31 +72,31 @@ Partial Class EditMapIndexForm
         'uxTownship
         '
         Me.uxTownship.FormattingEnabled = True
-        Me.uxTownship.Location = New System.Drawing.Point(101, 14)
+        Me.uxTownship.Location = New System.Drawing.Point(111, 14)
         Me.uxTownship.Name = "uxTownship"
-        Me.uxTownship.Size = New System.Drawing.Size(70, 21)
+        Me.uxTownship.Size = New System.Drawing.Size(60, 21)
         Me.uxTownship.TabIndex = 0
         '
         'uxTownshipDirectional
         '
         Me.uxTownshipDirectional.FormattingEnabled = True
-        Me.uxTownshipDirectional.Location = New System.Drawing.Point(101, 39)
+        Me.uxTownshipDirectional.Location = New System.Drawing.Point(111, 39)
         Me.uxTownshipDirectional.Name = "uxTownshipDirectional"
-        Me.uxTownshipDirectional.Size = New System.Drawing.Size(70, 21)
+        Me.uxTownshipDirectional.Size = New System.Drawing.Size(60, 21)
         Me.uxTownshipDirectional.TabIndex = 1
         '
         'uxTownshipPartial
         '
         Me.uxTownshipPartial.FormattingEnabled = True
-        Me.uxTownshipPartial.Location = New System.Drawing.Point(101, 64)
+        Me.uxTownshipPartial.Location = New System.Drawing.Point(111, 64)
         Me.uxTownshipPartial.Name = "uxTownshipPartial"
-        Me.uxTownshipPartial.Size = New System.Drawing.Size(70, 21)
+        Me.uxTownshipPartial.Size = New System.Drawing.Size(60, 21)
         Me.uxTownshipPartial.TabIndex = 2
         '
         'uxTownshipLabel
         '
         Me.uxTownshipLabel.AutoSize = True
-        Me.uxTownshipLabel.Location = New System.Drawing.Point(6, 17)
+        Me.uxTownshipLabel.Location = New System.Drawing.Point(7, 17)
         Me.uxTownshipLabel.Name = "uxTownshipLabel"
         Me.uxTownshipLabel.Size = New System.Drawing.Size(47, 13)
         Me.uxTownshipLabel.TabIndex = 3
@@ -105,7 +105,7 @@ Partial Class EditMapIndexForm
         'uxTownshipDirectionalLabel
         '
         Me.uxTownshipDirectionalLabel.AutoSize = True
-        Me.uxTownshipDirectionalLabel.Location = New System.Drawing.Point(6, 42)
+        Me.uxTownshipDirectionalLabel.Location = New System.Drawing.Point(7, 42)
         Me.uxTownshipDirectionalLabel.Name = "uxTownshipDirectionalLabel"
         Me.uxTownshipDirectionalLabel.Size = New System.Drawing.Size(60, 13)
         Me.uxTownshipDirectionalLabel.TabIndex = 4
@@ -114,7 +114,7 @@ Partial Class EditMapIndexForm
         'uxTownshipPartialLabel
         '
         Me.uxTownshipPartialLabel.AutoSize = True
-        Me.uxTownshipPartialLabel.Location = New System.Drawing.Point(6, 67)
+        Me.uxTownshipPartialLabel.Location = New System.Drawing.Point(7, 67)
         Me.uxTownshipPartialLabel.Name = "uxTownshipPartialLabel"
         Me.uxTownshipPartialLabel.Size = New System.Drawing.Size(67, 13)
         Me.uxTownshipPartialLabel.TabIndex = 5
@@ -153,7 +153,7 @@ Partial Class EditMapIndexForm
         'uxRangePartialLabel
         '
         Me.uxRangePartialLabel.AutoSize = True
-        Me.uxRangePartialLabel.Location = New System.Drawing.Point(6, 67)
+        Me.uxRangePartialLabel.Location = New System.Drawing.Point(7, 67)
         Me.uxRangePartialLabel.Name = "uxRangePartialLabel"
         Me.uxRangePartialLabel.Size = New System.Drawing.Size(67, 13)
         Me.uxRangePartialLabel.TabIndex = 5
@@ -162,7 +162,7 @@ Partial Class EditMapIndexForm
         'uxRangeDirectionalLabel
         '
         Me.uxRangeDirectionalLabel.AutoSize = True
-        Me.uxRangeDirectionalLabel.Location = New System.Drawing.Point(6, 42)
+        Me.uxRangeDirectionalLabel.Location = New System.Drawing.Point(7, 42)
         Me.uxRangeDirectionalLabel.Name = "uxRangeDirectionalLabel"
         Me.uxRangeDirectionalLabel.Size = New System.Drawing.Size(60, 13)
         Me.uxRangeDirectionalLabel.TabIndex = 4
@@ -171,7 +171,7 @@ Partial Class EditMapIndexForm
         'uxRangeLabel
         '
         Me.uxRangeLabel.AutoSize = True
-        Me.uxRangeLabel.Location = New System.Drawing.Point(6, 17)
+        Me.uxRangeLabel.Location = New System.Drawing.Point(7, 17)
         Me.uxRangeLabel.Name = "uxRangeLabel"
         Me.uxRangeLabel.Size = New System.Drawing.Size(47, 13)
         Me.uxRangeLabel.TabIndex = 3
@@ -180,25 +180,25 @@ Partial Class EditMapIndexForm
         'uxRangePartial
         '
         Me.uxRangePartial.FormattingEnabled = True
-        Me.uxRangePartial.Location = New System.Drawing.Point(101, 64)
+        Me.uxRangePartial.Location = New System.Drawing.Point(111, 64)
         Me.uxRangePartial.Name = "uxRangePartial"
-        Me.uxRangePartial.Size = New System.Drawing.Size(70, 21)
+        Me.uxRangePartial.Size = New System.Drawing.Size(60, 21)
         Me.uxRangePartial.TabIndex = 2
         '
         'uxRangeDirectional
         '
         Me.uxRangeDirectional.FormattingEnabled = True
-        Me.uxRangeDirectional.Location = New System.Drawing.Point(101, 39)
+        Me.uxRangeDirectional.Location = New System.Drawing.Point(111, 39)
         Me.uxRangeDirectional.Name = "uxRangeDirectional"
-        Me.uxRangeDirectional.Size = New System.Drawing.Size(70, 21)
+        Me.uxRangeDirectional.Size = New System.Drawing.Size(60, 21)
         Me.uxRangeDirectional.TabIndex = 1
         '
         'uxRange
         '
         Me.uxRange.FormattingEnabled = True
-        Me.uxRange.Location = New System.Drawing.Point(101, 14)
+        Me.uxRange.Location = New System.Drawing.Point(111, 14)
         Me.uxRange.Name = "uxRange"
-        Me.uxRange.Size = New System.Drawing.Size(70, 21)
+        Me.uxRange.Size = New System.Drawing.Size(60, 21)
         Me.uxRange.TabIndex = 0
         '
         'uxSectionGroupBox
@@ -207,7 +207,7 @@ Partial Class EditMapIndexForm
         Me.uxSectionGroupBox.Controls.Add(Me.uxSectionQtrLabel)
         Me.uxSectionGroupBox.Controls.Add(Me.uxSectionLabel)
         Me.uxSectionGroupBox.Controls.Add(Me.uxSectionQtrQtr)
-        Me.uxSectionGroupBox.Controls.Add(Me.uxSectionQtr)
+        Me.uxSectionGroupBox.Controls.Add(Me.uxSectionQuarter)
         Me.uxSectionGroupBox.Controls.Add(Me.uxSection)
         Me.uxSectionGroupBox.Location = New System.Drawing.Point(10, 203)
         Me.uxSectionGroupBox.Name = "uxSectionGroupBox"
@@ -219,7 +219,7 @@ Partial Class EditMapIndexForm
         'uxSectionQtrQtrLabel
         '
         Me.uxSectionQtrQtrLabel.AutoSize = True
-        Me.uxSectionQtrQtrLabel.Location = New System.Drawing.Point(2, 67)
+        Me.uxSectionQtrQtrLabel.Location = New System.Drawing.Point(7, 67)
         Me.uxSectionQtrQtrLabel.Name = "uxSectionQtrQtrLabel"
         Me.uxSectionQtrQtrLabel.Size = New System.Drawing.Size(95, 13)
         Me.uxSectionQtrQtrLabel.TabIndex = 5
@@ -228,7 +228,7 @@ Partial Class EditMapIndexForm
         'uxSectionQtrLabel
         '
         Me.uxSectionQtrLabel.AutoSize = True
-        Me.uxSectionQtrLabel.Location = New System.Drawing.Point(6, 42)
+        Me.uxSectionQtrLabel.Location = New System.Drawing.Point(7, 42)
         Me.uxSectionQtrLabel.Name = "uxSectionQtrLabel"
         Me.uxSectionQtrLabel.Size = New System.Drawing.Size(45, 13)
         Me.uxSectionQtrLabel.TabIndex = 4
@@ -237,7 +237,7 @@ Partial Class EditMapIndexForm
         'uxSectionLabel
         '
         Me.uxSectionLabel.AutoSize = True
-        Me.uxSectionLabel.Location = New System.Drawing.Point(6, 17)
+        Me.uxSectionLabel.Location = New System.Drawing.Point(7, 17)
         Me.uxSectionLabel.Name = "uxSectionLabel"
         Me.uxSectionLabel.Size = New System.Drawing.Size(47, 13)
         Me.uxSectionLabel.TabIndex = 3
@@ -246,25 +246,25 @@ Partial Class EditMapIndexForm
         'uxSectionQtrQtr
         '
         Me.uxSectionQtrQtr.FormattingEnabled = True
-        Me.uxSectionQtrQtr.Location = New System.Drawing.Point(101, 64)
+        Me.uxSectionQtrQtr.Location = New System.Drawing.Point(111, 64)
         Me.uxSectionQtrQtr.Name = "uxSectionQtrQtr"
-        Me.uxSectionQtrQtr.Size = New System.Drawing.Size(70, 21)
+        Me.uxSectionQtrQtr.Size = New System.Drawing.Size(60, 21)
         Me.uxSectionQtrQtr.TabIndex = 2
         '
-        'uxSectionQtr
+        'uxSectionQuarter
         '
-        Me.uxSectionQtr.FormattingEnabled = True
-        Me.uxSectionQtr.Location = New System.Drawing.Point(101, 39)
-        Me.uxSectionQtr.Name = "uxSectionQtr"
-        Me.uxSectionQtr.Size = New System.Drawing.Size(70, 21)
-        Me.uxSectionQtr.TabIndex = 1
+        Me.uxSectionQuarter.FormattingEnabled = True
+        Me.uxSectionQuarter.Location = New System.Drawing.Point(111, 39)
+        Me.uxSectionQuarter.Name = "uxSectionQuarter"
+        Me.uxSectionQuarter.Size = New System.Drawing.Size(60, 21)
+        Me.uxSectionQuarter.TabIndex = 1
         '
         'uxSection
         '
         Me.uxSection.FormattingEnabled = True
-        Me.uxSection.Location = New System.Drawing.Point(101, 14)
+        Me.uxSection.Location = New System.Drawing.Point(111, 14)
         Me.uxSection.Name = "uxSection"
-        Me.uxSection.Size = New System.Drawing.Size(70, 21)
+        Me.uxSection.Size = New System.Drawing.Size(60, 21)
         Me.uxSection.TabIndex = 0
         '
         'uxMapInfoGroupBox
@@ -295,7 +295,7 @@ Partial Class EditMapIndexForm
         'uxAnomalyLabel
         '
         Me.uxAnomalyLabel.AutoSize = True
-        Me.uxAnomalyLabel.Location = New System.Drawing.Point(6, 186)
+        Me.uxAnomalyLabel.Location = New System.Drawing.Point(9, 186)
         Me.uxAnomalyLabel.Name = "uxAnomalyLabel"
         Me.uxAnomalyLabel.Size = New System.Drawing.Size(50, 13)
         Me.uxAnomalyLabel.TabIndex = 16
@@ -304,7 +304,7 @@ Partial Class EditMapIndexForm
         'uxPageLabel
         '
         Me.uxPageLabel.AutoSize = True
-        Me.uxPageLabel.Location = New System.Drawing.Point(6, 165)
+        Me.uxPageLabel.Location = New System.Drawing.Point(9, 165)
         Me.uxPageLabel.Name = "uxPageLabel"
         Me.uxPageLabel.Size = New System.Drawing.Size(35, 13)
         Me.uxPageLabel.TabIndex = 15
@@ -313,7 +313,7 @@ Partial Class EditMapIndexForm
         'uxScaleLabel
         '
         Me.uxScaleLabel.AutoSize = True
-        Me.uxScaleLabel.Location = New System.Drawing.Point(6, 140)
+        Me.uxScaleLabel.Location = New System.Drawing.Point(9, 140)
         Me.uxScaleLabel.Name = "uxScaleLabel"
         Me.uxScaleLabel.Size = New System.Drawing.Size(37, 13)
         Me.uxScaleLabel.TabIndex = 14
@@ -322,7 +322,7 @@ Partial Class EditMapIndexForm
         'uxReliabilityLabel
         '
         Me.uxReliabilityLabel.AutoSize = True
-        Me.uxReliabilityLabel.Location = New System.Drawing.Point(6, 115)
+        Me.uxReliabilityLabel.Location = New System.Drawing.Point(9, 115)
         Me.uxReliabilityLabel.Name = "uxReliabilityLabel"
         Me.uxReliabilityLabel.Size = New System.Drawing.Size(54, 13)
         Me.uxReliabilityLabel.TabIndex = 13
@@ -331,7 +331,7 @@ Partial Class EditMapIndexForm
         'uxSuffixTypeLabel
         '
         Me.uxSuffixTypeLabel.AutoSize = True
-        Me.uxSuffixTypeLabel.Location = New System.Drawing.Point(6, 90)
+        Me.uxSuffixTypeLabel.Location = New System.Drawing.Point(9, 90)
         Me.uxSuffixTypeLabel.Name = "uxSuffixTypeLabel"
         Me.uxSuffixTypeLabel.Size = New System.Drawing.Size(87, 13)
         Me.uxSuffixTypeLabel.TabIndex = 12
@@ -340,7 +340,7 @@ Partial Class EditMapIndexForm
         'uxSuffixNumberLabel
         '
         Me.uxSuffixNumberLabel.AutoSize = True
-        Me.uxSuffixNumberLabel.Location = New System.Drawing.Point(6, 66)
+        Me.uxSuffixNumberLabel.Location = New System.Drawing.Point(9, 66)
         Me.uxSuffixNumberLabel.Name = "uxSuffixNumberLabel"
         Me.uxSuffixNumberLabel.Size = New System.Drawing.Size(100, 13)
         Me.uxSuffixNumberLabel.TabIndex = 11
@@ -349,7 +349,7 @@ Partial Class EditMapIndexForm
         'uxMapNumberLabel
         '
         Me.uxMapNumberLabel.AutoSize = True
-        Me.uxMapNumberLabel.Location = New System.Drawing.Point(6, 42)
+        Me.uxMapNumberLabel.Location = New System.Drawing.Point(9, 42)
         Me.uxMapNumberLabel.Name = "uxMapNumberLabel"
         Me.uxMapNumberLabel.Size = New System.Drawing.Size(71, 13)
         Me.uxMapNumberLabel.TabIndex = 9
@@ -359,14 +359,14 @@ Partial Class EditMapIndexForm
         '
         Me.uxAnomaly.Location = New System.Drawing.Point(113, 186)
         Me.uxAnomaly.Name = "uxAnomaly"
-        Me.uxAnomaly.Size = New System.Drawing.Size(55, 20)
+        Me.uxAnomaly.Size = New System.Drawing.Size(45, 20)
         Me.uxAnomaly.TabIndex = 8
         '
         'uxPage
         '
         Me.uxPage.Location = New System.Drawing.Point(113, 162)
         Me.uxPage.Name = "uxPage"
-        Me.uxPage.Size = New System.Drawing.Size(55, 20)
+        Me.uxPage.Size = New System.Drawing.Size(45, 20)
         Me.uxPage.TabIndex = 7
         '
         'uxScale
@@ -388,7 +388,7 @@ Partial Class EditMapIndexForm
         'uxCountyLabel
         '
         Me.uxCountyLabel.AutoSize = True
-        Me.uxCountyLabel.Location = New System.Drawing.Point(6, 17)
+        Me.uxCountyLabel.Location = New System.Drawing.Point(9, 17)
         Me.uxCountyLabel.Name = "uxCountyLabel"
         Me.uxCountyLabel.Size = New System.Drawing.Size(43, 13)
         Me.uxCountyLabel.TabIndex = 4
@@ -421,7 +421,7 @@ Partial Class EditMapIndexForm
         Me.uxCounty.FormattingEnabled = True
         Me.uxCounty.Location = New System.Drawing.Point(113, 14)
         Me.uxCounty.Name = "uxCounty"
-        Me.uxCounty.Size = New System.Drawing.Size(70, 21)
+        Me.uxCounty.Size = New System.Drawing.Size(60, 21)
         Me.uxCounty.TabIndex = 0
         '
         'uxORMAPNumberGroupBox
@@ -438,9 +438,9 @@ Partial Class EditMapIndexForm
         '
         Me.uxORMAPNumberLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.uxORMAPNumberLabel.Font = New System.Drawing.Font("Tahoma", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.uxORMAPNumberLabel.Location = New System.Drawing.Point(9, 25)
+        Me.uxORMAPNumberLabel.Location = New System.Drawing.Point(12, 25)
         Me.uxORMAPNumberLabel.Name = "uxORMAPNumberLabel"
-        Me.uxORMAPNumberLabel.Size = New System.Drawing.Size(234, 25)
+        Me.uxORMAPNumberLabel.Size = New System.Drawing.Size(231, 25)
         Me.uxORMAPNumberLabel.TabIndex = 0
         Me.uxORMAPNumberLabel.Text = "2015.00S05.00W3600--T000"
         Me.uxORMAPNumberLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -527,7 +527,7 @@ Partial Class EditMapIndexForm
     Friend WithEvents uxRangePartialLabel As System.Windows.Forms.Label
     Friend WithEvents uxSectionLabel As System.Windows.Forms.Label
     Friend WithEvents uxSectionQtrQtr As System.Windows.Forms.ComboBox
-    Friend WithEvents uxSectionQtr As System.Windows.Forms.ComboBox
+    Friend WithEvents uxSectionQuarter As System.Windows.Forms.ComboBox
     Friend WithEvents uxSection As System.Windows.Forms.ComboBox
     Friend WithEvents uxSectionQtrQtrLabel As System.Windows.Forms.Label
     Friend WithEvents uxSectionQtrLabel As System.Windows.Forms.Label

@@ -350,54 +350,54 @@ Public NotInheritable Class DataMonitor
                         ' ENHANCE: [NIS] Add MapNumber and MapScale validation here.
                         isValid = (theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolyline)
                         With EditorExtension.CartographicLinesSettings
-                            isValid = isValid AndAlso theFeatureClass.FindField(.LineTypeField) <> FieldNotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.LineTypeField) <> NotFoundIndex
                         End With
 
                     Case EditorExtension.TableNamesSettings.MapIndexFC()
                         isValid = (theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolygon)
                         With EditorExtension.MapIndexSettings
-                            isValid = isValid AndAlso theFeatureClass.FindField(.MapScaleField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.MapNumberField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.OrmapMapNumberField) <> FieldNotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapScaleField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapNumberField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.OrmapMapNumberField) <> NotFoundIndex
                             ' ENHANCE: [NIS] CityName should be added to MapIndexSettings. See ORMAP spec note from 1/13/06.
                             ' CityName (not in settings)
-                            isValid = isValid AndAlso theFeatureClass.FindField(.PageNumberField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.ReliabilityCodeField) <> FieldNotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.PageNumberField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.ReliabilityCodeField) <> NotFoundIndex
                             ' ENHANCE: [NIS] County, MapSuffixType and MapSuffixNum should be removed from MapIndexSettings. See ORMAP spec note from 2/10/05.
-                            'isValid = isValid AndAlso theFeatureClass.FindField(.CountyField) <> FieldNotFoundIndex
-                            'isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixTypeField) <> FieldNotFoundIndex
-                            'isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixNumberField) <> FieldNotFoundIndex
+                            'isValid = isValid AndAlso theFeatureClass.FindField(.CountyField) <> NotFoundIndex
+                            'isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixTypeField) <> NotFoundIndex
+                            'isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixNumberField) <> NotFoundIndex
                         End With
 
                     Case EditorExtension.TableNamesSettings.TaxLotFC
                         isValid = (theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolygon)
                         With EditorExtension.TaxLotSettings
-                            isValid = isValid AndAlso theFeatureClass.FindField(.CountyField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.TownshipField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.TownshipPartField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.TownshipDirectionField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.RangeField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.RangePartField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.RangeDirectionField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.SectionNumberField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.QuarterSectionField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.QuarterQuarterSectionField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.OrmapMapNumberField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.OrmapTaxlotField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.MapNumberField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.TaxlotField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.MapTaxlotField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.SpecialInterestField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixNumberField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixTypeField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.MapAcresField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.AnomalyField) <> FieldNotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.CountyField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.TownshipField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.TownshipPartField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.TownshipDirectionField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.RangeField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.RangePartField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.RangeDirectionField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.SectionNumberField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.QuarterSectionField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.QuarterQuarterSectionField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.OrmapMapNumberField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.OrmapTaxlotField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapNumberField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.TaxlotField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapTaxlotField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.SpecialInterestField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixNumberField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapSuffixTypeField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapAcresField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.AnomalyField) <> NotFoundIndex
                         End With
 
                     Case EditorExtension.TableNamesSettings.TaxLotLinesFC
                         isValid = (theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolyline)
                         With EditorExtension.TaxLotLinesSettings
-                            isValid = isValid AndAlso theFeatureClass.FindField(.LineTypeField) <> FieldNotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.LineTypeField) <> NotFoundIndex
                         End With
 
                     Case Else
@@ -409,8 +409,8 @@ Public NotInheritable Class DataMonitor
                         ' ENHANCE: [NIS] Add MapNumber and MapScale validation here.
                         ' ENHANCE: [NIS] Remove this with block in favor of validation based on TaxLotLinesSettings (when these settings are available).
                         With EditorExtension.MapIndexSettings
-                            isValid = isValid AndAlso theFeatureClass.FindField(.MapScaleField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theFeatureClass.FindField(.MapNumberField) <> FieldNotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapScaleField) <> NotFoundIndex
+                            isValid = isValid AndAlso theFeatureClass.FindField(.MapNumberField) <> NotFoundIndex
                         End With
                 End Select
 
@@ -422,8 +422,8 @@ Public NotInheritable Class DataMonitor
                         isValid = True
                         ' ENHANCE: [NIS] Create CancelledNumbersSettings file and connect it to the application in various places.
                         With EditorExtension.TaxLotSettings
-                            isValid = isValid AndAlso theTable.FindField(.TaxlotField) <> FieldNotFoundIndex
-                            isValid = isValid AndAlso theTable.FindField(.MapNumberField) <> FieldNotFoundIndex
+                            isValid = isValid AndAlso theTable.FindField(.TaxlotField) <> NotFoundIndex
+                            isValid = isValid AndAlso theTable.FindField(.MapNumberField) <> NotFoundIndex
                         End With
                     Case Else
                         '[No field names defined in settings...]
