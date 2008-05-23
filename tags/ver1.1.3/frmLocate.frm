@@ -4,17 +4,18 @@ Begin VB.Form frmLocate
    ClientHeight    =   1455
    ClientLeft      =   3270
    ClientTop       =   4605
-   ClientWidth     =   2700
+   ClientWidth     =   3225
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   1455
-   ScaleWidth      =   2700
+   ScaleWidth      =   3225
    ShowInTaskbar   =   0   'False
    Begin VB.CommandButton cmdHelp 
       Caption         =   "&Help"
       Height          =   375
-      Left            =   1830
+      Left            =   2310
       TabIndex        =   4
       Top             =   1020
       Width           =   800
@@ -23,7 +24,7 @@ Begin VB.Form frmLocate
       Caption         =   "&Find"
       Default         =   -1  'True
       Height          =   375
-      Left            =   990
+      Left            =   1470
       TabIndex        =   3
       Top             =   1020
       Width           =   800
@@ -33,7 +34,7 @@ Begin VB.Form frmLocate
       Left            =   1230
       TabIndex        =   0
       Top             =   210
-      Width           =   1335
+      Width           =   1935
    End
    Begin VB.TextBox txtTaxlot 
       Height          =   315
@@ -334,7 +335,7 @@ Private Sub cmdHelp_Click()
     Dim sFilePath As String
     '++ END JWalton 2/6/2007    Dim sFilePath As String
     
-    sFilePath = app.Path & "\Locate_help.rtf"
+    sFilePath = App.Path & "\Locate_help.rtf"
     If FileExists(sFilePath) Then
         '++ START JWM 10/16/2006 using new method to open help file
         gsb_StartDoc Me.hwnd, sFilePath
