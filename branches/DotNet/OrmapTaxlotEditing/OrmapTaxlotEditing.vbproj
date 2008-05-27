@@ -81,6 +81,7 @@
     <Reference Include="ESRI.ArcGIS.SystemUI, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -118,6 +119,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DataMonitor.vb" />
+    <Compile Include="DimensionArrowsForm.Designer.vb">
+      <DependentUpon>DimensionArrowsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="DimensionArrowsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="HelpForm.Designer.vb">
       <DependentUpon>HelpForm.vb</DependentUpon>
     </Compile>
@@ -366,6 +373,10 @@
     <EmbeddedResource Include="CombineTaxlotsForm.resx">
       <DependentUpon>CombineTaxlotsForm.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DimensionArrowsForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DimensionArrowsForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ORMAPToolBarResource.resx">
       <SubType>Designer</SubType>

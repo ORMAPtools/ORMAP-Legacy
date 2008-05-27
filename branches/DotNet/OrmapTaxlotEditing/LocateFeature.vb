@@ -122,12 +122,12 @@ Public NotInheritable Class LocateFeature
         If value IsNot Nothing Then
             _partnerLocateFeatureForm = value
             ' Subscribe to partner form events.
-            AddHandler _partnerLocateFeatureForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
+            AddHandler _partnerLocateFeatureForm.Load, AddressOf PartnerLocateFeatureForm_Load
             AddHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
             AddHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
         Else
             ' Unsubscribe to partner form events.
-            RemoveHandler _partnerLocateFeatureForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
+            RemoveHandler _partnerLocateFeatureForm.Load, AddressOf PartnerLocateFeatureForm_Load
             RemoveHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
             RemoveHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
         End If
@@ -137,7 +137,7 @@ Public NotInheritable Class LocateFeature
 
 #Region "Event Handlers"
 
-    Private Sub PartnerTaxlotAssignmentForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.Load
+    Private Sub PartnerLocateFeatureForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.Load
 
         With PartnerLocateFeatureForm
 
@@ -169,7 +169,7 @@ Public NotInheritable Class LocateFeature
 
     End Sub
 
-    Private Sub uxFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.uxFind.Click
+    Private Sub uxFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxFind.Click
 
         Dim mapNumber As String = Nothing
         Dim taxlot As String = Nothing
@@ -224,7 +224,7 @@ Public NotInheritable Class LocateFeature
 
     End Sub
 
-    Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.uxHelp.Click
+    Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxHelp.Click
         ' TODO: [ALL] Evaluate help systems and implement.
         MessageBox.Show("Sorry. Help not implemented at this time.")
     End Sub
@@ -241,7 +241,6 @@ Public NotInheritable Class LocateFeature
             PartnerLocateFeatureForm.uxFind.Enabled = False
 
             ' Check for valid data.
-
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
