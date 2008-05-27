@@ -31,14 +31,13 @@
 
 #Region "Subversion Keyword Expansion"
 'Tag for this file: $Name:$
-'SCC revision number: $Revision:$
-'Date of Last Change: $Date:$
+'SCC revision number: $Revision$
+'Date of Last Change: $Date$
 #End Region
 
 #Region "Imported Namespaces"
 Imports System.Collections
 Imports System.Windows.Forms
-Imports Microsoft.Practices.EnterpriseLibrary.ExceptionHandling
 Imports ESRI.ArcGIS.CatalogUI
 Imports ESRI.ArcGIS.Catalog
 #End Region
@@ -191,7 +190,7 @@ Public Class CatalogFileDialog
             filters.AddFilter(filter, isDefault)
             Return True
         Catch ex As Exception
-            Trace.WriteLine(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return False
         End Try
     End Function
@@ -222,10 +221,7 @@ Public Class CatalogFileDialog
             Loop
             Return _selectionList
         Catch ex As Exception
-            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Global Policy")
-            If (rethrow) Then
-                Throw
-            End If
+            EditorExtension.ProcessUnhandledException(ex)
             Return New ArrayList
         End Try
     End Function
@@ -246,10 +242,7 @@ Public Class CatalogFileDialog
             _selectionList.Add(String.Concat(selectedObject.FullName, "\", _theGxDialog.Name))
             Return _selectionList
         Catch ex As Exception
-            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Global Policy")
-            If (rethrow) Then
-                Throw
-            End If
+            EditorExtension.ProcessUnhandledException(ex)
             Return New ArrayList
         End Try
     End Function

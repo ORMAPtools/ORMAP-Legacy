@@ -82,7 +82,7 @@ Public NotInheritable Class StringUtilities
                 Return currentValue
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return String.Empty
         End Try
     End Function
@@ -278,7 +278,7 @@ Public NotInheritable Class StringUtilities
             Return formattedResult.ToString
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return String.Empty
 
         End Try
@@ -302,7 +302,7 @@ Public NotInheritable Class StringUtilities
                 Return String.Empty
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return String.Empty
         End Try
     End Function
@@ -319,7 +319,7 @@ Public NotInheritable Class StringUtilities
             ' the OrmapMapNumber.
             Return Left(theOrmapMapNumber, 20)
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return String.Empty
         End Try
     End Function
@@ -348,7 +348,7 @@ Public NotInheritable Class StringUtilities
 
             Return sb.ToString  ' do not trim off leading spaces
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return String.Empty
         End Try
     End Function

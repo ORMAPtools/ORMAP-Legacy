@@ -39,11 +39,10 @@
 Imports System.Collections.Generic
 Imports system.Drawing
 Imports System.Environment
+Imports System.Security.Permissions
 Imports System.Text
 Imports System.Windows.Forms
 Imports System.Runtime.InteropServices
-Imports Microsoft.Practices
-Imports Microsoft.Practices.EnterpriseLibrary.ExceptionHandling
 Imports ESRI.ArcGIS.Carto
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Editor
@@ -56,6 +55,9 @@ Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
 #End Region
+
+'The attribute is placed at the assembly level.
+<Assembly: PermissionSetAttribute(SecurityAction.RequestMinimum, Name:="FullTrust")> 
 
 <ComVisible(True)> _
 <ComClass(EditorExtension.ClassId, EditorExtension.InterfaceId, EditorExtension.EventsId), _
@@ -688,8 +690,6 @@ Public NotInheritable Class EditorExtension
             End If
 
         Catch ex As Exception
-            'Debug.WriteLine(ex.ToString)
-            'Trace.WriteLine(ex.ToString)
             ProcessUnhandledException(ex)
 
         End Try
@@ -714,8 +714,6 @@ Public NotInheritable Class EditorExtension
             End If
 
         Catch ex As Exception
-            'Debug.WriteLine(ex.ToString)
-            'Trace.WriteLine(ex.ToString)
             ProcessUnhandledException(ex)
 
         Finally
@@ -842,6 +840,65 @@ Public NotInheritable Class EditorExtension
     End Sub
 
     ''' <summary>
+    ''' Creates a trace listener for the event log.
+    ''' </summary>
+    ''' <remarks>Once created, any <c>Trace</c> call will be written to this log.</remarks>
+    Private Shared Sub addTraceListenerForEventLog()
+        ' Create a trace listener for the event log.
+        Dim theTraceListener As New EventLogTraceListener(My.Application.Info.ProductName)
+        theTraceListener.Name = My.Application.Info.AssemblyName & "_EventLogTraceListener"
+
+        ' Add the event log trace listener to the collection.
+        Trace.Listeners.Add(theTraceListener)
+    End Sub
+
+    ''' <summary>
+    ''' Create a trace listener for a file log.
+    ''' </summary>
+    ''' <param name="inLogFileName">The file log filename.</param>
+    ''' <remarks>Once created, any <c>Trace</c> call will be written to this log.</remarks>
+    Private Shared Sub addTraceListenerForFileLog(ByVal inLogFileName As String)
+        ' Create a trace listener for a file log.
+
+        ' Create a file for output.
+        Dim theFileStream As IO.Stream
+        If IO.File.Exists(inLogFileName) Then
+            theFileStream = IO.File.Open(inLogFileName, IO.FileMode.Append)
+        Else
+            theFileStream = IO.File.Create(inLogFileName)
+        End If
+        
+        ' Create a new text writer using the output stream, and add it to
+        ' the trace listeners. 
+        Dim theTextListener As New TextWriterTraceListener(theFileStream)
+        theTextListener.Name = My.Application.Info.AssemblyName & "_FileLogTraceListener"
+        Trace.Listeners.Add(theTextListener)
+    End Sub
+
+
+    ''' <summary>
+    ''' Removes a trace listener for the event log.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Shared Sub removeTraceListenerForEventLog()
+        ' Find the trace listener.
+        Dim theTraceListenerName As String = My.Application.Info.AssemblyName & "_EventLogTraceListener"
+        ' Remove a trace listener for the event log.
+        Trace.Listeners.Remove(theTraceListenerName)
+    End Sub
+
+    ''' <summary>
+    ''' Removes a trace listener for a file log.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Shared Sub removeTraceListenerForFileLog()
+        ' Find the trace listener.
+        Dim theTraceListenerName As String = My.Application.Info.AssemblyName & "_FileLogTraceListener"
+        ' Remove a trace listener for a file log.
+        Trace.Listeners.Remove(theTraceListenerName)
+    End Sub
+
+    ''' <summary>
     ''' Process any unhandled exceptions that occur in the application.
     ''' This code is called by all UI entry points in the application (e.g. button click events)
     ''' when an unhandled exception occurs.
@@ -852,28 +909,44 @@ Public NotInheritable Class EditorExtension
     ''' <remarks></remarks>
     Friend Shared Sub ProcessUnhandledException(ByVal ex As Exception)
         ' An unhandled exception occured somewhere in the application.
-        ' Let the 'Global Policy' handler have a try at handling it.
+
+        Dim sb As New System.Text.StringBuilder()
         Try
-            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Global Policy")
-            If (rethrow) Then
-                ' Something has gone very wrong - exit the extension.
-                Exit Sub
-            End If
-        Catch
-            Dim sb As New System.Text.StringBuilder()
-            sb.Append("An unexpected error occured while calling HandleException with policy 'Global Policy'." & NewLine)
-            'sb.Append(" Please check the event log for details about the exception.")
-            sb.Append(NewLine)
-            sb.Append(NewLine)
+            sb.AppendLine()
+            sb.Append(CChar("_"), 50)
+            sb.AppendLine()
+            sb.Append(My.Computer.Clock.GmtTime.ToString)
+            sb.AppendLine()
+            sb.AppendLine()
             sb.Append("UNHANDLED EXCEPTION CALL STACK:")
-            sb.Append(NewLine)
+            sb.AppendLine()
             sb.Append(ex.ToString)
-            sb.Append(NewLine)
-            sb.Append(NewLine)
+            sb.AppendLine()
+            sb.Append(CChar("_"), 50)
+            sb.AppendLine()
+            sb.Append("An unexpected exception occured.")
+            sb.AppendLine()
+            sb.AppendLine()
             sb.Append("Please contact technical support.")
-            sb.Append(NewLine)
+            sb.AppendLine()
+            sb.AppendLine()
             sb.Append("[Press Ctrl+C on your keyboard to copy this message to the Windows clipboard.]")
+            sb.AppendLine()
+            sb.Append(CChar("_"), 50)
+            sb.AppendLine()
+            sb.AppendLine()
+            Trace.TraceError(sb.ToString)
             MessageBox.Show(sb.ToString, "ORMAP Taxlot Editing Error", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+
+            '' Let the 'Global Policy' handler have a try at handling it.
+            'Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Log Only Policy")
+            'If (rethrow) Then
+            '    ' Something has gone very wrong - exit the extension.
+            '    Exit Sub
+            'End If
+
+        Catch
+            MessageBox.Show(ex.ToString, "ORMAP Taxlot Editing Error", MessageBoxButtons.OK, MessageBoxIcon.Stop)
         End Try
 
     End Sub
@@ -904,6 +977,9 @@ Public NotInheritable Class EditorExtension
             setEditor(Nothing)
             setEditEvents(Nothing)
 
+            removeTraceListenerForEventLog()
+            removeTraceListenerForFileLog()
+
         Catch ex As Exception
             ProcessUnhandledException(ex)
 
@@ -916,6 +992,9 @@ Public NotInheritable Class EditorExtension
                 ' Set the Editor and EditEvents properties.
                 setEditor(DirectCast(initializationData, IEditor2))
                 setEditEvents(DirectCast(EditorExtension.Editor, IEditEvents_Event))
+
+                addTraceListenerForEventLog()
+                addTraceListenerForFileLog(My.Application.Info.DirectoryPath & "\Trace.log")
 
                 My.User.InitializeWithWindowsUser()
 

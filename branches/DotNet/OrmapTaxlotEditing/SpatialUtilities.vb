@@ -171,7 +171,7 @@ Public NotInheritable Class SpatialUtilities
 
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return False
         End Try
     End Function
@@ -390,7 +390,7 @@ Public NotInheritable Class SpatialUtilities
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
 
         Finally
             theORMapNumClass = Nothing
@@ -440,7 +440,7 @@ Public NotInheritable Class SpatialUtilities
 
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             ConvertCodeValueDomainToCode = String.Empty
         End Try
     End Function
@@ -486,7 +486,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return String.Empty
         End Try
     End Function
@@ -532,7 +532,7 @@ Public NotInheritable Class SpatialUtilities
             Return returnValue
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return Nothing
 
         Finally
@@ -572,7 +572,7 @@ Public NotInheritable Class SpatialUtilities
             Return returnValue
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return Nothing
 
         Finally
@@ -596,7 +596,7 @@ Public NotInheritable Class SpatialUtilities
             center.Y = envelope.YMin + (envelope.YMax - envelope.YMin) / 2
             Return center
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return Nothing
         End Try
     End Function
@@ -646,7 +646,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return "000"
         End Try
     End Function
@@ -684,7 +684,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return "0"
         End Try
     End Function
@@ -721,7 +721,7 @@ Public NotInheritable Class SpatialUtilities
             End If
             Return Nothing
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return Nothing
         End Try
     End Function
@@ -1036,7 +1036,7 @@ Public NotInheritable Class SpatialUtilities
             Return theBestValue
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return String.Empty
         End Try
     End Function
@@ -1063,7 +1063,7 @@ Public NotInheritable Class SpatialUtilities
             returnValue = (featuresSelected.SelectionSet.Count >= inMinimumCount)
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return False
         End Try
     End Function
@@ -1090,7 +1090,7 @@ Public NotInheritable Class SpatialUtilities
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return False
         End Try
     End Function
@@ -1115,7 +1115,7 @@ Public NotInheritable Class SpatialUtilities
                 Return False
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return False
         End Try
     End Function
@@ -1159,7 +1159,7 @@ Public NotInheritable Class SpatialUtilities
             returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxLotLinesFC, True, CultureInfo.CurrentCulture) = StringMatch)
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return False
         End Try
     End Function
@@ -1184,7 +1184,7 @@ Public NotInheritable Class SpatialUtilities
                 Return False
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return False
         End Try
     End Function
@@ -1264,7 +1264,7 @@ Public NotInheritable Class SpatialUtilities
             Return True
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return False
 
         End Try
@@ -1358,7 +1358,7 @@ Public NotInheritable Class SpatialUtilities
             Return True
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return False
 
         End Try
@@ -1378,7 +1378,7 @@ Public NotInheritable Class SpatialUtilities
             returnValue = featureClass.Fields.FindField(fieldName)
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return -1
         End Try
     End Function
@@ -1449,7 +1449,7 @@ Public NotInheritable Class SpatialUtilities
 
             Return returnValue
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return String.Empty
         End Try
     End Function
@@ -1549,7 +1549,7 @@ Public NotInheritable Class SpatialUtilities
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
 
         End Try
 
@@ -1579,7 +1579,7 @@ Public NotInheritable Class SpatialUtilities
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
 
         End Try
     End Sub
@@ -1664,7 +1664,7 @@ Public NotInheritable Class SpatialUtilities
             Return returnValue
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return False
 
         End Try
@@ -1799,7 +1799,7 @@ Public NotInheritable Class SpatialUtilities
                 Return thisCursor
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return Nothing
         End Try
     End Function
@@ -1823,7 +1823,7 @@ Public NotInheritable Class SpatialUtilities
             ' Recreate and return the ORMAP Taxlot number
             Return String.Concat(shortORMapNum, taxlotMapSufTypeValue, taxlotMapSufNumberValue, taxlotValue)
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return String.Empty
         End Try
     End Function
@@ -1896,7 +1896,7 @@ Public NotInheritable Class SpatialUtilities
             Return thisFeatureCursor
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return Nothing
         End Try
     End Function
@@ -1921,7 +1921,7 @@ Public NotInheritable Class SpatialUtilities
             End With
             Return thisPolygon
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return Nothing
         End Try
     End Function
@@ -2037,7 +2037,7 @@ Public NotInheritable Class SpatialUtilities
             Return CDbl(size)
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return 10 'default
 
         End Try

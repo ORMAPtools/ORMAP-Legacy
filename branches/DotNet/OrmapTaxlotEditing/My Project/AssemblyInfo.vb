@@ -18,7 +18,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTrademark("")> 
 
 ' Note: Individual types can be set as ComVisible(True)
-<Assembly: ComVisible(True)> 
+<Assembly: ComVisible(False)> 
 ' Note: If this is set to true then all types and their members must also comply 
 ' or provide compliant alternate members
 <Assembly: CLSCompliant(False)> 

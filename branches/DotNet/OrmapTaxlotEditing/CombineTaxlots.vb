@@ -40,7 +40,6 @@ Imports System.Drawing
 Imports System.Environment
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
-Imports Microsoft.Practices.EnterpriseLibrary.ExceptionHandling
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
@@ -88,10 +87,7 @@ Public NotInheritable Class CombineTaxlots
             _bitmapResourceName = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), _bitmapResourceName)
         Catch ex As ArgumentException
-            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Log Only Policy")
-            If (rethrow) Then
-                Throw
-            End If
+            EditorExtension.ProcessUnhandledException(ex)
         End Try
 
     End Sub
@@ -289,7 +285,7 @@ Public NotInheritable Class CombineTaxlots
             PartnerCombineTaxlotsForm.ShowDialog()
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
 
         End Try
 
@@ -555,12 +551,13 @@ Public NotInheritable Class CombineTaxlots
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
             If withinEditOperation Then
                 ' Abort any ongoing edit operations
                 EditorExtension.Editor.AbortOperation()
                 withinEditOperation = False
             End If
+
+            Throw
 
         End Try
 

@@ -40,7 +40,6 @@ Imports System.Drawing
 Imports System.Environment
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
-Imports Microsoft.Practices.EnterpriseLibrary.ExceptionHandling
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
@@ -81,10 +80,7 @@ Public NotInheritable Class AutoUpdateAllToggle
             _bitmapResourceName = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), _bitmapResourceName)
         Catch ex As ArgumentException
-            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Log Only Policy")
-            If (rethrow) Then
-                Throw
-            End If
+            EditorExtension.ProcessUnhandledException(ex)
         End Try
 
     End Sub

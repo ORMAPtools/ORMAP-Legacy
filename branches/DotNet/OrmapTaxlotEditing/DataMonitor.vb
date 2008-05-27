@@ -38,7 +38,6 @@
 #Region "Imported Namespaces"
 Imports System.Configuration
 Imports System.Windows.Forms
-Imports Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.ExceptionPolicy
 Imports ESRI.ArcGIS.Carto
 Imports ESRI.ArcGIS.Geodatabase
 Imports ESRI.ArcGIS.Geometry
@@ -435,7 +434,7 @@ Public NotInheritable Class DataMonitor
             Return isValid
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
 
         End Try
 

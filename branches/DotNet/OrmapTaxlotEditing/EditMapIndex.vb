@@ -42,7 +42,6 @@ Imports System.Environment
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
 Imports System.Windows.Forms.Control
-Imports Microsoft.Practices.EnterpriseLibrary.ExceptionHandling
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
@@ -65,12 +64,12 @@ Public NotInheritable Class EditMapIndex
 
 #Region "Class-Level Constants And Enumerations"
 
-    Private Enum StatePassageType As Integer
+    Friend Enum StatePassageType As Integer
         Entering = 1
         Exiting = 2
     End Enum
 
-    Public Enum CommandStateType As Integer
+    Friend Enum CommandStateType As Integer
         Enabled = 10
         Disabled = 20
     End Enum
@@ -100,10 +99,7 @@ Public NotInheritable Class EditMapIndex
             _bitmapResourceName = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), _bitmapResourceName)
         Catch ex As ArgumentException
-            Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Log Only Policy")
-            If (rethrow) Then
-                Throw
-            End If
+            EditorExtension.ProcessUnhandledException(ex)
         End Try
 
     End Sub
@@ -163,7 +159,7 @@ Public NotInheritable Class EditMapIndex
 
     Private _state As CommandStateType = CommandStateType.Disabled
 
-    Public ReadOnly Property State() As CommandStateType
+    Friend ReadOnly Property State() As CommandStateType
         Get
             Return _state
         End Get
@@ -173,7 +169,7 @@ Public NotInheritable Class EditMapIndex
         _state = stateType
     End Sub
 
-    Public Property EditingState() As Boolean
+    Friend Property EditingState() As Boolean
         Get
             EditingState = _editingState
         End Get
@@ -355,7 +351,7 @@ Public NotInheritable Class EditMapIndex
             If theEditWorkSpace.IsBeingEdited Then
                 theEditWorkSpace.AbortEditOperation()
             End If
-            Trace.WriteLine(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
         End Try
     End Sub
 
@@ -618,7 +614,7 @@ Public NotInheritable Class EditMapIndex
             End If
 
         Catch ex As Exception
-            Trace.WriteLine(ex.Message)
+            EditorExtension.ProcessUnhandledException(ex)
         End Try
 
     End Sub
@@ -675,7 +671,7 @@ Public NotInheritable Class EditMapIndex
             Next
 
         Catch ex As Exception
-            Trace.WriteLine(ex.ToString())
+            EditorExtension.ProcessUnhandledException(ex)
         End Try
     End Sub
 
@@ -774,7 +770,7 @@ Public NotInheritable Class EditMapIndex
 
             Return True
         Catch ex As Exception
-            Trace.WriteLine(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return False
         End Try
     End Function
@@ -829,7 +825,7 @@ Public NotInheritable Class EditMapIndex
             End With
             Return True
         Catch ex As Exception
-            Trace.WriteLine(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return False
         End Try
 
@@ -928,7 +924,7 @@ Public NotInheritable Class EditMapIndex
             thisSpatialQuery = Nothing
         Catch ex As Exception
             _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = String.Empty
-            Trace.WriteLine(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
         End Try
     End Sub
 

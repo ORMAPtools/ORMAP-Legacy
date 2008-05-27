@@ -111,14 +111,14 @@ Public NotInheritable Class Utilities
             If path Is Nothing OrElse path.Length = 0 Then
                 Throw New ArgumentNullException("path")
             End If
-            Dim fInfo As New FileInfo(path)
-            If fInfo.Exists Then
+            Dim theFileInfo As New FileInfo(path)
+            If theFileInfo.Exists Then
                 Return True
             Else
                 Return False
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return False
         End Try
     End Function
@@ -135,10 +135,10 @@ Public NotInheritable Class Utilities
             MessageBox.Show("File not Found", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
-            Return
+            EditorExtension.ProcessUnhandledException(ex)
         End Try
     End Sub
+
 #End Region
 
 #Region "Private Members (none)"

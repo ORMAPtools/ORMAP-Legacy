@@ -88,7 +88,7 @@ Public NotInheritable Class AddArrows
             _bitmapResourceName = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), _bitmapResourceName)
         Catch ex As ArgumentException
-            Trace.WriteLine(ex.Message, "Invalid Bitmap")
+            EditorExtension.ProcessUnhandledException(ex)
         End Try
 
     End Sub
