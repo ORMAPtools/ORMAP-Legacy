@@ -1001,7 +1001,7 @@ Public NotInheritable Class EditorExtension
                 setEditEvents(DirectCast(EditorExtension.Editor, IEditEvents_Event))
 
                 addTraceListenerForEventLog()
-                addTraceListenerForFileLog(My.Application.Info.DirectoryPath & "\Trace.log")
+                addTraceListenerForFileLog(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".trace.log")
 
                 My.User.InitializeWithWindowsUser()
 
