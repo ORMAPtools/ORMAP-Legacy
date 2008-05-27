@@ -334,28 +334,20 @@ Public NotInheritable Class AddArrows
     Friend Sub DoButtonOperation()
 
         Try
-            'PartnerAddArrowsForm.uxMapNumber.Enabled = False
-            'PartnerAddArrowsForm.uxTaxlot.Enabled = False
-            'PartnerAddArrowsForm.uxFind.Enabled = False
+            ' Check for valid data.
+            CheckValidMapIndexDataProperties()
+            If Not HasValidMapIndexData Then
+                MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
+                                "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Sub
+            End If
 
-            '' Check for valid data.
-            'CheckValidMapIndexDataProperties()
-            'If Not HasValidMapIndexData Then
-            '    MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
-            '                    "Please load this dataset into your map.", _
-            '                    "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-            '    Exit Sub
-            'Else
-            '    PartnerAddArrowsForm.uxMapNumber.Enabled = True
-            '    PartnerAddArrowsForm.uxFind.Enabled = True
-            'End If
+            ' HACK:
 
-            'CheckValidTaxlotDataProperties()
-            'If HasValidTaxlotData Then
-            '    PartnerAddArrowsForm.uxTaxlot.Enabled = True
-            'Else
-            '    PartnerAddArrowsForm.uxTaxlot.Enabled = False
-            'End If
+            If _thelArrowPointsCollection Is Nothing Then
+                _thelArrowPointsCollection = New Collection
+            End If
 
             PartnerAddArrowsForm.ShowDialog()
 
