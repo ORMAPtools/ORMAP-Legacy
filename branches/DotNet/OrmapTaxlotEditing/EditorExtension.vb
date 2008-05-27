@@ -910,43 +910,50 @@ Public NotInheritable Class EditorExtension
     Friend Shared Sub ProcessUnhandledException(ByVal ex As Exception)
         ' An unhandled exception occured somewhere in the application.
 
-        Dim sb As New System.Text.StringBuilder()
-        Try
-            sb.AppendLine()
-            sb.Append(CChar("_"), 50)
-            sb.AppendLine()
-            sb.Append(My.Computer.Clock.GmtTime.ToString)
-            sb.AppendLine()
-            sb.AppendLine()
-            sb.Append("UNHANDLED EXCEPTION CALL STACK:")
-            sb.AppendLine()
-            sb.Append(ex.ToString)
-            sb.AppendLine()
-            sb.Append(CChar("_"), 50)
-            sb.AppendLine()
-            sb.Append("An unexpected exception occured.")
-            sb.AppendLine()
-            sb.AppendLine()
-            sb.Append("Please contact technical support.")
-            sb.AppendLine()
-            sb.AppendLine()
-            sb.Append("[Press Ctrl+C on your keyboard to copy this message to the Windows clipboard.]")
-            sb.AppendLine()
-            sb.Append(CChar("_"), 50)
-            sb.AppendLine()
-            sb.AppendLine()
-            Trace.TraceError(sb.ToString)
-            MessageBox.Show(sb.ToString, "ORMAP Taxlot Editing Error", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+        ' Tell the user what has happened
+        Dim theUserMessageText As New StringBuilder()
+        theUserMessageText.Append("An unexpected exception occured and has been logged for the developers.")
+        theUserMessageText.AppendLine()
+        theUserMessageText.AppendLine()
+        theUserMessageText.Append("Warning: The application may no longer be stable.")
+        theUserMessageText.AppendLine()
+        theUserMessageText.Append("Save your work just in case.")
 
-            '' Let the 'Global Policy' handler have a try at handling it.
-            'Dim rethrow As Boolean = ExceptionPolicy.HandleException(ex, "Log Only Policy")
-            'If (rethrow) Then
-            '    ' Something has gone very wrong - exit the extension.
-            '    Exit Sub
-            'End If
+        MessageBox.Show(theUserMessageText.ToString, "ORMAP Taxlot Editing Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+
+        ' Write a meaningful log entry for the error
+        Dim theLogText As New StringBuilder()
+        Try
+            theLogText.AppendLine()
+            theLogText.Append(CChar("_"), 50)
+            theLogText.AppendLine()
+            theLogText.Append(My.Computer.Clock.GmtTime.ToString)
+            theLogText.AppendLine()
+            theLogText.AppendLine()
+            theLogText.Append("An unexpected exception occured.")
+            theLogText.AppendLine()
+            theLogText.AppendLine()
+            theLogText.Append("UNHANDLED EXCEPTION CALL STACK:")
+            theLogText.AppendLine()
+            theLogText.Append(ex.ToString)
+            theLogText.AppendLine()
+            theLogText.Append(CChar("_"), 50)
+            theLogText.AppendLine()
+            
+            Trace.TraceError(theLogText.ToString)
 
         Catch
-            MessageBox.Show(ex.ToString, "ORMAP Taxlot Editing Error", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            theLogText.AppendLine()
+            theLogText.Append("Unable to log the above error.")
+            theLogText.AppendLine()
+            theLogText.Append("Please contact technical support and provide them with this information.")
+            theLogText.AppendLine()
+            theLogText.Append("[Press Ctrl+C on your keyboard to copy this message to the Windows clipboard.]")
+            theLogText.AppendLine()
+            theLogText.Append(CChar("_"), 50)
+            theLogText.AppendLine()
+            
+            MessageBox.Show(theLogText.ToString, "ORMAP Taxlot Editing Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
     End Sub
