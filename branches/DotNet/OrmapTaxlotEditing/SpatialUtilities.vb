@@ -127,7 +127,7 @@ Public NotInheritable Class SpatialUtilities
                     With inComboBox
                         If .Items.Count > 0 Then
                             'find the blank
-                            Dim textPosition As Integer = .FindStringExact(String.Empty, -1) 'HACK: JWM this is my best guess on how to find null string
+                            Dim textPosition As Integer = .FindStringExact(String.Empty, -1)
                             If textPosition > NotFoundIndex Then
                                 .Items.RemoveAt(textPosition)
                             End If
@@ -1604,7 +1604,7 @@ Public NotInheritable Class SpatialUtilities
             'check for existence of Taxlot layer
             Dim thisTaxlotFeatureLayer As IFeatureLayer
             thisTaxlotFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.TaxLotFC)
-            If thisTaxlotFeatureLayer Is Nothing Then ' TODO: JWM Place strings in resource file and may use for different type of notification
+            If thisTaxlotFeatureLayer Is Nothing Then
                 MessageBox.Show("Unable to locate the Taxlot layer in Table of Contents." & NewLine & _
                                 "This process requires a feature class called " & EditorExtension.TableNamesSettings.TaxLotFC & ".", _
                                 String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)

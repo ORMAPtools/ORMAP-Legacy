@@ -71,13 +71,6 @@ Public Class CatalogFileDialog
         End Try
     End Sub
 
-    ' TODO: JWM Add or remove.
-    ' See: http://msdn2.microsoft.com/bb264476(VS.90).aspx  
-    'Protected Overrides Sub Finalize()
-    '    _theGxDialog = Nothing
-    '    MyBase.Finalize()
-    'End Sub
-
 #End Region
 
 #Region "Custom class members"

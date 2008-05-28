@@ -182,7 +182,7 @@ Public NotInheritable Class StringUtilities
                         'Formats for the parcel id
                         If Not hasProcessedParcelId Then
                             'since we are at the end of the string use Insert
-                            formattedResult.Insert(positionInMask, mapTaxlotIdValue.Substring(24, 5)) ' TODO: JWM verify
+                            formattedResult.Insert(positionInMask, mapTaxlotIdValue.Substring(24, 5))
                             hasProcessedParcelId = True
                         End If
                     Case 38 '& Using these characters in mask will strip leading zeros from parcel id
@@ -233,7 +233,7 @@ Public NotInheritable Class StringUtilities
                         End If
                     Case 83 'S section
                         If String.CompareOrdinal(previousCharInMask, "S") = 0 Then 'second position
-                            formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(15, 1)) ' TODO: JWM verify
+                            formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(15, 1))
                         Else 'first position
                             formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(14, 1))
                         End If
@@ -329,10 +329,10 @@ Public NotInheritable Class StringUtilities
 #Region "Private Members"
 
     ''' <summary>
-    ''' 
+    ''' Trims leading zeros from a string
     ''' </summary>
     ''' <param name="stringToParse"></param>
-    ''' <returns></returns>
+    ''' <returns>A copy of the string without leading zeros</returns>
     ''' <remarks></remarks>
     Private Shared Function stripLeadingZeros(ByVal stringToParse As String) As String
         Try

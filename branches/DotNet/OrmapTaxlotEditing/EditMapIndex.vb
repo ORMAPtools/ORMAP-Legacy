@@ -371,9 +371,6 @@ Public NotInheritable Class EditMapIndex
     End Sub
 
     Private Sub uxCounty_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        ' TODO: JWM (?) ms-help://MS.VSCC.v80/MS.MSDN.vAug06.en/dv_fxmancli/html/228112e1-1711-42ee-8ffa-ff3555bffe66.htm says the first parameter is a reference to the object that raised the event.
-        '_ormapNumber.County = sender.selectedtext
-
         ' Validate entry
         Dim theOldSetting As String = _ormapNumber.County
         _ormapNumber.County = PartnerEditMapIndexForm.uxCounty.Text
