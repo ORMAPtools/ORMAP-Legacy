@@ -360,7 +360,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="license\COPYING.LESSER.txt" />
+    <Content Include="license\COPYING.LESSER.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="license\SOURCE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
