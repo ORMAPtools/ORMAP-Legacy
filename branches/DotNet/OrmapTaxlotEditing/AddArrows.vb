@@ -1380,7 +1380,7 @@ Public NotInheritable Class AddArrows
             ' Draw the temporary line the user sees while moving the mouse
             If arrowType.Equals("Hook", _ignoreCase) Then
 
-                If (Not _theInUse) Then Exit Sub ' SC perhaps exit try instead??
+                If (Not _theInUse) Then Exit Sub
 
                 ' Checks to see if the line symbol is defined
                 If (_theLineSymbol Is Nothing) Then bfirstTime = True

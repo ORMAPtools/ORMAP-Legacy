@@ -308,19 +308,6 @@ Public NotInheritable Class CombineTaxlots
             theTaxlotFieldIndex = LocateFields(TaxlotFeatureLayer.FeatureClass, EditorExtension.TaxLotSettings.TaxlotField)
             theTaxlotDataset = DirectCast(theTaxlotFClass, IDataset)
 
-            ' Find the Reference Lines feature class to insert any deleted lines in:
-
-            'Dim theReferenceLinesFeatureWorkspace As IFeatureWorkspace
-            'Dim theReferenceLinesFClass As IFeatureClass
-            'theReferenceLinesFeatureWorkspace = DirectCast(theTaxlotDataset.Workspace, IFeatureWorkspace)
-            'theReferenceLinesFClass = theReferenceLinesFeatureWorkspace.OpenFeatureClass(EditorExtension.TableNamesSettings.ReferenceLinesFC)
-            'If theReferenceLinesFClass Is Nothing Then
-            '    'If feature class not present, don't move lines
-            '    MessageBox.Show("Unable to locate Reference Lines feature class.", _
-            '            "Combine Taxlots", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-            '    Exit Try
-            'End If
-
             ' Combine taxlots:
 
             Dim theWorkspaceEdit As IWorkspaceEdit

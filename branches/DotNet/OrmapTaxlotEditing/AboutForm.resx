@@ -132,6 +132,50 @@ You should have received a copy of the Lesser GNU General Public License along w
 </value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="PictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+        x2Ix05wAAAAASUVORK5CYII=
+</value>
+  </data>
   <data name="uxLogo.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         R0lGODlhVgBSAPcAAP//////9f//5/f39/f37v/15uz2//b06fDw5e/v9e/v7/3t3eXt/e3t2fvp1uzr

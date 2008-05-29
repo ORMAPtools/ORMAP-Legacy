@@ -99,82 +99,79 @@ Public NotInheritable Class SpatialUtilities
     ''' <remarks></remarks>
     Public Shared Function AddCodesToCombo(ByVal inFieldName As String, ByVal inFeatureClass As IFeatureClass, ByVal inComboBox As ComboBox, ByVal inCurrentValue As Object, ByVal allowSpace As Boolean) As Boolean
         Dim returnValue As Boolean = False
-        Try
-            Dim theFieldIndex As Integer = inFeatureClass.Fields.FindField(inFieldName)
-            If theFieldIndex = NotFoundIndex Then
-                '[Field not found...]
-                Return False
-            End If
-            Dim theField As IField
-            theField = inFeatureClass.Fields.Field(theFieldIndex)
 
-            Dim theDomain As IDomain
-            theDomain = theField.Domain
-            If theDomain Is Nothing Then
-                '[Not a valid domain...]
-                Return False
-            End If
-
-            If theDomain.Type = esriDomainType.esriDTCodedValue Then
-                ' Populate the list
-                Dim theCodedValueDomain As ICodedValueDomain
-                theCodedValueDomain = DirectCast(theDomain, ICodedValueDomain)
-                Dim codeCount As Integer = theCodedValueDomain.CodeCount
-                For i As Integer = 0 To codeCount - 1
-                    inComboBox.Items.Add(theCodedValueDomain.Name(i))
-                Next i
-                ' Remove spaces if directed to.
-                If Not allowSpace Then
-                    With inComboBox
-                        If .Items.Count > 0 Then
-                            'find the blank
-                            Dim textPosition As Integer = .FindStringExact(String.Empty, -1)
-                            If textPosition > NotFoundIndex Then
-                                .Items.RemoveAt(textPosition)
-                            End If
-                        End If
-                    End With
-                End If
-                ' Set the current list index.
-                If TypeOf inCurrentValue Is String Then
-                    ' Select the existing value from the list
-                    inComboBox.SelectedIndex = inComboBox.FindStringExact(CStr(inCurrentValue), 0)
-                    If inComboBox.SelectedIndex = NotFoundIndex Then
-                        If inCurrentValue.Equals(String.Empty) AndAlso allowSpace Then
-                            ' Add the empty string as an item
-                            inComboBox.Items.Insert(0, String.Empty)
-                        End If
-                        ' Select the first item
-                        inComboBox.SelectedIndex = 0
-                    End If
-                End If
-
-                returnValue = True
-            Else
-                ' ENHANCE: Get unique values from the table for this field and add to combo list (?)
-
-                Dim theQueryFilter As IQueryFilter = New QueryFilter
-                theQueryFilter.SubFields = inFieldName
-
-                Dim theFeatCursor As IFeatureCursor = inFeatureClass.Search(theQueryFilter, False)
-                Dim theDataStats As IDataStatistics = New DataStatistics
-                Dim theDataStatsEnum As IEnumerator
-                With theDataStats
-                    .Cursor = DirectCast(theFeatCursor, ICursor)
-                    .Field = inFieldName
-                    theDataStatsEnum = CType(.UniqueValues, IEnumerator)
-                End With
-                Do Until theDataStatsEnum.MoveNext = False
-                    inComboBox.Items.Add(theDataStatsEnum.Current.ToString)
-                Loop
-
-            End If
-
-            Return returnValue
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
+        Dim theFieldIndex As Integer = inFeatureClass.Fields.FindField(inFieldName)
+        If theFieldIndex = NotFoundIndex Then
+            '[Field not found...]
             Return False
-        End Try
+        End If
+        Dim theField As IField
+        theField = inFeatureClass.Fields.Field(theFieldIndex)
+
+        Dim theDomain As IDomain
+        theDomain = theField.Domain
+        If theDomain Is Nothing Then
+            '[Not a valid domain...]
+            Return False
+        End If
+
+        If theDomain.Type = esriDomainType.esriDTCodedValue Then
+            ' Populate the list
+            Dim theCodedValueDomain As ICodedValueDomain
+            theCodedValueDomain = DirectCast(theDomain, ICodedValueDomain)
+            Dim codeCount As Integer = theCodedValueDomain.CodeCount
+            For i As Integer = 0 To codeCount - 1
+                inComboBox.Items.Add(theCodedValueDomain.Name(i))
+            Next i
+            ' Remove spaces if directed to.
+            If Not allowSpace Then
+                With inComboBox
+                    If .Items.Count > 0 Then
+                        'find the blank
+                        Dim textPosition As Integer = .FindStringExact(String.Empty, -1)
+                        If textPosition > NotFoundIndex Then
+                            .Items.RemoveAt(textPosition)
+                        End If
+                    End If
+                End With
+            End If
+            ' Set the current list index.
+            If TypeOf inCurrentValue Is String Then
+                ' Select the existing value from the list
+                inComboBox.SelectedIndex = inComboBox.FindStringExact(CStr(inCurrentValue), 0)
+                If inComboBox.SelectedIndex = NotFoundIndex Then
+                    If inCurrentValue.Equals(String.Empty) AndAlso allowSpace Then
+                        ' Add the empty string as an item
+                        inComboBox.Items.Insert(0, String.Empty)
+                    End If
+                    ' Select the first item
+                    inComboBox.SelectedIndex = 0
+                End If
+            End If
+
+            returnValue = True
+        Else
+            ' ENHANCE: Get unique values from the table for this field and add to combo list (?)
+
+            Dim theQueryFilter As IQueryFilter = New QueryFilter
+            theQueryFilter.SubFields = inFieldName
+
+            Dim theFeatCursor As IFeatureCursor = inFeatureClass.Search(theQueryFilter, False)
+            Dim theDataStats As IDataStatistics = New DataStatistics
+            Dim theDataStatsEnum As IEnumerator
+            With theDataStats
+                .Cursor = DirectCast(theFeatCursor, ICursor)
+                .Field = inFieldName
+                theDataStatsEnum = CType(.UniqueValues, IEnumerator)
+            End With
+            Do Until theDataStatsEnum.MoveNext = False
+                inComboBox.Items.Add(theDataStatsEnum.Current.ToString)
+            Loop
+
+        End If
+
+        Return returnValue
+
     End Function
 
     ''' <summary>
@@ -221,7 +218,7 @@ Public NotInheritable Class SpatialUtilities
                                 "Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Calculate Taxlot Values", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
             End If
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
@@ -229,7 +226,7 @@ Public NotInheritable Class SpatialUtilities
                                 "Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Calculate Taxlot Values", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
             End If
 
             ' Get the Taxlot feature class from the feature being edited.
@@ -269,7 +266,7 @@ Public NotInheritable Class SpatialUtilities
             '------------------------------------------
             Dim theCurrentMapNumber As String = GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
             If theCurrentMapNumber.Length = 0 Then
-                Exit Try
+                Exit Sub
             End If
 
             '------------------------------------------
@@ -295,7 +292,7 @@ Public NotInheritable Class SpatialUtilities
             Dim theORMapNum As String = GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
             If Not theORMapNumClass.ParseNumber(theORMapNum) Then
                 ' Exit if parse failed
-                Exit Try
+                Exit Sub
             End If
 
             '------------------------------------------
@@ -349,7 +346,7 @@ Public NotInheritable Class SpatialUtilities
             ' Recalculate ORTaxlot
             '------------------------------------------
             If IsDBNull(editFeature.Value(theTaxlotFieldIndex)) Then
-                Exit Try
+                Exit Sub
             End If
 
             ' Taxlot has actual taxlot number. ORTaxlot requires a 5-digit number, so leading zeros have to be added.
@@ -380,7 +377,7 @@ Public NotInheritable Class SpatialUtilities
 
             ' Recalculate ORTaxlot
             If IsDBNull(editFeature.Value(theORTaxlotFieldIndex)) Then
-                Exit Try
+                Exit Sub
             End If
             ' Get the current and the new ORTaxlot Numbers
             Dim theExistingORTaxlotString As String = CStr(editFeature.Value(theORTaxlotFieldIndex))
@@ -389,9 +386,6 @@ Public NotInheritable Class SpatialUtilities
             If String.Compare(theExistingORTaxlotString, theNewORTaxlotString, True, CultureInfo.CurrentCulture) <> 0 Then
                 editFeature.Value(theORTaxlotFieldIndex) = theNewORTaxlotString
             End If
-
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
 
         Finally
             theORMapNumClass = Nothing
@@ -410,40 +404,37 @@ Public NotInheritable Class SpatialUtilities
     ''' a empty string.</returns>
     ''' <remarks></remarks>
     Public Shared Function ConvertCodeValueDomainToCode(ByVal fields As IFields, ByVal fieldName As String, ByVal codedValue As String) As String
-        Try
-            Dim fieldIndex As Integer
-            Dim returnValue As String = String.Empty
 
-            If (fields Is Nothing) OrElse Not (TypeOf fields Is IFields) Then
-                Return returnValue
-            End If
+        Dim fieldIndex As Integer
+        Dim returnValue As String = String.Empty
 
-            fieldIndex = fields.FindField(fieldName)
-            If fieldIndex > -1 Then
-                Dim field As IField
-                field = fields.Field(fieldIndex)
-                Dim domain As IDomain = field.Domain
-
-                If domain IsNot Nothing Then
-                    If domain.Type = esriDomainType.esriDTCodedValue Then
-                        Dim thisCodedValueDomain As ICodedValueDomain
-                        thisCodedValueDomain = DirectCast(domain, ICodedValueDomain)
-                        For domainIndex As Integer = 0 To thisCodedValueDomain.CodeCount - 1
-                            If String.Compare(thisCodedValueDomain.Name(domainIndex), codedValue, True, CultureInfo.CurrentCulture) = 0 Then
-                                returnValue = thisCodedValueDomain.Value(domainIndex).ToString
-                            End If
-                        Next domainIndex
-                    Else
-                        returnValue = codedValue 'if range domain return the value
-                    End If
-                End If 'if domain is not nothing
-            End If
-
+        If (fields Is Nothing) OrElse Not (TypeOf fields Is IFields) Then
             Return returnValue
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            ConvertCodeValueDomainToCode = String.Empty
-        End Try
+        End If
+
+        fieldIndex = fields.FindField(fieldName)
+        If fieldIndex > -1 Then
+            Dim field As IField
+            field = fields.Field(fieldIndex)
+            Dim domain As IDomain = field.Domain
+
+            If domain IsNot Nothing Then
+                If domain.Type = esriDomainType.esriDTCodedValue Then
+                    Dim thisCodedValueDomain As ICodedValueDomain
+                    thisCodedValueDomain = DirectCast(domain, ICodedValueDomain)
+                    For domainIndex As Integer = 0 To thisCodedValueDomain.CodeCount - 1
+                        If String.Compare(thisCodedValueDomain.Name(domainIndex), codedValue, True, CultureInfo.CurrentCulture) = 0 Then
+                            returnValue = thisCodedValueDomain.Value(domainIndex).ToString
+                        End If
+                    Next domainIndex
+                Else
+                    returnValue = codedValue 'if range domain return the value
+                End If
+            End If 'if domain is not nothing
+        End If
+
+        Return returnValue
+
     End Function
 
     ''' <summary>
@@ -458,38 +449,36 @@ Public NotInheritable Class SpatialUtilities
     ''' empty string.</returns>
     ''' <remarks></remarks>
     Public Shared Function ConvertCodeValueDomainToDescription(ByVal fields As IFields, ByVal fieldName As String, ByVal codedValue As String) As String
-        Try
-            Dim returnValue As String = String.Empty
-            Dim fieldIndex As Integer
-            fieldIndex = fields.FindField(fieldName)
-            If fieldIndex > -1 Then
-                Dim field As IField
-                field = fields.Field(fieldIndex)
 
-                Dim domain As IDomain = field.Domain
-                If domain IsNot Nothing Then
-                    If domain.Type = esriDomainType.esriDTCodedValue Then
-                        Dim codedValueDomain As ICodedValueDomain = DirectCast(domain, ICodedValueDomain)
-                        For domainIndex As Integer = 0 To codedValueDomain.CodeCount - 1
-                            'In the vb6 version the code was comparing an object to a variant to get the result. We don't have that luxury.
-                            'codedValueDomain.Value is an object
-                            If String.Compare(codedValueDomain.Value(domainIndex).ToString, codedValue, True, CultureInfo.CurrentCulture) = 0 Then
-                                returnValue = codedValueDomain.Name(domainIndex)
-                            End If
-                        Next domainIndex
-                    Else
-                        returnValue = codedValue 'if range domain return the value
-                    End If
+        Dim returnValue As String = String.Empty
+        Dim fieldIndex As Integer
+        fieldIndex = fields.FindField(fieldName)
+        If fieldIndex > -1 Then
+            Dim field As IField
+            field = fields.Field(fieldIndex)
+
+            Dim domain As IDomain = field.Domain
+            If domain IsNot Nothing Then
+                If domain.Type = esriDomainType.esriDTCodedValue Then
+                    Dim codedValueDomain As ICodedValueDomain = DirectCast(domain, ICodedValueDomain)
+                    For domainIndex As Integer = 0 To codedValueDomain.CodeCount - 1
+                        'In the vb6 version the code was comparing an object to a variant to get the result. We don't have that luxury.
+                        'codedValueDomain.Value is an object
+                        If String.Compare(codedValueDomain.Value(domainIndex).ToString, codedValue, True, CultureInfo.CurrentCulture) = 0 Then
+                            returnValue = codedValueDomain.Name(domainIndex)
+                        End If
+                    Next domainIndex
                 Else
-                    Return codedValue
-                    Exit Try
-                End If 'if domain is valid object
-            End If
-            Return returnValue
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return String.Empty
-        End Try
+                    returnValue = codedValue 'if range domain return the value
+                End If
+            Else
+                Return codedValue
+                Exit Function
+            End If 'if domain is valid object
+        End If
+
+        Return returnValue
+
     End Function
 
     ''' <summary>
@@ -532,10 +521,6 @@ Public NotInheritable Class SpatialUtilities
 
             Return returnValue
 
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return Nothing
-
         Finally
             thisUID = Nothing
             theMap = Nothing
@@ -572,10 +557,6 @@ Public NotInheritable Class SpatialUtilities
 
             Return returnValue
 
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return Nothing
-
         Finally
             theMap = Nothing
 
@@ -590,16 +571,11 @@ Public NotInheritable Class SpatialUtilities
     ''' <returns>A Point object that represents the center of the envelope.</returns>
     ''' <remarks></remarks>
     Public Shared Function GetCenterOfEnvelope(ByVal envelope As IEnvelope) As IPoint
-        Try
-            Dim center As IPoint
-            center = New Point
-            center.X = envelope.XMin + (envelope.XMax - envelope.XMin) / 2
-            center.Y = envelope.YMin + (envelope.YMax - envelope.YMin) / 2
-            Return center
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return Nothing
-        End Try
+        Dim center As IPoint
+        center = New Point
+        center.X = envelope.XMin + (envelope.XMax - envelope.XMin) / 2
+        center.Y = envelope.YMin + (envelope.YMax - envelope.YMin) / 2
+        Return center
     End Function
 
     ''' <summary>
@@ -630,26 +606,23 @@ Public NotInheritable Class SpatialUtilities
     ''' <remarks></remarks>
     Public Shared Function GetMapSuffixNumber(ByVal feature As IFeature) As String
 
-        Try
-            Dim returnValue As New String("0"c, 3)
-            Dim theTaxlotMapSuffixFieldIndex As Integer = LocateFields(DirectCast(feature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixNumberField)
-            If theTaxlotMapSuffixFieldIndex > -1 Then
-                If Not IsDBNull(feature.Value(theTaxlotMapSuffixFieldIndex)) Then
-                    returnValue = CStr(feature.Value(theTaxlotMapSuffixFieldIndex))
-                End If
-                'verify that it is exactly 3 digits
-                If returnValue.Length < 3 Then
-                    returnValue = returnValue.PadLeft(3, "0"c)
-                End If
-                If returnValue.Length > 3 Then
-                    returnValue = returnValue.Substring(0, 3)
-                End If
+        Dim returnValue As New String("0"c, 3)
+        Dim theTaxlotMapSuffixFieldIndex As Integer = LocateFields(DirectCast(feature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixNumberField)
+        If theTaxlotMapSuffixFieldIndex > -1 Then
+            If Not IsDBNull(feature.Value(theTaxlotMapSuffixFieldIndex)) Then
+                returnValue = CStr(feature.Value(theTaxlotMapSuffixFieldIndex))
             End If
-            Return returnValue
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return "000"
-        End Try
+            'verify that it is exactly 3 digits
+            If returnValue.Length < 3 Then
+                returnValue = returnValue.PadLeft(3, "0"c)
+            End If
+            If returnValue.Length > 3 Then
+                returnValue = returnValue.Substring(0, 3)
+            End If
+        End If
+
+        Return returnValue
+
     End Function
 
     ''' <summary>
@@ -659,35 +632,33 @@ Public NotInheritable Class SpatialUtilities
     ''' <returns>A string that represents a properly formatted Map Suffix Type.</returns>
     ''' <remarks>A proper map suffix type is one character.</remarks>
     Public Shared Function GetMapSuffixType(ByVal theFeature As IFeature) As String
-        Try
-            Dim returnValue As New String("0"c, 1)
-            Dim theTaxlotMapTypeFieldIndex As Integer
-            theTaxlotMapTypeFieldIndex = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixTypeField)
-            If theTaxlotMapTypeFieldIndex > -1 Then
-                If Not IsDBNull(theFeature.Value(theTaxlotMapTypeFieldIndex)) Then
-                    returnValue = CStr(theFeature.Value(theTaxlotMapTypeFieldIndex))
-                    'verify that it is one digit
-                    If returnValue.Length > 1 Then
-                        returnValue = returnValue.PadLeft(1, "0"c)
-                    End If
-                    'verify that it is not more than 1 digit
-                    If returnValue.Length > 1 Then
-                        returnValue = returnValue.Substring(0, 1)
-                    End If
+
+        Dim returnValue As New String("0"c, 1)
+        Dim theTaxlotMapTypeFieldIndex As Integer
+        theTaxlotMapTypeFieldIndex = LocateFields(DirectCast(theFeature.Class, IFeatureClass), EditorExtension.TaxLotSettings.MapSuffixTypeField)
+        If theTaxlotMapTypeFieldIndex > -1 Then
+            If Not IsDBNull(theFeature.Value(theTaxlotMapTypeFieldIndex)) Then
+                returnValue = CStr(theFeature.Value(theTaxlotMapTypeFieldIndex))
+                'verify that it is one digit
+                If returnValue.Length > 1 Then
+                    returnValue = returnValue.PadLeft(1, "0"c)
                 End If
-                'verify that it is exactly one digit
-                If returnValue.Length < 1 Then
-                    returnValue = "0"
-                End If
+                'verify that it is not more than 1 digit
                 If returnValue.Length > 1 Then
                     returnValue = returnValue.Substring(0, 1)
                 End If
             End If
-            Return returnValue
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return "0"
-        End Try
+            'verify that it is exactly one digit
+            If returnValue.Length < 1 Then
+                returnValue = "0"
+            End If
+            If returnValue.Length > 1 Then
+                returnValue = returnValue.Substring(0, 1)
+            End If
+        End If
+
+        Return returnValue
+
     End Function
 
     ''' <summary>
@@ -701,30 +672,27 @@ Public NotInheritable Class SpatialUtilities
     ''' <para>This is optimized for annotation because there is a single 
     ''' relationship class.</para></remarks>
     Public Shared Function GetRelatedObjects(ByVal anObject As IObject) As IFeature
-        Try
-            Dim relationshipClassEnum As IEnumRelationshipClass
+        Dim relationshipClassEnum As IEnumRelationshipClass
 
-            relationshipClassEnum = anObject.Class.RelationshipClasses(esriRelRole.esriRelRoleAny)
-            If relationshipClassEnum IsNot Nothing Then
-                Dim thisRelationshipClass As IRelationshipClass
-                thisRelationshipClass = relationshipClassEnum.Next
-                If thisRelationshipClass IsNot Nothing Then
-                    Dim parentSet As ISet
-                    parentSet = thisRelationshipClass.GetObjectsRelatedToObject(anObject)
-                    If parentSet IsNot Nothing Then
-                        Dim parentFeature As IFeature
-                        parentFeature = DirectCast(parentSet.Next, IFeature)
-                        If parentFeature IsNot Nothing Then
-                            Return parentFeature
-                        End If
+        relationshipClassEnum = anObject.Class.RelationshipClasses(esriRelRole.esriRelRoleAny)
+        If relationshipClassEnum IsNot Nothing Then
+            Dim thisRelationshipClass As IRelationshipClass
+            thisRelationshipClass = relationshipClassEnum.Next
+            If thisRelationshipClass IsNot Nothing Then
+                Dim parentSet As ISet
+                parentSet = thisRelationshipClass.GetObjectsRelatedToObject(anObject)
+                If parentSet IsNot Nothing Then
+                    Dim parentFeature As IFeature
+                    parentFeature = DirectCast(parentSet.Next, IFeature)
+                    If parentFeature IsNot Nothing Then
+                        Return parentFeature
                     End If
                 End If
             End If
-            Return Nothing
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return Nothing
-        End Try
+        End If
+
+        Return Nothing
+
     End Function
 
     ''' <summary>
@@ -811,235 +779,230 @@ Public NotInheritable Class SpatialUtilities
 
         ' ENHANCE: [NIS] Refactor (smaller modules).
 
-        Try
-            Dim continueThisProcess As Boolean
+        Dim continueThisProcess As Boolean
 
-            continueThisProcess = True 'initialize
+        continueThisProcess = True 'initialize
 
-            Debug.Assert(Not searchGeometry Is Nothing, "GetValueViaOverlay", "searchGeometry Is Nothing")
-            Debug.Assert(Not overlayFeatureClass Is Nothing, "GetValueViaOverlay", "overlayFeatureClass Is Nothing")
-            Debug.Assert(Not valueFieldName = "", "GetValueViaOverlay", "valueFieldName is empty")
-            Debug.Assert(Not orderBestByFieldName = "", "GetValueViaOverlay", "orderBestByFieldName is empty")
+        Debug.Assert(Not searchGeometry Is Nothing, "GetValueViaOverlay", "searchGeometry Is Nothing")
+        Debug.Assert(Not overlayFeatureClass Is Nothing, "GetValueViaOverlay", "overlayFeatureClass Is Nothing")
+        Debug.Assert(Not valueFieldName = "", "GetValueViaOverlay", "valueFieldName is empty")
+        Debug.Assert(Not orderBestByFieldName = "", "GetValueViaOverlay", "orderBestByFieldName is empty")
 
-            If (searchGeometry Is Nothing) OrElse (overlayFeatureClass Is Nothing) OrElse (valueFieldName.Length <= 0) Then
+        If (searchGeometry Is Nothing) OrElse (overlayFeatureClass Is Nothing) OrElse (valueFieldName.Length <= 0) Then
+            continueThisProcess = False
+        End If
+
+        Dim valueFieldIndex As Integer = NotFoundIndex
+        If continueThisProcess Then
+            valueFieldIndex = overlayFeatureClass.Fields.FindField(valueFieldName)
+            If valueFieldIndex = NotFoundIndex Then
                 continueThisProcess = False
             End If
+        End If
 
-            Dim valueFieldIndex As Integer = NotFoundIndex
-            If continueThisProcess Then
-                valueFieldIndex = overlayFeatureClass.Fields.FindField(valueFieldName)
-                If valueFieldIndex = NotFoundIndex Then
-                    continueThisProcess = False
-                End If
-            End If
-
-            Dim orderBestByFieldIndex As Integer = NotFoundIndex
-            If continueThisProcess Then
-                If orderBestByFieldName.Length = 0 Then
-                    ' Use the value field as the order-by field
-                    orderBestByFieldIndex = valueFieldIndex
-                Else
-                    orderBestByFieldIndex = overlayFeatureClass.Fields.FindField(orderBestByFieldName)
-                    If orderBestByFieldIndex = NotFoundIndex Then
-                        ' Field not found. Try the OID field
-                        If overlayFeatureClass.HasOID Then
-                            orderBestByFieldIndex = overlayFeatureClass.Fields.FindField(overlayFeatureClass.OIDFieldName)
-                            Dim msg As String = "Field " & orderBestByFieldName & " not found in " & overlayFeatureClass.AliasName & NewLine & _
-                                    ". Using " & overlayFeatureClass.OIDFieldName
-                            Debug.WriteLine(msg)
-                            Trace.WriteLine(msg)
-                        Else
-                            continueThisProcess = False
-                        End If
+        Dim orderBestByFieldIndex As Integer = NotFoundIndex
+        If continueThisProcess Then
+            If orderBestByFieldName.Length = 0 Then
+                ' Use the value field as the order-by field
+                orderBestByFieldIndex = valueFieldIndex
+            Else
+                orderBestByFieldIndex = overlayFeatureClass.Fields.FindField(orderBestByFieldName)
+                If orderBestByFieldIndex = NotFoundIndex Then
+                    ' Field not found. Try the OID field
+                    If overlayFeatureClass.HasOID Then
+                        orderBestByFieldIndex = overlayFeatureClass.Fields.FindField(overlayFeatureClass.OIDFieldName)
+                        Dim msg As String = "Field " & orderBestByFieldName & " not found in " & overlayFeatureClass.AliasName & NewLine & _
+                                ". Using " & overlayFeatureClass.OIDFieldName
+                        Debug.WriteLine(msg)
+                        Trace.WriteLine(msg)
+                    Else
+                        continueThisProcess = False
                     End If
                 End If
             End If
+        End If
 
-            Dim thisPolygon As IPolygon
-            Dim thisArea As IArea
-            Dim thisCurve As ICurve
-            Dim thisEnvelope As IEnvelope
-            Dim intersectFuzzAmount As Double
-            Const fuzzFactor As Double = 0.05 ' ENHANCE: [NIS] Re-implement as user setting?
+        Dim thisPolygon As IPolygon
+        Dim thisArea As IArea
+        Dim thisCurve As ICurve
+        Dim thisEnvelope As IEnvelope
+        Dim intersectFuzzAmount As Double
+        Const fuzzFactor As Double = 0.05 ' ENHANCE: [NIS] Re-implement as user setting?
 
-            If continueThisProcess Then
-                Select Case searchGeometry.GeometryType
-                    Case esriGeometryType.esriGeometryPolygon
-                        thisPolygon = DirectCast(searchGeometry, IPolygon)
-                        thisArea = DirectCast(thisPolygon, IArea)
-                        intersectFuzzAmount = thisArea.Area * fuzzFactor
+        If continueThisProcess Then
+            Select Case searchGeometry.GeometryType
+                Case esriGeometryType.esriGeometryPolygon
+                    thisPolygon = DirectCast(searchGeometry, IPolygon)
+                    thisArea = DirectCast(thisPolygon, IArea)
+                    intersectFuzzAmount = thisArea.Area * fuzzFactor
 
-                    Case esriGeometryType.esriGeometryPolyline, esriGeometryType.esriGeometryLine, esriGeometryType.esriGeometryBezier3Curve, esriGeometryType.esriGeometryCircularArc, esriGeometryType.esriGeometryEllipticArc, esriGeometryType.esriGeometryPath
-                        thisCurve = DirectCast(searchGeometry, ICurve)
-                        intersectFuzzAmount = thisCurve.Length * fuzzFactor
+                Case esriGeometryType.esriGeometryPolyline, esriGeometryType.esriGeometryLine, esriGeometryType.esriGeometryBezier3Curve, esriGeometryType.esriGeometryCircularArc, esriGeometryType.esriGeometryEllipticArc, esriGeometryType.esriGeometryPath
+                    thisCurve = DirectCast(searchGeometry, ICurve)
+                    intersectFuzzAmount = thisCurve.Length * fuzzFactor
 
-                    Case esriGeometryType.esriGeometryEnvelope
-                        thisEnvelope = DirectCast(searchGeometry, IEnvelope)
-                        thisPolygon = envelopeToPolygon(thisEnvelope)
-                        thisArea = DirectCast(thisPolygon, IArea)
-                        intersectFuzzAmount = thisArea.Area * fuzzFactor
+                Case esriGeometryType.esriGeometryEnvelope
+                    thisEnvelope = DirectCast(searchGeometry, IEnvelope)
+                    thisPolygon = envelopeToPolygon(thisEnvelope)
+                    thisArea = DirectCast(thisPolygon, IArea)
+                    intersectFuzzAmount = thisArea.Area * fuzzFactor
 
-                    Case Else
-                        continueThisProcess = False
+                Case Else
+                    continueThisProcess = False
 
-                End Select
-            End If
+            End Select
+        End If
 
-            Dim theOverlayFeatureCursor As IFeatureCursor
-            Dim anOverlayFeature As IFeature
-            Dim dictCandidates As New Dictionary(Of Integer, Double) '(key::value) OID::area/length
+        Dim theOverlayFeatureCursor As IFeatureCursor
+        Dim anOverlayFeature As IFeature
+        Dim dictCandidates As New Dictionary(Of Integer, Double) '(key::value) OID::area/length
 
-            If continueThisProcess Then
+        If continueThisProcess Then
 
-                Dim largestIntersectArea As Double = 0
-                Dim longestIntersectLength As Double = 0
+            Dim largestIntersectArea As Double = 0
+            Dim longestIntersectLength As Double = 0
 
-                theOverlayFeatureCursor = DoSpatialQuery(overlayFeatureClass, searchGeometry, esriSpatialRelEnum.esriSpatialRelIntersects)
-                If theOverlayFeatureCursor IsNot Nothing Then
-                    anOverlayFeature = theOverlayFeatureCursor.NextFeature
-                    Dim topoOperator As ITopologicalOperator
-                    Dim intersectGeometry As IGeometry
-                    Dim intersectArea As Double = 0
-                    dictCandidates = New Dictionary(Of Integer, Double)
-                    While Not (anOverlayFeature Is Nothing)
+            theOverlayFeatureCursor = DoSpatialQuery(overlayFeatureClass, searchGeometry, esriSpatialRelEnum.esriSpatialRelIntersects)
+            If theOverlayFeatureCursor IsNot Nothing Then
+                anOverlayFeature = theOverlayFeatureCursor.NextFeature
+                Dim topoOperator As ITopologicalOperator
+                Dim intersectGeometry As IGeometry
+                Dim intersectArea As Double = 0
+                dictCandidates = New Dictionary(Of Integer, Double)
+                While Not (anOverlayFeature Is Nothing)
 
-                        topoOperator = DirectCast(anOverlayFeature.Shape, ITopologicalOperator)
-                        If Not topoOperator.IsSimple Then
-                            topoOperator.Simplify()
-                        End If
+                    topoOperator = DirectCast(anOverlayFeature.Shape, ITopologicalOperator)
+                    If Not topoOperator.IsSimple Then
+                        topoOperator.Simplify()
+                    End If
 
-                        Select Case searchGeometry.GeometryType
+                    Select Case searchGeometry.GeometryType
 
-                            Case esriGeometryType.esriGeometryEnvelope, esriGeometryType.esriGeometryPolygon
-                                ' Determine if the target feature has the largest area of intersection with the
-                                ' current source feature. Set flags used below.
-                                intersectGeometry = topoOperator.Intersect(searchGeometry, esriGeometryDimension.esriGeometry2Dimension)
-                                If Not intersectGeometry.IsEmpty Then
-                                    thisPolygon = DirectCast(intersectGeometry, IPolygon)
-                                    thisArea = DirectCast(thisPolygon, IArea)
-                                    intersectArea = thisArea.Area
-                                    If System.Math.Abs(intersectArea - largestIntersectArea) > intersectFuzzAmount Then
-                                        '[Difference greater than fuzz amount, so not a "fuzzy tie"...]
-                                        ' Determine if this is the feature with the largest area of intersection.
-                                        If intersectArea > largestIntersectArea Then
-                                            largestIntersectArea = intersectArea
-                                            '[New largest intersection...]
-                                            ' Get the value only for this feature.
-                                            dictCandidates.Clear()
-                                            dictCandidates.Add(anOverlayFeature.OID, largestIntersectArea)
-                                        Else
-                                            '[Smaller intersection...]
-                                            ' Don't get the value for this feature.
-                                        End If
-                                    Else
-                                        '[Difference not greater than fuzz amount, so a "fuzzy tie"...]
-                                        ' Evaluate this feature against other tied candidates (don't clear dictionary).
+                        Case esriGeometryType.esriGeometryEnvelope, esriGeometryType.esriGeometryPolygon
+                            ' Determine if the target feature has the largest area of intersection with the
+                            ' current source feature. Set flags used below.
+                            intersectGeometry = topoOperator.Intersect(searchGeometry, esriGeometryDimension.esriGeometry2Dimension)
+                            If Not intersectGeometry.IsEmpty Then
+                                thisPolygon = DirectCast(intersectGeometry, IPolygon)
+                                thisArea = DirectCast(thisPolygon, IArea)
+                                intersectArea = thisArea.Area
+                                If System.Math.Abs(intersectArea - largestIntersectArea) > intersectFuzzAmount Then
+                                    '[Difference greater than fuzz amount, so not a "fuzzy tie"...]
+                                    ' Determine if this is the feature with the largest area of intersection.
+                                    If intersectArea > largestIntersectArea Then
+                                        largestIntersectArea = intersectArea
+                                        '[New largest intersection...]
+                                        ' Get the value only for this feature.
+                                        dictCandidates.Clear()
                                         dictCandidates.Add(anOverlayFeature.OID, largestIntersectArea)
+                                    Else
+                                        '[Smaller intersection...]
+                                        ' Don't get the value for this feature.
                                     End If
                                 Else
-                                    '[Empty intersection geometry...]
-                                    ' Don't get the value for this feature
-                                End If
-
-                            Case esriGeometryType.esriGeometryLine, esriGeometryType.esriGeometryPolyline
-                                ' Determine if the target feature has the longest length of intersection with the
-                                ' current source feature. Set flags used below.
-                                intersectGeometry = topoOperator.Intersect(searchGeometry, esriGeometryDimension.esriGeometry1Dimension)
-                                If Not intersectGeometry.IsEmpty Then
-                                    thisCurve = DirectCast(intersectGeometry, ICurve)
-                                    Dim intersectLength As Double
-                                    intersectLength = thisCurve.Length
-                                    If System.Math.Abs(intersectLength - longestIntersectLength) > intersectFuzzAmount Then
-                                        '[Difference greater than fuzz amount, so not a "fuzzy tie"...]
-                                        ' Determine if this is the feature with the longest length of intersection
-                                        If intersectLength > longestIntersectLength Then
-                                            longestIntersectLength = intersectLength
-                                            dictCandidates.Clear()
-                                            dictCandidates.Add(anOverlayFeature.OID, longestIntersectLength)
-                                        Else
-                                            '[Smaller intersection...]
-                                            ' Don't get the value for this feature
-                                        End If
-                                    Else
-                                        '[Difference not greater than fuzz amount, so a "fuzzy tie"...]
-                                        'Evaluate this feature against other tied candidates (don't clear dictionary).
-                                        dictCandidates.Add(anOverlayFeature.OID, longestIntersectLength)
-                                    End If
-                                Else
-                                    '[Empty intersection geometry...]
-                                    ' Don't get the value for this feature
-                                End If
-
-                            Case esriGeometryType.esriGeometryPoint
-                                '[Tied by definition (0-dimension = zero area & length = tie)...]
-                                ' Evaluate this feature against other tied candidates (don't clear dictionary).
-                                dictCandidates.Add(anOverlayFeature.OID, 0)
-
-                            Case Else
-                                continueThisProcess = False
-
-                        End Select
-                        anOverlayFeature = theOverlayFeatureCursor.NextFeature
-                    End While
-                End If
-
-            End If
-
-            Dim theBestValue As String = ""
-
-            If continueThisProcess Then
-
-                If dictCandidates.Count > 0 Then
-                    Dim aValue As String = ""
-                    Dim theBestOrderByValue As String = ""
-
-                    Dim whereClause As String = String.Concat(overlayFeatureClass.OIDFieldName, " in (", candidateKeysToDelimitedString(dictCandidates), ")")
-                    theOverlayFeatureCursor = DoSpatialQuery(overlayFeatureClass, searchGeometry, esriSpatialRelEnum.esriSpatialRelIntersects, whereClause)
-                    If Not (theOverlayFeatureCursor Is Nothing) Then
-                        anOverlayFeature = theOverlayFeatureCursor.NextFeature
-                        While Not (anOverlayFeature Is Nothing)
-                            If dictCandidates.Count > 1 Then
-                                '[Candidates tied for area/length of intersection (unikely but possible)...]
-                                ' Get the value only if the candidate source feature has the best (lowest) order-by value
-                                Dim anOrderByValue As String = CStr(anOverlayFeature.Value(orderBestByFieldIndex))
-                                ' Note: When you compare strings, the string expressions are evaluated based on their 
-                                ' alphabetical sort order (e.g. "A" < "B" and "A" < "Ax"), which depends on the Option 
-                                ' Compare setting.
-                                If theBestOrderByValue.Length = 0 OrElse anOrderByValue < theBestOrderByValue Then
-                                    '[Any new value beats an empty value...]
-                                    '[lower in the sort order is assumed to be better...]
-                                    theBestOrderByValue = anOrderByValue
-                                    If Not IsDBNull(anOverlayFeature.Value(valueFieldIndex)) Then
-                                        aValue = CStr(anOverlayFeature.Value(valueFieldIndex))
-                                        theBestValue = aValue
-                                    Else
-                                        MessageBox.Show("The field " & anOverlayFeature.Fields.Field(valueFieldIndex).Name & " contains a Null" & NewLine & "for the feature with OID=" & anOverlayFeature.OID & ".", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                                    End If
+                                    '[Difference not greater than fuzz amount, so a "fuzzy tie"...]
+                                    ' Evaluate this feature against other tied candidates (don't clear dictionary).
+                                    dictCandidates.Add(anOverlayFeature.OID, largestIntersectArea)
                                 End If
                             Else
-                                '[Candidates not tied (only one)...]
-                                ' Get the value for the only candidate feature
+                                '[Empty intersection geometry...]
+                                ' Don't get the value for this feature
+                            End If
+
+                        Case esriGeometryType.esriGeometryLine, esriGeometryType.esriGeometryPolyline
+                            ' Determine if the target feature has the longest length of intersection with the
+                            ' current source feature. Set flags used below.
+                            intersectGeometry = topoOperator.Intersect(searchGeometry, esriGeometryDimension.esriGeometry1Dimension)
+                            If Not intersectGeometry.IsEmpty Then
+                                thisCurve = DirectCast(intersectGeometry, ICurve)
+                                Dim intersectLength As Double
+                                intersectLength = thisCurve.Length
+                                If System.Math.Abs(intersectLength - longestIntersectLength) > intersectFuzzAmount Then
+                                    '[Difference greater than fuzz amount, so not a "fuzzy tie"...]
+                                    ' Determine if this is the feature with the longest length of intersection
+                                    If intersectLength > longestIntersectLength Then
+                                        longestIntersectLength = intersectLength
+                                        dictCandidates.Clear()
+                                        dictCandidates.Add(anOverlayFeature.OID, longestIntersectLength)
+                                    Else
+                                        '[Smaller intersection...]
+                                        ' Don't get the value for this feature
+                                    End If
+                                Else
+                                    '[Difference not greater than fuzz amount, so a "fuzzy tie"...]
+                                    'Evaluate this feature against other tied candidates (don't clear dictionary).
+                                    dictCandidates.Add(anOverlayFeature.OID, longestIntersectLength)
+                                End If
+                            Else
+                                '[Empty intersection geometry...]
+                                ' Don't get the value for this feature
+                            End If
+
+                        Case esriGeometryType.esriGeometryPoint
+                            '[Tied by definition (0-dimension = zero area & length = tie)...]
+                            ' Evaluate this feature against other tied candidates (don't clear dictionary).
+                            dictCandidates.Add(anOverlayFeature.OID, 0)
+
+                        Case Else
+                            continueThisProcess = False
+
+                    End Select
+                    anOverlayFeature = theOverlayFeatureCursor.NextFeature
+                End While
+            End If
+
+        End If
+
+        Dim theBestValue As String = ""
+
+        If continueThisProcess Then
+
+            If dictCandidates.Count > 0 Then
+                Dim aValue As String = ""
+                Dim theBestOrderByValue As String = ""
+
+                Dim whereClause As String = String.Concat(overlayFeatureClass.OIDFieldName, " in (", candidateKeysToDelimitedString(dictCandidates), ")")
+                theOverlayFeatureCursor = DoSpatialQuery(overlayFeatureClass, searchGeometry, esriSpatialRelEnum.esriSpatialRelIntersects, whereClause)
+                If Not (theOverlayFeatureCursor Is Nothing) Then
+                    anOverlayFeature = theOverlayFeatureCursor.NextFeature
+                    While Not (anOverlayFeature Is Nothing)
+                        If dictCandidates.Count > 1 Then
+                            '[Candidates tied for area/length of intersection (unikely but possible)...]
+                            ' Get the value only if the candidate source feature has the best (lowest) order-by value
+                            Dim anOrderByValue As String = CStr(anOverlayFeature.Value(orderBestByFieldIndex))
+                            ' Note: When you compare strings, the string expressions are evaluated based on their 
+                            ' alphabetical sort order (e.g. "A" < "B" and "A" < "Ax"), which depends on the Option 
+                            ' Compare setting.
+                            If theBestOrderByValue.Length = 0 OrElse anOrderByValue < theBestOrderByValue Then
+                                '[Any new value beats an empty value...]
+                                '[lower in the sort order is assumed to be better...]
+                                theBestOrderByValue = anOrderByValue
                                 If Not IsDBNull(anOverlayFeature.Value(valueFieldIndex)) Then
                                     aValue = CStr(anOverlayFeature.Value(valueFieldIndex))
                                     theBestValue = aValue
                                 Else
                                     MessageBox.Show("The field " & anOverlayFeature.Fields.Field(valueFieldIndex).Name & " contains a Null" & NewLine & "for the feature with OID=" & anOverlayFeature.OID & ".", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                                 End If
-                                Exit While
-                            End If 'dictCandidates.count > 1
-                        End While
-                    End If 'featurecursor is not nothing
-                Else
-                    MessageBox.Show("No " & overlayFeatureClass.AliasName & "features found " & NewLine & " which intersect this feature.", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                End If 'dictionary count > zero
-            End If 'continueThisProcess 
+                            End If
+                        Else
+                            '[Candidates not tied (only one)...]
+                            ' Get the value for the only candidate feature
+                            If Not IsDBNull(anOverlayFeature.Value(valueFieldIndex)) Then
+                                aValue = CStr(anOverlayFeature.Value(valueFieldIndex))
+                                theBestValue = aValue
+                            Else
+                                MessageBox.Show("The field " & anOverlayFeature.Fields.Field(valueFieldIndex).Name & " contains a Null" & NewLine & "for the feature with OID=" & anOverlayFeature.OID & ".", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                            End If
+                            Exit While
+                        End If 'dictCandidates.count > 1
+                    End While
+                End If 'featurecursor is not nothing
+            Else
+                MessageBox.Show("No " & overlayFeatureClass.AliasName & "features found " & NewLine & " which intersect this feature.", "Error: GetValueViaOverlay", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If 'dictionary count > zero
+        End If 'continueThisProcess 
 
-            Return theBestValue
+        Return theBestValue
 
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return String.Empty
-        End Try
     End Function
 
     ''' <summary>
@@ -1052,21 +1015,18 @@ Public NotInheritable Class SpatialUtilities
     ''' <remarks>Checking the selection set of layer, determine if one, many, 
     ''' or no features are selected.</remarks>
     Public Shared Function HasSelectedFeatureCount(ByVal inLayer As IFeatureLayer, ByVal inMinimumCount As Integer) As Boolean
-        Try
-            Dim returnValue As Boolean = False
-            If (inLayer Is Nothing) Or Not (TypeOf inLayer Is IFeatureLayer) Then
-                Return returnValue
-            End If
-
-            ' How many are selected?
-            Dim featuresSelected As IFeatureSelection
-            featuresSelected = DirectCast(inLayer, IFeatureSelection)
-            returnValue = (featuresSelected.SelectionSet.Count >= inMinimumCount)
+        Dim returnValue As Boolean = False
+        If (inLayer Is Nothing) Or Not (TypeOf inLayer Is IFeatureLayer) Then
             Return returnValue
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return False
-        End Try
+        End If
+
+        ' How many are selected?
+        Dim featuresSelected As IFeatureSelection
+        featuresSelected = DirectCast(inLayer, IFeatureSelection)
+        returnValue = (featuresSelected.SelectionSet.Count >= inMinimumCount)
+
+        Return returnValue
+
     End Function
 
     ''' <summary>
@@ -1077,23 +1037,18 @@ Public NotInheritable Class SpatialUtilities
     ''' <remarks>Compares the feature type of <paramref name="thisObject"/> with 
     ''' that of annotation and return the truth value of the comparison.</remarks>
     Public Shared Function IsAnno(ByVal thisObject As IObject) As Boolean
-        Try
-            Dim thisObjectClass As IObjectClass
-            thisObjectClass = thisObject.Class
+        Dim thisObjectClass As IObjectClass
+        thisObjectClass = thisObject.Class
 
-            If TypeOf thisObject Is IFeature Then
-                Dim thisFeatureClass As IFeatureClass
-                thisFeatureClass = DirectCast(thisObjectClass, IFeatureClass)
-                If thisFeatureClass.FeatureType = esriFeatureType.esriFTAnnotation Then
-                    Return True
-                Else
-                    Return False
-                End If
+        If TypeOf thisObject Is IFeature Then
+            Dim thisFeatureClass As IFeatureClass
+            thisFeatureClass = DirectCast(thisObjectClass, IFeatureClass)
+            If thisFeatureClass.FeatureType = esriFeatureType.esriFTAnnotation Then
+                Return True
+            Else
+                Return False
             End If
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return False
-        End Try
+        End If
     End Function
 
     ''' <summary>
@@ -1105,20 +1060,15 @@ Public NotInheritable Class SpatialUtilities
     ''' feature class to the Map Index layer name in order to determine if it 
     ''' is the MapIndex feature class.</remarks>
     Public Shared Function IsMapIndex(ByVal thisObject As IObject) As Boolean
-        Try
-            Dim thisObjectClass As IObjectClass
-            Dim thisDataset As IDataset
-            thisObjectClass = thisObject.Class
-            thisDataset = DirectCast(thisObjectClass, IDataset)
-            If String.Compare(thisDataset.Name, EditorExtension.TableNamesSettings.MapIndexFC, True, CultureInfo.CurrentCulture) = 0 Then
-                Return True
-            Else
-                Return False
-            End If
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
+        Dim thisObjectClass As IObjectClass
+        Dim thisDataset As IDataset
+        thisObjectClass = thisObject.Class
+        thisDataset = DirectCast(thisObjectClass, IDataset)
+        If String.Compare(thisDataset.Name, EditorExtension.TableNamesSettings.MapIndexFC, True, CultureInfo.CurrentCulture) = 0 Then
+            Return True
+        Else
             Return False
-        End Try
+        End If
     End Function
 
     ''' <summary>
@@ -1129,40 +1079,37 @@ Public NotInheritable Class SpatialUtilities
     ''' <remarks></remarks>
     Public Shared Function IsOrmapFeature(ByVal theObject As IObject) As Boolean
         ' ENHANCE: JWM Refactor to return enum of ORMAP feature class type
-        Try
-            Dim returnValue As Boolean = False
-            Dim thisObjectClass As IObjectClass
-            thisObjectClass = theObject.Class
-            Dim thisDataset As IDataset
-            thisDataset = DirectCast(thisObjectClass, IDataset)
-            Dim datasetName As String = thisDataset.Name
-            Const StringMatch As Integer = 0
-            ' Check for a match against any of the ORMAP feature classes.
-            returnValue = (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0010scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0020scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0030scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0040scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0050scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0100scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0200scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0400scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0800scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno2000scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxCodeAnnoFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.CartographicLinesFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxLotFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.MapIndexFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.PlatsFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.ReferenceLinesFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxCodeFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxLotLinesFC, True, CultureInfo.CurrentCulture) = StringMatch)
-            Return returnValue
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return False
-        End Try
+        Dim returnValue As Boolean = False
+        Dim thisObjectClass As IObjectClass
+        thisObjectClass = theObject.Class
+        Dim thisDataset As IDataset
+        thisDataset = DirectCast(thisObjectClass, IDataset)
+        Dim datasetName As String = thisDataset.Name
+        Const StringMatch As Integer = 0
+        ' Check for a match against any of the ORMAP feature classes.
+        returnValue = (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0010scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0020scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0030scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0040scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0050scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0100scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0200scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0400scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno0800scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.Anno2000scaleFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxCodeAnnoFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.CartographicLinesFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxLotFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.MapIndexFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.PlatsFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.ReferenceLinesFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxCodeFC, True, CultureInfo.CurrentCulture) = StringMatch)
+        returnValue = returnValue OrElse (String.Compare(datasetName, EditorExtension.TableNamesSettings.TaxLotLinesFC, True, CultureInfo.CurrentCulture) = StringMatch)
+
+        Return returnValue
+
     End Function
 
     ''' <summary>
@@ -1174,20 +1121,15 @@ Public NotInheritable Class SpatialUtilities
     ''' checking the name of the dataset of thisObject feature class against 
     ''' the Taxlot Feature Class constant.</remarks>
     Public Shared Function IsTaxlot(ByVal thisObject As IObject) As Boolean
-        Try
-            Dim thisObjectClass As IObjectClass
-            Dim thisDataset As IDataset
-            thisObjectClass = thisObject.Class
-            thisDataset = DirectCast(thisObjectClass, IDataset)
-            If String.Compare(thisDataset.Name, EditorExtension.TableNamesSettings.TaxLotFC, True, CultureInfo.CurrentCulture) = 0 Then
-                Return True
-            Else
-                Return False
-            End If
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
+        Dim thisObjectClass As IObjectClass
+        Dim thisDataset As IDataset
+        thisObjectClass = thisObject.Class
+        thisDataset = DirectCast(thisObjectClass, IDataset)
+        If String.Compare(thisDataset.Name, EditorExtension.TableNamesSettings.TaxLotFC, True, CultureInfo.CurrentCulture) = 0 Then
+            Return True
+        Else
             Return False
-        End Try
+        End If
     End Function
 
     ''' <summary>
@@ -1214,61 +1156,55 @@ Public NotInheritable Class SpatialUtilities
     ''' The feature class is then loaded in the current map from the chosen personal 
     ''' geodatabase.</remarks>
     Public Overloads Shared Function LoadFCIntoMap(ByVal featureClassName As String, ByVal dialogTitle As String) As Boolean
-        Try
-            Dim thisFileDialog As CatalogFileDialog
-            thisFileDialog = New CatalogFileDialog()
 
-            With thisFileDialog
-                .SetAllowMultiSelect(True)
-                .SetButtonCaption("Select")
-                If dialogTitle.Length > 0 Then
-                    .SetTitle(dialogTitle)
-                Else
-                    .SetTitle(String.Concat("Find feature class ", featureClassName, "..."))
-                End If
-                .SetFilter(New GxFilterFeatureClasses, True, True)
-                .ShowOpen()
-            End With
+        Dim thisFileDialog As CatalogFileDialog
+        thisFileDialog = New CatalogFileDialog()
 
-            ' Exit if there is nothing selected
-            If thisFileDialog.SelectedObject(1) Is Nothing Then
-                Return False
+        With thisFileDialog
+            .SetAllowMultiSelect(True)
+            .SetButtonCaption("Select")
+            If dialogTitle.Length > 0 Then
+                .SetTitle(dialogTitle)
+            Else
+                .SetTitle(String.Concat("Find feature class ", featureClassName, "..."))
             End If
+            .SetFilter(New GxFilterFeatureClasses, True, True)
+            .ShowOpen()
+        End With
 
-            Dim thisWorkSpace As IWorkspace = getWorkspace(thisFileDialog)
-            ' Exit if the file selected is not in a valid workspace
-            If thisWorkSpace Is Nothing Then
-                Return False
-            End If
-
-            Dim thisFeatureWorkspace As IFeatureWorkspace
-            thisFeatureWorkspace = DirectCast(thisWorkSpace, IFeatureWorkspace)
-
-            Dim thisFeatureClass As IFeatureClass
-            thisFeatureClass = thisFeatureWorkspace.OpenFeatureClass(featureClassName)
-
-            Dim thisFeatureLayer As New FeatureLayer
-            thisFeatureLayer.FeatureClass = thisFeatureClass
-
-            Dim thisDataSet As IDataset
-            thisDataSet = DirectCast(thisFeatureClass, IDataset)
-            thisFeatureLayer.Name = thisDataSet.Name
-
-            Dim thisMap As IMap
-            thisMap = EditorExtension.Editor.Map
-            thisMap.AddLayer(thisFeatureLayer)
-
-            Dim thisArcMapDoc As IMxDocument
-            thisArcMapDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
-            thisArcMapDoc.CurrentContentsView.Refresh(0)
-
-            Return True
-
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
+        ' Exit if there is nothing selected
+        If thisFileDialog.SelectedObject(1) Is Nothing Then
             Return False
+        End If
 
-        End Try
+        Dim thisWorkSpace As IWorkspace = getWorkspace(thisFileDialog)
+        ' Exit if the file selected is not in a valid workspace
+        If thisWorkSpace Is Nothing Then
+            Return False
+        End If
+
+        Dim thisFeatureWorkspace As IFeatureWorkspace
+        thisFeatureWorkspace = DirectCast(thisWorkSpace, IFeatureWorkspace)
+
+        Dim thisFeatureClass As IFeatureClass
+        thisFeatureClass = thisFeatureWorkspace.OpenFeatureClass(featureClassName)
+
+        Dim thisFeatureLayer As New FeatureLayer
+        thisFeatureLayer.FeatureClass = thisFeatureClass
+
+        Dim thisDataSet As IDataset
+        thisDataSet = DirectCast(thisFeatureClass, IDataset)
+        thisFeatureLayer.Name = thisDataSet.Name
+
+        Dim thisMap As IMap
+        thisMap = EditorExtension.Editor.Map
+        thisMap.AddLayer(thisFeatureLayer)
+
+        Dim thisArcMapDoc As IMxDocument
+        thisArcMapDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        thisArcMapDoc.CurrentContentsView.Refresh(0)
+
+        Return True
 
     End Function
 
@@ -1296,73 +1232,66 @@ Public NotInheritable Class SpatialUtilities
     ''' The object class is then loaded in the current map from the chosen data source.</remarks>
     Public Overloads Shared Function LoadTableIntoMap(ByVal objectClassName As String, ByVal dialogTitle As String) As Boolean
 
-        Try
-            Dim theFileDialog As CatalogFileDialog
-            theFileDialog = New CatalogFileDialog()
+        Dim theFileDialog As CatalogFileDialog
+        theFileDialog = New CatalogFileDialog()
 
-            With theFileDialog
-                .SetAllowMultiSelect(True)
-                .SetButtonCaption("Select")
-                If dialogTitle.Length > 0 Then
-                    .SetTitle(dialogTitle)
-                Else
-                    .SetTitle(String.Concat("Find object class (table) ", objectClassName, "..."))
-                End If
-                '.SetFilter(New GxFilterTables, True, True)
-                .SetFilter(New GxFilterPGDBTables, True, True)
-                .SetFilter(New GxFilterSDETables, False, False)
-                .SetFilter(New GxFilterFGDBTables, False, False)
-                .ShowOpen()
-            End With
-
-            ' Exit if there is nothing selected
-            If theFileDialog.SelectedObject(1) Is Nothing Then
-                Return False
+        With theFileDialog
+            .SetAllowMultiSelect(True)
+            .SetButtonCaption("Select")
+            If dialogTitle.Length > 0 Then
+                .SetTitle(dialogTitle)
+            Else
+                .SetTitle(String.Concat("Find object class (table) ", objectClassName, "..."))
             End If
+            '.SetFilter(New GxFilterTables, True, True)
+            .SetFilter(New GxFilterPGDBTables, True, True)
+            .SetFilter(New GxFilterSDETables, False, False)
+            .SetFilter(New GxFilterFGDBTables, False, False)
+            .ShowOpen()
+        End With
 
-            Dim theWorkSpace As IWorkspace = getWorkspace(theFileDialog)
-            ' Exit if the file selected is not in a valid workspace
-            If theWorkSpace Is Nothing Then
-                Return False
-            End If
-
-            Dim theFeatureWorkspace As IFeatureWorkspace
-            theFeatureWorkspace = DirectCast(theWorkSpace, IFeatureWorkspace)
-
-            ' Open the table
-            Dim theTable As Geodatabase.ITable
-            theTable = theFeatureWorkspace.OpenTable(objectClassName)
-
-            Dim theMap As ESRI.ArcGIS.Carto.IMap
-            Dim theArcMapDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
-            theMap = EditorExtension.Editor.Map
-            theArcMapDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
-
-            ' Create a table collection and assign the new table to it
-            Dim theStandaloneTable As IStandaloneTable
-            Dim theStandaloneTableCollection As IStandaloneTableCollection
-            theStandaloneTable = New StandaloneTable
-            theStandaloneTable.Table = theTable
-            theStandaloneTableCollection = DirectCast(theMap, IStandaloneTableCollection)
-            theStandaloneTableCollection.AddStandaloneTable(theStandaloneTable)
-
-            ' Create a new table window for the table
-            Dim theTableWindow As ITableWindow
-            theTableWindow = New TableWindow
-            theTableWindow.Table = theTable
-            theTableWindow.ShowAliasNamesInColumnHeadings = True
-            theTableWindow.Application = EditorExtension.Application
-
-            ' Update the document
-            theArcMapDoc.UpdateContents()
-
-            Return True
-
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
+        ' Exit if there is nothing selected
+        If theFileDialog.SelectedObject(1) Is Nothing Then
             Return False
+        End If
 
-        End Try
+        Dim theWorkSpace As IWorkspace = getWorkspace(theFileDialog)
+        ' Exit if the file selected is not in a valid workspace
+        If theWorkSpace Is Nothing Then
+            Return False
+        End If
+
+        Dim theFeatureWorkspace As IFeatureWorkspace
+        theFeatureWorkspace = DirectCast(theWorkSpace, IFeatureWorkspace)
+
+        ' Open the table
+        Dim theTable As Geodatabase.ITable
+        theTable = theFeatureWorkspace.OpenTable(objectClassName)
+
+        Dim theMap As ESRI.ArcGIS.Carto.IMap
+        Dim theArcMapDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
+        theMap = EditorExtension.Editor.Map
+        theArcMapDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
+
+        ' Create a table collection and assign the new table to it
+        Dim theStandaloneTable As IStandaloneTable
+        Dim theStandaloneTableCollection As IStandaloneTableCollection
+        theStandaloneTable = New StandaloneTable
+        theStandaloneTable.Table = theTable
+        theStandaloneTableCollection = DirectCast(theMap, IStandaloneTableCollection)
+        theStandaloneTableCollection.AddStandaloneTable(theStandaloneTable)
+
+        ' Create a new table window for the table
+        Dim theTableWindow As ITableWindow
+        theTableWindow = New TableWindow
+        theTableWindow.Table = theTable
+        theTableWindow.ShowAliasNamesInColumnHeadings = True
+        theTableWindow.Application = EditorExtension.Application
+
+        ' Update the document
+        theArcMapDoc.UpdateContents()
+
+        Return True
 
     End Function
 
@@ -1374,14 +1303,9 @@ Public NotInheritable Class SpatialUtilities
     ''' <returns>Index of field or -1.</returns>
     ''' <remarks>This function may return zero because that is a valid index, but -1 is not. The return value of -1 means the field was not found.</remarks>
     Public Shared Function LocateFields(ByVal featureClass As ESRI.ArcGIS.Geodatabase.IFeatureClass, ByVal fieldName As String) As Integer
-        Try
-            Dim returnValue As Integer
-            returnValue = featureClass.Fields.FindField(fieldName)
-            Return returnValue
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return -1
-        End Try
+        Dim returnValue As Integer
+        returnValue = featureClass.Fields.FindField(fieldName)
+        Return returnValue
     End Function
 
     ''' <summary>
@@ -1406,53 +1330,50 @@ Public NotInheritable Class SpatialUtilities
     ''' <remarks>Reads the value of a field with a domain and translates 
     ''' the value from the coded value to the coded name.</remarks>
     Public Overloads Shared Function ReadValue(ByVal row As IRow, ByVal fieldName As String, ByVal dataType As String) As String
-        Try
-            Dim fieldIndex As Integer
-            Dim returnValue As String = String.Empty
 
-            fieldIndex = row.Fields.FindField(fieldName)
-            If fieldIndex > -1 Then
-                If String.Compare(dataType, "date", True, CultureInfo.CurrentCulture) = 0 Then
-                    If IsDBNull(row.Value(fieldIndex)) Then
-                        returnValue = CStr(System.DateTime.Today)
-                    Else
-                        returnValue = CStr(row.Value(fieldIndex))
-                    End If
+        Dim fieldIndex As Integer
+        Dim returnValue As String = String.Empty
+
+        fieldIndex = row.Fields.FindField(fieldName)
+        If fieldIndex > -1 Then
+            If String.Compare(dataType, "date", True, CultureInfo.CurrentCulture) = 0 Then
+                If IsDBNull(row.Value(fieldIndex)) Then
+                    returnValue = CStr(System.DateTime.Today)
                 Else
-                    If IsDBNull(row.Value(fieldIndex)) Then
-                        returnValue = String.Empty
-                    Else
-                        returnValue = CStr(row.Value(fieldIndex))
-                    End If
+                    returnValue = CStr(row.Value(fieldIndex))
                 End If
-                'Determine if a Domain Field
-                Dim field As IField
-                field = row.Fields.Field(fieldIndex)
-                Dim domain As IDomain
-                domain = field.Domain
-                If Not domain Is Nothing Then
-                    If domain.Type = esriDomainType.esriDTCodedValue Then
-                        'If TypeOf domain Is ICodedValueDomain Then
-                        Dim thisCodedValueDomain As ICodedValueDomain
-                        thisCodedValueDomain = DirectCast(domain, ICodedValueDomain)
-                        Dim domainValue As Object
-                        domainValue = row.Value(fieldIndex)
-                        'search domain for the code
-                        For domainIndex As Integer = 0 To thisCodedValueDomain.CodeCount - 1
-                            If String.Compare(thisCodedValueDomain.Value(domainIndex).ToString, domainValue.ToString, True, CultureInfo.CurrentCulture) = 0 Then
-                                returnValue = thisCodedValueDomain.Name(domainIndex)
-                                Exit For
-                            End If
-                        Next domainIndex
-                    End If
+            Else
+                If IsDBNull(row.Value(fieldIndex)) Then
+                    returnValue = String.Empty
+                Else
+                    returnValue = CStr(row.Value(fieldIndex))
                 End If
             End If
+            'Determine if a Domain Field
+            Dim field As IField
+            field = row.Fields.Field(fieldIndex)
+            Dim domain As IDomain
+            domain = field.Domain
+            If Not domain Is Nothing Then
+                If domain.Type = esriDomainType.esriDTCodedValue Then
+                    'If TypeOf domain Is ICodedValueDomain Then
+                    Dim thisCodedValueDomain As ICodedValueDomain
+                    thisCodedValueDomain = DirectCast(domain, ICodedValueDomain)
+                    Dim domainValue As Object
+                    domainValue = row.Value(fieldIndex)
+                    'search domain for the code
+                    For domainIndex As Integer = 0 To thisCodedValueDomain.CodeCount - 1
+                        If String.Compare(thisCodedValueDomain.Value(domainIndex).ToString, domainValue.ToString, True, CultureInfo.CurrentCulture) = 0 Then
+                            returnValue = thisCodedValueDomain.Name(domainIndex)
+                            Exit For
+                        End If
+                    Next domainIndex
+                End If
+            End If
+        End If
 
-            Return returnValue
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return String.Empty
-        End Try
+        Return returnValue
+
     End Function
 
     ''' <summary>
@@ -1467,92 +1388,86 @@ Public NotInheritable Class SpatialUtilities
     ''' and resets the annotation symbol size.</para>
     ''' </remarks>
     Public Shared Sub SetAnnoSize(ByVal annoObject As IObject)
-        Try
 
-            Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
-            Dim theAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
+        Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
+        Dim theAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
 
-            Dim theLinkedFeatureID As Integer
-            theAnnotationFeature = DirectCast(annoObject, IAnnotationFeature)
+        Dim theLinkedFeatureID As Integer
+        theAnnotationFeature = DirectCast(annoObject, IAnnotationFeature)
 
-            theLinkedFeatureID = theAnnotationFeature.LinkedFeatureID
-            If theLinkedFeatureID > -1 Then
-                '[Feature linked anno...]
-                ' Get the related feature so the map number can be obtained
-                theFeature = GetRelatedObjects(annoObject)
-                If theFeature Is Nothing Then Exit Try
-            Else
-                '[Not feature linked anno...]
-                ' Use the annotation feature as the feature
-                theFeature = DirectCast(annoObject, IFeature)
-            End If
+        theLinkedFeatureID = theAnnotationFeature.LinkedFeatureID
+        If theLinkedFeatureID > -1 Then
+            '[Feature linked anno...]
+            ' Get the related feature so the map number can be obtained
+            theFeature = GetRelatedObjects(annoObject)
+            If theFeature Is Nothing Then Exit Sub
+        Else
+            '[Not feature linked anno...]
+            ' Use the annotation feature as the feature
+            theFeature = DirectCast(annoObject, IFeature)
+        End If
 
-            ' Check for valid data
-            If Not HasValidMapIndexData Then
-                MessageBox.Show("Unable to set annotation size." & NewLine & _
-                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
-                                "Please load this dataset into your map.", _
-                                "Set Anno Size", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
-            End If
+        ' Check for valid data
+        If Not HasValidMapIndexData Then
+            MessageBox.Show("Unable to set annotation size." & NewLine & _
+                            "Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
+                            "Please load this dataset into your map.", _
+                            "Set Anno Size", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            Exit Sub
+        End If
 
-            ' Get the Map Index data.
-            Dim theMapIndexFeatureClass As IFeatureClass
-            theMapIndexFeatureClass = MapIndexFeatureLayer.FeatureClass
+        ' Get the Map Index data.
+        Dim theMapIndexFeatureClass As IFeatureClass
+        theMapIndexFeatureClass = MapIndexFeatureLayer.FeatureClass
 
-            ' Get the feature geometry.
-            Dim theGeometry As IGeometry
-            theGeometry = theFeature.Shape
-            If theGeometry.IsEmpty Then
-                Exit Try
-            End If
+        ' Get the feature geometry.
+        Dim theGeometry As IGeometry
+        theGeometry = theFeature.Shape
+        If theGeometry.IsEmpty Then
+            Exit Sub
+        End If
 
-            ' Update the annotation size to reflect current mapscale...
+        ' Update the annotation size to reflect current mapscale...
 
-            ' Get the Map Index map scale
-            Dim theMapScale As String = GetValueViaOverlay(theGeometry, theMapIndexFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
-            If theMapScale.Length = 0 Then
-                Exit Try
-            End If
+        ' Get the Map Index map scale
+        Dim theMapScale As String = GetValueViaOverlay(theGeometry, theMapIndexFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+        If theMapScale.Length = 0 Then
+            Exit Sub
+        End If
 
-            ' Determine which annotation class this is
-            Dim theAnnoObjectClass As IObjectClass
-            theAnnoObjectClass = annoObject.Class
+        ' Determine which annotation class this is
+        Dim theAnnoObjectClass As IObjectClass
+        theAnnoObjectClass = annoObject.Class
 
-            Dim theAnnoDataSet As IDataset
-            theAnnoDataSet = DirectCast(theAnnoObjectClass, IDataset)
+        Dim theAnnoDataSet As IDataset
+        theAnnoDataSet = DirectCast(theAnnoObjectClass, IDataset)
 
-            'If taxlot annotation of one kind or another, change annotation size
-            Dim isTaxlotNumberAnno As Boolean = (String.Compare(theAnnoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True, CultureInfo.CurrentCulture) <> 0)
-            Dim isTaxlotAcreageAnno As Boolean = (String.Compare(theAnnoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True, CultureInfo.CurrentCulture) <> 0)
-            If isTaxlotNumberAnno OrElse isTaxlotAcreageAnno Then
+        'If taxlot annotation of one kind or another, change annotation size
+        Dim isTaxlotNumberAnno As Boolean = (String.Compare(theAnnoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True, CultureInfo.CurrentCulture) <> 0)
+        Dim isTaxlotAcreageAnno As Boolean = (String.Compare(theAnnoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True, CultureInfo.CurrentCulture) <> 0)
+        If isTaxlotNumberAnno OrElse isTaxlotAcreageAnno Then
 
-                ' Gets the size of the annotation from the scale of the annotation dataset
-                Dim theAnnotationSize As Double = getAnnoSizeByScale(theAnnoDataSet.Name, CInt(theMapScale))
+            ' Gets the size of the annotation from the scale of the annotation dataset
+            Dim theAnnotationSize As Double = getAnnoSizeByScale(theAnnoDataSet.Name, CInt(theMapScale))
 
-                ' Set the new annotation size
-                Dim theAnnoElement As IAnnotationElement
-                Dim theTextElement As ITextElement
-                Dim theTextSymbol As ESRI.ArcGIS.Display.ITextSymbol
+            ' Set the new annotation size
+            Dim theAnnoElement As IAnnotationElement
+            Dim theTextElement As ITextElement
+            Dim theTextSymbol As ESRI.ArcGIS.Display.ITextSymbol
 
-                theAnnoElement = DirectCast(theAnnotationFeature.Annotation, IAnnotationElement)
-                theTextElement = DirectCast(theAnnoElement, ITextElement)
-                theTextSymbol = theTextElement.Symbol
+            theAnnoElement = DirectCast(theAnnotationFeature.Annotation, IAnnotationElement)
+            theTextElement = DirectCast(theAnnoElement, ITextElement)
+            theTextSymbol = theTextElement.Symbol
 
-                theTextSymbol.Size = theAnnotationSize
+            theTextSymbol.Size = theAnnotationSize
 
-                ' TEST: [NIS] Do we need to wrap this back together (as was done in VB6 code)?
-                'theTextElement.Symbol = theTextSymbol
-                'theCartoElement = DirectCast(theTextElement, IElement)
-                'theAnnoElement = DirectCast(theCartoElement, IAnnotationElement)
-                'theAnnotationFeature.Annotation = DirectCast(theAnnoElement, IElement)
+            ' TEST: [NIS] Do we need to wrap this back together (as was done in VB6 code)?
+            'theTextElement.Symbol = theTextSymbol
+            'theCartoElement = DirectCast(theTextElement, IElement)
+            'theAnnoElement = DirectCast(theCartoElement, IAnnotationElement)
+            'theAnnotationFeature.Annotation = DirectCast(theAnnoElement, IElement)
 
-            End If
-
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-
-        End Try
+        End If
 
     End Sub
 
@@ -1564,7 +1479,7 @@ Public NotInheritable Class SpatialUtilities
     Public Shared Sub UpdateMinimumAutoFields(ByVal feature As IFeature)
         Try
             If feature Is Nothing Then
-                Exit Try
+                Exit Sub
             End If
 
             Dim theAutoDateFieldIndex As Integer
@@ -1580,7 +1495,9 @@ Public NotInheritable Class SpatialUtilities
             End If
 
         Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
+            ' Add clean-up code here...
+
+            Throw
 
         End Try
     End Sub
@@ -1599,76 +1516,70 @@ Public NotInheritable Class SpatialUtilities
     ''' or having only one match present.</para>
     ''' </remarks>
     Public Shared Function IsTaxlotNumberLocallyUnique(ByVal taxlotNumber As String, ByVal thisGeometry As IGeometry, ByVal allowOneInstance As Boolean) As Boolean
-        Try
-            Dim returnValue As Boolean = False
 
-            'check for existence of Taxlot layer
-            Dim thisTaxlotFeatureLayer As IFeatureLayer
-            thisTaxlotFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.TaxLotFC)
-            If thisTaxlotFeatureLayer Is Nothing Then
-                MessageBox.Show("Unable to locate the Taxlot layer in Table of Contents." & NewLine & _
-                                "This process requires a feature class called " & EditorExtension.TableNamesSettings.TaxLotFC & ".", _
-                                String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Return returnValue
-            End If
+        Dim returnValue As Boolean = False
 
-            'check for existence of Map index layer
-            Dim thisTaxlotFeatureClass As IFeatureClass
-            thisTaxlotFeatureClass = thisTaxlotFeatureLayer.FeatureClass
-
-            Dim mapIndexFeatureLayer As IFeatureLayer
-            mapIndexFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
-            If mapIndexFeatureLayer Is Nothing Then
-                MessageBox.Show("Unable to locate the MapIndex layer in Table of Contents." & NewLine & _
-                                "This process requires a feature class called " & EditorExtension.TableNamesSettings.MapIndexFC & ".", _
-                                String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Return returnValue
-            End If
-
-            Dim mapIndexFeatureClass As IFeatureClass
-            mapIndexFeatureClass = mapIndexFeatureLayer.FeatureClass
-
-            ' Checks for the existence of a current ORMAP Number and Taxlot number
-            Dim mapIndexORMAPValue As String = String.Empty
-            mapIndexORMAPValue = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
-            If mapIndexORMAPValue.Length = 0 Then
-                returnValue = True
-            End If
-
-            ' Make sure this number is unique within taxlots with this OM number
-            Dim whereClause As String = formatWhereClause(String.Concat("[", EditorExtension.TaxLotSettings.MapNumberField, "]", " = '", mapIndexORMAPValue, "' AND ", "[", EditorExtension.TaxLotSettings.TaxlotField, "]", " = '", taxlotNumber, "'"), thisTaxlotFeatureClass)
-            Dim n As Integer = 0
-            Dim cursor As ICursor
-            cursor = attributeQuery(DirectCast(thisTaxlotFeatureClass, ITable), whereClause)
-            If Not (cursor Is Nothing) AndAlso (returnValue = False) Then
-                Dim row As IRow
-                row = cursor.NextRow
-                If row Is Nothing Then
-                    n += 1
-                End If
-            End If
-
-            If allowOneInstance Then
-                If n < 2 Then
-                    returnValue = True
-                Else
-                    returnValue = False
-                End If
-            Else
-                If n < 1 Then
-                    returnValue = True
-                Else
-                    returnValue = False
-                End If
-            End If
-
+        'check for existence of Taxlot layer
+        Dim thisTaxlotFeatureLayer As IFeatureLayer
+        thisTaxlotFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.TaxLotFC)
+        If thisTaxlotFeatureLayer Is Nothing Then
+            MessageBox.Show("Unable to locate the Taxlot layer in Table of Contents." & NewLine & _
+                            "This process requires a feature class called " & EditorExtension.TableNamesSettings.TaxLotFC & ".", _
+                            String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)
             Return returnValue
+        End If
 
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return False
+        'check for existence of Map index layer
+        Dim thisTaxlotFeatureClass As IFeatureClass
+        thisTaxlotFeatureClass = thisTaxlotFeatureLayer.FeatureClass
 
-        End Try
+        Dim mapIndexFeatureLayer As IFeatureLayer
+        mapIndexFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
+        If mapIndexFeatureLayer Is Nothing Then
+            MessageBox.Show("Unable to locate the MapIndex layer in Table of Contents." & NewLine & _
+                            "This process requires a feature class called " & EditorExtension.TableNamesSettings.MapIndexFC & ".", _
+                            String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            Return returnValue
+        End If
+
+        Dim mapIndexFeatureClass As IFeatureClass
+        mapIndexFeatureClass = mapIndexFeatureLayer.FeatureClass
+
+        ' Checks for the existence of a current ORMAP Number and Taxlot number
+        Dim mapIndexORMAPValue As String = String.Empty
+        mapIndexORMAPValue = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+        If mapIndexORMAPValue.Length = 0 Then
+            returnValue = True
+        End If
+
+        ' Make sure this number is unique within taxlots with this OM number
+        Dim whereClause As String = formatWhereClause(String.Concat("[", EditorExtension.TaxLotSettings.MapNumberField, "]", " = '", mapIndexORMAPValue, "' AND ", "[", EditorExtension.TaxLotSettings.TaxlotField, "]", " = '", taxlotNumber, "'"), thisTaxlotFeatureClass)
+        Dim n As Integer = 0
+        Dim cursor As ICursor
+        cursor = attributeQuery(DirectCast(thisTaxlotFeatureClass, ITable), whereClause)
+        If Not (cursor Is Nothing) AndAlso (returnValue = False) Then
+            Dim row As IRow
+            row = cursor.NextRow
+            If row Is Nothing Then
+                n += 1
+            End If
+        End If
+
+        If allowOneInstance Then
+            If n < 2 Then
+                returnValue = True
+            Else
+                returnValue = False
+            End If
+        Else
+            If n < 1 Then
+                returnValue = True
+            Else
+                returnValue = False
+            End If
+        End If
+
+        Return returnValue
 
     End Function
 
@@ -1788,21 +1699,19 @@ Public NotInheritable Class SpatialUtilities
     ''' <returns>Return a cursor that represents the results of an attribute query.</returns>
     ''' <remarks>Creates a cursor from table that contains all feature records that meet the criteria in <paramref name="whereClause">whereClause</paramref>.</remarks>
     Private Shared Function attributeQuery(ByVal table As ITable, Optional ByVal whereClause As String = "") As ICursor
-        Try
-            Dim thisQueryFilter As IQueryFilter
-            thisQueryFilter = New QueryFilter
-            thisQueryFilter.WhereClause = whereClause
-            Dim thisCursor As ICursor
-            thisCursor = table.Search(thisQueryFilter, False)
-            If table.RowCount(thisQueryFilter) = 0 Then
-                Return Nothing
-            Else
-                Return thisCursor
-            End If
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
+
+        Dim thisQueryFilter As IQueryFilter
+        thisQueryFilter = New QueryFilter
+        thisQueryFilter.WhereClause = whereClause
+        Dim thisCursor As ICursor
+        thisCursor = table.Search(thisQueryFilter, False)
+
+        If table.RowCount(thisQueryFilter) = 0 Then
             Return Nothing
-        End Try
+        Else
+            Return thisCursor
+        End If
+
     End Function
 
     ''' <summary>
@@ -1817,16 +1726,13 @@ Public NotInheritable Class SpatialUtilities
     ''' Remove the existing map suffix type and number from <paramref name="existingORMapNum">existingORMapNum</paramref> and replace them with the new values in <paramref name="theFeature">theFeature</paramref> and
     ''' append <paramref name="taxlotValue">taxlotValue</paramref> to form the return value.</remarks>
     Private Shared Function generateORMAPTaxlotNumber(ByVal existingORMapNum As String, ByVal theFeature As IFeature, ByVal taxlotValue As String) As String
-        Try
-            Dim shortORMapNum As String = existingORMapNum.Substring(0, 20) 'replaces the ShortenOMTLNum function 
-            Dim taxlotMapSufNumberValue As String = GetMapSuffixNumber(theFeature)
-            Dim taxlotMapSufTypeValue As String = GetMapSuffixType(theFeature)
-            ' Recreate and return the ORMAP Taxlot number
-            Return String.Concat(shortORMapNum, taxlotMapSufTypeValue, taxlotMapSufNumberValue, taxlotValue)
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return String.Empty
-        End Try
+
+        Dim shortORMapNum As String = existingORMapNum.Substring(0, 20) 'replaces the ShortenOMTLNum function 
+        Dim taxlotMapSufNumberValue As String = GetMapSuffixNumber(theFeature)
+        Dim taxlotMapSufTypeValue As String = GetMapSuffixType(theFeature)
+        ' Recreate and return the ORMAP Taxlot number
+        Return String.Concat(shortORMapNum, taxlotMapSufTypeValue, taxlotMapSufNumberValue, taxlotValue)
+
     End Function
 
     ''' <summary>
@@ -1874,32 +1780,30 @@ Public NotInheritable Class SpatialUtilities
     ''' which meet criteria whereClause have a relationship of spatialRelation to searchGeometry. 
     ''' The returned cursor is updatable if IsUpdateable is True.</remarks>
     Public Shared Function DoSpatialQuery(ByVal inFeatureClass As IFeatureClass, ByVal searchGeometry As IGeometry, ByVal spatialRelation As esriSpatialRelEnum, Optional ByVal whereClause As String = "", Optional ByVal isUpdateable As Boolean = False) As IFeatureCursor
-        Try
-            Dim thisSpatialFilter As ISpatialFilter
-            thisSpatialFilter = New SpatialFilter
-            thisSpatialFilter.Geometry = searchGeometry
 
-            Dim shapeFieldName As String
-            shapeFieldName = inFeatureClass.ShapeFieldName
-            thisSpatialFilter.GeometryField = shapeFieldName
+        Dim thisSpatialFilter As ISpatialFilter
+        thisSpatialFilter = New SpatialFilter
+        thisSpatialFilter.Geometry = searchGeometry
 
-            thisSpatialFilter.SpatialRel = spatialRelation
-            thisSpatialFilter.WhereClause = whereClause
+        Dim shapeFieldName As String
+        shapeFieldName = inFeatureClass.ShapeFieldName
+        thisSpatialFilter.GeometryField = shapeFieldName
 
-            Dim thisQueryFilter As IQueryFilter
-            thisQueryFilter = thisSpatialFilter
-            Dim thisFeatureCursor As IFeatureCursor
-            If isUpdateable Then
-                thisFeatureCursor = inFeatureClass.Update(thisQueryFilter, False)
-            Else
-                thisFeatureCursor = inFeatureClass.Search(thisQueryFilter, False)
-            End If
-            Return thisFeatureCursor
+        thisSpatialFilter.SpatialRel = spatialRelation
+        thisSpatialFilter.WhereClause = whereClause
 
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return Nothing
-        End Try
+        Dim thisQueryFilter As IQueryFilter
+        thisQueryFilter = thisSpatialFilter
+        Dim thisFeatureCursor As IFeatureCursor
+
+        If isUpdateable Then
+            thisFeatureCursor = inFeatureClass.Update(thisQueryFilter, False)
+        Else
+            thisFeatureCursor = inFeatureClass.Search(thisQueryFilter, False)
+        End If
+
+        Return thisFeatureCursor
+
     End Function
 
     ''' <summary>
@@ -1909,22 +1813,17 @@ Public NotInheritable Class SpatialUtilities
     ''' <returns>A Polygon.</returns>
     ''' <remarks></remarks>
     Private Shared Function envelopeToPolygon(ByVal envelope As IEnvelope) As IPolygon
-        Try
-            Dim thisPolygon As IPolygon
-            thisPolygon = New Polygon
-            Dim pointCollection As IPointCollection
-            pointCollection = DirectCast(thisPolygon, IPointCollection)
-            With pointCollection
-                .AddPoint(envelope.UpperRight)
-                .AddPoint(envelope.LowerRight)
-                .AddPoint(envelope.LowerLeft)
-                .AddPoint(envelope.UpperLeft)
-            End With
-            Return thisPolygon
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return Nothing
-        End Try
+        Dim thisPolygon As IPolygon
+        thisPolygon = New Polygon
+        Dim pointCollection As IPointCollection
+        pointCollection = DirectCast(thisPolygon, IPointCollection)
+        With pointCollection
+            .AddPoint(envelope.UpperRight)
+            .AddPoint(envelope.LowerRight)
+            .AddPoint(envelope.LowerLeft)
+            .AddPoint(envelope.UpperLeft)
+        End With
+        Return thisPolygon
     End Function
 
     ''' <summary>
@@ -1961,11 +1860,15 @@ Public NotInheritable Class SpatialUtilities
             ElseIf thisFileGDBWorkspaceFactory.IsWorkspace(theGrandParentPath) Then
                 thisWorkSpace = thisFileGDBWorkspaceFactory.OpenFromFile(theParentPath, 0)
             End If
+
+            Return thisWorkSpace
+
         Catch ex As Exception
             thisWorkSpace = Nothing
-        End Try
 
-        Return thisWorkSpace
+            Throw
+
+        End Try
 
     End Function
 
@@ -1979,69 +1882,65 @@ Public NotInheritable Class SpatialUtilities
     ''' Defaults at size 5 is the <paramref name="scale">scale</paramref> is invalid, and size 10 if
     ''' <paramref name="thisFeatureClassName">thisFeatureClassName</paramref> is not Taxlot Acreage Annotation or Taxlot Number Annotation.</remarks>
     Private Shared Function getAnnoSizeByScale(ByVal thisFeatureClassName As String, ByVal scale As Integer) As Double
-        Try
-            Dim size As String
-            If String.Compare(thisFeatureClassName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True, CultureInfo.CurrentCulture) = 0 Then
-                Select Case scale
-                    Case 120
-                        size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize00120Scale
-                    Case 240
-                        size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize00240Scale
-                    Case 360
-                        size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize00360Scale
-                    Case 480
-                        size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize00480Scale
-                    Case 600
-                        size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize00600Scale
-                    Case 1200
-                        size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize01200Scale
-                    Case 2400
-                        size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize02400Scale
-                    Case 4800
-                        size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize04800Scale
-                    Case 9600
-                        size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize09600Scale
-                    Case 24000
-                        size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize24000Scale
-                    Case Else
-                        ' Default size
-                        size = "5"
-                End Select
-            ElseIf String.Compare(thisFeatureClassName, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True, CultureInfo.CurrentCulture) = 0 Then
-                Select Case scale
-                    Case 120
-                        size = EditorExtension.TaxlotNumberAnnoSettings.TextSize00120Scale
-                    Case 240
-                        size = EditorExtension.TaxlotNumberAnnoSettings.TextSize00240Scale
-                    Case 360
-                        size = EditorExtension.TaxlotNumberAnnoSettings.TextSize00360Scale
-                    Case 480
-                        size = EditorExtension.TaxlotNumberAnnoSettings.TextSize00480Scale
-                    Case 600
-                        size = EditorExtension.TaxlotNumberAnnoSettings.TextSize00600Scale
-                    Case 1200
-                        size = EditorExtension.TaxlotNumberAnnoSettings.TextSize01200Scale
-                    Case 2400
-                        size = EditorExtension.TaxlotNumberAnnoSettings.TextSize02400Scale
-                    Case 4800
-                        size = EditorExtension.TaxlotNumberAnnoSettings.TextSize04800Scale
-                    Case 9600
-                        size = EditorExtension.TaxlotNumberAnnoSettings.TextSize09600Scale
-                    Case 24000
-                        size = EditorExtension.TaxlotNumberAnnoSettings.TextSize24000Scale
-                    Case Else
-                        size = "5"
-                End Select
-            Else
-                size = "10" 'default
-            End If
-            Return CDbl(size)
 
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return 10 'default
+        Dim size As String
+        If String.Compare(thisFeatureClassName, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True, CultureInfo.CurrentCulture) = 0 Then
+            Select Case scale
+                Case 120
+                    size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize00120Scale
+                Case 240
+                    size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize00240Scale
+                Case 360
+                    size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize00360Scale
+                Case 480
+                    size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize00480Scale
+                Case 600
+                    size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize00600Scale
+                Case 1200
+                    size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize01200Scale
+                Case 2400
+                    size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize02400Scale
+                Case 4800
+                    size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize04800Scale
+                Case 9600
+                    size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize09600Scale
+                Case 24000
+                    size = EditorExtension.TaxlotAcreageAnnoSettings.TextSize24000Scale
+                Case Else
+                    ' Default size
+                    size = "5"
+            End Select
+        ElseIf String.Compare(thisFeatureClassName, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True, CultureInfo.CurrentCulture) = 0 Then
+            Select Case scale
+                Case 120
+                    size = EditorExtension.TaxlotNumberAnnoSettings.TextSize00120Scale
+                Case 240
+                    size = EditorExtension.TaxlotNumberAnnoSettings.TextSize00240Scale
+                Case 360
+                    size = EditorExtension.TaxlotNumberAnnoSettings.TextSize00360Scale
+                Case 480
+                    size = EditorExtension.TaxlotNumberAnnoSettings.TextSize00480Scale
+                Case 600
+                    size = EditorExtension.TaxlotNumberAnnoSettings.TextSize00600Scale
+                Case 1200
+                    size = EditorExtension.TaxlotNumberAnnoSettings.TextSize01200Scale
+                Case 2400
+                    size = EditorExtension.TaxlotNumberAnnoSettings.TextSize02400Scale
+                Case 4800
+                    size = EditorExtension.TaxlotNumberAnnoSettings.TextSize04800Scale
+                Case 9600
+                    size = EditorExtension.TaxlotNumberAnnoSettings.TextSize09600Scale
+                Case 24000
+                    size = EditorExtension.TaxlotNumberAnnoSettings.TextSize24000Scale
+                Case Else
+                    size = "5"
+            End Select
+        Else
+            size = "10" 'default
+        End If
 
-        End Try
+        Return CDbl(size)
+
     End Function
 
 #End Region

@@ -284,7 +284,7 @@ Public NotInheritable Class TaxlotAssignment
         Try
             If (Button <> EsriMouseButtons.Left) Then
                 ' Exit silently.
-                Exit Try
+                Exit Sub
             End If
 
             ' Check for valid data
@@ -294,7 +294,7 @@ Public NotInheritable Class TaxlotAssignment
                                 "Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
             End If
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
@@ -302,7 +302,7 @@ Public NotInheritable Class TaxlotAssignment
                                 "Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
             End If
 
             ' If taxlot numbering is selected, then make sure value is numeric.
@@ -338,7 +338,7 @@ Public NotInheritable Class TaxlotAssignment
                 MessageBox.Show("Unable to assign taxlot values to polygons" & NewLine & _
                                 "that are not within a MapIndex polygon.", _
                                 "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
             End If
 
             ' Verify the uniqueness of the specified taxlot number (if taxlot type input).
@@ -350,7 +350,7 @@ Public NotInheritable Class TaxlotAssignment
                                        "Attribute feature with value anyway?", _
                                        "Taxlot Assignment", MessageBoxButtons.YesNo, _
                                        MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.No Then
-                        Exit Try
+                        Exit Sub
                     End If
                 End If
             End If
@@ -386,7 +386,7 @@ Public NotInheritable Class TaxlotAssignment
                     '[No taxlot features are selected...]
                     MessageBox.Show("No Taxlot features have been selected.", _
                                     "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                    Exit Try
+                    Exit Sub
                 End If
             End If
 
@@ -401,7 +401,7 @@ Public NotInheritable Class TaxlotAssignment
             If Len(theExistingTaxlot) > 0 And theExistingTaxlot <> "0" Then
                 If MessageBox.Show("Taxlot currently has a Taxlot value (" & theExistingTaxlot & ")." & NewLine & _
                           "Update it?", "Taxlot Assignment", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.No Then
-                    Exit Try
+                    Exit Sub
                 End If
             End If
 

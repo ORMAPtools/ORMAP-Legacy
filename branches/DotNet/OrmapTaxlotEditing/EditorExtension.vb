@@ -411,21 +411,21 @@ Public NotInheritable Class EditorExtension
     Private Sub EditEvents_OnChangeFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnChangeFeature
 
         Try
-            If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
-            If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
-            If Not IsOrmapFeature(obj) Then Exit Try
+            If Not EditorExtension.CanEnableExtendedEditing Then Exit Sub
+            If Not EditorExtension.AllowedToAutoUpdate Then Exit Sub
+            If Not IsOrmapFeature(obj) Then Exit Sub
 
             ' Update the minimum auto-calculated fields
             UpdateMinimumAutoFields(DirectCast(obj, IFeature))
 
-            If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Try
+            If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Sub
 
             ' Avoid rentrancy
             If _isDuringAutoUpdate = False Then
                 _isDuringAutoUpdate = True
             Else
                 Throw New InvalidOperationException("Already in AutoUpdate mode. Cannot initiate AutoUpdate.")
-                Exit Try
+                Exit Sub
             End If
 
             ' Note: Must check here for if required data is available
@@ -438,7 +438,7 @@ Public NotInheritable Class EditorExtension
                                 "Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnChangeFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
             End If
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
@@ -447,7 +447,7 @@ Public NotInheritable Class EditorExtension
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnChangeFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
 
-                Exit Try
+                Exit Sub
             End If
 
             If IsTaxlot(obj) Then
@@ -482,14 +482,14 @@ Public NotInheritable Class EditorExtension
     Private Sub EditEvents_OnCreateFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnCreateFeature
 
         Try
-            If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
-            If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
-            If Not IsOrmapFeature(obj) Then Exit Try
+            If Not EditorExtension.CanEnableExtendedEditing Then Exit Sub
+            If Not EditorExtension.AllowedToAutoUpdate Then Exit Sub
+            If Not IsOrmapFeature(obj) Then Exit Sub
 
             ' Update the minimum auto-calculated fields
             UpdateMinimumAutoFields(DirectCast(obj, IFeature))
 
-            If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Try
+            If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Sub
 
             ' Note: Must check here for if required data is available
             ' (in case subroutines called don't check).
@@ -501,7 +501,7 @@ Public NotInheritable Class EditorExtension
                                 "Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnCreateFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
             End If
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
@@ -509,7 +509,7 @@ Public NotInheritable Class EditorExtension
                                 "Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnCreateFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
             End If
 
             ' Get the feature
@@ -520,7 +520,7 @@ Public NotInheritable Class EditorExtension
             Dim theGeometry As ESRI.ArcGIS.Geometry.IGeometry
             theGeometry = theFeature.Shape
             If theGeometry.IsEmpty Then
-                Exit Try
+                Exit Sub
             End If
 
             If IsTaxlot(obj) Then
@@ -542,7 +542,7 @@ Public NotInheritable Class EditorExtension
                 theParentID = theAnnotationFeature.LinkedFeatureID
                 If theParentID > NotFoundIndex Then 'Feature linked
                     theFeature = GetRelatedObjects(obj)
-                    If theFeature Is Nothing Then Exit Try
+                    If theFeature Is Nothing Then Exit Sub
                 Else
                     'Not feature linked anno, so we can use the feature as is
 
@@ -576,10 +576,10 @@ Public NotInheritable Class EditorExtension
     Private Sub EditEvents_OnDeleteFeature(ByVal obj As ESRI.ArcGIS.Geodatabase.IObject) 'Handles EditEvents.OnDeleteFeature
 
         Try
-            If Not EditorExtension.CanEnableExtendedEditing Then Exit Try
-            If Not EditorExtension.AllowedToAutoUpdate Then Exit Try
-            If Not IsOrmapFeature(obj) Then Exit Try ' TODO: [NIS] Is this even needed here anymore?
-            If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Try
+            If Not EditorExtension.CanEnableExtendedEditing Then Exit Sub
+            If Not EditorExtension.AllowedToAutoUpdate Then Exit Sub
+            If Not IsOrmapFeature(obj) Then Exit Sub ' TODO: [NIS] Is this even needed here anymore?
+            If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Sub
 
             ' Note: Must check here for if required data is available
             ' (in case subroutines called don't check).
@@ -590,21 +590,21 @@ Public NotInheritable Class EditorExtension
                 MessageBox.Show("Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
             End If
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
             End If
             CheckValidCancelledNumbersTableDataProperties()
             If Not HasValidCancelledNumbersTableData Then
                 MessageBox.Show("Missing data: Valid ORMAP CancelledNumbersTable not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
             End If
 
             If IsTaxlot(obj) Then

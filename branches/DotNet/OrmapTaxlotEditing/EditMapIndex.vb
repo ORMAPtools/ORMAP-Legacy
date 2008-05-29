@@ -291,7 +291,7 @@ Public NotInheritable Class EditMapIndex
 
             If Not validData Then
                 MessageBox.Show("Invalid data. All fields must be filled in before assigning.", "Edit Map Index", MessageBoxButtons.OK)
-                Exit Try
+                Exit Sub
             End If
             If theEditWorkSpace IsNot Nothing Then
                 ' Begin edit process
@@ -566,7 +566,7 @@ Public NotInheritable Class EditMapIndex
                 MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Edit Map Index", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
             Else
                 ' TODO: [ALL] Why does this return false when one or more MapIndex features are selected?
                 'If Not HasSelectedFeatureCount(MapIndexFeatureLayer, 1) Then
@@ -592,12 +592,12 @@ Public NotInheritable Class EditMapIndex
                         MessageBox.Show("No features selected in the MapIndex layer." & NewLine & _
                                         "Please select one MapIndex feature.", _
                                         "Edit Map Index", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                        Exit Try
+                        Exit Sub
                     Case Else
                         MessageBox.Show(CStr(n) & " features selected in the MapIndex layer." & NewLine & _
                                         "Please select just one MapIndex feature.", _
                                         "Edit Map Index", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                        Exit Try
+                        Exit Sub
                 End Select
             End If
 
@@ -606,7 +606,7 @@ Public NotInheritable Class EditMapIndex
                 MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "Edit Map Index", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Try
+                Exit Sub
             Else
                 PartnerEditMapIndexForm.ShowDialog()
             End If
