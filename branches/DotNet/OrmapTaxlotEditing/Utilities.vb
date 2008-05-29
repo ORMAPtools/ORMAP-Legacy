@@ -36,8 +36,18 @@
 #End Region
 
 #Region "Imported Namespaces"
+
 Imports System.Windows.Forms
 Imports System.IO
+
+Imports Microsoft.VisualBasic
+Imports System.Environment
+Imports System.Text
+Imports System.Net.Mail
+
+Imports System.Diagnostics.FileVersionInfo
+Imports System.Reflection.Assembly
+
 #End Region
 
 #Region "Class Declaration"
@@ -137,6 +147,94 @@ Public NotInheritable Class Utilities
         Catch ex As Exception
             EditorExtension.ProcessUnhandledException(ex)
         End Try
+    End Sub
+
+    ''' <summary>
+    ''' Send email messages via SMTP.
+    ''' </summary>
+    ''' <param name="inFrom">The sender.</param>
+    ''' <param name="inTo">A string array for multiple recipients.</param>
+    ''' <param name="inSubject">The subject.</param>
+    ''' <param name="inBody">The message.</param>
+    ''' <param name="inAttachments">A string array for multiple filenames.</param>
+    ''' <remarks>This procedure takes string array parameters for 
+    ''' multiple recipients (inTo) and files (inAttachments).</remarks>
+    Public Overloads Shared Sub SendEmailMessage(ByVal inFrom As String, ByVal inTo() _
+            As String, ByVal inSubject _
+            As String, ByVal inBody _
+            As String, ByVal inAttachments() As String)
+
+        Try
+            For Each thisRecipient As String In inTo
+                ' Create a mail message
+                Dim thisMailMsg As New MailMessage(New MailAddress(inFrom.Trim()), New MailAddress(Trim(thisRecipient)))
+                thisMailMsg.BodyEncoding = Encoding.Default
+                thisMailMsg.Subject = inSubject.Trim()
+                thisMailMsg.Body = inBody.Trim() & NewLine
+                thisMailMsg.Priority = MailPriority.High
+                thisMailMsg.IsBodyHtml = True
+
+                ' Attach each file attachment
+                For Each thisAttachment As String In inAttachments
+                    If Not thisAttachment = "" Then
+                        Dim thisFile As New Attachment(thisAttachment)
+                        thisMailMsg.Attachments.Add(thisFile)
+                    End If
+                Next
+
+                ' Use an SMTP client to send the mail message
+                Dim theSmtpClient As New SmtpClient()
+                theSmtpClient.Host = "smtp.gmail.com"  'e.g. "10.10.10.10"
+                theSmtpClient.Send(thisMailMsg)
+            Next
+
+            'Message Successful
+
+        Catch ex As Exception
+            'Message Error
+        End Try
+
+    End Sub
+
+    ''' <summary>
+    ''' Send email messages via SMTP.
+    ''' </summary>
+    ''' <param name="inFrom">The sender.</param>
+    ''' <param name="inTo">The recipient.</param>
+    ''' <param name="inSubject">The subject.</param>
+    ''' <param name="inBody">The message.</param>
+    ''' <param name="inAttachment">The filename.</param>
+    ''' <remarks>This procedure takes strings for the recipient and file attachement.</remarks>
+    Public Overloads Shared Sub SendEmailMessage(ByVal inFrom As String, ByVal inTo _
+            As String, ByVal inSubject _
+            As String, ByVal inBody _
+            As String, ByVal inAttachment As String)
+
+        Try
+            Dim theMailMsg As New MailMessage(New MailAddress(inFrom.Trim()), New MailAddress(inTo))
+            theMailMsg.BodyEncoding = Encoding.Default
+            theMailMsg.Subject = inSubject.Trim()
+            theMailMsg.Body = inBody.Trim() & NewLine
+            theMailMsg.Priority = MailPriority.High
+            theMailMsg.IsBodyHtml = True
+
+            If Not inAttachment = "" Then
+                Dim theAttachment As New Attachment(inAttachment)
+                theMailMsg.Attachments.Add(theAttachment)
+            End If
+
+            ' Use an SMTP client to send the mail message
+            Dim theSmtpClient As New SmtpClient()
+            theSmtpClient.Host = "smtp.gmail.com"  'e.g. "10.10.10.10"
+            theSmtpClient.Port = 465
+            theSmtpClient.Send(theMailMsg)
+
+            'Message Successful
+
+        Catch ex As Exception
+            'Message Error
+        End Try
+
     End Sub
 
 #End Region

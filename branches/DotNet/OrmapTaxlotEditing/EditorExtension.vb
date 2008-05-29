@@ -37,11 +37,13 @@
 
 #Region "Imported Namespaces"
 Imports System.Collections.Generic
+Imports System.Diagnostics.FileVersionInfo
 Imports system.Drawing
 Imports System.Environment
 Imports System.Security.Permissions
 Imports System.Text
 Imports System.Windows.Forms
+Imports System.Reflection.Assembly
 Imports System.Runtime.InteropServices
 Imports ESRI.ArcGIS.Carto
 Imports ESRI.ArcGIS.esriSystem
@@ -858,12 +860,10 @@ Public NotInheritable Class EditorExtension
     ''' <param name="inLogFileName">The file log filename.</param>
     ''' <remarks>Once created, any <c>Trace</c> call will be written to this log.</remarks>
     Private Shared Sub addTraceListenerForFileLog(ByVal inLogFileName As String)
-        ' Create a trace listener for a file log.
-
         ' Create a file for output.
         Dim theFileStream As IO.Stream
         If IO.File.Exists(inLogFileName) Then
-            theFileStream = IO.File.Open(inLogFileName, IO.FileMode.Append)
+            theFileStream = IO.File.Open(inLogFileName, IO.FileMode.Append, IO.FileAccess.ReadWrite, IO.FileShare.Read)
         Else
             theFileStream = IO.File.Create(inLogFileName)
         End If
@@ -941,19 +941,30 @@ Public NotInheritable Class EditorExtension
             theLogText.AppendLine()
             
             Trace.TraceError(theLogText.ToString)
+            Trace.Flush()
+
+            ' TODO: [NIS] Get this working? Attach log file (last parameter)?
+            'SendEmailMessage("OPET.NET@gmail.com", "nseigal@lcog.org", "ORMAP Taxlot Editing Error", theLogText.ToString, "")
 
         Catch
-            theLogText.AppendLine()
-            theLogText.Append("Unable to log the above error.")
-            theLogText.AppendLine()
-            theLogText.Append("Please contact technical support and provide them with this information.")
-            theLogText.AppendLine()
-            theLogText.Append("[Press Ctrl+C on your keyboard to copy this message to the Windows clipboard.]")
-            theLogText.AppendLine()
-            theLogText.Append(CChar("_"), 50)
-            theLogText.AppendLine()
-            
-            MessageBox.Show(theLogText.ToString, "ORMAP Taxlot Editing Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Dim theUnableToLogText As New StringBuilder()
+            theUnableToLogText.Append(GetVersionInfo(GetExecutingAssembly.Location).ProductName & _
+            " v" & GetVersionInfo(GetExecutingAssembly.Location).ProductVersion)
+            'theUnableToLogText.AppendLine()
+            'theUnableToLogText.Append(GetVersionInfo(GetExecutingAssembly.Location).Comments)
+            theUnableToLogText.AppendLine()
+            theUnableToLogText.AppendLine()
+            theUnableToLogText.Append("Unable to log an error (see below).")
+            theUnableToLogText.AppendLine()
+            theUnableToLogText.AppendLine()
+            theUnableToLogText.Append("Please contact technical support and provide this information.")
+            theUnableToLogText.AppendLine()
+            theUnableToLogText.Append(theLogText.ToString)
+            theUnableToLogText.AppendLine()
+            theUnableToLogText.Append("[Press Ctrl+C on your keyboard to copy this message to the Windows clipboard.]  ")
+            theUnableToLogText.AppendLine()
+
+            MessageBox.Show(theUnableToLogText.ToString, "ORMAP Taxlot Editing Error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
         End Try
 
     End Sub
@@ -984,6 +995,7 @@ Public NotInheritable Class EditorExtension
             setEditor(Nothing)
             setEditEvents(Nothing)
 
+            Trace.Flush()
             removeTraceListenerForEventLog()
             removeTraceListenerForFileLog()
 
@@ -1001,7 +1013,7 @@ Public NotInheritable Class EditorExtension
                 setEditEvents(DirectCast(EditorExtension.Editor, IEditEvents_Event))
 
                 addTraceListenerForEventLog()
-                addTraceListenerForFileLog(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".trace.log")
+                addTraceListenerForFileLog(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & "." & Now.Ticks.ToString & ".trace.log")
 
                 My.User.InitializeWithWindowsUser()
 
