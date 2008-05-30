@@ -19,6 +19,7 @@ Partial Class DimensionArrowsForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container
         Me.uxCurveLabel = New System.Windows.Forms.Label
         Me.uxLineLabel = New System.Windows.Forms.Label
         Me.uxSmoothLabel = New System.Windows.Forms.Label
@@ -29,95 +30,85 @@ Partial Class DimensionArrowsForm
         Me.uxSmoothRatio = New System.Windows.Forms.TextBox
         Me.uxManuallyAddArrow = New System.Windows.Forms.CheckBox
         Me.uxDimensionPropertiesGroup = New System.Windows.Forms.GroupBox
+        Me.uxErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.uxDimensionPropertiesGroup.SuspendLayout()
+        CType(Me.uxErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'uxCurveLabel
         '
         Me.uxCurveLabel.AutoSize = True
-        Me.uxCurveLabel.Location = New System.Drawing.Point(8, 27)
-        Me.uxCurveLabel.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.uxCurveLabel.Location = New System.Drawing.Point(6, 22)
         Me.uxCurveLabel.Name = "uxCurveLabel"
-        Me.uxCurveLabel.Size = New System.Drawing.Size(126, 17)
+        Me.uxCurveLabel.Size = New System.Drawing.Size(96, 13)
         Me.uxCurveLabel.TabIndex = 0
         Me.uxCurveLabel.Text = "Ratio of the Curve:"
         '
         'uxLineLabel
         '
         Me.uxLineLabel.AutoSize = True
-        Me.uxLineLabel.Location = New System.Drawing.Point(8, 59)
-        Me.uxLineLabel.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.uxLineLabel.Location = New System.Drawing.Point(6, 48)
         Me.uxLineLabel.Name = "uxLineLabel"
-        Me.uxLineLabel.Size = New System.Drawing.Size(140, 17)
+        Me.uxLineLabel.Size = New System.Drawing.Size(99, 13)
         Me.uxLineLabel.TabIndex = 1
-        Me.uxLineLabel.Text = "Ration from the Line:"
+        Me.uxLineLabel.Text = "Ratio from the Line:"
         '
         'uxSmoothLabel
         '
         Me.uxSmoothLabel.AutoSize = True
-        Me.uxSmoothLabel.Location = New System.Drawing.Point(8, 91)
-        Me.uxSmoothLabel.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.uxSmoothLabel.Location = New System.Drawing.Point(6, 74)
         Me.uxSmoothLabel.Name = "uxSmoothLabel"
-        Me.uxSmoothLabel.Size = New System.Drawing.Size(97, 17)
+        Me.uxSmoothLabel.Size = New System.Drawing.Size(74, 13)
         Me.uxSmoothLabel.TabIndex = 2
         Me.uxSmoothLabel.Text = "Smooth Ratio:"
         '
         'uxReset
         '
-        Me.uxReset.Location = New System.Drawing.Point(52, 172)
-        Me.uxReset.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.uxReset.Location = New System.Drawing.Point(39, 140)
         Me.uxReset.Name = "uxReset"
-        Me.uxReset.Size = New System.Drawing.Size(100, 28)
+        Me.uxReset.Size = New System.Drawing.Size(75, 23)
         Me.uxReset.TabIndex = 4
         Me.uxReset.Text = "Reset"
         Me.uxReset.UseVisualStyleBackColor = True
         '
         'uxApply
         '
-        Me.uxApply.Location = New System.Drawing.Point(164, 172)
-        Me.uxApply.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.uxApply.Location = New System.Drawing.Point(123, 140)
         Me.uxApply.Name = "uxApply"
-        Me.uxApply.Size = New System.Drawing.Size(100, 28)
+        Me.uxApply.Size = New System.Drawing.Size(75, 23)
         Me.uxApply.TabIndex = 5
         Me.uxApply.Text = "Apply"
         Me.uxApply.UseVisualStyleBackColor = True
         '
         'uxRatioOfCurve
         '
-        Me.uxRatioOfCurve.Location = New System.Drawing.Point(181, 18)
-        Me.uxRatioOfCurve.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.uxRatioOfCurve.Location = New System.Drawing.Point(121, 15)
         Me.uxRatioOfCurve.Name = "uxRatioOfCurve"
-        Me.uxRatioOfCurve.Size = New System.Drawing.Size(57, 22)
+        Me.uxRatioOfCurve.Size = New System.Drawing.Size(44, 20)
         Me.uxRatioOfCurve.TabIndex = 6
-        Me.uxRatioOfCurve.Text = "1.35"
         '
         'uxRatioOfLine
         '
-        Me.uxRatioOfLine.Location = New System.Drawing.Point(181, 50)
-        Me.uxRatioOfLine.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.uxRatioOfLine.Location = New System.Drawing.Point(121, 41)
         Me.uxRatioOfLine.Name = "uxRatioOfLine"
-        Me.uxRatioOfLine.Size = New System.Drawing.Size(57, 22)
+        Me.uxRatioOfLine.Size = New System.Drawing.Size(44, 20)
         Me.uxRatioOfLine.TabIndex = 7
-        Me.uxRatioOfLine.Text = "1.75"
         '
         'uxSmoothRatio
         '
-        Me.uxSmoothRatio.Location = New System.Drawing.Point(181, 82)
-        Me.uxSmoothRatio.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.uxSmoothRatio.Location = New System.Drawing.Point(121, 67)
         Me.uxSmoothRatio.Name = "uxSmoothRatio"
-        Me.uxSmoothRatio.Size = New System.Drawing.Size(57, 22)
+        Me.uxSmoothRatio.Size = New System.Drawing.Size(44, 20)
         Me.uxSmoothRatio.TabIndex = 8
-        Me.uxSmoothRatio.Text = "10"
         '
         'uxManuallyAddArrow
         '
         Me.uxManuallyAddArrow.AutoSize = True
-        Me.uxManuallyAddArrow.Location = New System.Drawing.Point(16, 144)
-        Me.uxManuallyAddArrow.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.uxManuallyAddArrow.Location = New System.Drawing.Point(12, 117)
         Me.uxManuallyAddArrow.Name = "uxManuallyAddArrow"
-        Me.uxManuallyAddArrow.Size = New System.Drawing.Size(148, 21)
+        Me.uxManuallyAddArrow.Size = New System.Drawing.Size(120, 17)
         Me.uxManuallyAddArrow.TabIndex = 9
-        Me.uxManuallyAddArrow.Text = "Manuall Add Arrow"
+        Me.uxManuallyAddArrow.Text = "Manually Add Arrow"
         Me.uxManuallyAddArrow.UseVisualStyleBackColor = True
         '
         'uxDimensionPropertiesGroup
@@ -128,26 +119,27 @@ Partial Class DimensionArrowsForm
         Me.uxDimensionPropertiesGroup.Controls.Add(Me.uxLineLabel)
         Me.uxDimensionPropertiesGroup.Controls.Add(Me.uxRatioOfLine)
         Me.uxDimensionPropertiesGroup.Controls.Add(Me.uxSmoothLabel)
-        Me.uxDimensionPropertiesGroup.Location = New System.Drawing.Point(16, 15)
-        Me.uxDimensionPropertiesGroup.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.uxDimensionPropertiesGroup.Location = New System.Drawing.Point(12, 12)
         Me.uxDimensionPropertiesGroup.Name = "uxDimensionPropertiesGroup"
-        Me.uxDimensionPropertiesGroup.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
-        Me.uxDimensionPropertiesGroup.Size = New System.Drawing.Size(248, 114)
+        Me.uxDimensionPropertiesGroup.Size = New System.Drawing.Size(186, 93)
         Me.uxDimensionPropertiesGroup.TabIndex = 10
         Me.uxDimensionPropertiesGroup.TabStop = False
         Me.uxDimensionPropertiesGroup.Text = "Dimension Arrow Properties"
         '
+        'uxErrorProvider
+        '
+        Me.uxErrorProvider.ContainerControl = Me
+        '
         'DimensionArrowsForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(281, 214)
+        Me.ClientSize = New System.Drawing.Size(209, 170)
         Me.Controls.Add(Me.uxDimensionPropertiesGroup)
         Me.Controls.Add(Me.uxManuallyAddArrow)
         Me.Controls.Add(Me.uxApply)
         Me.Controls.Add(Me.uxReset)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "DimensionArrowsForm"
@@ -157,6 +149,7 @@ Partial Class DimensionArrowsForm
         Me.TopMost = True
         Me.uxDimensionPropertiesGroup.ResumeLayout(False)
         Me.uxDimensionPropertiesGroup.PerformLayout()
+        CType(Me.uxErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -171,4 +164,5 @@ Partial Class DimensionArrowsForm
     Friend WithEvents uxSmoothRatio As System.Windows.Forms.TextBox
     Friend WithEvents uxManuallyAddArrow As System.Windows.Forms.CheckBox
     Friend WithEvents uxDimensionPropertiesGroup As System.Windows.Forms.GroupBox
+    Friend WithEvents uxErrorProvider As System.Windows.Forms.ErrorProvider
 End Class
