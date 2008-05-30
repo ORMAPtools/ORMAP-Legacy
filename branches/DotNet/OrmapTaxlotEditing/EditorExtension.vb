@@ -105,7 +105,11 @@ Public NotInheritable Class EditorExtension
             Return _application
         End Get
     End Property
-
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="value">An object that supports <c>IApplication</c>.</param>
+    ''' <remarks></remarks>
     Private Shared Sub setApplication(ByVal value As IApplication)
         _application = value
     End Sub
@@ -122,7 +126,11 @@ Public NotInheritable Class EditorExtension
             Return _editor
         End Get
     End Property
-
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="value">An object that supports <c>IEditor2</c>.</param>
+    ''' <remarks></remarks>
     Private Shared Sub setEditor(ByVal value As IEditor2)
         _editor = value
     End Sub
@@ -140,7 +148,11 @@ Public NotInheritable Class EditorExtension
             Return _editEvents
         End Get
     End Property
-
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="value">An object that supports <c>IEditEvents_Event</c>.</param>
+    ''' <remarks></remarks>
     Private Shared Sub setEditEvents(ByVal value As IEditEvents_Event)
         _editEvents = value
     End Sub
@@ -158,7 +170,11 @@ Public NotInheritable Class EditorExtension
             Return _activeViewEvents
         End Get
     End Property
-
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="value">An object that supports <c>IActiveViewEvents_Event</c>.</param>
+    ''' <remarks></remarks>
     Private Shared Sub setActiveViewEvents(ByVal value As IActiveViewEvents_Event)
         _activeViewEvents = value
     End Sub
@@ -314,7 +330,11 @@ Public NotInheritable Class EditorExtension
             Return _hasValidLicense
         End Get
     End Property
-
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="value">A boolean value.</param>
+    ''' <remarks></remarks>
     Private Shared Sub setHasValidLicense(ByVal value As Boolean)
         _hasValidLicense = value
     End Sub
@@ -332,7 +352,11 @@ Public NotInheritable Class EditorExtension
             Return _isValidWorkspace
         End Get
     End Property
-
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="value">A boolean value.</param>
+    ''' <remarks></remarks>
     Private Shared Sub setIsValidWorkspace(ByVal value As Boolean)
         _isValidWorkspace = value
     End Sub
@@ -647,6 +671,10 @@ Public NotInheritable Class EditorExtension
 
     End Sub
 
+    ''' <summary>
+    ''' Event handler.
+    ''' </summary>
+    ''' <remarks>Handles EditEvents.OnStartEditing events.</remarks>
     Private Sub EditEvents_OnStartEditing()
 
         Try
@@ -699,6 +727,10 @@ Public NotInheritable Class EditorExtension
 
     End Sub
 
+    ''' <summary>
+    ''' Event handler.
+    ''' </summary>
+    ''' <remarks>Handles EditEvents.OnStopEditing events.</remarks>
     Private Sub EditEvents_OnStopEditing(ByVal save As Boolean)
 
         Try
@@ -734,6 +766,10 @@ Public NotInheritable Class EditorExtension
 
 #Region "ActiveViewEvents Event Handlers"
 
+    ''' <summary>
+    ''' Event handler.
+    ''' </summary>
+    ''' <remarks>Handles ActiveViewEvents.FocusMapChanged events.</remarks>
     Public Sub ActiveViewEvents_FocusMapChanged() 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.FocusMapChanged
         ' TODO: [NIS] Determine why this event never fires...
         Try
@@ -744,6 +780,10 @@ Public NotInheritable Class EditorExtension
 
     End Sub
 
+    ''' <summary>
+    ''' Event handler.
+    ''' </summary>
+    ''' <remarks>Handles ActiveViewEvents.ItemAdded events.</remarks>
     Public Sub ActiveViewEvents_ItemAdded(ByVal Item As Object) 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.ItemAdded
         Try
             ClearAllValidDataProperties()
@@ -753,6 +793,10 @@ Public NotInheritable Class EditorExtension
 
     End Sub
 
+    ''' <summary>
+    ''' Event handler.
+    ''' </summary>
+    ''' <remarks>Handles ActiveViewEvents.ItemDeleted events.</remarks>
     Public Sub ActiveViewEvents_ItemDeleted(ByVal Item As Object) 'Handles ESRI.ArcGIS.Carto.IActiveViewEvents.ItemDeleted
         Try
             ClearAllValidDataProperties()
@@ -768,11 +812,23 @@ Public NotInheritable Class EditorExtension
 
 #Region "Methods"
 
-    ' TEST: [NIS] Not sure these accelerators will work with an editor extension.
+    ''' <summary>
+    ''' Set a keyboard accelerator. 
+    ''' </summary>
+    ''' <param name="acceleratorTable">The accelerator table to store the accelerators in.</param>
+    ''' <param name="classID">the ClassID of the command to trigger by the accelerator.</param>
+    ''' <param name="key">The key to use.</param>
+    ''' <param name="usesCtrl"><italic>Flag.</italic> Uses Ctrl key modification.</param>
+    ''' <param name="usesAlt"><italic>Flag.</italic> Uses Alt key modification.</param>
+    ''' <param name="usesShift"><italic>Flag.</italic> Uses Shift key modification.</param>
+    ''' <remarks></remarks>
     Private Shared Sub setAccelerator(ByVal acceleratorTable As IAcceleratorTable, _
             ByVal classID As UID, ByVal key As Integer, _
             ByVal usesCtrl As Boolean, ByVal usesAlt As Boolean, _
             ByVal usesShift As Boolean)
+
+        ' TEST: [NIS] Not sure these accelerators will work with an editor extension.
+
         ' Create accelerator only if nothing else is using it
 
         Dim accelerator As IAccelerator
@@ -788,8 +844,8 @@ Public NotInheritable Class EditorExtension
     ''' <summary>
     ''' Validate the license (e.g. ArcEditor or ArcInfo).
     ''' </summary>
-    ''' <param name="requiredProductCode"></param>
-    ''' <returns></returns>
+    ''' <param name="requiredProductCode">An <c>"esriLicenseProductCode"</c> enumerated item.</param>
+    ''' <returns><c>True</c> or <c>False</c>, depending on the licence validity.</returns>
     ''' <remarks></remarks>
     Private Shared Function validateLicense(ByVal requiredProductCode As esriLicenseProductCode) As Boolean
 
@@ -802,11 +858,11 @@ Public NotInheritable Class EditorExtension
     ''' <summary>
     ''' Set the map index (if the field exists) to the Map Index map index for the feature location.
     ''' </summary>
-    ''' <param name="obj"></param>
-    ''' <param name="theFeature"></param>
-    ''' <param name="theGeometry"></param>
+    ''' <param name="obj">An object implementing <c>IObject</c>, either a Feature or a Row.</param>
+    ''' <param name="theFeature">An object implementing <c>IFeature</c>.</param>
+    ''' <param name="theSearchGeometry">An object implementing <c>IGeometry</c>.</param>
     ''' <remarks></remarks>
-    Private Shared Sub setMapIndexAndScale(ByVal obj As IObject, ByVal theFeature As IFeature, ByVal theGeometry As IGeometry)
+    Private Shared Sub setMapIndexAndScale(ByVal obj As IObject, ByVal theFeature As IFeature, ByVal theSearchGeometry As IGeometry)
 
         Dim theMapScale As String
         Dim theMapNumber As String
@@ -816,7 +872,7 @@ Public NotInheritable Class EditorExtension
         theMapNumFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
         If theMapNumFieldIndex > NotFoundIndex And Not IsMapIndex(obj) Then
             ' Get the Map Index map number for the location of the new feature.
-            theMapNumber = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+            theMapNumber = GetValueViaOverlay(theSearchGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
             ' Set the feature map number.
             If Len(theMapNumber) > 0 Then
                 theFeature.Value(theMapNumFieldIndex) = theMapNumber
@@ -832,7 +888,7 @@ Public NotInheritable Class EditorExtension
         theMapScaleFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
         If theMapScaleFieldIndex > NotFoundIndex And Not IsMapIndex(obj) Then
             ' Get the Map Index map scale for the location of the new feature.
-            theMapScale = GetValueViaOverlay(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+            theMapScale = GetValueViaOverlay(theSearchGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
             ' Set the feature map scale.
             If Len(theMapScale) > 0 Then
                 theFeature.Value(theMapScaleFieldIndex) = theMapScale
@@ -901,13 +957,14 @@ Public NotInheritable Class EditorExtension
 
     ''' <summary>
     ''' Process any unhandled exceptions that occur in the application.
-    ''' This code is called by all UI entry points in the application (e.g. button click events)
-    ''' when an unhandled exception occurs.
-    ''' You could also achieve this by handling the Application.ThreadException event, however
-    ''' the VS2005 debugger will break before this event is called.
     ''' </summary>
-    ''' <param name="ex">The unhandled exception</param>
-    ''' <remarks></remarks>
+    ''' <param name="ex">The unhandled exception.</param>
+    ''' <remarks>
+    ''' <para>This code is called by all UI entry points in the application (e.g. button click events)
+    ''' when an unhandled exception occurs.</para>
+    ''' <para>You could also achieve this by handling the Application.ThreadException event, however
+    ''' the VS2005 debugger will break before this event is called.</para>
+    ''' </remarks>
     Friend Shared Sub ProcessUnhandledException(ByVal ex As Exception)
         ' An unhandled exception occured somewhere in the application.
 
@@ -944,7 +1001,7 @@ Public NotInheritable Class EditorExtension
             Trace.TraceError(theLogText.ToString)
             Trace.Flush()
 
-            ' TODO: [NIS] Get this working? Attach log file (last parameter)?
+            ' ENHANCE: [NIS] Get this working? Attach log file (last parameter)?
             'SendEmailMessage("OPET.NET@gmail.com", "nseigal@lcog.org", "ORMAP Taxlot Editing Error", theLogText.ToString, "")
 
         Catch
@@ -1039,7 +1096,7 @@ Public NotInheritable Class EditorExtension
     ''' Create the keyboard accelerators for this extension.
     ''' </summary>
     ''' <remarks></remarks>
-    Public Sub CreateAccelerators() Implements ESRI.ArcGIS.esriSystem.IExtensionAccelerators.CreateAccelerators
+    Public Sub CreateAccelerators() Implements IExtensionAccelerators.CreateAccelerators
 
         ' TEST: [NIS] Not sure these accelerators will work with an editor extension.
 

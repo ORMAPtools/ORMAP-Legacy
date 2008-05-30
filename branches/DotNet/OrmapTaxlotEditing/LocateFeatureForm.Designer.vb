@@ -27,15 +27,15 @@ Partial Class LocateFeatureForm
         Me.uxTaxlot = New System.Windows.Forms.TextBox
         Me.SuspendLayout()
         '
-        'uxMapnumber
+        'uxMapNumber
         '
         Me.uxMapNumber.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
         Me.uxMapNumber.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxMapNumber.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.uxMapNumber.FormattingEnabled = True
-        Me.uxMapNumber.Location = New System.Drawing.Point(9, 25)
+        Me.uxMapNumber.Location = New System.Drawing.Point(9, 24)
         Me.uxMapNumber.Margin = New System.Windows.Forms.Padding(2)
-        Me.uxMapNumber.Name = "uxMapnumber"
+        Me.uxMapNumber.Name = "uxMapNumber"
         Me.uxMapNumber.Size = New System.Drawing.Size(126, 21)
         Me.uxMapNumber.Sorted = True
         Me.uxMapNumber.TabIndex = 0

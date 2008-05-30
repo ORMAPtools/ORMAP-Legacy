@@ -1581,6 +1581,9 @@ Public NotInheritable Class SpatialUtilities
 
     End Function
 
+    ''' <summary>
+    ''' Zooms to the given extent.
+    ''' </summary>
     <ObsoleteAttribute("Use the ZoomToEnvelope() function instead.", True)> _
     Public Shared Sub ZoomToExtent(ByVal pEnv As ESRI.ArcGIS.Geometry.IEnvelope, ByVal pMxDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument)
         Dim pMap As ESRI.ArcGIS.Carto.IMap
@@ -1596,11 +1599,10 @@ Public NotInheritable Class SpatialUtilities
     End Sub
 
     ''' <summary>
-    ''' Zooms to the given envenlope.
+    ''' Zooms to the given envelope.
     ''' </summary>
     ''' <param name="theEnvelope">The envelope to zoom to.</param>
     ''' <remarks>Replaces ZoomToExtent sub.  This sub removes the unneeded pMxDoc parameter.</remarks>
-    ''' 
     Public Shared Sub ZoomToEnvelope(ByVal theEnvelope As IEnvelope)
 
         Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
@@ -1679,6 +1681,8 @@ Public NotInheritable Class SpatialUtilities
                 formattedWhereClause = whereClause
             Case "Spatial Database Connection"
                 formattedWhereClause = whereClause.Replace("[", "").Replace("]", "")
+            Case Else
+                Throw New Exception("Invalid ORMAP data type.")
 
         End Select
         Return formattedWhereClause

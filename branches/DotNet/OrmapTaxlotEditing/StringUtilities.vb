@@ -332,7 +332,7 @@ Public NotInheritable Class StringUtilities
 #Region "Private Members"
 
     ''' <summary>
-    ''' Trims leading zeros from a string
+    ''' Trims leading zeros from a string.
     ''' </summary>
     ''' <param name="stringToParse"></param>
     ''' <returns>A copy of the string without leading zeros</returns>

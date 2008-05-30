@@ -84,6 +84,9 @@ Public NotInheritable Class ORMapNum
 #End Region
 
 #Region "Events"
+    ''' <summary>
+    ''' Event triggered when ORMAP number changes.
+    ''' </summary>
     Friend Event OnChange(ByVal newNumber As String)
 #End Region
 
@@ -92,7 +95,7 @@ Public NotInheritable Class ORMapNum
     Private _county As String
 
     ''' <summary>
-    ''' Two digit code for the County -- Default: 00
+    ''' Two digit code for the County -- Default: 00.
     ''' </summary>
     Public Property County() As String
         Get
@@ -118,7 +121,7 @@ Public NotInheritable Class ORMapNum
     Private _township As String
 
     ''' <summary>
-    ''' Two digit code for the township -- Default: 01
+    ''' Two digit code for the township -- Default: 01.
     ''' </summary>
     Public Property Township() As String
         Get
@@ -137,7 +140,7 @@ Public NotInheritable Class ORMapNum
     Private _partialTownshipCode As String
 
     ''' <summary>
-    ''' Three digit code for the partial township code -- Default: .00
+    ''' Three digit code for the partial township code -- Default: .00.
     ''' </summary>
     Public Property PartialTownshipCode() As String
         Get
@@ -157,7 +160,7 @@ Public NotInheritable Class ORMapNum
     Private _townshipDirectional As String
 
     ''' <summary>
-    ''' One digit directional for the township -- Default: N
+    ''' One digit directional for the township -- Default: N.
     ''' </summary>
     Public Property TownshipDirectional() As String
         Get
@@ -177,7 +180,7 @@ Public NotInheritable Class ORMapNum
     Private _range As String
 
     ''' <summary>
-    ''' Two digit code for the range -- Default: 01
+    ''' Two digit code for the range -- Default: 01.
     ''' </summary>
     Public Property Range() As String
         Get
@@ -197,7 +200,7 @@ Public NotInheritable Class ORMapNum
     Private _partialRangeCode As String
 
     ''' <summary>
-    ''' Three-digit code for the partial range code -- Default: .00
+    ''' Three-digit code for the partial range code -- Default: .00.
     ''' </summary>
     Public Property PartialRangeCode() As String
         Get
@@ -217,7 +220,7 @@ Public NotInheritable Class ORMapNum
     Private _rangeDirectional As String
 
     ''' <summary>
-    ''' One digit code for the directional for the range -- Default: W
+    ''' One digit code for the directional for the range -- Default: W.
     ''' </summary>
     Public Property RangeDirectional() As String
         Get
@@ -237,7 +240,7 @@ Public NotInheritable Class ORMapNum
     Private _section As String
 
     ''' <summary>
-    ''' Two digit code for the section number from 00 to 37 -- Default: 00
+    ''' Two digit code for the section number from 00 to 37 -- Default: 00.
     ''' </summary>
     Public Property Section() As String
         Get
@@ -266,7 +269,7 @@ Public NotInheritable Class ORMapNum
     Private _quarter As String
 
     ''' <summary>
-    ''' One digit code for the quarter from A to J -- Default: 0
+    ''' One digit code for the quarter from A to J -- Default: 0.
     ''' </summary>
     Public Property Quarter() As String
         Get
@@ -286,7 +289,7 @@ Public NotInheritable Class ORMapNum
     Private _quarterQuarter As String
 
     ''' <summary>
-    ''' One digit code for the quarter/quarter from A to J -- Default: 0
+    ''' One digit code for the quarter/quarter from A to J -- Default: 0.
     ''' </summary>
     Public Property QuarterQuarter() As String
         Get
@@ -306,7 +309,7 @@ Public NotInheritable Class ORMapNum
     Private _suffixType As String
 
     ''' <summary>
-    ''' One digit code, S, D, T, or 0, for suffix type -- Default: 0
+    ''' One digit code, S, D, T, or 0, for suffix type -- Default: 0.
     ''' </summary>
     Public Property SuffixType() As String
         Get
@@ -326,7 +329,7 @@ Public NotInheritable Class ORMapNum
     Private _suffixNumber As String
 
     ''' <summary>
-    ''' Three digit code for the suffix number from 000 to 999 -- Default: 000
+    ''' Three digit code for the suffix number from 000 to 999 -- Default: 000.
     ''' </summary>
     Public Property SuffixNumber() As String
         Get
@@ -453,7 +456,7 @@ Public NotInheritable Class ORMapNum
 
 
     ''' <summary>
-    ''' Validate ORMAP Numbers
+    ''' Validate ORMAP Numbers.
     ''' </summary>
     ''' <remarks>Determines validity based on all elements having a length of greater than 0.</remarks>
     ''' <returns>Boolean value representing the Valid status of the number.</returns>
@@ -476,7 +479,7 @@ Public NotInheritable Class ORMapNum
     End Function
 
     ''' <summary>
-    ''' Length of ORMAPMapNum field
+    ''' Length of ORMAPMapNum field.
     ''' </summary>
     ''' <returns>Number of characters allowed in this field as integer.</returns>
     Public Shared Function GetMapNumFieldLength() As Integer

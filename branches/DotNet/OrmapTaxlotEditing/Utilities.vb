@@ -78,8 +78,14 @@ Public NotInheritable Class Utilities
 #Region "Custom Class Members"
 
 #Region "Public Members"
+    ''' <summary>
+    ''' Index returned when field or other collection item not found (-1).
+    ''' </summary>
     Public Const NotFoundIndex As Integer = -1
 
+    ''' <summary>
+    ''' Enumeration of ESRI mouse button constant values.
+    ''' </summary>
     Friend Enum EsriMouseButtons
         Left = 1
         Right = 2

@@ -76,6 +76,9 @@ Public Class CatalogFileDialog
 
 #Region "Custom class members"
 
+    ''' <summary>
+    ''' The dialog name.
+    ''' </summary>
     Public Property Name() As String
         Get
             Name = _theGxDialog.Name
@@ -87,7 +90,7 @@ Public Class CatalogFileDialog
 
     ''' <summary>
     ''' The file path present when the user specifies a file to open
-    ''' or a file name to save in Open/Save As dialog boxes
+    ''' or a file name to save in Open/Save As dialog boxes.
     ''' </summary>
     ''' <value></value>
     ''' <returns></returns>
@@ -98,6 +101,9 @@ Public Class CatalogFileDialog
         End Get
     End Property
 
+    ''' <summary>
+    ''' Constant storing the value returned when there is no selected element (-1).
+    ''' </summary>
     Public Const NoSelectedElementIndex As Integer = -1
 
     ''' <summary>
@@ -133,7 +139,7 @@ Public Class CatalogFileDialog
 
 
     ''' <summary>
-    ''' Initial file path for either open or save dialog boxes
+    ''' Set the initial file path for either open or save dialog boxes.
     ''' </summary>
     ''' <param name="location"></param>
     ''' <remarks></remarks>
@@ -190,7 +196,7 @@ Public Class CatalogFileDialog
     End Function
 
     ''' <summary>
-    ''' Show the ArcCatalog file open dialog box
+    ''' Show the ArcCatalog file open dialog box.
     ''' </summary>
     ''' <returns>  A collection of names of objects that have been selected by the user from the dialog box</returns>
     ''' <remarks></remarks>
@@ -221,7 +227,7 @@ Public Class CatalogFileDialog
     End Function
 
     ''' <summary>
-    ''' Show the ArcCatalog file save dialog box
+    ''' Show the ArcCatalog file save dialog box.
     ''' </summary>
     ''' <returns>A collection holding the full path that is a concatenation of the final path and the specified name</returns>
     ''' <remarks></remarks>

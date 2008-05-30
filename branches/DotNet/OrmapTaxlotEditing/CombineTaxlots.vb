@@ -668,6 +668,7 @@ Public NotInheritable Class CombineTaxlots
 
         Dim theLineTypeFieldIndex As Integer
 
+        ' ENHANCE: [NIS] Need to add ReferenceLinesSettings and use them here.
         theLineTypeFieldIndex = LocateFields(ReferenceLinesFeatureLayer.FeatureClass, EditorExtension.TaxLotLinesSettings.LineTypeField)
 
         Dim theCombinedGeom As IGeometry

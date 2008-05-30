@@ -88,7 +88,7 @@ Public NotInheritable Class AddArrows
         ' Define protected instance field values for the public properties
         MyBase.m_category = "OrmapToolbar"  'localizable text 
         MyBase.m_caption = "AddArrows"   'localizable text 
-        MyBase.m_message = "Add arrow features to the cartographic lines feature class."   'localizable text 
+        MyBase.m_message = "Add arrow features to the Cartographic Lines feature class."   'localizable text 
         MyBase.m_toolTip = "Add Arrows" 'localizable text 
         MyBase.m_name = MyBase.m_category & "_AddArrows"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
 
@@ -393,16 +393,18 @@ Public NotInheritable Class AddArrows
                 OnKeyDown(Keys.Q, 1) 'exit tool
                 Exit Try
             End If
-            ' Check for Cartographic Lines Feature Class.
-            If FindDataLayerInMap(EditorExtension.TableNamesSettings.CartographicLinesFC) Is Nothing Then
-                MessageBox.Show("Missing data: Valid " & EditorExtension.TableNamesSettings.CartographicLinesFC & " Feature Class not found in the map." & vbNewLine & _
+
+            ' Check for Cartographic Lines data.
+            CheckValidCartographicLinesDataProperties()
+            If Not HasValidCartographicLinesData Then
+                MessageBox.Show("Missing data: Valid ORMAP CartographicLines layer not found in the map." & vbNewLine & _
                                 "Please load this dataset into your map.", _
-                                "Add Arrows", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                                "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 OnKeyDown(Keys.Q, 1) 'exit tool
                 Exit Try
             End If
 
-            '--Hack - set global variables in DoButtonOperation... These should be re-evaluated.
+            ' HACK: [SC] Set global variables in DoButtonOperation... These should be re-evaluated.
             If _arrowPointsCollection Is Nothing Then _arrowPointsCollection = New Collection
             Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
             _theActiveView = theArcMapDoc.ActiveView
@@ -507,7 +509,7 @@ Public NotInheritable Class AddArrows
     '        End If
 
     '        'Get the hook layer
-    '        Dim theHookFLayer As IFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.CartographicLinesFC)
+    '        Dim theHookFLayer As IFeatureLayer = DataMonitor.CartographicLinesFeatureLayer
     '        Dim theHookFClass As IFeatureClass = theHookFLayer.FeatureClass
 
     '        Dim theDataSet As IDataset = DirectCast(theHookFClass, IDataset)
@@ -515,7 +517,7 @@ Public NotInheritable Class AddArrows
 
     '        ' Locate the line type field
     '        Dim lineTypeField As Integer = LocateFields(theHookFClass, (EditorExtension.CartographicLinesSettings.LineTypeField))
-    '        If lineTypeField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+    '        If lineTypeField = NotFoundIndex Then Exit Sub
 
     '        ' Initialize line objects and collections to create a new line
     '        Dim theNewPointColl As IPointCollection = New Polyline
@@ -592,28 +594,28 @@ Public NotInheritable Class AddArrows
 
     '        ' Set the AutoMethod Field
     '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.AllTablesSettings.AutoMethodField))
-    '        If lineTypeField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+    '        If lineTypeField = NotFoundIndex Then Exit Sub
     '        theFeature.Value(lineTypeField) = "UNK"
 
     '        ' Set the AutoWho Field
     '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.AllTablesSettings.AutoWhoField))
-    '        If lineTypeField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+    '        If lineTypeField = NotFoundIndex Then Exit Sub
     '        theFeature.Value(lineTypeField) = UserName
 
     '        ' Set the AutoDate Field
     '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.AllTablesSettings.AutoDateField))
-    '        If lineTypeField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+    '        If lineTypeField = NotFoundIndex Then Exit Sub
     '        theFeature.Value(lineTypeField) = Format(Today, "MM/dd/yyyy")
 
     '        ' Set the MapScale Field
     '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.MapIndexSettings.MapScaleField))
-    '        If lineTypeField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+    '        If lineTypeField = NotFoundIndex Then Exit Sub
     '        theFeature.Value(lineTypeField) = theMapScale1
 
     '        ' Set the MapNumber Field
     '        Dim curMapNum As String = GetValueViaOverlay(theFeature.Shape, theMIFclass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
     '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.MapIndexSettings.MapNumberField))
-    '        If lineTypeField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+    '        If lineTypeField = NotFoundIndex Then Exit Sub
     '        theFeature.Value(lineTypeField) = curMapNum
 
     '        theFeature.Store()
@@ -681,9 +683,9 @@ Public NotInheritable Class AddArrows
                 .Blue = 223
             End With
 
-            _theLineSymbol.Color = theRGBColor
-            Dim theSymbol As ISymbol = DirectCast(_theLineSymbol, ISymbol)
-            theSymbol.ROP2 = esriRasterOpCode.esriROPXOrPen
+            _theLineSymbol.Color.RGB = theRGBColor.RGB
+            Dim pSymbol As ISymbol = DirectCast(_theLineSymbol, ISymbol)
+            pSymbol.ROP2 = esriRasterOpCode.esriROPXOrPen
 
             ' Create the polyline from a point collection
             Dim theArrowLine As IPointCollection4 = New Polyline
@@ -777,7 +779,7 @@ Public NotInheritable Class AddArrows
     Private Function GetCurrentMapScale(ByRef theMIFeatureClass As IFeatureClass) As String
 
         Try
-            Dim theDimensionArrowLayerTemp As IFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.CartographicLinesFC)
+            Dim theDimensionArrowLayerTemp As IFeatureLayer = DataMonitor.CartographicLinesFeatureLayer
             Dim theDimensionArrowFCTemp As IFeatureClass = theDimensionArrowLayerTemp.FeatureClass
             Dim theDimensionDSetTemp As IDataset = DirectCast(theDimensionArrowFCTemp, IDataset)
             Dim theDimensionWSEditTemp As IWorkspaceEdit = DirectCast(theDimensionDSetTemp.Workspace, IWorkspaceEdit)
@@ -926,7 +928,7 @@ Public NotInheritable Class AddArrows
         Try
 
             Dim fieldNumber As Integer = theFields.FindField(fieldName)
-            If fieldNumber > -1 Then
+            If fieldNumber > NotFoundIndex Then
                 'Determine if domain field
                 Dim theField As IField = theFields.Field(fieldNumber)
                 Dim theDomain As IDomain = theField.Domain
@@ -1118,7 +1120,7 @@ Public NotInheritable Class AddArrows
                         theArrowLine.Smooth(theArrowLine.Length / 10)
 
                         ' Get a reference to the Cartographic Lines feature class
-                        Dim theArrowLayer As IFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.CartographicLinesFC)
+                        Dim theArrowLayer As IFeatureLayer = DataMonitor.CartographicLinesFeatureLayer
                         Dim theArrowFeatureClass As IFeatureClass = theArrowLayer.FeatureClass
                         Dim theDataSet As IDataset = DirectCast(theArrowFeatureClass, IDataset)
                         Dim theWorkSpaceEdit As IWorkspaceEdit = DirectCast(theDataSet.Workspace, IWorkspaceEdit)
@@ -1133,7 +1135,7 @@ Public NotInheritable Class AddArrows
                         ' Locates fields in the feature's dataset
                         Dim mapNumberField As Integer = LocateFields(theArrowFeatureClass, EditorExtension.MapIndexSettings.MapNumberField)
                         theField = LocateFields(theArrowFeatureClass, EditorExtension.CartographicLinesSettings.LineTypeField)
-                        If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                        If theField = NotFoundIndex Then Exit Sub
                         ' Populate field values in the feature
                         Dim curMapNum As String = GetValueViaOverlay(theFeature.Shape, theMIFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
                         theFeature.Value(mapNumberField) = curMapNum
@@ -1142,23 +1144,23 @@ Public NotInheritable Class AddArrows
 
                         ' Set the AutoMethod Field
                         theField = LocateFields(theArrowFeatureClass, EditorExtension.AllTablesSettings.AutoMethodField)
-                        If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                        If theField = NotFoundIndex Then Exit Sub
                         theFeature.Value(theField) = "UNK"
 
                         ' Set the AutoWho Field
                         theField = LocateFields(theArrowFeatureClass, EditorExtension.AllTablesSettings.AutoWhoField)
-                        If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                        If theField = NotFoundIndex Then Exit Sub
                         theFeature.Value(theField) = UserName
 
                         ' Set the AutoDate Field
                         theField = LocateFields(theArrowFeatureClass, EditorExtension.AllTablesSettings.AutoDateField)
-                        If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                        If theField = NotFoundIndex Then Exit Sub
                         theFeature.Value(theField) = Format(Today, "MM/dd/yyyy")
 
                         ' Set the MapScale Field
                         currentMapScale = GetValueViaOverlay(theFeature.Shape, theMIFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
                         theField = LocateFields(theArrowFeatureClass, EditorExtension.MapIndexSettings.MapScaleField)
-                        If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                        If theField = NotFoundIndex Then Exit Sub
                         theFeature.Value(theField) = currentMapScale
 
                         ' Finalize the edit operation
@@ -1322,7 +1324,7 @@ Public NotInheritable Class AddArrows
                                 theDimensionLine.Smooth(theDimensionLine.Length / SmoothRatio)
                             End If
 
-                            Dim theDimensionArrowLayer As IFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.CartographicLinesFC)
+                            Dim theDimensionArrowLayer As IFeatureLayer = DataMonitor.CartographicLinesFeatureLayer
                             Dim theDimensionArrowFC As IFeatureClass = theDimensionArrowLayer.FeatureClass
                             Dim theDimensionDSet As IDataset = DirectCast(theDimensionArrowFC, IDataset)
                             Dim theDimensionWSEdit As IWorkspaceEdit = DirectCast(theDimensionDSet.Workspace, IWorkspaceEdit)
@@ -1337,7 +1339,7 @@ Public NotInheritable Class AddArrows
                             theDimensionFeature.Shape = theDimensionLine
 
                             theField = LocateFields(theDimensionArrowFC, EditorExtension.CartographicLinesSettings.LineTypeField)
-                            If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                            If theField = NotFoundIndex Then Exit Sub
                             theDimensionFeature.Value(theField) = 134 'Bearing Distance Arrow
 
                             ' Get the current MapNumber
@@ -1348,22 +1350,22 @@ Public NotInheritable Class AddArrows
 
                             ' Set the AutoMethod Field
                             theField = LocateFields(theDimensionArrowFC, EditorExtension.AllTablesSettings.AutoMethodField)
-                            If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                            If theField = NotFoundIndex Then Exit Sub
                             theDimensionFeature.Value(theField) = "UNK"
 
                             ' Set the AutoWho Field
                             theField = LocateFields(theDimensionArrowFC, EditorExtension.AllTablesSettings.AutoWhoField)
-                            If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                            If theField = NotFoundIndex Then Exit Sub
                             theDimensionFeature.Value(theField) = UserName
 
                             ' Set the AutoDate Field
                             theField = LocateFields(theDimensionArrowFC, EditorExtension.AllTablesSettings.AutoDateField)
-                            If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                            If theField = NotFoundIndex Then Exit Sub
                             theDimensionFeature.Value(theField) = Format(Today, "MM/dd/yyyy")
 
                             ' Set the MapScale Field
                             theField = LocateFields(theDimensionArrowFC, EditorExtension.MapIndexSettings.MapScaleField)
-                            If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                            If theField = NotFoundIndex Then Exit Sub
                             theDimensionFeature.Value(theField) = CInt(currentMapScale) * 12
 
                             theDimensionFeature.Store()
