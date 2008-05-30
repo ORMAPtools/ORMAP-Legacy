@@ -177,7 +177,7 @@ Public NotInheritable Class Utilities
 
                 ' Attach each file attachment
                 For Each thisAttachment As String In inAttachments
-                    If Not thisAttachment = "" Then
+                    If Not thisAttachment = String.Empty Then
                         Dim thisFile As New Attachment(thisAttachment)
                         thisMailMsg.Attachments.Add(thisFile)
                     End If
@@ -219,7 +219,7 @@ Public NotInheritable Class Utilities
             theMailMsg.Priority = MailPriority.High
             theMailMsg.IsBodyHtml = True
 
-            If Not inAttachment = "" Then
+            If Not inAttachment = String.Empty Then
                 Dim theAttachment As New Attachment(inAttachment)
                 theMailMsg.Attachments.Add(theAttachment)
             End If

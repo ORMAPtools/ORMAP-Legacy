@@ -775,7 +775,7 @@ Public NotInheritable Class AddArrows
                 End If
             End If
 
-            Dim dimensionArrowSide As String = ""
+            Dim dimensionArrowSide As String = String.Empty
             If z < 0 Then dimensionArrowSide = "left"
             If z > 0 Then dimensionArrowSide = "right"
             If z = 0 Then dimensionArrowSide = "left" '"online"
@@ -854,7 +854,7 @@ Public NotInheritable Class AddArrows
                 Return vVal
             Else
                 'Field not found
-                Return ""
+                Return String.Empty
             End If 'If lFld > -1/Else
 
         Catch ex As Exception

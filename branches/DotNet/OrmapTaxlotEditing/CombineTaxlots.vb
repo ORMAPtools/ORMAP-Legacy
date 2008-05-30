@@ -674,7 +674,7 @@ Public NotInheritable Class CombineTaxlots
         theCombinedGeom = theKeepFeature.Shape
 
         Dim theTaxlotLinesFCursor As IFeatureCursor
-        theTaxlotLinesFCursor = DoSpatialQuery(theTaxlotLinesFClass, theCombinedGeom, esriSpatialRelEnum.esriSpatialRelContains, "", True)
+        theTaxlotLinesFCursor = DoSpatialQuery(theTaxlotLinesFClass, theCombinedGeom, esriSpatialRelEnum.esriSpatialRelContains, String.Empty, True)
         If Not theTaxlotLinesFCursor Is Nothing Then
             Dim thisLineFeature As IFeature
             thisLineFeature = theTaxlotLinesFCursor.NextFeature

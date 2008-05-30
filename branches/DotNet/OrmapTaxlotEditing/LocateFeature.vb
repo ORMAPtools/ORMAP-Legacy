@@ -184,7 +184,7 @@ Public NotInheritable Class LocateFeature
         End If
 
         Dim uxTaxlot As TextBox = PartnerLocateFeatureForm.uxTaxlot
-        If uxTaxlot.Enabled And uxTaxlot.Text.Trim <> "" Then
+        If uxTaxlot.Enabled And uxTaxlot.Text.Trim <> String.Empty Then
             taxlot = uxTaxlot.Text.Trim
         End If
 

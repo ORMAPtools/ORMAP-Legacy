@@ -131,7 +131,7 @@ Partial Class EditMapIndexForm
         Me.uxTownshipGroupBox.Location = New System.Drawing.Point(10, 6)
         Me.uxTownshipGroupBox.Name = "uxTownshipGroupBox"
         Me.uxTownshipGroupBox.Size = New System.Drawing.Size(181, 92)
-        Me.uxTownshipGroupBox.TabIndex = 5
+        Me.uxTownshipGroupBox.TabIndex = 0
         Me.uxTownshipGroupBox.TabStop = False
         Me.uxTownshipGroupBox.Text = "Township"
         '
@@ -146,7 +146,7 @@ Partial Class EditMapIndexForm
         Me.uxRangeGroupBox.Location = New System.Drawing.Point(10, 104)
         Me.uxRangeGroupBox.Name = "uxRangeGroupBox"
         Me.uxRangeGroupBox.Size = New System.Drawing.Size(181, 92)
-        Me.uxRangeGroupBox.TabIndex = 6
+        Me.uxRangeGroupBox.TabIndex = 1
         Me.uxRangeGroupBox.TabStop = False
         Me.uxRangeGroupBox.Text = "Range"
         '
@@ -212,7 +212,7 @@ Partial Class EditMapIndexForm
         Me.uxSectionGroupBox.Location = New System.Drawing.Point(10, 203)
         Me.uxSectionGroupBox.Name = "uxSectionGroupBox"
         Me.uxSectionGroupBox.Size = New System.Drawing.Size(181, 92)
-        Me.uxSectionGroupBox.TabIndex = 7
+        Me.uxSectionGroupBox.TabIndex = 3
         Me.uxSectionGroupBox.TabStop = False
         Me.uxSectionGroupBox.Text = "Section"
         '
@@ -288,7 +288,7 @@ Partial Class EditMapIndexForm
         Me.uxMapInfoGroupBox.Location = New System.Drawing.Point(203, 6)
         Me.uxMapInfoGroupBox.Name = "uxMapInfoGroupBox"
         Me.uxMapInfoGroupBox.Size = New System.Drawing.Size(253, 214)
-        Me.uxMapInfoGroupBox.TabIndex = 8
+        Me.uxMapInfoGroupBox.TabIndex = 4
         Me.uxMapInfoGroupBox.TabStop = False
         Me.uxMapInfoGroupBox.Text = "Map Information"
         '
@@ -450,7 +450,7 @@ Partial Class EditMapIndexForm
         Me.uxHelp.Location = New System.Drawing.Point(381, 301)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
-        Me.uxHelp.TabIndex = 10
+        Me.uxHelp.TabIndex = 7
         Me.uxHelp.Text = "&Help"
         Me.uxHelp.UseVisualStyleBackColor = True
         '
@@ -459,7 +459,7 @@ Partial Class EditMapIndexForm
         Me.uxEdit.Location = New System.Drawing.Point(221, 301)
         Me.uxEdit.Name = "uxEdit"
         Me.uxEdit.Size = New System.Drawing.Size(75, 23)
-        Me.uxEdit.TabIndex = 11
+        Me.uxEdit.TabIndex = 5
         Me.uxEdit.Text = "&Edit"
         Me.uxEdit.UseVisualStyleBackColor = True
         '
@@ -469,7 +469,7 @@ Partial Class EditMapIndexForm
         Me.uxQuit.Location = New System.Drawing.Point(301, 301)
         Me.uxQuit.Name = "uxQuit"
         Me.uxQuit.Size = New System.Drawing.Size(75, 23)
-        Me.uxQuit.TabIndex = 12
+        Me.uxQuit.TabIndex = 6
         Me.uxQuit.Text = "&Quit"
         Me.uxQuit.UseVisualStyleBackColor = True
         '

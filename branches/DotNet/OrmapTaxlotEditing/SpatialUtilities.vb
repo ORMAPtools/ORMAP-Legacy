@@ -757,7 +757,7 @@ Public NotInheritable Class SpatialUtilities
     ''' but possible), then gets the best (lowest) value from the field, based 
     ''' on the order by field value.</remarks>
     Public Overloads Shared Function GetValueViaOverlay(ByVal searchGeometry As IGeometry, ByVal overlayFeatureClass As IFeatureClass, ByVal valueFieldName As String) As String
-        Return GetValueViaOverlay(searchGeometry, overlayFeatureClass, valueFieldName, "")
+        Return GetValueViaOverlay(searchGeometry, overlayFeatureClass, valueFieldName, String.Empty)
     End Function
 
     ''' <summary>
@@ -779,29 +779,27 @@ Public NotInheritable Class SpatialUtilities
 
         ' ENHANCE: [NIS] Refactor (smaller modules).
 
-        Dim continueThisProcess As Boolean
-
-        continueThisProcess = True 'initialize
+        Dim canContinueThisProcess As Boolean = True
 
         Debug.Assert(Not searchGeometry Is Nothing, "GetValueViaOverlay", "searchGeometry Is Nothing")
         Debug.Assert(Not overlayFeatureClass Is Nothing, "GetValueViaOverlay", "overlayFeatureClass Is Nothing")
-        Debug.Assert(Not valueFieldName = "", "GetValueViaOverlay", "valueFieldName is empty")
-        Debug.Assert(Not orderBestByFieldName = "", "GetValueViaOverlay", "orderBestByFieldName is empty")
+        Debug.Assert(Not valueFieldName = String.Empty, "GetValueViaOverlay", "valueFieldName is empty")
+        Debug.Assert(Not orderBestByFieldName = String.Empty, "GetValueViaOverlay", "orderBestByFieldName is empty")
 
         If (searchGeometry Is Nothing) OrElse (overlayFeatureClass Is Nothing) OrElse (valueFieldName.Length <= 0) Then
-            continueThisProcess = False
+            canContinueThisProcess = False
         End If
 
         Dim valueFieldIndex As Integer = NotFoundIndex
-        If continueThisProcess Then
+        If canContinueThisProcess Then
             valueFieldIndex = overlayFeatureClass.Fields.FindField(valueFieldName)
             If valueFieldIndex = NotFoundIndex Then
-                continueThisProcess = False
+                canContinueThisProcess = False
             End If
         End If
 
         Dim orderBestByFieldIndex As Integer = NotFoundIndex
-        If continueThisProcess Then
+        If canContinueThisProcess Then
             If orderBestByFieldName.Length = 0 Then
                 ' Use the value field as the order-by field
                 orderBestByFieldIndex = valueFieldIndex
@@ -816,7 +814,7 @@ Public NotInheritable Class SpatialUtilities
                         Debug.WriteLine(msg)
                         Trace.WriteLine(msg)
                     Else
-                        continueThisProcess = False
+                        canContinueThisProcess = False
                     End If
                 End If
             End If
@@ -829,7 +827,7 @@ Public NotInheritable Class SpatialUtilities
         Dim intersectFuzzAmount As Double
         Const fuzzFactor As Double = 0.05 ' ENHANCE: [NIS] Re-implement as user setting?
 
-        If continueThisProcess Then
+        If canContinueThisProcess Then
             Select Case searchGeometry.GeometryType
                 Case esriGeometryType.esriGeometryPolygon
                     thisPolygon = DirectCast(searchGeometry, IPolygon)
@@ -847,7 +845,7 @@ Public NotInheritable Class SpatialUtilities
                     intersectFuzzAmount = thisArea.Area * fuzzFactor
 
                 Case Else
-                    continueThisProcess = False
+                    canContinueThisProcess = False
 
             End Select
         End If
@@ -856,7 +854,7 @@ Public NotInheritable Class SpatialUtilities
         Dim anOverlayFeature As IFeature
         Dim dictCandidates As New Dictionary(Of Integer, Double) '(key::value) OID::area/length
 
-        If continueThisProcess Then
+        If canContinueThisProcess Then
 
             Dim largestIntersectArea As Double = 0
             Dim longestIntersectLength As Double = 0
@@ -943,7 +941,7 @@ Public NotInheritable Class SpatialUtilities
                             dictCandidates.Add(anOverlayFeature.OID, 0)
 
                         Case Else
-                            continueThisProcess = False
+                            canContinueThisProcess = False
 
                     End Select
                     anOverlayFeature = theOverlayFeatureCursor.NextFeature
@@ -952,13 +950,13 @@ Public NotInheritable Class SpatialUtilities
 
         End If
 
-        Dim theBestValue As String = ""
+        Dim theBestValue As String = String.Empty
 
-        If continueThisProcess Then
+        If canContinueThisProcess Then
 
             If dictCandidates.Count > 0 Then
-                Dim aValue As String = ""
-                Dim theBestOrderByValue As String = ""
+                Dim aValue As String = String.Empty
+                Dim theBestOrderByValue As String = String.Empty
 
                 Dim whereClause As String = String.Concat(overlayFeatureClass.OIDFieldName, " in (", candidateKeysToDelimitedString(dictCandidates), ")")
                 theOverlayFeatureCursor = DoSpatialQuery(overlayFeatureClass, searchGeometry, esriSpatialRelEnum.esriSpatialRelIntersects, whereClause)
@@ -1142,7 +1140,7 @@ Public NotInheritable Class SpatialUtilities
     ''' The feature class is then loaded in the current map from the chosen personal 
     ''' geodatabase.</remarks>
     Public Overloads Shared Function LoadFCIntoMap(ByVal featureClassName As String) As Boolean
-        Return LoadFCIntoMap(featureClassName, "")
+        Return LoadFCIntoMap(featureClassName, String.Empty)
     End Function
 
     ''' <summary>
@@ -1218,7 +1216,7 @@ Public NotInheritable Class SpatialUtilities
     ''' The object class is then loaded in the current map from the chosen personal 
     ''' geodatabase.</remarks>
     Public Overloads Shared Function LoadTableIntoMap(ByVal objectClassName As String) As Boolean
-        Return LoadTableIntoMap(objectClassName, "")
+        Return LoadTableIntoMap(objectClassName, String.Empty)
     End Function
 
     ''' <summary>

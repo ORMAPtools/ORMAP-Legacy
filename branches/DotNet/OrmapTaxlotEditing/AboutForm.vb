@@ -46,7 +46,7 @@ Public NotInheritable Class AboutForm
     Private Sub AboutForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ' Set the title of the form.
         Dim ApplicationTitle As String
-        If My.Application.Info.Title <> "" Then
+        If My.Application.Info.Title <> String.Empty Then
             'ApplicationTitle = My.Application.Info.Title
             ApplicationTitle = My.Application.Info.ProductName
         Else

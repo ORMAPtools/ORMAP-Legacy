@@ -486,7 +486,7 @@ Public NotInheritable Class EditMapIndex
     Private Sub uxSectionQuarter_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         ' Validate entry
         Dim theOldSetting As String = _ormapNumber.Quarter
-        _ormapNumber.Quarter = PartnerEditMapIndexForm.uxSectionQuarter.SelectedText
+        _ormapNumber.Quarter = PartnerEditMapIndexForm.uxSectionQuarter.Text
         If _ormapNumber.IsValidNumber Then
             PartnerEditMapIndexForm.uxSectionQuarter.Text = _ormapNumber.Quarter
         Else
@@ -756,9 +756,9 @@ Public NotInheritable Class EditMapIndex
                 .uxSuffixNumber.Text = _ormapNumber.SuffixNumber ' Suffix types
                 AddCodesToCombo(EditorExtension.TaxLotSettings.MapSuffixTypeField, DataMonitor.TaxlotFeatureLayer.FeatureClass, .uxSuffixType, _ormapNumber.SuffixType, True)
                 ' Reliabilities
-                AddCodesToCombo(EditorExtension.MapIndexSettings.ReliabilityCodeField, DataMonitor.MapIndexFeatureLayer.FeatureClass, .uxReliability, "", True)
+                AddCodesToCombo(EditorExtension.MapIndexSettings.ReliabilityCodeField, DataMonitor.MapIndexFeatureLayer.FeatureClass, .uxReliability, String.Empty, True)
                 ' Scales
-                AddCodesToCombo(EditorExtension.MapIndexSettings.MapScaleField, DataMonitor.MapIndexFeatureLayer.FeatureClass, .uxScale, "", True)
+                AddCodesToCombo(EditorExtension.MapIndexSettings.MapScaleField, DataMonitor.MapIndexFeatureLayer.FeatureClass, .uxScale, String.Empty, True)
                 ' Anomaly
                 .uxAnomaly.Text = _ormapNumber.Anomaly
                 ' Page
@@ -841,7 +841,7 @@ Public NotInheritable Class EditMapIndex
                     resetControlContents(ctl.Controls, inRecursive)
                 End If
             ElseIf TypeOf ctl Is TextBox Then
-                ctl.Text = ""
+                ctl.Text = String.Empty
             ElseIf TypeOf ctl Is ComboBox Then
                 Dim cmb As ComboBox = DirectCast(ctl, ComboBox)
                 cmb.Items.Clear()
@@ -857,7 +857,7 @@ Public NotInheritable Class EditMapIndex
             thisSpatialQuery.Geometry = theMapIndexFeature.ShapeCopy
             thisSpatialQuery.SpatialRel = esriSpatialRelEnum.esriSpatialRelContains
             Dim thisFeatureSelection As IFeatureCursor = DataMonitor.TaxlotFeatureLayer.FeatureClass.Update(thisSpatialQuery, False)
-
+            'What if there are no underlying taxlot features to update? Will thisTaxlotFeature contain anything?
             Dim thisTaxlotFeature As IFeature = thisFeatureSelection.NextFeature
             Dim taxlot As String
             Dim mapNumber As String

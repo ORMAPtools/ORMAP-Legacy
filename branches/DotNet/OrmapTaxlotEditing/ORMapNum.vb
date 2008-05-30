@@ -244,10 +244,8 @@ Public NotInheritable Class ORMapNum
             Section = _section
         End Get
         Set(ByVal value As String)
-            'If IsNumeric(value) Then ' TODO: JWM is there a another way to test for numeric?
             Dim valueAsInteger As Integer
             If Integer.TryParse(value, valueAsInteger) Then
-                'Select Case CInt(value)
                 Select Case valueAsInteger
                     Case 0
                         _section = "00" ' ENHANCE: [NIS] Add Section to EditorExtension.DefaultValuesSettings and use here.
@@ -505,9 +503,5 @@ Public NotInheritable Class ORMapNum
 #End Region
 
 #End Region
-
-
-
-
 End Class
 #End Region

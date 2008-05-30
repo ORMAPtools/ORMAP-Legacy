@@ -395,7 +395,7 @@ Public NotInheritable Class TaxlotAssignment
             '------------------------------------------
             Dim theExistingTaxlot As String = String.Empty 'initialize
             Dim theTLTaxlotFieldIndex As Integer = DataMonitor.TaxlotFeatureLayer.FeatureClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-            theExistingTaxlot = CStr(IIf(IsDBNull(theTaxlotFeature.Value(theTLTaxlotFieldIndex)), "", theTaxlotFeature.Value(theTLTaxlotFieldIndex)))
+            theExistingTaxlot = CStr(IIf(IsDBNull(theTaxlotFeature.Value(theTLTaxlotFieldIndex)), String.Empty, theTaxlotFeature.Value(theTLTaxlotFieldIndex)))
 
             ' Check with user before updating Taxlot field
             If Len(theExistingTaxlot) > 0 And theExistingTaxlot <> "0" Then
