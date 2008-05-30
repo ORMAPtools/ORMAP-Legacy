@@ -112,42 +112,32 @@ Public NotInheritable Class AddArrows
 
     Private _application As IApplication
     Private _bitmapResourceName As String
-
-    Private _theMxDoc As IMxDocument
-    Private _theMap As IMap
     Private _theLineSymbol As ILineSymbol
     Private _theArrowPt1 As IPoint
     Private _theArrowPt2 As IPoint
     Private _theArrowPt3 As IPoint
     Private _theArrowPt4 As IPoint
-    Private _theFromBreakPoint As IPoint ' hooks
-    Private _theStartPoint As IPoint ' hooks
     Private _theTextPoint As IPoint
-    Private _theToBreakPoint As IPoint ' hooks
     Private _theLinePolyline As IPolyline
     Private _theTextSymbol As ITextSymbol
-    Private _theHookAngle As Double
-    Private _theDoOnce As Boolean ' testing
-    Private _theInUse As Boolean
-
+    Private _inUse As Boolean
     Private _theArrowPtTemp As IPoint
     Private _theArrowPtTemp2 As IPoint
     Private _thePt As IPoint
     Private _theSnapAgent As IFeatureSnapAgent
-    Private _theMouseHasMoved As Boolean
-    Private _theInTol As Boolean
-
-    Private _theMxApp As IMxApplication
     Private _theActiveView As IActiveView
-
-    Private WithEvents m_pEditorEvents As Editor 'Deal with this...
-    Private m_pEditor As IEditor2 'Deal with this...
-
-    Private _theToolJustCompletedTask As Boolean
-    Private _theolDimensionChanged As Boolean
-    Dim _thelArrowPointsCollection As Collection
-
-
+    Private WithEvents _theEditorEvents As Editor
+    Private _toolJustCompletedTask As Boolean
+    Private _arrowPointsCollection As Collection
+    '-- HOOKS NOT IMPLEMENTED --
+    'Private _theFromBreakPoint As IPoint ' hooks
+    'Private _theStartPoint As IPoint ' hooks 
+    'Private _theToBreakPoint As IPoint ' hooks  
+    'Private _hookAngle As Double
+    'Private _doOnce As Boolean
+    'Private _mouseHasMoved As Boolean
+    'Private _inTol As Boolean
+    '-- END HOOKS
 
 #End Region
 
@@ -173,6 +163,8 @@ Public NotInheritable Class AddArrows
             AddHandler _partnerAddArrowsForm.uxHelp.Click, AddressOf uxHelp_Click
             AddHandler _partnerAddArrowsForm.uxAddStandard.Click, AddressOf uxAddStandard_Click
             AddHandler _partnerAddArrowsForm.uxAddDimension.Click, AddressOf uxAddDimension_Click
+            AddHandler _partnerAddArrowsForm.FormClosed, AddressOf PartnerAddArrowsForm_Close
+
         Else
             ' Unsubscribe to partner form events.
             RemoveHandler _partnerAddArrowsForm.Load, AddressOf PartnerAddArrowsForm_Load
@@ -180,6 +172,7 @@ Public NotInheritable Class AddArrows
             RemoveHandler _partnerAddArrowsForm.uxHelp.Click, AddressOf uxHelp_Click
             RemoveHandler _partnerAddArrowsForm.uxAddStandard.Click, AddressOf uxAddStandard_Click
             RemoveHandler _partnerAddArrowsForm.uxAddDimension.Click, AddressOf uxAddDimension_Click
+            RemoveHandler _partnerAddArrowsForm.FormClosed, AddressOf PartnerAddArrowsForm_Close
         End If
 
     End Sub
@@ -198,61 +191,60 @@ Public NotInheritable Class AddArrows
     Private Sub setPartnerDimensionArrowsForm(ByVal value As DimensionArrowsForm)
         If value IsNot Nothing Then
             _partnerDimensionArrowsForm = value
+            AddHandler _partnerDimensionArrowsForm.Load, AddressOf PartnerDimensionArrowsForm_Load
+            AddHandler _partnerDimensionArrowsForm.uxApply.Click, AddressOf uxApply_Click
+            AddHandler _partnerDimensionArrowsForm.uxReset.Click, AddressOf uxReset_Click
+
             ' Subscribe to partner form events.
         Else
+            RemoveHandler _partnerDimensionArrowsForm.Load, AddressOf PartnerDimensionArrowsForm_Load
+            RemoveHandler _partnerDimensionArrowsForm.uxApply.Click, AddressOf uxApply_Click
+            RemoveHandler _partnerDimensionArrowsForm.uxReset.Click, AddressOf uxReset_Click
             ' Unsubscribe to partner form events.
         End If
     End Sub
 
-    Private _ratioLine As Double
+    Private _ratioLine As Double = 1.75
     Friend Property RatioLine() As Double
         Get
-            _ratioLine = CInt(PartnerDimensionArrowsForm.uxRatioOfLine.Text)
             Return _ratioLine
         End Get
         Set(ByVal value As Double)
             _ratioLine = value
-            PartnerDimensionArrowsForm.uxRatioOfLine.Text = CStr(_ratioLine)
         End Set
     End Property
 
-    Private _ratioCurve As Double
+    Private _ratioCurve As Double = 1.35
     Friend Property RatioCurve() As Double
         Get
-            _ratioCurve = CInt(PartnerDimensionArrowsForm.uxRatioOfCurve.Text)
             Return _ratioCurve
         End Get
         Set(ByVal value As Double)
             _ratioCurve = value
-            PartnerDimensionArrowsForm.uxRatioOfCurve.Text = CStr(_ratioCurve)
         End Set
     End Property
 
-    Private _smoothRatio As Double
+    Private _smoothRatio As Double = 10
     Friend Property SmoothRatio() As Double
         Get
-            _smoothRatio = CInt(PartnerDimensionArrowsForm.uxSmoothRatio.Text)
             Return _smoothRatio
         End Get
         Set(ByVal value As Double)
             _smoothRatio = value
-            PartnerDimensionArrowsForm.uxSmoothRatio.Text = CStr(_smoothRatio)
         End Set
     End Property
 
-    Private _addManually As Boolean
+    Private _addManually As Boolean = False
     Friend Property AddManually() As Boolean
         Get
-            _addManually = PartnerDimensionArrowsForm.uxManuallyAddArrow.Checked
             Return _addManually
         End Get
         Set(ByVal value As Boolean)
             _addManually = value
-            PartnerDimensionArrowsForm.uxManuallyAddArrow.Checked = _addManually
         End Set
     End Property
 
-    Private _arrowType As String
+    Private _arrowType As String = ""
     Friend Property arrowType() As String
         Get
             Return _arrowType
@@ -265,7 +257,6 @@ Public NotInheritable Class AddArrows
     Private _arrowLineStyle As Integer
     Friend Property arrowLineStyle() As Integer
         Get
-            '_arrowLineStyle = CInt(PartnerAddArrowsForm.uxArrowLineStyle.Text.Substring(0, 3))
             Return _arrowLineStyle
         End Get
         Set(ByVal value As Integer)
@@ -281,7 +272,7 @@ Public NotInheritable Class AddArrows
     Private Sub PartnerAddArrowsForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles PartnerAddArrowsForm.Load
 
         With PartnerAddArrowsForm
-            'Populate multi-value controls
+            ' Populate multi-value controls
             If .uxArrowLineStyle.Items.Count = 0 Then '-- Only load the text box the first time the tool is run.
                 .uxArrowLineStyle.Items.Add("100 - Anno Arrow")
                 .uxArrowLineStyle.Items.Add("101 - Hooks")
@@ -303,454 +294,541 @@ Public NotInheritable Class AddArrows
 
     End Sub
 
-    Private Sub uxQuit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.uxFind.Click
-
-        Dim mapIndexFClass As IFeatureClass = DataMonitor.MapIndexFeatureLayer.FeatureClass
-        MsgBox(mapIndexFClass.ShapeFieldName.ToString)
-
+    Private Sub uxQuit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerAddArrowsForm.uxFind.Click
+        OnKeyDown(Keys.Q, 1) 'exit tool
         PartnerAddArrowsForm.Close()
     End Sub
 
-    Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.uxHelp.Click
+    Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerAddArrowsForm.uxHelp.Click
         ' TODO [SC] Evaluate help systems and implement.
         MessageBox.Show("uxHelp clicked")
     End Sub
 
-
-    Private Sub uxAddStandard_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.uxAddStandard.Click
+    Private Sub uxAddStandard_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerAddArrowsForm.uxAddStandard.Click
         arrowType = "ARROW"
         arrowLineStyle = CInt(PartnerAddArrowsForm.uxArrowLineStyle.Text.Substring(0, 3))
         PartnerAddArrowsForm.Close()
     End Sub
 
-    Private Sub uxAddDimension_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.uxAddDimension.Click
+    Private Sub uxAddDimension_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerAddArrowsForm.uxAddDimension.Click
         arrowType = "DIMENSION"
         PartnerAddArrowsForm.Close()
     End Sub
 
+    Private Sub uxApply_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerDimensionArrowsForm.uxApply.Click
+
+        Dim uxRatioOfLine As String = PartnerDimensionArrowsForm.uxRatioOfLine.Text
+        Dim uxSmoothRatio As String = PartnerDimensionArrowsForm.uxSmoothRatio.Text
+        Dim uxRatioOfCurve As String = PartnerDimensionArrowsForm.uxRatioOfCurve.Text
+
+        ' Clear any previous errors
+        PartnerDimensionArrowsForm.uxErrorProvider.Clear()
+
+        Dim errorControl As Control = Nothing
+        If Not IsNumeric(uxSmoothRatio) OrElse CDbl(uxSmoothRatio) <= 0 Then errorControl = PartnerDimensionArrowsForm.uxSmoothRatio
+        If Not IsNumeric(uxRatioOfLine) OrElse CDbl(uxRatioOfLine) <= 0 Then errorControl = PartnerDimensionArrowsForm.uxRatioOfLine
+        If Not IsNumeric(uxRatioOfCurve) OrElse CDbl(uxRatioOfCurve) <= 0 Then errorControl = PartnerDimensionArrowsForm.uxRatioOfCurve
+
+        If Not errorControl Is Nothing Then
+            Dim errorText As String = "Please enter a numeric value greater than 0."
+            PartnerDimensionArrowsForm.uxErrorProvider.SetError(errorControl, errorText)
+            MessageBox.Show(errorText, "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
+
+        ' Close the form.
+        PartnerDimensionArrowsForm.Close()
+
+        RatioLine = CDbl(uxRatioOfLine)
+        SmoothRatio = CDbl(uxSmoothRatio)
+        RatioCurve = CDbl(uxRatioOfCurve)
+        AddManually = PartnerDimensionArrowsForm.uxManuallyAddArrow.Checked
+
+    End Sub
+
+    Private Sub PartnerDimensionArrowsForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerDimensionArrowsForm.Load
+        ' Clear any previous errors
+        PartnerDimensionArrowsForm.uxErrorProvider.Clear()
+
+        If PartnerDimensionArrowsForm.uxRatioOfCurve.Text = "" Then
+            uxReset_Click(sender, e)
+        Else
+            PartnerDimensionArrowsForm.uxManuallyAddArrow.Checked = AddManually
+            PartnerDimensionArrowsForm.uxSmoothRatio.Text = CStr(SmoothRatio)
+            PartnerDimensionArrowsForm.uxRatioOfCurve.Text = CStr(RatioCurve)
+            PartnerDimensionArrowsForm.uxRatioOfLine.Text = CStr(RatioLine)
+        End If
+
+    End Sub
+
+
+    Private Sub uxReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerDimensionArrowsForm.uxReset.Click
+        ' Clear any previous errors
+        PartnerDimensionArrowsForm.uxErrorProvider.Clear()
+
+        PartnerDimensionArrowsForm.uxManuallyAddArrow.Checked = False
+        PartnerDimensionArrowsForm.uxSmoothRatio.Text = "10"
+        PartnerDimensionArrowsForm.uxRatioOfCurve.Text = "1.35"
+        PartnerDimensionArrowsForm.uxRatioOfLine.Text = "1.75"
+
+    End Sub
+
+    Private Sub PartnerAddArrowsForm_Close(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs)
+        If arrowType = "" Then OnKeyDown(Keys.Q, 1) 'exit tool
+    End Sub
+
+
 #End Region
 
-#Region "Methods - Shad needs to Review"
-
+#Region "Methods"
     Friend Sub DoButtonOperation()
 
         Try
-            ' Check for valid data.
+            ' Check for valid Map Index data.
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & vbNewLine & _
                                 "Please load this dataset into your map.", _
                                 "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Sub
+                OnKeyDown(Keys.Q, 1) 'exit tool
+                Exit Try
+            End If
+            ' Check for Cartographic Lines Feature Class.
+            If FindDataLayerInMap(EditorExtension.TableNamesSettings.CartographicLinesFC) Is Nothing Then
+                MessageBox.Show("Missing data: Valid " & EditorExtension.TableNamesSettings.CartographicLinesFC & " Feature Class not found in the map." & vbNewLine & _
+                                "Please load this dataset into your map.", _
+                                "Add Arrows", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                OnKeyDown(Keys.Q, 1) 'exit tool
+                Exit Try
             End If
 
-            ' HACK:
-
-            If _thelArrowPointsCollection Is Nothing Then
-                _thelArrowPointsCollection = New Collection
-            End If
+            '--Hack - set global variables in DoButtonOperation... These should be re-evaluated.
+            If _arrowPointsCollection Is Nothing Then _arrowPointsCollection = New Collection
+            Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+            _theActiveView = theArcMapDoc.ActiveView
 
             PartnerAddArrowsForm.ShowDialog()
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
 
         End Try
 
     End Sub
 
-    Friend Function GetSmashedLine(ByVal theDisplay As IScreenDisplay, ByVal theTextSymbol As ISymbol, _
-        ByVal thePoint As IPoint, ByVal thePolyline As IPolyline) As IPolyline
+    '-- HOOKS NOT IMPLEMENTED --
+    '''' <summary>
+    '''' Find a polyline that intersects a text element but omits the section that intersects the text element
+    '''' </summary>
+    '''' <param name="theTextSymbol">The text to overlay the polyline.</param>
+    '''' <param name="thePoint">A filler symbol for the returned polyline.</param>
+    '''' <param name="thePolyline">The polyline to intersect.</param>
+    '''' <returns> A polyline that represents the difference between the 
+    '''' input polyline and the intersection of the input polyline
+    '''' and the boundary of the input text symbol
+    ''''</returns>
+    '''' <remarks>Give a screen display, pDisplay, a text symbol, pTextSymbol,
+    '''' a point to fill the a polygon with, pPoint, and the polyline to intersect, 
+    '''' pPolyline.  Find the bounding polygon of theTextSymbol and fill it with 
+    '''' thePoint.  Then determine the intersection between pPolyline and theTextSymbol.  
+    '''' Finally, return the difference of the intersection and pPolyline.
+    '''' </remarks>
+    'Friend Function GetSmashedLine(ByVal theTextSymbol As ISymbol, ByVal thePoint As IPoint, ByVal thePolyline As IPolyline) As IPolyline
 
-        Try
+    '    Try
 
-            Dim theBoundary As IPolygon = New Polygon
-            theTextSymbol.QueryBoundary(theDisplay.hDC, theDisplay.DisplayTransformation, thePoint, theBoundary)
+    '        Dim theBoundary As IPolygon = New Polygon
+    '        theTextSymbol.QueryBoundary(_theActiveView.ScreenDisplay.hDC, _theActiveView.ScreenDisplay.DisplayTransformation, thePoint, theBoundary)
 
-            Dim theTopoOperator As ITopologicalOperator = DirectCast(theBoundary, ITopologicalOperator)
-            Dim pIntersect As IPolyline = DirectCast(theTopoOperator.Intersect(thePolyline, esriGeometryDimension.esriGeometry1Dimension), IPolyline)
+    '        Dim theTopoOperator As ITopologicalOperator = DirectCast(theBoundary, ITopologicalOperator)
+    '        Dim theIntersect As IPolyline = DirectCast(theTopoOperator.Intersect(thePolyline, esriGeometryDimension.esriGeometry1Dimension), IPolyline)
 
-            ' Returns the difference between the polyline and the intersection
-            theTopoOperator = DirectCast(thePolyline, ITopologicalOperator)
+    '        ' Returns the difference between the polyline and the intersection
+    '        theTopoOperator = DirectCast(thePolyline, ITopologicalOperator)
 
-            Return DirectCast(theTopoOperator.Difference(pIntersect), IPolyline)
+    '        Return DirectCast(theTopoOperator.Difference(theIntersect), IPolyline)
 
-        Catch ex As Exception
-            MessageBox.Show(ex.ToString)
-            Return Nothing
-        End Try
+    '    Catch ex As Exception
+    '        EditorExtension.ProcessUnhandledException(ex)
+    '        Return Nothing
 
-    End Function
+    '    End Try
 
-    Friend Sub GenerateHooks(ByRef pSketch As IGeometry)
+    'End Function
 
-        Try
 
-            ' Initialize the hook angle
-            _theHookAngle = 20
+    '''' <summary>
+    '''' Given a base line, theSketch. Create a land hook based on the endpoints of theSketch.
+    '''' </summary>
+    '''' <param name="theSketch">An object that supports the IGeometry interface.</param>
+    '''' <remarks>
+    '''' </remarks>
+    'Friend Sub GenerateHooks(ByRef theSketch As IGeometry)
 
-            'Make sure the edit sketch is a polyline
-            If Not TypeOf pSketch Is IPolyline Then Exit Sub 'SC Perhaps throw an exception instead of exiting.
-            Dim pCurve As ICurve = DirectCast(pSketch, ICurve)
+    '    Try
 
-            ' Retrieve a reference to the Map Index layer
-            Dim pMIFlayer As IFeatureLayer = MapIndexFeatureLayer
+    '        ' Initialize the hook angle
+    '        _hookAngle = 20
 
-            Dim pMIFclass As IFeatureClass = pMIFlayer.FeatureClass
+    '        ' Make sure the edit sketch is a polyline and insure that the polyline only has two vertices (Starting & Ending points only)
+    '        If Not TypeOf theSketch Is IPolyline OrElse Not IsSketcha2PointLine(theSketch) Then Exit Try
 
-            ' Retrieve the map scale from the overlaying Map Index layer
-            Dim vMapScale1 As Object = GetValueViaOverlay(pCurve.FromPoint, pMIFclass, EditorExtension.MapIndexSettings.MapScaleField)
-            Dim vMapScale2 As Object = GetValueViaOverlay(pCurve.ToPoint, pMIFclass, EditorExtension.MapIndexSettings.MapScaleField)
+    '        ' Retrieve the map scale from the overlaying Map Index layer
+    '        Dim theCurve As ICurve = DirectCast(theSketch, ICurve)
+    '        Dim theMIFclass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
+    '        Dim theMapScale1 As Object = GetValueViaOverlay(theCurve.FromPoint, theMIFclass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+    '        Dim theMapScale2 As Object = GetValueViaOverlay(theCurve.ToPoint, theMIFclass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
 
-            ' Insure that the map scales exist and that they are equal
-            If IsDBNull(vMapScale1) Or IsDBNull(vMapScale2) Then
-                MsgBox("No mapscale for current MapIndex.  Unable to create hooks", MsgBoxStyle.OkOnly)
-                Exit Sub 'SC perhaps throw and error instead.
-            End If
-            If Not vMapScale1 Is vMapScale2 Then
-                MsgBox("Hook can not span Mapindex polygons with different scale", MsgBoxStyle.Critical)
-                Exit Sub 'SC perhaps throw and error instead.
-            End If
+    '        ' Insure that the map scales exist and that they are equal
+    '        If IsDBNull(theMapScale1) Or IsDBNull(theMapScale2) Then
+    '            MessageBox.Show("No mapscale for current MapIndex.  Unable to create hooks", "Hook Error", MessageBoxButtons.OK)
+    '            Exit Try
+    '        End If
+    '        If Not theMapScale1 Is theMapScale2 Then
+    '            MessageBox.Show("Hook can not span Mapindex polygons with different scale", "Hook Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    '            Exit Try
+    '        End If
 
-            ' Insures that the map scale is supported -- Not all scales are defined (Issue)
-            Dim lLineLength As Integer
-            If vMapScale1.Equals(600) Then
-                lLineLength = 20
-            ElseIf vMapScale1.Equals(1200) Then
-                lLineLength = 20
-            ElseIf vMapScale1.Equals(2400) Then
-                lLineLength = 40
-            ElseIf vMapScale1.Equals(4800) Then
-                lLineLength = 80
-            ElseIf vMapScale1.Equals(24000) Then
-                lLineLength = 400
-            Else
-                MsgBox("Not a valid mapscale.  Unable to create hooks", MsgBoxStyle.OkOnly)
-                Exit Sub 'SC perhaps throw and error instead.
-            End If
-            Dim dHookLength As Double = lLineLength * 0.1
+    '        ' Insures that the map scale is supported -- Not all scales are defined (Issue)
+    '        Dim theLineLength As Integer
+    '        If theMapScale1.Equals(600) Then
+    '            theLineLength = 20
+    '        ElseIf theMapScale1.Equals(1200) Then
+    '            theLineLength = 20
+    '        ElseIf theMapScale1.Equals(2400) Then
+    '            theLineLength = 40
+    '        ElseIf theMapScale1.Equals(4800) Then
+    '            theLineLength = 80
+    '        ElseIf theMapScale1.Equals(24000) Then
+    '            theLineLength = 400
+    '        Else
+    '            MessageBox.Show("Not a valid mapscale.  Unable to create hooks", "Hook Error", MessageBoxButtons.OK)
+    '            Exit Try
+    '        End If
 
-            ' Insures that the polyline only has two vertices (Starting & Ending points only)
-            If Not IsSketcha2PointLine(pSketch) Then
-                Exit Sub 'SC perhaps throw and error instead.
-            End If
+    '        'Get the hook layer
+    '        Dim theHookFLayer As IFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.CartographicLinesFC)
+    '        Dim theHookFClass As IFeatureClass = theHookFLayer.FeatureClass
 
-            'Get the hook layer
-            Dim pHookLayer As IFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.CartographicLinesFC)
-            If pHookLayer Is Nothing Then
-                MsgBox("The layer, " & EditorExtension.TableNamesSettings.CartographicLinesFC & ", is not in the map.", MsgBoxStyle.Exclamation, "Layer not found")
-                Exit Sub 'SC perhaps throw and error instead.
-            End If
-            Dim pHookFC As IFeatureClass = pHookLayer.FeatureClass
-            Dim pDSet As IDataset = DirectCast(pHookFC, IDataset)
-            Dim pWSEdit As IWorkspaceEdit = DirectCast(pDSet.Workspace, IWorkspaceEdit)
+    '        Dim theDataSet As IDataset = DirectCast(theHookFClass, IDataset)
+    '        Dim theWorkSpaceEdit As IWorkspaceEdit = DirectCast(theDataSet.Workspace, IWorkspaceEdit)
 
-            ' Locate the line type field
-            Dim lLineTypeFld As Integer = LocateFields(pHookFC, (EditorExtension.CartographicLinesSettings.LineTypeField))
-            If lLineTypeFld = -1 Then Exit Sub 'SC perhaps throw and error instead.
+    '        ' Locate the line type field
+    '        Dim lineTypeField As Integer = LocateFields(theHookFClass, (EditorExtension.CartographicLinesSettings.LineTypeField))
+    '        If lineTypeField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
 
-            ' Initialize line objects and collections to create a new line
-            Dim pNewPointColl As IPointCollection = New Polyline
-            Dim pNormal As ILine = New Line
-            Dim pPointColl As IPointCollection = DirectCast(pSketch, IPointCollection)
+    '        ' Initialize line objects and collections to create a new line
+    '        Dim theNewPointColl As IPointCollection = New Polyline
+    '        Dim theNormalLine As ILine = New Line
+    '        Dim thePointColl As IPointCollection = DirectCast(theSketch, IPointCollection)
 
-            ' Adds the head of the hook based on the specified angle and hook length
-            Dim dSideA As Double = (dHookLength * System.Math.Sin((360 - _theHookAngle) * (3.14 / 180)))
-            Dim dSideC As Double = dHookLength
-            Dim dSideB As Double = System.Math.Sqrt((dSideC * dSideC) - (dSideA * dSideA))
-            pCurve.QueryNormal(ESRI.ArcGIS.Geometry.esriSegmentExtension.esriNoExtension, dSideB, False, dSideA, pNormal)
-            pNewPointColl.AddPoint(pNormal.ToPoint)
+    '        ' Adds the head of the hook based on the specified angle and hook length
+    '        Dim hookLength As Double = theLineLength * 0.1
+    '        Dim sideA As Double = (hookLength * System.Math.Sin((360 - _hookAngle) * (3.14 / 180)))
+    '        Dim sideC As Double = hookLength
+    '        Dim sideB As Double = System.Math.Sqrt((sideC * sideC) - (sideA * sideA))
+    '        theCurve.QueryNormal(ESRI.ArcGIS.Geometry.esriSegmentExtension.esriNoExtension, sideB, False, sideA, theNormalLine)
+    '        theNewPointColl.AddPoint(theNormalLine.ToPoint)
 
-            ' Adds the line points
-            pNewPointColl.AddPoint(pPointColl.Point(0))
-            pNewPointColl.AddPoint(pPointColl.Point(1))
+    '        ' Adds the line points
+    '        theNewPointColl.AddPoint(thePointColl.Point(0))
+    '        theNewPointColl.AddPoint(thePointColl.Point(1))
 
-            ' Adds the tail of the hook based on the specified angle and hook length
-            dSideA = (dHookLength * System.Math.Sin(_theHookAngle * (3.14 / 180)))
-            dSideC = dHookLength
-            dSideB = System.Math.Sqrt((dSideC * dSideC) - (dSideA * dSideA))
-            pCurve.QueryNormal(ESRI.ArcGIS.Geometry.esriSegmentExtension.esriNoExtension, (pCurve.Length - dSideB), False, dSideA, pNormal)
-            pNewPointColl.AddPoint(pNormal.ToPoint)
+    '        ' Adds the tail of the hook based on the specified angle and hook length
+    '        sideA = (hookLength * System.Math.Sin(_hookAngle * (3.14 / 180)))
+    '        sideC = hookLength
+    '        sideB = System.Math.Sqrt((sideC * sideC) - (sideA * sideA))
+    '        theCurve.QueryNormal(ESRI.ArcGIS.Geometry.esriSegmentExtension.esriNoExtension, (theCurve.Length - sideB), False, sideA, theNormalLine)
+    '        theNewPointColl.AddPoint(theNormalLine.ToPoint)
 
-            'Now get rid of the line between the start and end points (where user clicked)
-            Dim pWholeLine As IPolyline4 = DirectCast(pNewPointColl, IPolyline4)
-            Dim bBool As Boolean
-            Dim bSplitHappened As Boolean
-            Dim lNewPartIndex As Integer
-            Dim lNewSegIndex As Integer
-            pWholeLine.SplitAtPoint(_theFromBreakPoint, True, bBool, bSplitHappened, lNewPartIndex, lNewSegIndex)
-            pWholeLine.SplitAtPoint(_theToBreakPoint, True, bBool, bSplitHappened, lNewPartIndex, lNewSegIndex)
+    '        'Now get rid of the line between the start and end points (where user clicked)
+    '        Dim theWholeLine As IPolyline4 = DirectCast(theNewPointColl, IPolyline4)
+    '        Dim createPart As Boolean
+    '        Dim splitHappened As Boolean
+    '        Dim newPartIndex As Integer
+    '        Dim newSegIndex As Integer
+    '        theWholeLine.SplitAtPoint(_theFromBreakPoint, True, createPart, splitHappened, newPartIndex, newSegIndex)
+    '        theWholeLine.SplitAtPoint(_theToBreakPoint, True, createPart, splitHappened, newPartIndex, newSegIndex)
 
-            ' Initialize new path objects and collections to create a new polyline
-            Dim pPath1 As ISegmentCollection = New Path
-            Dim pPath2 As ISegmentCollection = New Path
-            Dim pPath3 As ISegmentCollection = New Path
+    '        ' Initialize new path objects and collections to create a new polyline
+    '        Dim path1 As ISegmentCollection = New Path
+    '        Dim path2 As ISegmentCollection = New Path
+    '        Dim path3 As ISegmentCollection = New Path
 
-            ' QI to get the segment collection of the landhook
-            Dim pSegCollection As ISegmentCollection = DirectCast(pWholeLine, ISegmentCollection)
+    '        ' QI to get the segment collection of the landhook
+    '        Dim theSegCollection As ISegmentCollection = DirectCast(theWholeLine, ISegmentCollection)
 
-            ' Retreive an enumeration of the segments
-            Dim pEnumSeg As IEnumSegment = pSegCollection.EnumSegments
+    '        ' Retreive an enumeration of the segments
+    '        Dim theEnumSeg As IEnumSegment = theSegCollection.EnumSegments
 
-            ' Add segments to the paths that will make the final land hook
-            Dim pSeg As ISegment = Nothing
-            Dim lPartIndex As Integer
-            Dim lSegIndex As Integer
-            pEnumSeg.Next(pSeg, lPartIndex, lSegIndex)
-            Do While Not pSeg Is Nothing
-                If lSegIndex < 1 Then
-                    pPath1.AddSegment(pSeg)
-                ElseIf lSegIndex = 1 Then
-                    pPath2.AddSegment(pSeg)
-                ElseIf lSegIndex = 2 Then
-                    pPath3.AddSegment(pSeg)
-                End If
-                pEnumSeg.Next(pSeg, lPartIndex, lSegIndex)
-            Loop
+    '        ' Add segments to the paths that will make the final land hook
+    '        Dim theSegment As ISegment = Nothing
+    '        Dim partIndex As Integer
+    '        Dim segmentIndex As Integer
+    '        theEnumSeg.Next(theSegment, partIndex, segmentIndex)
+    '        Do While Not theSegment Is Nothing
+    '            If segmentIndex < 1 Then
+    '                path1.AddSegment(theSegment)
+    '            ElseIf segmentIndex = 1 Then
+    '                path2.AddSegment(theSegment)
+    '            ElseIf segmentIndex = 2 Then
+    '                path3.AddSegment(theSegment)
+    '            End If
+    '            theEnumSeg.Next(theSegment, partIndex, segmentIndex)
+    '        Loop
 
-            ' Add the component paths to the final land hook
-            Dim pGeomColl As IGeometryCollection = New Polyline
-            pGeomColl.AddGeometry(DirectCast(pPath1, IGeometry))
-            pGeomColl.AddGeometry(DirectCast(pPath2, IGeometry))
-            pGeomColl.AddGeometry(DirectCast(pPath3, IGeometry))
-            pGeomColl.GeometriesChanged()
+    '        ' Add the component paths to the final land hook
+    '        Dim theGeomColl As IGeometryCollection = New Polyline
+    '        theGeomColl.AddGeometry(DirectCast(path1, IGeometry))
+    '        theGeomColl.AddGeometry(DirectCast(path2, IGeometry))
+    '        theGeomColl.AddGeometry(DirectCast(path3, IGeometry))
+    '        theGeomColl.GeometriesChanged()
 
-            'Store the new land hook feature
-            pWSEdit.StartEditOperation()
-            Dim pFeature As IFeature = pHookFC.CreateFeature
-            pFeature.Shape = DirectCast(pGeomColl, IGeometry)
-            pFeature.Value(lLineTypeFld) = 101
+    '        ' Store the new land hook feature
+    '        theWorkSpaceEdit.StartEditOperation()
+    '        Dim theFeature As IFeature = theHookFClass.CreateFeature
+    '        theFeature.Shape = DirectCast(theGeomColl, IGeometry)
+    '        theFeature.Value(lineTypeField) = 101
 
-            'Set the AutoMethod Field
-            lLineTypeFld = LocateFields(pHookFC, (EditorExtension.AllTablesSettings.AutoMethodField))
-            If lLineTypeFld = -1 Then Exit Sub
-            pFeature.Value(lLineTypeFld) = "UNK"
+    '        ' Set the AutoMethod Field
+    '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.AllTablesSettings.AutoMethodField))
+    '        If lineTypeField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+    '        theFeature.Value(lineTypeField) = "UNK"
 
-            'Set the AutoWho Field
-            lLineTypeFld = LocateFields(pHookFC, (EditorExtension.AllTablesSettings.AutoWhoField))
-            If lLineTypeFld = -1 Then Exit Sub
-            pFeature.Value(lLineTypeFld) = UserName
+    '        ' Set the AutoWho Field
+    '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.AllTablesSettings.AutoWhoField))
+    '        If lineTypeField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+    '        theFeature.Value(lineTypeField) = UserName
 
-            'Set the AutoDate Field
-            lLineTypeFld = LocateFields(pHookFC, (EditorExtension.AllTablesSettings.AutoDateField))
-            If lLineTypeFld = -1 Then Exit Sub
-            pFeature.Value(lLineTypeFld) = Format(Today, "MM/dd/yyyy")
+    '        ' Set the AutoDate Field
+    '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.AllTablesSettings.AutoDateField))
+    '        If lineTypeField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+    '        theFeature.Value(lineTypeField) = Format(Today, "MM/dd/yyyy")
 
-            'Set the MapScale Field
-            lLineTypeFld = LocateFields(pHookFC, (EditorExtension.MapIndexSettings.MapScaleField))
-            If lLineTypeFld = -1 Then Exit Sub
-            pFeature.Value(lLineTypeFld) = vMapScale1
+    '        ' Set the MapScale Field
+    '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.MapIndexSettings.MapScaleField))
+    '        If lineTypeField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+    '        theFeature.Value(lineTypeField) = theMapScale1
 
-            'Set the MapNumber Field
-            Dim sCurMapNum As String = GetValueViaOverlay(pFeature.Shape, pMIFclass, EditorExtension.MapIndexSettings.MapNumberField)
-            lLineTypeFld = LocateFields(pHookFC, (EditorExtension.MapIndexSettings.MapNumberField))
-            If lLineTypeFld = -1 Then Exit Sub
-            pFeature.Value(lLineTypeFld) = sCurMapNum
+    '        ' Set the MapNumber Field
+    '        Dim curMapNum As String = GetValueViaOverlay(theFeature.Shape, theMIFclass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+    '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.MapIndexSettings.MapNumberField))
+    '        If lineTypeField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+    '        theFeature.Value(lineTypeField) = curMapNum
 
-            pFeature.Store()
-            pWSEdit.StopEditOperation()
+    '        theFeature.Store()
+    '        theWorkSpaceEdit.StopEditOperation()
 
-            Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
-            Dim pActiveView As IActiveView = theArcMapDoc.ActiveView
-            pActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground, Nothing, pFeature.Extent.Envelope)
+    '        _theActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground, Nothing, theFeature.Extent.Envelope)
 
-        Catch ex As Exception
-            MessageBox.Show(ex.ToString)
-        End Try
+    '    Catch ex As Exception
+    '        EditorExtension.ProcessUnhandledException(ex)
 
-    End Sub
+    '    End Try
 
-    Public Function IsSketcha2PointLine(ByRef pGeom As IGeometry) As Boolean
-        Try
-            ' Validate the passed geometry
-            If Not TypeOf pGeom Is IPointCollection Then Exit Function
+    'End Sub
 
-            ' Validate the number of points in the collection
-            Dim pPointColl As IPointCollection = DirectCast(pGeom, IPointCollection)
-            If pPointColl.PointCount <> 2 Then
-                MessageBox.Show("When creating the parcel hook only digitize two points", "Parcel Hook Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                Return False
-            Else
-                Return True
-            End If
+    '''' <summary>
+    '''' Determine if a geometry is a two-point line
+    '''' </summary>
+    '''' <param name="theGeometry">The geometry to evaluate.</param>
+    '''' <returns> A boolean value that indicates if the geometry is a either a 
+    '''' two-point line or not
+    ''''</returns>
+    '''' <remarks>
+    '''' </remarks>
+    'Public Function IsSketcha2PointLine(ByRef theGeometry As IGeometry) As Boolean
 
-        Catch ex As Exception
-            MessageBox.Show(ex.ToString)
-            Return False
-        End Try
+    '    Try
+    '        ' Validate the passed geometry
+    '        If Not TypeOf theGeometry Is IPointCollection Then Exit Function
 
-    End Function
+    '        ' Validate the number of points in the collection
+    '        Dim thePointColl As IPointCollection = DirectCast(theGeometry, IPointCollection)
+    '        If thePointColl.PointCount <> 2 Then
+    '            MessageBox.Show("When creating the parcel hook only digitize two points", "Hook Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    '            Return False
+    '        Else
+    '            Return True
+    '        End If
 
-    Private Function ReturnExtended(ByRef pExt As esriSegmentExtension, ByRef pPolyline As IPolyline, ByRef lLength As Integer) As IPolyline
+    '    Catch ex As Exception
+    '        EditorExtension.ProcessUnhandledException(ex)
+    '        Return False
 
-        Try
-            Dim pCurve As ICurve = pPolyline
-            Dim pLine As ILine = New ESRI.ArcGIS.Geometry.Line
-            Dim pPLine As IPolyline = New Polyline
-            pCurve.QueryTangent(pExt, 1, False, lLength, pLine)
+    '    End Try
 
-            'Convert ILine to an IPolyline
-            pPLine.FromPoint = pLine.FromPoint
-            pPLine.ToPoint = pLine.ToPoint
-            Return pPLine
+    'End Function
+    '-- END HOOKS
 
-        Catch ex As Exception
-            MessageBox.Show(ex.ToString)
-            Return Nothing
-        End Try
-
-    End Function
-
+    ''' <summary>
+    ''' Create a temporary polyline
+    ''' </summary>
+    ''' <remarks>Given four points, m_pArrowPt1 thru m_pArrowPt4. Create a 
+    ''' temporary polyline from the given points and display it as a temporary 
+    ''' line on the display
+    ''' </remarks>
     Private Sub DrawArrows()
 
         Try
-            'Set up line symbol to display temporary line
+            ' Set up line symbol to display temporary line
             _theLineSymbol = New SimpleLineSymbol
             _theLineSymbol.Width = 2
-            Dim pRGBColor As IRgbColor = New RgbColor
-            With pRGBColor
+            Dim theRGBColor As IRgbColor = New RgbColor
+            With theRGBColor
                 .Red = 223
                 .Green = 223
                 .Blue = 223
             End With
 
-            'UPGRADE_WARNING: Couldn't resolve default property of object pRGBColor. Click for more: 'ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-            _theLineSymbol.Color = pRGBColor
-            Dim pSymbol As ISymbol = DirectCast(_theLineSymbol, ISymbol)
-            pSymbol.ROP2 = esriRasterOpCode.esriROPXOrPen
+            _theLineSymbol.Color = theRGBColor
+            Dim theSymbol As ISymbol = DirectCast(_theLineSymbol, ISymbol)
+            theSymbol.ROP2 = esriRasterOpCode.esriROPXOrPen
 
             ' Create the polyline from a point collection
-            Dim pArrowLine As IPointCollection4 = New Polyline
-
+            Dim theArrowLine As IPointCollection4 = New Polyline
 
             If arrowType.Equals("Arrow", _ignoreCase) Then
-                If _thelArrowPointsCollection.Count() > 1 Then
-                    For lngIndex As Integer = 1 To _thelArrowPointsCollection.Count()
-                        pArrowLine.AddPoint(DirectCast(_thelArrowPointsCollection.Item(lngIndex), IPoint))
+                If _arrowPointsCollection.Count() > 1 Then
+                    For i As Integer = 1 To _arrowPointsCollection.Count()
+                        theArrowLine.AddPoint(DirectCast(_arrowPointsCollection.Item(i), IPoint))
                     Next
                 End If
             Else
-                If Not _theArrowPt1 Is Nothing Then pArrowLine.AddPoint(_theArrowPt1)
-                If Not _theArrowPt2 Is Nothing Then pArrowLine.AddPoint(_theArrowPt2)
-                If Not _theArrowPt3 Is Nothing Then pArrowLine.AddPoint(_theArrowPt3)
-                If Not _theArrowPt4 Is Nothing Then pArrowLine.AddPoint(_theArrowPt4)
+                If Not _theArrowPt1 Is Nothing Then theArrowLine.AddPoint(_theArrowPt1)
+                If Not _theArrowPt2 Is Nothing Then theArrowLine.AddPoint(_theArrowPt2)
+                If Not _theArrowPt3 Is Nothing Then theArrowLine.AddPoint(_theArrowPt3)
+                If Not _theArrowPt4 Is Nothing Then theArrowLine.AddPoint(_theArrowPt4)
             End If
 
-            Dim pArrowLine2 As IPolyline4 = DirectCast(pArrowLine, IPolyline4)
+            Dim theArrowLine2 As IPolyline4 = DirectCast(theArrowLine, IPolyline4)
 
-            ' Draw the temporary line
-            Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
-            Dim pActiveView As IActiveView = theArcMapDoc.ActiveView
-
-            pActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
-            If (pArrowLine2.Length > 0) Then pActiveView.ScreenDisplay.DrawPolyline(pArrowLine2)
-            pActiveView.ScreenDisplay.FinishDrawing()
+            _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
+            If (theArrowLine2.Length > 0) Then _theActiveView.ScreenDisplay.DrawPolyline(theArrowLine2)
+            _theActiveView.ScreenDisplay.FinishDrawing()
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
-        End Try
-
-    End Sub
-
-    Private Sub GetMousePoint(ByRef X As Integer, ByRef Y As Integer)
-
-        Try
-            '+++ Get the current map point (and invert the agent at that location)
-            _thePt = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
-
-            '+++ get the snap agent, if it is being used
-            _theSnapAgent = Nothing
-
-            Dim pSnapenv As ISnapEnvironment = DirectCast(EditorExtension.Editor, ISnapEnvironment)
-
-            Dim pSnapAgent As ISnapAgent
-            Dim pFSnapAgent As IFeatureSnapAgent
-            Dim pEdLyrs As IEditLayers
-            Dim pLayer As ILayer
-            Dim ht As esriGeometryHitPartType
-
-            For i As Integer = 0 To pSnapenv.SnapAgentCount - 1
-                pSnapAgent = pSnapenv.SnapAgent(i)
-                If TypeOf pSnapAgent Is ESRI.ArcGIS.Editor.IFeatureSnapAgent Then
-                    pFSnapAgent = DirectCast(pSnapAgent, IFeatureSnapAgent)
-                    pEdLyrs = DirectCast(EditorExtension.Editor, IEditLayers)
-                    pLayer = pEdLyrs.CurrentLayer
-                    ht = pFSnapAgent.HitType
-                    If ht <> 0 Then
-                        _theSnapAgent = pFSnapAgent
-                        Exit For
-                    End If
-                    pLayer = Nothing
-                    pEdLyrs = Nothing
-                    pFSnapAgent = Nothing
-                End If
-            Next i
-
-            pSnapAgent = Nothing
-            pSnapenv = Nothing
-
-        Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
 
         End Try
 
     End Sub
 
-    Private Function GetCurrentMapScale(ByRef pMIFC As IFeatureClass) As String
+    '-- HOOKS NOT IMPLEMENTED --
+    '''' <summary>
+    '''' Get the mousepoint using ISnapAgent
+    '''' </summary>
+    '''' <param name="X">An object that supports the IGeometry interface.</param>
+    '''' <param name="Y">An object that supports the IGeometry interface.</param>
+    '''' <remarks>
+    '''' </remarks>
+    'Private Sub GetMousePoint(ByRef X As Integer, ByRef Y As Integer)
+
+    '    Try
+    '        ' Get the current map point (and invert the agent at that location)
+    '        _thePt = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+
+    '        ' Get the snap agent, if it is being used
+    '        _theSnapAgent = Nothing
+
+    '        Dim theSnapenv As ISnapEnvironment = DirectCast(EditorExtension.Editor, ISnapEnvironment)
+
+    '        Dim theSnapAgent As ISnapAgent
+    '        Dim theFSnapAgent As IFeatureSnapAgent
+    '        Dim theEdLyrs As IEditLayers
+    '        Dim theLayer As ILayer
+    '        Dim theGeometryHitPartType As esriGeometryHitPartType
+
+    '        For i As Integer = 0 To theSnapenv.SnapAgentCount - 1
+    '            theSnapAgent = theSnapenv.SnapAgent(i)
+    '            If TypeOf theSnapAgent Is IFeatureSnapAgent Then
+    '                theFSnapAgent = DirectCast(theSnapAgent, IFeatureSnapAgent)
+    '                theEdLyrs = DirectCast(EditorExtension.Editor, IEditLayers)
+    '                theLayer = theEdLyrs.CurrentLayer
+    '                theGeometryHitPartType = theFSnapAgent.HitType
+    '                If theGeometryHitPartType <> 0 Then
+    '                    _theSnapAgent = theFSnapAgent
+    '                    Exit For
+    '                End If
+    '                theLayer = Nothing
+    '                theEdLyrs = Nothing
+    '                theFSnapAgent = Nothing
+    '            End If
+    '        Next i
+
+    '    Catch ex As Exception
+    '        EditorExtension.ProcessUnhandledException(ex)
+
+    '    End Try
+
+    'End Sub
+    '-- END HOOKS
+
+
+
+    ''' <summary>
+    ''' Get the mapscale of a temp feature
+    ''' </summary>
+    ''' <param name="theMIFeatureClass">The Mapindex feature class.</param>
+    ''' <returns> A string representing the map scale
+    '''</returns>
+    ''' <remarks>
+    ''' </remarks>
+    Private Function GetCurrentMapScale(ByRef theMIFeatureClass As IFeatureClass) As String
 
         Try
-            Dim pDimensionArrowLayerTemp As IFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.CartographicLinesFC)
-            If pDimensionArrowLayerTemp Is Nothing Then
-                MsgBox("The layer, " & EditorExtension.TableNamesSettings.CartographicLinesFC & ", is not in the map.", MsgBoxStyle.Exclamation, "Layer not found")
-                m_pEditor.AbortOperation()
-                Return Nothing
-                Exit Function
-            End If
+            Dim theDimensionArrowLayerTemp As IFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.CartographicLinesFC)
+            Dim theDimensionArrowFCTemp As IFeatureClass = theDimensionArrowLayerTemp.FeatureClass
+            Dim theDimensionDSetTemp As IDataset = DirectCast(theDimensionArrowFCTemp, IDataset)
+            Dim theDimensionWSEditTemp As IWorkspaceEdit = DirectCast(theDimensionDSetTemp.Workspace, IWorkspaceEdit)
 
-            Dim pDimensionArrowFCTemp As IFeatureClass = pDimensionArrowLayerTemp.FeatureClass
-            Dim pDimensionDSetTemp As IDataset = DirectCast(pDimensionArrowFCTemp, IDataset)
-            Dim pDimensionWSEditTemp As IWorkspaceEdit = DirectCast(pDimensionDSetTemp.Workspace, IWorkspaceEdit)
+            ' Create the arrow feature
+            theDimensionWSEditTemp.StartEditOperation()
+            Dim theDimensionFeatureTemp As IFeature = theDimensionArrowFCTemp.CreateFeature
+            Dim theDimensionpointsTemp As ESRI.ArcGIS.Geometry.IPointCollection4
+            theDimensionpointsTemp = New ESRI.ArcGIS.Geometry.Polyline
+            theDimensionpointsTemp.AddPoint(_theArrowPt1)
+            theDimensionpointsTemp.AddPoint(_theArrowPt2)
 
-            'create the arrow feature
-            pDimensionWSEditTemp.StartEditOperation()
-            Dim pDimensionFeatureTemp As IFeature = pDimensionArrowFCTemp.CreateFeature
-            Dim pDimensionpointsTemp As ESRI.ArcGIS.Geometry.IPointCollection4
-            pDimensionpointsTemp = New ESRI.ArcGIS.Geometry.Polyline
-            pDimensionpointsTemp.AddPoint(_theArrowPt1)
-            pDimensionpointsTemp.AddPoint(_theArrowPt2)
-
-            Dim pDimensionLineTemp As ESRI.ArcGIS.Geometry.IPolyline
-            pDimensionLineTemp = DirectCast(pDimensionpointsTemp, IPolyline)
-            pDimensionFeatureTemp.Shape = pDimensionLineTemp
+            Dim theDimensionLineTemp As ESRI.ArcGIS.Geometry.IPolyline
+            theDimensionLineTemp = DirectCast(theDimensionpointsTemp, IPolyline)
+            theDimensionFeatureTemp.Shape = theDimensionLineTemp
 
 
-            'Get the current MapNumber
-            Dim sCurrentMapScale As String
-            sCurrentMapScale = GetValueViaOverlay((pDimensionFeatureTemp.Shape), pMIFC, EditorExtension.MapIndexSettings.MapScaleField)
-            Return CStr(CDbl(sCurrentMapScale) / 12)
+            ' Get the current MapNumber
+            Dim currentMapScale As String
+            currentMapScale = GetValueViaOverlay((theDimensionFeatureTemp.Shape), theMIFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+            Return CStr(CDbl(currentMapScale) / 12)
 
-            pDimensionWSEditTemp.AbortEditOperation()
-            pDimensionWSEditTemp.StopEditOperation()
+            theDimensionWSEditTemp.AbortEditOperation()
+            theDimensionWSEditTemp.StopEditOperation()
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return Nothing
 
         End Try
 
     End Function
 
+    ''' <summary>
+    ''' Get the side of the line the dimension arrows will be placed on; right or left
+    ''' </summary>
+    ''' <returns> A string representing the side of the line the third clicked point is on
+    '''</returns>
+    ''' <remarks>
+    ''' </remarks>
     Private Function GetDimensionArrowSide() As String
 
         Try
-            'Determine point location is on the left or right by Dean Anderson, help of Nate Anderson
-            Dim slope As Double = 0
+            ' Determine point location is on the left or right by Dean Anderson, help of Nate Anderson
+            Dim lineSlope As Double = 0
             If _theArrowPt2.Y <> _theArrowPt1.Y Then
-                slope = (_theArrowPt1.Y - _theArrowPt2.Y) / (_theArrowPt1.X - _theArrowPt2.X)
+                lineSlope = (_theArrowPt1.Y - _theArrowPt2.Y) / (_theArrowPt1.X - _theArrowPt2.X)
             End If
 
-            Dim yint As Double = _theArrowPt1.Y - (slope * _theArrowPt1.X)
-            Dim z As Double = (slope * _theArrowPt3.X) + yint - _theArrowPt3.Y
+            Dim yIntercept As Double = _theArrowPt1.Y - (lineSlope * _theArrowPt1.X)
+            Dim z As Double = (lineSlope * _theArrowPt3.X) + yIntercept - _theArrowPt3.Y
 
             If _theArrowPt1.X = _theArrowPt2.X Then 'vertical
                 If _theArrowPt3.X = _theArrowPt1.X Then z = 0
@@ -789,81 +867,100 @@ Public NotInheritable Class AddArrows
             Return dimensionArrowSide
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return Nothing
 
         End Try
 
     End Function
 
-    Private Function GetChange(ByRef sCurrentMapScale As String, ByVal Shift As Integer) As Short
+
+    ''' <summary>
+    ''' Get the size of the dimension arrows so that all are standard
+    ''' </summary>
+    ''' <param name="theCurrentMapScale">The current map scale.</param>
+    ''' <returns> 
+    '''</returns>
+    ''' <remarks>
+    ''' </remarks>
+    Private Function GetChange(ByRef theCurrentMapScale As String) As Short
 
         Try
 
             Dim theChange As Short = Nothing
-
-            If sCurrentMapScale = "100" Then
+            If theCurrentMapScale = "100" Then
                 theChange = 15
-            ElseIf sCurrentMapScale = "200" Then
+            ElseIf theCurrentMapScale = "200" Then
                 theChange = 30
-            ElseIf sCurrentMapScale = "400" Then
+            ElseIf theCurrentMapScale = "400" Then
                 theChange = 60
-            ElseIf sCurrentMapScale = "2000" Then
+            ElseIf theCurrentMapScale = "2000" Then
                 theChange = 300
             End If
 
             Return theChange
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return Nothing
 
         End Try
 
     End Function
 
-
-    Public Function ConvertToDescription(ByVal pFlds As IFields, ByVal sFldName As String, ByVal vVal As String) As String
+    ''' <summary>
+    ''' Converts a domain descriptive value to the stored code
+    ''' </summary>
+    ''' <param name="theFields">An object that supports the IFields interface.</param>
+    ''' <param name="fieldName">A field that exists in pFields.</param>
+    ''' <param name="codedValue">A coded value to covert to a coded name.</param>
+    ''' <returns>A string that represents the domain coded name that corresponds with 
+    ''' the coded value, vVal, or a zero-length string.
+    '''</returns>
+    ''' <remarks>Given a field, sFldName, in a collection of fields, pFields, and a coded 
+    ''' value name, vVal.  Locates the sFldName in pFields and gets a reference to the field's 
+    ''' domain, and then finds the coded name in the domain that corresponds to the coded value vVal
+    ''' </remarks>
+    Public Function ConvertToDescription(ByVal theFields As IFields, ByVal fieldName As String, ByVal codedValue As String) As String
 
         Try
 
-            Dim lFld As Integer = pFlds.FindField(sFldName)
-            If lFld > -1 Then
+            Dim fieldNumber As Integer = theFields.FindField(fieldName)
+            If fieldNumber > -1 Then
                 'Determine if domain field
-                Dim pField As IField = pFlds.Field(lFld)
-                Dim pDomain As IDomain = pField.Domain
-                If pDomain Is Nothing Then
-                    Return vVal
+                Dim theField As IField = theFields.Field(fieldNumber)
+                Dim theDomain As IDomain = theField.Domain
+                If theDomain Is Nothing Then
+                    Return codedValue
                     Exit Function
                 Else
                     'Determine type of domain  -If Coded Value, get the description
-                    If TypeOf pDomain Is ICodedValueDomain Then
-                        Dim pCVDomain As ICodedValueDomain = DirectCast(pDomain, ICodedValueDomain)
+                    If TypeOf theDomain Is ICodedValueDomain Then
+                        Dim theCVDomain As ICodedValueDomain = DirectCast(theDomain, ICodedValueDomain)
                         'Given the description, search the domain for the code
-                        For i As Integer = 0 To pCVDomain.CodeCount - 1
-                            If pCVDomain.Value(i).Equals(vVal) Then
-                                ConvertToDescription = pCVDomain.Name(i) 'Return the code value
+                        For i As Integer = 0 To theCVDomain.CodeCount - 1
+                            If theCVDomain.Value(i).Equals(codedValue) Then
+                                ConvertToDescription = theCVDomain.Name(i) 'Return the code value
                                 Exit Function
                             End If
                         Next i
                     Else ' If range domain, return the numeric value
-                        Return vVal
+                        Return codedValue
                         Exit Function
                     End If
-                End If  'If pDomain is nothing/Else
-                Return vVal
+                End If
+                Return codedValue
             Else
                 'Field not found
                 Return String.Empty
-            End If 'If lFld > -1/Else
+            End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            EditorExtension.ProcessUnhandledException(ex)
             Return Nothing
 
         End Try
 
-        '++ END JWalton 2/7/2007
     End Function
 
 #End Region
@@ -902,14 +999,15 @@ Public NotInheritable Class AddArrows
                 If TypeOf hook Is IMxApplication Then
                     _application = DirectCast(hook, IApplication)
                     setPartnerAddArrowsForm(New AddArrowsForm())
+                    setPartnerDimensionArrowsForm(New DimensionArrowsForm())
                     MyBase.m_enabled = True
                 Else
                     MyBase.m_enabled = False
                     'Disable tool if parent application is not ArcMap
                     If TypeOf hook Is IMxApplication Then
                         _application = DirectCast(hook, IApplication)
-                        ' TODO: [SC] Create the form, property and set__ procedure. (Nick)
-                        'setPartnerAddArrowsForm(New AddArrowsForm())
+                        setPartnerAddArrowsForm(New AddArrowsForm())
+                        setPartnerDimensionArrowsForm(New DimensionArrowsForm())
                         MyBase.m_enabled = True
                     Else
                         MyBase.m_enabled = False
@@ -928,8 +1026,10 @@ Public NotInheritable Class AddArrows
     Public Overrides Sub OnClick()
         Try
             DoButtonOperation()
+
         Catch ex As Exception
             EditorExtension.ProcessUnhandledException(ex)
+
         End Try
     End Sub
 
@@ -939,45 +1039,40 @@ Public NotInheritable Class AddArrows
 
         Try
 
-            Dim lLineTypeFld As Integer
-            Dim sCurrentMapScale As String
-            Dim dSmoothRatio As Double
-            Dim bolFinish As Boolean
-            Dim lngIndex As Long
+            ' Recycled variables
+            Dim theField As Integer
+            Dim currentMapScale As String
+            Dim finishedDrawing As Boolean
+            Dim indexNumber As Long
 
             ' Set the in use flag
-            _theInUse = True
-
-            Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
-            Dim pActiveView As IActiveView = theArcMapDoc.ActiveView
+            _inUse = True
 
             ' Retrieve a reference to the Map Index layer
-            'Dim pMIFL As IFeatureLayer = MapIndexFeatureLayer
-            Dim pMIFC As IFeatureClass = MapIndexFeatureLayer.FeatureClass
+            Dim theMIFeatureClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
 
             Select Case arrowType
 
-                Case "HOOK"  '"Hook" 'If drawing hooks
-                    ' Get point to measure distance from
-                    _theStartPoint = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
-                    _theDoOnce = False 'testing
-                    _theFromBreakPoint = _theStartPoint
+                '-- HOOKS NOT IMPLEMENTED --
+                'Case "HOOK"  '"Hook" 'If drawing hooks
+                '' Get point to measure distance from
+                '_theStartPoint = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+                '_doOnce = False
+                '_theFromBreakPoint = _theStartPoint
 
-                    ' Get the scale of the current mapindex
-                    Dim sScale As String = GetValueViaOverlay(_theStartPoint, pMIFC, EditorExtension.MapIndexSettings.MapScaleField)
-                    sScale = ConvertToDescription(pMIFC.Fields, EditorExtension.MapIndexSettings.MapScaleField, sScale)
-
+                '' Get the scale of the current mapindex
+                'Dim mapIndexScale As String = GetValueViaOverlay(_theStartPoint, theMIFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+                'mapIndexScale = ConvertToDescription(theMIFeatureClass.Fields, EditorExtension.MapIndexSettings.MapScaleField, mapIndexScale)
+                '-- END HOOKS
 
                 Case "ARROW" 'If drawing annotation arrows
-                    'If m_bToolJustCompletedTask = False Then
-                    If bolFinish = False Then
-                        'Right mouse click
-                        If Button = 1 And Shift = 1 Then
+                    If finishedDrawing = False Then
+                        If Button = 1 And Shift = 1 Then 'Right mouse click
                             'Save the first point
-                            If _thelArrowPointsCollection.Count = 0 Then
+                            If _arrowPointsCollection.Count = 0 Then
                                 If _theArrowPt1 Is Nothing Then
-                                    _theArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
-                                    _thelArrowPointsCollection.Add(_theArrowPt1)
+                                    _theArrowPt1 = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+                                    _arrowPointsCollection.Add(_theArrowPt1)
 
                                     'Clear existing point
                                     _theArrowPt1 = Nothing
@@ -986,13 +1081,13 @@ Public NotInheritable Class AddArrows
                                 'Save the last point
                             Else
                                 If _theArrowPt1 Is Nothing Then
-                                    _theArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
-                                    _thelArrowPointsCollection.Add(_theArrowPt1)
+                                    _theArrowPt1 = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+                                    _arrowPointsCollection.Add(_theArrowPt1)
                                     DrawArrows()
 
                                     'Clear existing point
                                     _theArrowPt1 = Nothing
-                                    bolFinish = True
+                                    finishedDrawing = True
                                 End If
                             End If
 
@@ -1000,8 +1095,8 @@ Public NotInheritable Class AddArrows
                         ElseIf Button = 1 And Shift = 0 Then
                             'Add vertex
                             If _theArrowPt1 Is Nothing Then
-                                _theArrowPt1 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
-                                _thelArrowPointsCollection.Add(_theArrowPt1)
+                                _theArrowPt1 = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+                                _arrowPointsCollection.Add(_theArrowPt1)
 
                                 'Clear existing point
                                 _theArrowPt1 = Nothing
@@ -1010,77 +1105,70 @@ Public NotInheritable Class AddArrows
                     End If
 
 
-                    If _thelArrowPointsCollection.Count > 1 And bolFinish = True Then
+                    If _arrowPointsCollection.Count > 1 And finishedDrawing = True Then
 
                         ' Creates a new polygon from the points and smoothes it
-                        Dim pArrowPoints As IPointCollection4 = New Polyline
+                        Dim theArrowPoints As IPointCollection4 = New Polyline
 
-                        For lngIndex = 1 To _thelArrowPointsCollection.Count
-                            pArrowPoints.AddPoint(DirectCast(_thelArrowPointsCollection.Item(lngIndex), IPoint))
+                        For i As Integer = 1 To _arrowPointsCollection.Count
+                            theArrowPoints.AddPoint(DirectCast(_arrowPointsCollection.Item(i), IPoint))
                         Next
 
-                        Dim pArrowLine As IPolyline4 = DirectCast(pArrowPoints, IPolyline4)
-                        pArrowLine.Smooth(pArrowLine.Length / 10)
+                        Dim theArrowLine As IPolyline4 = DirectCast(theArrowPoints, IPolyline4)
+                        theArrowLine.Smooth(theArrowLine.Length / 10)
 
                         ' Get a reference to the Cartographic Lines feature class
-                        Dim pArrowLayer As IFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.CartographicLinesFC)
-                        If pArrowLayer Is Nothing Then
-                            MsgBox("The layer, " & EditorExtension.TableNamesSettings.CartographicLinesFC & ", is not in the map.", vbExclamation, "Layer not found")
-                            Exit Sub 'SC better method?
-                        End If
-                        Dim pArrowFC As IFeatureClass = pArrowLayer.FeatureClass
-                        Dim pDSet As IDataset = DirectCast(pArrowFC, IDataset)
-                        Dim pWSEdit As IWorkspaceEdit = DirectCast(pDSet.Workspace, IWorkspaceEdit)
+                        Dim theArrowLayer As IFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.CartographicLinesFC)
+                        Dim theArrowFeatureClass As IFeatureClass = theArrowLayer.FeatureClass
+                        Dim theDataSet As IDataset = DirectCast(theArrowFeatureClass, IDataset)
+                        Dim theWorkSpaceEdit As IWorkspaceEdit = DirectCast(theDataSet.Workspace, IWorkspaceEdit)
 
                         ' Start an edit operation to encompass the creation of the feature
-                        pWSEdit.StartEditOperation()
+                        theWorkSpaceEdit.StartEditOperation()
 
                         ' Create the arrow feature
-                        Dim pFeature As IFeature = pArrowFC.CreateFeature
-                        pFeature.Shape = pArrowLine
+                        Dim theFeature As IFeature = theArrowFeatureClass.CreateFeature
+                        theFeature.Shape = theArrowLine
 
                         ' Locates fields in the feature's dataset
-                        Dim lCLMNfld As Integer = LocateFields(pArrowFC, EditorExtension.MapIndexSettings.MapNumberField)
-                        lLineTypeFld = LocateFields(pArrowFC, EditorExtension.CartographicLinesSettings.LineTypeField)
-
-                        ' Insure that the feature's fields are found
-                        If lLineTypeFld = -1 Then Exit Sub 'SC better method?
-
+                        Dim mapNumberField As Integer = LocateFields(theArrowFeatureClass, EditorExtension.MapIndexSettings.MapNumberField)
+                        theField = LocateFields(theArrowFeatureClass, EditorExtension.CartographicLinesSettings.LineTypeField)
+                        If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
                         ' Populate field values in the feature
-                        Dim sCurMapNum As String = GetValueViaOverlay(pFeature.Shape, pMIFC, EditorExtension.MapIndexSettings.MapNumberField)
-                        pFeature.Value(lCLMNfld) = sCurMapNum
-                        pFeature.Value(lLineTypeFld) = arrowLineStyle
-                        pFeature.Store()
+                        Dim curMapNum As String = GetValueViaOverlay(theFeature.Shape, theMIFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+                        theFeature.Value(mapNumberField) = curMapNum
+                        theFeature.Value(theField) = arrowLineStyle
+                        theFeature.Store()
 
-                        'Set the AutoMethod Field
-                        lLineTypeFld = LocateFields(pArrowFC, EditorExtension.AllTablesSettings.AutoMethodField)
-                        If lLineTypeFld = -1 Then Exit Sub
-                        pFeature.Value(lLineTypeFld) = "UNK"
+                        ' Set the AutoMethod Field
+                        theField = LocateFields(theArrowFeatureClass, EditorExtension.AllTablesSettings.AutoMethodField)
+                        If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                        theFeature.Value(theField) = "UNK"
 
-                        'Set the AutoWho Field
-                        lLineTypeFld = LocateFields(pArrowFC, EditorExtension.AllTablesSettings.AutoWhoField)
-                        If lLineTypeFld = -1 Then Exit Sub
-                        pFeature.Value(lLineTypeFld) = UserName
+                        ' Set the AutoWho Field
+                        theField = LocateFields(theArrowFeatureClass, EditorExtension.AllTablesSettings.AutoWhoField)
+                        If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                        theFeature.Value(theField) = UserName
 
-                        'Set the AutoDate Field
-                        lLineTypeFld = LocateFields(pArrowFC, EditorExtension.AllTablesSettings.AutoDateField)
-                        If lLineTypeFld = -1 Then Exit Sub
-                        pFeature.Value(lLineTypeFld) = Format(Today, "MM/dd/yyyy")
+                        ' Set the AutoDate Field
+                        theField = LocateFields(theArrowFeatureClass, EditorExtension.AllTablesSettings.AutoDateField)
+                        If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                        theFeature.Value(theField) = Format(Today, "MM/dd/yyyy")
 
-                        'Set the MapScale Field
-                        sCurrentMapScale = GetValueViaOverlay(pFeature.Shape, pMIFC, EditorExtension.MapIndexSettings.MapScaleField)
-                        lLineTypeFld = LocateFields(pArrowFC, EditorExtension.MapIndexSettings.MapScaleField)
-                        If lLineTypeFld = -1 Then Exit Sub
-                        pFeature.Value(lLineTypeFld) = sCurrentMapScale
+                        ' Set the MapScale Field
+                        currentMapScale = GetValueViaOverlay(theFeature.Shape, theMIFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+                        theField = LocateFields(theArrowFeatureClass, EditorExtension.MapIndexSettings.MapScaleField)
+                        If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                        theFeature.Value(theField) = currentMapScale
 
                         ' Finalize the edit operation
-                        pWSEdit.StopEditOperation()
+                        theWorkSpaceEdit.StopEditOperation()
 
                         ' Refresh the display
-                        pActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground, Nothing, pFeature.Extent.Envelope)
+                        _theActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground, Nothing, theFeature.Extent.Envelope)
 
-                        _thelArrowPointsCollection = Nothing
-                        _thelArrowPointsCollection = New Collection
+                        _arrowPointsCollection = Nothing
+                        _arrowPointsCollection = New Collection
 
 
                     End If
@@ -1093,242 +1181,199 @@ Public NotInheritable Class AddArrows
                         _theArrowPt2 = _thePt
                         DrawArrows()
                     ElseIf _theArrowPt3 Is Nothing Then
-                        _theArrowPt3 = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+                        _theArrowPt3 = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
                         DrawArrows()
 
-                        'Check to be sure the 2 points are not equal
+                        ' Check to be sure the 2 points are not equal
                         If (_theArrowPt1.X = _theArrowPt2.X) And (_theArrowPt1.Y = _theArrowPt2.Y) Then
-                            MsgBox("Two input points can't be equal, dimension arrows terminated.", vbInformation, "Invalid Input")
+                            MessageBox.Show("Two input points can't be equal, dimension arrows terminated.", "Dimension Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             OnKeyDown(Keys.Q, 1)
-                            Exit Sub
+                            Exit Try
                         End If
 
-                        'Get the mapscale
-                        sCurrentMapScale = GetCurrentMapScale(pMIFC)
+                        ' Get the mapscale
+                        currentMapScale = GetCurrentMapScale(theMIFeatureClass)
 
-                        'Get the side the dimension arrows should be on based upon the 3rd input point
-                        Dim sSide As String = GetDimensionArrowSide()
+                        ' Get the side the dimension arrows should be on based upon the 3rd input point
+                        Dim dimensionArrowSide As String = GetDimensionArrowSide()
 
-                        'Create two dimension arrows, one on the left and one on the right
-                        'Dim lngIndex As Long
-                        For lngIndex = 1 To 2
-
-                            Dim pDimensionLine As IPolyline4
-                            Dim pDimensionPoints As IPointCollection4
-                            pDimensionPoints = New Polyline
+                        ' Create two dimension arrows, one on the left and one on the right
+                        For indexNumber = 1 To 2
+                            Dim theDimensionLine As IPolyline4
+                            Dim theDimensionPoints As IPointCollection4
+                            theDimensionPoints = New Polyline
 
                             If _addManually = False Then
 
-                                'Add starting point
-                                pDimensionPoints.AddPoint(_theArrowPt1)
+                                ' Add starting point
+                                theDimensionPoints.AddPoint(_theArrowPt1)
 
-                                'Instanciate the temp points
+                                ' Instanciate the temp points
                                 _theArrowPtTemp = New ESRI.ArcGIS.Geometry.Point
                                 _theArrowPtTemp2 = New ESRI.ArcGIS.Geometry.Point
 
-                                'Set the distance of change for the dimension arrows based upon the mapscale
-                                Dim iChange As Integer = GetChange(sCurrentMapScale, Shift)
+                                ' Set the distance of change for the dimension arrows based upon the mapscale
+                                Dim iChange As Integer = GetChange(currentMapScale)
 
-                                'Get 3 calculated points for a hook
-                                'Create the line from input
-                                pDimensionPoints.AddPoint(_theArrowPt1)
-                                pDimensionPoints.AddPoint(_theArrowPt2)
-                                pDimensionLine = DirectCast(pDimensionPoints, IPolyline4)
-
-                                'Check the ratio changes
-                                Dim dRatioLine As Double
-                                Dim dRatioCurve As Double
-
-                                If _theolDimensionChanged = True Then
-                                    If _ratioLine > 0 Then
-                                        dRatioLine = _ratioLine
-                                    Else
-                                        dRatioLine = 1.75
-                                    End If
-
-                                    If _ratioCurve > 0 Then
-                                        dRatioCurve = _ratioCurve
-                                    Else
-                                        dRatioCurve = 1.35
-                                    End If
-
-                                    If _smoothRatio >= 0 Then
-                                        dSmoothRatio = _smoothRatio
-                                    Else
-                                        dSmoothRatio = 10
-                                    End If
-                                Else
-                                    dRatioLine = 1.75
-                                    dRatioCurve = 1.35
-                                    dSmoothRatio = 10
-                                End If
+                                ' Get 3 calculated points for a hook and create the line from input
+                                theDimensionPoints.AddPoint(_theArrowPt1)
+                                theDimensionPoints.AddPoint(_theArrowPt2)
+                                theDimensionLine = DirectCast(theDimensionPoints, IPolyline4)
 
                                 'Create a line iChange from the beginning
-                                Dim pLine As ILine = New Line
-                                If lngIndex = 1 Then
+                                Dim theLine As ILine = New Line
+                                If indexNumber = 1 Then
                                     If Shift = 0 Then 'shift not pressed
-                                        If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, iChange, False, ((iChange / dRatioLine) / 2), pLine)
-                                        ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, iChange, False, -((iChange / dRatioLine) / 2), pLine)
+                                        If Trim$(UCase$(dimensionArrowSide)) = "RIGHT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, iChange, False, ((iChange / RatioLine) / 2), theLine)
+                                        ElseIf Trim$(UCase$(dimensionArrowSide)) = "LEFT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, iChange, False, -((iChange / RatioLine) / 2), theLine)
                                         End If
                                     ElseIf Shift = 1 Then 'shift pressed
-                                        If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, iChange, False, (((iChange * 2) / dRatioLine) / 2), pLine)
-                                        ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, iChange, False, -(((iChange * 2) / dRatioLine) / 2), pLine)
+                                        If Trim$(UCase$(dimensionArrowSide)) = "RIGHT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, iChange, False, (((iChange * 2) / RatioLine) / 2), theLine)
+                                        ElseIf Trim$(UCase$(dimensionArrowSide)) = "LEFT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, iChange, False, -(((iChange * 2) / RatioLine) / 2), theLine)
                                         End If
                                     End If
-                                ElseIf lngIndex = 2 Then
+                                ElseIf indexNumber = 2 Then
                                     If Shift = 0 Then 'shift not pressed
-                                        If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (pDimensionLine.Length - iChange), False, ((iChange / dRatioLine) / 2), pLine)
-                                        ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (pDimensionLine.Length - iChange), False, -((iChange / dRatioLine) / 2), pLine)
+                                        If Trim$(UCase$(dimensionArrowSide)) = "RIGHT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (theDimensionLine.Length - iChange), False, ((iChange / RatioLine) / 2), theLine)
+                                        ElseIf Trim$(UCase$(dimensionArrowSide)) = "LEFT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (theDimensionLine.Length - iChange), False, -((iChange / RatioLine) / 2), theLine)
                                         End If
                                     ElseIf Shift = 1 Then 'shift pressed
-                                        If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (pDimensionLine.Length - iChange), False, (((iChange * 2) / dRatioLine) / 2), pLine)
-                                        ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (pDimensionLine.Length - iChange), False, -(((iChange * 2) / dRatioLine) / 2), pLine)
+                                        If Trim$(UCase$(dimensionArrowSide)) = "RIGHT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (theDimensionLine.Length - iChange), False, (((iChange * 2) / RatioLine) / 2), theLine)
+                                        ElseIf Trim$(UCase$(dimensionArrowSide)) = "LEFT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (theDimensionLine.Length - iChange), False, -(((iChange * 2) / RatioLine) / 2), theLine)
 
-                                        End If
-                                    End If
-                                End If
-
-                                'Save the to and from points of the line
-                                _theArrowPtTemp.X = pLine.ToPoint.X
-                                _theArrowPtTemp.Y = pLine.ToPoint.Y
-                                pLine = Nothing
-
-                                'Create a line (iChange/.25) from the beginning
-                                pLine = New Line
-                                If lngIndex = 1 Then
-                                    If Shift = 0 Then 'shift not pressed
-                                        If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (iChange / dRatioCurve), False, ((iChange / dRatioLine) / 1.75), pLine)
-                                        ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (iChange / dRatioCurve), False, -((iChange / dRatioLine) / 1.75), pLine)
-                                        End If
-                                    ElseIf Shift = 1 Then 'shift pressed
-                                        If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (iChange / dRatioCurve), False, (((iChange * 2) / dRatioLine) / 1.75), pLine)
-                                        ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (iChange / dRatioCurve), False, -(((iChange * 2) / dRatioLine) / 1.75), pLine)
-                                        End If
-                                    End If
-                                ElseIf lngIndex = 2 Then
-                                    If Shift = 0 Then 'shift not pressed
-                                        If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, ((iChange / dRatioLine) / 1.75), pLine)
-                                        ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, -((iChange / dRatioLine) / 1.75), pLine)
-                                        End If
-                                    ElseIf Shift = 1 Then 'shift pressed
-                                        If Trim$(UCase$(sSide)) = "RIGHT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, (((iChange * 2) / dRatioLine) / 1.75), pLine)
-                                        ElseIf Trim$(UCase$(sSide)) = "LEFT" Then
-                                            pDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (pDimensionLine.Length - (iChange / dRatioCurve)), False, -(((iChange * 2) / dRatioLine) / 1.75), pLine)
                                         End If
                                     End If
                                 End If
 
-                                'Save the to and from points of the line
-                                _theArrowPtTemp2.X = pLine.ToPoint.X
-                                _theArrowPtTemp2.Y = pLine.ToPoint.Y
-                                pLine = Nothing
+                                ' Save the to and from points of the line
+                                _theArrowPtTemp.X = theLine.ToPoint.X
+                                _theArrowPtTemp.Y = theLine.ToPoint.Y
+                                theLine = Nothing
 
-                                pDimensionPoints = Nothing
-                                pDimensionPoints = New Polyline
-
-                                'Add the points to the line/hook to be created
-                                If lngIndex = 1 Then
-                                    pDimensionPoints.AddPoint(_theArrowPt1)
-                                ElseIf lngIndex = 2 Then
-                                    pDimensionPoints.AddPoint(_theArrowPt2)
+                                ' Create a line (iChange/.25) from the beginning
+                                theLine = New Line
+                                If indexNumber = 1 Then
+                                    If Shift = 0 Then 'shift not pressed
+                                        If Trim$(UCase$(dimensionArrowSide)) = "RIGHT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (iChange / RatioCurve), False, ((iChange / RatioLine) / 1.75), theLine)
+                                        ElseIf Trim$(UCase$(dimensionArrowSide)) = "LEFT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (iChange / RatioCurve), False, -((iChange / RatioLine) / 1.75), theLine)
+                                        End If
+                                    ElseIf Shift = 1 Then 'shift pressed
+                                        If Trim$(UCase$(dimensionArrowSide)) = "RIGHT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (iChange / RatioCurve), False, (((iChange * 2) / RatioLine) / 1.75), theLine)
+                                        ElseIf Trim$(UCase$(dimensionArrowSide)) = "LEFT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (iChange / RatioCurve), False, -(((iChange * 2) / RatioLine) / 1.75), theLine)
+                                        End If
+                                    End If
+                                ElseIf indexNumber = 2 Then
+                                    If Shift = 0 Then 'shift not pressed
+                                        If Trim$(UCase$(dimensionArrowSide)) = "RIGHT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (theDimensionLine.Length - (iChange / RatioCurve)), False, ((iChange / RatioLine) / 1.75), theLine)
+                                        ElseIf Trim$(UCase$(dimensionArrowSide)) = "LEFT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (theDimensionLine.Length - (iChange / RatioCurve)), False, -((iChange / RatioLine) / 1.75), theLine)
+                                        End If
+                                    ElseIf Shift = 1 Then 'shift pressed
+                                        If Trim$(UCase$(dimensionArrowSide)) = "RIGHT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (theDimensionLine.Length - (iChange / RatioCurve)), False, (((iChange * 2) / RatioLine) / 1.75), theLine)
+                                        ElseIf Trim$(UCase$(dimensionArrowSide)) = "LEFT" Then
+                                            theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (theDimensionLine.Length - (iChange / RatioCurve)), False, -(((iChange * 2) / RatioLine) / 1.75), theLine)
+                                        End If
+                                    End If
                                 End If
-                                pDimensionPoints.AddPoint(_theArrowPtTemp2)
-                                pDimensionPoints.AddPoint(_theArrowPtTemp)
+
+                                ' Save the to and from points of the line
+                                _theArrowPtTemp2.X = theLine.ToPoint.X
+                                _theArrowPtTemp2.Y = theLine.ToPoint.Y
+                                theLine = Nothing
+
+                                theDimensionPoints = Nothing
+                                theDimensionPoints = New Polyline
+
+                                ' Add the points to the line/hook to be created
+                                If indexNumber = 1 Then
+                                    theDimensionPoints.AddPoint(_theArrowPt1)
+                                ElseIf indexNumber = 2 Then
+                                    theDimensionPoints.AddPoint(_theArrowPt2)
+                                End If
+                                theDimensionPoints.AddPoint(_theArrowPtTemp2)
+                                theDimensionPoints.AddPoint(_theArrowPtTemp)
 
                             Else 'Adding dimension arrow manually
-                                lngIndex = 3
-                                pDimensionPoints.AddPoint(_theArrowPt1)
-                                pDimensionPoints.AddPoint(_theArrowPt2)
-                                pDimensionPoints.AddPoint(_theArrowPt3)
+                                indexNumber = 3
+                                theDimensionPoints.AddPoint(_theArrowPt1)
+                                theDimensionPoints.AddPoint(_theArrowPt2)
+                                theDimensionPoints.AddPoint(_theArrowPt3)
 
-                                If _smoothRatio >= 0 Then
-                                    dSmoothRatio = _smoothRatio
-                                Else
-                                    dSmoothRatio = 10
-                                End If
                             End If
 
-                            'Create the dimension arrow from the collection of 3 points (1 input, 2 calculated)
-                            pDimensionLine = DirectCast(pDimensionPoints, IPolyline4)
+                            ' Create the dimension arrow from the collection of 3 points (1 input, 2 calculated)
+                            theDimensionLine = DirectCast(theDimensionPoints, IPolyline4)
 
-                            If dSmoothRatio > 0 Then
-                                pDimensionLine.Smooth(pDimensionLine.Length / dSmoothRatio)
+                            If SmoothRatio > 0 Then
+                                theDimensionLine.Smooth(theDimensionLine.Length / SmoothRatio)
                             End If
 
-                            Dim pDimensionFeature As IFeature
-                            Dim pDimensionWSEdit As IWorkspaceEdit
-                            Dim pDimensionDSet As IDataset
-                            Dim pDimensionArrowLayer As IFeatureLayer
-                            Dim pDimensionArrowFC As IFeatureClass
-                            pDimensionArrowLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.CartographicLinesFC)
-                            If pDimensionArrowLayer Is Nothing Then
-                                MsgBox("The layer, " & EditorExtension.TableNamesSettings.CartographicLinesFC & ", is not in the map.", vbExclamation, "Layer not found")
-                                m_pEditor.AbortOperation()
-                                Exit Sub
-                            End If
-                            pDimensionArrowFC = pDimensionArrowLayer.FeatureClass
-                            pDimensionDSet = DirectCast(pDimensionArrowFC, IDataset)
-                            pDimensionWSEdit = DirectCast(pDimensionDSet.Workspace, IWorkspaceEdit)
+                            Dim theDimensionArrowLayer As IFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.CartographicLinesFC)
+                            Dim theDimensionArrowFC As IFeatureClass = theDimensionArrowLayer.FeatureClass
+                            Dim theDimensionDSet As IDataset = DirectCast(theDimensionArrowFC, IDataset)
+                            Dim theDimensionWSEdit As IWorkspaceEdit = DirectCast(theDimensionDSet.Workspace, IWorkspaceEdit)
 
-                            'create the arrow feature
-                            pDimensionWSEdit.StartEditOperation()
-                            pDimensionFeature = pDimensionArrowFC.CreateFeature
-                            pDimensionFeature.Shape = pDimensionLine
-                            lLineTypeFld = LocateFields(pDimensionArrowFC, EditorExtension.CartographicLinesSettings.LineTypeField)
-                            If lLineTypeFld = -1 Then Exit Sub
-                            pDimensionFeature.Value(lLineTypeFld) = 134 'Bearing Distance Arrow
+                            ' Create the arrow feature
+                            theDimensionWSEdit.StartEditOperation()
 
-                            'Get the current MapNumber
-                            Dim sCurrentMapNums As String
-                            sCurrentMapNums = GetValueViaOverlay(pDimensionFeature.Shape, pMIFC, EditorExtension.MapIndexSettings.MapNumberField)
-                            Dim lCLMNSfld As Integer
-                            lCLMNSfld = LocateFields(pDimensionArrowFC, EditorExtension.MapIndexSettings.MapNumberField)
-                            pDimensionFeature.Value(lCLMNSfld) = sCurrentMapNums
+                            Dim theDimensionFeature As IFeature
+                            theDimensionFeature = theDimensionArrowFC.CreateFeature
 
-                            'Set the AutoMethod Field
-                            lLineTypeFld = LocateFields(pDimensionArrowFC, EditorExtension.AllTablesSettings.AutoMethodField)
-                            If lLineTypeFld = -1 Then Exit Sub
-                            pDimensionFeature.Value(lLineTypeFld) = "UNK"
 
-                            'Set the AutoWho Field
-                            lLineTypeFld = LocateFields(pDimensionArrowFC, EditorExtension.AllTablesSettings.AutoWhoField)
-                            If lLineTypeFld = -1 Then Exit Sub
-                            pDimensionFeature.Value(lLineTypeFld) = UserName
+                            theDimensionFeature.Shape = theDimensionLine
 
-                            'Set the AutoDate Field
-                            lLineTypeFld = LocateFields(pDimensionArrowFC, EditorExtension.AllTablesSettings.AutoDateField)
-                            If lLineTypeFld = -1 Then Exit Sub
-                            pDimensionFeature.Value(lLineTypeFld) = Format(Today, "MM/dd/yyyy")
+                            theField = LocateFields(theDimensionArrowFC, EditorExtension.CartographicLinesSettings.LineTypeField)
+                            If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                            theDimensionFeature.Value(theField) = 134 'Bearing Distance Arrow
 
-                            'Set the MapScale Field
-                            lLineTypeFld = LocateFields(pDimensionArrowFC, EditorExtension.MapIndexSettings.MapScaleField)
-                            If lLineTypeFld = -1 Then Exit Sub
-                            pDimensionFeature.Value(lLineTypeFld) = CInt(sCurrentMapScale) * 12
+                            ' Get the current MapNumber
+                            Dim currentMapNums As String
+                            currentMapNums = GetValueViaOverlay(theDimensionFeature.Shape, theMIFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+                            theField = LocateFields(theDimensionArrowFC, EditorExtension.MapIndexSettings.MapNumberField)
+                            theDimensionFeature.Value(theField) = currentMapNums
 
-                            pDimensionFeature.Store()
-                            pDimensionWSEdit.StopEditOperation()
+                            ' Set the AutoMethod Field
+                            theField = LocateFields(theDimensionArrowFC, EditorExtension.AllTablesSettings.AutoMethodField)
+                            If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                            theDimensionFeature.Value(theField) = "UNK"
 
-                            'Refresh the display
-                            pActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground, Nothing, pDimensionFeature.Extent.Envelope)
+                            ' Set the AutoWho Field
+                            theField = LocateFields(theDimensionArrowFC, EditorExtension.AllTablesSettings.AutoWhoField)
+                            If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                            theDimensionFeature.Value(theField) = UserName
+
+                            ' Set the AutoDate Field
+                            theField = LocateFields(theDimensionArrowFC, EditorExtension.AllTablesSettings.AutoDateField)
+                            If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                            theDimensionFeature.Value(theField) = Format(Today, "MM/dd/yyyy")
+
+                            ' Set the MapScale Field
+                            theField = LocateFields(theDimensionArrowFC, EditorExtension.MapIndexSettings.MapScaleField)
+                            If theField = -1 Then Exit Try ' TODO: [SC] Possibly add Cartographic Lines to the DataMonitor??.
+                            theDimensionFeature.Value(theField) = CInt(currentMapScale) * 12
+
+                            theDimensionFeature.Store()
+                            theDimensionWSEdit.StopEditOperation()
+
+                            ' Refresh the display
+                            _theActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground, Nothing, theDimensionFeature.Extent.Envelope)
 
                             _theArrowPtTemp = Nothing
                             _theArrowPtTemp2 = Nothing
-
                             _theTextSymbol = Nothing
                             _theTextPoint = Nothing
                             _theLinePolyline = Nothing
@@ -1341,7 +1386,7 @@ Public NotInheritable Class AddArrows
                         _theArrowPt3 = Nothing
                         _theArrowPt4 = Nothing
 
-                    Else 'Reset everything
+                    Else ' Reset everything
                         _theArrowPt1 = Nothing
                         _theArrowPt2 = Nothing
                         _theArrowPt3 = Nothing
@@ -1349,9 +1394,9 @@ Public NotInheritable Class AddArrows
                         _theArrowPtTemp = Nothing
                         _theArrowPtTemp2 = Nothing
                         _theSnapAgent = Nothing
-                        _theToolJustCompletedTask = True
+                        _toolJustCompletedTask = True
 
-                        'Deactivate the tool
+                        ' Deactivate the tool
                         _application.CurrentTool = Nothing
 
                     End If
@@ -1359,235 +1404,223 @@ Public NotInheritable Class AddArrows
 
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
-        End Try
-
-
-
-    End Sub
-
-    Public Overrides Sub OnMouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
-        MyBase.OnMouseMove(Button, Shift, X, Y)
-
-
-        Try
-
-            Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
-            Dim pActiveView As IActiveView = theArcMapDoc.ActiveView
-            Dim bfirstTime As Boolean
-            Dim lLineLength As Long = 0 'TODO - SC This does not get set.
-
-            ' Draw the temporary line the user sees while moving the mouse
-            If arrowType.Equals("Hook", _ignoreCase) Then
-
-                If (Not _theInUse) Then Exit Sub
-
-                ' Checks to see if the line symbol is defined
-                If (_theLineSymbol Is Nothing) Then bfirstTime = True
-
-                ' Get current point
-                Dim pPoint As IPoint = pActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
-                _theToBreakPoint = pPoint 'the unextended to point used to break the hooks
-
-                'Check to be sure there is a start point for the hook to prevent an error
-                If _theStartPoint Is Nothing Then Exit Sub
-
-                ' Draw a virtual line that represents the extended line
-                Dim pPLine As IPolyline = New Polyline
-                pPLine.FromPoint = _theStartPoint
-                pPLine.ToPoint = pPoint
-                Dim pCv As ICurve = pPLine
-
-                Dim pCPoint As IConstructPoint = New ESRI.ArcGIS.Geometry.Point
-                pCPoint.ConstructAlong(pCv, esriSegmentExtension.esriExtendAtTo, pCv.Length + CDbl(lLineLength), False)
-                pPoint = DirectCast(pCPoint, IPoint)
-
-                If Not _theDoOnce Then
-                    Dim pFCPoint As IConstructPoint = New ESRI.ArcGIS.Geometry.Point
-                    pFCPoint.ConstructAlong(pCv, esriSegmentExtension.esriExtendAtFrom, -(CDbl(lLineLength)), False)
-                    _theStartPoint = DirectCast(pFCPoint, IPoint)
-                    _theDoOnce = True
-                End If
-
-                'Draw the line
-                pActiveView.ScreenDisplay.StartDrawing(pActiveView.ScreenDisplay.hDC, -1)
-
-                ' Initialize or draw the temporary line
-                If bfirstTime Then
-                    'Line Symbol
-                    _theLineSymbol = New SimpleLineSymbol
-                    _theLineSymbol.Width = 2
-                    Dim pRGBColor As IRgbColor = New RgbColor
-                    With pRGBColor
-                        .Red = 223
-                        .Green = 223
-                        .Blue = 223
-                    End With
-                    _theLineSymbol.Color = pRGBColor
-                    Dim pSymbol As ISymbol = DirectCast(_theLineSymbol, ISymbol)
-                    pSymbol.ROP2 = esriRasterOpCode.esriROPXOrPen
-
-                    'Text Symbol
-                    _theTextSymbol = New ESRI.ArcGIS.Display.TextSymbol
-                    _theTextSymbol.HorizontalAlignment = esriTextHorizontalAlignment.esriTHACenter
-                    _theTextSymbol.VerticalAlignment = esriTextVerticalAlignment.esriTVACenter
-                    _theTextSymbol.Size = 16
-                    _theTextSymbol.Font.Name = "Arial"
-
-                    pSymbol = DirectCast(_theTextSymbol, ISymbol)
-                    Dim pFont As Font = DirectCast(_theTextSymbol.Font, Font)
-                    pSymbol.ROP2 = esriRasterOpCode.esriROPXOrPen
-
-                    'Create point to draw text in
-                    _theTextPoint = New ESRI.ArcGIS.Geometry.Point
-                Else
-                    'Use existing symbols and draw existing text and polyline
-                    pActiveView.ScreenDisplay.SetSymbol(DirectCast(_theTextSymbol, ISymbol))
-                    pActiveView.ScreenDisplay.DrawText(_theTextPoint, _theTextSymbol.Text)
-                    pActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
-                    If (_theLinePolyline.Length > 0) Then _
-                      pActiveView.ScreenDisplay.DrawPolyline(_theLinePolyline)
-                End If
-
-                'Get line between from and to points, and angle for text
-                Dim pLine As ILine = New ESRI.ArcGIS.Geometry.Line
-                pLine.PutCoords(_theStartPoint, pPoint)
-                Dim angle As Double = pLine.Angle
-                angle = angle * (180.0# / 3.14159)
-                If ((angle > 90.0#) And (angle < 180.0#)) Then
-                    angle = angle + 180.0#
-                ElseIf ((angle < 0.0#) And (angle < -90.0#)) Then
-                    angle = angle - 180.0#
-                ElseIf ((angle < -90.0#) And (angle > -180)) Then
-                    angle = angle - 180.0#
-                ElseIf (angle > 180) Then
-                    angle = angle - 180.0#
-                End If
-
-                'For drawing text, get text(distance), angle, and point
-                Dim deltaX As Double = pPoint.X - _theStartPoint.X
-                Dim deltaY As Double = pPoint.Y - _theStartPoint.Y
-                _theTextPoint.X = _theStartPoint.X + deltaX / 2.0#
-                _theTextPoint.Y = _theStartPoint.Y + deltaY / 2.0#
-                _theTextSymbol.Angle = angle
-                _theTextSymbol.Text = ""
-
-                'Draw text
-                pActiveView.ScreenDisplay.SetSymbol(DirectCast(_theTextSymbol, ISymbol))
-                pActiveView.ScreenDisplay.DrawText(_theTextPoint, _theTextSymbol.Text)
-
-                'Get polyline with blank space for text
-                Dim pPolyline As IPolyline = New ESRI.ArcGIS.Geometry.Polyline
-                Dim pSegColl As ISegmentCollection = DirectCast(pPolyline, ISegmentCollection)
-                pSegColl.AddSegment(DirectCast(pLine, ISegment))
-                _theLinePolyline = GetSmashedLine(pActiveView.ScreenDisplay, DirectCast(_theTextSymbol, ISymbol), _theTextPoint, pPolyline)
-
-                'Draw polyline
-                pActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
-                If (_theLinePolyline.Length > 0) Then _
-                  pActiveView.ScreenDisplay.DrawPolyline(_theLinePolyline)
-                pActiveView.ScreenDisplay.FinishDrawing()
-            End If
-
-            '++ START Added by Laura Gordon, 02/20/2007
-            If arrowType.Equals("Dimension", _ignoreCase) Then
-
-                m_pEditor = EditorExtension.Editor
-                m_pEditorEvents = DirectCast(m_pEditor, Editor)
-
-                If _theToolJustCompletedTask Then 'gets rid of a stray editor agent
-                    _theActiveView.Refresh()
-                    _theToolJustCompletedTask = False
-                    Exit Sub
-                End If
-
-                If _theMouseHasMoved Then
-                    'Check to be sure m_pPt has a value, prevents an error if called after other tools
-                    If _thePt Is Nothing Then
-                        _theMouseHasMoved = False
-                        Exit Sub
-                    End If
-                    'erase the old agent
-                    m_pEditor.InvertAgent(_thePt, 0)
-                    'get the new point
-                    GetMousePoint(X, Y)
-                Else
-                    _thePt = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
-                End If
-                _theMouseHasMoved = True
-
-                If Not _theSnapAgent Is Nothing Then
-                    Dim pSnapenv As ISnapEnvironment
-                    pSnapenv = DirectCast(m_pEditor, ISnapEnvironment)
-                    Dim pTmpPt As IPoint = New ESRI.ArcGIS.Geometry.Point
-                    pTmpPt.PutCoords(_thePt.X, _thePt.Y)
-                    Dim dTol As Double
-                    dTol = pSnapenv.SnapTolerance
-                    _theInTol = pSnapenv.SnapPoint(_thePt)
-                    If Not _theInTol Then
-                        _thePt = New ESRI.ArcGIS.Geometry.Point
-                        _thePt.PutCoords(pTmpPt.X, pTmpPt.Y)  '+++ set the point back b/c it was not in the snap tol
-                    End If
-                Else
-                    _theInTol = False
-                End If
-
-                m_pEditor.InvertAgent(_thePt, 0) 'draw the agent
-
-            End If
-
-
-        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
 
         End Try
 
 
-    End Sub
-
-    Public Overrides Sub OnMouseUp(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
-        MyBase.OnMouseUp(Button, Shift, X, Y)
-
-        If arrowType.Equals("Hook", _ignoreCase) Then
-            If (Not _theInUse) Then Exit Sub 'SC ??
-
-            If (_theLineSymbol Is Nothing) Then Exit Sub 'SC ??
-
-            Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
-            Dim pActiveView As IActiveView = theArcMapDoc.ActiveView
-
-            ' Draws a temporary line on the screen
-            pActiveView.ScreenDisplay.StartDrawing(pActiveView.ScreenDisplay.hDC, -1)
-            pActiveView.ScreenDisplay.SetSymbol(DirectCast(_theTextSymbol, ISymbol))
-            pActiveView.ScreenDisplay.DrawText(_theTextPoint, _theTextSymbol.Text)
-            pActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
-            If (_theLinePolyline.Length > 0) Then pActiveView.ScreenDisplay.DrawPolyline(_theLinePolyline)
-            pActiveView.ScreenDisplay.FinishDrawing()
-
-            ' Generate hooks based on the graphic polyline
-            GenerateHooks(DirectCast(_theLinePolyline, IPolyline))
-
-
-            ' Records that the tool is no longer in use
-            _theInUse = False
-
-            ' Clean up
-            _theTextSymbol = Nothing
-            _theTextPoint = Nothing
-            _theLinePolyline = Nothing
-            _theLineSymbol = Nothing
-
-        End If
 
     End Sub
+
+
+    '-- HOOKS NOT IMPLEMENTED --
+    'Public Overrides Sub onmousemove(ByVal button As Integer, ByVal shift As Integer, ByVal x As Integer, ByVal y As Integer)
+    '    MyBase.onmousemove(button, shift, x, y)
+
+    '    Try
+
+    '         draw the temporary line the user sees while moving the mouse
+    '        If arrowType.Equals("hook", _ignoreCase) Then
+
+    '            Dim firsttime As Boolean
+    '            Dim linelength As Long = 0 'todo - sc this does not get set... what's the deal... maybe this is why its not drawing on screen??
+    '            If (Not _inUse) Then Exit Try
+
+    '            ' checks to see if the line symbol is defined
+    '            If (_theLineSymbol Is Nothing) Then firsttime = True
+
+    '            ' get current point
+    '            Dim thepoint As IPoint = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, y)
+    '            _theToBreakPoint = thepoint 'the unextended to point used to break the hooks
+
+    '            ' check to be sure there is a start point for the hook to prevent an error
+    '            If _theStartPoint Is Nothing Then Exit Try
+
+    '            ' draw a virtual line that represents the extended line
+    '            Dim thepolyline As IPolyline = New Polyline
+    '            thepolyline.FromPoint = _theStartPoint
+    '            thepolyline.ToPoint = thepoint
+    '            Dim thecurve As ICurve = thepolyline
+
+    '            Dim theconstructpoint1 As IConstructPoint = New ESRI.ArcGIS.Geometry.Point
+    '            theconstructpoint1.ConstructAlong(thecurve, esriSegmentExtension.esriExtendAtTo, thecurve.Length + CDbl(linelength), False)
+    '            thepoint = DirectCast(theconstructpoint1, IPoint)
+
+    '            If Not _doOnce Then
+    '                Dim theconstructpoint2 As IConstructPoint = New ESRI.ArcGIS.Geometry.Point
+    '                theconstructpoint2.ConstructAlong(thecurve, esriSegmentExtension.esriExtendAtFrom, -(CDbl(linelength)), False)
+    '                _theStartPoint = DirectCast(theconstructpoint2, IPoint)
+    '                _doOnce = True
+    '            End If
+
+    '            ' draw the line
+    '            _theActiveView.ScreenDisplay.StartDrawing(_theActiveView.ScreenDisplay.hDC, -1)
+
+    '            ' initialize or draw the temporary line
+    '            If firsttime Then
+    '                ' line symbol
+    '                _theLineSymbol = New SimpleLineSymbol
+    '                _theLineSymbol.Width = 2
+    '                Dim thergbcolor As IRgbColor = New RgbColor
+    '                With thergbcolor
+    '                    .Red = 223
+    '                    .Green = 223
+    '                    .Blue = 223
+    '                End With
+    '                _theLineSymbol.Color = thergbcolor
+    '                Dim thesymbol As ISymbol = DirectCast(_theLineSymbol, ISymbol)
+    '                thesymbol.ROP2 = esriRasterOpCode.esriROPXOrPen
+
+    '                ' text symbol
+    '                _theTextSymbol = New ESRI.ArcGIS.Display.TextSymbol
+    '                _theTextSymbol.HorizontalAlignment = esriTextHorizontalAlignment.esriTHACenter
+    '                _theTextSymbol.VerticalAlignment = esriTextVerticalAlignment.esriTVACenter
+    '                _theTextSymbol.Size = 16
+    '                _theTextSymbol.Font.Name = "arial"
+
+    '                thesymbol = DirectCast(_theTextSymbol, ISymbol)
+    '                Dim thefont As Font = DirectCast(_theTextSymbol.Font, Font)
+    '                thesymbol.ROP2 = esriRasterOpCode.esriROPXOrPen
+
+    '                ' create point to draw text in
+    '                _theTextPoint = New ESRI.ArcGIS.Geometry.Point
+    '            Else
+    '                ' use existing symbols and draw existing text and polyline
+    '                _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theTextSymbol, ISymbol))
+    '                _theActiveView.ScreenDisplay.DrawText(_theTextPoint, _theTextSymbol.Text)
+    '                _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
+    '                If (_theLinePolyline.Length > 0) Then _
+    '                  _theActiveView.ScreenDisplay.DrawPolyline(_theLinePolyline)
+    '            End If
+
+    '            ' get line between from and to points, and angle for text
+    '            Dim theline As ILine = New ESRI.ArcGIS.Geometry.Line
+    '            theline.PutCoords(_theStartPoint, thepoint)
+    '            Dim lineangle As Double = theline.Angle
+    '            lineangle = lineangle * (180.0# / 3.14159)
+    '            If ((lineangle > 90.0#) And (lineangle < 180.0#)) Then
+    '                lineangle = lineangle + 180.0#
+    '            ElseIf ((lineangle < 0.0#) And (lineangle < -90.0#)) Then
+    '                lineangle = lineangle - 180.0#
+    '            ElseIf ((lineangle < -90.0#) And (lineangle > -180)) Then
+    '                lineangle = lineangle - 180.0#
+    '            ElseIf (lineangle > 180) Then
+    '                lineangle = lineangle - 180.0#
+    '            End If
+
+    '            ' for drawing text, get text(distance), angle, and point
+    '            Dim deltax As Double = thepoint.X - _theStartPoint.X
+    '            Dim deltay As Double = thepoint.Y - _theStartPoint.Y
+    '            _theTextPoint.X = _theStartPoint.X + deltax / 2.0#
+    '            _theTextPoint.Y = _theStartPoint.Y + deltay / 2.0#
+    '            _theTextSymbol.Angle = lineangle
+    '            _theTextSymbol.Text = ""
+
+    '            ' draw text
+    '            _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theTextSymbol, ISymbol))
+    '            _theActiveView.ScreenDisplay.DrawText(_theTextPoint, _theTextSymbol.Text)
+
+    '            ' get polyline with blank space for text
+    '            thepolyline = New Polyline
+    '            Dim psegcoll As ISegmentCollection = DirectCast(thepolyline, ISegmentCollection)
+    '            psegcoll.AddSegment(DirectCast(theline, ISegment))
+    '            _theLinePolyline = getsmashedline(DirectCast(_theTextSymbol, ISymbol), _theTextPoint, thepolyline)
+
+    '            ' draw polyline
+    '            _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
+    '            If (_theLinePolyline.Length > 0) Then _
+    '              _theActiveView.ScreenDisplay.DrawPolyline(_theLinePolyline)
+    '            _theActiveView.ScreenDisplay.FinishDrawing()
+    '        End If
+
+    '        If arrowType.Equals("dimension", _ignoreCase) Then
+    '            _theEditorEvents = DirectCast(EditorExtension.Editor, Editor)
+
+    '            If _toolJustCompletedTask Then 'gets rid of a stray editor agent
+    '                _theActiveView.Refresh()
+    '                _toolJustCompletedTask = False
+    '                Exit Try
+    '            End If
+
+    '            If _mouseHasMoved Then
+    '                ' check to be sure m_ppt has a value, prevents an error if called after other tools
+    '                If _thePt Is Nothing Then
+    '                    _mouseHasMoved = False
+    '                    Exit Try
+    '                End If
+    '                ' erase the old agent
+    '                EditorExtension.Editor.InvertAgent(_thePt, 0)
+    '                ' get the new point
+    '                getmousepoint(x, y)
+    '            Else
+    '                _thePt = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, y)
+    '            End If
+    '            _mouseHasMoved = True
+
+    '            If Not _theSnapAgent Is Nothing Then
+    '                Dim thesnapenv As ISnapEnvironment
+    '                thesnapenv = DirectCast(EditorExtension.Editor, ISnapEnvironment)
+    '                Dim thetemppt As IPoint = New ESRI.ArcGIS.Geometry.Point
+    '                thetemppt.PutCoords(_thePt.X, _thePt.Y)
+    '                Dim thesnaptolerance As Double
+    '                thesnaptolerance = thesnapenv.SnapTolerance
+    '                _inTol = thesnapenv.SnapPoint(_thePt)
+    '                If Not _inTol Then
+    '                    _thePt = New ESRI.ArcGIS.Geometry.Point
+    '                    _thePt.PutCoords(thetemppt.X, thetemppt.Y)  'set the point back b/c it was not in the snap tol
+    '                End If
+    '            Else
+    '                _inTol = False
+    '            End If
+
+    '            EditorExtension.Editor.InvertAgent(_thePt, 0) 'draw the agent
+
+    '        End If
+
+
+    '    Catch ex As exception
+    '        editorextension.processunhandledexception(ex)
+
+    '    End Try
+    'End Sub
+    '
+    'Public Overrides Sub OnMouseUp(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
+    '    MyBase.OnMouseUp(Button, Shift, X, Y)
+
+    '    If arrowType.Equals("Hook", _ignoreCase) Then
+    '        If (Not _inUse) OrElse (_theLineSymbol Is Nothing) Then Exit Sub
+
+    '        ' Draws a temporary line on the screen
+    '        _theActiveView.ScreenDisplay.StartDrawing(_theActiveView.ScreenDisplay.hDC, -1)
+    '        _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theTextSymbol, ISymbol))
+    '        _theActiveView.ScreenDisplay.DrawText(_theTextPoint, _theTextSymbol.Text)
+    '        _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
+    '        If (_theLinePolyline.Length > 0) Then _theActiveView.ScreenDisplay.DrawPolyline(_theLinePolyline)
+    '        _theActiveView.ScreenDisplay.FinishDrawing()
+
+    '        ' Generate hooks based on the graphic polyline
+    '        GenerateHooks(DirectCast(_theLinePolyline, IPolyline))
+
+    '        ' Records that the tool is no longer in use
+    '        _inUse = False
+
+    '        ' Clean up
+    '        _theTextSymbol = Nothing
+    '        _theTextPoint = Nothing
+    '        _theLinePolyline = Nothing
+    '        _theLineSymbol = Nothing
+    '    End If
+
+    'End Sub
+    '-- END HOOKS
 
     Public Overrides Sub OnKeyDown(ByVal keyCode As Integer, ByVal Shift As Integer)
         MyBase.OnKeyDown(keyCode, Shift)
 
-        '++ START Added by Laura Gordon 02/20/2007
-        'End the dimension arrow tool if the "q" key is pressed
+        ' End the dimension arrow tool if the "q" key is pressed
         If keyCode = System.Windows.Forms.Keys.Q Then
             If arrowType.Equals("Dimension", _ignoreCase) Then
-                'Deactivate the tool
+                ' Deactivate the tool and reset
                 _theArrowPt1 = Nothing
                 _theArrowPt2 = Nothing
                 _theArrowPt3 = Nothing
@@ -1597,31 +1630,26 @@ Public NotInheritable Class AddArrows
                 _theArrowPtTemp2 = Nothing
                 _application.CurrentTool = Nothing
                 _application.RefreshWindow()
-                _theToolJustCompletedTask = True
-                If arrowType.Equals("Dimension", _ignoreCase) Then
-
-                End If
+                _toolJustCompletedTask = True
             ElseIf arrowType.Equals("Arrow", _ignoreCase) Then
-                'Deactivate the tool
+                ' Deactivate the tool and reset
                 _theArrowPt1 = Nothing
                 _theArrowPt2 = Nothing
                 _theArrowPt3 = Nothing
                 _theArrowPt4 = Nothing
-                _thelArrowPointsCollection = Nothing
+                _arrowPointsCollection = Nothing
                 _application.CurrentTool = Nothing
                 _application.RefreshWindow()
-                _theToolJustCompletedTask = True
-            Else 'Hooks
-                'Deactivate the tool
+                _toolJustCompletedTask = True
+            Else ' Hooks or ""
+                ' Deactivate the tool and reset
                 _application.CurrentTool = Nothing
                 _application.RefreshWindow()
-                _theToolJustCompletedTask = True
+                _toolJustCompletedTask = True
             End If
         End If
         If keyCode = System.Windows.Forms.Keys.D Then
             If arrowType.Equals("Dimension", _ignoreCase) Then
-                _theolDimensionChanged = True
-                MsgBox("show dialog of another form - sc fix")
                 PartnerDimensionArrowsForm.ShowDialog()
             End If
         End If
