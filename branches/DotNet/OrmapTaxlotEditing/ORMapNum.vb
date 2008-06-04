@@ -403,7 +403,7 @@ Public NotInheritable Class ORMapNum
     End Function
 
     ''' <summary>
-    ''' Returns a properly formatted ORMAP Number minus the County.
+    ''' Returns a properly formatted ORMAP Number minus the County code.
     ''' </summary>
     Public Function GetOrmapMapNumber() As String
         If IsValidNumber() Then

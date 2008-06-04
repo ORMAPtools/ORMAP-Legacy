@@ -310,23 +310,6 @@ Public NotInheritable Class StringUtilities
         End Try
     End Function
 
-    ''' <summary>
-    ''' Remove two characters (the county code) from the right end of the OrmapMapNumber.
-    ''' </summary>
-    ''' <param name="theOrmapMapNumber">The Ormap Map Number string.</param>
-    ''' <returns>A string that is a substring of the input.</returns>
-    ''' <remarks>For the purpose of populating OrmapTaxlot.</remarks>
-    Public Shared Function OrmapMapNumberNoCountyCodeSuffix(ByVal theOrmapMapNumber As String) As String
-        Try
-            ' Remove two characters (the county code) from the right end of 
-            ' the OrmapMapNumber.
-            Return Left(theOrmapMapNumber, 20)
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-            Return String.Empty
-        End Try
-    End Function
-
 #End Region
 
 #Region "Private Members"
