@@ -18,7 +18,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTrademark("")> 
 
 ' Note: Individual types can be set as ComVisible(True)
-<Assembly: ComVisible(True)> 
+<Assembly: ComVisible(False)> 
 ' Note: If this is set to true then all types and their members must also comply 
 ' or provide compliant alternate members
 <Assembly: CLSCompliant(False)> 
@@ -37,7 +37,7 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("2.0.0.0")> 
-<Assembly: AssemblyFileVersion("2.0.0.0")> 
+<Assembly: AssemblyVersion("2.0.2.0")> 
+<Assembly: AssemblyFileVersion("2.0.2.0")> 
 
 <Assembly: NeutralResourcesLanguageAttribute("en-US")> 
