@@ -456,6 +456,7 @@ Partial Class EditMapIndexForm
         '
         'uxEdit
         '
+        Me.uxEdit.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.uxEdit.Location = New System.Drawing.Point(221, 301)
         Me.uxEdit.Name = "uxEdit"
         Me.uxEdit.Size = New System.Drawing.Size(75, 23)

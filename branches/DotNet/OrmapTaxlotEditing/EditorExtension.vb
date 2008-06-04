@@ -309,10 +309,10 @@ Public NotInheritable Class EditorExtension
         Get
             Dim canEnable As Boolean = True
             canEnable = canEnable AndAlso EditorExtension.Editor IsNot Nothing
-            canEnable = canEnable AndAlso EditorExtension.Editor.EditState = esriEditState.esriStateEditing
-            canEnable = canEnable AndAlso EditorExtension.AllowedToEditTaxlots
+            'canEnable = canEnable AndAlso EditorExtension.Editor.EditState = esriEditState.esriStateEditing
+            'canEnable = canEnable AndAlso EditorExtension.IsValidWorkspace
             canEnable = canEnable AndAlso EditorExtension.HasValidLicense
-            canEnable = canEnable AndAlso EditorExtension.IsValidWorkspace
+            canEnable = canEnable AndAlso EditorExtension.AllowedToEditTaxlots
             Return canEnable
         End Get
     End Property
@@ -395,7 +395,7 @@ Public NotInheritable Class EditorExtension
         End Set
     End Property
 
-    Private Shared _allowedToAutoUpdateAllFields As Boolean = True
+    Private Shared _allowedToAutoUpdateAllFields As Boolean
 
     ''' <summary>
     ''' Allowed to auto-update all fields on edit events 
@@ -678,9 +678,9 @@ Public NotInheritable Class EditorExtension
     Private Sub EditEvents_OnStartEditing()
 
         Try
-            ' Check for a valid ArcGIS license.
-            setHasValidLicense((validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
-                            validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcInfo)))
+            '' Check for a valid ArcGIS license.
+            'setHasValidLicense((validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
+            '                validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcInfo)))
 
             ' Check for a valid workspace.
             If EditorExtension.Editor.EditWorkspace.Type = esriWorkspaceType.esriFileSystemWorkspace Then
@@ -694,8 +694,8 @@ Public NotInheritable Class EditorExtension
 
             If HasValidLicense AndAlso IsValidWorkspace Then
 
-                ' Set the Application property
-                setApplication(DirectCast(Editor.Parent, IApplication))
+                '' Set the Application property
+                'setApplication(DirectCast(Editor.Parent, IApplication))
 
                 ' Set active view events object
                 Dim theMxDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
@@ -752,7 +752,7 @@ Public NotInheritable Class EditorExtension
             ProcessUnhandledException(ex)
 
         Finally
-            setApplication(Nothing)
+            'setApplication(Nothing)
             setActiveViewEvents(Nothing)
 
             SetHasValidTaxlotData(False)
@@ -1044,15 +1044,22 @@ Public NotInheritable Class EditorExtension
         End Get
     End Property
 
+    ''' <summary>
+    ''' Shuts down the extension.
+    ''' </summary>
+    ''' <remarks><see cref="Startup" /></remarks>
     Public Sub Shutdown() Implements ESRI.ArcGIS.esriSystem.IExtension.Shutdown
         Try
             ' Unsubscribe to edit events.
             RemoveHandler EditEvents.OnStartEditing, AddressOf EditEvents_OnStartEditing
             RemoveHandler EditEvents.OnStopEditing, AddressOf EditEvents_OnStopEditing
 
+            ' Clear extension properties
             setEditor(Nothing)
             setEditEvents(Nothing)
+            setApplication(Nothing)
 
+            ' Stop exception logging
             Trace.Flush()
             removeTraceListenerForEventLog()
             removeTraceListenerForFileLog()
@@ -1063,15 +1070,43 @@ Public NotInheritable Class EditorExtension
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Starts up the extension with the given initialization data.
+    ''' </summary>
+    ''' <param name="initializationData">A reference to the object with 
+    ''' which this extension is registered (Editor).</param>
+    ''' <remarks>
+    ''' <para>
+    ''' Registered in this case with the <bold>ESRI Editor Extensions</bold> 
+    ''' category.
+    ''' </para>
+    ''' <para>
+    ''' Any extension that is registered with an application is automatically 
+    ''' loaded and unloaded by the application; the end user does nothing to 
+    ''' load or unload. For example, an extension that has been added to the 
+    ''' ESRI Mx Extensions category will be started when ArcMap is started and 
+    ''' will be shutdown when ArcMap is shutdown. In this case, the editor
+    ''' extension is loaded when the ArcMap Editor object is loaded, which 
+    ''' occurs when ArcMap is started. So this startup event occurs when
+    ''' ArcMap is started (rather than when an edit session is started).
+    ''' </para>
+    ''' </remarks>
     Public Sub Startup(ByRef initializationData As Object) Implements ESRI.ArcGIS.esriSystem.IExtension.Startup
         Try
             If Not initializationData Is Nothing AndAlso TypeOf initializationData Is IEditor2 Then
+
+                ' Set up exception logging
+                addTraceListenerForEventLog()
+                addTraceListenerForFileLog(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & "." & Now.Ticks.ToString & ".trace.log")
+
                 ' Set the Editor and EditEvents properties.
                 setEditor(DirectCast(initializationData, IEditor2))
                 setEditEvents(DirectCast(EditorExtension.Editor, IEditEvents_Event))
+                setApplication(DirectCast(Editor.Parent, IApplication))
 
-                addTraceListenerForEventLog()
-                addTraceListenerForFileLog(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & "." & Now.Ticks.ToString & ".trace.log")
+                ' Check for a valid ArcGIS license.
+                setHasValidLicense((validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
+                                validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcInfo)))
 
                 My.User.InitializeWithWindowsUser()
 

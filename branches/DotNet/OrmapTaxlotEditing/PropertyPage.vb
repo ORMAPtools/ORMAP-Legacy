@@ -219,36 +219,72 @@ Public NotInheritable Class PropertyPage
 
 #Region "IComPropertyPage Implementations"
 
+    ''' <summary>
+    ''' Return the height of the page in pixels.
+    ''' </summary>
+    ''' <value>The height of the page in pixels.</value>
+    ''' <returns>The height in pixels.</returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property Height() As Integer Implements IComPropertyPage.Height
         Get
             Return PartnerPropertiesForm.Height
         End Get
     End Property
 
+    ''' <summary>
+    ''' Return the help file name for the page.
+    ''' </summary>
+    ''' <value>The help file name for the page.</value>
+    ''' <returns>The help file name.</returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property HelpFile() As String Implements IComPropertyPage.HelpFile
         Get
             Return Nothing  ' TODO: [NIS] Implement Help File
         End Get
     End Property
 
+    ''' <summary>
+    ''' Return the help context ID for the specified control on the page.
+    ''' </summary>
+    ''' <param name="controlID"></param>
+    ''' <value>The help context ID for the specified control on the page.</value>
+    ''' <returns>The help context ID.</returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property HelpContextID(ByVal controlID As Integer) As Integer Implements IComPropertyPage.HelpContextID
         Get
             Return 0  ' TODO: [NIS] Implement Help File
         End Get
     End Property
 
+    ''' <summary>
+    ''' Indicates if the page made any changes to the object(s).
+    ''' </summary>
+    ''' <value>If the page made any changes to the object(s).</value>
+    ''' <returns><c>True</c> or <c>False</c>, depending on if changes were made.</returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property IsPageDirty() As Boolean Implements IComPropertyPage.IsPageDirty
         Get
             Return PageDirty
         End Get
     End Property
 
+    ''' <summary>
+    ''' Set the COM property page site.
+    ''' </summary>
+    ''' <value>The sheet that contains the page.</value>
+    ''' <remarks></remarks>
     Public WriteOnly Property PageSite() As ESRI.ArcGIS.Framework.IComPropertyPageSite Implements IComPropertyPage.PageSite
         Set(ByVal value As ESRI.ArcGIS.Framework.IComPropertyPageSite)
             setPropertiesPageSite(value)
         End Set
     End Property
 
+    ''' <summary>
+    ''' Returns the page priority.
+    ''' </summary>
+    ''' <value>The page priority.</value>
+    ''' <returns>The priority.</returns>
+    ''' <remarks>The higher the priority, the sooner the page appears in the containing property sheet.</remarks>
     Public Property Priority() As Integer Implements IComPropertyPage.Priority
         Get
             Return 0  'Lowest number = last/rightmost tab position in the Properties window.
@@ -258,6 +294,12 @@ Public NotInheritable Class PropertyPage
         End Set
     End Property
 
+    ''' <summary>
+    ''' Return the title of the property page.
+    ''' </summary>
+    ''' <value>The title of the property page.</value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property Title() As String Implements IComPropertyPage.Title
         Get
             Return "ORMAP Taxlot Editor"
@@ -267,16 +309,33 @@ Public NotInheritable Class PropertyPage
         End Set
     End Property
 
+    ''' <summary>
+    ''' Return the width of the page in pixels.
+    ''' </summary>
+    ''' <value>The width of the page in pixels.</value>
+    ''' <returns>The width in pixels.</returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property Width() As Integer Implements IComPropertyPage.Width
         Get
             Return PartnerPropertiesForm.Width
         End Get
     End Property
 
+    ''' <summary>
+    ''' Activate the page.
+    ''' </summary>
+    ''' <returns>The hWnd of the page.</returns>
+    ''' <remarks>Occurs on page creation. Return the hWnd of the page here.</remarks>
     Public Function Activate() As Integer Implements IComPropertyPage.Activate
         Return PartnerPropertiesForm.Handle.ToInt32()
     End Function
 
+    ''' <summary>
+    ''' Indicates if the page applies to the specified objects.
+    ''' </summary>
+    ''' <param name="objects">The objects for which property pages may be displayed.</param>
+    ''' <returns><c>True</c> or <c>False</c>, depending on if the page applies to the objects.</returns>
+    ''' <remarks>If page applies it will be displayed. Triggered by an external ArcGIS event.</remarks>
     Public Function Applies(ByVal objects As ESRI.ArcGIS.esriSystem.ISet) As Boolean Implements IComPropertyPage.Applies
         Try
             ' Do not affirm if the objects list is empty.
@@ -292,10 +351,10 @@ Public NotInheritable Class PropertyPage
                 Return False
             End If
 
-            ' Do not affirm if the user is not editing.
-            If editor.EditState <> esriEditState.esriStateEditing Then
-                Return False
-            End If
+            '' Do not affirm if the user is not editing.
+            'If editor.EditState <> esriEditState.esriStateEditing Then
+            '    Return False
+            'End If
 
             ' Otherwise, affirm.
             Return True
@@ -305,6 +364,10 @@ Public NotInheritable Class PropertyPage
         End Try
     End Function
 
+    ''' <summary>
+    ''' Apply any changes to the object(s).
+    ''' </summary>
+    ''' <remarks>Triggered by an external ArcGIS event.</remarks>
     Public Sub Apply() Implements IComPropertyPage.Apply
         Try
             ' Write to the EditorExtension shared (i.e. by all class objects) properties
@@ -317,6 +380,10 @@ Public NotInheritable Class PropertyPage
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Cancel the changes to the object(s).
+    ''' </summary>
+    ''' <remarks>Triggered by an external ArcGIS event.</remarks>
     Public Sub Cancel() Implements IComPropertyPage.Cancel
         Try
             ' TODO: [NIS] Implement this?
@@ -325,6 +392,10 @@ Public NotInheritable Class PropertyPage
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Destroy the page.
+    ''' </summary>
+    ''' <remarks>Triggered by an external ArcGIS event.</remarks>
     Public Sub Deactivate() Implements IComPropertyPage.Deactivate
         Try
             If Not _partnerPropertiesForm Is Nothing Then
@@ -337,6 +408,10 @@ Public NotInheritable Class PropertyPage
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Hide the page.
+    ''' </summary>
+    ''' <remarks>Triggered by an external ArcGIS event.</remarks>
     Public Sub Hide() Implements IComPropertyPage.Hide
         Try
             PartnerPropertiesForm.Hide()
@@ -345,6 +420,11 @@ Public NotInheritable Class PropertyPage
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Supply the page with the object(s) to be edited.
+    ''' </summary>
+    ''' <param name="objects">The object(s) to be edited.</param>
+    ''' <remarks>Triggered by an external ArcGIS event.</remarks>
     Public Sub SetObjects(ByVal objects As ESRI.ArcGIS.esriSystem.ISet) Implements IComPropertyPage.SetObjects
         Try
             ' Note: The Applies() method should have done preliminary checking of 
@@ -370,6 +450,10 @@ Public NotInheritable Class PropertyPage
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Show the page.
+    ''' </summary>
+    ''' <remarks>Triggered by an external ArcGIS event.</remarks>
     Public Sub Show() Implements IComPropertyPage.Show
         Try
             PartnerPropertiesForm.Show()

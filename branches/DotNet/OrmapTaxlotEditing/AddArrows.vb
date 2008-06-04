@@ -44,15 +44,12 @@ Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Carto
-
 Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Framework
-
 Imports ESRI.ArcGIS.Display
 Imports ESRI.ArcGIS.Geometry
 Imports ESRI.ArcGIS.Geodatabase
-
 Imports OrmapTaxlotEditing.DataMonitor
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
@@ -61,7 +58,6 @@ Imports OrmapTaxlotEditing.Utilities
 Imports System.Text
 
 #End Region
-
 
 <ComVisible(True)> _
 <ComClass(AddArrows.ClassId, AddArrows.InterfaceId, AddArrows.EventsId), _
@@ -982,6 +978,8 @@ Public NotInheritable Class AddArrows
             Try
                 Dim canEnable As Boolean
                 canEnable = EditorExtension.CanEnableExtendedEditing
+                canEnable = canEnable AndAlso EditorExtension.Editor.EditState = esriEditState.esriStateEditing
+                canEnable = canEnable AndAlso EditorExtension.IsValidWorkspace
                 Return canEnable
             Catch ex As Exception
                 EditorExtension.ProcessUnhandledException(ex)

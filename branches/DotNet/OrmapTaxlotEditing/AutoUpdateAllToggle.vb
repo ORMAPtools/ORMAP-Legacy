@@ -44,6 +44,7 @@ Imports System.Windows.Forms
 Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
+Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.Framework
 #End Region
 
@@ -71,7 +72,7 @@ Public NotInheritable Class AutoUpdateAllToggle
         ' Define protected instance field values for the public properties
         MyBase.m_category = "OrmapToolbar"  'localizable text 
         MyBase.m_caption = "AutoUpdateAllToggle"   'localizable text 
-        MyBase.m_message = "Turn on automatic update of all taxlot fields"   'localizable text 
+        MyBase.m_message = "Toggle automatic update of all taxlot fields"   'localizable text 
         MyBase.m_toolTip = "Automatic Update" 'localizable text 
         MyBase.m_name = MyBase.m_category & "_AutoUpdateAllToggle"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
         MyBase.m_checked = False
@@ -127,6 +128,8 @@ Public NotInheritable Class AutoUpdateAllToggle
             End If
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
+            canEnable = canEnable AndAlso EditorExtension.Editor.EditState = esriEditState.esriStateEditing
+            canEnable = canEnable AndAlso EditorExtension.IsValidWorkspace
             Return canEnable
         End Get
     End Property
@@ -170,15 +173,19 @@ Public NotInheritable Class AutoUpdateAllToggle
             MyBase.m_checked = Not MyBase.m_checked
             ' Synch up the extension-level flag for auto updates.
             EditorExtension.AllowedToAutoUpdateAllFields = MyBase.m_checked
+
             If EditorExtension.AllowedToAutoUpdateAllFields Then
-                MessageBox.Show("Auto update of taxlot fields is ON. The minimum fields" & NewLine & _
-                        " (e.g. autodate, autowho) will be updated, as well as all taxlot fields.", _
-                        "Auto Update All Toggle", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                'MessageBox.Show("Auto update of taxlot fields is ON. The minimum fields" & NewLine & _
+                '        " (e.g. autodate, autowho) will be updated, as well as all taxlot fields.", _
+                '        "Auto Update All Toggle", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Auto update of taxlot fields is ON"
             Else
-                MessageBox.Show("Auto update of taxlot fields is OFF. Only the minimum fields" & NewLine & _
-                        "(e.g. autodate, autowho) will be updated.", _
-                        "Auto Update All Toggle", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                'MessageBox.Show("Auto update of taxlot fields is OFF. Only the minimum fields" & NewLine & _
+                '        "(e.g. autodate, autowho) will be updated.", _
+                '        "Auto Update All Toggle", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Auto update of taxlot fields is OFF"
             End If
+
         Catch ex As Exception
             EditorExtension.ProcessUnhandledException(ex)
         End Try

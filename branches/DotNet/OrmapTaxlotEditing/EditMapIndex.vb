@@ -265,7 +265,7 @@ Public NotInheritable Class EditMapIndex
     Private Sub PartnerMapIndexForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles _partnerEditMapIndexForm.Load
         initializeFieldIndices()
         EditingState = (EditorExtension.Editor.EditState = esriEditState.esriStateEditing)
-        toggleControls(EditingState)
+        toggleComponentControls(EditingState)
         initForm()
         ' State Transistion E2
         TransitionE2()
@@ -572,9 +572,14 @@ Public NotInheritable Class EditMapIndex
                 'If Not HasSelectedFeatureCount(MapIndexFeatureLayer, 1) Then
                 ' HACK: [NIS] This will get past the problem for now...
                 Dim theEnumFeature As IEnumFeature
+                'theEnumFeature = EditorExtension.Editor.EditSelection
+                Dim theMxDoc As IMxDocument
+                Dim theMap As IMap
+                theMxDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
+                theMap = theMxDoc.FocusMap
+                theEnumFeature = DirectCast(theMap.FeatureSelection, IEnumFeature)
                 Dim theFeature As IFeature
                 Dim n As Integer = 0 'The MapIndex feature count
-                theEnumFeature = EditorExtension.Editor.EditSelection
                 theFeature = theEnumFeature.Next
                 Do While (Not theFeature Is Nothing)
                     If theFeature.Class Is DataMonitor.MapIndexFeatureLayer.FeatureClass Then
@@ -652,7 +657,7 @@ Public NotInheritable Class EditMapIndex
 
     End Sub
 
-    Private Sub toggleControls(ByVal enable As Boolean)
+    Private Sub toggleComponentControls(ByVal enable As Boolean)
         Try
             Dim ctl As System.Windows.Forms.Control
             For Each ctl In PartnerEditMapIndexForm.Controls
@@ -687,8 +692,8 @@ Public NotInheritable Class EditMapIndex
             Exit Sub
         End If
 
-            _ormapNumber = New ORMapNum
-            _ormapNumber.ParseNumber(ReadValue(theRow, EditorExtension.MapIndexSettings.OrmapMapNumberField))
+        _ormapNumber = New ORMapNum
+        _ormapNumber.ParseNumber(ReadValue(theRow, EditorExtension.MapIndexSettings.OrmapMapNumberField))
 
         If _ormapNumber.IsValidNumber Then
             initWithFeature(_mapIndexFeature)
@@ -932,7 +937,7 @@ Public NotInheritable Class EditMapIndex
 
     Private Sub CondState1()
         ' Evaluate condition
-        If _ormapNumber.IsValidNumber Then
+        If _ormapNumber.IsValidNumber And EditorExtension.Editor.EditState = esriEditState.esriStateEditing Then
             StateS1_1(StatePassageType.Entering)
         Else
             StateS1_2(StatePassageType.Entering)

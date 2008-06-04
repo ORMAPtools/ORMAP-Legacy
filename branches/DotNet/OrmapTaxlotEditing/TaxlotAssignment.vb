@@ -46,6 +46,7 @@ Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Carto
+Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.Geodatabase
@@ -374,7 +375,7 @@ Public NotInheritable Class TaxlotAssignment
             theSpatialFilter.OutputSpatialReference(theShapeFieldName) = EditorExtension.Editor.Map.SpatialReference
             theSpatialFilter.GeometryField = DataMonitor.TaxlotFeatureLayer.FeatureClass.ShapeFieldName
             theSpatialFilter.SpatialRel = ESRI.ArcGIS.Geodatabase.esriSpatialRelEnum.esriSpatialRelIntersects
-            theTaxlotFCursor = DataMonitor.TaxlotFeatureLayer.FeatureClass.Search(theSpatialFilter, False)
+            theTaxlotFCursor = DataMonitor.TaxlotFeatureLayer.FeatureClass.Update(theSpatialFilter, False)
             If theTaxlotFCursor IsNot Nothing Then
                 theTaxlotFeature = theTaxlotFCursor.NextFeature
                 ' Start the feature update operation
@@ -498,6 +499,8 @@ Public NotInheritable Class TaxlotAssignment
         Get
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
+            canEnable = canEnable AndAlso EditorExtension.Editor.EditState = esriEditState.esriStateEditing
+            canEnable = canEnable AndAlso EditorExtension.IsValidWorkspace
             Return canEnable
         End Get
     End Property

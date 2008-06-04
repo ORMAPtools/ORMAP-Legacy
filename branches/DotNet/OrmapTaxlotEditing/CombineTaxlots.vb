@@ -46,6 +46,7 @@ Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Carto
 Imports ESRI.ArcGIS.Display
+Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.Geodatabase
 Imports ESRI.ArcGIS.Geometry
@@ -186,9 +187,6 @@ Public NotInheritable Class CombineTaxlots
         Dim uxNewTaxlotNumber As ComboBox = PartnerCombineTaxlotsForm.uxNewTaxlotNumber
         theTaxlotNumber = uxNewTaxlotNumber.Text.Trim
 
-        ' Get the selected taxlot from the set of taxlots to be combined.
-        Dim theFeature As IFeature = getSelectedTaxlotFromSet(theTaxlotNumber)
-
         If PartnerCombineTaxlotsForm.Modal Then
             ' Modal form is closed automatically by the 
             ' uxCombine.DialogResult = OK property. 
@@ -198,7 +196,10 @@ Public NotInheritable Class CombineTaxlots
 
         ' Verify that within this map index, this existing taxlot number is unique.
         ' If not unique, give user option to quit.
-
+        '
+        '' Get the selected taxlot from the set of taxlots to be combined.
+        'Dim theFeature As IFeature = getSelectedTaxlotFromSet(theTaxlotNumber)
+        '
         'If Not IsTaxlotNumberLocallyUnique(theTaxlotNumber, theFeature.Shape, True) Then
         '    If MessageBox.Show("The current Taxlot value (" & theTaxlotNumber & ") is not unique within this MapIndex. " & NewLine & _
         '            "Continue the combine process anyway?", _
@@ -324,7 +325,7 @@ Public NotInheritable Class CombineTaxlots
                 Dim theAreaSum As Double = 0
                 Dim theLengthSum As Double = 0
 
-                Dim theKeepFeature As IFeature = getSelectedTaxlotFromSet(theTaxlotNumber)
+                Dim theKeepFeature As IFeature = getSelectedTaxlotFromSet(theTaxlotNumber, True)
 
                 '---------------------------------------
                 ' Start edit operation.
@@ -337,9 +338,9 @@ Public NotInheritable Class CombineTaxlots
                 ' selected features, depending on 
                 ' feature geometry type.
                 '---------------------------------------
-                theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer) 'Make sure more than one selected
+                theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer)
 
-                If Not theSelectedFeaturesCursor Is Nothing Then
+                If Not theSelectedFeaturesCursor Is Nothing Then 'Make sure more than one selected
 
                     ' Get the first feature
                     thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
@@ -386,9 +387,9 @@ Public NotInheritable Class CombineTaxlots
                 '---------------------------------------
                 Dim theOutputGeometry As IGeometry = theKeepFeature.ShapeCopy
 
-                theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer) 'Make sure more than one selected
+                theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer, True)
 
-                If Not theSelectedFeaturesCursor Is Nothing Then
+                If Not theSelectedFeaturesCursor Is Nothing Then 'Make sure more than one selected
 
                     ' Extract the default subtype from the feature's class.
                     ' Initialize the default values for the new feature.
@@ -622,7 +623,7 @@ Public NotInheritable Class CombineTaxlots
         '---------------------------------------
         ' Delete all the other features.
         '---------------------------------------
-        theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer)
+        theSelectedFeaturesCursor = GetSelectedFeatures(TaxlotFeatureLayer, True)
         If Not theSelectedFeaturesCursor Is Nothing Then
             thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
             Do Until thisSelectedFeature Is Nothing
@@ -633,7 +634,7 @@ Public NotInheritable Class CombineTaxlots
 
     End Sub
 
-    Private Shared Function getSelectedTaxlotFromSet(ByVal theTaxlotNumber As String) As IFeature
+    Private Shared Function getSelectedTaxlotFromSet(ByVal theTaxlotNumber As String, Optional ByVal isEditable As Boolean = False) As IFeature
 
         ' Get the selected taxlot from the set of taxlots to be combined.
 
@@ -645,7 +646,11 @@ Public NotInheritable Class CombineTaxlots
         theQueryFilter.WhereClause = formatWhereClause(theSQL, TaxlotFeatureLayer.FeatureClass)
 
         Dim theCursor As ICursor = Nothing
-        theCurrentTaxlotSelection.SelectionSet.Search(theQueryFilter, False, theCursor)
+        If isEditable Then
+            theCurrentTaxlotSelection.SelectionSet.Search(theQueryFilter, False, theCursor) 'non-recycling cursor
+        Else
+            theCurrentTaxlotSelection.SelectionSet.Search(theQueryFilter, True, theCursor) 'recycling cursor
+        End If
         Dim theQueryField As Integer = theCursor.FindField(EditorExtension.TaxLotSettings.TaxlotField)
         Dim theRow As IRow = theCursor.NextRow
         Dim theFeature As IFeature = Nothing
@@ -707,6 +712,8 @@ Public NotInheritable Class CombineTaxlots
         Get
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
+            canEnable = canEnable AndAlso EditorExtension.Editor.EditState = esriEditState.esriStateEditing
+            canEnable = canEnable AndAlso EditorExtension.IsValidWorkspace
             Return canEnable
         End Get
     End Property

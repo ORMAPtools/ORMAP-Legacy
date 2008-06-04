@@ -151,7 +151,7 @@ Public NotInheritable Class SpatialUtilities
 
             returnValue = True
         Else
-            ' ENHANCE: Get unique values from the table for this field and add to combo list (?)
+            ' Get unique values from the table for this field and add to combo list
 
             Dim theQueryFilter As IQueryFilter = New QueryFilter
             theQueryFilter.SubFields = inFieldName
@@ -490,7 +490,8 @@ Public NotInheritable Class SpatialUtilities
     ''' Returns the first feature layer with a matching dataset name.</remarks>
     Public Shared Function FindFeatureLayerByDSName(ByVal datasetName As String) As ESRI.ArcGIS.Carto.IFeatureLayer
 
-        Dim theMap As IMap = EditorExtension.Editor.Map
+        Dim theMXDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        Dim theMap As IMap = theMXDocument.FocusMap
         Dim thisUID As New UID
 
         Try
@@ -537,7 +538,8 @@ Public NotInheritable Class SpatialUtilities
     ''' <remarks>Returns the first table with a matching dataset name.</remarks>
     Public Shared Function FindStandaloneTableByDSName(ByVal datasetName As String) As IStandaloneTable
 
-        Dim theMap As IMap = EditorExtension.Editor.Map
+        Dim theMXDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        Dim theMap As IMap = theMXDocument.FocusMap
 
         Try
             Dim returnValue As IStandaloneTable = Nothing
@@ -698,11 +700,12 @@ Public NotInheritable Class SpatialUtilities
     ''' <summary>
     ''' Return a feature cursor of the selected features of the specified layer.
     ''' </summary>
-    ''' <param name="layer">The feature layer to return the selection from</param>
+    ''' <param name="layer">The feature layer to return the selection from.</param>
+    ''' <param name="isEditable">Whether the returned cursor will be used for editing.</param>
     ''' <returns>An object that supports the <c>IFeatureCursor</c> interface.</returns>
     ''' <remarks>References the currently selected features in layer, and 
     ''' returns a feature cursor with the selected features in it.</remarks>
-    Public Shared Function GetSelectedFeatures(ByRef layer As IFeatureLayer) As IFeatureCursor
+    Public Shared Function GetSelectedFeatures(ByRef layer As IFeatureLayer, Optional ByVal isEditable As Boolean = False) As IFeatureCursor
         Dim returnValue As IFeatureCursor = Nothing
 
         Dim theFeatureSelection As IFeatureSelection = DirectCast(layer, IFeatureSelection)
@@ -711,7 +714,11 @@ Public NotInheritable Class SpatialUtilities
 
         If theSelectionSet.Count > 0 Then
             Dim thisCursor As ICursor = Nothing
-            theSelectionSet.Search(Nothing, False, thisCursor)
+            If isEditable Then
+                theSelectionSet.Search(Nothing, False, thisCursor) 'non-recycling cursor
+            Else
+                theSelectionSet.Search(Nothing, True, thisCursor) 'recycling cursor
+            End If
             If theSelectionSet.Count > 0 Then
                 returnValue = DirectCast(thisCursor, IFeatureCursor)
             Else
@@ -1155,10 +1162,10 @@ Public NotInheritable Class SpatialUtilities
     ''' geodatabase.</remarks>
     Public Overloads Shared Function LoadFCIntoMap(ByVal featureClassName As String, ByVal dialogTitle As String) As Boolean
 
-        Dim thisFileDialog As CatalogFileDialog
-        thisFileDialog = New CatalogFileDialog()
+        Dim theFileDialog As CatalogFileDialog
+        theFileDialog = New CatalogFileDialog()
 
-        With thisFileDialog
+        With theFileDialog
             .SetAllowMultiSelect(True)
             .SetButtonCaption("Select")
             If dialogTitle.Length > 0 Then
@@ -1171,36 +1178,36 @@ Public NotInheritable Class SpatialUtilities
         End With
 
         ' Exit if there is nothing selected
-        If thisFileDialog.SelectedObject(1) Is Nothing Then
+        If theFileDialog.SelectedObject(1) Is Nothing Then
             Return False
         End If
 
-        Dim thisWorkSpace As IWorkspace = getWorkspace(thisFileDialog)
+        Dim theWorkSpace As IWorkspace = getWorkspace(theFileDialog)
         ' Exit if the file selected is not in a valid workspace
-        If thisWorkSpace Is Nothing Then
+        If theWorkSpace Is Nothing Then
             Return False
         End If
 
-        Dim thisFeatureWorkspace As IFeatureWorkspace
-        thisFeatureWorkspace = DirectCast(thisWorkSpace, IFeatureWorkspace)
+        Dim theFeatureWorkspace As IFeatureWorkspace
+        theFeatureWorkspace = DirectCast(theWorkSpace, IFeatureWorkspace)
 
-        Dim thisFeatureClass As IFeatureClass
-        thisFeatureClass = thisFeatureWorkspace.OpenFeatureClass(featureClassName)
+        Dim theFeatureClass As IFeatureClass
+        theFeatureClass = theFeatureWorkspace.OpenFeatureClass(featureClassName)
 
-        Dim thisFeatureLayer As New FeatureLayer
-        thisFeatureLayer.FeatureClass = thisFeatureClass
+        Dim theFeatureLayer As New FeatureLayer
+        theFeatureLayer.FeatureClass = theFeatureClass
 
-        Dim thisDataSet As IDataset
-        thisDataSet = DirectCast(thisFeatureClass, IDataset)
-        thisFeatureLayer.Name = thisDataSet.Name
+        Dim theDataSet As IDataset
+        theDataSet = DirectCast(theFeatureClass, IDataset)
+        theFeatureLayer.Name = theDataSet.Name
 
-        Dim thisMap As IMap
-        thisMap = EditorExtension.Editor.Map
-        thisMap.AddLayer(thisFeatureLayer)
+        Dim theMXDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        Dim theMap As IMap = theMXDocument.FocusMap
+        theMap.AddLayer(theFeatureLayer)
 
-        Dim thisArcMapDoc As IMxDocument
-        thisArcMapDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
-        thisArcMapDoc.CurrentContentsView.Refresh(0)
+        Dim theArcMapDoc As IMxDocument
+        theArcMapDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        theArcMapDoc.CurrentContentsView.Refresh(0)
 
         Return True
 
@@ -1266,10 +1273,9 @@ Public NotInheritable Class SpatialUtilities
         Dim theTable As Geodatabase.ITable
         theTable = theFeatureWorkspace.OpenTable(objectClassName)
 
-        Dim theMap As ESRI.ArcGIS.Carto.IMap
-        Dim theArcMapDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument
-        theMap = EditorExtension.Editor.Map
-        theArcMapDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        ' Get the map
+        Dim theMXDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        Dim theMap As IMap = theMXDocument.FocusMap
 
         ' Create a table collection and assign the new table to it
         Dim theStandaloneTable As IStandaloneTable
@@ -1287,7 +1293,7 @@ Public NotInheritable Class SpatialUtilities
         theTableWindow.Application = EditorExtension.Application
 
         ' Update the document
-        theArcMapDoc.UpdateContents()
+        theMXDocument.UpdateContents()
 
         Return True
 
@@ -1586,8 +1592,8 @@ Public NotInheritable Class SpatialUtilities
     ''' </summary>
     <ObsoleteAttribute("Use the ZoomToEnvelope() function instead.", True)> _
     Public Shared Sub ZoomToExtent(ByVal pEnv As ESRI.ArcGIS.Geometry.IEnvelope, ByVal pMxDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument)
-        Dim pMap As ESRI.ArcGIS.Carto.IMap
-        Dim pActiveView As ESRI.ArcGIS.Carto.IActiveView
+        Dim pMap As IMap
+        Dim pActiveView As IActiveView
 
         ' Gets a reference to the current view window
         pMap = pMxDoc.FocusMap
@@ -1700,13 +1706,17 @@ Public NotInheritable Class SpatialUtilities
     ''' <param name="whereClause">A Sql Where clause without the WHERE.</param>
     ''' <returns>Return a cursor that represents the results of an attribute query.</returns>
     ''' <remarks>Creates a cursor from table that contains all feature records that meet the criteria in <paramref name="whereClause">whereClause</paramref>.</remarks>
-    Private Shared Function attributeQuery(ByVal table As ITable, Optional ByVal whereClause As String = "") As ICursor
+    Private Shared Function attributeQuery(ByVal table As ITable, Optional ByVal whereClause As String = "", Optional ByVal isEditable As Boolean = False) As ICursor
 
         Dim thisQueryFilter As IQueryFilter
         thisQueryFilter = New QueryFilter
         thisQueryFilter.WhereClause = whereClause
         Dim thisCursor As ICursor
-        thisCursor = table.Search(thisQueryFilter, False)
+        If isEditable Then
+            thisCursor = table.Update(thisQueryFilter, False) 'non-recycling update cursor
+        Else
+            thisCursor = table.Search(thisQueryFilter, True) 'recycling search cursor
+        End If
 
         If table.RowCount(thisQueryFilter) = 0 Then
             Return Nothing

@@ -193,26 +193,26 @@ Public NotInheritable Class LocateFeature
 
         Dim theWhereClause As String
 
-        If taxlot Is Nothing Then '-- Must be MapIndex Feature Layer.
+        If taxlot Is Nothing Then
+            '[Looking for just a MapIndex...]
             theXFlayer = MapIndexFeatureLayer
-            theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField
-            theWhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "]='" & mapNumber & "'"
-        Else '-- Taxlot Feature Layer.
+            theQueryFilter.SubFields = "Shape, " & EditorExtension.MapIndexSettings.MapNumberField
+            theWhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] = '" & mapNumber & "'"
+        Else
+            '[Looking for a MapIndex and Taxlot...]
             theXFlayer = MapIndexFeatureLayer
-            theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField & "," & EditorExtension.TaxLotSettings.TaxlotField
-            theWhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "]='" & mapNumber & "' and [" & EditorExtension.TaxLotSettings.TaxlotField & "]='" & taxlot & "'"
+            theQueryFilter.SubFields = "Shape, " & EditorExtension.MapIndexSettings.MapNumberField & ", " & EditorExtension.TaxLotSettings.TaxlotField
+            theWhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] = '" & mapNumber & "' AND [" & EditorExtension.TaxLotSettings.TaxlotField & "] = '" & taxlot & "'"
         End If
 
         theQueryFilter.WhereClause = formatWhereClause(theWhereClause, theXFlayer.FeatureClass)
 
-        theQueryFilter.WhereClause = formatWhereClause(theWhereClause, theXFlayer)
-
         Dim theXFClass As IFeatureClass = theXFlayer.FeatureClass
-        Dim theFeatCursor As IFeatureCursor = theXFClass.Search(theQueryFilter, False)
-        Dim thisFeature As IFeature = theFeatCursor.NextFeature()
+        Dim theFeatCursor As IFeatureCursor = theXFClass.Search(theQueryFilter, True)
+        Dim thisFeature As IFeature = theFeatCursor.NextFeature
 
-        If thisFeature Is Nothing Then '-- Must be due to invalid taxlot entered into text box.
-            MessageBox.Show("Taxlot does not exist.", "Invalid Taxlot", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
+        If thisFeature Is Nothing Then '-- Must be due to invalid mapindex or taxlot entered into the text boxes.
+            MessageBox.Show("Feature does not exist.", "Locate feature", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
         Else
             Dim theEnvelope As IEnvelope = thisFeature.Shape.Envelope
             Do Until thisFeature Is Nothing
@@ -260,7 +260,8 @@ Public NotInheritable Class LocateFeature
                 PartnerLocateFeatureForm.uxTaxlot.Enabled = False
             End If
 
-            PartnerLocateFeatureForm.ShowDialog()
+            'PartnerLocateFeatureForm.ShowDialog() 'MODAL
+            PartnerLocateFeatureForm.Show() 'NON-MODAL
 
         Catch ex As Exception
             EditorExtension.ProcessUnhandledException(ex)
