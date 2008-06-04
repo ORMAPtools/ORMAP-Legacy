@@ -332,7 +332,7 @@ Public NotInheritable Class SpatialUtilities
                 .Value(theMapSufNumFieldIndex) = CLng(theORMapNumClass.SuffixNumber)
                 .Value(theAnomalyFieldIndex) = theORMapNumClass.Anomaly
                 .Value(theMapNumberFieldIndex) = theCurrentMapNumber
-                .Value(theORMapNumFieldIndex) = theORMapNumClass.GetOrmapMapNumber
+                .Value(theORMapNumFieldIndex) = theORMapNumClass.GetORMapNum
                 'Taxlot (not updated here)
                 'SFBUG START JWM 05/02/2008 Sourceforge Tracker 1922332 ++++++++++
                 '.Value(theSpcIntrstFldIdx) = theCurrentSpecialInterest
