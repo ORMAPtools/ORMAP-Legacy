@@ -125,14 +125,14 @@ Public NotInheritable Class AddArrows
     Private WithEvents _theEditorEvents As Editor
     Private _toolJustCompletedTask As Boolean
     Private _arrowPointsCollection As Collection
+    Private _mouseHasMoved As Boolean
+    Private _inTol As Boolean
     '-- HOOKS NOT IMPLEMENTED --
-    'Private _theFromBreakPoint As IPoint ' hooks
-    'Private _theStartPoint As IPoint ' hooks 
-    'Private _theToBreakPoint As IPoint ' hooks  
-    'Private _hookAngle As Double
-    'Private _doOnce As Boolean
-    'Private _mouseHasMoved As Boolean
-    'Private _inTol As Boolean
+    '--HOOKS-     Private _theFromBreakPoint As IPoint ' hooks
+    '--HOOKS-     Private _theStartPoint As IPoint ' hooks 
+    '--HOOKS-     Private _theToBreakPoint As IPoint ' hooks  
+    '--HOOKS-     Private _hookAngle As Double
+    '--HOOKS-     Private _doOnce As Boolean
     '-- END HOOKS
 
 #End Region
@@ -240,7 +240,7 @@ Public NotInheritable Class AddArrows
         End Set
     End Property
 
-    Private _arrowType As String = ""
+    Private _arrowType As String = String.Empty
     Friend Property arrowType() As String
         Get
             Return _arrowType
@@ -415,249 +415,251 @@ Public NotInheritable Class AddArrows
     End Sub
 
     '-- HOOKS NOT IMPLEMENTED --
-    '''' <summary>
-    '''' Find a polyline that intersects a text element but omits the section that intersects the text element
-    '''' </summary>
-    '''' <param name="theTextSymbol">The text to overlay the polyline.</param>
-    '''' <param name="thePoint">A filler symbol for the returned polyline.</param>
-    '''' <param name="thePolyline">The polyline to intersect.</param>
-    '''' <returns> A polyline that represents the difference between the 
-    '''' input polyline and the intersection of the input polyline
-    '''' and the boundary of the input text symbol
-    ''''</returns>
-    '''' <remarks>Give a screen display, pDisplay, a text symbol, pTextSymbol,
-    '''' a point to fill the a polygon with, pPoint, and the polyline to intersect, 
-    '''' pPolyline.  Find the bounding polygon of theTextSymbol and fill it with 
-    '''' thePoint.  Then determine the intersection between pPolyline and theTextSymbol.  
-    '''' Finally, return the difference of the intersection and pPolyline.
-    '''' </remarks>
-    'Friend Function GetSmashedLine(ByVal theTextSymbol As ISymbol, ByVal thePoint As IPoint, ByVal thePolyline As IPolyline) As IPolyline
-
-    '    Try
-
-    '        Dim theBoundary As IPolygon = New Polygon
-    '        theTextSymbol.QueryBoundary(_theActiveView.ScreenDisplay.hDC, _theActiveView.ScreenDisplay.DisplayTransformation, thePoint, theBoundary)
-
-    '        Dim theTopoOperator As ITopologicalOperator = DirectCast(theBoundary, ITopologicalOperator)
-    '        Dim theIntersect As IPolyline = DirectCast(theTopoOperator.Intersect(thePolyline, esriGeometryDimension.esriGeometry1Dimension), IPolyline)
-
-    '        ' Returns the difference between the polyline and the intersection
-    '        theTopoOperator = DirectCast(thePolyline, ITopologicalOperator)
-
-    '        Return DirectCast(theTopoOperator.Difference(theIntersect), IPolyline)
-
-    '    Catch ex As Exception
-    '        EditorExtension.ProcessUnhandledException(ex)
-    '        Return Nothing
-
-    '    End Try
-
-    'End Function
-
-
-    '''' <summary>
-    '''' Given a base line, theSketch. Create a land hook based on the endpoints of theSketch.
-    '''' </summary>
-    '''' <param name="theSketch">An object that supports the IGeometry interface.</param>
-    '''' <remarks>
-    '''' </remarks>
-    'Friend Sub GenerateHooks(ByRef theSketch As IGeometry)
-
-    '    Try
-
-    '        ' Initialize the hook angle
-    '        _hookAngle = 20
-
-    '        ' Make sure the edit sketch is a polyline and insure that the polyline only has two vertices (Starting & Ending points only)
-    '        If Not TypeOf theSketch Is IPolyline OrElse Not IsSketcha2PointLine(theSketch) Then Exit Try
-
-    '        ' Retrieve the map scale from the overlaying Map Index layer
-    '        Dim theCurve As ICurve = DirectCast(theSketch, ICurve)
-    '        Dim theMIFclass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
-    '        Dim theMapScale1 As Object = GetValueViaOverlay(theCurve.FromPoint, theMIFclass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
-    '        Dim theMapScale2 As Object = GetValueViaOverlay(theCurve.ToPoint, theMIFclass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
-
-    '        ' Insure that the map scales exist and that they are equal
-    '        If IsDBNull(theMapScale1) Or IsDBNull(theMapScale2) Then
-    '            MessageBox.Show("No mapscale for current MapIndex.  Unable to create hooks", "Hook Error", MessageBoxButtons.OK)
-    '            Exit Try
-    '        End If
-    '        If Not theMapScale1 Is theMapScale2 Then
-    '            MessageBox.Show("Hook can not span Mapindex polygons with different scale", "Hook Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-    '            Exit Try
-    '        End If
-
-    '        ' Insures that the map scale is supported -- Not all scales are defined (Issue)
-    '        Dim theLineLength As Integer
-    '        If theMapScale1.Equals(600) Then
-    '            theLineLength = 20
-    '        ElseIf theMapScale1.Equals(1200) Then
-    '            theLineLength = 20
-    '        ElseIf theMapScale1.Equals(2400) Then
-    '            theLineLength = 40
-    '        ElseIf theMapScale1.Equals(4800) Then
-    '            theLineLength = 80
-    '        ElseIf theMapScale1.Equals(24000) Then
-    '            theLineLength = 400
-    '        Else
-    '            MessageBox.Show("Not a valid mapscale.  Unable to create hooks", "Hook Error", MessageBoxButtons.OK)
-    '            Exit Try
-    '        End If
-
-    '        'Get the hook layer
-    '        Dim theHookFLayer As IFeatureLayer = DataMonitor.CartographicLinesFeatureLayer
-    '        Dim theHookFClass As IFeatureClass = theHookFLayer.FeatureClass
-
-    '        Dim theDataSet As IDataset = DirectCast(theHookFClass, IDataset)
-    '        Dim theWorkSpaceEdit As IWorkspaceEdit = DirectCast(theDataSet.Workspace, IWorkspaceEdit)
-
-    '        ' Locate the line type field
-    '        Dim lineTypeField As Integer = LocateFields(theHookFClass, (EditorExtension.CartographicLinesSettings.LineTypeField))
-    '        If lineTypeField = NotFoundIndex Then Exit Sub
-
-    '        ' Initialize line objects and collections to create a new line
-    '        Dim theNewPointColl As IPointCollection = New Polyline
-    '        Dim theNormalLine As ILine = New Line
-    '        Dim thePointColl As IPointCollection = DirectCast(theSketch, IPointCollection)
-
-    '        ' Adds the head of the hook based on the specified angle and hook length
-    '        Dim hookLength As Double = theLineLength * 0.1
-    '        Dim sideA As Double = (hookLength * System.Math.Sin((360 - _hookAngle) * (3.14 / 180)))
-    '        Dim sideC As Double = hookLength
-    '        Dim sideB As Double = System.Math.Sqrt((sideC * sideC) - (sideA * sideA))
-    '        theCurve.QueryNormal(ESRI.ArcGIS.Geometry.esriSegmentExtension.esriNoExtension, sideB, False, sideA, theNormalLine)
-    '        theNewPointColl.AddPoint(theNormalLine.ToPoint)
-
-    '        ' Adds the line points
-    '        theNewPointColl.AddPoint(thePointColl.Point(0))
-    '        theNewPointColl.AddPoint(thePointColl.Point(1))
-
-    '        ' Adds the tail of the hook based on the specified angle and hook length
-    '        sideA = (hookLength * System.Math.Sin(_hookAngle * (3.14 / 180)))
-    '        sideC = hookLength
-    '        sideB = System.Math.Sqrt((sideC * sideC) - (sideA * sideA))
-    '        theCurve.QueryNormal(ESRI.ArcGIS.Geometry.esriSegmentExtension.esriNoExtension, (theCurve.Length - sideB), False, sideA, theNormalLine)
-    '        theNewPointColl.AddPoint(theNormalLine.ToPoint)
-
-    '        'Now get rid of the line between the start and end points (where user clicked)
-    '        Dim theWholeLine As IPolyline4 = DirectCast(theNewPointColl, IPolyline4)
-    '        Dim createPart As Boolean
-    '        Dim splitHappened As Boolean
-    '        Dim newPartIndex As Integer
-    '        Dim newSegIndex As Integer
-    '        theWholeLine.SplitAtPoint(_theFromBreakPoint, True, createPart, splitHappened, newPartIndex, newSegIndex)
-    '        theWholeLine.SplitAtPoint(_theToBreakPoint, True, createPart, splitHappened, newPartIndex, newSegIndex)
-
-    '        ' Initialize new path objects and collections to create a new polyline
-    '        Dim path1 As ISegmentCollection = New Path
-    '        Dim path2 As ISegmentCollection = New Path
-    '        Dim path3 As ISegmentCollection = New Path
-
-    '        ' QI to get the segment collection of the landhook
-    '        Dim theSegCollection As ISegmentCollection = DirectCast(theWholeLine, ISegmentCollection)
-
-    '        ' Retreive an enumeration of the segments
-    '        Dim theEnumSeg As IEnumSegment = theSegCollection.EnumSegments
-
-    '        ' Add segments to the paths that will make the final land hook
-    '        Dim theSegment As ISegment = Nothing
-    '        Dim partIndex As Integer
-    '        Dim segmentIndex As Integer
-    '        theEnumSeg.Next(theSegment, partIndex, segmentIndex)
-    '        Do While Not theSegment Is Nothing
-    '            If segmentIndex < 1 Then
-    '                path1.AddSegment(theSegment)
-    '            ElseIf segmentIndex = 1 Then
-    '                path2.AddSegment(theSegment)
-    '            ElseIf segmentIndex = 2 Then
-    '                path3.AddSegment(theSegment)
-    '            End If
-    '            theEnumSeg.Next(theSegment, partIndex, segmentIndex)
-    '        Loop
-
-    '        ' Add the component paths to the final land hook
-    '        Dim theGeomColl As IGeometryCollection = New Polyline
-    '        theGeomColl.AddGeometry(DirectCast(path1, IGeometry))
-    '        theGeomColl.AddGeometry(DirectCast(path2, IGeometry))
-    '        theGeomColl.AddGeometry(DirectCast(path3, IGeometry))
-    '        theGeomColl.GeometriesChanged()
-
-    '        ' Store the new land hook feature
-    '        theWorkSpaceEdit.StartEditOperation()
-    '        Dim theFeature As IFeature = theHookFClass.CreateFeature
-    '        theFeature.Shape = DirectCast(theGeomColl, IGeometry)
-    '        theFeature.Value(lineTypeField) = 101
-
-    '        ' Set the AutoMethod Field
-    '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.AllTablesSettings.AutoMethodField))
-    '        If lineTypeField = NotFoundIndex Then Exit Sub
-    '        theFeature.Value(lineTypeField) = "UNK"
-
-    '        ' Set the AutoWho Field
-    '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.AllTablesSettings.AutoWhoField))
-    '        If lineTypeField = NotFoundIndex Then Exit Sub
-    '        theFeature.Value(lineTypeField) = UserName
-
-    '        ' Set the AutoDate Field
-    '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.AllTablesSettings.AutoDateField))
-    '        If lineTypeField = NotFoundIndex Then Exit Sub
-    '        theFeature.Value(lineTypeField) = Format(Today, "MM/dd/yyyy")
-
-    '        ' Set the MapScale Field
-    '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.MapIndexSettings.MapScaleField))
-    '        If lineTypeField = NotFoundIndex Then Exit Sub
-    '        theFeature.Value(lineTypeField) = theMapScale1
-
-    '        ' Set the MapNumber Field
-    '        Dim curMapNum As String = GetValueViaOverlay(theFeature.Shape, theMIFclass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
-    '        lineTypeField = LocateFields(theHookFClass, (EditorExtension.MapIndexSettings.MapNumberField))
-    '        If lineTypeField = NotFoundIndex Then Exit Sub
-    '        theFeature.Value(lineTypeField) = curMapNum
-
-    '        theFeature.Store()
-    '        theWorkSpaceEdit.StopEditOperation()
-
-    '        _theActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground, Nothing, theFeature.Extent.Envelope)
-
-    '    Catch ex As Exception
-    '        EditorExtension.ProcessUnhandledException(ex)
-
-    '    End Try
-
-    'End Sub
-
-    '''' <summary>
-    '''' Determine if a geometry is a two-point line
-    '''' </summary>
-    '''' <param name="theGeometry">The geometry to evaluate.</param>
-    '''' <returns> A boolean value that indicates if the geometry is a either a 
-    '''' two-point line or not
-    ''''</returns>
-    '''' <remarks>
-    '''' </remarks>
-    'Public Function IsSketcha2PointLine(ByRef theGeometry As IGeometry) As Boolean
-
-    '    Try
-    '        ' Validate the passed geometry
-    '        If Not TypeOf theGeometry Is IPointCollection Then Exit Function
-
-    '        ' Validate the number of points in the collection
-    '        Dim thePointColl As IPointCollection = DirectCast(theGeometry, IPointCollection)
-    '        If thePointColl.PointCount <> 2 Then
-    '            MessageBox.Show("When creating the parcel hook only digitize two points", "Hook Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-    '            Return False
-    '        Else
-    '            Return True
-    '        End If
-
-    '    Catch ex As Exception
-    '        EditorExtension.ProcessUnhandledException(ex)
-    '        Return False
-
-    '    End Try
-
-    'End Function
+    '--HOOKS-     ''' <summary>
+    '--HOOKS-     ''' Find a polyline that intersects a text element but omits the section that intersects the text element
+    '--HOOKS-     ''' </summary>
+    '--HOOKS-     ''' <param name="theTextSymbol">The text to overlay the polyline.</param>
+    '--HOOKS-     ''' <param name="thePoint">A filler symbol for the returned polyline.</param>
+    '--HOOKS-     ''' <param name="thePolyline">The polyline to intersect.</param>
+    '--HOOKS-     ''' <returns> A polyline that represents the difference between the 
+    '--HOOKS-     ''' input polyline and the intersection of the input polyline
+    '--HOOKS-     ''' and the boundary of the input text symbol
+    '--HOOKS-     '''</returns>
+    '--HOOKS-     ''' <remarks>Give a screen display, pDisplay, a text symbol, pTextSymbol,
+    '--HOOKS-     ''' a point to fill the a polygon with, pPoint, and the polyline to intersect, 
+    '--HOOKS-     ''' pPolyline.  Find the bounding polygon of theTextSymbol and fill it with 
+    '--HOOKS-     ''' thePoint.  Then determine the intersection between pPolyline and theTextSymbol.  
+    '--HOOKS-     ''' Finally, return the difference of the intersection and pPolyline.
+    '--HOOKS-     ''' </remarks>
+    '--HOOKS-     Friend Function GetSmashedLine(ByVal theTextSymbol As ISymbol, ByVal thePoint As IPoint, ByVal thePolyline As IPolyline) As IPolyline
+    '--HOOKS- 
+    '--HOOKS-         Try
+    '--HOOKS- 
+    '--HOOKS-             Dim theBoundary As IPolygon = New Polygon
+    '--HOOKS-             theTextSymbol.QueryBoundary(_theActiveView.ScreenDisplay.hDC, _theActiveView.ScreenDisplay.DisplayTransformation, thePoint, theBoundary)
+    '--HOOKS- 
+    '--HOOKS-             Dim theTopoOperator As ITopologicalOperator = DirectCast(theBoundary, ITopologicalOperator)
+    '--HOOKS-             Dim theIntersect As IPolyline = DirectCast(theTopoOperator.Intersect(thePolyline, esriGeometryDimension.esriGeometry1Dimension), IPolyline)
+    '--HOOKS- 
+    '--HOOKS-             ' Returns the difference between the polyline and the intersection
+    '--HOOKS-             theTopoOperator = DirectCast(thePolyline, ITopologicalOperator)
+    '--HOOKS- 
+    '--HOOKS-             Return DirectCast(theTopoOperator.Difference(theIntersect), IPolyline)
+    '--HOOKS- 
+    '--HOOKS-         Catch ex As Exception
+    '--HOOKS-             EditorExtension.ProcessUnhandledException(ex)
+    '--HOOKS-             Return Nothing
+    '--HOOKS- 
+    '--HOOKS-         End Try
+    '--HOOKS- 
+    '--HOOKS-     End Function
+    '--HOOKS- 
+    '--HOOKS- 
+    '--HOOKS-     ''' <summary>
+    '--HOOKS-     ''' Given a base line, theSketch. Create a land hook based on the endpoints of theSketch.
+    '--HOOKS-     ''' </summary>
+    '--HOOKS-     ''' <param name="theSketch">An object that supports the IGeometry interface.</param>
+    '--HOOKS-     ''' <remarks>
+    '--HOOKS-     ''' </remarks>
+    '--HOOKS-     Friend Sub GenerateHooks(ByRef theSketch As IGeometry)
+    '--HOOKS- 
+    '--HOOKS-         Try
+    '--HOOKS- 
+    '--HOOKS-             ' Initialize the hook angle
+    '--HOOKS-             _hookAngle = 20
+    '--HOOKS- 
+    '--HOOKS-             ' Make sure the edit sketch is a polyline and insure that the polyline only has two vertices (Starting & Ending points only)
+    '--HOOKS-             If Not TypeOf theSketch Is IPolyline OrElse Not IsSketcha2PointLine(theSketch) Then Exit Try
+    '--HOOKS- 
+    '--HOOKS-             ' Retrieve the map scale from the overlaying Map Index layer
+    '--HOOKS-             Dim theCurve As ICurve = DirectCast(theSketch, ICurve)
+    '--HOOKS-             Dim theMIFclass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
+    '--HOOKS-             Dim theMapScale1 As Object = GetValueViaOverlay(theCurve.FromPoint, theMIFclass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+    '--HOOKS-             Dim theMapScale2 As Object = GetValueViaOverlay(theCurve.ToPoint, theMIFclass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+    '--HOOKS- 
+    '--HOOKS-             ' Insure that the map scales exist and that they are equal
+    '--HOOKS-             If IsDBNull(theMapScale1) Or IsDBNull(theMapScale2) Then
+    '--HOOKS-                 MessageBox.Show("No mapscale for current MapIndex.  Unable to create hooks", "Hook Error", MessageBoxButtons.OK)
+    '--HOOKS-                 Exit Try
+    '--HOOKS-             End If
+    '--HOOKS-             If Not theMapScale1 Is theMapScale2 Then
+    '--HOOKS-                 MessageBox.Show("Hook can not span Mapindex polygons with different scale", "Hook Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    '--HOOKS-                 Exit Try
+    '--HOOKS-             End If
+    '--HOOKS- 
+    '--HOOKS-             ' Insures that the map scale is supported -- Not all scales are defined (Issue)
+    '--HOOKS-             Dim theLineLength As Integer
+    '--HOOKS-             If theMapScale1.Equals(600) Then
+    '--HOOKS-                 theLineLength = 20
+    '--HOOKS-             ElseIf theMapScale1.Equals(1200) Then
+    '--HOOKS-                 theLineLength = 20
+    '--HOOKS-             ElseIf theMapScale1.Equals(2400) Then
+    '--HOOKS-                 theLineLength = 40
+    '--HOOKS-             ElseIf theMapScale1.Equals(4800) Then
+    '--HOOKS-                 theLineLength = 80
+    '--HOOKS-             ElseIf theMapScale1.Equals(24000) Then
+    '--HOOKS-                 theLineLength = 400
+    '--HOOKS-             Else
+    '--HOOKS-                 MessageBox.Show("Not a valid mapscale.  Unable to create hooks", "Hook Error", MessageBoxButtons.OK)
+    '--HOOKS-                 Exit Try
+    '--HOOKS-             End If
+    '--HOOKS- 
+    '--HOOKS-             'Get the hook layer
+    '--HOOKS-             Dim theHookFLayer As IFeatureLayer = DataMonitor.CartographicLinesFeatureLayer
+    '--HOOKS-             Dim theHookFClass As IFeatureClass = theHookFLayer.FeatureClass
+    '--HOOKS- 
+    '--HOOKS-             Dim theDataSet As IDataset = DirectCast(theHookFClass, IDataset)
+    '--HOOKS-             Dim theWorkSpaceEdit As IWorkspaceEdit = DirectCast(theDataSet.Workspace, IWorkspaceEdit)
+    '--HOOKS- 
+    '--HOOKS-             ' Locate the line type field
+    '--HOOKS-             Dim lineTypeField As Integer = LocateFields(theHookFClass, (EditorExtension.CartographicLinesSettings.LineTypeField))
+    '--HOOKS-             If lineTypeField = NotFoundIndex Then Exit Sub
+    '--HOOKS- 
+    '--HOOKS-             ' Initialize line objects and collections to create a new line
+    '--HOOKS-             Dim theNewPointColl As IPointCollection = New Polyline
+    '--HOOKS-             Dim theNormalLine As ILine = New Line
+    '--HOOKS-             Dim thePointColl As IPointCollection = DirectCast(theSketch, IPointCollection)
+    '--HOOKS- 
+    '--HOOKS-             ' Adds the head of the hook based on the specified angle and hook length
+    '--HOOKS-             Dim hookLength As Double = theLineLength * 0.1
+    '--HOOKS-             Dim sideA As Double = (hookLength * System.Math.Sin((360 - _hookAngle) * (3.14 / 180)))
+    '--HOOKS-             Dim sideC As Double = hookLength
+    '--HOOKS-             Dim sideB As Double = System.Math.Sqrt((sideC * sideC) - (sideA * sideA))
+    '--HOOKS-             theCurve.QueryNormal(ESRI.ArcGIS.Geometry.esriSegmentExtension.esriNoExtension, sideB, False, sideA, theNormalLine)
+    '--HOOKS-             theNewPointColl.AddPoint(theNormalLine.ToPoint)
+    '--HOOKS- 
+    '--HOOKS-             ' Adds the line points
+    '--HOOKS-             theNewPointColl.AddPoint(thePointColl.Point(0))
+    '--HOOKS-             theNewPointColl.AddPoint(thePointColl.Point(1))
+    '--HOOKS- 
+    '--HOOKS-             ' Adds the tail of the hook based on the specified angle and hook length
+    '--HOOKS-             sideA = (hookLength * System.Math.Sin(_hookAngle * (3.14 / 180)))
+    '--HOOKS-             sideC = hookLength
+    '--HOOKS-             sideB = System.Math.Sqrt((sideC * sideC) - (sideA * sideA))
+    '--HOOKS-             theCurve.QueryNormal(ESRI.ArcGIS.Geometry.esriSegmentExtension.esriNoExtension, (theCurve.Length - sideB), False, sideA, theNormalLine)
+    '--HOOKS-             theNewPointColl.AddPoint(theNormalLine.ToPoint)
+    '--HOOKS- 
+    '--HOOKS-             'Now get rid of the line between the start and end points (where user clicked)
+    '--HOOKS-             Dim theWholeLine As IPolyline4 = DirectCast(theNewPointColl, IPolyline4)
+    '--HOOKS-             Dim createPart As Boolean
+    '--HOOKS-             Dim splitHappened As Boolean
+    '--HOOKS-             Dim newPartIndex As Integer
+    '--HOOKS-             Dim newSegIndex As Integer
+    '--HOOKS-             theWholeLine.SplitAtPoint(_theFromBreakPoint, True, createPart, splitHappened, newPartIndex, newSegIndex)
+    '--HOOKS-             theWholeLine.SplitAtPoint(_theToBreakPoint, True, createPart, splitHappened, newPartIndex, newSegIndex)
+    '--HOOKS- 
+    '--HOOKS-             ' Initialize new path objects and collections to create a new polyline
+    '--HOOKS-             Dim path1 As ISegmentCollection = New Path
+    '--HOOKS-             Dim path2 As ISegmentCollection = New Path
+    '--HOOKS-             Dim path3 As ISegmentCollection = New Path
+    '--HOOKS- 
+    '--HOOKS-             ' QI to get the segment collection of the landhook
+    '--HOOKS-             Dim theSegCollection As ISegmentCollection = DirectCast(theWholeLine, ISegmentCollection)
+    '--HOOKS- 
+    '--HOOKS-             ' Retreive an enumeration of the segments
+    '--HOOKS-             Dim theEnumSeg As IEnumSegment = theSegCollection.EnumSegments
+    '--HOOKS- 
+    '--HOOKS-             ' Add segments to the paths that will make the final land hook
+    '--HOOKS-             Dim theSegment As ISegment = Nothing
+    '--HOOKS-             Dim partIndex As Integer
+    '--HOOKS-             Dim segmentIndex As Integer
+    '--HOOKS-             theEnumSeg.Next(theSegment, partIndex, segmentIndex)
+    '--HOOKS-             Do While Not theSegment Is Nothing
+    '--HOOKS-                 If segmentIndex < 1 Then
+    '--HOOKS-                     path1.AddSegment(theSegment)
+    '--HOOKS-                 ElseIf segmentIndex = 1 Then
+    '--HOOKS-                     path2.AddSegment(theSegment)
+    '--HOOKS-                 ElseIf segmentIndex = 2 Then
+    '--HOOKS-                     path3.AddSegment(theSegment)
+    '--HOOKS-                 End If
+    '--HOOKS-                 theEnumSeg.Next(theSegment, partIndex, segmentIndex)
+    '--HOOKS-             Loop
+    '--HOOKS- 
+    '--HOOKS-             ' Add the component paths to the final land hook
+    '--HOOKS-             Dim theGeomColl As IGeometryCollection = New Polyline
+    '--HOOKS-             theGeomColl.AddGeometry(DirectCast(path1, IGeometry))
+    '--HOOKS-             theGeomColl.AddGeometry(DirectCast(path2, IGeometry))
+    '--HOOKS-             theGeomColl.AddGeometry(DirectCast(path3, IGeometry))
+    '--HOOKS-             theGeomColl.GeometriesChanged()
+    '--HOOKS- 
+    '--HOOKS-             ' Store the new land hook feature
+    '--HOOKS-             theWorkSpaceEdit.StartEditOperation()
+    '--HOOKS-             Dim theFeature As IFeature = theHookFClass.CreateFeature
+    '--HOOKS-             theFeature.Shape = DirectCast(theGeomColl, IGeometry)
+    '--HOOKS-             theFeature.Value(lineTypeField) = 101
+    '--HOOKS- 
+    '--HOOKS-             ' Set the AutoMethod Field
+    '--HOOKS-             lineTypeField = LocateFields(theHookFClass, (EditorExtension.AllTablesSettings.AutoMethodField))
+    '--HOOKS-             If lineTypeField = NotFoundIndex Then Exit Sub
+    '--HOOKS-             theFeature.Value(lineTypeField) = "UNK"
+    '--HOOKS- 
+    '--HOOKS-             ' Set the AutoWho Field
+    '--HOOKS-             lineTypeField = LocateFields(theHookFClass, (EditorExtension.AllTablesSettings.AutoWhoField))
+    '--HOOKS-             If lineTypeField = NotFoundIndex Then Exit Sub
+    '--HOOKS-             theFeature.Value(lineTypeField) = UserName
+    '--HOOKS- 
+    '--HOOKS-             ' Set the AutoDate Field
+    '--HOOKS-             lineTypeField = LocateFields(theHookFClass, (EditorExtension.AllTablesSettings.AutoDateField))
+    '--HOOKS-             If lineTypeField = NotFoundIndex Then Exit Sub
+    '--HOOKS-             theFeature.Value(lineTypeField) = Format(Today, "MM/dd/yyyy")
+    '--HOOKS- 
+    '--HOOKS-             ' Set the MapScale Field
+    '--HOOKS-             lineTypeField = LocateFields(theHookFClass, (EditorExtension.MapIndexSettings.MapScaleField))
+    '--HOOKS-             If lineTypeField = NotFoundIndex Then Exit Sub
+    '--HOOKS-             theFeature.Value(lineTypeField) = theMapScale1
+    '--HOOKS- 
+    '--HOOKS-             ' Set the MapNumber Field
+    '--HOOKS-             Dim curMapNum As String = GetValueViaOverlay(theFeature.Shape, theMIFclass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+    '--HOOKS-             lineTypeField = LocateFields(theHookFClass, (EditorExtension.MapIndexSettings.MapNumberField))
+    '--HOOKS-             If lineTypeField = NotFoundIndex Then Exit Sub
+    '--HOOKS-             theFeature.Value(lineTypeField) = curMapNum
+    '--HOOKS- 
+    '--HOOKS-             theFeature.Store()
+    '--HOOKS-             theWorkSpaceEdit.StopEditOperation()
+    '--HOOKS- 
+    '--HOOKS-             _theActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground, Nothing, theFeature.Extent.Envelope)
+    '--HOOKS- 
+    '--HOOKS-         Catch ex As Exception
+    '--HOOKS-             EditorExtension.ProcessUnhandledException(ex)
+    '--HOOKS- 
+    '--HOOKS-         End Try
+    '--HOOKS- 
+    '--HOOKS-     End Sub
+    '--HOOKS- 
+    '--HOOKS-     ''' <summary>
+    '--HOOKS-     ''' Determine if a geometry is a two-point line
+    '--HOOKS-     ''' </summary>
+    '--HOOKS-     ''' <param name="theGeometry">The geometry to evaluate.</param>
+    '--HOOKS-     ''' <returns> A boolean value that indicates if the geometry is a either a 
+    '--HOOKS-     ''' two-point line or not
+    '--HOOKS-     '''</returns>
+    '--HOOKS-     ''' <remarks>
+    '--HOOKS-     ''' </remarks>
+    '--HOOKS-     Public Function IsSketcha2PointLine(ByRef theGeometry As IGeometry) As Boolean
+    '--HOOKS- 
+    '--HOOKS-         Try
+    '--HOOKS-             ' Validate the passed geometry
+    '--HOOKS-             If Not TypeOf theGeometry Is IPointCollection Then Exit Function
+    '--HOOKS- 
+    '--HOOKS-             ' Validate the number of points in the collection
+    '--HOOKS-             Dim thePointColl As IPointCollection = DirectCast(theGeometry, IPointCollection)
+    '--HOOKS-             If thePointColl.PointCount <> 2 Then
+    '--HOOKS-                 MessageBox.Show("When creating the parcel hook only digitize two points", "Hook Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    '--HOOKS-                 Return False
+    '--HOOKS-             Else
+    '--HOOKS-                 Return True
+    '--HOOKS-             End If
+    '--HOOKS- 
+    '--HOOKS-         Catch ex As Exception
+    '--HOOKS-             EditorExtension.ProcessUnhandledException(ex)
+    '--HOOKS-             Return False
+    '--HOOKS- 
+    '--HOOKS-         End Try
+    '--HOOKS- 
+    '--HOOKS-     End Function
     '-- END HOOKS
+
+
 
     ''' <summary>
     ''' Create a temporary polyline
@@ -712,57 +714,53 @@ Public NotInheritable Class AddArrows
 
     End Sub
 
-    '-- HOOKS NOT IMPLEMENTED --
-    '''' <summary>
-    '''' Get the mousepoint using ISnapAgent
-    '''' </summary>
-    '''' <param name="X">An object that supports the IGeometry interface.</param>
-    '''' <param name="Y">An object that supports the IGeometry interface.</param>
-    '''' <remarks>
-    '''' </remarks>
-    'Private Sub GetMousePoint(ByRef X As Integer, ByRef Y As Integer)
+    ''' <summary>
+    ''' Get the mousepoint using ISnapAgent
+    ''' </summary>
+    ''' <param name="X">An object that supports the IGeometry interface.</param>
+    ''' <param name="Y">An object that supports the IGeometry interface.</param>
+    ''' <remarks>
+    ''' </remarks>
+    Private Sub GetMousePoint(ByRef X As Integer, ByRef Y As Integer)
 
-    '    Try
-    '        ' Get the current map point (and invert the agent at that location)
-    '        _thePt = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+        Try
+            ' Get the current map point (and invert the agent at that location)
+            _thePt = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
 
-    '        ' Get the snap agent, if it is being used
-    '        _theSnapAgent = Nothing
+            ' Get the snap agent, if it is being used
+            _theSnapAgent = Nothing
 
-    '        Dim theSnapenv As ISnapEnvironment = DirectCast(EditorExtension.Editor, ISnapEnvironment)
+            Dim theSnapenv As ISnapEnvironment = DirectCast(EditorExtension.Editor, ISnapEnvironment)
 
-    '        Dim theSnapAgent As ISnapAgent
-    '        Dim theFSnapAgent As IFeatureSnapAgent
-    '        Dim theEdLyrs As IEditLayers
-    '        Dim theLayer As ILayer
-    '        Dim theGeometryHitPartType As esriGeometryHitPartType
+            Dim theSnapAgent As ISnapAgent
+            Dim theFSnapAgent As IFeatureSnapAgent
+            Dim theEdLyrs As IEditLayers
+            Dim theLayer As ILayer
+            Dim theGeometryHitPartType As esriGeometryHitPartType
 
-    '        For i As Integer = 0 To theSnapenv.SnapAgentCount - 1
-    '            theSnapAgent = theSnapenv.SnapAgent(i)
-    '            If TypeOf theSnapAgent Is IFeatureSnapAgent Then
-    '                theFSnapAgent = DirectCast(theSnapAgent, IFeatureSnapAgent)
-    '                theEdLyrs = DirectCast(EditorExtension.Editor, IEditLayers)
-    '                theLayer = theEdLyrs.CurrentLayer
-    '                theGeometryHitPartType = theFSnapAgent.HitType
-    '                If theGeometryHitPartType <> 0 Then
-    '                    _theSnapAgent = theFSnapAgent
-    '                    Exit For
-    '                End If
-    '                theLayer = Nothing
-    '                theEdLyrs = Nothing
-    '                theFSnapAgent = Nothing
-    '            End If
-    '        Next i
+            For i As Integer = 0 To theSnapenv.SnapAgentCount - 1
+                theSnapAgent = theSnapenv.SnapAgent(i)
+                If TypeOf theSnapAgent Is IFeatureSnapAgent Then
+                    theFSnapAgent = DirectCast(theSnapAgent, IFeatureSnapAgent)
+                    theEdLyrs = DirectCast(EditorExtension.Editor, IEditLayers)
+                    theLayer = theEdLyrs.CurrentLayer
+                    theGeometryHitPartType = theFSnapAgent.HitType
+                    If theGeometryHitPartType <> 0 Then
+                        _theSnapAgent = theFSnapAgent
+                        Exit For
+                    End If
+                    theLayer = Nothing
+                    theEdLyrs = Nothing
+                    theFSnapAgent = Nothing
+                End If
+            Next i
 
-    '    Catch ex As Exception
-    '        EditorExtension.ProcessUnhandledException(ex)
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
 
-    '    End Try
+        End Try
 
-    'End Sub
-    '-- END HOOKS
-
-
+    End Sub
 
     ''' <summary>
     ''' Get the mapscale of a temp feature
@@ -1054,15 +1052,14 @@ Public NotInheritable Class AddArrows
             Select Case arrowType
 
                 '-- HOOKS NOT IMPLEMENTED --
-                'Case "HOOK"  '"Hook" 'If drawing hooks
-                '' Get point to measure distance from
-                '_theStartPoint = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
-                '_doOnce = False
-                '_theFromBreakPoint = _theStartPoint
-
-                '' Get the scale of the current mapindex
-                'Dim mapIndexScale As String = GetValueViaOverlay(_theStartPoint, theMIFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
-                'mapIndexScale = ConvertToDescription(theMIFeatureClass.Fields, EditorExtension.MapIndexSettings.MapScaleField, mapIndexScale)
+                '--HOOKS-                 Case "HOOK"  'If drawing hooks
+                '--HOOKS-                     ' Get point to measure distance from
+                '--HOOKS-                     _theStartPoint = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
+                '--HOOKS-                     _doOnce = False
+                '--HOOKS-                     _theFromBreakPoint = _theStartPoint
+                '--HOOKS-                     ' Get the scale of the current mapindex
+                '--HOOKS-                     Dim mapIndexScale As String = GetValueViaOverlay(_theStartPoint, theMIFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+                '--HOOKS-                     mapIndexScale = ConvertToDescription(theMIFeatureClass.Fields, EditorExtension.MapIndexSettings.MapScaleField, mapIndexScale)
                 '-- END HOOKS
 
                 Case "ARROW" 'If drawing annotation arrows
@@ -1413,205 +1410,207 @@ Public NotInheritable Class AddArrows
     End Sub
 
 
+
+    Public Overrides Sub onmousemove(ByVal button As Integer, ByVal shift As Integer, ByVal x As Integer, ByVal y As Integer)
+        MyBase.OnMouseMove(button, shift, x, y)
+
+        Try
+            '-- HOOKS NOT IMPLEMENTED --
+            '--HOOKS-             'draw the temporary line the user sees while moving the mouse
+            '--HOOKS-             If arrowType.Equals("hook", _ignoreCase) Then
+            '--HOOKS- 
+            '--HOOKS-                 Dim firsttime As Boolean
+            '--HOOKS-                 Dim linelength As Long = 0 'todo - sc this does not get set... what's the deal... maybe this is why its not drawing on screen??
+            '--HOOKS-                 If (Not _inUse) Then Exit Try
+            '--HOOKS- 
+            '--HOOKS-                 ' checks to see if the line symbol is defined
+            '--HOOKS-                 If (_theLineSymbol Is Nothing) Then firsttime = True
+            '--HOOKS- 
+            '--HOOKS-                 ' get current point
+            '--HOOKS-                 Dim thepoint As IPoint = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, y)
+            '--HOOKS-                 _theToBreakPoint = thepoint 'the unextended to point used to break the hooks
+            '--HOOKS- 
+            '--HOOKS-                 ' check to be sure there is a start point for the hook to prevent an error
+            '--HOOKS-                 If _theStartPoint Is Nothing Then Exit Try
+            '--HOOKS- 
+            '--HOOKS-                 ' draw a virtual line that represents the extended line
+            '--HOOKS-                 Dim thepolyline As IPolyline = New Polyline
+            '--HOOKS-                 thepolyline.FromPoint = _theStartPoint
+            '--HOOKS-                 thepolyline.ToPoint = thepoint
+            '--HOOKS-                 Dim thecurve As ICurve = thepolyline
+            '--HOOKS- 
+            '--HOOKS-                 Dim theconstructpoint1 As IConstructPoint = New ESRI.ArcGIS.Geometry.Point
+            '--HOOKS-                 theconstructpoint1.ConstructAlong(thecurve, esriSegmentExtension.esriExtendAtTo, thecurve.Length + CDbl(linelength), False)
+            '--HOOKS-                 thepoint = DirectCast(theconstructpoint1, IPoint)
+            '--HOOKS- 
+            '--HOOKS-                 If Not _doOnce Then
+            '--HOOKS-                     Dim theconstructpoint2 As IConstructPoint = New ESRI.ArcGIS.Geometry.Point
+            '--HOOKS-                     theconstructpoint2.ConstructAlong(thecurve, esriSegmentExtension.esriExtendAtFrom, -(CDbl(linelength)), False)
+            '--HOOKS-                     _theStartPoint = DirectCast(theconstructpoint2, IPoint)
+            '--HOOKS-                     _doOnce = True
+            '--HOOKS-                 End If
+            '--HOOKS- 
+            '--HOOKS-                 ' draw the line
+            '--HOOKS-                 _theActiveView.ScreenDisplay.StartDrawing(_theActiveView.ScreenDisplay.hDC, -1)
+            '--HOOKS- 
+            '--HOOKS-                 ' initialize or draw the temporary line
+            '--HOOKS-                 If firsttime Then
+            '--HOOKS-                     ' line symbol
+            '--HOOKS-                     _theLineSymbol = New SimpleLineSymbol
+            '--HOOKS-                     _theLineSymbol.Width = 2
+            '--HOOKS-                     Dim thergbcolor As IRgbColor = New RgbColor
+            '--HOOKS-                     With thergbcolor
+            '--HOOKS-                         .Red = 223
+            '--HOOKS-                         .Green = 223
+            '--HOOKS-                         .Blue = 223
+            '--HOOKS-                     End With
+            '--HOOKS-                     _theLineSymbol.Color = thergbcolor
+            '--HOOKS-                     Dim thesymbol As ISymbol = DirectCast(_theLineSymbol, ISymbol)
+            '--HOOKS-                     thesymbol.ROP2 = esriRasterOpCode.esriROPXOrPen
+            '--HOOKS- 
+            '--HOOKS-                     ' text symbol
+            '--HOOKS-                     _theTextSymbol = New ESRI.ArcGIS.Display.TextSymbol
+            '--HOOKS-                     _theTextSymbol.HorizontalAlignment = esriTextHorizontalAlignment.esriTHACenter
+            '--HOOKS-                     _theTextSymbol.VerticalAlignment = esriTextVerticalAlignment.esriTVACenter
+            '--HOOKS-                     _theTextSymbol.Size = 16
+            '--HOOKS-                     _theTextSymbol.Font.Name = "arial"
+            '--HOOKS- 
+            '--HOOKS-                     thesymbol = DirectCast(_theTextSymbol, ISymbol)
+            '--HOOKS-                     Dim thefont As Font = DirectCast(_theTextSymbol.Font, Font)
+            '--HOOKS-                     thesymbol.ROP2 = esriRasterOpCode.esriROPXOrPen
+            '--HOOKS- 
+            '--HOOKS-                     ' create point to draw text in
+            '--HOOKS-                     _theTextPoint = New ESRI.ArcGIS.Geometry.Point
+            '--HOOKS-                 Else
+            '--HOOKS-                     ' use existing symbols and draw existing text and polyline
+            '--HOOKS-                     _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theTextSymbol, ISymbol))
+            '--HOOKS-                     _theActiveView.ScreenDisplay.DrawText(_theTextPoint, _theTextSymbol.Text)
+            '--HOOKS-                     _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
+            '--HOOKS-                     If (_theLinePolyline.Length > 0) Then _
+            '--HOOKS-                       _theActiveView.ScreenDisplay.DrawPolyline(_theLinePolyline)
+            '--HOOKS-                 End If
+            '--HOOKS- 
+            '--HOOKS-                 ' get line between from and to points, and angle for text
+            '--HOOKS-                 Dim theline As ILine = New ESRI.ArcGIS.Geometry.Line
+            '--HOOKS-                 theline.PutCoords(_theStartPoint, thepoint)
+            '--HOOKS-                 Dim lineangle As Double = theline.Angle
+            '--HOOKS-                 lineangle = lineangle * (180.0# / 3.14159)
+            '--HOOKS-                 If ((lineangle > 90.0#) And (lineangle < 180.0#)) Then
+            '--HOOKS-                     lineangle = lineangle + 180.0#
+            '--HOOKS-                 ElseIf ((lineangle < 0.0#) And (lineangle < -90.0#)) Then
+            '--HOOKS-                     lineangle = lineangle - 180.0#
+            '--HOOKS-                 ElseIf ((lineangle < -90.0#) And (lineangle > -180)) Then
+            '--HOOKS-                     lineangle = lineangle - 180.0#
+            '--HOOKS-                 ElseIf (lineangle > 180) Then
+            '--HOOKS-                     lineangle = lineangle - 180.0#
+            '--HOOKS-                 End If
+            '--HOOKS- 
+            '--HOOKS-                 ' for drawing text, get text(distance), angle, and point
+            '--HOOKS-                 Dim deltax As Double = thepoint.X - _theStartPoint.X
+            '--HOOKS-                 Dim deltay As Double = thepoint.Y - _theStartPoint.Y
+            '--HOOKS-                 _theTextPoint.X = _theStartPoint.X + deltax / 2.0#
+            '--HOOKS-                 _theTextPoint.Y = _theStartPoint.Y + deltay / 2.0#
+            '--HOOKS-                 _theTextSymbol.Angle = lineangle
+            '--HOOKS-                 _theTextSymbol.Text = ""
+            '--HOOKS- 
+            '--HOOKS-                 ' draw text
+            '--HOOKS-                 _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theTextSymbol, ISymbol))
+            '--HOOKS-                 _theActiveView.ScreenDisplay.DrawText(_theTextPoint, _theTextSymbol.Text)
+            '--HOOKS- 
+            '--HOOKS-                 ' get polyline with blank space for text
+            '--HOOKS-                 thepolyline = New Polyline
+            '--HOOKS-                 Dim psegcoll As ISegmentCollection = DirectCast(thepolyline, ISegmentCollection)
+            '--HOOKS-                 psegcoll.AddSegment(DirectCast(theline, ISegment))
+            '--HOOKS-                 _theLinePolyline = getsmashedline(DirectCast(_theTextSymbol, ISymbol), _theTextPoint, thepolyline)
+            '--HOOKS- 
+            '--HOOKS-                 ' draw polyline
+            '--HOOKS-                 _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
+            '--HOOKS-                 If (_theLinePolyline.Length > 0) Then _
+            '--HOOKS-                   _theActiveView.ScreenDisplay.DrawPolyline(_theLinePolyline)
+            '--HOOKS-                 _theActiveView.ScreenDisplay.FinishDrawing()
+            '--HOOKS-             End If
+            '-- END HOOKS
+
+            If arrowType.Equals("dimension", _ignoreCase) Then
+                _theEditorEvents = DirectCast(EditorExtension.Editor, Editor)
+
+                If _toolJustCompletedTask Then 'gets rid of a stray editor agent
+                    _theActiveView.Refresh()
+                    _toolJustCompletedTask = False
+                    Exit Try
+                End If
+
+                If _mouseHasMoved Then
+                    ' check to be sure m_ppt has a value, prevents an error if called after other tools
+                    If _thePt Is Nothing Then
+                        _mouseHasMoved = False
+                        Exit Try
+                    End If
+                    ' erase the old agent
+                    EditorExtension.Editor.InvertAgent(_thePt, 0)
+                    ' get the new point
+                    GetMousePoint(x, y)
+                Else
+                    _thePt = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, y)
+                End If
+                _mouseHasMoved = True
+
+                If Not _theSnapAgent Is Nothing Then
+                    Dim thesnapenv As ISnapEnvironment
+                    thesnapenv = DirectCast(EditorExtension.Editor, ISnapEnvironment)
+                    Dim thetemppt As IPoint = New ESRI.ArcGIS.Geometry.Point
+                    thetemppt.PutCoords(_thePt.X, _thePt.Y)
+                    Dim thesnaptolerance As Double
+                    thesnaptolerance = thesnapenv.SnapTolerance
+                    _inTol = thesnapenv.SnapPoint(_thePt)
+                    If Not _inTol Then
+                        _thePt = New ESRI.ArcGIS.Geometry.Point
+                        _thePt.PutCoords(thetemppt.X, thetemppt.Y)  'set the point back b/c it was not in the snap tol
+                    End If
+                Else
+                    _inTol = False
+                End If
+
+                EditorExtension.Editor.InvertAgent(_thePt, 0) 'draw the agent
+
+            End If
+
+
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+
+        End Try
+    End Sub
+
     '-- HOOKS NOT IMPLEMENTED --
-    'Public Overrides Sub onmousemove(ByVal button As Integer, ByVal shift As Integer, ByVal x As Integer, ByVal y As Integer)
-    '    MyBase.onmousemove(button, shift, x, y)
-
-    '    Try
-
-    '         draw the temporary line the user sees while moving the mouse
-    '        If arrowType.Equals("hook", _ignoreCase) Then
-
-    '            Dim firsttime As Boolean
-    '            Dim linelength As Long = 0 'todo - sc this does not get set... what's the deal... maybe this is why its not drawing on screen??
-    '            If (Not _inUse) Then Exit Try
-
-    '            ' checks to see if the line symbol is defined
-    '            If (_theLineSymbol Is Nothing) Then firsttime = True
-
-    '            ' get current point
-    '            Dim thepoint As IPoint = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, y)
-    '            _theToBreakPoint = thepoint 'the unextended to point used to break the hooks
-
-    '            ' check to be sure there is a start point for the hook to prevent an error
-    '            If _theStartPoint Is Nothing Then Exit Try
-
-    '            ' draw a virtual line that represents the extended line
-    '            Dim thepolyline As IPolyline = New Polyline
-    '            thepolyline.FromPoint = _theStartPoint
-    '            thepolyline.ToPoint = thepoint
-    '            Dim thecurve As ICurve = thepolyline
-
-    '            Dim theconstructpoint1 As IConstructPoint = New ESRI.ArcGIS.Geometry.Point
-    '            theconstructpoint1.ConstructAlong(thecurve, esriSegmentExtension.esriExtendAtTo, thecurve.Length + CDbl(linelength), False)
-    '            thepoint = DirectCast(theconstructpoint1, IPoint)
-
-    '            If Not _doOnce Then
-    '                Dim theconstructpoint2 As IConstructPoint = New ESRI.ArcGIS.Geometry.Point
-    '                theconstructpoint2.ConstructAlong(thecurve, esriSegmentExtension.esriExtendAtFrom, -(CDbl(linelength)), False)
-    '                _theStartPoint = DirectCast(theconstructpoint2, IPoint)
-    '                _doOnce = True
-    '            End If
-
-    '            ' draw the line
-    '            _theActiveView.ScreenDisplay.StartDrawing(_theActiveView.ScreenDisplay.hDC, -1)
-
-    '            ' initialize or draw the temporary line
-    '            If firsttime Then
-    '                ' line symbol
-    '                _theLineSymbol = New SimpleLineSymbol
-    '                _theLineSymbol.Width = 2
-    '                Dim thergbcolor As IRgbColor = New RgbColor
-    '                With thergbcolor
-    '                    .Red = 223
-    '                    .Green = 223
-    '                    .Blue = 223
-    '                End With
-    '                _theLineSymbol.Color = thergbcolor
-    '                Dim thesymbol As ISymbol = DirectCast(_theLineSymbol, ISymbol)
-    '                thesymbol.ROP2 = esriRasterOpCode.esriROPXOrPen
-
-    '                ' text symbol
-    '                _theTextSymbol = New ESRI.ArcGIS.Display.TextSymbol
-    '                _theTextSymbol.HorizontalAlignment = esriTextHorizontalAlignment.esriTHACenter
-    '                _theTextSymbol.VerticalAlignment = esriTextVerticalAlignment.esriTVACenter
-    '                _theTextSymbol.Size = 16
-    '                _theTextSymbol.Font.Name = "arial"
-
-    '                thesymbol = DirectCast(_theTextSymbol, ISymbol)
-    '                Dim thefont As Font = DirectCast(_theTextSymbol.Font, Font)
-    '                thesymbol.ROP2 = esriRasterOpCode.esriROPXOrPen
-
-    '                ' create point to draw text in
-    '                _theTextPoint = New ESRI.ArcGIS.Geometry.Point
-    '            Else
-    '                ' use existing symbols and draw existing text and polyline
-    '                _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theTextSymbol, ISymbol))
-    '                _theActiveView.ScreenDisplay.DrawText(_theTextPoint, _theTextSymbol.Text)
-    '                _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
-    '                If (_theLinePolyline.Length > 0) Then _
-    '                  _theActiveView.ScreenDisplay.DrawPolyline(_theLinePolyline)
-    '            End If
-
-    '            ' get line between from and to points, and angle for text
-    '            Dim theline As ILine = New ESRI.ArcGIS.Geometry.Line
-    '            theline.PutCoords(_theStartPoint, thepoint)
-    '            Dim lineangle As Double = theline.Angle
-    '            lineangle = lineangle * (180.0# / 3.14159)
-    '            If ((lineangle > 90.0#) And (lineangle < 180.0#)) Then
-    '                lineangle = lineangle + 180.0#
-    '            ElseIf ((lineangle < 0.0#) And (lineangle < -90.0#)) Then
-    '                lineangle = lineangle - 180.0#
-    '            ElseIf ((lineangle < -90.0#) And (lineangle > -180)) Then
-    '                lineangle = lineangle - 180.0#
-    '            ElseIf (lineangle > 180) Then
-    '                lineangle = lineangle - 180.0#
-    '            End If
-
-    '            ' for drawing text, get text(distance), angle, and point
-    '            Dim deltax As Double = thepoint.X - _theStartPoint.X
-    '            Dim deltay As Double = thepoint.Y - _theStartPoint.Y
-    '            _theTextPoint.X = _theStartPoint.X + deltax / 2.0#
-    '            _theTextPoint.Y = _theStartPoint.Y + deltay / 2.0#
-    '            _theTextSymbol.Angle = lineangle
-    '            _theTextSymbol.Text = ""
-
-    '            ' draw text
-    '            _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theTextSymbol, ISymbol))
-    '            _theActiveView.ScreenDisplay.DrawText(_theTextPoint, _theTextSymbol.Text)
-
-    '            ' get polyline with blank space for text
-    '            thepolyline = New Polyline
-    '            Dim psegcoll As ISegmentCollection = DirectCast(thepolyline, ISegmentCollection)
-    '            psegcoll.AddSegment(DirectCast(theline, ISegment))
-    '            _theLinePolyline = getsmashedline(DirectCast(_theTextSymbol, ISymbol), _theTextPoint, thepolyline)
-
-    '            ' draw polyline
-    '            _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
-    '            If (_theLinePolyline.Length > 0) Then _
-    '              _theActiveView.ScreenDisplay.DrawPolyline(_theLinePolyline)
-    '            _theActiveView.ScreenDisplay.FinishDrawing()
-    '        End If
-
-    '        If arrowType.Equals("dimension", _ignoreCase) Then
-    '            _theEditorEvents = DirectCast(EditorExtension.Editor, Editor)
-
-    '            If _toolJustCompletedTask Then 'gets rid of a stray editor agent
-    '                _theActiveView.Refresh()
-    '                _toolJustCompletedTask = False
-    '                Exit Try
-    '            End If
-
-    '            If _mouseHasMoved Then
-    '                ' check to be sure m_ppt has a value, prevents an error if called after other tools
-    '                If _thePt Is Nothing Then
-    '                    _mouseHasMoved = False
-    '                    Exit Try
-    '                End If
-    '                ' erase the old agent
-    '                EditorExtension.Editor.InvertAgent(_thePt, 0)
-    '                ' get the new point
-    '                getmousepoint(x, y)
-    '            Else
-    '                _thePt = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, y)
-    '            End If
-    '            _mouseHasMoved = True
-
-    '            If Not _theSnapAgent Is Nothing Then
-    '                Dim thesnapenv As ISnapEnvironment
-    '                thesnapenv = DirectCast(EditorExtension.Editor, ISnapEnvironment)
-    '                Dim thetemppt As IPoint = New ESRI.ArcGIS.Geometry.Point
-    '                thetemppt.PutCoords(_thePt.X, _thePt.Y)
-    '                Dim thesnaptolerance As Double
-    '                thesnaptolerance = thesnapenv.SnapTolerance
-    '                _inTol = thesnapenv.SnapPoint(_thePt)
-    '                If Not _inTol Then
-    '                    _thePt = New ESRI.ArcGIS.Geometry.Point
-    '                    _thePt.PutCoords(thetemppt.X, thetemppt.Y)  'set the point back b/c it was not in the snap tol
-    '                End If
-    '            Else
-    '                _inTol = False
-    '            End If
-
-    '            EditorExtension.Editor.InvertAgent(_thePt, 0) 'draw the agent
-
-    '        End If
-
-
-    '    Catch ex As exception
-    '        editorextension.processunhandledexception(ex)
-
-    '    End Try
-    'End Sub
-    '
-    'Public Overrides Sub OnMouseUp(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
-    '    MyBase.OnMouseUp(Button, Shift, X, Y)
-
-    '    If arrowType.Equals("Hook", _ignoreCase) Then
-    '        If (Not _inUse) OrElse (_theLineSymbol Is Nothing) Then Exit Sub
-
-    '        ' Draws a temporary line on the screen
-    '        _theActiveView.ScreenDisplay.StartDrawing(_theActiveView.ScreenDisplay.hDC, -1)
-    '        _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theTextSymbol, ISymbol))
-    '        _theActiveView.ScreenDisplay.DrawText(_theTextPoint, _theTextSymbol.Text)
-    '        _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
-    '        If (_theLinePolyline.Length > 0) Then _theActiveView.ScreenDisplay.DrawPolyline(_theLinePolyline)
-    '        _theActiveView.ScreenDisplay.FinishDrawing()
-
-    '        ' Generate hooks based on the graphic polyline
-    '        GenerateHooks(DirectCast(_theLinePolyline, IPolyline))
-
-    '        ' Records that the tool is no longer in use
-    '        _inUse = False
-
-    '        ' Clean up
-    '        _theTextSymbol = Nothing
-    '        _theTextPoint = Nothing
-    '        _theLinePolyline = Nothing
-    '        _theLineSymbol = Nothing
-    '    End If
-
-    'End Sub
+    '--HOOKS-     Public Overrides Sub OnMouseUp(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Integer, ByVal Y As Integer)
+    '--HOOKS-         MyBase.OnMouseUp(Button, Shift, X, Y)
+    '--HOOKS- 
+    '--HOOKS-         If arrowType.Equals("Hook", _ignoreCase) Then
+    '--HOOKS-             If (Not _inUse) OrElse (_theLineSymbol Is Nothing) Then Exit Sub
+    '--HOOKS- 
+    '--HOOKS-             ' Draws a temporary line on the screen
+    '--HOOKS-             _theActiveView.ScreenDisplay.StartDrawing(_theActiveView.ScreenDisplay.hDC, -1)
+    '--HOOKS-             _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theTextSymbol, ISymbol))
+    '--HOOKS-             _theActiveView.ScreenDisplay.DrawText(_theTextPoint, _theTextSymbol.Text)
+    '--HOOKS-             _theActiveView.ScreenDisplay.SetSymbol(DirectCast(_theLineSymbol, ISymbol))
+    '--HOOKS-             If (_theLinePolyline.Length > 0) Then _theActiveView.ScreenDisplay.DrawPolyline(_theLinePolyline)
+    '--HOOKS-             _theActiveView.ScreenDisplay.FinishDrawing()
+    '--HOOKS- 
+    '--HOOKS-             ' Generate hooks based on the graphic polyline
+    '--HOOKS-             GenerateHooks(DirectCast(_theLinePolyline, IPolyline))
+    '--HOOKS- 
+    '--HOOKS-             ' Records that the tool is no longer in use
+    '--HOOKS-             _inUse = False
+    '--HOOKS- 
+    '--HOOKS-             ' Clean up
+    '--HOOKS-             _theTextSymbol = Nothing
+    '--HOOKS-             _theTextPoint = Nothing
+    '--HOOKS-             _theLinePolyline = Nothing
+    '--HOOKS-             _theLineSymbol = Nothing
+    '--HOOKS-         End If
+    '--HOOKS- 
+    '--HOOKS-     End Sub
     '-- END HOOKS
 
     Public Overrides Sub OnKeyDown(ByVal keyCode As Integer, ByVal Shift As Integer)
