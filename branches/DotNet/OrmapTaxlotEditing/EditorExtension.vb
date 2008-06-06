@@ -70,7 +70,7 @@ Public NotInheritable Class EditorExtension
     Implements IExtensionAccelerators
     Implements IPersistVariant
 
-#Region "Class-Level Constants And Enumerations (none)"
+#Region "Class-Level Constants and Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"
@@ -477,6 +477,17 @@ Public NotInheritable Class EditorExtension
             If IsTaxlot(obj) Then
                 '[Edited object is a ORMAP taxlot feature...]
 
+                Dim theTaxlotFeature As IFeature = DirectCast(obj, IFeature)
+                Dim theRowChanges As IRowChanges = DirectCast(theTaxlotFeature, IRowChanges)
+                If theRowChanges.ValueChanged(TaxlotFeatureLayer.FeatureClass.FindField(TaxLotSettings.TaxlotField)) OrElse _
+                        theRowChanges.ValueChanged(TaxlotFeatureLayer.FeatureClass.FindField(TaxLotSettings.MapNumberField)) Then
+                    ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
+                    ' Taxlots will send their numbers to the CancelledNumbers table
+                    ' ONLY if they are unique in the map at the time of deletion/change.
+                    SendExtinctToCancelledNumbersTable(theTaxlotFeature, True)
+                End If
+
+
                 ' Obtain OrmapMapNumber via overlay and calculate other field values.
                 CalculateTaxlotValues(DirectCast(obj, IFeature), FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC))
 
@@ -635,32 +646,10 @@ Public NotInheritable Class EditorExtension
                 '[Deleting taxlots...]
 
                 ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
-
-                ' Retrieve field positions.
-                Dim theTLTaxlotFieldIndex As Integer = TaxlotFeatureLayer.FeatureClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-                Dim theTLMapNumberFieldIndex As Integer = TaxlotFeatureLayer.FeatureClass.FindField(EditorExtension.TaxLotSettings.MapNumberField)
-                Dim theCNTaxlotFieldIndex As Integer = CancelledNumbersTable.Table.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-                Dim theCNMapNumberFieldIndex As Integer = CancelledNumbersTable.Table.FindField(EditorExtension.TaxLotSettings.MapNumberField)
-
-                Dim theFeature As IFeature = DirectCast(obj, IFeature)
-
-                ' If no null values, copy them to Cancelled numbers
-                If Not IsDBNull(theFeature.Value(theTLTaxlotFieldIndex)) And Not IsDBNull(theFeature.Value(theTLMapNumberFieldIndex)) Then
-
-                    ' Taxlots will send their numbers to the CancelledNumbers table 
-                    ' ONLY if they are unique in the map at the time of deletion.
-                    Dim theTaxlotNumber As String = CStr(theFeature.Value(theTLTaxlotFieldIndex))
-                    Dim theArea As IArea = DirectCast(theFeature.Shape, IArea)
-                    If IsTaxlotNumberLocallyUnique(theTaxlotNumber, theArea.Centroid, True) Then
-                        Dim theRow As ESRI.ArcGIS.Geodatabase.IRow
-                        theRow = CancelledNumbersTable.Table.CreateRow
-                        theRow.Value(theCNTaxlotFieldIndex) = theFeature.Value(theTLTaxlotFieldIndex)
-                        theRow.Value(theCNMapNumberFieldIndex) = theFeature.Value(theTLMapNumberFieldIndex)
-                        theRow.Store()
-                    End If
-
-                End If
-
+                ' Taxlots will send their numbers to the CancelledNumbers table
+                ' ONLY if they are unique in the map at the time of deletion.
+                Dim theTaxlotFeature As IFeature = DirectCast(obj, IFeature)
+                SendExtinctToCancelledNumbersTable(theTaxlotFeature, False)
 
             End If
 
@@ -870,7 +859,7 @@ Public NotInheritable Class EditorExtension
         ' Get the Map Index map number field index.
         Dim theMapNumFieldIndex As Integer
         theMapNumFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
-        If theMapNumFieldIndex > NotFoundIndex And Not IsMapIndex(obj) Then
+        If theMapNumFieldIndex > NotFoundIndex AndAlso Not IsMapIndex(obj) Then
             ' Get the Map Index map number for the location of the new feature.
             theMapNumber = GetValueViaOverlay(theSearchGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
             ' Set the feature map number.
@@ -886,7 +875,7 @@ Public NotInheritable Class EditorExtension
         ' Get the Map Index map scale field index.
         Dim theMapScaleFieldIndex As Integer
         theMapScaleFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
-        If theMapScaleFieldIndex > NotFoundIndex And Not IsMapIndex(obj) Then
+        If theMapScaleFieldIndex > NotFoundIndex AndAlso Not IsMapIndex(obj) Then
             ' Get the Map Index map scale for the location of the new feature.
             theMapScale = GetValueViaOverlay(theSearchGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
             ' Set the feature map scale.

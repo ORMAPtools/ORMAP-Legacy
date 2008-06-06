@@ -1021,7 +1021,7 @@ Public NotInheritable Class SpatialUtilities
     ''' or no features are selected.</remarks>
     Public Shared Function HasSelectedFeatureCount(ByVal inLayer As IFeatureLayer, ByVal inMinimumCount As Integer) As Boolean
         Dim returnValue As Boolean = False
-        If (inLayer Is Nothing) Or Not (TypeOf inLayer Is IFeatureLayer) Then
+        If (inLayer Is Nothing) OrElse Not (TypeOf inLayer Is IFeatureLayer) Then
             Return returnValue
         End If
 
@@ -1400,7 +1400,7 @@ Public NotInheritable Class SpatialUtilities
         theAnnotationFeature = DirectCast(annoObject, IAnnotationFeature)
 
         theLinkedFeatureID = theAnnotationFeature.LinkedFeatureID
-        If theLinkedFeatureID > -1 Then
+        If theLinkedFeatureID > NotFoundIndex Then
             '[Feature linked anno...]
             ' Get the related feature so the map number can be obtained
             theFeature = GetRelatedObjects(annoObject)
@@ -1447,8 +1447,8 @@ Public NotInheritable Class SpatialUtilities
         theAnnoDataSet = DirectCast(theAnnoObjectClass, IDataset)
 
         'If taxlot annotation of one kind or another, change annotation size
-        Dim isTaxlotNumberAnno As Boolean = (String.Compare(theAnnoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True, CultureInfo.CurrentCulture) <> 0)
-        Dim isTaxlotAcreageAnno As Boolean = (String.Compare(theAnnoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True, CultureInfo.CurrentCulture) <> 0)
+        Dim isTaxlotNumberAnno As Boolean = (String.Compare(theAnnoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotNumberAnnoFC, True, CultureInfo.CurrentCulture) = 0)
+        Dim isTaxlotAcreageAnno As Boolean = (String.Compare(theAnnoDataSet.Name, EditorExtension.AnnoTableNamesSettings.TaxlotAcreageAnnoFC, True, CultureInfo.CurrentCulture) = 0)
         If isTaxlotNumberAnno OrElse isTaxlotAcreageAnno Then
 
             ' Gets the size of the annotation from the scale of the annotation dataset
@@ -1465,11 +1465,10 @@ Public NotInheritable Class SpatialUtilities
 
             theTextSymbol.Size = theAnnotationSize
 
-            ' TEST: [NIS] Do we need to wrap this back together (as was done in VB6 code)?
-            'theTextElement.Symbol = theTextSymbol
-            'theCartoElement = DirectCast(theTextElement, IElement)
-            'theAnnoElement = DirectCast(theCartoElement, IAnnotationElement)
-            'theAnnotationFeature.Annotation = DirectCast(theAnnoElement, IElement)
+            ' TEST: [NIS] Do we really need to wrap this back together (as was done in VB6 code)?
+            theTextElement.Symbol = theTextSymbol
+            theAnnoElement = DirectCast(theTextElement, IAnnotationElement)
+            theAnnotationFeature.Annotation = DirectCast(theAnnoElement, IElement)
 
         End If
 
@@ -1627,17 +1626,33 @@ Public NotInheritable Class SpatialUtilities
     ''' <param name="featureLayer">The feature layer containing the feature.</param>
     ''' <param name="feature">The feature to zoom to.</param> 
     ''' <remarks></remarks>
-    ''' 
-    Public Shared Sub SetSelectedFeature(ByVal featureLayer As IFeatureLayer, ByVal feature As IFeature)
+    Public Shared Sub SetSelectedFeature(ByVal featureLayer As IFeatureLayer, ByVal feature As IFeature, ByVal refreshMap As Boolean)
 
         Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
         Dim theMap As IMap = theArcMapDoc.FocusMap
         Dim theActiveView As IActiveView = DirectCast(theMap, IActiveView)
 
+        ' Partially refresh the display
+        theActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground Or _
+                                     esriViewDrawPhase.esriViewGeography Or _
+                                     esriViewDrawPhase.esriViewGeoSelection Or _
+                                     esriViewDrawPhase.esriViewGraphics Or _
+                                     esriViewDrawPhase.esriViewGraphicSelection, Nothing, Nothing)
+
         ' Select the feature
         theMap.ClearSelection()
         theMap.SelectFeature(featureLayer, feature)
-        theActiveView.Refresh()
+
+        If refreshMap Then
+            'theActiveView.Refresh()
+
+            ' Partially refresh the display again
+            theActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground Or _
+                                         esriViewDrawPhase.esriViewGeography Or _
+                                         esriViewDrawPhase.esriViewGeoSelection Or _
+                                         esriViewDrawPhase.esriViewGraphics Or _
+                                         esriViewDrawPhase.esriViewGraphicSelection, Nothing, Nothing)
+        End If
 
     End Sub
 

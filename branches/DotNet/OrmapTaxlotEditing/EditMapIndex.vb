@@ -63,7 +63,7 @@ Public NotInheritable Class EditMapIndex
     Inherits BaseCommand
     Implements IDisposable
 
-#Region "Class-Level Constants And Enumerations"
+#Region "Class-Level Constants and Enumerations"
 
     Friend Enum StatePassageType As Integer
         Entering = 1
@@ -283,11 +283,11 @@ Public NotInheritable Class EditMapIndex
 
         Try
             Dim validData As Boolean = True
-            validData = validData And (Len(PartnerEditMapIndexForm.uxReliability.Text) <> 0)
-            validData = validData And (Len(PartnerEditMapIndexForm.uxScale.Text) <> 0)
-            validData = validData And (Len(PartnerEditMapIndexForm.uxMapNumber.Text) <> 0)
-            validData = validData And (Len(PartnerEditMapIndexForm.uxPage.Text) <> 0)
-            validData = validData And _ormapNumber.IsValidNumber
+            validData = validData AndAlso (Len(PartnerEditMapIndexForm.uxReliability.Text) <> 0)
+            validData = validData AndAlso (Len(PartnerEditMapIndexForm.uxScale.Text) <> 0)
+            validData = validData AndAlso (Len(PartnerEditMapIndexForm.uxMapNumber.Text) <> 0)
+            validData = validData AndAlso (Len(PartnerEditMapIndexForm.uxPage.Text) <> 0)
+            validData = validData AndAlso _ormapNumber.IsValidNumber
 
             If Not validData Then
                 MessageBox.Show("Invalid data. All fields must be filled in before assigning.", "Edit Map Index", MessageBoxButtons.OK)
@@ -661,12 +661,12 @@ Public NotInheritable Class EditMapIndex
         Try
             Dim ctl As System.Windows.Forms.Control
             For Each ctl In PartnerEditMapIndexForm.Controls
-                If TypeOf ctl Is ComboBox Or TypeOf ctl Is TextBox Then
+                If TypeOf ctl Is ComboBox OrElse TypeOf ctl Is TextBox Then
                     ctl.Enabled = enable
                 End If
                 If ctl.Controls.Count > 0 Then
                     For Each subControl As Control In ctl.Controls
-                        If TypeOf subControl Is TextBox Or TypeOf subControl Is ComboBox Then
+                        If TypeOf subControl Is TextBox OrElse TypeOf subControl Is ComboBox Then
                             subControl.Enabled = enable
                         End If
                     Next
@@ -937,7 +937,7 @@ Public NotInheritable Class EditMapIndex
 
     Private Sub CondState1()
         ' Evaluate condition
-        If _ormapNumber.IsValidNumber And EditorExtension.Editor.EditState = esriEditState.esriStateEditing Then
+        If _ormapNumber.IsValidNumber AndAlso EditorExtension.Editor.EditState = esriEditState.esriStateEditing Then
             StateS1_1(StatePassageType.Entering)
         Else
             StateS1_2(StatePassageType.Entering)

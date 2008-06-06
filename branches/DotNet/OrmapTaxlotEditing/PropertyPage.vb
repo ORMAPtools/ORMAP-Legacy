@@ -54,7 +54,7 @@ ProgId("ORMAPTaxlotEditing.PropertyPage")> _
 Public NotInheritable Class PropertyPage
     Implements IComPropertyPage
 
-#Region "Class-Level Constants And Enumerations (none)"
+#Region "Class-Level Constants and Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"

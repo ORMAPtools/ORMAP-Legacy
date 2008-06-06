@@ -62,7 +62,7 @@ Public NotInheritable Class LocateFeature
     Inherits BaseCommand
     Implements IDisposable
 
-#Region "Class-Level Constants And Enumerations (none)"
+#Region "Class-Level Constants and Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"
@@ -184,7 +184,7 @@ Public NotInheritable Class LocateFeature
         End If
 
         Dim uxTaxlot As TextBox = PartnerLocateFeatureForm.uxTaxlot
-        If uxTaxlot.Enabled And uxTaxlot.Text.Trim <> String.Empty Then
+        If uxTaxlot.Enabled AndAlso uxTaxlot.Text.Trim <> String.Empty Then
             taxlot = uxTaxlot.Text.Trim
         End If
 
@@ -200,9 +200,9 @@ Public NotInheritable Class LocateFeature
             theWhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] = '" & mapNumber & "'"
         Else
             '[Looking for a MapIndex and Taxlot...]
-            theXFlayer = MapIndexFeatureLayer
-            theQueryFilter.SubFields = "Shape, " & EditorExtension.MapIndexSettings.MapNumberField & ", " & EditorExtension.TaxLotSettings.TaxlotField
-            theWhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] = '" & mapNumber & "' AND [" & EditorExtension.TaxLotSettings.TaxlotField & "] = '" & taxlot & "'"
+            theXFlayer = TaxlotFeatureLayer
+            theQueryFilter.SubFields = "Shape, " & EditorExtension.TaxLotSettings.MapNumberField & ", " & EditorExtension.TaxLotSettings.TaxlotField
+            theWhereClause = "[" & EditorExtension.TaxLotSettings.MapNumberField & "] = '" & mapNumber & "' AND [" & EditorExtension.TaxLotSettings.TaxlotField & "] = '" & taxlot & "'"
         End If
 
         theQueryFilter.WhereClause = formatWhereClause(theWhereClause, theXFlayer.FeatureClass)
@@ -220,7 +220,7 @@ Public NotInheritable Class LocateFeature
                 thisFeature = theFeatCursor.NextFeature
             Loop
             ZoomToEnvelope(theEnvelope)
-            SetSelectedFeature(theXFlayer, thisFeature)
+            SetSelectedFeature(theXFlayer, thisFeature, True) ' TODO: [NIS] This is not working here. Why not?
         End If
 
     End Sub

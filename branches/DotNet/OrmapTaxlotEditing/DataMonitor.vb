@@ -55,7 +55,7 @@ Imports OrmapTaxlotEditing.Utilities
 ''' <remarks>Keeps track of availability of valid ORMAP datasets in the map document.</remarks>
 Public NotInheritable Class DataMonitor
 
-#Region "Class-Level Constants And Enumerations"
+#Region "Class-Level Constants and Enumerations"
 
     Friend Enum ESRIClassType As Integer
         FeatureClass = 1
@@ -531,6 +531,62 @@ Public NotInheritable Class DataMonitor
         theStandaloneTable = FindStandaloneTableByDSName(objectClassName)
         Return theStandaloneTable
     End Function
+
+    ''' <summary>
+    ''' Captures the mapnumber and taxlot and records them in the CancelledNumbers table if they are extinct.
+    ''' </summary>
+    ''' <param name="inTaxlotFeature">The feature to get the numbers from.</param>
+    ''' <param name="isDuringOnChange">Whether the check is being called from within an OnChange event handler.</param>
+    ''' <remarks>
+    ''' <para>Taxlots will send their numbers to the CancelledNumbers table 
+    ''' ONLY if they are "extinct" (unique in the map at the time of deletion/change).
+    ''' </para>
+    ''' <para>
+    ''' If this check is being called from within an OnChange event handler, 
+    ''' then it will use the feature's original values rather than its current 
+    ''' values.
+    ''' </para>
+    ''' <para>
+    ''' Features with null or non-numeric values will not be written to the table. 
+    ''' This will effectively exclude roads, rails, water, and nontl polygons which
+    ''' have non-numeric Taxlot field values.
+    ''' </para>
+    ''' </remarks>
+    Friend Shared Sub SendExtinctToCancelledNumbersTable(ByVal inTaxlotFeature As IFeature, ByVal isDuringOnChange As Boolean)
+        ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
+
+        ' Retrieve field positions.
+        Dim theTLTaxlotFieldIndex As Integer = TaxlotFeatureLayer.FeatureClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+        Dim theTLMapNumberFieldIndex As Integer = TaxlotFeatureLayer.FeatureClass.FindField(EditorExtension.TaxLotSettings.MapNumberField)
+        Dim theCNTaxlotFieldIndex As Integer = CancelledNumbersTable.Table.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+        Dim theCNMapNumberFieldIndex As Integer = CancelledNumbersTable.Table.FindField(EditorExtension.TaxLotSettings.MapNumberField)
+
+        ' If null or non-numeric values, don't copy them to Cancelled numbers
+        If IsDBNull(inTaxlotFeature.Value(theTLTaxlotFieldIndex)) Then Exit Sub
+        If IsDBNull(inTaxlotFeature.Value(theTLMapNumberFieldIndex)) Then Exit Sub
+        If Not IsNumeric(inTaxlotFeature.Value(theTLTaxlotFieldIndex)) Then Exit Sub
+        If Not IsNumeric(inTaxlotFeature.Value(theTLMapNumberFieldIndex)) Then Exit Sub
+
+        ' Copy valid numbers to the CancelledNumbers table.
+        ' Taxlots will send their numbers to the CancelledNumbers table
+        ' ONLY if they are unique in the map at the time of deletion/change.
+        Dim theTaxlotNumber As String = CStr(inTaxlotFeature.Value(theTLTaxlotFieldIndex))
+        Dim theArea As IArea = DirectCast(inTaxlotFeature.Shape, IArea)
+        If IsTaxlotNumberLocallyUnique(theTaxlotNumber, theArea.Centroid, True) Then
+            Dim theRow As ESRI.ArcGIS.Geodatabase.IRow
+            theRow = CancelledNumbersTable.Table.CreateRow
+            Dim theRowChanges As IRowChanges = DirectCast(inTaxlotFeature, IRowChanges)
+            If isDuringOnChange Then
+                theRow.Value(theCNTaxlotFieldIndex) = theRowChanges.OriginalValue(theTLTaxlotFieldIndex)
+                theRow.Value(theCNMapNumberFieldIndex) = theRowChanges.OriginalValue(theTLMapNumberFieldIndex)
+            Else
+                theRow.Value(theCNTaxlotFieldIndex) = inTaxlotFeature.Value(theTLTaxlotFieldIndex)
+                theRow.Value(theCNMapNumberFieldIndex) = inTaxlotFeature.Value(theTLMapNumberFieldIndex)
+            End If
+            theRow.Store()
+        End If
+
+    End Sub
 
     ''' <summary>
     ''' Load a standalone table into the current map.

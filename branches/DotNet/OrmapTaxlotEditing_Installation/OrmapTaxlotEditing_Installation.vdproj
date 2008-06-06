@@ -639,6 +639,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_87C3F427CD53103BB7013B8C0DF6161E"
+        "OwnerKey" = "8:_577352F57C3F4F81BFBF5F3EC1FC5A0D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8A260126390AB570F161AD651749C159"
         "OwnerKey" = "8:_45371C6D8E0E04FB6CB33BE18CB0CE2B"
         "MsmSig" = "8:_UNDEFINED"
@@ -928,12 +934,6 @@
         "Entry"
         {
         "MsmKey" = "8:_CF0925986E938EBD35BAFD3FE1E8D393"
-        "OwnerKey" = "8:_577352F57C3F4F81BFBF5F3EC1FC5A0D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D3FB3B28B5BB131750A81DE833001299"
         "OwnerKey" = "8:_577352F57C3F4F81BFBF5F3EC1FC5A0D"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1911,6 +1911,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_87C3F427CD53103BB7013B8C0DF6161E"
+            {
+            "SourcePath" = "8:OrmapTaxlotEditing.tlb"
+            "TargetName" = "8:OrmapTaxlotEditing.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_E33C79760C6B4FB39C8BDF049381D413"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8A260126390AB570F161AD651749C159"
             {
             "AssemblyRegister" = "3:1"
@@ -2039,7 +2059,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.ADF, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.ADF, Version=9.2.4.1420, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_B41BA6900BCFF7376367DC5C0A22C841"
@@ -2187,26 +2207,6 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D3FB3B28B5BB131750A81DE833001299"
-            {
-            "SourcePath" = "8:OrmapTaxlotEditing.tlb"
-            "TargetName" = "8:OrmapTaxlotEditing.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_E33C79760C6B4FB39C8BDF049381D413"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -2358,14 +2358,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Ormap Taxlot Editing Toolbar"
-        "ProductCode" = "8:{45BB83EA-3B53-40C2-B63B-818B393602B1}"
-        "PackageCode" = "8:{6F0DC714-0502-48A3-9A1E-73A5E2B84E4D}"
+        "ProductCode" = "8:{2BE01897-BA99-43CD-9510-AC4798F429EC}"
+        "PackageCode" = "8:{63D001F5-82AF-44DB-A125-A80CC3BF639A}"
         "UpgradeCode" = "8:{2B517D2C-8626-43F7-B78E-DBC51DB579D2}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.0.3"
+        "ProductVersion" = "8:2.0.4"
         "Manufacturer" = "8:ORMAP"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://sourceforge.net/projects/opet"

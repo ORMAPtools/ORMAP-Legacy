@@ -49,7 +49,7 @@ Imports System.Runtime.InteropServices
 Friend NotInheritable Class PropertiesForm
     Inherits System.Windows.Forms.Form
 
-#Region "Class-Level Constants And Enumerations (none)"
+#Region "Class-Level Constants and Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"

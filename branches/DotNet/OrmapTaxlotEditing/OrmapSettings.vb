@@ -45,7 +45,7 @@ Imports System.Runtime.InteropServices
 <ComVisible(False)> _
 Public NotInheritable Class OrmapSettings
 
-#Region "Class-Level Constants And Enumerations (none)"
+#Region "Class-Level Constants and Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"

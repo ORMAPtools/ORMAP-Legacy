@@ -66,7 +66,7 @@ Public NotInheritable Class AddArrows
     Inherits BaseTool
     Implements IDisposable
 
-#Region "Class-Level Constants And Enumerations"
+#Region "Class-Level Constants and Enumerations"
     Private Const _ignoreCase As StringComparison = StringComparison.CurrentCultureIgnoreCase
 #End Region
 
@@ -478,7 +478,7 @@ Public NotInheritable Class AddArrows
     '--HOOKS-             Dim theMapScale2 As Object = GetValueViaOverlay(theCurve.ToPoint, theMIFclass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
     '--HOOKS- 
     '--HOOKS-             ' Insure that the map scales exist and that they are equal
-    '--HOOKS-             If IsDBNull(theMapScale1) Or IsDBNull(theMapScale2) Then
+    '--HOOKS-             If IsDBNull(theMapScale1) OrElse IsDBNull(theMapScale2) Then
     '--HOOKS-                 MessageBox.Show("No mapscale for current MapIndex.  Unable to create hooks", "Hook Error", MessageBoxButtons.OK)
     '--HOOKS-                 Exit Try
     '--HOOKS-             End If
@@ -854,7 +854,7 @@ Public NotInheritable Class AddArrows
             If z > 0 Then dimensionArrowSide = "right"
             If z = 0 Then dimensionArrowSide = "left" '"online"
 
-            If (_theArrowPt1.X > _theArrowPt2.X And _theArrowPt1.Y > _theArrowPt2.Y) Or (_theArrowPt1.X > _theArrowPt2.X And _theArrowPt2.Y > _theArrowPt1.Y) Then
+            If (_theArrowPt1.X > _theArrowPt2.X AndAlso _theArrowPt1.Y > _theArrowPt2.Y) OrElse (_theArrowPt1.X > _theArrowPt2.X AndAlso _theArrowPt2.Y > _theArrowPt1.Y) Then
                 If z > 0 Then dimensionArrowSide = "left"
                 If z < 0 Then dimensionArrowSide = "right"
                 If z = 0 Then dimensionArrowSide = "left" '"online"
@@ -1064,7 +1064,7 @@ Public NotInheritable Class AddArrows
 
                 Case "ARROW" 'If drawing annotation arrows
                     If finishedDrawing = False Then
-                        If Button = 1 And Shift = 1 Then 'Right mouse click
+                        If Button = 1 AndAlso Shift = 1 Then 'Right mouse click
                             'Save the first point
                             If _arrowPointsCollection.Count = 0 Then
                                 If _theArrowPt1 Is Nothing Then
@@ -1089,7 +1089,7 @@ Public NotInheritable Class AddArrows
                             End If
 
                             'Left mouse click
-                        ElseIf Button = 1 And Shift = 0 Then
+                        ElseIf Button = 1 AndAlso Shift = 0 Then
                             'Add vertex
                             If _theArrowPt1 Is Nothing Then
                                 _theArrowPt1 = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
@@ -1102,7 +1102,7 @@ Public NotInheritable Class AddArrows
                     End If
 
 
-                    If _arrowPointsCollection.Count > 1 And finishedDrawing = True Then
+                    If _arrowPointsCollection.Count > 1 AndAlso finishedDrawing = True Then
 
                         ' Creates a new polygon from the points and smoothes it
                         Dim theArrowPoints As IPointCollection4 = New Polyline
@@ -1182,7 +1182,7 @@ Public NotInheritable Class AddArrows
                         DrawArrows()
 
                         ' Check to be sure the 2 points are not equal
-                        If (_theArrowPt1.X = _theArrowPt2.X) And (_theArrowPt1.Y = _theArrowPt2.Y) Then
+                        If (_theArrowPt1.X = _theArrowPt2.X) AndAlso (_theArrowPt1.Y = _theArrowPt2.Y) Then
                             MessageBox.Show("Two input points can't be equal, dimension arrows terminated.", "Dimension Error", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             OnKeyDown(Keys.Q, 1)
                             Exit Try
@@ -1495,11 +1495,11 @@ Public NotInheritable Class AddArrows
             '--HOOKS-                 theline.PutCoords(_theStartPoint, thepoint)
             '--HOOKS-                 Dim lineangle As Double = theline.Angle
             '--HOOKS-                 lineangle = lineangle * (180.0# / 3.14159)
-            '--HOOKS-                 If ((lineangle > 90.0#) And (lineangle < 180.0#)) Then
+            '--HOOKS-                 If ((lineangle > 90.0#) AndAlso (lineangle < 180.0#)) Then
             '--HOOKS-                     lineangle = lineangle + 180.0#
-            '--HOOKS-                 ElseIf ((lineangle < 0.0#) And (lineangle < -90.0#)) Then
+            '--HOOKS-                 ElseIf ((lineangle < 0.0#) AndAlso (lineangle < -90.0#)) Then
             '--HOOKS-                     lineangle = lineangle - 180.0#
-            '--HOOKS-                 ElseIf ((lineangle < -90.0#) And (lineangle > -180)) Then
+            '--HOOKS-                 ElseIf ((lineangle < -90.0#) AndAlso (lineangle > -180)) Then
             '--HOOKS-                     lineangle = lineangle - 180.0#
             '--HOOKS-                 ElseIf (lineangle > 180) Then
             '--HOOKS-                     lineangle = lineangle - 180.0#

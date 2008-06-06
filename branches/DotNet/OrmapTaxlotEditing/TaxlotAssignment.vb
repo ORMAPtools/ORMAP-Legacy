@@ -64,7 +64,7 @@ Public NotInheritable Class TaxlotAssignment
     Inherits BaseTool
     Implements IDisposable
 
-#Region "Class-Level Constants And Enumerations"
+#Region "Class-Level Constants and Enumerations"
 
     ' Taxlot number type constants
     ' NOTE: these must be exactly 5 characters long
@@ -346,7 +346,7 @@ Public NotInheritable Class TaxlotAssignment
             If isTaxlotType Then
                 '[Taxlot value is a number...]
                 If Not IsTaxlotNumberLocallyUnique(CStr(Me.NumberStartingFrom), theGeometry, False) Then
-                    If MessageBox.Show("The current Taxlot value (" & Me.NumberStartingFrom & ")" & NewLine & _
+                    If MessageBox.Show("The new Taxlot value (" & Me.NumberStartingFrom & ")" & NewLine & _
                                        "is not unique within this MapIndex." & NewLine & _
                                        "Attribute feature with value anyway?", _
                                        "Taxlot Assignment", MessageBoxButtons.YesNo, _
@@ -399,12 +399,19 @@ Public NotInheritable Class TaxlotAssignment
             theExistingTaxlot = CStr(IIf(IsDBNull(theTaxlotFeature.Value(theTLTaxlotFieldIndex)), String.Empty, theTaxlotFeature.Value(theTLTaxlotFieldIndex)))
 
             ' Check with user before updating Taxlot field
-            If Len(theExistingTaxlot) > 0 And theExistingTaxlot <> "0" Then
-                If MessageBox.Show("Taxlot currently has a Taxlot value (" & theExistingTaxlot & ")." & NewLine & _
-                          "Update it?", "Taxlot Assignment", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.No Then
+            If Len(theExistingTaxlot) > 0 AndAlso theExistingTaxlot <> "0" Then
+                If MessageBox.Show("Taxlot currently has a Taxlot number (" & theExistingTaxlot & ")." & NewLine & _
+                          "Update it?" & NewLine & NewLine & _
+                          "NOTE: If the old number is unique in the map," & NewLine & _
+                          "it will be added to the Cancelled Numbers table.", "Taxlot Assignment", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.No Then
                     Exit Sub
                 End If
             End If
+
+            ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
+            ' Taxlots will send their numbers to the CancelledNumbers table
+            ' ONLY if they are unique in the map at the time of deletion.
+            SendExtinctToCancelledNumbersTable(theTaxlotFeature, False)
 
             Dim theNewTLTaxlotNum As String = String.Empty 'initialize
             If isTaxlotType Then
@@ -440,8 +447,7 @@ Public NotInheritable Class TaxlotAssignment
             End If
 
             ' Select the feature
-            EditorExtension.Editor.Map.ClearSelection()
-            EditorExtension.Editor.Map.SelectFeature(DataMonitor.TaxlotFeatureLayer, theTaxlotFeature)
+            SetSelectedFeature(TaxlotFeatureLayer, theTaxlotFeature, True)
 
             ' Check for stacked features in the same location
             theTaxlotFeature = theTaxlotFCursor.NextFeature
@@ -449,16 +455,6 @@ Public NotInheritable Class TaxlotAssignment
                 MessageBox.Show("Multiple (""vertical"") features found at this location. This tool can only edit one.", _
                                 "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             End If
-
-            ' Update the view
-            Dim theActiveView As IActiveView
-            theActiveView = DirectCast(EditorExtension.Editor.Map, IActiveView)
-
-            ' Partially refresh the display
-            theActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground Or _
-                                         esriViewDrawPhase.esriViewGeography Or _
-                                         esriViewDrawPhase.esriViewGraphics Or _
-                                         esriViewDrawPhase.esriViewGraphicSelection, Nothing, Nothing)
 
             _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Taxlot feature updated"
 

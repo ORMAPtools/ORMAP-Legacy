@@ -63,7 +63,7 @@ Public NotInheritable Class CombineTaxlots
     Inherits BaseCommand
     Implements IDisposable
 
-#Region "Class-Level Constants And Enumerations (none)"
+#Region "Class-Level Constants and Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"
@@ -507,14 +507,10 @@ Public NotInheritable Class CombineTaxlots
                 deleteUnneededFeatures(theKeepFeature)
 
                 '---------------------------------------
-                ' Select the new feature:
+                ' Move deleted taxlot lines to Reference Lines,
+                ' line type 33 (historical):
                 '---------------------------------------
-                Dim theMxDoc As IMxDocument
-                Dim theMap As IMap
-                theMxDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
-                theMap = theMxDoc.FocusMap
-                theMap.ClearSelection()
-                theMap.SelectFeature(TaxlotFeatureLayer, theKeepFeature)
+                moveDeletedLines(theKeepFeature)
 
                 '---------------------------------------
                 ' Refresh the display area of the new feature:
@@ -526,10 +522,9 @@ Public NotInheritable Class CombineTaxlots
                 theInvalidArea.Invalidate(CShort(esriScreenCache.esriAllScreenCaches))
 
                 '---------------------------------------
-                ' Move deleted taxlot lines to Reference Lines,
-                ' line type 33 (historical):
+                ' Select the new feature:
                 '---------------------------------------
-                moveDeletedLines(theKeepFeature)
+                SetSelectedFeature(TaxlotFeatureLayer, theKeepFeature, True)
 
                 '---------------------------------------
                 ' Finish edit operation.

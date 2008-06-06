@@ -295,7 +295,7 @@ Partial Class EditMapIndexForm
         'uxAnomalyLabel
         '
         Me.uxAnomalyLabel.AutoSize = True
-        Me.uxAnomalyLabel.Location = New System.Drawing.Point(9, 186)
+        Me.uxAnomalyLabel.Location = New System.Drawing.Point(9, 42)
         Me.uxAnomalyLabel.Name = "uxAnomalyLabel"
         Me.uxAnomalyLabel.Size = New System.Drawing.Size(50, 13)
         Me.uxAnomalyLabel.TabIndex = 16
@@ -304,25 +304,25 @@ Partial Class EditMapIndexForm
         'uxPageLabel
         '
         Me.uxPageLabel.AutoSize = True
-        Me.uxPageLabel.Location = New System.Drawing.Point(9, 165)
+        Me.uxPageLabel.Location = New System.Drawing.Point(9, 164)
         Me.uxPageLabel.Name = "uxPageLabel"
-        Me.uxPageLabel.Size = New System.Drawing.Size(35, 13)
+        Me.uxPageLabel.Size = New System.Drawing.Size(75, 13)
         Me.uxPageLabel.TabIndex = 15
-        Me.uxPageLabel.Text = "Page:"
+        Me.uxPageLabel.Text = "Page Number:"
         '
         'uxScaleLabel
         '
         Me.uxScaleLabel.AutoSize = True
-        Me.uxScaleLabel.Location = New System.Drawing.Point(9, 140)
+        Me.uxScaleLabel.Location = New System.Drawing.Point(9, 115)
         Me.uxScaleLabel.Name = "uxScaleLabel"
-        Me.uxScaleLabel.Size = New System.Drawing.Size(37, 13)
+        Me.uxScaleLabel.Size = New System.Drawing.Size(58, 13)
         Me.uxScaleLabel.TabIndex = 14
-        Me.uxScaleLabel.Text = "Scale:"
+        Me.uxScaleLabel.Text = "MapScale:"
         '
         'uxReliabilityLabel
         '
         Me.uxReliabilityLabel.AutoSize = True
-        Me.uxReliabilityLabel.Location = New System.Drawing.Point(9, 115)
+        Me.uxReliabilityLabel.Location = New System.Drawing.Point(9, 188)
         Me.uxReliabilityLabel.Name = "uxReliabilityLabel"
         Me.uxReliabilityLabel.Size = New System.Drawing.Size(54, 13)
         Me.uxReliabilityLabel.TabIndex = 13
@@ -331,7 +331,7 @@ Partial Class EditMapIndexForm
         'uxSuffixTypeLabel
         '
         Me.uxSuffixTypeLabel.AutoSize = True
-        Me.uxSuffixTypeLabel.Location = New System.Drawing.Point(9, 90)
+        Me.uxSuffixTypeLabel.Location = New System.Drawing.Point(9, 66)
         Me.uxSuffixTypeLabel.Name = "uxSuffixTypeLabel"
         Me.uxSuffixTypeLabel.Size = New System.Drawing.Size(87, 13)
         Me.uxSuffixTypeLabel.TabIndex = 12
@@ -340,7 +340,7 @@ Partial Class EditMapIndexForm
         'uxSuffixNumberLabel
         '
         Me.uxSuffixNumberLabel.AutoSize = True
-        Me.uxSuffixNumberLabel.Location = New System.Drawing.Point(9, 66)
+        Me.uxSuffixNumberLabel.Location = New System.Drawing.Point(9, 91)
         Me.uxSuffixNumberLabel.Name = "uxSuffixNumberLabel"
         Me.uxSuffixNumberLabel.Size = New System.Drawing.Size(100, 13)
         Me.uxSuffixNumberLabel.TabIndex = 11
@@ -349,7 +349,7 @@ Partial Class EditMapIndexForm
         'uxMapNumberLabel
         '
         Me.uxMapNumberLabel.AutoSize = True
-        Me.uxMapNumberLabel.Location = New System.Drawing.Point(9, 42)
+        Me.uxMapNumberLabel.Location = New System.Drawing.Point(9, 140)
         Me.uxMapNumberLabel.Name = "uxMapNumberLabel"
         Me.uxMapNumberLabel.Size = New System.Drawing.Size(71, 13)
         Me.uxMapNumberLabel.TabIndex = 9
@@ -357,14 +357,14 @@ Partial Class EditMapIndexForm
         '
         'uxAnomaly
         '
-        Me.uxAnomaly.Location = New System.Drawing.Point(113, 186)
+        Me.uxAnomaly.Location = New System.Drawing.Point(113, 39)
         Me.uxAnomaly.Name = "uxAnomaly"
         Me.uxAnomaly.Size = New System.Drawing.Size(45, 20)
         Me.uxAnomaly.TabIndex = 8
         '
         'uxPage
         '
-        Me.uxPage.Location = New System.Drawing.Point(113, 162)
+        Me.uxPage.Location = New System.Drawing.Point(113, 161)
         Me.uxPage.Name = "uxPage"
         Me.uxPage.Size = New System.Drawing.Size(45, 20)
         Me.uxPage.TabIndex = 7
@@ -372,7 +372,7 @@ Partial Class EditMapIndexForm
         'uxScale
         '
         Me.uxScale.FormattingEnabled = True
-        Me.uxScale.Location = New System.Drawing.Point(113, 137)
+        Me.uxScale.Location = New System.Drawing.Point(113, 112)
         Me.uxScale.Name = "uxScale"
         Me.uxScale.Size = New System.Drawing.Size(130, 21)
         Me.uxScale.TabIndex = 6
@@ -380,7 +380,7 @@ Partial Class EditMapIndexForm
         'uxReliability
         '
         Me.uxReliability.FormattingEnabled = True
-        Me.uxReliability.Location = New System.Drawing.Point(113, 112)
+        Me.uxReliability.Location = New System.Drawing.Point(113, 185)
         Me.uxReliability.Name = "uxReliability"
         Me.uxReliability.Size = New System.Drawing.Size(130, 21)
         Me.uxReliability.TabIndex = 5
@@ -397,21 +397,21 @@ Partial Class EditMapIndexForm
         'uxSuffixType
         '
         Me.uxSuffixType.FormattingEnabled = True
-        Me.uxSuffixType.Location = New System.Drawing.Point(113, 87)
+        Me.uxSuffixType.Location = New System.Drawing.Point(113, 63)
         Me.uxSuffixType.Name = "uxSuffixType"
         Me.uxSuffixType.Size = New System.Drawing.Size(130, 21)
         Me.uxSuffixType.TabIndex = 3
         '
         'uxSuffixNumber
         '
-        Me.uxSuffixNumber.Location = New System.Drawing.Point(113, 63)
+        Me.uxSuffixNumber.Location = New System.Drawing.Point(113, 88)
         Me.uxSuffixNumber.Name = "uxSuffixNumber"
         Me.uxSuffixNumber.Size = New System.Drawing.Size(130, 20)
         Me.uxSuffixNumber.TabIndex = 2
         '
         'uxMapNumber
         '
-        Me.uxMapNumber.Location = New System.Drawing.Point(113, 39)
+        Me.uxMapNumber.Location = New System.Drawing.Point(113, 137)
         Me.uxMapNumber.Name = "uxMapNumber"
         Me.uxMapNumber.Size = New System.Drawing.Size(130, 20)
         Me.uxMapNumber.TabIndex = 1
@@ -438,11 +438,10 @@ Partial Class EditMapIndexForm
         '
         Me.uxORMAPNumberLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.uxORMAPNumberLabel.Font = New System.Drawing.Font("Tahoma", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.uxORMAPNumberLabel.Location = New System.Drawing.Point(12, 25)
+        Me.uxORMAPNumberLabel.Location = New System.Drawing.Point(11, 25)
         Me.uxORMAPNumberLabel.Name = "uxORMAPNumberLabel"
         Me.uxORMAPNumberLabel.Size = New System.Drawing.Size(231, 25)
         Me.uxORMAPNumberLabel.TabIndex = 0
-        Me.uxORMAPNumberLabel.Text = "2015.00S05.00W3600--T000"
         Me.uxORMAPNumberLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'uxHelp

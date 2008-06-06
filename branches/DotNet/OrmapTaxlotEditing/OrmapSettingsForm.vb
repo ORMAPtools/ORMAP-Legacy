@@ -45,7 +45,7 @@ Imports System.Windows.Forms
 <ComVisible(False)> _
 Public Class OrmapSettingsForm
 
-#Region "Class-Level Constants And Enumerations (none)"
+#Region "Class-Level Constants and Enumerations (none)"
 #End Region
 
 #Region "Built-In Class Members (Constructors, Etc.)"
