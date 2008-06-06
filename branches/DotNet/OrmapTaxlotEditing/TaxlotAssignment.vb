@@ -305,6 +305,14 @@ Public NotInheritable Class TaxlotAssignment
                                 "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
+            CheckValidCancelledNumbersTableDataProperties()
+            If Not HasValidCancelledNumbersTableData Then
+                MessageBox.Show("Unable to assign taxlot values to polygons." & NewLine & _
+                                "Missing data: Valid ORMAP CancelledNumbersTable not found in the map." & NewLine & _
+                                "Please load this dataset into your map.", _
+                                "Taxlot Assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Sub
+            End If
 
             ' If taxlot numbering is selected, then make sure value is numeric.
             Dim isTaxlotType As Boolean = (StrComp(Me.TaxlotType, TaxlotAssignment.taxlotNumberTypeTaxlot, CompareMethod.Text) = 0)
