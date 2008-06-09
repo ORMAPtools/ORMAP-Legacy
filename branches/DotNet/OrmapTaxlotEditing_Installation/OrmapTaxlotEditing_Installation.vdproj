@@ -2359,7 +2359,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Ormap Taxlot Editing Toolbar"
         "ProductCode" = "8:{2F9B2F95-AA4D-4DDF-A85F-A0182967790E}"
-        "PackageCode" = "8:{1238EE2F-06A8-4E07-87C8-DE4DC103EDBA}"
+        "PackageCode" = "8:{A817D63C-7DD3-4F4F-8314-54FF4C35B9A7}"
         "UpgradeCode" = "8:{2B517D2C-8626-43F7-B78E-DBC51DB579D2}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -2381,7 +2381,7 @@
         "UseSystemSearchPath" = "11:TRUE"
         "TargetPlatform" = "3:0"
         "PreBuildEvent" = "8:"
-        "PostBuildEvent" = "8:"
+        "PostBuildEvent" = "8:copy $(ProjectDir)\\$(Configuration) $(ProjectDir)\\Installer"
         "RunPostBuildEvent" = "3:0"
         }
         "Registry"
