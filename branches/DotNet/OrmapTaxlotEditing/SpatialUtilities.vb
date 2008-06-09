@@ -1522,44 +1522,52 @@ Public NotInheritable Class SpatialUtilities
 
         Dim returnValue As Boolean = False
 
-        'check for existence of Taxlot layer
-        Dim thisTaxlotFeatureLayer As IFeatureLayer
-        thisTaxlotFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.TaxLotFC)
-        If thisTaxlotFeatureLayer Is Nothing Then
-            MessageBox.Show("Unable to locate the Taxlot layer in Table of Contents." & NewLine & _
-                            "This process requires a feature class called " & EditorExtension.TableNamesSettings.TaxLotFC & ".", _
-                            String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)
-            Return returnValue
+        ' Check for existence of Taxlot layer
+        Dim thisTaxlotFeatureLayer As IFeatureLayer = Nothing
+        If TaxlotFeatureLayer Is Nothing Then
+            thisTaxlotFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.TaxLotFC)
+            If thisTaxlotFeatureLayer Is Nothing Then
+                MessageBox.Show("Unable to locate the Taxlot layer in Table of Contents." & NewLine & _
+                                "This process requires a feature class called " & EditorExtension.TableNamesSettings.TaxLotFC & ".", _
+                                String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Return returnValue
+            End If
+        Else
+            thisTaxlotFeatureLayer = TaxlotFeatureLayer
         End If
 
-        'check for existence of Map index layer
         Dim thisTaxlotFeatureClass As IFeatureClass
         thisTaxlotFeatureClass = thisTaxlotFeatureLayer.FeatureClass
 
-        Dim mapIndexFeatureLayer As IFeatureLayer
-        mapIndexFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
-        If mapIndexFeatureLayer Is Nothing Then
-            MessageBox.Show("Unable to locate the MapIndex layer in Table of Contents." & NewLine & _
-                            "This process requires a feature class called " & EditorExtension.TableNamesSettings.MapIndexFC & ".", _
-                            String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)
-            Return returnValue
+        ' Check for existence of MapIndex layer
+        Dim thisMapIndexFeatureLayer As IFeatureLayer = Nothing
+        If MapIndexFeatureLayer Is Nothing Then
+            thisMapIndexFeatureLayer = FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC)
+            If thisMapIndexFeatureLayer Is Nothing Then
+                MessageBox.Show("Unable to locate the MapIndex layer in Table of Contents." & NewLine & _
+                                "This process requires a feature class called " & EditorExtension.TableNamesSettings.MapIndexFC & ".", _
+                                String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Return returnValue
+            End If
+        Else
+            thisMapIndexFeatureLayer = MapIndexFeatureLayer
         End If
 
         Dim mapIndexFeatureClass As IFeatureClass
-        mapIndexFeatureClass = mapIndexFeatureLayer.FeatureClass
+        mapIndexFeatureClass = thisMapIndexFeatureLayer.FeatureClass
 
-        ' Checks for the existence of a current ORMAP Number and Taxlot number
+        ' Check for the existence of a current OR Map Number and Taxlot number
         Dim mapIndexORMAPValue As String = String.Empty
         mapIndexORMAPValue = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
         If mapIndexORMAPValue.Length = 0 Then
             returnValue = True
         End If
 
-        ' Make sure this number is unique within taxlots with this OM number
+        ' Make sure this number is unique within taxlots with this OR Map Number
         Dim whereClause As String = formatWhereClause(String.Concat("[", EditorExtension.TaxLotSettings.MapNumberField, "]", " = '", mapIndexORMAPValue, "' AND ", "[", EditorExtension.TaxLotSettings.TaxlotField, "]", " = '", taxlotNumber, "'"), thisTaxlotFeatureClass)
         Dim n As Integer = 0
         Dim cursor As ICursor
-        cursor = attributeQuery(DirectCast(thisTaxlotFeatureClass, ITable), whereClause)
+        cursor = attributeQuery(DirectCast(thisTaxlotFeatureClass, ITable), whereClause, False)
         If Not (cursor Is Nothing) AndAlso (returnValue = False) Then
             Dim row As IRow
             row = cursor.NextRow
@@ -1718,9 +1726,12 @@ Public NotInheritable Class SpatialUtilities
     ''' Return a cursor that represents the results of an attribute query.
     ''' </summary>
     ''' <param name="table">An object that supports the ITable interface.</param>
-    ''' <param name="whereClause">A Sql Where clause without the WHERE.</param>
+    ''' <param name="whereClause">A SQL Where clause without the WHERE.</param>
+    ''' <param name="isEditable">A flag representing whether to return an editable 
+    ''' (update) cursor or not.</param>
     ''' <returns>Return a cursor that represents the results of an attribute query.</returns>
-    ''' <remarks>Creates a cursor from table that contains all feature records that meet the criteria in <paramref name="whereClause">whereClause</paramref>.</remarks>
+    ''' <remarks>Creates a cursor from table that contains all feature records that 
+    ''' meet the criteria in <paramref name="whereClause">whereClause</paramref>.</remarks>
     Private Shared Function attributeQuery(ByVal table As ITable, Optional ByVal whereClause As String = "", Optional ByVal isEditable As Boolean = False) As ICursor
 
         Dim thisQueryFilter As IQueryFilter

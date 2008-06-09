@@ -416,10 +416,12 @@ Public NotInheritable Class TaxlotAssignment
                 End If
             End If
 
-            ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
-            ' Taxlots will send their numbers to the CancelledNumbers table
-            ' ONLY if they are unique in the map at the time of deletion.
-            SendExtinctToCancelledNumbersTable(theTaxlotFeature, False)
+            '' NOTE: [NIS] This code is no longer needed since the OnChangeFeature 
+            '' event handler also tracks this
+            '' Capture the mapnumber and taxlot and record them in CancelledNumbers.
+            '' Taxlots will send their numbers to the CancelledNumbers table
+            '' ONLY if they are unique in the map at the time of deletion.
+            'SendExtinctToCancelledNumbersTable(theTaxlotFeature, False)
 
             Dim theNewTLTaxlotNum As String = String.Empty 'initialize
             If isTaxlotType Then

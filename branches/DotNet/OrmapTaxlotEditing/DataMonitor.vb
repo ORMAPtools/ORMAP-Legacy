@@ -37,6 +37,7 @@
 #End Region
 
 #Region "Imported Namespaces"
+
 Imports System.Configuration
 Imports System.Windows.Forms
 Imports ESRI.ArcGIS.Carto
@@ -45,6 +46,7 @@ Imports ESRI.ArcGIS.Geometry
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
+'Imports ESRI.ArcGIS.Framework
 
 #End Region
 
@@ -555,6 +557,8 @@ Public NotInheritable Class DataMonitor
     Friend Shared Sub SendExtinctToCancelledNumbersTable(ByVal inTaxlotFeature As IFeature, ByVal isDuringOnChange As Boolean)
         ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
 
+        EditorExtension.Application.StatusBar.Message(ESRI.ArcGIS.Framework.esriStatusBarPanes.esriStatusMain) = "Checking taxlot for extinct status..."
+
         ' Retrieve field positions.
         Dim theTLTaxlotFieldIndex As Integer = TaxlotFeatureLayer.FeatureClass.FindField(EditorExtension.TaxLotSettings.TaxlotField)
         Dim theTLMapNumberFieldIndex As Integer = TaxlotFeatureLayer.FeatureClass.FindField(EditorExtension.TaxLotSettings.MapNumberField)
@@ -583,8 +587,11 @@ Public NotInheritable Class DataMonitor
                 theRow.Value(theCNTaxlotFieldIndex) = inTaxlotFeature.Value(theTLTaxlotFieldIndex)
                 theRow.Value(theCNMapNumberFieldIndex) = inTaxlotFeature.Value(theTLMapNumberFieldIndex)
             End If
+            EditorExtension.Application.StatusBar.Message(ESRI.ArcGIS.Framework.esriStatusBarPanes.esriStatusMain) = "Writing taxlot information to the cancelled Numbers table..."
             theRow.Store()
         End If
+
+        EditorExtension.Application.StatusBar.Message(ESRI.ArcGIS.Framework.esriStatusBarPanes.esriStatusMain) = ""
 
     End Sub
 

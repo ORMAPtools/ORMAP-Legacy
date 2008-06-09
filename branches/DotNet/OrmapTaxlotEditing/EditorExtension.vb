@@ -458,24 +458,30 @@ Public NotInheritable Class EditorExtension
             ' Check for valid data (will try to load data if not found).
             CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
-                MessageBox.Show("Unable to update Taxlot field values." & NewLine & _
-                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
+                MessageBox.Show("Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnChangeFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
-                MessageBox.Show("Unable to update taxlot field values." & NewLine & _
-                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
+                MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnChangeFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
 
                 Exit Sub
             End If
-
+            
             If IsTaxlot(obj) Then
                 '[Edited object is a ORMAP taxlot feature...]
+
+                CheckValidCancelledNumbersTableDataProperties()
+                If Not HasValidCancelledNumbersTableData Then
+                    MessageBox.Show("Missing data: Valid ORMAP CancelledNumbersTable not found in the map." & NewLine & _
+                                    "Please load this dataset into your map.", _
+                                    "ORMAP Taxlot Editing (OnChangeFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                    Exit Sub
+                End If
 
                 Dim theTaxlotFeature As IFeature = DirectCast(obj, IFeature)
                 Dim theRowChanges As IRowChanges = DirectCast(theTaxlotFeature, IRowChanges)
@@ -486,7 +492,6 @@ Public NotInheritable Class EditorExtension
                     ' ONLY if they are unique in the map at the time of deletion/change.
                     SendExtinctToCancelledNumbersTable(theTaxlotFeature, True)
                 End If
-
 
                 ' Obtain OrmapMapNumber via overlay and calculate other field values.
                 CalculateTaxlotValues(DirectCast(obj, IFeature), FindFeatureLayerByDSName(EditorExtension.TableNamesSettings.MapIndexFC))
@@ -532,16 +537,14 @@ Public NotInheritable Class EditorExtension
             ' Check for valid data (will try to load data if not found).
             CheckValidTaxlotDataProperties()
             If Not HasValidTaxlotData Then
-                MessageBox.Show("Unable to populate Taxlot field values." & NewLine & _
-                                "Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
+                MessageBox.Show("Missing data: Valid ORMAP Taxlot layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnCreateFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
             CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
-                MessageBox.Show("Unable to populate taxlot field values." & NewLine & _
-                                "Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
+                MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
                                 "ORMAP Taxlot Editing (OnCreateFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
@@ -634,16 +637,17 @@ Public NotInheritable Class EditorExtension
                                 "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
-            CheckValidCancelledNumbersTableDataProperties()
-            If Not HasValidCancelledNumbersTableData Then
-                MessageBox.Show("Missing data: Valid ORMAP CancelledNumbersTable not found in the map." & NewLine & _
-                                "Please load this dataset into your map.", _
-                                "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Sub
-            End If
 
             If IsTaxlot(obj) Then
                 '[Deleting taxlots...]
+
+                CheckValidCancelledNumbersTableDataProperties()
+                If Not HasValidCancelledNumbersTableData Then
+                    MessageBox.Show("Missing data: Valid ORMAP CancelledNumbersTable not found in the map." & NewLine & _
+                                    "Please load this dataset into your map.", _
+                                    "ORMAP Taxlot Editing (OnDeleteFeature)", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                    Exit Sub
+                End If
 
                 ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
                 ' Taxlots will send their numbers to the CancelledNumbers table
