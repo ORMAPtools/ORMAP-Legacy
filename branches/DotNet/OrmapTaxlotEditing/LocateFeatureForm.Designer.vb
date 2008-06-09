@@ -19,26 +19,13 @@ Partial Class LocateFeatureForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.uxMapNumber = New System.Windows.Forms.ComboBox
         Me.uxFind = New System.Windows.Forms.Button
         Me.uxHelp = New System.Windows.Forms.Button
         Me.MapnumberLabel = New System.Windows.Forms.Label
         Me.TaxlotLabel = New System.Windows.Forms.Label
         Me.uxTaxlot = New System.Windows.Forms.TextBox
+        Me.uxMapNumber = New System.Windows.Forms.TextBox
         Me.SuspendLayout()
-        '
-        'uxMapNumber
-        '
-        Me.uxMapNumber.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
-        Me.uxMapNumber.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
-        Me.uxMapNumber.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.uxMapNumber.FormattingEnabled = True
-        Me.uxMapNumber.Location = New System.Drawing.Point(9, 24)
-        Me.uxMapNumber.Margin = New System.Windows.Forms.Padding(2)
-        Me.uxMapNumber.Name = "uxMapNumber"
-        Me.uxMapNumber.Size = New System.Drawing.Size(126, 21)
-        Me.uxMapNumber.Sorted = True
-        Me.uxMapNumber.TabIndex = 0
         '
         'uxFind
         '
@@ -84,11 +71,26 @@ Partial Class LocateFeatureForm
         '
         'uxTaxlot
         '
+        Me.uxTaxlot.AllowDrop = True
+        Me.uxTaxlot.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
+        Me.uxTaxlot.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
         Me.uxTaxlot.Location = New System.Drawing.Point(9, 66)
         Me.uxTaxlot.Margin = New System.Windows.Forms.Padding(2)
         Me.uxTaxlot.Name = "uxTaxlot"
         Me.uxTaxlot.Size = New System.Drawing.Size(74, 20)
         Me.uxTaxlot.TabIndex = 6
+        '
+        'uxMapNumber
+        '
+        Me.uxMapNumber.AllowDrop = True
+        Me.uxMapNumber.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
+        Me.uxMapNumber.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
+        Me.uxMapNumber.Location = New System.Drawing.Point(9, 24)
+        Me.uxMapNumber.Margin = New System.Windows.Forms.Padding(2)
+        Me.uxMapNumber.MaxLength = 12
+        Me.uxMapNumber.Name = "uxMapNumber"
+        Me.uxMapNumber.Size = New System.Drawing.Size(107, 20)
+        Me.uxMapNumber.TabIndex = 1
         '
         'LocateFeatureForm
         '
@@ -96,9 +98,9 @@ Partial Class LocateFeatureForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(173, 129)
+        Me.Controls.Add(Me.uxMapNumber)
         Me.Controls.Add(Me.uxFind)
         Me.Controls.Add(Me.uxHelp)
-        Me.Controls.Add(Me.uxMapNumber)
         Me.Controls.Add(Me.uxTaxlot)
         Me.Controls.Add(Me.TaxlotLabel)
         Me.Controls.Add(Me.MapnumberLabel)
@@ -115,10 +117,10 @@ Partial Class LocateFeatureForm
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents uxMapNumber As System.Windows.Forms.ComboBox
     Friend WithEvents uxFind As System.Windows.Forms.Button
     Friend WithEvents uxHelp As System.Windows.Forms.Button
     Friend WithEvents MapnumberLabel As System.Windows.Forms.Label
     Friend WithEvents TaxlotLabel As System.Windows.Forms.Label
     Friend WithEvents uxTaxlot As System.Windows.Forms.TextBox
+    Friend WithEvents uxMapNumber As System.Windows.Forms.TextBox
 End Class

@@ -124,11 +124,13 @@ Public NotInheritable Class LocateFeature
             _partnerLocateFeatureForm = value
             ' Subscribe to partner form events.
             AddHandler _partnerLocateFeatureForm.Load, AddressOf PartnerLocateFeatureForm_Load
+            AddHandler _partnerLocateFeatureForm.uxMapNumber.TextChanged, AddressOf uxMapNumber_TextChanged
             AddHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
             AddHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
         Else
             ' Unsubscribe to partner form events.
             RemoveHandler _partnerLocateFeatureForm.Load, AddressOf PartnerLocateFeatureForm_Load
+            RemoveHandler _partnerLocateFeatureForm.uxMapNumber.TextChanged, AddressOf uxMapNumber_TextChanged
             RemoveHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
             RemoveHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
         End If
@@ -141,87 +143,190 @@ Public NotInheritable Class LocateFeature
     Private Sub PartnerLocateFeatureForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.Load
 
         With PartnerLocateFeatureForm
+            Try
+                .UseWaitCursor = True
 
-            ' Populate multi-value controls
-            If .uxMapNumber.Items.Count = 0 Then '-- Only load the text box the first time the tool is run.
-                Dim mapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
+                ' Populate multi-value controls
+                If .uxMapNumber.AutoCompleteCustomSource.Count = 0 Then '-- Only load the text box the first time the tool is run.
+                    Dim theMapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
 
-                Dim theQueryFilter As IQueryFilter = New QueryFilter
-                theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField
+                    Dim theQueryFilter As IQueryFilter = New QueryFilter
+                    theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField
 
-                Dim theFeatCursor As IFeatureCursor = mapIndexFClass.Search(theQueryFilter, False)
-                Dim theDataStats As IDataStatistics = New DataStatistics
-                Dim theDataStatsEnum As IEnumerator
-                With theDataStats
-                    .Cursor = DirectCast(theFeatCursor, ICursor)
-                    .Field = EditorExtension.MapIndexSettings.MapNumberField
-                    theDataStatsEnum = CType(.UniqueValues, IEnumerator)
-                End With
-                Do Until theDataStatsEnum.MoveNext = False
-                    .uxMapNumber.Items.Add(theDataStatsEnum.Current.ToString)
-                Loop
+                    Dim theFeatCursor As IFeatureCursor = theMapIndexFClass.Search(theQueryFilter, True)
 
-            End If
+                    '' NOTE: [NIS] The following code was replaced by the subsequent code 
+                    '' due to being 3 orders of magnitude slower.
+                    'Dim theDataStats As IDataStatistics = New DataStatistics
+                    'Dim theDataStatsEnum As IEnumerator
+                    'With theDataStats
+                    '    .Cursor = DirectCast(theFeatCursor, ICursor)
+                    '    .Field = EditorExtension.MapIndexSettings.MapNumberField
+                    '    theDataStatsEnum = CType(.UniqueValues, IEnumerator)
+                    'End With
+                    '
+                    'Do Until theDataStatsEnum.MoveNext = False
+                    '    .uxMapNumber.AutoCompleteCustomSource.Add(theDataStatsEnum.Current.ToString)
+                    'Loop
 
-            ' Set control defaults
-            .uxMapNumber.SelectedIndex = 0
+                    Dim theFeature As IFeature
+                    theFeature = theFeatCursor.NextFeature
+                    Dim theFieldIdx As Integer = Nothing
+                    If Not theFeature Is Nothing Then
+                        theFieldIdx = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
+                    Else
+                        Exit Sub
+                    End If
+                    Do Until theFeature Is Nothing
+                        Dim theMapNumberVal As String = theFeature.Value(theFieldIdx).ToString
+                        If Not .uxMapNumber.AutoCompleteCustomSource.Contains(theMapNumberVal) Then
+                            .uxMapNumber.AutoCompleteCustomSource.Add(theMapNumberVal)
+                        End If
+                        theFeature = theFeatCursor.NextFeature
+                    Loop
+
+                End If
+
+                ' Set control defaults
+                .uxMapNumber.Text = String.Empty
+                .uxTaxlot.Text = String.Empty
+            Finally
+                .UseWaitCursor = False
+            End Try
+        End With
+
+    End Sub
+
+    Private Sub uxMapNumber_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxMapNumber.TextChanged
+
+        With PartnerLocateFeatureForm
+            Try
+                .UseWaitCursor = True
+
+                Dim uxMapnumber As TextBox = .uxMapNumber
+                Dim uxTaxlot As TextBox = .uxTaxlot
+                If uxMapnumber.AutoCompleteCustomSource.Contains(uxMapnumber.Text.Trim) Then
+                    Dim theMapNumberVal As String = Nothing
+                    theMapNumberVal = uxMapnumber.Text.Trim
+
+                    If theMapNumberVal = String.Empty Then
+                        Exit Sub
+                    End If
+
+                    Dim theTaxlotFClass As IFeatureClass = TaxlotFeatureLayer.FeatureClass
+
+                    Dim theQueryFilter As IQueryFilter = New QueryFilter
+                    theQueryFilter.SubFields = EditorExtension.TaxLotSettings.MapNumberField & ", " & EditorExtension.TaxLotSettings.TaxlotField
+                    Dim theWhereClause As String
+                    theWhereClause = "[" & EditorExtension.TaxLotSettings.MapNumberField & "] = '" & theMapNumberVal & "'"
+                    theQueryFilter.WhereClause = formatWhereClause(theWhereClause, theTaxlotFClass)
+
+                    Dim theFeatCursor As IFeatureCursor = theTaxlotFClass.Search(theQueryFilter, True)
+
+                    '' NOTE: [NIS] The following code was replaced by the subsequent code 
+                    '' due to being 3 orders of magnitude slower.
+                    'Dim theDataStats As IDataStatistics = New DataStatistics
+                    'Dim theDataStatsEnum As IEnumerator
+                    'With theDataStats
+                    '    .Cursor = DirectCast(theFeatCursor, ICursor)
+                    '    .Field = EditorExtension.TaxLotSettings.TaxlotField
+                    '    theDataStatsEnum = CType(.UniqueValues, IEnumerator)
+                    'End With
+                    'Do Until theDataStatsEnum.MoveNext = False
+                    '    uxTaxlot.AutoCompleteCustomSource.Add(theDataStatsEnum.Current.ToString)
+                    'Loop
+
+                    Dim theFeature As IFeature
+                    theFeature = theFeatCursor.NextFeature
+                    Dim theFieldIdx As Integer = Nothing
+                    If Not theFeature Is Nothing Then
+                        theFieldIdx = theFeature.Fields.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+                    Else
+                        Exit Sub
+                    End If
+                    Do Until theFeature Is Nothing
+                        Dim theTaxlotVal As String = theFeature.Value(theFieldIdx).ToString
+                        If Not .uxTaxlot.AutoCompleteCustomSource.Contains(theTaxlotVal) Then
+                            .uxTaxlot.AutoCompleteCustomSource.Add(theTaxlotVal)
+                        End If
+                        theFeature = theFeatCursor.NextFeature
+                    Loop
+                Else
+                    uxTaxlot.AutoCompleteCustomSource.Clear()
+                End If
+
+            Finally
+                .UseWaitCursor = False
+            End Try
 
         End With
+
 
     End Sub
 
     Private Sub uxFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxFind.Click
 
-        Dim mapNumber As String = Nothing
-        Dim taxlot As String = Nothing
+        With PartnerLocateFeatureForm
+            Try
+                .UseWaitCursor = True
 
-        Dim uxMapnumber As ComboBox = PartnerLocateFeatureForm.uxMapNumber
-        If uxMapnumber.FindStringExact(uxMapnumber.Text) = -1 Then
-            MessageBox.Show("Invalid MapNumber.  Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        Else
-            mapNumber = uxMapnumber.Text.Trim
-        End If
+                Dim uxMapnumber As TextBox = PartnerLocateFeatureForm.uxMapNumber
+                Dim theMapNumberVal As String = uxMapnumber.Text.Trim
 
-        Dim uxTaxlot As TextBox = PartnerLocateFeatureForm.uxTaxlot
-        If uxTaxlot.Enabled AndAlso uxTaxlot.Text.Trim <> String.Empty Then
-            taxlot = uxTaxlot.Text.Trim
-        End If
+                If theMapNumberVal = String.Empty OrElse Not uxMapnumber.AutoCompleteCustomSource.Contains(theMapNumberVal) Then
+                    .UseWaitCursor = False
+                    MessageBox.Show("Invalid MapNumber. Please try again.", "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    Exit Sub
+                End If
 
-        Dim theQueryFilter As IQueryFilter = New QueryFilter
-        Dim theXFlayer As IFeatureLayer = Nothing '-- Set as either the MapIndex or Taxlot Feature Layer.
+                Dim uxTaxlot As TextBox = PartnerLocateFeatureForm.uxTaxlot
+                Dim theTaxlotVal As String = uxTaxlot.Text.Trim
 
-        Dim theWhereClause As String
+                If theTaxlotVal <> String.Empty AndAlso Not uxTaxlot.AutoCompleteCustomSource.Contains(theTaxlotVal) Then
+                    .UseWaitCursor = False
+                    MessageBox.Show("Invalid Taxlot. Please try again.", "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    Exit Sub
+                End If
 
-        If taxlot Is Nothing Then
-            '[Looking for just a MapIndex...]
-            theXFlayer = MapIndexFeatureLayer
-            theQueryFilter.SubFields = "Shape, " & EditorExtension.MapIndexSettings.MapNumberField
-            theWhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] = '" & mapNumber & "'"
-        Else
-            '[Looking for a MapIndex and Taxlot...]
-            theXFlayer = TaxlotFeatureLayer
-            theQueryFilter.SubFields = "Shape, " & EditorExtension.TaxLotSettings.MapNumberField & ", " & EditorExtension.TaxLotSettings.TaxlotField
-            theWhereClause = "[" & EditorExtension.TaxLotSettings.MapNumberField & "] = '" & mapNumber & "' AND [" & EditorExtension.TaxLotSettings.TaxlotField & "] = '" & taxlot & "'"
-        End If
+                Dim theQueryFilter As IQueryFilter = New QueryFilter
+                Dim theXFlayer As IFeatureLayer = Nothing '-- Set as either the MapIndex or Taxlot Feature Layer.
 
-        theQueryFilter.WhereClause = formatWhereClause(theWhereClause, theXFlayer.FeatureClass)
+                Dim theWhereClause As String
 
-        Dim theXFClass As IFeatureClass = theXFlayer.FeatureClass
-        Dim theFeatCursor As IFeatureCursor = theXFClass.Search(theQueryFilter, True)
-        Dim thisFeature As IFeature = theFeatCursor.NextFeature
+                If theTaxlotVal = String.Empty Then
+                    '[Looking for just a MapIndex...]
+                    theXFlayer = MapIndexFeatureLayer
+                    theQueryFilter.SubFields = "Shape, " & EditorExtension.MapIndexSettings.MapNumberField
+                    theWhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] = '" & theMapNumberVal & "'"
+                Else
+                    '[Looking for a MapIndex and Taxlot...]
+                    theXFlayer = TaxlotFeatureLayer
+                    theQueryFilter.SubFields = "Shape, " & EditorExtension.TaxLotSettings.MapNumberField & ", " & EditorExtension.TaxLotSettings.TaxlotField
+                    theWhereClause = "[" & EditorExtension.TaxLotSettings.MapNumberField & "] = '" & theMapNumberVal & "' AND [" & EditorExtension.TaxLotSettings.TaxlotField & "] = '" & theTaxlotVal & "'"
+                End If
 
-        If thisFeature Is Nothing Then '-- Must be due to invalid mapindex or taxlot entered into the text boxes.
-            MessageBox.Show("Feature does not exist.", "Locate feature", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
-        Else
-            Dim theEnvelope As IEnvelope = thisFeature.Shape.Envelope
-            Do Until thisFeature Is Nothing
-                theEnvelope.Union(thisFeature.Shape.Envelope)
-                thisFeature = theFeatCursor.NextFeature
-            Loop
-            ZoomToEnvelope(theEnvelope)
-            SetSelectedFeature(theXFlayer, thisFeature, True) ' TODO: [NIS] This is not working here. Why not?
-        End If
+                theQueryFilter.WhereClause = formatWhereClause(theWhereClause, theXFlayer.FeatureClass)
+
+                Dim theXFClass As IFeatureClass = theXFlayer.FeatureClass
+                Dim theFeatCursor As IFeatureCursor = theXFClass.Search(theQueryFilter, True)
+                Dim thisFeature As IFeature = theFeatCursor.NextFeature
+
+                If thisFeature Is Nothing Then '-- Must be due to invalid mapindex or taxlot entered into the text boxes.
+                    MessageBox.Show("Feature does not exist.", "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
+                Else
+                    Dim theEnvelope As IEnvelope = thisFeature.Shape.Envelope
+                    Do Until thisFeature Is Nothing
+                        theEnvelope.Union(thisFeature.Shape.Envelope)
+                        thisFeature = theFeatCursor.NextFeature
+                    Loop
+                    ZoomToEnvelope(theEnvelope)
+                    SetSelectedFeature(theXFlayer, thisFeature, True) ' TODO: [NIS] This is not working here. Why not?
+                End If
+            Finally
+                .UseWaitCursor = False
+            End Try
+        End With
+
 
     End Sub
 
