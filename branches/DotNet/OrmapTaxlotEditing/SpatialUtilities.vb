@@ -1265,7 +1265,7 @@ Public NotInheritable Class SpatialUtilities
         End With
 
         ' Exit if there is nothing selected
-        If theFileDialog.SelectedObject(1) Is Nothing Then
+        If theFileDialog.SelectedObject(0) Is Nothing Then
             Return False
         End If
 
@@ -1343,7 +1343,7 @@ Public NotInheritable Class SpatialUtilities
         End With
 
         ' Exit if there is nothing selected
-        If theFileDialog.SelectedObject(1) Is Nothing Then
+        If theFileDialog.SelectedObject(0) Is Nothing Then
             Return False
         End If
 
@@ -1969,7 +1969,7 @@ Public NotInheritable Class SpatialUtilities
         Dim thisSdeWorkspaceFactory As IWorkspaceFactory2 = New SdeWorkspaceFactory
         Dim thisFileGDBWorkspaceFactory As IWorkspaceFactory2 = New FileGDBWorkspaceFactory
         Try
-            Dim thisFileDialogSelectedObject As String = CStr(thisFileDialog.SelectedObject(1))
+            Dim thisFileDialogSelectedObject As String = CStr(thisFileDialog.SelectedObject(0))
             Dim theParentPath As String = My.Computer.FileSystem.GetParentPath(thisFileDialogSelectedObject) 'Geodatabase or feature dataset
             Dim theGrandParentPath As String = My.Computer.FileSystem.GetParentPath(theParentPath) 'Needed if parent is a feature dataset
             If thisAccessWorkspaceFactory.IsWorkspace(theParentPath) Then

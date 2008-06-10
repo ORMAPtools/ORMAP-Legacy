@@ -122,7 +122,7 @@ Public Class CatalogFileDialog
     ''' <returns>A file object.</returns>
     ''' <remarks>Return the nth selected element from the most recent file save/open dialog request.</remarks>
     Public Overloads Function SelectedObject(ByVal selection As Integer) As Object
-        If selection > _selectionList.Count OrElse selection = NoSelectedElementIndex Then
+        If selection >= _selectionList.Count OrElse selection = NoSelectedElementIndex Then
             Return Nothing
         Else
             Return _selectionList.Item(selection)

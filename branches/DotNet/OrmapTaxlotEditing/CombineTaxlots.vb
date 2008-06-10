@@ -494,14 +494,20 @@ Public NotInheritable Class CombineTaxlots
                                         End If
                                         areaWeightedAddByDataType(theKeepFeature, thisSelectedFeature, thisArea, thisCurve, theAreaSum, theLengthSum, thisFieldIndex)
 
-                                    Case Else 'If no merge policy, just take one of the existing values
-                                        theKeepFeature.Value(thisFieldIndex) = thisSelectedFeature.Value(thisFieldIndex)
+                                    Case Else
+                                        '[No merge policy...]
+                                        ' Use the existing keep feature value
+                                        'DO NOT USE: 
+                                        'theKeepFeature.Value(thisFieldIndex) = thisSelectedFeature.Value(thisFieldIndex)
 
                                 End Select 'do not need a case for default value as it is set above
-                            Else 'If not a domain, copy the existing value
-                                If theKeepFeature.Fields.Field(thisFieldIndex).Editable Then 'Don't attempt to copy objectid or other non-editable field
-                                    theKeepFeature.Value(thisFieldIndex) = thisSelectedFeature.Value(thisFieldIndex)
-                                End If
+                            Else
+                                '[Not a domain...]
+                                ' Use the existing keep feature value
+                                'DO NOT USE: 
+                                'If theKeepFeature.Fields.Field(thisFieldIndex).Editable Then 'Don't attempt to copy objectid or other non-editable field
+                                '    theKeepFeature.Value(thisFieldIndex) = thisSelectedFeature.Value(thisFieldIndex)
+                                'End If
                             End If
                         Next thisFieldIndex
 
@@ -524,10 +530,10 @@ Public NotInheritable Class CombineTaxlots
                 '---------------------------------------
                 theKeepFeature.Shape = theOutputGeometry
 
-                '---------------------------------------
-                ' Set the new combined taxlot number.
-                '---------------------------------------
-                theKeepFeature.Value(theTaxlotFieldIndex) = theTaxlotNumber
+                ''---------------------------------------
+                '' Set the new combined taxlot number.
+                ''---------------------------------------
+                'theKeepFeature.Value(theTaxlotFieldIndex) = theTaxlotNumber
 
                 '---------------------------------------
                 ' Store the feature edits.
@@ -643,9 +649,10 @@ Public NotInheritable Class CombineTaxlots
         Dim theOidList() As Integer
         ReDim theOidList(0)
         theOidList(0) = theKeepFeature.OID
+        DirectCast(EditorExtension.Editor.Map, IActiveView).PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, Nothing, Nothing)
+        Dim theSelectionEvents As ISelectionEvents = DirectCast(EditorExtension.Editor.Map, ISelectionEvents)
         theCurrentTaxlotSelection.SelectionSet.RemoveList(1, theOidList(0))
         theCurrentTaxlotSelection.SelectionChanged()
-        Dim theSelectionEvents As ISelectionEvents = DirectCast(EditorExtension.Editor.Map, ISelectionEvents)
         theSelectionEvents.SelectionChanged()
         DirectCast(EditorExtension.Editor.Map, IActiveView).PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, Nothing, Nothing)
 
