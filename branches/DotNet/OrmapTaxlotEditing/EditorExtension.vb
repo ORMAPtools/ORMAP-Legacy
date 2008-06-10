@@ -471,7 +471,7 @@ Public NotInheritable Class EditorExtension
 
                 Exit Sub
             End If
-            
+
             If IsTaxlot(obj) Then
                 '[Edited object is a ORMAP taxlot feature...]
 

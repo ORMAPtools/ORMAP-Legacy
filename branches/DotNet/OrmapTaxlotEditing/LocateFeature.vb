@@ -320,7 +320,7 @@ Public NotInheritable Class LocateFeature
                         thisFeature = theFeatCursor.NextFeature
                     Loop
                     ZoomToEnvelope(theEnvelope)
-                    SetSelectedFeature(theXFlayer, thisFeature, True) ' TODO: [NIS] This is not working here. Why not?
+                    SetSelectedFeature(theXFlayer, thisFeature, True) ' TODO: [SC] This is not working here. Add new procedure for multiple features.
                 End If
             Finally
                 .UseWaitCursor = False

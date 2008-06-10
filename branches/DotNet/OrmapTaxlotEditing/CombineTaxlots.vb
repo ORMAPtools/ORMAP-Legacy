@@ -125,11 +125,13 @@ Public NotInheritable Class CombineTaxlots
             _partnerCombineTaxlotsForm = value
             ' Subscribe to partner form events.
             AddHandler _partnerCombineTaxlotsForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
+            AddHandler _partnerCombineTaxlotsForm.uxNewTaxlotNumber.SelectedIndexChanged, AddressOf uxNewTaxlotNumber_SelectedIndexChanged
             AddHandler _partnerCombineTaxlotsForm.uxCombine.Click, AddressOf uxCombine_Click
             AddHandler _partnerCombineTaxlotsForm.uxHelp.Click, AddressOf uxHelp_Click
         Else
             ' Unsubscribe to partner form events.
             RemoveHandler _partnerCombineTaxlotsForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
+            RemoveHandler _partnerCombineTaxlotsForm.uxNewTaxlotNumber.SelectedIndexChanged, AddressOf uxNewTaxlotNumber_SelectedIndexChanged
             RemoveHandler _partnerCombineTaxlotsForm.uxCombine.Click, AddressOf uxCombine_Click
             RemoveHandler _partnerCombineTaxlotsForm.uxHelp.Click, AddressOf uxHelp_Click
         End If
@@ -176,6 +178,38 @@ Public NotInheritable Class CombineTaxlots
 
             End With
 
+        End If
+
+    End Sub
+
+    Private Sub uxNewTaxlotNumber_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.uxNewTaxlotNumber.SelectedIndexChanged
+
+        ' Get the user-entered or selected taxlot.
+        Dim theTaxlotNumber As String = Nothing
+        Dim uxNewTaxlotNumber As ComboBox = PartnerCombineTaxlotsForm.uxNewTaxlotNumber
+        theTaxlotNumber = uxNewTaxlotNumber.Text.Trim
+
+
+        Dim theFlayer As IFeatureLayer = Nothing
+        theFlayer = TaxlotFeatureLayer
+
+        Dim theQueryFilter As IQueryFilter = New QueryFilter
+        Dim theWhereClause As String
+        theQueryFilter.SubFields = "Shape, " & EditorExtension.TaxLotSettings.MapNumberField
+        theWhereClause = "[" & EditorExtension.TaxLotSettings.TaxlotField & "] = '" & theTaxlotNumber & "'"
+        theQueryFilter.WhereClause = formatWhereClause(theWhereClause, theFlayer.FeatureClass)
+
+        Dim theCurrentTaxlotSelection As IFeatureSelection = DirectCast(TaxlotFeatureLayer, IFeatureSelection)
+
+        ' ENHANCE: [NIS] Escape with error message in the case where selected features span tax maps...
+
+        Dim theCursor As ICursor = Nothing
+        theCurrentTaxlotSelection.SelectionSet.Search(theQueryFilter, True, theCursor)
+
+        Dim thisFeature As IFeature = DirectCast(theCursor.NextRow, IFeature)
+
+        If thisFeature IsNot Nothing Then
+            FlashFeature(thisFeature, DirectCast(EditorExtension.Application.Document, IMxDocument), 100)
         End If
 
     End Sub

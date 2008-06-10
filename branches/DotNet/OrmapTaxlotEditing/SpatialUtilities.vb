@@ -37,22 +37,26 @@
 #End Region
 
 #Region "Imported Namespaces"
+
 Imports System.Collections.Generic
 Imports System.Environment
 Imports System.Globalization
 Imports System.Text
+Imports System.Threading.Thread
 Imports System.Windows.Forms
 Imports ESRI.ArcGIS
 Imports ESRI.ArcGIS.ArcMapUI
 Imports ESRI.ArcGIS.Carto
 Imports ESRI.ArcGIS.Catalog
 Imports ESRI.ArcGIS.DataSourcesGDB
+Imports ESRI.ArcGIS.Display
 Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Geodatabase
 Imports ESRI.ArcGIS.Geometry
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
 Imports OrmapTaxlotEditing.DataMonitor
+
 #End Region
 
 #Region "Class Declaration"
@@ -480,6 +484,89 @@ Public NotInheritable Class SpatialUtilities
         Return returnValue
 
     End Function
+
+    ' TODO: [NIS] Add XML comments
+    Public Shared Sub FlashFeature(ByVal theFeature As IFeature, ByVal theMxDoc As IMxDocument, ByVal inDurationMilliseconds As Integer)
+
+        ' Start drawing on screen (suppress other draw events). 
+        theMxDoc.ActiveView.ScreenDisplay.StartDrawing(0, CShort(esriScreenCache.esriNoScreenCache))
+
+        ' Switch functions based on Geometry type. 
+        Select Case theFeature.Shape.GeometryType
+            Case esriGeometryType.esriGeometryPolyline
+                flashLine(theMxDoc.ActiveView.ScreenDisplay, theFeature.Shape, inDurationMilliseconds)
+            Case esriGeometryType.esriGeometryPolygon
+                flashPolygon(theMxDoc.ActiveView.ScreenDisplay, theFeature.Shape, inDurationMilliseconds)
+            Case esriGeometryType.esriGeometryPoint
+                flashPoint(theMxDoc.ActiveView.ScreenDisplay, theFeature.Shape, inDurationMilliseconds)
+        End Select
+
+        ' Finish drawing on screen. 
+        theMxDoc.ActiveView.ScreenDisplay.FinishDrawing()
+    End Sub
+
+    ' TODO: [NIS] Add XML comments
+    Private Shared Sub flashLine(ByVal inDisplay As IScreenDisplay, ByVal inGeometry As IGeometry, ByVal inDurationMilliseconds As Integer)
+        Dim theLineSymbol As ISimpleLineSymbol
+        Dim theSymbol As ISymbol
+        
+        theLineSymbol = New SimpleLineSymbol
+        theLineSymbol.Width = 4
+
+        Dim theRGBColor As IRgbColor
+        theRGBColor = New RgbColor
+        theRGBColor.Green = 128
+
+        theSymbol = DirectCast(theLineSymbol, ISymbol)
+        theSymbol.ROP2 = esriRasterOpCode.esriROPNotXOrPen
+
+        inDisplay.SetSymbol(DirectCast(theLineSymbol, ISymbol))
+        inDisplay.DrawPolyline(inGeometry)
+        Sleep(inDurationMilliseconds)
+        inDisplay.DrawPolyline(inGeometry)
+    End Sub
+
+    ' TODO: [NIS] Add XML comments
+    Private Shared Sub flashPolygon(ByVal inDisplay As IScreenDisplay, ByVal inGeometry As IGeometry, ByVal inDurationMilliseconds As Integer)
+        Dim theFillSymbol As ISimpleFillSymbol
+        Dim theSymbol As ISymbol
+        
+        theFillSymbol = New SimpleFillSymbol
+        theFillSymbol.Outline = Nothing
+
+        Dim theRGBColor As IRgbColor
+        theRGBColor = New RgbColor
+        theRGBColor.Green = 128
+
+        theSymbol = DirectCast(theFillSymbol, ISymbol)
+        theSymbol.ROP2 = esriRasterOpCode.esriROPNotXOrPen
+
+        inDisplay.SetSymbol(DirectCast(theFillSymbol, ISymbol))
+        inDisplay.DrawPolygon(inGeometry)
+        Sleep(inDurationMilliseconds)
+        inDisplay.DrawPolygon(inGeometry)
+    End Sub
+
+    ' TODO: [NIS] Add XML comments
+    Private Shared Sub flashPoint(ByVal inDisplay As IScreenDisplay, ByVal inGeometry As IGeometry, ByVal inDurationMilliseconds As Integer)
+        Dim theMarkerSymbol As ISimpleMarkerSymbol
+        Dim theSymbol As ISymbol
+        
+        theMarkerSymbol = New SimpleMarkerSymbol
+        theMarkerSymbol.Style = esriSimpleMarkerStyle.esriSMSCircle
+
+        Dim theRGBColor As IRgbColor
+        theRGBColor = New RgbColor
+        theRGBColor.Green = 128
+
+        theSymbol = DirectCast(theMarkerSymbol, ISymbol)
+        theSymbol.ROP2 = esriRasterOpCode.esriROPNotXOrPen
+
+        inDisplay.SetSymbol(DirectCast(theMarkerSymbol, ISymbol))
+        inDisplay.DrawPoint(inGeometry)
+        Sleep(inDurationMilliseconds)
+        inDisplay.DrawPoint(inGeometry)
+    End Sub
 
     ''' <summary>
     ''' Locate a feature layer by its dataset name.
