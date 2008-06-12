@@ -19,12 +19,15 @@ Partial Class LocateFeatureForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container
         Me.uxFind = New System.Windows.Forms.Button
         Me.uxHelp = New System.Windows.Forms.Button
         Me.MapnumberLabel = New System.Windows.Forms.Label
         Me.TaxlotLabel = New System.Windows.Forms.Label
         Me.uxTaxlot = New System.Windows.Forms.TextBox
         Me.uxMapNumber = New System.Windows.Forms.TextBox
+        Me.uxErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        CType(Me.uxErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'uxFind
@@ -92,6 +95,10 @@ Partial Class LocateFeatureForm
         Me.uxMapNumber.Size = New System.Drawing.Size(107, 20)
         Me.uxMapNumber.TabIndex = 1
         '
+        'uxErrorProvider
+        '
+        Me.uxErrorProvider.ContainerControl = Me
+        '
         'LocateFeatureForm
         '
         Me.AcceptButton = Me.uxFind
@@ -113,6 +120,7 @@ Partial Class LocateFeatureForm
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Locate Feature"
         Me.TopMost = True
+        CType(Me.uxErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -123,4 +131,5 @@ Partial Class LocateFeatureForm
     Friend WithEvents TaxlotLabel As System.Windows.Forms.Label
     Friend WithEvents uxTaxlot As System.Windows.Forms.TextBox
     Friend WithEvents uxMapNumber As System.Windows.Forms.TextBox
+    Friend WithEvents uxErrorProvider As System.Windows.Forms.ErrorProvider
 End Class

@@ -136,6 +136,7 @@ Public NotInheritable Class LocateFeature
         End If
     End Sub
 
+
 #End Region
 
 #Region "Event Handlers"
@@ -146,50 +147,31 @@ Public NotInheritable Class LocateFeature
             Try
                 .UseWaitCursor = True
 
-                ' Populate multi-value controls
-                If .uxMapNumber.AutoCompleteCustomSource.Count = 0 Then '-- Only load the text box the first time the tool is run.
-                    Dim theMapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
-
-                    Dim theQueryFilter As IQueryFilter = New QueryFilter
-                    theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField
-
-                    Dim theFeatCursor As IFeatureCursor = theMapIndexFClass.Search(theQueryFilter, True)
-
-                    '' NOTE: [NIS] The following code was replaced by the subsequent code 
-                    '' due to being 3 orders of magnitude slower.
-                    'Dim theDataStats As IDataStatistics = New DataStatistics
-                    'Dim theDataStatsEnum As IEnumerator
-                    'With theDataStats
-                    '    .Cursor = DirectCast(theFeatCursor, ICursor)
-                    '    .Field = EditorExtension.MapIndexSettings.MapNumberField
-                    '    theDataStatsEnum = CType(.UniqueValues, IEnumerator)
-                    'End With
-                    '
-                    'Do Until theDataStatsEnum.MoveNext = False
-                    '    .uxMapNumber.AutoCompleteCustomSource.Add(theDataStatsEnum.Current.ToString)
-                    'Loop
-
-                    Dim theFeature As IFeature
-                    theFeature = theFeatCursor.NextFeature
-                    Dim theFieldIdx As Integer = Nothing
-                    If Not theFeature Is Nothing Then
-                        theFieldIdx = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
-                    Else
-                        Exit Sub
+                '' NOTE: [SC] Calculating a AutoCompleteCustomSource using the List of strings is considerably faster than
+                '' adding with the .add method.
+                Dim mapNumberStringList As List(Of String) = New List(Of String)
+                Dim theMapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
+                Dim theQueryFilter As IQueryFilter = New QueryFilter
+                theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapNumberField
+                Dim theFeatCursor As IFeatureCursor = theMapIndexFClass.Search(theQueryFilter, True)
+                Dim theFeature As IFeature = theFeatCursor.NextFeature
+                If theFeature Is Nothing Then Exit Sub
+                Dim theFieldIdx As Integer = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
+                Do Until theFeature Is Nothing
+                    Dim theMapNumberVal As String = theFeature.Value(theFieldIdx).ToString
+                    If Not mapNumberStringList.Contains(theMapNumberVal) Then
+                        mapNumberStringList.Add(theMapNumberVal)
                     End If
-                    Do Until theFeature Is Nothing
-                        Dim theMapNumberVal As String = theFeature.Value(theFieldIdx).ToString
-                        If Not .uxMapNumber.AutoCompleteCustomSource.Contains(theMapNumberVal) Then
-                            .uxMapNumber.AutoCompleteCustomSource.Add(theMapNumberVal)
-                        End If
-                        theFeature = theFeatCursor.NextFeature
-                    Loop
+                    theFeature = theFeatCursor.NextFeature
+                Loop
 
-                End If
+                ' Populate the combobox from the List object
+                .uxMapNumber.AutoCompleteCustomSource.AddRange(mapNumberStringList.ToArray)
 
                 ' Set control defaults
                 .uxMapNumber.Text = String.Empty
                 .uxTaxlot.Text = String.Empty
+
             Finally
                 .UseWaitCursor = False
             End Try
@@ -205,54 +187,44 @@ Public NotInheritable Class LocateFeature
 
                 Dim uxMapnumber As TextBox = .uxMapNumber
                 Dim uxTaxlot As TextBox = .uxTaxlot
-                If uxMapnumber.AutoCompleteCustomSource.Contains(uxMapnumber.Text.Trim) Then
-                    Dim theMapNumberVal As String = Nothing
-                    theMapNumberVal = uxMapnumber.Text.Trim
 
-                    If theMapNumberVal = String.Empty Then
-                        Exit Sub
-                    End If
+                If uxMapnumber.AutoCompleteCustomSource.Contains(uxMapnumber.Text.Trim) Then
+
+                    Dim theMapNumberVal As String = uxMapnumber.Text.Trim
+                    If theMapNumberVal = String.Empty Then Exit Sub
 
                     Dim theTaxlotFClass As IFeatureClass = TaxlotFeatureLayer.FeatureClass
 
                     Dim theQueryFilter As IQueryFilter = New QueryFilter
                     theQueryFilter.SubFields = EditorExtension.TaxLotSettings.MapNumberField & ", " & EditorExtension.TaxLotSettings.TaxlotField
-                    Dim theWhereClause As String
-                    theWhereClause = "[" & EditorExtension.TaxLotSettings.MapNumberField & "] = '" & theMapNumberVal & "'"
-                    theQueryFilter.WhereClause = formatWhereClause(theWhereClause, theTaxlotFClass)
+                    '' NOTE: [SC] The following whereclause was slower than querying the entire recordset and then filtering 
+                    '' results (see feature loop below).
+                    'Dim theWhereClause As String
+                    'theWhereClause = "[" & EditorExtension.TaxLotSettings.MapNumberField & "] = '" & theMapNumberVal & "'"
+                    'theQueryFilter.WhereClause = formatWhereClause(theWhereClause, theTaxlotFClass)
 
+                    '' NOTE: [SC] Calculating a AutoCompleteCustomSource using the List of strings is considerably faster than
+                    '' adding with the .add method.
+                    Dim taxlotStringList As List(Of String) = New List(Of String)
                     Dim theFeatCursor As IFeatureCursor = theTaxlotFClass.Search(theQueryFilter, True)
+                    Dim theFeature As IFeature = theFeatCursor.NextFeature
+                    If theFeature Is Nothing Then Exit Sub
+                    Dim theTaxlotFieldIdx As Integer = theFeature.Fields.FindField(EditorExtension.TaxLotSettings.TaxlotField)
+                    Dim theMapNumberFieldIdx As Integer = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
 
-                    '' NOTE: [NIS] The following code was replaced by the subsequent code 
-                    '' due to being 3 orders of magnitude slower.
-                    'Dim theDataStats As IDataStatistics = New DataStatistics
-                    'Dim theDataStatsEnum As IEnumerator
-                    'With theDataStats
-                    '    .Cursor = DirectCast(theFeatCursor, ICursor)
-                    '    .Field = EditorExtension.TaxLotSettings.TaxlotField
-                    '    theDataStatsEnum = CType(.UniqueValues, IEnumerator)
-                    'End With
-                    'Do Until theDataStatsEnum.MoveNext = False
-                    '    uxTaxlot.AutoCompleteCustomSource.Add(theDataStatsEnum.Current.ToString)
-                    'Loop
-
-                    Dim theFeature As IFeature
-                    theFeature = theFeatCursor.NextFeature
-                    Dim theFieldIdx As Integer = Nothing
-                    If Not theFeature Is Nothing Then
-                        theFieldIdx = theFeature.Fields.FindField(EditorExtension.TaxLotSettings.TaxlotField)
-                    Else
-                        Exit Sub
-                    End If
                     Do Until theFeature Is Nothing
-                        Dim theTaxlotVal As String = theFeature.Value(theFieldIdx).ToString
-                        If Not .uxTaxlot.AutoCompleteCustomSource.Contains(theTaxlotVal) Then
-                            .uxTaxlot.AutoCompleteCustomSource.Add(theTaxlotVal)
+                        Dim theTaxlotVal As String = theFeature.Value(theTaxlotFieldIdx).ToString
+                        If Not uxTaxlot.AutoCompleteCustomSource.Contains(theTaxlotVal) AndAlso theMapNumberVal = theFeature.Value(theMapNumberFieldIdx).ToString Then
+                            taxlotStringList.Add(theTaxlotVal)
                         End If
                         theFeature = theFeatCursor.NextFeature
                     Loop
+
+                    uxTaxlot.AutoCompleteCustomSource.AddRange(taxlotStringList.ToArray)
+
                 Else
                     uxTaxlot.AutoCompleteCustomSource.Clear()
+                    uxTaxlot.Text = String.Empty
                 End If
 
             Finally
@@ -279,7 +251,7 @@ Public NotInheritable Class LocateFeature
                     Exit Sub
                 End If
 
-                Dim uxTaxlot As TextBox = PartnerLocateFeatureForm.uxTaxlot
+                Dim uxTaxlot As TextBox = .uxTaxlot
                 Dim theTaxlotVal As String = uxTaxlot.Text.Trim
 
                 If theTaxlotVal <> String.Empty AndAlso Not uxTaxlot.AutoCompleteCustomSource.Contains(theTaxlotVal) Then
