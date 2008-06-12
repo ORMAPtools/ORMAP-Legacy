@@ -147,33 +147,38 @@ Public NotInheritable Class CombineTaxlots
 
             With PartnerCombineTaxlotsForm
 
+                '-------------------------------
                 ' Populate multi-value controls
-                If .uxNewTaxlotNumber.Items.Count = 0 Then
-                    ' Get a list of distinct taxlot numbers for the set of taxlots to be combined.
-                    Dim theCurrentTaxlotSelection As IFeatureSelection = DirectCast(TaxlotFeatureLayer, IFeatureSelection)
+                '-------------------------------
 
-                    ' ENHANCE: [NIS] Escape with error message in the case where selected features span tax maps...
+                .uxNewTaxlotNumber.Items.Clear()
 
-                    Dim theQueryFilter As IQueryFilter = New QueryFilter
-                    theQueryFilter.SubFields = EditorExtension.TaxLotSettings.TaxlotField
+                ' Get a list of distinct taxlot numbers for the set of taxlots to be combined.
+                Dim theCurrentTaxlotSelection As IFeatureSelection = DirectCast(TaxlotFeatureLayer, IFeatureSelection)
 
-                    Dim theCursor As ICursor = Nothing
-                    theCurrentTaxlotSelection.SelectionSet.Search(theQueryFilter, True, theCursor)
+                ' ENHANCE: [NIS] Escape with error message in the case where selected features span tax maps...
 
-                    Dim theDataStats As IDataStatistics = New DataStatistics
-                    Dim theDataStatsEnum As IEnumerator
-                    With theDataStats
-                        .Cursor = theCursor
-                        .Field = EditorExtension.TaxLotSettings.TaxlotField
-                        theDataStatsEnum = CType(.UniqueValues, IEnumerator)
-                    End With
+                Dim theQueryFilter As IQueryFilter = New QueryFilter
+                theQueryFilter.SubFields = EditorExtension.TaxLotSettings.TaxlotField
 
-                    Do Until theDataStatsEnum.MoveNext = False
-                        .uxNewTaxlotNumber.Items.Add(theDataStatsEnum.Current.ToString)
-                    Loop
-                End If
+                Dim theCursor As ICursor = Nothing
+                theCurrentTaxlotSelection.SelectionSet.Search(theQueryFilter, True, theCursor)
 
+                Dim theDataStats As IDataStatistics = New DataStatistics
+                Dim theDataStatsEnum As IEnumerator
+                With theDataStats
+                    .Cursor = theCursor
+                    .Field = EditorExtension.TaxLotSettings.TaxlotField
+                    theDataStatsEnum = CType(.UniqueValues, IEnumerator)
+                End With
+
+                Do Until theDataStatsEnum.MoveNext = False
+                    .uxNewTaxlotNumber.Items.Add(theDataStatsEnum.Current.ToString)
+                Loop
+                
+                '-------------------------------
                 ' Set control defaults
+                '-------------------------------
                 .uxNewTaxlotNumber.SelectedIndex = 0
 
             End With
