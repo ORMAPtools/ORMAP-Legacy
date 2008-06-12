@@ -888,6 +888,7 @@ Public NotInheritable Class EditMapIndex
                 Dim mapTaxlotID As String = _ormapNumber.GetORMapNum & taxlot
                 Dim countyCode As Short = CShort(EditorExtension.DefaultValuesSettings.County)
                 Dim mapTaxlotValue As String = String.Empty
+                Dim parseResult As Integer = 0
 
                 Select Case countyCode
                     Case 1 To 19, 21 To 36
@@ -911,9 +912,14 @@ Public NotInheritable Class EditMapIndex
                     .Value(_taxlotFields.Anomaly) = _ormapNumber.Anomaly
                     .Value(_taxlotFields.MapNumber) = theMapIndexFeature.Value(_mapIndexFields.MapNumber)
                     .Value(_taxlotFields.OrmapMapNumber) = _ormapNumber.GetOrmapMapNumber
-                    .Value(_taxlotFields.Taxlot) = CInt(taxlot)
+                    If Integer.TryParse(taxlot, parseResult) Then
+                        .Value(_taxlotFields.Taxlot) = parseResult
+                    Else
+                        .Value(_taxlotFields.Taxlot) = taxlot.Trim()
+                    End If
+
                     ' Special interest used to go here
-                    .Value(_taxlotFields.MapTaxlotNumber) = mapTaxlotValue
+                    .Value(_taxlotFields.MapTaxlotNumber) = mapTaxlotValue.Trim()
                     .Value(_taxlotFields.OrmapTaxlotNumber) = _ormapNumber.GetORMapNum & taxlot
                     .Store()
                 End With
