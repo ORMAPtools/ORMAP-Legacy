@@ -465,7 +465,7 @@ On Error GoTo ErrorHandler
     Set m_pTaxlotFLayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
     If m_pTaxlotFLayer Is Nothing Then
     '++ START JWalton 1/31/2007 Added load option for this feature class
-        ' Attempt to load and find the Map Index in the map document
+        ' Attempt to load and find the Taxlot layer in the map document
         If LoadFCIntoMap(g_pFldnames.FCTaxlot) Then
             Set m_pMIFlayer = FindFeatureLayerByDS(g_pFldnames.FCTaxlot)
           Else
