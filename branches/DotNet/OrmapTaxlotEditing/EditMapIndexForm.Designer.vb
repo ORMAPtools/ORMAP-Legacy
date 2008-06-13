@@ -19,6 +19,7 @@ Partial Class EditMapIndexForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container
         Me.uxTownship = New System.Windows.Forms.ComboBox
         Me.uxTownshipDirectional = New System.Windows.Forms.ComboBox
         Me.uxTownshipPartial = New System.Windows.Forms.ComboBox
@@ -62,11 +63,13 @@ Partial Class EditMapIndexForm
         Me.uxHelp = New System.Windows.Forms.Button
         Me.uxEdit = New System.Windows.Forms.Button
         Me.uxQuit = New System.Windows.Forms.Button
+        Me.ErrorProviderSuffixNum = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.uxTownshipGroupBox.SuspendLayout()
         Me.uxRangeGroupBox.SuspendLayout()
         Me.uxSectionGroupBox.SuspendLayout()
         Me.uxMapInfoGroupBox.SuspendLayout()
         Me.uxORMAPNumberGroupBox.SuspendLayout()
+        CType(Me.ErrorProviderSuffixNum, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'uxTownship
@@ -285,9 +288,9 @@ Partial Class EditMapIndexForm
         Me.uxMapInfoGroupBox.Controls.Add(Me.uxSuffixNumber)
         Me.uxMapInfoGroupBox.Controls.Add(Me.uxMapNumber)
         Me.uxMapInfoGroupBox.Controls.Add(Me.uxCounty)
-        Me.uxMapInfoGroupBox.Location = New System.Drawing.Point(203, 6)
+        Me.uxMapInfoGroupBox.Location = New System.Drawing.Point(217, 6)
         Me.uxMapInfoGroupBox.Name = "uxMapInfoGroupBox"
-        Me.uxMapInfoGroupBox.Size = New System.Drawing.Size(253, 214)
+        Me.uxMapInfoGroupBox.Size = New System.Drawing.Size(273, 214)
         Me.uxMapInfoGroupBox.TabIndex = 4
         Me.uxMapInfoGroupBox.TabStop = False
         Me.uxMapInfoGroupBox.Text = "Map Information"
@@ -418,16 +421,17 @@ Partial Class EditMapIndexForm
         '
         'uxCounty
         '
+        Me.uxCounty.DropDownWidth = 130
         Me.uxCounty.FormattingEnabled = True
         Me.uxCounty.Location = New System.Drawing.Point(113, 14)
         Me.uxCounty.Name = "uxCounty"
-        Me.uxCounty.Size = New System.Drawing.Size(60, 21)
+        Me.uxCounty.Size = New System.Drawing.Size(129, 21)
         Me.uxCounty.TabIndex = 0
         '
         'uxORMAPNumberGroupBox
         '
         Me.uxORMAPNumberGroupBox.Controls.Add(Me.uxORMAPNumberLabel)
-        Me.uxORMAPNumberGroupBox.Location = New System.Drawing.Point(203, 227)
+        Me.uxORMAPNumberGroupBox.Location = New System.Drawing.Point(217, 227)
         Me.uxORMAPNumberGroupBox.Name = "uxORMAPNumberGroupBox"
         Me.uxORMAPNumberGroupBox.Size = New System.Drawing.Size(253, 68)
         Me.uxORMAPNumberGroupBox.TabIndex = 9
@@ -446,7 +450,7 @@ Partial Class EditMapIndexForm
         '
         'uxHelp
         '
-        Me.uxHelp.Location = New System.Drawing.Point(381, 301)
+        Me.uxHelp.Location = New System.Drawing.Point(395, 301)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
         Me.uxHelp.TabIndex = 7
@@ -455,23 +459,26 @@ Partial Class EditMapIndexForm
         '
         'uxEdit
         '
-        Me.uxEdit.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.uxEdit.Location = New System.Drawing.Point(221, 301)
+        Me.uxEdit.Location = New System.Drawing.Point(235, 301)
         Me.uxEdit.Name = "uxEdit"
         Me.uxEdit.Size = New System.Drawing.Size(75, 23)
         Me.uxEdit.TabIndex = 5
-        Me.uxEdit.Text = "&Edit"
+        Me.uxEdit.Text = "&Save"
         Me.uxEdit.UseVisualStyleBackColor = True
         '
         'uxQuit
         '
         Me.uxQuit.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.uxQuit.Location = New System.Drawing.Point(301, 301)
+        Me.uxQuit.Location = New System.Drawing.Point(315, 301)
         Me.uxQuit.Name = "uxQuit"
         Me.uxQuit.Size = New System.Drawing.Size(75, 23)
         Me.uxQuit.TabIndex = 6
         Me.uxQuit.Text = "&Quit"
         Me.uxQuit.UseVisualStyleBackColor = True
+        '
+        'ErrorProviderSuffixNum
+        '
+        Me.ErrorProviderSuffixNum.ContainerControl = Me
         '
         'EditMapIndexForm
         '
@@ -479,7 +486,7 @@ Partial Class EditMapIndexForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.uxQuit
-        Me.ClientSize = New System.Drawing.Size(467, 333)
+        Me.ClientSize = New System.Drawing.Size(502, 333)
         Me.Controls.Add(Me.uxQuit)
         Me.Controls.Add(Me.uxEdit)
         Me.Controls.Add(Me.uxHelp)
@@ -505,6 +512,7 @@ Partial Class EditMapIndexForm
         Me.uxMapInfoGroupBox.ResumeLayout(False)
         Me.uxMapInfoGroupBox.PerformLayout()
         Me.uxORMAPNumberGroupBox.ResumeLayout(False)
+        CType(Me.ErrorProviderSuffixNum, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -551,4 +559,5 @@ Partial Class EditMapIndexForm
     Friend WithEvents uxHelp As System.Windows.Forms.Button
     Friend WithEvents uxEdit As System.Windows.Forms.Button
     Friend WithEvents uxQuit As System.Windows.Forms.Button
+    Friend WithEvents ErrorProviderSuffixNum As System.Windows.Forms.ErrorProvider
 End Class

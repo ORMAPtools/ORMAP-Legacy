@@ -212,13 +212,15 @@ Public NotInheritable Class EditMapIndex
                 AddHandler .uxSectionQtrQtr.SelectedIndexChanged, AddressOf Me.uxSectionQtrQtr_SelectedIndexChanged
 
                 AddHandler .uxCounty.SelectedIndexChanged, AddressOf Me.uxCounty_SelectedIndexChanged
-                ' Map Number (?)
+                ' Map Number (?)Not part of a ORMAP number
                 AddHandler .uxSuffixType.SelectedIndexChanged, AddressOf Me.uxSuffixType_SelectedIndexChanged
-                AddHandler .uxSuffixNumber.TextChanged, AddressOf Me.uxSuffixNumber_TextChanged
+                'AddHandler .uxSuffixNumber.TextChanged, AddressOf Me.uxSuffixNumber_TextChanged
+                AddHandler .uxSuffixNumber.Validating, AddressOf Me.uxSuffixNumber_Validating
+                AddHandler .uxSuffixNumber.Validated, AddressOf Me.uxSuffixNumber_Validated
                 AddHandler .uxSuffixType.SelectedIndexChanged, AddressOf Me.uxSuffixType_SelectedIndexChanged
-                ' Reliability (?)
-                ' Scale (?)
-                ' Page (?)
+                ' Reliability (?)Not part of a ORMAP number
+                ' Scale (?)Not part of a ORMAP number
+                ' Page (?)Not part of a ORMAP number
                 AddHandler .uxAnomaly.TextChanged, AddressOf Me.uxAnomaly_TextChanged
 
                 AddHandler .uxORMAPNumberLabel.TextChanged, AddressOf Me.uxORMAPNumberLabel_TextChanged
@@ -243,13 +245,15 @@ Public NotInheritable Class EditMapIndex
                 RemoveHandler .uxSectionQtrQtr.SelectedIndexChanged, AddressOf Me.uxSectionQtrQtr_SelectedIndexChanged
 
                 RemoveHandler .uxCounty.SelectedIndexChanged, AddressOf Me.uxCounty_SelectedIndexChanged
-                ' Map Number (?)
+                ' Map Number (?)Not part of a ORMAP number
                 RemoveHandler .uxSuffixType.SelectedIndexChanged, AddressOf Me.uxSuffixType_SelectedIndexChanged
-                RemoveHandler .uxSuffixNumber.TextChanged, AddressOf Me.uxSuffixNumber_TextChanged
+                'RemoveHandler .uxSuffixNumber.TextChanged, AddressOf Me.uxSuffixNumber_TextChanged
+                RemoveHandler .uxSuffixNumber.Validating, AddressOf Me.uxSuffixNumber_Validating
+                RemoveHandler .uxSuffixNumber.Validated, AddressOf Me.uxSuffixNumber_Validated
                 RemoveHandler .uxSuffixType.SelectedIndexChanged, AddressOf Me.uxSuffixType_SelectedIndexChanged
-                ' Reliability (?)
-                ' Scale (?)
-                ' Page (?)
+                ' Reliability (?)Not part of a ORMAP number
+                ' Scale (?)Not part of a ORMAP number
+                ' Page (?)Not part of a ORMAP number
                 RemoveHandler .uxAnomaly.TextChanged, AddressOf Me.uxAnomaly_TextChanged
 
                 RemoveHandler .uxORMAPNumberLabel.TextChanged, AddressOf Me.uxORMAPNumberLabel_TextChanged
@@ -265,6 +269,7 @@ Public NotInheritable Class EditMapIndex
     Private Sub PartnerMapIndexForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles _partnerEditMapIndexForm.Load
         initializeFieldIndices()
         EditingState = (EditorExtension.Editor.EditState = esriEditState.esriStateEditing)
+        'PartnerEditMapIndexForm.uxSuffixNumber.MaxLength = 3 '3 chars only
         toggleComponentControls(EditingState)
         initForm()
         ' State Transistion E2
@@ -526,20 +531,52 @@ Public NotInheritable Class EditMapIndex
         updateNumbers()
     End Sub
 
-    Private Sub uxSuffixNumber_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        ' Validate entry
-        Dim theOldSetting As String = _ormapNumber.SuffixNumber
-        _ormapNumber.SuffixNumber = PartnerEditMapIndexForm.uxSuffixNumber.Text
-        If _ormapNumber.IsValidNumber Then
-            PartnerEditMapIndexForm.uxSuffixNumber.Text = _ormapNumber.SuffixNumber
+    'Private Sub uxSuffixNumber_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    'This code caused recursion within this event. Move code to different events Validating and Validated
+    '    ' Validate entry
+    '    Dim theOldSetting As String = _ormapNumber.SuffixNumber
+    '    _ormapNumber.SuffixNumber = PartnerEditMapIndexForm.uxSuffixNumber.Text
+    '    If _ormapNumber.IsValidNumber Then
+    '        PartnerEditMapIndexForm.uxSuffixNumber.Text = _ormapNumber.SuffixNumber
+    '    Else
+    '        _ormapNumber.SuffixNumber = theOldSetting
+    '        PartnerEditMapIndexForm.uxSuffixNumber.Text = theOldSetting
+    '    End If
+    '    ' Update map number strings
+    '    updateNumbers()
+    'End Sub
+    Private Sub uxSuffixNumber_Validating(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs)
+        'jwm 6-13-08 Am validating based on Oregon Taxmap ESRI user group geodatabase schema design document dated 7/20/2006
+        ' MapSuffixNum is a number between 0 and 999
+        'Dim theOldSetting As String = _ormapNumber.SuffixNumber
+        Dim theValue As String = PartnerEditMapIndexForm.uxSuffixNumber.Text
+        Dim theValueAsInt As Integer = 0
+
+        If Integer.TryParse(theValue, theValueAsInt) Then
+            If theValueAsInt > 999 AndAlso theValueAsInt > 0 Then
+                PartnerEditMapIndexForm.ErrorProviderSuffixNum.SetError(PartnerEditMapIndexForm.uxSuffixNumber, "Value must be between 0 and 999")
+                e.Cancel = True
+            Else
+                PartnerEditMapIndexForm.ErrorProviderSuffixNum.SetError(PartnerEditMapIndexForm.uxSuffixNumber, "")
+                e.Cancel = False
+                _ormapNumber.SuffixNumber = theValue
+                If _ormapNumber.IsValidNumber Then
+                    PartnerEditMapIndexForm.uxSuffixNumber.Text = _ormapNumber.SuffixNumber
+                    'Else
+                    '    _ormapNumber.SuffixNumber = theOldSetting
+                    '    PartnerEditMapIndexForm.uxSuffixNumber.Text = theOldSetting
+                End If
+            End If
         Else
-            _ormapNumber.SuffixNumber = theOldSetting
-            PartnerEditMapIndexForm.uxSuffixNumber.Text = theOldSetting
+            PartnerEditMapIndexForm.ErrorProviderSuffixNum.SetError(PartnerEditMapIndexForm.uxSuffixNumber, "Not a numeric value.")
+            e.Cancel = True
         End If
-        ' Update map number strings
-        updateNumbers()
+
     End Sub
 
+    Private Sub uxSuffixNumber_Validated(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        updateNumbers()
+    End Sub
     Private Sub uxAnomaly_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         ' Validate entry
         Dim theOldSetting As String = _ormapNumber.Anomaly
