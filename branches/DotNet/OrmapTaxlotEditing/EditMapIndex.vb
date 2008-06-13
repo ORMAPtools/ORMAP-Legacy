@@ -299,7 +299,7 @@ Public NotInheritable Class EditMapIndex
 
                 With PartnerEditMapIndexForm
                     ' Update form caption
-                    .Text = "Edit Map Index - OR Map Number: " & _ormapNumber.GetORMapNum
+                    .Text = String.Concat("Edit Map Index - OR Map Number: ", _ormapNumber.GetORMapNum)
 
                     ' Update all taxlot polygons that underlie this mapindex polygon
 
@@ -345,8 +345,9 @@ Public NotInheritable Class EditMapIndex
 
             End If
             ' Update form caption
-            PartnerEditMapIndexForm.Text = "Map Index (" & _ormapNumber.GetORMapNum & ")"
-            PartnerEditMapIndexForm.Close()
+            PartnerEditMapIndexForm.Text = String.Concat("Map Index (", _ormapNumber.GetORMapNum, ")")
+            'Why do we close the form after making a edit? We might wish to edit some more mapindexes.
+            'PartnerEditMapIndexForm.Close()
 
         Catch ex As Exception
             If theEditWorkSpace.IsBeingEdited Then
@@ -784,7 +785,7 @@ Public NotInheritable Class EditMapIndex
             With PartnerEditMapIndexForm
                 resetControlContents(.Controls, True)
 
-                .Text = "Edit Map Index - OR Map Number: " & _ormapNumber.GetORMapNum
+                .Text = String.Concat("Edit Map Index - OR Map Number: ", _ormapNumber.GetORMapNum)
 
                 ' Townships
                 AddCodesToCombo(EditorExtension.TaxLotSettings.TownshipField, DataMonitor.TaxlotFeatureLayer.FeatureClass, .uxTownship, _ormapNumber.Township, True)
@@ -862,15 +863,15 @@ Public NotInheritable Class EditMapIndex
             thisSpatialQuery.Geometry = theMapIndexFeature.ShapeCopy
             thisSpatialQuery.SpatialRel = esriSpatialRelEnum.esriSpatialRelContains
             Dim thisFeatureSelection As IFeatureCursor = DataMonitor.TaxlotFeatureLayer.FeatureClass.Update(thisSpatialQuery, False)
-            'What if there are no underlying taxlot features to update? Will thisTaxlotFeature contain anything?
+            'What if there are no underlying taxlot features to update? Will this assignment below contain anything?
             Dim thisTaxlotFeature As IFeature = thisFeatureSelection.NextFeature
             Dim taxlot As String
             Dim mapNumber As String
             ' Loop through the selected features
-            Do While Not thisTaxlotFeature Is Nothing
+            Do While thisTaxlotFeature IsNot Nothing
                 ' Gets the formatted taxlot value
                 If IsDBNull(thisTaxlotFeature.Value(_taxlotFields.Taxlot)) Then
-                    taxlot = New String("0"c, ORMapNum.GetORTaxlotFieldLength)
+                    taxlot = New String("0"c, ORMapNum.GetTaxlotFieldLength)
                 Else
                     taxlot = AddLeadingZeros(CStr(thisTaxlotFeature.Value(_taxlotFields.Taxlot)), ORMapNum.GetTaxlotFieldLength)
                 End If
@@ -888,7 +889,7 @@ Public NotInheritable Class EditMapIndex
                 Dim mapTaxlotID As String = _ormapNumber.GetORMapNum & taxlot
                 Dim countyCode As Short = CShort(EditorExtension.DefaultValuesSettings.County)
                 Dim mapTaxlotValue As String = String.Empty
-                Dim parseResult As Integer = 0
+                Dim taxlotAsInteger As Integer = 0
 
                 Select Case countyCode
                     Case 1 To 19, 21 To 36
@@ -912,15 +913,14 @@ Public NotInheritable Class EditMapIndex
                     .Value(_taxlotFields.Anomaly) = _ormapNumber.Anomaly
                     .Value(_taxlotFields.MapNumber) = theMapIndexFeature.Value(_mapIndexFields.MapNumber)
                     .Value(_taxlotFields.OrmapMapNumber) = _ormapNumber.GetOrmapMapNumber
-                    If Integer.TryParse(taxlot, parseResult) Then
-                        .Value(_taxlotFields.Taxlot) = parseResult
+                    If Integer.TryParse(taxlot, taxlotAsInteger) Then
+                        .Value(_taxlotFields.Taxlot) = taxlotAsInteger
                     Else
-                        .Value(_taxlotFields.Taxlot) = taxlot.Trim()
+                        .Value(_taxlotFields.Taxlot) = taxlot.Trim
                     End If
-
-                    ' Special interest used to go here
-                    .Value(_taxlotFields.MapTaxlotNumber) = mapTaxlotValue.Trim()
-                    .Value(_taxlotFields.OrmapTaxlotNumber) = _ormapNumber.GetORMapNum & taxlot
+                    ' Special interest field was updated here see above
+                    .Value(_taxlotFields.MapTaxlotNumber) = mapTaxlotValue.Trim
+                    .Value(_taxlotFields.OrmapTaxlotNumber) = String.Concat(_ormapNumber.GetORMapNum, taxlot)
                     .Store()
                 End With
                 thisTaxlotFeature = thisFeatureSelection.NextFeature
