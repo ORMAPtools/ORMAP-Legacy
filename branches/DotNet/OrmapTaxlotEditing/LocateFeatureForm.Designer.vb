@@ -19,21 +19,19 @@ Partial Class LocateFeatureForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
         Me.uxFind = New System.Windows.Forms.Button
         Me.uxHelp = New System.Windows.Forms.Button
         Me.MapnumberLabel = New System.Windows.Forms.Label
         Me.TaxlotLabel = New System.Windows.Forms.Label
         Me.uxTaxlot = New System.Windows.Forms.TextBox
         Me.uxMapNumber = New System.Windows.Forms.TextBox
-        Me.uxErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        CType(Me.uxErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.uxSelectFeatures = New System.Windows.Forms.CheckBox
         Me.SuspendLayout()
         '
         'uxFind
         '
         Me.uxFind.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.uxFind.Location = New System.Drawing.Point(8, 98)
+        Me.uxFind.Location = New System.Drawing.Point(27, 123)
         Me.uxFind.Margin = New System.Windows.Forms.Padding(2)
         Me.uxFind.Name = "uxFind"
         Me.uxFind.Size = New System.Drawing.Size(75, 23)
@@ -44,7 +42,7 @@ Partial Class LocateFeatureForm
         'uxHelp
         '
         Me.uxHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.uxHelp.Location = New System.Drawing.Point(89, 98)
+        Me.uxHelp.Location = New System.Drawing.Point(108, 123)
         Me.uxHelp.Margin = New System.Windows.Forms.Padding(2)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
@@ -95,16 +93,23 @@ Partial Class LocateFeatureForm
         Me.uxMapNumber.Size = New System.Drawing.Size(107, 20)
         Me.uxMapNumber.TabIndex = 1
         '
-        'uxErrorProvider
+        'uxSelectFeatures
         '
-        Me.uxErrorProvider.ContainerControl = Me
+        Me.uxSelectFeatures.AutoSize = True
+        Me.uxSelectFeatures.Location = New System.Drawing.Point(9, 96)
+        Me.uxSelectFeatures.Name = "uxSelectFeatures"
+        Me.uxSelectFeatures.Size = New System.Drawing.Size(166, 17)
+        Me.uxSelectFeatures.TabIndex = 7
+        Me.uxSelectFeatures.Text = "Select features when locating"
+        Me.uxSelectFeatures.UseVisualStyleBackColor = True
         '
         'LocateFeatureForm
         '
         Me.AcceptButton = Me.uxFind
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(173, 129)
+        Me.ClientSize = New System.Drawing.Size(192, 154)
+        Me.Controls.Add(Me.uxSelectFeatures)
         Me.Controls.Add(Me.uxMapNumber)
         Me.Controls.Add(Me.uxFind)
         Me.Controls.Add(Me.uxHelp)
@@ -120,7 +125,6 @@ Partial Class LocateFeatureForm
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Locate Feature"
         Me.TopMost = True
-        CType(Me.uxErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -131,5 +135,5 @@ Partial Class LocateFeatureForm
     Friend WithEvents TaxlotLabel As System.Windows.Forms.Label
     Friend WithEvents uxTaxlot As System.Windows.Forms.TextBox
     Friend WithEvents uxMapNumber As System.Windows.Forms.TextBox
-    Friend WithEvents uxErrorProvider As System.Windows.Forms.ErrorProvider
+    Friend WithEvents uxSelectFeatures As System.Windows.Forms.CheckBox
 End Class

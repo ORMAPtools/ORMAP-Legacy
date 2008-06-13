@@ -127,14 +127,27 @@ Public NotInheritable Class LocateFeature
             AddHandler _partnerLocateFeatureForm.uxMapNumber.TextChanged, AddressOf uxMapNumber_TextChanged
             AddHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
             AddHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
+            AddHandler _partnerLocateFeatureForm.uxSelectFeatures.CheckedChanged, AddressOf uxSelectFeatures_CheckedChanged
         Else
             ' Unsubscribe to partner form events.
             RemoveHandler _partnerLocateFeatureForm.Load, AddressOf PartnerLocateFeatureForm_Load
             RemoveHandler _partnerLocateFeatureForm.uxMapNumber.TextChanged, AddressOf uxMapNumber_TextChanged
             RemoveHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
             RemoveHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
+            RemoveHandler _partnerLocateFeatureForm.uxSelectFeatures.CheckedChanged, AddressOf uxSelectFeatures_CheckedChanged
         End If
     End Sub
+
+
+    Private _uxSelectFeaturesChecked As Boolean = False
+    Friend Property uxSelectFeaturesChecked() As Boolean
+        Get
+            Return _uxSelectFeaturesChecked
+        End Get
+        Set(ByVal value As Boolean)
+            _uxSelectFeaturesChecked = value
+        End Set
+    End Property
 
 
 #End Region
@@ -171,6 +184,7 @@ Public NotInheritable Class LocateFeature
                 ' Set control defaults
                 .uxMapNumber.Text = String.Empty
                 .uxTaxlot.Text = String.Empty
+                If uxSelectFeaturesChecked Then .uxSelectFeatures.Checked = True
 
             Finally
                 .UseWaitCursor = False
@@ -268,12 +282,11 @@ Public NotInheritable Class LocateFeature
                 If theTaxlotVal = String.Empty Then
                     '[Looking for just a MapIndex...]
                     theXFlayer = MapIndexFeatureLayer
-                    theQueryFilter.SubFields = "Shape, " & EditorExtension.MapIndexSettings.MapNumberField
+
                     theWhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] = '" & theMapNumberVal & "'"
                 Else
                     '[Looking for a MapIndex and Taxlot...]
                     theXFlayer = TaxlotFeatureLayer
-                    theQueryFilter.SubFields = "Shape, " & EditorExtension.TaxLotSettings.MapNumberField & ", " & EditorExtension.TaxLotSettings.TaxlotField
                     theWhereClause = "[" & EditorExtension.TaxLotSettings.MapNumberField & "] = '" & theMapNumberVal & "' AND [" & EditorExtension.TaxLotSettings.TaxlotField & "] = '" & theTaxlotVal & "'"
                 End If
 
@@ -283,24 +296,36 @@ Public NotInheritable Class LocateFeature
                 Dim theFeatCursor As IFeatureCursor = theXFClass.Search(theQueryFilter, True)
                 Dim thisFeature As IFeature = theFeatCursor.NextFeature
 
+                Dim pFeatureSelection As IFeatureSelection = DirectCast(theXFlayer, IFeatureSelection)
+                If .uxSelectFeatures.Checked Then pFeatureSelection.Clear()
+
                 If thisFeature Is Nothing Then '-- Must be due to invalid mapindex or taxlot entered into the text boxes.
                     MessageBox.Show("Feature does not exist.", "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
                 Else
                     Dim theEnvelope As IEnvelope = thisFeature.Shape.Envelope
                     Do Until thisFeature Is Nothing
                         theEnvelope.Union(thisFeature.Shape.Envelope)
+                        If .uxSelectFeatures.Checked Then
+                            pFeatureSelection.Add(thisFeature)
+                            pFeatureSelection.SelectionChanged()
+                        End If
                         thisFeature = theFeatCursor.NextFeature
                     Loop
                     ZoomToEnvelope(theEnvelope)
-                    SetSelectedFeature(theXFlayer, thisFeature, True) ' TODO: [SC] This is not working here. Add new procedure for multiple features.
                 End If
             Finally
                 .UseWaitCursor = False
             End Try
         End With
 
+    End Sub
+
+    Private Sub uxSelectFeatures_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxHelp.Click
+
+        uxSelectFeaturesChecked = PartnerLocateFeatureForm.uxSelectFeatures.Checked
 
     End Sub
+
 
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxHelp.Click
         ' TODO: [ALL] Evaluate help systems and implement.
