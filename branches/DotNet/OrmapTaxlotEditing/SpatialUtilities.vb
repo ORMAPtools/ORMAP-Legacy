@@ -402,12 +402,12 @@ Public NotInheritable Class SpatialUtilities
     ''' </summary>
     ''' <param name="fields">An field collection object that supports the IFields interface.</param>
     ''' <param name="fieldName">A field that exists in fields.</param>
-    ''' <param name="codedValue">A coded name to convert to a coded value</param>
-    ''' <returns>A string that represents the domain coded value that 
-    ''' corresponds with the coded value name (<paramref name="codedValue"/>), or 
+    ''' <param name="codedName">A descriptive name to convert to a code value</param>
+    ''' <returns>A string that represents the code value that 
+    ''' corresponds with the code name (<paramref name="codedName"/>), or 
     ''' a empty string.</returns>
     ''' <remarks></remarks>
-    Public Shared Function ConvertCodeValueDomainToCode(ByVal fields As IFields, ByVal fieldName As String, ByVal codedValue As String) As String
+    Public Shared Function ConvertCodeValueDomainToCode(ByVal fields As IFields, ByVal fieldName As String, ByVal codedName As String) As String
 
         Dim fieldIndex As Integer
         Dim returnValue As String = String.Empty
@@ -417,7 +417,7 @@ Public NotInheritable Class SpatialUtilities
         End If
 
         fieldIndex = fields.FindField(fieldName)
-        If fieldIndex > -1 Then
+        If fieldIndex > NotFoundIndex Then
             Dim field As IField
             field = fields.Field(fieldIndex)
             Dim domain As IDomain = field.Domain
@@ -427,12 +427,12 @@ Public NotInheritable Class SpatialUtilities
                     Dim thisCodedValueDomain As ICodedValueDomain
                     thisCodedValueDomain = DirectCast(domain, ICodedValueDomain)
                     For domainIndex As Integer = 0 To thisCodedValueDomain.CodeCount - 1
-                        If String.Compare(thisCodedValueDomain.Name(domainIndex), codedValue, True, CultureInfo.CurrentCulture) = 0 Then
+                        If String.Compare(thisCodedValueDomain.Name(domainIndex), codedName, True, CultureInfo.CurrentCulture) = 0 Then
                             returnValue = thisCodedValueDomain.Value(domainIndex).ToString
                         End If
                     Next domainIndex
                 Else
-                    returnValue = codedValue 'if range domain return the value
+                    returnValue = codedName 'if not coded value domain, then just return the input value
                 End If
             End If 'if domain is not nothing
         End If
@@ -1682,23 +1682,6 @@ Public NotInheritable Class SpatialUtilities
     End Function
 
     ''' <summary>
-    ''' Zooms to the given extent.
-    ''' </summary>
-    <ObsoleteAttribute("Use the ZoomToEnvelope() function instead.", True)> _
-    Public Shared Sub ZoomToExtent(ByVal pEnv As ESRI.ArcGIS.Geometry.IEnvelope, ByVal pMxDoc As ESRI.ArcGIS.ArcMapUI.IMxDocument)
-        Dim pMap As IMap
-        Dim pActiveView As IActiveView
-
-        ' Gets a reference to the current view window
-        pMap = pMxDoc.FocusMap
-        pActiveView = DirectCast(pMap, IActiveView)
-
-        ' Updates the view's extent
-        pActiveView.Extent = pEnv
-        pActiveView.Refresh()
-    End Sub
-
-    ''' <summary>
     ''' Zooms to the given envelope.
     ''' </summary>
     ''' <param name="theEnvelope">The envelope to zoom to.</param>
@@ -1710,6 +1693,7 @@ Public NotInheritable Class SpatialUtilities
         Dim theActiveView As IActiveView = DirectCast(theMap, IActiveView)
 
         ' Updates the view's extent
+        theEnvelope.Expand(1.1, 1.1, True)
         theActiveView.Extent = theEnvelope
         theActiveView.Refresh()
 

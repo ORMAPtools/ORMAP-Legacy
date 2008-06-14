@@ -57,7 +57,7 @@ Partial Class AddArrowsForm
         Me.uxStandardGroup.Location = New System.Drawing.Point(9, 10)
         Me.uxStandardGroup.Name = "uxStandardGroup"
         Me.uxStandardGroup.Size = New System.Drawing.Size(195, 84)
-        Me.uxStandardGroup.TabIndex = 2
+        Me.uxStandardGroup.TabIndex = 0
         Me.uxStandardGroup.TabStop = False
         Me.uxStandardGroup.Text = "Standard Arrows"
         '
@@ -68,7 +68,7 @@ Partial Class AddArrowsForm
         Me.uxDimensionGroup.Location = New System.Drawing.Point(10, 100)
         Me.uxDimensionGroup.Name = "uxDimensionGroup"
         Me.uxDimensionGroup.Size = New System.Drawing.Size(194, 112)
-        Me.uxDimensionGroup.TabIndex = 3
+        Me.uxDimensionGroup.TabIndex = 1
         Me.uxDimensionGroup.TabStop = False
         Me.uxDimensionGroup.Text = "Dimension Arrows"
         '
@@ -80,7 +80,8 @@ Partial Class AddArrowsForm
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ReadOnly = True
         Me.TextBox1.Size = New System.Drawing.Size(175, 58)
-        Me.TextBox1.TabIndex = 8
+        Me.TextBox1.TabIndex = 1
+        Me.TextBox1.TabStop = False
         Me.TextBox1.Text = "Note: Dimension Properties can be altered by pressing ""d"" when in Add Dimension A" & _
             "rrow mode.  See the Help file for more information."
         '
@@ -95,11 +96,12 @@ Partial Class AddArrowsForm
         '
         'uxQuit
         '
+        Me.uxQuit.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.uxQuit.Location = New System.Drawing.Point(48, 238)
         Me.uxQuit.Name = "uxQuit"
         Me.uxQuit.Size = New System.Drawing.Size(75, 23)
-        Me.uxQuit.TabIndex = 4
-        Me.uxQuit.Text = "Quit"
+        Me.uxQuit.TabIndex = 3
+        Me.uxQuit.Text = "&Quit"
         Me.uxQuit.UseVisualStyleBackColor = True
         '
         'uxHelp
@@ -107,8 +109,8 @@ Partial Class AddArrowsForm
         Me.uxHelp.Location = New System.Drawing.Point(129, 238)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
-        Me.uxHelp.TabIndex = 5
-        Me.uxHelp.Text = "Help"
+        Me.uxHelp.TabIndex = 4
+        Me.uxHelp.Text = "&Help"
         Me.uxHelp.UseVisualStyleBackColor = True
         '
         'uxNote
@@ -118,13 +120,15 @@ Partial Class AddArrowsForm
         Me.uxNote.Location = New System.Drawing.Point(20, 218)
         Me.uxNote.Name = "uxNote"
         Me.uxNote.Size = New System.Drawing.Size(172, 13)
-        Me.uxNote.TabIndex = 7
+        Me.uxNote.TabIndex = 2
         Me.uxNote.Text = "Press ""q"" to exit Add Arrows."
         '
         'AddArrowsForm
         '
+        Me.AcceptButton = Me.uxQuit
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.CancelButton = Me.uxQuit
         Me.ClientSize = New System.Drawing.Size(214, 269)
         Me.Controls.Add(Me.uxNote)
         Me.Controls.Add(Me.uxHelp)

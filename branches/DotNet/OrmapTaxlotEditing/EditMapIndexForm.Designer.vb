@@ -61,8 +61,9 @@ Partial Class EditMapIndexForm
         Me.uxORMAPNumberGroupBox = New System.Windows.Forms.GroupBox
         Me.uxORMAPNumberLabel = New System.Windows.Forms.Label
         Me.uxHelp = New System.Windows.Forms.Button
-        Me.uxEdit = New System.Windows.Forms.Button
-        Me.uxQuit = New System.Windows.Forms.Button
+        Me.uxOK = New System.Windows.Forms.Button
+        Me.uxCancel = New System.Windows.Forms.Button
+        Me.uxApply = New System.Windows.Forms.Button
         Me.ErrorProviderSuffixNum = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.uxTownshipGroupBox.SuspendLayout()
         Me.uxRangeGroupBox.SuspendLayout()
@@ -78,7 +79,7 @@ Partial Class EditMapIndexForm
         Me.uxTownship.Location = New System.Drawing.Point(111, 14)
         Me.uxTownship.Name = "uxTownship"
         Me.uxTownship.Size = New System.Drawing.Size(60, 21)
-        Me.uxTownship.TabIndex = 0
+        Me.uxTownship.TabIndex = 1
         '
         'uxTownshipDirectional
         '
@@ -86,7 +87,7 @@ Partial Class EditMapIndexForm
         Me.uxTownshipDirectional.Location = New System.Drawing.Point(111, 39)
         Me.uxTownshipDirectional.Name = "uxTownshipDirectional"
         Me.uxTownshipDirectional.Size = New System.Drawing.Size(60, 21)
-        Me.uxTownshipDirectional.TabIndex = 1
+        Me.uxTownshipDirectional.TabIndex = 3
         '
         'uxTownshipPartial
         '
@@ -94,7 +95,7 @@ Partial Class EditMapIndexForm
         Me.uxTownshipPartial.Location = New System.Drawing.Point(111, 64)
         Me.uxTownshipPartial.Name = "uxTownshipPartial"
         Me.uxTownshipPartial.Size = New System.Drawing.Size(60, 21)
-        Me.uxTownshipPartial.TabIndex = 2
+        Me.uxTownshipPartial.TabIndex = 5
         '
         'uxTownshipLabel
         '
@@ -102,7 +103,7 @@ Partial Class EditMapIndexForm
         Me.uxTownshipLabel.Location = New System.Drawing.Point(7, 17)
         Me.uxTownshipLabel.Name = "uxTownshipLabel"
         Me.uxTownshipLabel.Size = New System.Drawing.Size(47, 13)
-        Me.uxTownshipLabel.TabIndex = 3
+        Me.uxTownshipLabel.TabIndex = 0
         Me.uxTownshipLabel.Text = "Number:"
         '
         'uxTownshipDirectionalLabel
@@ -111,7 +112,7 @@ Partial Class EditMapIndexForm
         Me.uxTownshipDirectionalLabel.Location = New System.Drawing.Point(7, 42)
         Me.uxTownshipDirectionalLabel.Name = "uxTownshipDirectionalLabel"
         Me.uxTownshipDirectionalLabel.Size = New System.Drawing.Size(60, 13)
-        Me.uxTownshipDirectionalLabel.TabIndex = 4
+        Me.uxTownshipDirectionalLabel.TabIndex = 2
         Me.uxTownshipDirectionalLabel.Text = "Directional:"
         '
         'uxTownshipPartialLabel
@@ -120,7 +121,7 @@ Partial Class EditMapIndexForm
         Me.uxTownshipPartialLabel.Location = New System.Drawing.Point(7, 67)
         Me.uxTownshipPartialLabel.Name = "uxTownshipPartialLabel"
         Me.uxTownshipPartialLabel.Size = New System.Drawing.Size(67, 13)
-        Me.uxTownshipPartialLabel.TabIndex = 5
+        Me.uxTownshipPartialLabel.TabIndex = 4
         Me.uxTownshipPartialLabel.Text = "Partial Code:"
         '
         'uxTownshipGroupBox
@@ -159,7 +160,7 @@ Partial Class EditMapIndexForm
         Me.uxRangePartialLabel.Location = New System.Drawing.Point(7, 67)
         Me.uxRangePartialLabel.Name = "uxRangePartialLabel"
         Me.uxRangePartialLabel.Size = New System.Drawing.Size(67, 13)
-        Me.uxRangePartialLabel.TabIndex = 5
+        Me.uxRangePartialLabel.TabIndex = 4
         Me.uxRangePartialLabel.Text = "Partial Code:"
         '
         'uxRangeDirectionalLabel
@@ -168,7 +169,7 @@ Partial Class EditMapIndexForm
         Me.uxRangeDirectionalLabel.Location = New System.Drawing.Point(7, 42)
         Me.uxRangeDirectionalLabel.Name = "uxRangeDirectionalLabel"
         Me.uxRangeDirectionalLabel.Size = New System.Drawing.Size(60, 13)
-        Me.uxRangeDirectionalLabel.TabIndex = 4
+        Me.uxRangeDirectionalLabel.TabIndex = 2
         Me.uxRangeDirectionalLabel.Text = "Directional:"
         '
         'uxRangeLabel
@@ -177,7 +178,7 @@ Partial Class EditMapIndexForm
         Me.uxRangeLabel.Location = New System.Drawing.Point(7, 17)
         Me.uxRangeLabel.Name = "uxRangeLabel"
         Me.uxRangeLabel.Size = New System.Drawing.Size(47, 13)
-        Me.uxRangeLabel.TabIndex = 3
+        Me.uxRangeLabel.TabIndex = 0
         Me.uxRangeLabel.Text = "Number:"
         '
         'uxRangePartial
@@ -186,7 +187,7 @@ Partial Class EditMapIndexForm
         Me.uxRangePartial.Location = New System.Drawing.Point(111, 64)
         Me.uxRangePartial.Name = "uxRangePartial"
         Me.uxRangePartial.Size = New System.Drawing.Size(60, 21)
-        Me.uxRangePartial.TabIndex = 2
+        Me.uxRangePartial.TabIndex = 5
         '
         'uxRangeDirectional
         '
@@ -194,7 +195,7 @@ Partial Class EditMapIndexForm
         Me.uxRangeDirectional.Location = New System.Drawing.Point(111, 39)
         Me.uxRangeDirectional.Name = "uxRangeDirectional"
         Me.uxRangeDirectional.Size = New System.Drawing.Size(60, 21)
-        Me.uxRangeDirectional.TabIndex = 1
+        Me.uxRangeDirectional.TabIndex = 3
         '
         'uxRange
         '
@@ -202,7 +203,7 @@ Partial Class EditMapIndexForm
         Me.uxRange.Location = New System.Drawing.Point(111, 14)
         Me.uxRange.Name = "uxRange"
         Me.uxRange.Size = New System.Drawing.Size(60, 21)
-        Me.uxRange.TabIndex = 0
+        Me.uxRange.TabIndex = 1
         '
         'uxSectionGroupBox
         '
@@ -215,7 +216,7 @@ Partial Class EditMapIndexForm
         Me.uxSectionGroupBox.Location = New System.Drawing.Point(10, 203)
         Me.uxSectionGroupBox.Name = "uxSectionGroupBox"
         Me.uxSectionGroupBox.Size = New System.Drawing.Size(181, 92)
-        Me.uxSectionGroupBox.TabIndex = 3
+        Me.uxSectionGroupBox.TabIndex = 2
         Me.uxSectionGroupBox.TabStop = False
         Me.uxSectionGroupBox.Text = "Section"
         '
@@ -225,7 +226,7 @@ Partial Class EditMapIndexForm
         Me.uxSectionQtrQtrLabel.Location = New System.Drawing.Point(7, 67)
         Me.uxSectionQtrQtrLabel.Name = "uxSectionQtrQtrLabel"
         Me.uxSectionQtrQtrLabel.Size = New System.Drawing.Size(95, 13)
-        Me.uxSectionQtrQtrLabel.TabIndex = 5
+        Me.uxSectionQtrQtrLabel.TabIndex = 4
         Me.uxSectionQtrQtrLabel.Text = "Quarter of Quarter:"
         '
         'uxSectionQtrLabel
@@ -234,7 +235,7 @@ Partial Class EditMapIndexForm
         Me.uxSectionQtrLabel.Location = New System.Drawing.Point(7, 42)
         Me.uxSectionQtrLabel.Name = "uxSectionQtrLabel"
         Me.uxSectionQtrLabel.Size = New System.Drawing.Size(45, 13)
-        Me.uxSectionQtrLabel.TabIndex = 4
+        Me.uxSectionQtrLabel.TabIndex = 2
         Me.uxSectionQtrLabel.Text = "Quarter:"
         '
         'uxSectionLabel
@@ -243,7 +244,7 @@ Partial Class EditMapIndexForm
         Me.uxSectionLabel.Location = New System.Drawing.Point(7, 17)
         Me.uxSectionLabel.Name = "uxSectionLabel"
         Me.uxSectionLabel.Size = New System.Drawing.Size(47, 13)
-        Me.uxSectionLabel.TabIndex = 3
+        Me.uxSectionLabel.TabIndex = 0
         Me.uxSectionLabel.Text = "Number:"
         '
         'uxSectionQtrQtr
@@ -252,7 +253,7 @@ Partial Class EditMapIndexForm
         Me.uxSectionQtrQtr.Location = New System.Drawing.Point(111, 64)
         Me.uxSectionQtrQtr.Name = "uxSectionQtrQtr"
         Me.uxSectionQtrQtr.Size = New System.Drawing.Size(60, 21)
-        Me.uxSectionQtrQtr.TabIndex = 2
+        Me.uxSectionQtrQtr.TabIndex = 5
         '
         'uxSectionQuarter
         '
@@ -260,7 +261,7 @@ Partial Class EditMapIndexForm
         Me.uxSectionQuarter.Location = New System.Drawing.Point(111, 39)
         Me.uxSectionQuarter.Name = "uxSectionQuarter"
         Me.uxSectionQuarter.Size = New System.Drawing.Size(60, 21)
-        Me.uxSectionQuarter.TabIndex = 1
+        Me.uxSectionQuarter.TabIndex = 3
         '
         'uxSection
         '
@@ -268,7 +269,7 @@ Partial Class EditMapIndexForm
         Me.uxSection.Location = New System.Drawing.Point(111, 14)
         Me.uxSection.Name = "uxSection"
         Me.uxSection.Size = New System.Drawing.Size(60, 21)
-        Me.uxSection.TabIndex = 0
+        Me.uxSection.TabIndex = 1
         '
         'uxMapInfoGroupBox
         '
@@ -291,7 +292,7 @@ Partial Class EditMapIndexForm
         Me.uxMapInfoGroupBox.Location = New System.Drawing.Point(217, 6)
         Me.uxMapInfoGroupBox.Name = "uxMapInfoGroupBox"
         Me.uxMapInfoGroupBox.Size = New System.Drawing.Size(273, 214)
-        Me.uxMapInfoGroupBox.TabIndex = 4
+        Me.uxMapInfoGroupBox.TabIndex = 3
         Me.uxMapInfoGroupBox.TabStop = False
         Me.uxMapInfoGroupBox.Text = "Map Information"
         '
@@ -301,7 +302,7 @@ Partial Class EditMapIndexForm
         Me.uxAnomalyLabel.Location = New System.Drawing.Point(9, 42)
         Me.uxAnomalyLabel.Name = "uxAnomalyLabel"
         Me.uxAnomalyLabel.Size = New System.Drawing.Size(50, 13)
-        Me.uxAnomalyLabel.TabIndex = 16
+        Me.uxAnomalyLabel.TabIndex = 2
         Me.uxAnomalyLabel.Text = "Anomaly:"
         '
         'uxPageLabel
@@ -310,7 +311,7 @@ Partial Class EditMapIndexForm
         Me.uxPageLabel.Location = New System.Drawing.Point(9, 164)
         Me.uxPageLabel.Name = "uxPageLabel"
         Me.uxPageLabel.Size = New System.Drawing.Size(75, 13)
-        Me.uxPageLabel.TabIndex = 15
+        Me.uxPageLabel.TabIndex = 12
         Me.uxPageLabel.Text = "Page Number:"
         '
         'uxScaleLabel
@@ -319,7 +320,7 @@ Partial Class EditMapIndexForm
         Me.uxScaleLabel.Location = New System.Drawing.Point(9, 115)
         Me.uxScaleLabel.Name = "uxScaleLabel"
         Me.uxScaleLabel.Size = New System.Drawing.Size(58, 13)
-        Me.uxScaleLabel.TabIndex = 14
+        Me.uxScaleLabel.TabIndex = 8
         Me.uxScaleLabel.Text = "MapScale:"
         '
         'uxReliabilityLabel
@@ -328,7 +329,7 @@ Partial Class EditMapIndexForm
         Me.uxReliabilityLabel.Location = New System.Drawing.Point(9, 188)
         Me.uxReliabilityLabel.Name = "uxReliabilityLabel"
         Me.uxReliabilityLabel.Size = New System.Drawing.Size(54, 13)
-        Me.uxReliabilityLabel.TabIndex = 13
+        Me.uxReliabilityLabel.TabIndex = 14
         Me.uxReliabilityLabel.Text = "Reliability:"
         '
         'uxSuffixTypeLabel
@@ -337,7 +338,7 @@ Partial Class EditMapIndexForm
         Me.uxSuffixTypeLabel.Location = New System.Drawing.Point(9, 66)
         Me.uxSuffixTypeLabel.Name = "uxSuffixTypeLabel"
         Me.uxSuffixTypeLabel.Size = New System.Drawing.Size(87, 13)
-        Me.uxSuffixTypeLabel.TabIndex = 12
+        Me.uxSuffixTypeLabel.TabIndex = 4
         Me.uxSuffixTypeLabel.Text = "Map Suffix Type:"
         '
         'uxSuffixNumberLabel
@@ -346,7 +347,7 @@ Partial Class EditMapIndexForm
         Me.uxSuffixNumberLabel.Location = New System.Drawing.Point(9, 91)
         Me.uxSuffixNumberLabel.Name = "uxSuffixNumberLabel"
         Me.uxSuffixNumberLabel.Size = New System.Drawing.Size(100, 13)
-        Me.uxSuffixNumberLabel.TabIndex = 11
+        Me.uxSuffixNumberLabel.TabIndex = 6
         Me.uxSuffixNumberLabel.Text = "Map Suffix Number:"
         '
         'uxMapNumberLabel
@@ -355,7 +356,7 @@ Partial Class EditMapIndexForm
         Me.uxMapNumberLabel.Location = New System.Drawing.Point(9, 140)
         Me.uxMapNumberLabel.Name = "uxMapNumberLabel"
         Me.uxMapNumberLabel.Size = New System.Drawing.Size(71, 13)
-        Me.uxMapNumberLabel.TabIndex = 9
+        Me.uxMapNumberLabel.TabIndex = 10
         Me.uxMapNumberLabel.Text = "Map Number:"
         '
         'uxAnomaly
@@ -363,14 +364,14 @@ Partial Class EditMapIndexForm
         Me.uxAnomaly.Location = New System.Drawing.Point(113, 39)
         Me.uxAnomaly.Name = "uxAnomaly"
         Me.uxAnomaly.Size = New System.Drawing.Size(45, 20)
-        Me.uxAnomaly.TabIndex = 8
+        Me.uxAnomaly.TabIndex = 3
         '
         'uxPage
         '
         Me.uxPage.Location = New System.Drawing.Point(113, 161)
         Me.uxPage.Name = "uxPage"
         Me.uxPage.Size = New System.Drawing.Size(45, 20)
-        Me.uxPage.TabIndex = 7
+        Me.uxPage.TabIndex = 13
         '
         'uxScale
         '
@@ -378,7 +379,7 @@ Partial Class EditMapIndexForm
         Me.uxScale.Location = New System.Drawing.Point(113, 112)
         Me.uxScale.Name = "uxScale"
         Me.uxScale.Size = New System.Drawing.Size(130, 21)
-        Me.uxScale.TabIndex = 6
+        Me.uxScale.TabIndex = 9
         '
         'uxReliability
         '
@@ -386,7 +387,7 @@ Partial Class EditMapIndexForm
         Me.uxReliability.Location = New System.Drawing.Point(113, 185)
         Me.uxReliability.Name = "uxReliability"
         Me.uxReliability.Size = New System.Drawing.Size(130, 21)
-        Me.uxReliability.TabIndex = 5
+        Me.uxReliability.TabIndex = 15
         '
         'uxCountyLabel
         '
@@ -394,7 +395,7 @@ Partial Class EditMapIndexForm
         Me.uxCountyLabel.Location = New System.Drawing.Point(9, 17)
         Me.uxCountyLabel.Name = "uxCountyLabel"
         Me.uxCountyLabel.Size = New System.Drawing.Size(43, 13)
-        Me.uxCountyLabel.TabIndex = 4
+        Me.uxCountyLabel.TabIndex = 0
         Me.uxCountyLabel.Text = "County:"
         '
         'uxSuffixType
@@ -403,21 +404,21 @@ Partial Class EditMapIndexForm
         Me.uxSuffixType.Location = New System.Drawing.Point(113, 63)
         Me.uxSuffixType.Name = "uxSuffixType"
         Me.uxSuffixType.Size = New System.Drawing.Size(130, 21)
-        Me.uxSuffixType.TabIndex = 3
+        Me.uxSuffixType.TabIndex = 5
         '
         'uxSuffixNumber
         '
         Me.uxSuffixNumber.Location = New System.Drawing.Point(113, 88)
         Me.uxSuffixNumber.Name = "uxSuffixNumber"
         Me.uxSuffixNumber.Size = New System.Drawing.Size(130, 20)
-        Me.uxSuffixNumber.TabIndex = 2
+        Me.uxSuffixNumber.TabIndex = 7
         '
         'uxMapNumber
         '
         Me.uxMapNumber.Location = New System.Drawing.Point(113, 137)
         Me.uxMapNumber.Name = "uxMapNumber"
         Me.uxMapNumber.Size = New System.Drawing.Size(130, 20)
-        Me.uxMapNumber.TabIndex = 1
+        Me.uxMapNumber.TabIndex = 11
         '
         'uxCounty
         '
@@ -426,7 +427,7 @@ Partial Class EditMapIndexForm
         Me.uxCounty.Location = New System.Drawing.Point(113, 14)
         Me.uxCounty.Name = "uxCounty"
         Me.uxCounty.Size = New System.Drawing.Size(129, 21)
-        Me.uxCounty.TabIndex = 0
+        Me.uxCounty.TabIndex = 1
         '
         'uxORMAPNumberGroupBox
         '
@@ -434,7 +435,7 @@ Partial Class EditMapIndexForm
         Me.uxORMAPNumberGroupBox.Location = New System.Drawing.Point(217, 227)
         Me.uxORMAPNumberGroupBox.Name = "uxORMAPNumberGroupBox"
         Me.uxORMAPNumberGroupBox.Size = New System.Drawing.Size(253, 68)
-        Me.uxORMAPNumberGroupBox.TabIndex = 9
+        Me.uxORMAPNumberGroupBox.TabIndex = 4
         Me.uxORMAPNumberGroupBox.TabStop = False
         Me.uxORMAPNumberGroupBox.Text = "Preview"
         '
@@ -453,28 +454,36 @@ Partial Class EditMapIndexForm
         Me.uxHelp.Location = New System.Drawing.Point(395, 301)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
-        Me.uxHelp.TabIndex = 7
+        Me.uxHelp.TabIndex = 8
         Me.uxHelp.Text = "&Help"
         Me.uxHelp.UseVisualStyleBackColor = True
         '
-        'uxEdit
+        'uxOK
         '
-        Me.uxEdit.Location = New System.Drawing.Point(235, 301)
-        Me.uxEdit.Name = "uxEdit"
-        Me.uxEdit.Size = New System.Drawing.Size(75, 23)
-        Me.uxEdit.TabIndex = 5
-        Me.uxEdit.Text = "&Save"
-        Me.uxEdit.UseVisualStyleBackColor = True
+        Me.uxOK.Location = New System.Drawing.Point(139, 301)
+        Me.uxOK.Name = "uxOK"
+        Me.uxOK.Size = New System.Drawing.Size(75, 23)
+        Me.uxOK.TabIndex = 5
+        Me.uxOK.Text = "&OK"
+        Me.uxOK.UseVisualStyleBackColor = True
         '
-        'uxQuit
+        'uxCancel
         '
-        Me.uxQuit.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.uxQuit.Location = New System.Drawing.Point(315, 301)
-        Me.uxQuit.Name = "uxQuit"
-        Me.uxQuit.Size = New System.Drawing.Size(75, 23)
-        Me.uxQuit.TabIndex = 6
-        Me.uxQuit.Text = "&Quit"
-        Me.uxQuit.UseVisualStyleBackColor = True
+        Me.uxCancel.Location = New System.Drawing.Point(301, 301)
+        Me.uxCancel.Name = "uxCancel"
+        Me.uxCancel.Size = New System.Drawing.Size(75, 23)
+        Me.uxCancel.TabIndex = 7
+        Me.uxCancel.Text = "&Cancel"
+        Me.uxCancel.UseVisualStyleBackColor = True
+        '
+        'uxApply
+        '
+        Me.uxApply.Location = New System.Drawing.Point(220, 301)
+        Me.uxApply.Name = "uxApply"
+        Me.uxApply.Size = New System.Drawing.Size(75, 23)
+        Me.uxApply.TabIndex = 6
+        Me.uxApply.Text = "&Apply"
+        Me.uxApply.UseVisualStyleBackColor = True
         '
         'ErrorProviderSuffixNum
         '
@@ -482,13 +491,14 @@ Partial Class EditMapIndexForm
         '
         'EditMapIndexForm
         '
-        Me.AcceptButton = Me.uxEdit
+        Me.AcceptButton = Me.uxOK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.CancelButton = Me.uxQuit
+        Me.CancelButton = Me.uxCancel
         Me.ClientSize = New System.Drawing.Size(502, 333)
-        Me.Controls.Add(Me.uxQuit)
-        Me.Controls.Add(Me.uxEdit)
+        Me.Controls.Add(Me.uxApply)
+        Me.Controls.Add(Me.uxCancel)
+        Me.Controls.Add(Me.uxOK)
         Me.Controls.Add(Me.uxHelp)
         Me.Controls.Add(Me.uxORMAPNumberGroupBox)
         Me.Controls.Add(Me.uxMapInfoGroupBox)
@@ -557,7 +567,8 @@ Partial Class EditMapIndexForm
     Friend WithEvents uxMapNumberLabel As System.Windows.Forms.Label
     Friend WithEvents uxAnomalyLabel As System.Windows.Forms.Label
     Friend WithEvents uxHelp As System.Windows.Forms.Button
-    Friend WithEvents uxEdit As System.Windows.Forms.Button
-    Friend WithEvents uxQuit As System.Windows.Forms.Button
+    Friend WithEvents uxOK As System.Windows.Forms.Button
+    Friend WithEvents uxCancel As System.Windows.Forms.Button
+    Friend WithEvents uxApply As System.Windows.Forms.Button
     Friend WithEvents ErrorProviderSuffixNum As System.Windows.Forms.ErrorProvider
 End Class

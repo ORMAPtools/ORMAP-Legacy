@@ -35,7 +35,7 @@ Partial Class LocateFeatureForm
         Me.uxFind.Margin = New System.Windows.Forms.Padding(2)
         Me.uxFind.Name = "uxFind"
         Me.uxFind.Size = New System.Drawing.Size(75, 23)
-        Me.uxFind.TabIndex = 2
+        Me.uxFind.TabIndex = 5
         Me.uxFind.Text = "&Find"
         Me.uxFind.UseVisualStyleBackColor = True
         '
@@ -46,7 +46,7 @@ Partial Class LocateFeatureForm
         Me.uxHelp.Margin = New System.Windows.Forms.Padding(2)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
-        Me.uxHelp.TabIndex = 3
+        Me.uxHelp.TabIndex = 6
         Me.uxHelp.Text = "&Help"
         Me.uxHelp.UseVisualStyleBackColor = True
         '
@@ -57,7 +57,7 @@ Partial Class LocateFeatureForm
         Me.MapnumberLabel.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.MapnumberLabel.Name = "MapnumberLabel"
         Me.MapnumberLabel.Size = New System.Drawing.Size(71, 13)
-        Me.MapnumberLabel.TabIndex = 4
+        Me.MapnumberLabel.TabIndex = 0
         Me.MapnumberLabel.Text = "Map Number:"
         '
         'TaxlotLabel
@@ -67,7 +67,7 @@ Partial Class LocateFeatureForm
         Me.TaxlotLabel.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.TaxlotLabel.Name = "TaxlotLabel"
         Me.TaxlotLabel.Size = New System.Drawing.Size(39, 13)
-        Me.TaxlotLabel.TabIndex = 5
+        Me.TaxlotLabel.TabIndex = 2
         Me.TaxlotLabel.Text = "Taxlot:"
         '
         'uxTaxlot
@@ -79,7 +79,7 @@ Partial Class LocateFeatureForm
         Me.uxTaxlot.Margin = New System.Windows.Forms.Padding(2)
         Me.uxTaxlot.Name = "uxTaxlot"
         Me.uxTaxlot.Size = New System.Drawing.Size(74, 20)
-        Me.uxTaxlot.TabIndex = 6
+        Me.uxTaxlot.TabIndex = 3
         '
         'uxMapNumber
         '
@@ -99,7 +99,7 @@ Partial Class LocateFeatureForm
         Me.uxSelectFeatures.Location = New System.Drawing.Point(9, 96)
         Me.uxSelectFeatures.Name = "uxSelectFeatures"
         Me.uxSelectFeatures.Size = New System.Drawing.Size(166, 17)
-        Me.uxSelectFeatures.TabIndex = 7
+        Me.uxSelectFeatures.TabIndex = 4
         Me.uxSelectFeatures.Text = "Select features when locating"
         Me.uxSelectFeatures.UseVisualStyleBackColor = True
         '

@@ -36,7 +36,7 @@ Partial Class CombineTaxlotsForm
         Me.uxNewTaxlotNumber.Name = "uxNewTaxlotNumber"
         Me.uxNewTaxlotNumber.Size = New System.Drawing.Size(103, 21)
         Me.uxNewTaxlotNumber.Sorted = True
-        Me.uxNewTaxlotNumber.TabIndex = 0
+        Me.uxNewTaxlotNumber.TabIndex = 1
         '
         'uxCombine
         '
@@ -68,7 +68,7 @@ Partial Class CombineTaxlotsForm
         Me.NewTaxlotNumberLabel.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.NewTaxlotNumberLabel.Name = "NewTaxlotNumberLabel"
         Me.NewTaxlotNumberLabel.Size = New System.Drawing.Size(104, 13)
-        Me.NewTaxlotNumberLabel.TabIndex = 4
+        Me.NewTaxlotNumberLabel.TabIndex = 0
         Me.NewTaxlotNumberLabel.Text = "New Taxlot Number:"
         '
         'CombineTaxlotsForm

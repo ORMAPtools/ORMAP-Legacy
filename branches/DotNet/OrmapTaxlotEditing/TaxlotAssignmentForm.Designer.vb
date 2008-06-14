@@ -88,7 +88,7 @@ Partial Class TaxlotAssignmentForm
         Me.uxIncrementByNone.Location = New System.Drawing.Point(7, 66)
         Me.uxIncrementByNone.Name = "uxIncrementByNone"
         Me.uxIncrementByNone.Size = New System.Drawing.Size(44, 20)
-        Me.uxIncrementByNone.TabIndex = 14
+        Me.uxIncrementByNone.TabIndex = 3
         Me.uxIncrementByNone.TabStop = True
         Me.uxIncrementByNone.Text = "None"
         Me.uxIncrementByNone.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -100,7 +100,7 @@ Partial Class TaxlotAssignmentForm
         Me.uxIncrementBy1.Location = New System.Drawing.Point(57, 66)
         Me.uxIncrementBy1.Name = "uxIncrementBy1"
         Me.uxIncrementBy1.Size = New System.Drawing.Size(44, 20)
-        Me.uxIncrementBy1.TabIndex = 15
+        Me.uxIncrementBy1.TabIndex = 4
         Me.uxIncrementBy1.Text = "1"
         Me.uxIncrementBy1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.uxIncrementBy1.UseVisualStyleBackColor = True
@@ -111,7 +111,7 @@ Partial Class TaxlotAssignmentForm
         Me.uxIncrementBy10.Location = New System.Drawing.Point(107, 66)
         Me.uxIncrementBy10.Name = "uxIncrementBy10"
         Me.uxIncrementBy10.Size = New System.Drawing.Size(44, 20)
-        Me.uxIncrementBy10.TabIndex = 16
+        Me.uxIncrementBy10.TabIndex = 5
         Me.uxIncrementBy10.Text = "10"
         Me.uxIncrementBy10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.uxIncrementBy10.UseVisualStyleBackColor = True
@@ -122,7 +122,7 @@ Partial Class TaxlotAssignmentForm
         Me.uxIncrementBy100.Location = New System.Drawing.Point(157, 66)
         Me.uxIncrementBy100.Name = "uxIncrementBy100"
         Me.uxIncrementBy100.Size = New System.Drawing.Size(44, 20)
-        Me.uxIncrementBy100.TabIndex = 17
+        Me.uxIncrementBy100.TabIndex = 6
         Me.uxIncrementBy100.Text = "100"
         Me.uxIncrementBy100.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.uxIncrementBy100.UseVisualStyleBackColor = True
@@ -134,7 +134,7 @@ Partial Class TaxlotAssignmentForm
         Me.uxIncrementBy1000.Location = New System.Drawing.Point(207, 66)
         Me.uxIncrementBy1000.Name = "uxIncrementBy1000"
         Me.uxIncrementBy1000.Size = New System.Drawing.Size(44, 20)
-        Me.uxIncrementBy1000.TabIndex = 18
+        Me.uxIncrementBy1000.TabIndex = 7
         Me.uxIncrementBy1000.Text = "1000"
         Me.uxIncrementBy1000.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.uxIncrementBy1000.UseVisualStyleBackColor = True
@@ -149,7 +149,7 @@ Partial Class TaxlotAssignmentForm
         Me.uxIncrementByLabel.Name = "uxIncrementByLabel"
         Me.uxIncrementByLabel.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.uxIncrementByLabel.Size = New System.Drawing.Size(75, 17)
-        Me.uxIncrementByLabel.TabIndex = 3
+        Me.uxIncrementByLabel.TabIndex = 2
         Me.uxIncrementByLabel.Text = "Increment by:"
         Me.uxIncrementByLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -165,7 +165,7 @@ Partial Class TaxlotAssignmentForm
         Me.uxStartingFrom.Name = "uxStartingFrom"
         Me.uxStartingFrom.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.uxStartingFrom.Size = New System.Drawing.Size(74, 20)
-        Me.uxStartingFrom.TabIndex = 2
+        Me.uxStartingFrom.TabIndex = 1
         '
         'uxStartingFromLabel
         '
@@ -177,7 +177,7 @@ Partial Class TaxlotAssignmentForm
         Me.uxStartingFromLabel.Name = "uxStartingFromLabel"
         Me.uxStartingFromLabel.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.uxStartingFromLabel.Size = New System.Drawing.Size(75, 17)
-        Me.uxStartingFromLabel.TabIndex = 1
+        Me.uxStartingFromLabel.TabIndex = 0
         Me.uxStartingFromLabel.Text = "Starting from:"
         Me.uxStartingFromLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -187,7 +187,7 @@ Partial Class TaxlotAssignmentForm
         Me.uxHelp.Location = New System.Drawing.Point(194, 144)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
-        Me.uxHelp.TabIndex = 4
+        Me.uxHelp.TabIndex = 3
         Me.uxHelp.Text = "&Help"
         Me.uxHelp.UseVisualStyleBackColor = True
         '

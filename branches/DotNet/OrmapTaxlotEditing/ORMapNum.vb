@@ -338,11 +338,15 @@ Public NotInheritable Class ORMapNum
         Set(ByVal value As String)
 
             If IsNumeric(value) AndAlso value.Length > 0 Then
-                Select Case CLng(value)
+                Select Case value.Length
                     Case Is <= 0
                         _suffixNumber = EditorExtension.DefaultValuesSettings.MapSuffixNumber
-                    Case Is < 1000
+                    Case Is = 1, 2
                         _suffixNumber = New String("0"c, 3 - value.Length) & value
+                    Case Is = 3
+                        _suffixNumber = value
+                    Case Is >= 4
+                        _suffixNumber = EditorExtension.DefaultValuesSettings.MapSuffixNumber
                     Case Else
                         _suffixNumber = EditorExtension.DefaultValuesSettings.MapSuffixNumber
                 End Select

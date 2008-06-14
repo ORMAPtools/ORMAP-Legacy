@@ -148,7 +148,7 @@ Friend NotInheritable Class PropertiesForm
         Me.uxDescription.Location = New System.Drawing.Point(11, 13)
         Me.uxDescription.Name = "uxDescription"
         Me.uxDescription.Size = New System.Drawing.Size(370, 34)
-        Me.uxDescription.TabIndex = 2
+        Me.uxDescription.TabIndex = 0
         Me.uxDescription.Text = "The ORMAP Taxlot Editing Toolbar gives the user tools to edit taxlots and related" & _
             " features in compliance with the ORMAP standard."
         '
@@ -158,7 +158,7 @@ Friend NotInheritable Class PropertiesForm
         Me.uxMinimumFieldsOption.Location = New System.Drawing.Point(53, 97)
         Me.uxMinimumFieldsOption.Name = "uxMinimumFieldsOption"
         Me.uxMinimumFieldsOption.Size = New System.Drawing.Size(285, 17)
-        Me.uxMinimumFieldsOption.TabIndex = 4
+        Me.uxMinimumFieldsOption.TabIndex = 3
         Me.uxMinimumFieldsOption.Text = "Minimum fields only (e.g. AUTODATE and AUTOWHO)"
         Me.uxMinimumFieldsOption.UseVisualStyleBackColor = True
         '
@@ -169,7 +169,7 @@ Friend NotInheritable Class PropertiesForm
         Me.uxAllFieldsOption.Location = New System.Drawing.Point(53, 121)
         Me.uxAllFieldsOption.Name = "uxAllFieldsOption"
         Me.uxAllFieldsOption.Size = New System.Drawing.Size(63, 17)
-        Me.uxAllFieldsOption.TabIndex = 5
+        Me.uxAllFieldsOption.TabIndex = 4
         Me.uxAllFieldsOption.TabStop = True
         Me.uxAllFieldsOption.Text = "All fields"
         Me.uxAllFieldsOption.UseVisualStyleBackColor = True
@@ -181,7 +181,7 @@ Friend NotInheritable Class PropertiesForm
         Me.uxEnableAutoUpdate.Location = New System.Drawing.Point(33, 73)
         Me.uxEnableAutoUpdate.Name = "uxEnableAutoUpdate"
         Me.uxEnableAutoUpdate.Size = New System.Drawing.Size(284, 17)
-        Me.uxEnableAutoUpdate.TabIndex = 1
+        Me.uxEnableAutoUpdate.TabIndex = 2
         Me.uxEnableAutoUpdate.Text = "Enable field auto-updates"
         '
         'uxEnableTools
@@ -191,7 +191,7 @@ Friend NotInheritable Class PropertiesForm
         Me.uxEnableTools.Location = New System.Drawing.Point(14, 50)
         Me.uxEnableTools.Name = "uxEnableTools"
         Me.uxEnableTools.Size = New System.Drawing.Size(284, 17)
-        Me.uxEnableTools.TabIndex = 0
+        Me.uxEnableTools.TabIndex = 1
         Me.uxEnableTools.Text = "Enable taxlot editing tools"
         '
         'uxSettings
@@ -199,8 +199,8 @@ Friend NotInheritable Class PropertiesForm
         Me.uxSettings.Location = New System.Drawing.Point(14, 164)
         Me.uxSettings.Name = "uxSettings"
         Me.uxSettings.Size = New System.Drawing.Size(86, 23)
-        Me.uxSettings.TabIndex = 6
-        Me.uxSettings.Text = "Settings..."
+        Me.uxSettings.TabIndex = 5
+        Me.uxSettings.Text = "&Settings..."
         Me.uxSettings.UseVisualStyleBackColor = True
         '
         'uxAbout
@@ -208,8 +208,8 @@ Friend NotInheritable Class PropertiesForm
         Me.uxAbout.Location = New System.Drawing.Point(11, 362)
         Me.uxAbout.Name = "uxAbout"
         Me.uxAbout.Size = New System.Drawing.Size(86, 23)
-        Me.uxAbout.TabIndex = 7
-        Me.uxAbout.Text = "About..."
+        Me.uxAbout.TabIndex = 6
+        Me.uxAbout.Text = "&About..."
         Me.uxAbout.UseVisualStyleBackColor = True
         '
         'PropertiesForm

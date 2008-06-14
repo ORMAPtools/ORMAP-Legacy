@@ -198,7 +198,7 @@ Public NotInheritable Class LocateFeature
         With PartnerLocateFeatureForm
             Try
                 .UseWaitCursor = True
-
+                
                 Dim uxMapnumber As TextBox = .uxMapNumber
                 Dim uxTaxlot As TextBox = .uxTaxlot
 

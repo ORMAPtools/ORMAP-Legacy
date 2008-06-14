@@ -50,7 +50,7 @@ Partial Class DimensionArrowsForm
         Me.uxLineLabel.Location = New System.Drawing.Point(7, 49)
         Me.uxLineLabel.Name = "uxLineLabel"
         Me.uxLineLabel.Size = New System.Drawing.Size(99, 13)
-        Me.uxLineLabel.TabIndex = 1
+        Me.uxLineLabel.TabIndex = 2
         Me.uxLineLabel.Text = "Ratio from the Line:"
         '
         'uxSmoothLabel
@@ -59,7 +59,7 @@ Partial Class DimensionArrowsForm
         Me.uxSmoothLabel.Location = New System.Drawing.Point(7, 75)
         Me.uxSmoothLabel.Name = "uxSmoothLabel"
         Me.uxSmoothLabel.Size = New System.Drawing.Size(74, 13)
-        Me.uxSmoothLabel.TabIndex = 2
+        Me.uxSmoothLabel.TabIndex = 4
         Me.uxSmoothLabel.Text = "Smooth Ratio:"
         '
         'uxReset
@@ -67,8 +67,8 @@ Partial Class DimensionArrowsForm
         Me.uxReset.Location = New System.Drawing.Point(114, 144)
         Me.uxReset.Name = "uxReset"
         Me.uxReset.Size = New System.Drawing.Size(75, 23)
-        Me.uxReset.TabIndex = 4
-        Me.uxReset.Text = "Reset"
+        Me.uxReset.TabIndex = 3
+        Me.uxReset.Text = "&Reset"
         Me.uxReset.UseVisualStyleBackColor = True
         '
         'uxApply
@@ -76,8 +76,8 @@ Partial Class DimensionArrowsForm
         Me.uxApply.Location = New System.Drawing.Point(33, 144)
         Me.uxApply.Name = "uxApply"
         Me.uxApply.Size = New System.Drawing.Size(75, 23)
-        Me.uxApply.TabIndex = 5
-        Me.uxApply.Text = "Apply"
+        Me.uxApply.TabIndex = 2
+        Me.uxApply.Text = "&Apply"
         Me.uxApply.UseVisualStyleBackColor = True
         '
         'uxRatioOfCurve
@@ -85,21 +85,21 @@ Partial Class DimensionArrowsForm
         Me.uxRatioOfCurve.Location = New System.Drawing.Point(122, 20)
         Me.uxRatioOfCurve.Name = "uxRatioOfCurve"
         Me.uxRatioOfCurve.Size = New System.Drawing.Size(44, 20)
-        Me.uxRatioOfCurve.TabIndex = 6
+        Me.uxRatioOfCurve.TabIndex = 1
         '
         'uxRatioOfLine
         '
         Me.uxRatioOfLine.Location = New System.Drawing.Point(122, 46)
         Me.uxRatioOfLine.Name = "uxRatioOfLine"
         Me.uxRatioOfLine.Size = New System.Drawing.Size(44, 20)
-        Me.uxRatioOfLine.TabIndex = 7
+        Me.uxRatioOfLine.TabIndex = 3
         '
         'uxSmoothRatio
         '
         Me.uxSmoothRatio.Location = New System.Drawing.Point(122, 72)
         Me.uxSmoothRatio.Name = "uxSmoothRatio"
         Me.uxSmoothRatio.Size = New System.Drawing.Size(44, 20)
-        Me.uxSmoothRatio.TabIndex = 8
+        Me.uxSmoothRatio.TabIndex = 5
         '
         'uxManuallyAddArrow
         '
@@ -107,7 +107,7 @@ Partial Class DimensionArrowsForm
         Me.uxManuallyAddArrow.Location = New System.Drawing.Point(10, 120)
         Me.uxManuallyAddArrow.Name = "uxManuallyAddArrow"
         Me.uxManuallyAddArrow.Size = New System.Drawing.Size(120, 17)
-        Me.uxManuallyAddArrow.TabIndex = 9
+        Me.uxManuallyAddArrow.TabIndex = 1
         Me.uxManuallyAddArrow.Text = "Manually Add Arrow"
         Me.uxManuallyAddArrow.UseVisualStyleBackColor = True
         '
@@ -122,7 +122,7 @@ Partial Class DimensionArrowsForm
         Me.uxDimensionPropertiesGroup.Location = New System.Drawing.Point(10, 7)
         Me.uxDimensionPropertiesGroup.Name = "uxDimensionPropertiesGroup"
         Me.uxDimensionPropertiesGroup.Size = New System.Drawing.Size(179, 103)
-        Me.uxDimensionPropertiesGroup.TabIndex = 10
+        Me.uxDimensionPropertiesGroup.TabIndex = 0
         Me.uxDimensionPropertiesGroup.TabStop = False
         Me.uxDimensionPropertiesGroup.Text = "Dimension Arrow Properties"
         '

@@ -128,7 +128,7 @@ Partial Class AboutForm
         Me.OKButton.Location = New System.Drawing.Point(318, 238)
         Me.OKButton.Name = "OKButton"
         Me.OKButton.Size = New System.Drawing.Size(75, 23)
-        Me.OKButton.TabIndex = 0
+        Me.OKButton.TabIndex = 2
         Me.OKButton.Text = "&OK"
         '
         'TextBoxDescription

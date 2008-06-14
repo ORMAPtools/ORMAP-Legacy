@@ -2153,7 +2153,7 @@ Partial Class OrmapSettingsForm
         Me.uxReload.Location = New System.Drawing.Point(161, 3)
         Me.uxReload.Name = "uxReload"
         Me.uxReload.Size = New System.Drawing.Size(73, 23)
-        Me.uxReload.TabIndex = 1
+        Me.uxReload.TabIndex = 2
         Me.uxReload.Text = "&Reload"
         '
         'uxSave
@@ -2172,7 +2172,7 @@ Partial Class OrmapSettingsForm
         Me.uxReset.Location = New System.Drawing.Point(241, 3)
         Me.uxReset.Name = "uxReset"
         Me.uxReset.Size = New System.Drawing.Size(75, 23)
-        Me.uxReset.TabIndex = 2
+        Me.uxReset.TabIndex = 3
         Me.uxReset.Text = "Re&set"
         '
         'TopToolStripPanel
@@ -2220,7 +2220,7 @@ Partial Class OrmapSettingsForm
         Me.uxCancel.Location = New System.Drawing.Point(82, 3)
         Me.uxCancel.Name = "uxCancel"
         Me.uxCancel.Size = New System.Drawing.Size(73, 23)
-        Me.uxCancel.TabIndex = 3
+        Me.uxCancel.TabIndex = 1
         Me.uxCancel.Text = "&Cancel"
         '
         'RightToolStripPanel
