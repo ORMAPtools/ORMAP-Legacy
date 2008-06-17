@@ -1712,11 +1712,7 @@ Public NotInheritable Class SpatialUtilities
         Dim theActiveView As IActiveView = DirectCast(theMap, IActiveView)
 
         ' Partially refresh the display
-        theActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground Or _
-                                     esriViewDrawPhase.esriViewGeography Or _
-                                     esriViewDrawPhase.esriViewGeoSelection Or _
-                                     esriViewDrawPhase.esriViewGraphics Or _
-                                     esriViewDrawPhase.esriViewGraphicSelection, Nothing, Nothing)
+        theActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, Nothing, Nothing)
 
         ' Select the feature
         theMap.ClearSelection()
@@ -1726,11 +1722,7 @@ Public NotInheritable Class SpatialUtilities
             'theActiveView.Refresh()
 
             ' Partially refresh the display again
-            theActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground Or _
-                                         esriViewDrawPhase.esriViewGeography Or _
-                                         esriViewDrawPhase.esriViewGeoSelection Or _
-                                         esriViewDrawPhase.esriViewGraphics Or _
-                                         esriViewDrawPhase.esriViewGraphicSelection, Nothing, Nothing)
+            theActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, Nothing, Nothing)
         End If
 
     End Sub

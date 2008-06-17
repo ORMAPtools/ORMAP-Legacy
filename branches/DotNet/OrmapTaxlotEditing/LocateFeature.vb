@@ -306,11 +306,20 @@ Public NotInheritable Class LocateFeature
                     Do Until thisFeature Is Nothing
                         theEnvelope.Union(thisFeature.Shape.Envelope)
                         If .uxSelectFeatures.Checked Then
-                            pFeatureSelection.Add(thisFeature)
-                            pFeatureSelection.SelectionChanged()
+                            SetSelectedFeature(theXFlayer, thisFeature, False)
+                            'pFeatureSelection.Add(thisFeature)
+                            'pFeatureSelection.SelectionChanged()
                         End If
                         thisFeature = theFeatCursor.NextFeature
                     Loop
+
+                    ' Partially refresh the display
+                    Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+                    Dim theMap As IMap = theArcMapDoc.FocusMap
+                    Dim theActiveView As IActiveView = DirectCast(theMap, IActiveView)
+                    theActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, Nothing, Nothing)
+
+                    ' Zoom to the located features
                     ZoomToEnvelope(theEnvelope)
                 End If
             Finally
