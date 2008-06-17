@@ -253,8 +253,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="help\TaxlotAssignmentHelp.pdf" />
-    <None Include="help\TaxlotAssignmentHelp.rtf" />
+    <EmbeddedResource Include="help\TaxlotAssignmentHelp.pdf" />
+    <EmbeddedResource Include="help\TaxlotAssignmentHelp.rtf" />
     <None Include="My Project\DataSources\AllTablesSettings.datasource" />
     <None Include="My Project\DataSources\AnnoTableNamesSettings.datasource" />
     <None Include="My Project\DataSources\CartographicLinesSettings.datasource" />
