@@ -349,9 +349,59 @@ Public NotInheritable Class EditMapIndex
         PartnerEditMapIndexForm.Close()
     End Sub
 
-    Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        ' TODO: [ALL] Evaluate help systems and implement.
-        MessageBox.Show("Sorry. Help not implemented at this time.")
+    Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerEditMapIndexForm.uxHelp.Click
+        ' TODO: [NIS] Could be replaced with new help mechanism.
+
+        ' Get the help form.
+        Dim theHelpForm As New HelpForm
+        theHelpForm.Text = "Edit Map Index Help"
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        '' Open a custom help text file.
+        '' Note: Requires a specific file in the help subdirectory of the application directory.
+        'Dim theTextFilePath As String
+        'theTextFilePath = My.Application.Info.DirectoryPath & "\help\EditMapIndexHelp.rtf"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theTextFilePath) Then
+        '    theHelpForm.RichTextBox1.LoadFile(theTextFilePath, RichTextBoxStreamType.RichText)
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help" & ".")
+        '    theHelpForm.TabPage1.Hide()
+        'End If
+
+        ' Open a custom help pdf file.
+        ' Note: Requires a specific file in the help subdirectory of the application directory.
+        ' Requires Adobe Acrobat reader plug-in.
+        Dim thePdfFilePath As String
+        thePdfFilePath = My.Application.Info.DirectoryPath & "\help\EditMapIndexHelp.pdf"
+        If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(thePdfFilePath) Then
+            Dim theUri As New System.Uri("file:///" & thePdfFilePath)
+            theHelpForm.WebBrowser1.Url = theUri
+        Else
+            MessageBox.Show("No help file available in the directory " & NewLine & _
+                    My.Application.Info.DirectoryPath & "\help" & ".")
+            theHelpForm.TabPage2.Hide()
+        End If
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        '' Open a custom help video.
+        '' Note: Requires a specific file in the help\videos subdirectory of the application directory.
+        'Dim theVideoFilePath As String
+        'theVideoFilePath = My.Application.Info.DirectoryPath & "\help\videos\EditMapIndex\EditMapIndex.html"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theVideoFilePath) Then
+        '    Dim theUri As New System.Uri("file:///" & theVideoFilePath)
+        '    theHelpForm.WebBrowser1.Url = theUri
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help\videos\EditMapIndex" & ".")
+        '    theHelpForm.TabPage2.Hide()
+        'End If
+
+        ' KLUDGE: [NIS] Remove comments if form will be used.
+        'theHelpForm.Width = 668
+        'theHelpForm.Height = 400
+        'theHelpForm.Show()
+
     End Sub
 
 

@@ -1700,22 +1700,38 @@ Public NotInheritable Class SpatialUtilities
     End Sub
 
     ''' <summary>
+    ''' Refresh the display's selection cache.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Shared Sub RefreshDisplaySelection()
+        ' Partially refresh the display
+        Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        Dim theMap As IMap = theArcMapDoc.FocusMap
+        Dim theActiveView As IActiveView = DirectCast(theMap, IActiveView)
+        theActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, Nothing, Nothing)
+    End Sub
+
+    ''' <summary>
     ''' Selects a single feature.
     ''' </summary>
     ''' <param name="featureLayer">The feature layer containing the feature.</param>
     ''' <param name="feature">The feature to zoom to.</param> 
     ''' <remarks></remarks>
-    Public Shared Sub SetSelectedFeature(ByVal featureLayer As IFeatureLayer, ByVal feature As IFeature, ByVal refreshMap As Boolean)
+    Public Shared Sub SetSelectedFeature(ByVal featureLayer As IFeatureLayer, ByVal feature As IFeature, ByVal addToSelection As Boolean, ByVal refreshMap As Boolean)
 
         Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
         Dim theMap As IMap = theArcMapDoc.FocusMap
         Dim theActiveView As IActiveView = DirectCast(theMap, IActiveView)
 
         ' Partially refresh the display
+        ' (When selecting features, you must call PartialRefresh twice, 
+        ' once before and once after the selection operation.)
         theActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, Nothing, Nothing)
 
         ' Select the feature
-        theMap.ClearSelection()
+        If Not addToSelection Then
+            theMap.ClearSelection()
+        End If
         theMap.SelectFeature(featureLayer, feature)
 
         If refreshMap Then

@@ -38,6 +38,7 @@
 
 #Region "Imported Namespaces"
 Imports System.Drawing
+Imports System.Environment
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
 Imports ESRI.ArcGIS.ADF.BaseClasses
@@ -296,8 +297,58 @@ Public NotInheritable Class AddArrows
     End Sub
 
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerAddArrowsForm.uxHelp.Click
-        ' TODO [SC] Evaluate help systems and implement.
-        MessageBox.Show("uxHelp clicked")
+        ' TODO: [NIS] Could be replaced with new help mechanism.
+
+        ' Get the help form.
+        Dim theHelpForm As New HelpForm
+        theHelpForm.Text = "Add Arrows Help"
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        '' Open a custom help text file.
+        '' Note: Requires a specific file in the help subdirectory of the application directory.
+        'Dim theTextFilePath As String
+        'theTextFilePath = My.Application.Info.DirectoryPath & "\help\AddArrowsHelp.rtf"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theTextFilePath) Then
+        '    theHelpForm.RichTextBox1.LoadFile(theTextFilePath, RichTextBoxStreamType.RichText)
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help" & ".")
+        '    theHelpForm.TabPage1.Hide()
+        'End If
+
+        ' Open a custom help pdf file.
+        ' Note: Requires a specific file in the help subdirectory of the application directory.
+        ' Requires Adobe Acrobat reader plug-in.
+        Dim thePdfFilePath As String
+        thePdfFilePath = My.Application.Info.DirectoryPath & "\help\AddArrowsHelp.pdf"
+        If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(thePdfFilePath) Then
+            Dim theUri As New System.Uri("file:///" & thePdfFilePath)
+            theHelpForm.WebBrowser1.Url = theUri
+        Else
+            MessageBox.Show("No help file available in the directory " & NewLine & _
+                    My.Application.Info.DirectoryPath & "\help" & ".")
+            theHelpForm.TabPage2.Hide()
+        End If
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        '' Open a custom help video.
+        '' Note: Requires a specific file in the help\videos subdirectory of the application directory.
+        'Dim theVideoFilePath As String
+        'theVideoFilePath = My.Application.Info.DirectoryPath & "\help\videos\AddArrows\AddArrows.html"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theVideoFilePath) Then
+        '    Dim theUri As New System.Uri("file:///" & theVideoFilePath)
+        '    theHelpForm.WebBrowser1.Url = theUri
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help\videos\AddArrows" & ".")
+        '    theHelpForm.TabPage2.Hide()
+        'End If
+
+        ' KLUDGE: [NIS] Remove comments if form will be used.
+        'theHelpForm.Width = 668
+        'theHelpForm.Height = 400
+        'theHelpForm.Show()
+
     End Sub
 
     Private Sub uxAddStandard_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerAddArrowsForm.uxAddStandard.Click
@@ -1145,7 +1196,7 @@ Public NotInheritable Class AddArrows
                         ' Set the AutoWho Field
                         theField = LocateFields(theArrowFeatureClass, EditorExtension.AllTablesSettings.AutoWhoField)
                         If theField = NotFoundIndex Then Exit Sub
-                        theFeature.Value(theField) = UserName
+                        theFeature.Value(theField) = OrmapTaxlotEditing.Utilities.UserName
 
                         ' Set the AutoDate Field
                         theField = LocateFields(theArrowFeatureClass, EditorExtension.AllTablesSettings.AutoDateField)
@@ -1351,7 +1402,7 @@ Public NotInheritable Class AddArrows
                             ' Set the AutoWho Field
                             theField = LocateFields(theDimensionArrowFC, EditorExtension.AllTablesSettings.AutoWhoField)
                             If theField = NotFoundIndex Then Exit Sub
-                            theDimensionFeature.Value(theField) = UserName
+                            theDimensionFeature.Value(theField) = OrmapTaxlotEditing.Utilities.UserName
 
                             ' Set the AutoDate Field
                             theField = LocateFields(theDimensionArrowFC, EditorExtension.AllTablesSettings.AutoDateField)

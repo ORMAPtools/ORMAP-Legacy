@@ -236,25 +236,58 @@ Public NotInheritable Class TaxlotAssignment
 
     End Sub
 
-    Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles TaxlotAssignmentForm.uxHelp.Click
+    Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.uxHelp.Click
         ' TODO: [NIS] Could be replaced with new help mechanism.
-        ' Open a custom help file.
+
+        ' Get the help form.
+        Dim theHelpForm As New HelpForm
+        theHelpForm.Text = "Taxlot Assignment Help"
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        '' Open a custom help text file.
+        '' Note: Requires a specific file in the help subdirectory of the application directory.
+        'Dim theTextFilePath As String
+        'theTextFilePath = My.Application.Info.DirectoryPath & "\help\TaxlotAssignmentHelp.rtf"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theTextFilePath) Then
+        '    theHelpForm.RichTextBox1.LoadFile(theTextFilePath, RichTextBoxStreamType.RichText)
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help" & ".")
+        '    theHelpForm.TabPage1.Hide()
+        'End If
+
+        ' Open a custom help pdf file.
         ' Note: Requires a specific file in the help subdirectory of the application directory.
-        Dim filePath As String
-        filePath = My.Application.Info.DirectoryPath & "\help\videos\TaxlotAssignment\TaxlotAssignment.html"
-        If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(filePath) Then
-            ' Open the help form.
-            Dim helpForm As New HelpForm
-            helpForm.Text = "Taxlot Assignment Help"
-            Dim theUri As New System.Uri("file:///" & filePath)
-            helpForm.WebBrowser1.Url = theUri
-            helpForm.Width = 1000
-            helpForm.Height = 740
-            helpForm.Show()
+        ' Requires Adobe Acrobat reader plug-in.
+        Dim thePdfFilePath As String
+        thePdfFilePath = My.Application.Info.DirectoryPath & "\help\TaxlotAssignmentHelp.pdf"
+        If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(thePdfFilePath) Then
+            Dim theUri As New System.Uri("file:///" & thePdfFilePath)
+            theHelpForm.WebBrowser1.Url = theUri
         Else
             MessageBox.Show("No help file available in the directory " & NewLine & _
-                    My.Application.Info.DirectoryPath & "\help\videos\TaxlotAssignment" & ".")
+                    My.Application.Info.DirectoryPath & "\help" & ".")
+            theHelpForm.TabPage2.Hide()
         End If
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        '' Open a custom help video.
+        '' Note: Requires a specific file in the help\videos subdirectory of the application directory.
+        'Dim theVideoFilePath As String
+        'theVideoFilePath = My.Application.Info.DirectoryPath & "\help\videos\TaxlotAssignment\TaxlotAssignment.html"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theVideoFilePath) Then
+        '    Dim theUri As New System.Uri("file:///" & theVideoFilePath)
+        '    theHelpForm.WebBrowser1.Url = theUri
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help\videos\TaxlotAssignment" & ".")
+        '    theHelpForm.TabPage2.Hide()
+        'End If
+
+        ' KLUDGE: [NIS] Remove comments if form will be used.
+        'theHelpForm.Width = 668
+        'theHelpForm.Height = 400
+        'theHelpForm.Show()
 
     End Sub
 
@@ -350,20 +383,6 @@ Public NotInheritable Class TaxlotAssignment
                 Exit Sub
             End If
 
-            ' Verify the uniqueness of the specified taxlot number (if taxlot type input).
-            If isTaxlotType Then
-                '[Taxlot value is a number...]
-                If Not IsTaxlotNumberLocallyUnique(CStr(Me.NumberStartingFrom), theGeometry, False) Then
-                    If MessageBox.Show("The new Taxlot value (" & Me.NumberStartingFrom & ")" & NewLine & _
-                                       "is not unique within this MapIndex." & NewLine & _
-                                       "Attribute feature with value anyway?", _
-                                       "Taxlot Assignment", MessageBoxButtons.YesNo, _
-                                       MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.No Then
-                        Exit Sub
-                    End If
-                End If
-            End If
-
             '=====================================
             ' The Update Operation Starts Here...
             '=====================================
@@ -411,17 +430,28 @@ Public NotInheritable Class TaxlotAssignment
                 If MessageBox.Show("Taxlot currently has a Taxlot number (" & theExistingTaxlot & ")." & NewLine & _
                           "Update it?" & NewLine & NewLine & _
                           "NOTE: If the old number is unique in the map," & NewLine & _
-                          "it will be added to the Cancelled Numbers table.", "Taxlot Assignment", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.No Then
+                          "it will be added to the Cancelled Numbers table.", "Taxlot Assignment", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.Yes Then
+                    ' continue...
+                Else
                     Exit Sub
                 End If
             End If
 
-            '' NOTE: [NIS] This code is no longer needed since the OnChangeFeature 
-            '' event handler also tracks this
-            '' Capture the mapnumber and taxlot and record them in CancelledNumbers.
-            '' Taxlots will send their numbers to the CancelledNumbers table
-            '' ONLY if they are unique in the map at the time of deletion.
-            'SendExtinctToCancelledNumbersTable(theTaxlotFeature, False)
+            ' Verify the uniqueness of the specified taxlot number (if taxlot type input).
+            If isTaxlotType Then
+                '[Taxlot value is a number...]
+                If Not IsTaxlotNumberLocallyUnique(CStr(Me.NumberStartingFrom), theGeometry, False) Then
+                    If MessageBox.Show("The new Taxlot value (" & Me.NumberStartingFrom & ")" & NewLine & _
+                                       "is not unique within this MapIndex." & NewLine & _
+                                       "Attribute feature with value anyway?", _
+                                       "Taxlot Assignment", MessageBoxButtons.YesNo, _
+                                       MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
+                        ' continue...
+                    Else
+                        Exit Sub
+                    End If
+                End If
+            End If
 
             Dim theNewTLTaxlotNum As String = String.Empty 'initialize
             If isTaxlotType Then
@@ -445,6 +475,10 @@ Public NotInheritable Class TaxlotAssignment
             '------------------------------------------
             ' End the edit operation (store & stop)
             '------------------------------------------
+            ' At this point, the OnChangeFeature event handler will capture 
+            ' the mapnumber and taxlot and record them in CancelledNumbers.
+            ' Taxlots will send their numbers to the CancelledNumbers table
+            ' ONLY if they are unique in the map at the time of deletion.
             theTaxlotFeature.Store()
             EditorExtension.Editor.StopOperation("Assign Taxlot Number (AutoIncrement)")
             withinEditOperation = False
@@ -457,7 +491,7 @@ Public NotInheritable Class TaxlotAssignment
             End If
 
             ' Select the feature
-            SetSelectedFeature(TaxlotFeatureLayer, theTaxlotFeature, True)
+            SetSelectedFeature(TaxlotFeatureLayer, theTaxlotFeature, False, True)
 
             ' Check for stacked features in the same location
             theTaxlotFeature = theTaxlotFCursor.NextFeature

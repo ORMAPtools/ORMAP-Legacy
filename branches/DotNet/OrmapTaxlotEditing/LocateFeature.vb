@@ -296,30 +296,36 @@ Public NotInheritable Class LocateFeature
                 Dim theFeatCursor As IFeatureCursor = theXFClass.Search(theQueryFilter, True)
                 Dim thisFeature As IFeature = theFeatCursor.NextFeature
 
-                Dim pFeatureSelection As IFeatureSelection = DirectCast(theXFlayer, IFeatureSelection)
-                If .uxSelectFeatures.Checked Then pFeatureSelection.Clear()
+                Dim theFeatureSelection As IFeatureSelection = DirectCast(theXFlayer, IFeatureSelection)
+                If .uxSelectFeatures.Checked Then theFeatureSelection.Clear()
 
                 If thisFeature Is Nothing Then '-- Must be due to invalid mapindex or taxlot entered into the text boxes.
                     MessageBox.Show("Feature does not exist.", "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
                 Else
+                    If .uxSelectFeatures.Checked Then
+                        ' Flag the original selection
+                        RefreshDisplaySelection()
+                        ' Clear all selections
+                        Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+                        theArcMapDoc.FocusMap.ClearSelection()
+                    End If
+
                     Dim theEnvelope As IEnvelope = thisFeature.Shape.Envelope
                     Do Until thisFeature Is Nothing
                         theEnvelope.Union(thisFeature.Shape.Envelope)
                         If .uxSelectFeatures.Checked Then
-                            SetSelectedFeature(theXFlayer, thisFeature, False)
-                            'pFeatureSelection.Add(thisFeature)
-                            'pFeatureSelection.SelectionChanged()
+                            SetSelectedFeature(theXFlayer, thisFeature, True, False)
+                            'theFeatureSelection.Add(thisFeature)
+                            'theFeatureSelection.SelectionChanged()
                         End If
                         thisFeature = theFeatCursor.NextFeature
                     Loop
 
-                    ' Partially refresh the display
-                    Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
-                    Dim theMap As IMap = theArcMapDoc.FocusMap
-                    Dim theActiveView As IActiveView = DirectCast(theMap, IActiveView)
-                    theActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, Nothing, Nothing)
-
-                    ' Zoom to the located features
+                    If .uxSelectFeatures.Checked Then
+                        ' Flag the new selection
+                        RefreshDisplaySelection()
+                    End If
+                    
                     ZoomToEnvelope(theEnvelope)
                 End If
             Finally
@@ -337,8 +343,58 @@ Public NotInheritable Class LocateFeature
 
 
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxHelp.Click
-        ' TODO: [ALL] Evaluate help systems and implement.
-        MessageBox.Show("Sorry. Help not implemented at this time.")
+        ' TODO: [NIS] Could be replaced with new help mechanism.
+
+        ' Get the help form.
+        Dim theHelpForm As New HelpForm
+        theHelpForm.Text = "Locate Feature Help"
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        '' Open a custom help text file.
+        '' Note: Requires a specific file in the help subdirectory of the application directory.
+        'Dim theTextFilePath As String
+        'theTextFilePath = My.Application.Info.DirectoryPath & "\help\LocateFeatureHelp.rtf"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theTextFilePath) Then
+        '    theHelpForm.RichTextBox1.LoadFile(theTextFilePath, RichTextBoxStreamType.RichText)
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help" & ".")
+        '    theHelpForm.TabPage1.Hide()
+        'End If
+
+        ' Open a custom help pdf file.
+        ' Note: Requires a specific file in the help subdirectory of the application directory.
+        ' Requires Adobe Acrobat reader plug-in.
+        Dim thePdfFilePath As String
+        thePdfFilePath = My.Application.Info.DirectoryPath & "\help\LocateFeatureHelp.pdf"
+        If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(thePdfFilePath) Then
+            Dim theUri As New System.Uri("file:///" & thePdfFilePath)
+            theHelpForm.WebBrowser1.Url = theUri
+        Else
+            MessageBox.Show("No help file available in the directory " & NewLine & _
+                    My.Application.Info.DirectoryPath & "\help" & ".")
+            theHelpForm.TabPage2.Hide()
+        End If
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        '' Open a custom help video.
+        '' Note: Requires a specific file in the help\videos subdirectory of the application directory.
+        'Dim theVideoFilePath As String
+        'theVideoFilePath = My.Application.Info.DirectoryPath & "\help\videos\LocateFeature\LocateFeature.html"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theVideoFilePath) Then
+        '    Dim theUri As New System.Uri("file:///" & theVideoFilePath)
+        '    theHelpForm.WebBrowser1.Url = theUri
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help\videos\LocateFeature" & ".")
+        '    theHelpForm.TabPage2.Hide()
+        'End If
+
+        ' KLUDGE: [NIS] Remove comments if form will be used.
+        'theHelpForm.Width = 668
+        'theHelpForm.Height = 400
+        'theHelpForm.Show()
+
     End Sub
 
 #End Region
