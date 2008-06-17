@@ -1767,36 +1767,6 @@ Public NotInheritable Class SpatialUtilities
 
     End Function
 
-    ''' <summary>
-    ''' Formats a WhereClause based upon the data source.  Input format should be based on the personal geodatabase.
-    ''' </summary>
-    ''' <param name="whereClause">The original WhereClause written for a personal geodatabase (ie with brackets "[") </param>
-    ''' <param name="theFeatureLayer">The Feature Layer for which the WhereClause is being generated </param>
-    ''' <returns>A String.</returns>
-    ''' <remarks></remarks>
-    Public Shared Function formatWhereClause(ByVal whereClause As String, ByVal theFeatureLayer As IFeatureLayer) As String
-
-        Dim pDataLayer As IDataLayer2 = CType(theFeatureLayer, IDataLayer2)
-        Dim pDatasetName As IDatasetName = CType(pDataLayer.DataSourceName, IDatasetName)
-        Dim theWorkspaceCategory As String = pDatasetName.WorkspaceName.Category.ToString
-
-        'TODO: [SC] This select statement is not a "best practice"... needs to be fixed for error handling. 
-        Dim formattedWhereClause As String = String.Empty
-        Select Case theWorkspaceCategory
-            Case "File Geodatabase"
-                formattedWhereClause = whereClause.Replace("[", """").Replace("]", """")
-            Case "Personal Geodatabase"
-                formattedWhereClause = whereClause
-            Case "Spatial Database Connection"
-                formattedWhereClause = whereClause.Replace("[", "").Replace("]", "")
-            Case Else
-                Throw New Exception("Invalid ORMAP data type.")
-
-        End Select
-        Return formattedWhereClause
-
-    End Function
-
 #End Region
 
 #Region "Private Members"
@@ -1818,12 +1788,12 @@ Public NotInheritable Class SpatialUtilities
         thisQueryFilter.WhereClause = whereClause
         Dim thisCursor As ICursor
         If isEditable Then
-            thisCursor = table.Update(thisQueryFilter, False) 'non-recycling update cursor
+            thisCursor = Table.Update(thisQueryFilter, False) 'non-recycling update cursor
         Else
-            thisCursor = table.Search(thisQueryFilter, True) 'recycling search cursor
+            thisCursor = Table.Search(thisQueryFilter, True) 'recycling search cursor
         End If
 
-        If table.RowCount(thisQueryFilter) = 0 Then
+        If Table.RowCount(thisQueryFilter) = 0 Then
             Return Nothing
         Else
             Return thisCursor
