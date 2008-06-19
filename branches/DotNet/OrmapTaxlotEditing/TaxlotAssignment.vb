@@ -430,7 +430,7 @@ Public NotInheritable Class TaxlotAssignment
                 If MessageBox.Show("Taxlot currently has a Taxlot number (" & theExistingTaxlot & ")." & NewLine & _
                           "Update it?" & NewLine & NewLine & _
                           "NOTE: If the old number is unique in the map," & NewLine & _
-                          "it will be added to the Cancelled Numbers table.", "Taxlot Assignment", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.Yes Then
+                          "it will be added to the Cancelled Numbers table.", "Taxlot Assignment", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.OK Then
                     ' continue...
                 Else
                     Exit Sub
@@ -516,7 +516,7 @@ Public NotInheritable Class TaxlotAssignment
             ' Insure that this tool keeps the focus
             Dim theUID As New UID
             Dim theCmdItem As ICommandItem
-            theUID.Value = "{" & TaxlotAssignment.ClassId & "}" ' "OrmapTaxlotEditing.TaxlotAssignment"
+            theUID.Value = "OrmapTaxlotEditing.TaxlotAssignment" '"{" & TaxlotAssignment.ClassId & "}"
             theCmdItem = EditorExtension.Application.Document.CommandBars.Find(theUID, False, False)
             EditorExtension.Application.CurrentTool = theCmdItem
 

@@ -932,6 +932,9 @@ Public NotInheritable Class SpatialUtilities
                     thisCurve = DirectCast(searchGeometry, ICurve)
                     intersectFuzzAmount = thisCurve.Length * fuzzFactor
 
+                Case esriGeometryType.esriGeometryPoint
+                    ' no variables settings needed
+
                 Case esriGeometryType.esriGeometryEnvelope
                     thisEnvelope = DirectCast(searchGeometry, IEnvelope)
                     thisPolygon = envelopeToPolygon(thisEnvelope)
@@ -1644,23 +1647,24 @@ Public NotInheritable Class SpatialUtilities
         mapIndexFeatureClass = thisMapIndexFeatureLayer.FeatureClass
 
         ' Check for the existence of a current OR Map Number and Taxlot number
-        Dim mapIndexORMAPValue As String = String.Empty
-        mapIndexORMAPValue = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
-        If mapIndexORMAPValue.Length = 0 Then
+        Dim mapIndexValue As String = String.Empty
+        mapIndexValue = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+        If mapIndexValue.Length = 0 Then
             returnValue = True
         End If
 
         ' Make sure this number is unique within taxlots with this OR Map Number
-        Dim whereClause As String = formatWhereClause(String.Concat("[", EditorExtension.TaxLotSettings.MapNumberField, "]", " = '", mapIndexORMAPValue, "' AND ", "[", EditorExtension.TaxLotSettings.TaxlotField, "]", " = '", taxlotNumber, "'"), thisTaxlotFeatureClass)
+        Dim whereClause As String = formatWhereClause(String.Concat("[", EditorExtension.TaxLotSettings.MapNumberField, "]", " = '", mapIndexValue, "' AND ", "[", EditorExtension.TaxLotSettings.TaxlotField, "]", " = '", taxlotNumber, "'"), thisTaxlotFeatureClass)
         Dim n As Integer = 0
         Dim cursor As ICursor
         cursor = attributeQuery(DirectCast(thisTaxlotFeatureClass, ITable), whereClause, False)
         If Not (cursor Is Nothing) AndAlso (returnValue = False) Then
             Dim row As IRow
             row = cursor.NextRow
-            If row Is Nothing Then
+            Do Until row Is Nothing
                 n += 1
-            End If
+                row = cursor.NextRow
+            Loop
         End If
 
         If allowOneInstance Then

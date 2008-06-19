@@ -1031,6 +1031,12 @@ Public NotInheritable Class EditorExtension
 
 #Region "IExtension Interface Implementation"
 
+    ''' <summary>
+    ''' Sets the name of the extension.
+    ''' </summary>
+    ''' <value>The name of the extension.</value>
+    ''' <returns>The name.</returns>
+    ''' <remarks>Must not exceed 31 characters.</remarks>
     Public ReadOnly Property Name() As String Implements ESRI.ArcGIS.esriSystem.IExtension.Name
         Get
             Return "EditorExtension"
@@ -1142,7 +1148,7 @@ Public NotInheritable Class EditorExtension
             usesCtrl = True
             usesAlt = True
             usesShift = False
-            uid.Value = "{" & OrmapTaxlotEditing.LocateFeature.ClassId & "}"
+            uid.Value = "OrmapTaxlotEditing.LocateFeature" '"{" & OrmapTaxlotEditing.LocateFeature.ClassId & "}"
             setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
             ' Set TaxlotAssignment accelerator keys to Ctrl + Alt + T
@@ -1150,7 +1156,7 @@ Public NotInheritable Class EditorExtension
             usesCtrl = True
             usesAlt = True
             usesShift = False
-            uid.Value = "{" & OrmapTaxlotEditing.TaxlotAssignment.ClassId & "}"
+            uid.Value = "OrmapTaxlotEditing.TaxlotAssignment" '"{" & OrmapTaxlotEditing.TaxlotAssignment.ClassId & "}"
             setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
             ' Set EditMapIndex accelerator keys to Ctrl + Alt + E
@@ -1158,7 +1164,7 @@ Public NotInheritable Class EditorExtension
             usesCtrl = True
             usesAlt = True
             usesShift = False
-            uid.Value = "{" & OrmapTaxlotEditing.EditMapIndex.ClassId & "}"
+            uid.Value = "OrmapTaxlotEditing.EditMapIndex" '"{" & OrmapTaxlotEditing.EditMapIndex.ClassId & "}"
             setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
             ' Set CombineTaxlots accelerator keys to Ctrl + Alt + C
@@ -1166,7 +1172,7 @@ Public NotInheritable Class EditorExtension
             usesCtrl = True
             usesAlt = True
             usesShift = False
-            uid.Value = "{" & OrmapTaxlotEditing.CombineTaxlots.ClassId & "}"
+            uid.Value = "OrmapTaxlotEditing.CombineTaxlots" '"{" & OrmapTaxlotEditing.CombineTaxlots.ClassId & "}"
             setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
             ' Set AddArrows accelerator keys to Ctrl + Alt + A
@@ -1174,7 +1180,7 @@ Public NotInheritable Class EditorExtension
             usesCtrl = True
             usesAlt = True
             usesShift = False
-            uid.Value = "{" & OrmapTaxlotEditing.AddArrows.ClassId & "}"
+            uid.Value = "OrmapTaxlotEditing.AddArrows" '"{" & OrmapTaxlotEditing.AddArrows.ClassId & "}"
             setAccelerator(acceleratorTable, uid, key, usesCtrl, usesAlt, usesShift)
 
         Catch ex As Exception
@@ -1192,7 +1198,7 @@ Public NotInheritable Class EditorExtension
         Get
             Dim uid As New UIDClass()
             Try
-                uid.Value = "{" & OrmapTaxlotEditing.EditorExtension.ClassId & "}"
+                uid.Value = Me.GetType().GUID.ToString("B") '"{" & OrmapTaxlotEditing.EditorExtension.ClassId & "}"
 
             Catch ex As Exception
                 ProcessUnhandledException(ex)
@@ -1211,6 +1217,9 @@ Public NotInheritable Class EditorExtension
             AllowedToEditTaxlots = CBool(Stream.Read())
             AllowedToAutoUpdate = CBool(Stream.Read())
             AllowedToAutoUpdateAllFields = CBool(Stream.Read())
+
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(Stream)
+
         Catch ex As Exception
             ProcessUnhandledException(ex)
         End Try
@@ -1227,6 +1236,9 @@ Public NotInheritable Class EditorExtension
             Stream.Write(AllowedToEditTaxlots)
             Stream.Write(AllowedToAutoUpdate)
             Stream.Write(AllowedToAutoUpdateAllFields)
+
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(Stream)
+
         Catch ex As Exception
             ProcessUnhandledException(ex)
         End Try
