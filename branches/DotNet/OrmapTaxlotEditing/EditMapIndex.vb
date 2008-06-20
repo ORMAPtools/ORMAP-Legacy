@@ -352,7 +352,6 @@ Public NotInheritable Class EditMapIndex
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerEditMapIndexForm.uxHelp.Click
         ' TODO: [NIS] Could be replaced with new help mechanism.
 
-
         Dim theRTFStream As System.IO.Stream = _
            Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.EditMapIndex_help.rtf")
         OpenHelp("Edit MapIndex Help", theRTFStream)
@@ -374,6 +373,7 @@ Public NotInheritable Class EditMapIndex
         '    theHelpForm.TabPage1.Hide()
         'End If
 
+        ' KLUDGE: [NIS] Remove comments if file is ready.
         ' Open a custom help pdf file.
         ' Note: Requires a specific file in the help subdirectory of the application directory.
         ' Requires Adobe Acrobat reader plug-in.

@@ -366,6 +366,7 @@ Public NotInheritable Class LocateFeature
         '    theHelpForm.TabPage1.Hide()
         'End If
 
+        ' KLUDGE: [NIS] Remove comments if file is ready.
         ' Open a custom help pdf file.
         ' Note: Requires a specific file in the help subdirectory of the application directory.
         ' Requires Adobe Acrobat reader plug-in.

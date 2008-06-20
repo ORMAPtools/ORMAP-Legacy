@@ -240,11 +240,9 @@ Public NotInheritable Class TaxlotAssignment
         ' TODO: [NIS] Could be replaced with new help mechanism.
 
         Dim theRTFStream As System.IO.Stream = _
-            Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.TaxlotAssignmentHelp.rtf")
+            Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.TaxlotAssignment_help.rtf")
         OpenHelp("Taxlot Assignment Help", theRTFStream)
 
-
-        ' KLUDGE: [NIS] Remove comments if file is ready.
         '' Open a custom help text file.
         '' Note: Requires a specific file in the help subdirectory of the application directory.
         'Dim theTextFilePath As String
@@ -257,15 +255,12 @@ Public NotInheritable Class TaxlotAssignment
         '    theHelpForm.TabPage1.Hide()
         'End If
 
+        ' KLUDGE: [NIS] Remove comments if file is ready.
         ' Open a custom help pdf file.
         ' Note: Requires a specific file in the help subdirectory of the application directory.
         ' Requires Adobe Acrobat reader plug-in.
-
-
-
         'Dim thePdfFilePath As String
         'thePdfFilePath = My.Application.Info.DirectoryPath & "\help\TaxlotAssignmentHelp.pdf"
-
         'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(thePdfFilePath) Then
         '    Dim theUri As New System.Uri("file:///" & thePdfFilePath)
         '    theHelpForm.WebBrowser1.Url = theUri

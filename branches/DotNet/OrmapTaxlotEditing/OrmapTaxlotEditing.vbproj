@@ -253,13 +253,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="help\TaxlotAssignmentHelp.rtf">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="help\AddArrows_help.rtf" />
     <EmbeddedResource Include="help\LocateFeature_help.rtf" />
     <EmbeddedResource Include="help\CombineSelectedTaxlots_help.rtf" />
     <EmbeddedResource Include="help\EditMapIndex_help.rtf" />
+    <EmbeddedResource Include="help\TaxlotAssignment_help.rtf" />
     <None Include="My Project\DataSources\AllTablesSettings.datasource" />
     <None Include="My Project\DataSources\AnnoTableNamesSettings.datasource" />
     <None Include="My Project\DataSources\CartographicLinesSettings.datasource" />
@@ -333,14 +331,6 @@
       <DependentUpon>PropertiesForm.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="cursors\icons\AutoUpdateAllToggle.bmp" />
-    <EmbeddedResource Include="cursors\icons\LocateFeature.bmp" />
-    <EmbeddedResource Include="cursors\icons\EditMapIndex.bmp" />
-    <EmbeddedResource Include="cursors\icons\TaxlotAssignment.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="cursors\icons\AddArrows.bmp" />
-    <EmbeddedResource Include="cursors\icons\CombineTaxlots.bmp" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AboutForm.resx">
@@ -363,13 +353,21 @@
       <SubType>Designer</SubType>
       <DependentUpon>OrmapSettingsForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="cursors\icons\ORMAPLogo.gif" />
     <EmbeddedResource Include="TaxlotAssignmentForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>TaxlotAssignmentForm.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="icons\AddArrows.bmp" />
+    <EmbeddedResource Include="icons\AutoUpdateAllToggle.bmp" />
+    <EmbeddedResource Include="icons\CombineTaxlots.bmp" />
+    <EmbeddedResource Include="icons\EditMapIndex.bmp" />
+    <EmbeddedResource Include="icons\lgplv3-88x31.png" />
+    <EmbeddedResource Include="icons\LocateFeature.bmp" />
+    <EmbeddedResource Include="icons\LocateFeature_Old.bmp" />
+    <EmbeddedResource Include="icons\ORMAPLogo.gif" />
+    <EmbeddedResource Include="icons\TaxlotAssignment.bmp" />
     <Content Include="license\COPYING.LESSER.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
