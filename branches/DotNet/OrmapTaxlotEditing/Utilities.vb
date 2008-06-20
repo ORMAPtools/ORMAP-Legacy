@@ -244,6 +244,26 @@ Public NotInheritable Class Utilities
 
     End Sub
 
+
+
+    Public Shared Sub OpenHelp(ByVal helpFormText As String, ByVal theRTFStream As Stream)
+
+        ' Get the help form.
+        Dim theHelpForm As New HelpForm
+        theHelpForm.Text = helpFormText
+
+        If Not (theRTFStream Is Nothing) Then
+            Dim sr As New StreamReader(theRTFStream)
+            theHelpForm.RichTextBox1.LoadFile(theRTFStream, RichTextBoxStreamType.RichText)
+            sr.Close()
+        End If
+
+        theHelpForm.Show()
+
+    End Sub
+
+
+
 #End Region
 
 #Region "Private Members (none)"

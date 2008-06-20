@@ -24,9 +24,9 @@ Partial Class HelpForm
     Private Sub InitializeComponent()
         Me.TabControl1 = New System.Windows.Forms.TabControl
         Me.TabPage1 = New System.Windows.Forms.TabPage
+        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox
         Me.TabPage2 = New System.Windows.Forms.TabPage
         Me.WebBrowser1 = New System.Windows.Forms.WebBrowser
-        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
@@ -40,7 +40,7 @@ Partial Class HelpForm
         Me.TabControl1.Location = New System.Drawing.Point(5, 5)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(532, 356)
+        Me.TabControl1.Size = New System.Drawing.Size(665, 426)
         Me.TabControl1.TabIndex = 6
         '
         'TabPage1
@@ -49,10 +49,19 @@ Partial Class HelpForm
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(524, 330)
+        Me.TabPage1.Size = New System.Drawing.Size(657, 400)
         Me.TabPage1.TabIndex = 1
         Me.TabPage1.Text = "Text"
         Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'RichTextBox1
+        '
+        Me.RichTextBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBox1.Location = New System.Drawing.Point(3, 3)
+        Me.RichTextBox1.Name = "RichTextBox1"
+        Me.RichTextBox1.Size = New System.Drawing.Size(651, 394)
+        Me.RichTextBox1.TabIndex = 0
+        Me.RichTextBox1.Text = ""
         '
         'TabPage2
         '
@@ -74,20 +83,11 @@ Partial Class HelpForm
         Me.WebBrowser1.Size = New System.Drawing.Size(518, 324)
         Me.WebBrowser1.TabIndex = 5
         '
-        'RichTextBox1
-        '
-        Me.RichTextBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.RichTextBox1.Location = New System.Drawing.Point(3, 3)
-        Me.RichTextBox1.Name = "RichTextBox1"
-        Me.RichTextBox1.Size = New System.Drawing.Size(518, 324)
-        Me.RichTextBox1.TabIndex = 0
-        Me.RichTextBox1.Text = ""
-        '
         'HelpForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(542, 366)
+        Me.ClientSize = New System.Drawing.Size(675, 436)
         Me.Controls.Add(Me.TabControl1)
         Me.Name = "HelpForm"
         Me.Padding = New System.Windows.Forms.Padding(5)

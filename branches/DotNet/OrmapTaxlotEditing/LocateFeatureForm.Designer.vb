@@ -78,7 +78,7 @@ Partial Class LocateFeatureForm
         Me.uxTaxlot.Location = New System.Drawing.Point(9, 66)
         Me.uxTaxlot.Margin = New System.Windows.Forms.Padding(2)
         Me.uxTaxlot.Name = "uxTaxlot"
-        Me.uxTaxlot.Size = New System.Drawing.Size(74, 20)
+        Me.uxTaxlot.Size = New System.Drawing.Size(93, 20)
         Me.uxTaxlot.TabIndex = 3
         '
         'uxMapNumber
@@ -90,7 +90,7 @@ Partial Class LocateFeatureForm
         Me.uxMapNumber.Margin = New System.Windows.Forms.Padding(2)
         Me.uxMapNumber.MaxLength = 12
         Me.uxMapNumber.Name = "uxMapNumber"
-        Me.uxMapNumber.Size = New System.Drawing.Size(107, 20)
+        Me.uxMapNumber.Size = New System.Drawing.Size(134, 20)
         Me.uxMapNumber.TabIndex = 1
         '
         'uxSelectFeatures

@@ -258,9 +258,13 @@ Public NotInheritable Class CombineTaxlots
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerCombineTaxlotsForm.uxHelp.Click
         ' TODO: [NIS] Could be replaced with new help mechanism.
 
+        Dim theRTFStream As System.IO.Stream = _
+           Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.CombineSelectedTaxlots_help.rtf")
+        OpenHelp("Combine Selected Taxlots Help", theRTFStream)
+
         ' Get the help form.
-        Dim theHelpForm As New HelpForm
-        theHelpForm.Text = "Combine Taxlots Help"
+        'Dim theHelpForm As New HelpForm
+        'theHelpForm.Text = "Combine Taxlots Help"
 
         ' KLUDGE: [NIS] Remove comments if file is ready.
         '' Open a custom help text file.
@@ -278,16 +282,16 @@ Public NotInheritable Class CombineTaxlots
         ' Open a custom help pdf file.
         ' Note: Requires a specific file in the help subdirectory of the application directory.
         ' Requires Adobe Acrobat reader plug-in.
-        Dim thePdfFilePath As String
-        thePdfFilePath = My.Application.Info.DirectoryPath & "\help\CombineTaxlotsHelp.pdf"
-        If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(thePdfFilePath) Then
-            Dim theUri As New System.Uri("file:///" & thePdfFilePath)
-            theHelpForm.WebBrowser1.Url = theUri
-        Else
-            MessageBox.Show("No help file available in the directory " & NewLine & _
-                    My.Application.Info.DirectoryPath & "\help" & ".")
-            theHelpForm.TabPage2.Hide()
-        End If
+        'Dim thePdfFilePath As String
+        'thePdfFilePath = My.Application.Info.DirectoryPath & "\help\CombineTaxlotsHelp.pdf"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(thePdfFilePath) Then
+        '    Dim theUri As New System.Uri("file:///" & thePdfFilePath)
+        '    theHelpForm.WebBrowser1.Url = theUri
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help" & ".")
+        '    theHelpForm.TabPage2.Hide()
+        'End If
 
         ' KLUDGE: [NIS] Remove comments if file is ready.
         '' Open a custom help video.
