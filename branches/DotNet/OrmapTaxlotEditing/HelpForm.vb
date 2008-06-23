@@ -43,5 +43,14 @@ Imports System.Runtime.InteropServices
 <ComVisible(False)> _
 Public Class HelpForm
 
+    Private Sub uxReportOrRequest_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxReportOrRequest.Click
+        Dim theRTFStream As System.IO.Stream = _
+                Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.ReportOrRequest_help.rtf")
+        Utilities.OpenHelp("Report Bug or Request New Feature", theRTFStream)
+    End Sub
+
+    Private Sub RichTextBox1_LinkClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.LinkClickedEventArgs) Handles RichTextBox1.LinkClicked
+        System.Diagnostics.Process.Start(e.LinkText)
+    End Sub
 
 End Class

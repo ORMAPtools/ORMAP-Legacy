@@ -85,6 +85,7 @@ Friend NotInheritable Class PropertiesForm
     Friend WithEvents uxMinimumFieldsOption As RadioButton
     Friend WithEvents uxAllFieldsOption As RadioButton
     Friend WithEvents uxAbout As System.Windows.Forms.Button
+    Friend WithEvents uxReportOrRequest As System.Windows.Forms.Button
     Friend WithEvents uxSettings As Button
 
 #End Region
@@ -141,6 +142,7 @@ Friend NotInheritable Class PropertiesForm
         Me.uxEnableTools = New System.Windows.Forms.CheckBox
         Me.uxSettings = New System.Windows.Forms.Button
         Me.uxAbout = New System.Windows.Forms.Button
+        Me.uxReportOrRequest = New System.Windows.Forms.Button
         Me.SuspendLayout()
         '
         'uxDescription
@@ -212,11 +214,21 @@ Friend NotInheritable Class PropertiesForm
         Me.uxAbout.Text = "&About..."
         Me.uxAbout.UseVisualStyleBackColor = True
         '
+        'uxReportOrRequest
+        '
+        Me.uxReportOrRequest.Location = New System.Drawing.Point(103, 362)
+        Me.uxReportOrRequest.Name = "uxReportOrRequest"
+        Me.uxReportOrRequest.Size = New System.Drawing.Size(202, 23)
+        Me.uxReportOrRequest.TabIndex = 8
+        Me.uxReportOrRequest.Text = "&Report Bug or Request New Feature..."
+        Me.uxReportOrRequest.UseVisualStyleBackColor = True
+        '
         'PropertiesForm
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(456, 398)
+        Me.Controls.Add(Me.uxReportOrRequest)
         Me.Controls.Add(Me.uxAbout)
         Me.Controls.Add(Me.uxSettings)
         Me.Controls.Add(Me.uxAllFieldsOption)
@@ -235,6 +247,12 @@ Friend NotInheritable Class PropertiesForm
 #End Region
 
 #End Region
+
+    Private Sub uxReportOrRequest_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Dim theRTFStream As System.IO.Stream = _
+                Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.ReportOrRequest_help.rtf")
+        Utilities.OpenHelp("Report Bug or Request New Feature", theRTFStream)
+    End Sub
 
 End Class
 

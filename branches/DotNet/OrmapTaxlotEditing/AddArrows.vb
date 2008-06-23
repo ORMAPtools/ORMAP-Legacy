@@ -285,7 +285,10 @@ Public NotInheritable Class AddArrows
                 .uxArrowLineStyle.Items.Add("162 - See Map Arrow")
             End If
             ' Set control defaults
-            .uxArrowLineStyle.SelectedIndex = 0
+            If .uxArrowLineStyle.SelectedIndex = -1 Then
+                .uxArrowLineStyle.SelectedIndex = 0
+            End If
+
 
         End With
 

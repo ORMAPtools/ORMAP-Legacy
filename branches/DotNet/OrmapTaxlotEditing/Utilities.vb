@@ -244,8 +244,6 @@ Public NotInheritable Class Utilities
 
     End Sub
 
-
-
     Public Shared Sub OpenHelp(ByVal helpFormText As String, ByVal theRTFStream As Stream)
 
         ' Get the help form.

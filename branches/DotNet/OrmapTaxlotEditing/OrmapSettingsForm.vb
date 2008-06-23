@@ -97,6 +97,18 @@ Public Class OrmapSettingsForm
     End Sub
 
     ''' <summary>
+    ''' Imports application settings values and keeps the dialog open. 
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub uxImport_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxImport.Click
+
+        ImportSettings()
+
+    End Sub
+
+    ''' <summary>
     ''' Reloads application settings values and keeps the dialog open. 
     ''' </summary>
     ''' <param name="sender"></param>
@@ -114,7 +126,7 @@ Public Class OrmapSettingsForm
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub uxReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxReset.Click
+    Private Sub uxReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxImport.Click
 
         ResetSettings()
 
@@ -142,6 +154,36 @@ Public Class OrmapSettingsForm
 #End Region
 
 #Region "Methods"
+
+    ''' <summary>
+    ''' Imports application settings values from a file.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub ImportSettings()
+
+        ' Get the local user.config file path
+        Dim config As System.Configuration.Configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal)
+        Dim theLocalFilePath As String = config.FilePath
+
+        ' Create a back up of this file
+        If My.Computer.FileSystem.FileExists(theLocalFilePath) Then
+            My.Computer.FileSystem.CopyFile(theLocalFilePath, theLocalFilePath & ".bak", True)
+        Else
+            MessageBox.Show("Local file not available.", "Import Settings", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Exit Sub
+        End If
+
+        ' Get user supplied source path (common dialog).
+        Dim theSourceFilePath As String = My.Application.Info.DirectoryPath & "\user.config"
+
+        ' Copy from source path to local path.
+        If My.Computer.FileSystem.FileExists(theSourceFilePath) Then
+            My.Computer.FileSystem.CopyFile(theSourceFilePath, theLocalFilePath, True)
+        Else
+            MessageBox.Show("Source file not available.", "Import Settings", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
+
+    End Sub
 
     ''' <summary>
     ''' Set the control binding sources for the form.
