@@ -39,6 +39,7 @@
 #Region "Imported Namespaces"
 Imports System.Runtime.InteropServices
 Imports System.Configuration
+Imports System.Environment
 Imports System.Windows.Forms
 #End Region
 
@@ -169,7 +170,7 @@ Public Class OrmapSettingsForm
         If My.Computer.FileSystem.FileExists(theLocalFilePath) Then
             My.Computer.FileSystem.CopyFile(theLocalFilePath, theLocalFilePath & ".bak", True)
         Else
-            MessageBox.Show("Local file not available.", "Import Settings", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("the local settings file (user.config) is not available.", "Import Settings", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End If
 
@@ -179,8 +180,11 @@ Public Class OrmapSettingsForm
         ' Copy from source path to local path.
         If My.Computer.FileSystem.FileExists(theSourceFilePath) Then
             My.Computer.FileSystem.CopyFile(theSourceFilePath, theLocalFilePath, True)
+            ReloadSettings()
         Else
-            MessageBox.Show("Source file not available.", "Import Settings", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("the source settings file (user.config) is not available at:" & NewLine & _
+                    My.Computer.FileSystem.GetParentPath(theSourceFilePath) & "." & NewLine & NewLine & _
+                    "Copy your source settings file to this location and try again.", "Import Settings", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
 
     End Sub

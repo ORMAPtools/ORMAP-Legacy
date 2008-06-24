@@ -2268,6 +2268,7 @@ Partial Class OrmapSettingsForm
         Me.MinimizeBox = False
         Me.Name = "OrmapSettingsForm"
         Me.Padding = New System.Windows.Forms.Padding(10)
+        Me.ShowIcon = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "ORMAP Taxlot Editing Settings"
