@@ -98,12 +98,26 @@ Public Class OrmapSettingsForm
     End Sub
 
     ''' <summary>
+    ''' Launches help.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxHelp.Click
+
+        Dim theRTFStream As System.IO.Stream = _
+        Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.Settings_help.rtf")
+        Utilities.OpenHelp("ORMAP Taxlot Editing Settings Help", theRTFStream)
+
+    End Sub
+
+    ''' <summary>
     ''' Imports application settings values and keeps the dialog open. 
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub uxImport_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxImport.Click
+    Private Sub uxImport_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxHelp.Click
 
         ImportSettings()
 
@@ -127,7 +141,7 @@ Public Class OrmapSettingsForm
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub uxReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxImport.Click
+    Private Sub uxReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxHelp.Click
 
         ResetSettings()
 

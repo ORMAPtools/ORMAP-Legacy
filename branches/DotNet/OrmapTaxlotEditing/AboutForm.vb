@@ -46,6 +46,9 @@ Public NotInheritable Class AboutForm
     ''' <summary>
     ''' Form Load event handler.
     ''' </summary>
+    ''' <param name="sender">The object that raised the event.</param>
+    ''' <param name="e">The event arguments.</param>
+    ''' <remarks></remarks>
     Private Sub AboutForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ' Set the title of the form.
         Dim ApplicationTitle As String
@@ -70,6 +73,9 @@ Public NotInheritable Class AboutForm
     ''' <summary>
     ''' Button click event handler.
     ''' </summary>
+    ''' <param name="sender">The object that raised the event.</param>
+    ''' <param name="e">The event arguments.</param>
+    ''' <remarks></remarks>
     Private Sub OKButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OKButton.Click
         Me.Close()
     End Sub

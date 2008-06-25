@@ -260,6 +260,7 @@
     <EmbeddedResource Include="help\EditMapIndex_help.rtf" />
     <EmbeddedResource Include="help\TaxlotAssignment_help.rtf" />
     <EmbeddedResource Include="help\ReportOrRequest_help.rtf" />
+    <EmbeddedResource Include="help\Settings_help.rtf" />
     <None Include="My Project\DataSources\AllTablesSettings.datasource" />
     <None Include="My Project\DataSources\AnnoTableNamesSettings.datasource" />
     <None Include="My Project\DataSources\CartographicLinesSettings.datasource" />

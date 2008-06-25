@@ -219,7 +219,7 @@ Partial Class OrmapSettingsForm
         Me.BottomToolStripPanel = New System.Windows.Forms.ToolStripPanel
         Me.uxReload = New System.Windows.Forms.Button
         Me.uxSave = New System.Windows.Forms.Button
-        Me.uxImport = New System.Windows.Forms.Button
+        Me.uxHelp = New System.Windows.Forms.Button
         Me.TopToolStripPanel = New System.Windows.Forms.ToolStripPanel
         Me.Panel1 = New System.Windows.Forms.Panel
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
@@ -227,6 +227,7 @@ Partial Class OrmapSettingsForm
         Me.uxCancel = New System.Windows.Forms.Button
         Me.RightToolStripPanel = New System.Windows.Forms.ToolStripPanel
         Me.LeftToolStripPanel = New System.Windows.Forms.ToolStripPanel
+        Me.Button2 = New System.Windows.Forms.Button
         AutoDateFieldLabel = New System.Windows.Forms.Label
         AutoMethodFieldLabel = New System.Windows.Forms.Label
         AutoWhoFieldLabel = New System.Windows.Forms.Label
@@ -2151,9 +2152,9 @@ Partial Class OrmapSettingsForm
         'uxReload
         '
         Me.uxReload.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.uxReload.Location = New System.Drawing.Point(198, 3)
+        Me.uxReload.Location = New System.Drawing.Point(183, 3)
         Me.uxReload.Name = "uxReload"
-        Me.uxReload.Size = New System.Drawing.Size(59, 23)
+        Me.uxReload.Size = New System.Drawing.Size(54, 23)
         Me.uxReload.TabIndex = 2
         Me.uxReload.Text = "&Reload"
         '
@@ -2163,18 +2164,18 @@ Partial Class OrmapSettingsForm
         Me.uxSave.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.uxSave.Location = New System.Drawing.Point(3, 3)
         Me.uxSave.Name = "uxSave"
-        Me.uxSave.Size = New System.Drawing.Size(59, 23)
+        Me.uxSave.Size = New System.Drawing.Size(54, 23)
         Me.uxSave.TabIndex = 0
         Me.uxSave.Text = "&Save"
         '
-        'uxImport
+        'uxHelp
         '
-        Me.uxImport.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.uxImport.Location = New System.Drawing.Point(263, 3)
-        Me.uxImport.Name = "uxImport"
-        Me.uxImport.Size = New System.Drawing.Size(54, 23)
-        Me.uxImport.TabIndex = 3
-        Me.uxImport.Text = "&Import"
+        Me.uxHelp.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.uxHelp.Location = New System.Drawing.Point(303, 3)
+        Me.uxHelp.Name = "uxHelp"
+        Me.uxHelp.Size = New System.Drawing.Size(54, 23)
+        Me.uxHelp.TabIndex = 3
+        Me.uxHelp.Text = "&Help"
         '
         'TopToolStripPanel
         '
@@ -2198,30 +2199,32 @@ Partial Class OrmapSettingsForm
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel1.ColumnCount = 5
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle)
+        Me.TableLayoutPanel1.ColumnCount = 6
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.Button1, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.uxSave, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.uxCancel, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.uxReload, 2, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.uxImport, 3, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(154, 480)
+        Me.TableLayoutPanel1.Controls.Add(Me.Button2, 3, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.uxCancel, 2, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.uxHelp, 5, 0)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(113, 480)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(320, 29)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(360, 29)
         Me.TableLayoutPanel1.TabIndex = 4
         '
         'Button1
         '
         Me.Button1.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Button1.Location = New System.Drawing.Point(68, 3)
+        Me.Button1.Location = New System.Drawing.Point(63, 3)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(59, 23)
+        Me.Button1.Size = New System.Drawing.Size(54, 23)
         Me.Button1.TabIndex = 4
         Me.Button1.Text = "Re&set"
         '
@@ -2229,9 +2232,9 @@ Partial Class OrmapSettingsForm
         '
         Me.uxCancel.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.uxCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.uxCancel.Location = New System.Drawing.Point(133, 3)
+        Me.uxCancel.Location = New System.Drawing.Point(123, 3)
         Me.uxCancel.Name = "uxCancel"
-        Me.uxCancel.Size = New System.Drawing.Size(59, 23)
+        Me.uxCancel.Size = New System.Drawing.Size(54, 23)
         Me.uxCancel.TabIndex = 1
         Me.uxCancel.Text = "&Cancel"
         '
@@ -2251,12 +2254,19 @@ Partial Class OrmapSettingsForm
         Me.LeftToolStripPanel.RowMargin = New System.Windows.Forms.Padding(3, 0, 0, 0)
         Me.LeftToolStripPanel.Size = New System.Drawing.Size(0, 0)
         '
+        'Button2
+        '
+        Me.Button2.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Button2.Location = New System.Drawing.Point(243, 3)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(54, 23)
+        Me.Button2.TabIndex = 5
+        Me.Button2.Text = "&Import"
+        '
         'OrmapSettingsForm
         '
-        Me.AcceptButton = Me.uxSave
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.CancelButton = Me.uxCancel
         Me.ClientSize = New System.Drawing.Size(482, 526)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.BottomToolStripPanel)
@@ -2323,7 +2333,7 @@ Partial Class OrmapSettingsForm
     Friend WithEvents BottomToolStripPanel As System.Windows.Forms.ToolStripPanel
     Friend WithEvents uxReload As System.Windows.Forms.Button
     Friend WithEvents uxSave As System.Windows.Forms.Button
-    Friend WithEvents uxImport As System.Windows.Forms.Button
+    Friend WithEvents uxHelp As System.Windows.Forms.Button
     Friend WithEvents TopToolStripPanel As System.Windows.Forms.ToolStripPanel
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
@@ -2428,4 +2438,5 @@ Partial Class OrmapSettingsForm
     Friend WithEvents TextSize24000ScaleTextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents uxCancel As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents Button2 As System.Windows.Forms.Button
 End Class
