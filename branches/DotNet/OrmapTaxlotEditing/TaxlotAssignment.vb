@@ -388,7 +388,7 @@ Public NotInheritable Class TaxlotAssignment
             ' The Update Operation Starts Here...
             '=====================================
 
-            _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Updating taxlot feature..."
+            _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Updating Taxlot feature..."
 
             '------------------------------------------
             ' Get the taxlot feature to update.
@@ -437,6 +437,8 @@ Public NotInheritable Class TaxlotAssignment
                     Exit Sub
                 End If
             End If
+
+            _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Verifying Taxlot number uniqueness..."
 
             ' Verify the uniqueness of the specified taxlot number (if taxlot type input).
             If isTaxlotType Then
@@ -503,7 +505,7 @@ Public NotInheritable Class TaxlotAssignment
 
             _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Taxlot feature updated"
 
-        Catch ex As Exception
+        Finally
             If withinEditOperation Then
                 ' Abort any ongoing edit operations
                 EditorExtension.Editor.AbortOperation()
@@ -511,9 +513,6 @@ Public NotInheritable Class TaxlotAssignment
                 _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Taxlot feature update aborted"
             End If
 
-            Throw
-
-        Finally
             ' Insure that this tool keeps the focus
             Dim theUID As New UID
             Dim theCmdItem As ICommandItem

@@ -567,9 +567,6 @@ Public NotInheritable Class AddArrows
     '--HOOKS-             Dim theHookFLayer As IFeatureLayer = DataMonitor.CartographicLinesFeatureLayer
     '--HOOKS-             Dim theHookFClass As IFeatureClass = theHookFLayer.FeatureClass
     '--HOOKS- 
-    '--HOOKS-             Dim theDataSet As IDataset = DirectCast(theHookFClass, IDataset)
-    '--HOOKS-             Dim theWorkSpaceEdit As IWorkspaceEdit = DirectCast(theDataSet.Workspace, IWorkspaceEdit)
-    '--HOOKS- 
     '--HOOKS-             ' Locate the line type field
     '--HOOKS-             Dim lineTypeField As Integer = LocateFields(theHookFClass, (EditorExtension.CartographicLinesSettings.LineTypeField))
     '--HOOKS-             If lineTypeField = NotFoundIndex Then Exit Sub
@@ -642,7 +639,8 @@ Public NotInheritable Class AddArrows
     '--HOOKS-             theGeomColl.GeometriesChanged()
     '--HOOKS- 
     '--HOOKS-             ' Store the new land hook feature
-    '--HOOKS-             theWorkSpaceEdit.StartEditOperation()
+    '--HOOKS-             EditorExtension.Editor.StartOperation()
+    '--HOOKS-             
     '--HOOKS-             Dim theFeature As IFeature = theHookFClass.CreateFeature
     '--HOOKS-             theFeature.Shape = DirectCast(theGeomColl, IGeometry)
     '--HOOKS-             theFeature.Value(lineTypeField) = 101
@@ -674,12 +672,13 @@ Public NotInheritable Class AddArrows
     '--HOOKS-             theFeature.Value(lineTypeField) = curMapNum
     '--HOOKS- 
     '--HOOKS-             theFeature.Store()
-    '--HOOKS-             theWorkSpaceEdit.StopEditOperation()
+    '--HOOKS-             EditorExtension.Editor.StopOperation("Generate Hooks")
     '--HOOKS- 
     '--HOOKS-             _theActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground, Nothing, theFeature.Extent.Envelope)
     '--HOOKS- 
     '--HOOKS-         Catch ex As Exception
-    '--HOOKS-             EditorExtension.ProcessUnhandledException(ex)
+    '--HOOKS-             EditorExtension.Editor.AbortOperation()
+    '--HOOKS-             Throw
     '--HOOKS- 
     '--HOOKS-         End Try
     '--HOOKS- 

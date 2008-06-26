@@ -1101,7 +1101,7 @@ Public NotInheritable Class EditorExtension
 
                 ' Set up exception logging
                 addTraceListenerForEventLog()
-                addTraceListenerForFileLog(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & "." & Now.Ticks.ToString & ".trace.log")
+                addTraceListenerForFileLog(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".trace.log")
 
                 ' Set the Editor and EditEvents properties.
                 setEditor(DirectCast(initializationData, IEditor2))

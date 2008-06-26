@@ -105,6 +105,7 @@ Partial Class HelpForm
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "ORMAP Taxlot Editing Help - No Topic"
+        Me.TopMost = True
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
         Me.TabPage2.ResumeLayout(False)

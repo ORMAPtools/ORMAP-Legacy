@@ -85,6 +85,7 @@ Partial Class TaxlotAssignmentForm
         '
         Me.uxIncrementByNone.Appearance = System.Windows.Forms.Appearance.Button
         Me.uxIncrementByNone.Checked = True
+        Me.uxIncrementByNone.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.uxIncrementByNone.Location = New System.Drawing.Point(7, 66)
         Me.uxIncrementByNone.Name = "uxIncrementByNone"
         Me.uxIncrementByNone.Size = New System.Drawing.Size(44, 20)
@@ -97,6 +98,7 @@ Partial Class TaxlotAssignmentForm
         'uxIncrementBy1
         '
         Me.uxIncrementBy1.Appearance = System.Windows.Forms.Appearance.Button
+        Me.uxIncrementBy1.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.Control
         Me.uxIncrementBy1.Location = New System.Drawing.Point(57, 66)
         Me.uxIncrementBy1.Name = "uxIncrementBy1"
         Me.uxIncrementBy1.Size = New System.Drawing.Size(44, 20)
@@ -108,6 +110,7 @@ Partial Class TaxlotAssignmentForm
         'uxIncrementBy10
         '
         Me.uxIncrementBy10.Appearance = System.Windows.Forms.Appearance.Button
+        Me.uxIncrementBy10.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.Control
         Me.uxIncrementBy10.Location = New System.Drawing.Point(107, 66)
         Me.uxIncrementBy10.Name = "uxIncrementBy10"
         Me.uxIncrementBy10.Size = New System.Drawing.Size(44, 20)
@@ -119,6 +122,7 @@ Partial Class TaxlotAssignmentForm
         'uxIncrementBy100
         '
         Me.uxIncrementBy100.Appearance = System.Windows.Forms.Appearance.Button
+        Me.uxIncrementBy100.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.Control
         Me.uxIncrementBy100.Location = New System.Drawing.Point(157, 66)
         Me.uxIncrementBy100.Name = "uxIncrementBy100"
         Me.uxIncrementBy100.Size = New System.Drawing.Size(44, 20)
@@ -131,6 +135,7 @@ Partial Class TaxlotAssignmentForm
         '
         Me.uxIncrementBy1000.AccessibleDescription = ""
         Me.uxIncrementBy1000.Appearance = System.Windows.Forms.Appearance.Button
+        Me.uxIncrementBy1000.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.Control
         Me.uxIncrementBy1000.Location = New System.Drawing.Point(207, 66)
         Me.uxIncrementBy1000.Name = "uxIncrementBy1000"
         Me.uxIncrementBy1000.Size = New System.Drawing.Size(44, 20)

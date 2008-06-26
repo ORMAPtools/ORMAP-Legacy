@@ -75,6 +75,8 @@ Partial Class EditMapIndexForm
         '
         'uxTownship
         '
+        Me.uxTownship.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.uxTownship.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxTownship.FormattingEnabled = True
         Me.uxTownship.Location = New System.Drawing.Point(111, 14)
         Me.uxTownship.Name = "uxTownship"
@@ -83,6 +85,8 @@ Partial Class EditMapIndexForm
         '
         'uxTownshipDirectional
         '
+        Me.uxTownshipDirectional.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.uxTownshipDirectional.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxTownshipDirectional.FormattingEnabled = True
         Me.uxTownshipDirectional.Location = New System.Drawing.Point(111, 39)
         Me.uxTownshipDirectional.Name = "uxTownshipDirectional"
@@ -91,6 +95,8 @@ Partial Class EditMapIndexForm
         '
         'uxTownshipPartial
         '
+        Me.uxTownshipPartial.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.uxTownshipPartial.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxTownshipPartial.FormattingEnabled = True
         Me.uxTownshipPartial.Location = New System.Drawing.Point(111, 64)
         Me.uxTownshipPartial.Name = "uxTownshipPartial"
@@ -183,6 +189,8 @@ Partial Class EditMapIndexForm
         '
         'uxRangePartial
         '
+        Me.uxRangePartial.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.uxRangePartial.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxRangePartial.FormattingEnabled = True
         Me.uxRangePartial.Location = New System.Drawing.Point(111, 64)
         Me.uxRangePartial.Name = "uxRangePartial"
@@ -191,6 +199,8 @@ Partial Class EditMapIndexForm
         '
         'uxRangeDirectional
         '
+        Me.uxRangeDirectional.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.uxRangeDirectional.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxRangeDirectional.FormattingEnabled = True
         Me.uxRangeDirectional.Location = New System.Drawing.Point(111, 39)
         Me.uxRangeDirectional.Name = "uxRangeDirectional"
@@ -199,6 +209,8 @@ Partial Class EditMapIndexForm
         '
         'uxRange
         '
+        Me.uxRange.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.uxRange.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxRange.FormattingEnabled = True
         Me.uxRange.Location = New System.Drawing.Point(111, 14)
         Me.uxRange.Name = "uxRange"
@@ -249,6 +261,8 @@ Partial Class EditMapIndexForm
         '
         'uxSectionQtrQtr
         '
+        Me.uxSectionQtrQtr.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.uxSectionQtrQtr.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxSectionQtrQtr.FormattingEnabled = True
         Me.uxSectionQtrQtr.Location = New System.Drawing.Point(111, 64)
         Me.uxSectionQtrQtr.Name = "uxSectionQtrQtr"
@@ -257,6 +271,8 @@ Partial Class EditMapIndexForm
         '
         'uxSectionQuarter
         '
+        Me.uxSectionQuarter.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.uxSectionQuarter.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxSectionQuarter.FormattingEnabled = True
         Me.uxSectionQuarter.Location = New System.Drawing.Point(111, 39)
         Me.uxSectionQuarter.Name = "uxSectionQuarter"
@@ -265,6 +281,8 @@ Partial Class EditMapIndexForm
         '
         'uxSection
         '
+        Me.uxSection.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.uxSection.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxSection.FormattingEnabled = True
         Me.uxSection.Location = New System.Drawing.Point(111, 14)
         Me.uxSection.Name = "uxSection"
@@ -361,30 +379,34 @@ Partial Class EditMapIndexForm
         '
         'uxAnomaly
         '
-        Me.uxAnomaly.Location = New System.Drawing.Point(113, 39)
+        Me.uxAnomaly.Location = New System.Drawing.Point(115, 39)
         Me.uxAnomaly.Name = "uxAnomaly"
         Me.uxAnomaly.Size = New System.Drawing.Size(45, 20)
         Me.uxAnomaly.TabIndex = 3
         '
         'uxPage
         '
-        Me.uxPage.Location = New System.Drawing.Point(113, 161)
+        Me.uxPage.Location = New System.Drawing.Point(115, 161)
         Me.uxPage.Name = "uxPage"
         Me.uxPage.Size = New System.Drawing.Size(45, 20)
         Me.uxPage.TabIndex = 13
         '
         'uxScale
         '
+        Me.uxScale.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.uxScale.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxScale.FormattingEnabled = True
-        Me.uxScale.Location = New System.Drawing.Point(113, 112)
+        Me.uxScale.Location = New System.Drawing.Point(115, 112)
         Me.uxScale.Name = "uxScale"
         Me.uxScale.Size = New System.Drawing.Size(130, 21)
         Me.uxScale.TabIndex = 9
         '
         'uxReliability
         '
+        Me.uxReliability.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.uxReliability.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxReliability.FormattingEnabled = True
-        Me.uxReliability.Location = New System.Drawing.Point(113, 185)
+        Me.uxReliability.Location = New System.Drawing.Point(115, 185)
         Me.uxReliability.Name = "uxReliability"
         Me.uxReliability.Size = New System.Drawing.Size(130, 21)
         Me.uxReliability.TabIndex = 15
@@ -400,33 +422,37 @@ Partial Class EditMapIndexForm
         '
         'uxSuffixType
         '
+        Me.uxSuffixType.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.uxSuffixType.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxSuffixType.FormattingEnabled = True
-        Me.uxSuffixType.Location = New System.Drawing.Point(113, 63)
+        Me.uxSuffixType.Location = New System.Drawing.Point(115, 63)
         Me.uxSuffixType.Name = "uxSuffixType"
         Me.uxSuffixType.Size = New System.Drawing.Size(130, 21)
         Me.uxSuffixType.TabIndex = 5
         '
         'uxSuffixNumber
         '
-        Me.uxSuffixNumber.Location = New System.Drawing.Point(113, 88)
+        Me.uxSuffixNumber.Location = New System.Drawing.Point(115, 88)
         Me.uxSuffixNumber.Name = "uxSuffixNumber"
         Me.uxSuffixNumber.Size = New System.Drawing.Size(130, 20)
         Me.uxSuffixNumber.TabIndex = 7
         '
         'uxMapNumber
         '
-        Me.uxMapNumber.Location = New System.Drawing.Point(113, 137)
+        Me.uxMapNumber.Location = New System.Drawing.Point(115, 137)
         Me.uxMapNumber.Name = "uxMapNumber"
         Me.uxMapNumber.Size = New System.Drawing.Size(130, 20)
         Me.uxMapNumber.TabIndex = 11
         '
         'uxCounty
         '
+        Me.uxCounty.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
+        Me.uxCounty.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.uxCounty.DropDownWidth = 130
         Me.uxCounty.FormattingEnabled = True
-        Me.uxCounty.Location = New System.Drawing.Point(113, 14)
+        Me.uxCounty.Location = New System.Drawing.Point(115, 14)
         Me.uxCounty.Name = "uxCounty"
-        Me.uxCounty.Size = New System.Drawing.Size(129, 21)
+        Me.uxCounty.Size = New System.Drawing.Size(130, 21)
         Me.uxCounty.TabIndex = 1
         '
         'uxORMAPNumberGroupBox
@@ -469,6 +495,7 @@ Partial Class EditMapIndexForm
         '
         'uxCancel
         '
+        Me.uxCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.uxCancel.Location = New System.Drawing.Point(301, 301)
         Me.uxCancel.Name = "uxCancel"
         Me.uxCancel.Size = New System.Drawing.Size(75, 23)

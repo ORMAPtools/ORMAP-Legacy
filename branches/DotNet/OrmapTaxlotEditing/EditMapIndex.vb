@@ -302,6 +302,7 @@ Public NotInheritable Class EditMapIndex
                 MessageBox.Show("Invalid data. All fields must be filled in before assigning.", "Edit Map Index", MessageBoxButtons.OK)
                 Exit Sub
             End If
+
             editMapIndex(theEditWorkSpace)
 
             PartnerEditMapIndexForm.Close()
@@ -334,6 +335,7 @@ Public NotInheritable Class EditMapIndex
                 MessageBox.Show("Invalid data. All fields must be filled in before assigning.", "Edit Map Index", MessageBoxButtons.OK)
                 Exit Sub
             End If
+
             editMapIndex(theEditWorkSpace)
 
         Catch ex As Exception
@@ -744,9 +746,9 @@ Public NotInheritable Class EditMapIndex
 
     Private Sub editMapIndex(ByRef theEditWorkSpace As IWorkspaceEdit)
 
-        If theEditWorkSpace IsNot Nothing Then
+        Try
             ' Begin edit process
-            theEditWorkSpace.StartEditOperation()
+            EditorExtension.Editor.StartOperation()
 
             With PartnerEditMapIndexForm
                 ' Update form caption
@@ -789,15 +791,21 @@ Public NotInheritable Class EditMapIndex
                 _mapIndexFeature.Store()
 
             End With 'PartnerMapindexForm
+
             ' Update all taxlot polygons that underlie this polygon
             updateTaxlots(_mapIndexFeature)
+
             ' Finalize this edit
-            theEditWorkSpace.StopEditOperation()
+            EditorExtension.Editor.StopOperation("Edit Map Index")
 
-        End If
+            ' Update form caption
+            PartnerEditMapIndexForm.Text = String.Concat("Map Index (", _ormapNumber.GetORMapNum, ")")
 
-        ' Update form caption
-        PartnerEditMapIndexForm.Text = String.Concat("Map Index (", _ormapNumber.GetORMapNum, ")")
+        Catch ex As Exception
+            EditorExtension.Editor.AbortOperation()
+            _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "MapIndex feature update aborted"
+
+        End Try
 
     End Sub
 
@@ -1037,18 +1045,25 @@ Public NotInheritable Class EditMapIndex
 
     Private Sub updateTaxlots(ByVal theMapIndexFeature As IFeature)
         Try
-            _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Updating underlyling taxlot features..."
-            ' Finds any taxlots that are underneath the map index polygon
+            _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Finding underlying Taxlot features..."
+
+            ' Find any taxlots that are underneath the map index polygon
             Dim thisSpatialQuery As ISpatialFilter = New SpatialFilter
             thisSpatialQuery.Geometry = theMapIndexFeature.ShapeCopy
             thisSpatialQuery.SpatialRel = esriSpatialRelEnum.esriSpatialRelContains
             Dim thisFeatureSelection As IFeatureCursor = DataMonitor.TaxlotFeatureLayer.FeatureClass.Update(thisSpatialQuery, False)
-            'What if there are no underlying taxlot features to update? Will this assignment below contain anything?
+
             Dim thisTaxlotFeature As IFeature = thisFeatureSelection.NextFeature
+            ' Exit if there are no underlying taxlot features to update.
+            If thisTaxlotFeature Is Nothing Then Exit Sub
+
+            ' Loop through the selected features
             Dim taxlot As String
             Dim mapNumber As String
-            ' Loop through the selected features
             Do While thisTaxlotFeature IsNot Nothing
+
+                _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = "Updating underlying Taxlot " & CStr(thisTaxlotFeature.Value(_taxlotFields.Taxlot))
+
                 ' Gets the formatted taxlot value
                 If IsDBNull(thisTaxlotFeature.Value(_taxlotFields.Taxlot)) Then
                     taxlot = New String("0"c, ORMapNum.GetTaxlotFieldLength)
@@ -1065,44 +1080,45 @@ Public NotInheritable Class EditMapIndex
                 Else
                     mapNumber = CStr(thisTaxlotFeature.Value(_mapIndexFields.MapNumber))
                 End If
-                ' Copy new attributes to  the taxlot table
-                Dim mapTaxlotID As String = _ormapNumber.GetORMapNum & taxlot
-                Dim countyCode As Short = CShort(EditorExtension.DefaultValuesSettings.County)
-                Dim mapTaxlotValue As String = String.Empty
-                Dim taxlotAsInteger As Integer = 0
 
-                Select Case countyCode
-                    Case 1 To 19, 21 To 36
-                        mapTaxlotValue = GenerateMapTaxlotValue(mapTaxlotID, EditorExtension.TaxLotSettings.MapTaxlotFormatMask)
-                    Case 20
-                        mapTaxlotValue = mapNumber.TrimEnd(CChar(mapNumber.Substring(0, 8))) & taxlot
-                End Select
-                With thisTaxlotFeature
-                    .Value(_taxlotFields.County) = _ormapNumber.County
-                    .Value(_taxlotFields.Township) = _ormapNumber.Township
-                    .Value(_taxlotFields.PartialTownshipCode) = _ormapNumber.PartialTownshipCode
-                    .Value(_taxlotFields.TownshipDirectional) = _ormapNumber.TownshipDirectional
-                    .Value(_taxlotFields.Range) = _ormapNumber.Range
-                    .Value(_taxlotFields.PartialRangeCode) = _ormapNumber.PartialRangeCode
-                    .Value(_taxlotFields.RangeDirectional) = _ormapNumber.RangeDirectional
-                    .Value(_taxlotFields.Section) = _ormapNumber.Section
-                    .Value(_taxlotFields.Quarter) = _ormapNumber.Quarter
-                    .Value(_taxlotFields.QuarterQuarter) = _ormapNumber.QuarterQuarter
-                    .Value(_taxlotFields.SuffixType) = _ormapNumber.SuffixType
-                    .Value(_taxlotFields.SuffixNumber) = _ormapNumber.SuffixNumber
-                    .Value(_taxlotFields.Anomaly) = _ormapNumber.Anomaly
-                    .Value(_taxlotFields.MapNumber) = theMapIndexFeature.Value(_mapIndexFields.MapNumber)
-                    .Value(_taxlotFields.OrmapMapNumber) = _ormapNumber.GetOrmapMapNumber
-                    If Integer.TryParse(taxlot, taxlotAsInteger) Then
-                        .Value(_taxlotFields.Taxlot) = taxlotAsInteger
-                    Else
-                        .Value(_taxlotFields.Taxlot) = taxlot.Trim
-                    End If
-                    ' Special interest field was updated here see above
-                    .Value(_taxlotFields.MapTaxlotNumber) = mapTaxlotValue.Trim
-                    .Value(_taxlotFields.OrmapTaxlotNumber) = String.Concat(_ormapNumber.GetORMapNum, taxlot)
-                    .Store()
-                End With
+                '' Copy new attributes to  the taxlot table
+                'Dim mapTaxlotID As String = _ormapNumber.GetORMapNum & taxlot
+                'Dim countyCode As Short = CShort(EditorExtension.DefaultValuesSettings.County)
+                'Dim mapTaxlotValue As String = String.Empty
+                'Dim taxlotAsInteger As Integer = 0
+
+                'Select Case countyCode
+                '    Case 1 To 19, 21 To 36
+                '        mapTaxlotValue = GenerateMapTaxlotValue(mapTaxlotID, EditorExtension.TaxLotSettings.MapTaxlotFormatMask)
+                '    Case 20
+                '        mapTaxlotValue = mapNumber.TrimEnd(CChar(mapNumber.Substring(0, 8))) & taxlot
+                'End Select
+                'With thisTaxlotFeature
+                '    .Value(_taxlotFields.County) = _ormapNumber.County
+                '    .Value(_taxlotFields.Township) = _ormapNumber.Township
+                '    .Value(_taxlotFields.PartialTownshipCode) = _ormapNumber.PartialTownshipCode
+                '    .Value(_taxlotFields.TownshipDirectional) = _ormapNumber.TownshipDirectional
+                '    .Value(_taxlotFields.Range) = _ormapNumber.Range
+                '    .Value(_taxlotFields.PartialRangeCode) = _ormapNumber.PartialRangeCode
+                '    .Value(_taxlotFields.RangeDirectional) = _ormapNumber.RangeDirectional
+                '    .Value(_taxlotFields.Section) = _ormapNumber.Section
+                '    .Value(_taxlotFields.Quarter) = _ormapNumber.Quarter
+                '    .Value(_taxlotFields.QuarterQuarter) = _ormapNumber.QuarterQuarter
+                '    .Value(_taxlotFields.SuffixType) = _ormapNumber.SuffixType
+                '    .Value(_taxlotFields.SuffixNumber) = _ormapNumber.SuffixNumber
+                '    .Value(_taxlotFields.Anomaly) = _ormapNumber.Anomaly
+                '    .Value(_taxlotFields.MapNumber) = theMapIndexFeature.Value(_mapIndexFields.MapNumber)
+                '    .Value(_taxlotFields.OrmapMapNumber) = _ormapNumber.GetOrmapMapNumber
+                '    If Integer.TryParse(taxlot, taxlotAsInteger) Then
+                '        .Value(_taxlotFields.Taxlot) = taxlotAsInteger
+                '    Else
+                '        .Value(_taxlotFields.Taxlot) = taxlot.Trim
+                '    End If
+                '    ' Special interest field was updated here see above
+                '    .Value(_taxlotFields.MapTaxlotNumber) = mapTaxlotValue.Trim
+                '    .Value(_taxlotFields.OrmapTaxlotNumber) = String.Concat(_ormapNumber.GetORMapNum, taxlot)
+                'End With
+                thisTaxlotFeature.Store()
                 thisTaxlotFeature = thisFeatureSelection.NextFeature
             Loop
 
@@ -1111,10 +1127,13 @@ Public NotInheritable Class EditMapIndex
             thisTaxlotFeature = Nothing
             thisFeatureSelection = Nothing
             thisSpatialQuery = Nothing
+
         Catch ex As Exception
             _application.StatusBar.Message(esriStatusBarPanes.esriStatusMain) = String.Empty
-            EditorExtension.ProcessUnhandledException(ex)
+            Throw
+
         End Try
+
     End Sub
 
 #Region "State Machine"
