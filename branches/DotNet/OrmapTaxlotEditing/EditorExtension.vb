@@ -575,16 +575,21 @@ Public NotInheritable Class EditorExtension
                 Dim theAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
                 theAnnotationFeature = DirectCast(theFeature, IAnnotationFeature)
 
-                'Get the parent feature
-                Dim theParentID As Integer
-                theParentID = theAnnotationFeature.LinkedFeatureID
-                If theParentID > NotFoundIndex Then 'Feature linked
-                    theFeature = GetRelatedObjects(obj)
-                    If theFeature Is Nothing Then Exit Sub
-                Else
-                    'Not feature linked anno, so we can use the feature as is
-
-                End If
+                ' NOTE: [NIS] This does not appear to do the right thing. 
+                '       The feature is set to the geo feature instead of 
+                '       the anno, which results in the anno never being 
+                '       updated by the subsequent functions.
+                ''Get the parent feature
+                'Dim theParentID As Integer
+                'theParentID = theAnnotationFeature.LinkedFeatureID
+                'If theParentID > NotFoundIndex Then
+                '    '[Feature linked anno...]
+                '    theFeature = GetRelatedObjects(obj)
+                '    If theFeature Is Nothing Then Exit Sub
+                'Else
+                '    '[Not feature linked anno...]
+                '    ' Continue
+                'End If
 
                 setMapIndexAndScale(obj, theFeature, theGeometry)
 

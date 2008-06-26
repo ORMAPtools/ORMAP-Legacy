@@ -117,14 +117,14 @@ Public Class OrmapSettingsForm
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub uxImport_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxHelp.Click
+    Private Sub uxImport_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxImport.Click
 
         ImportSettings()
 
     End Sub
 
     ''' <summary>
-    ''' Reloads application settings values and keeps the dialog open. 
+    ''' Reloads saved application settings values and keeps the dialog open. 
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
@@ -136,12 +136,12 @@ Public Class OrmapSettingsForm
     End Sub
 
     ''' <summary>
-    ''' Resets application settings values and keeps the dialog open. 
+    ''' Resets application settings values to defaults and keeps the dialog open. 
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub uxReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxHelp.Click
+    Private Sub uxReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxReset.Click
 
         ResetSettings()
 

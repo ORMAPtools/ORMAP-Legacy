@@ -223,11 +223,11 @@ Partial Class OrmapSettingsForm
         Me.TopToolStripPanel = New System.Windows.Forms.ToolStripPanel
         Me.Panel1 = New System.Windows.Forms.Panel
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
-        Me.Button1 = New System.Windows.Forms.Button
+        Me.uxReset = New System.Windows.Forms.Button
+        Me.uxImport = New System.Windows.Forms.Button
         Me.uxCancel = New System.Windows.Forms.Button
         Me.RightToolStripPanel = New System.Windows.Forms.ToolStripPanel
         Me.LeftToolStripPanel = New System.Windows.Forms.ToolStripPanel
-        Me.Button2 = New System.Windows.Forms.Button
         AutoDateFieldLabel = New System.Windows.Forms.Label
         AutoMethodFieldLabel = New System.Windows.Forms.Label
         AutoWhoFieldLabel = New System.Windows.Forms.Label
@@ -2206,10 +2206,10 @@ Partial Class OrmapSettingsForm
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.Button1, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.uxReset, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.uxSave, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.uxReload, 2, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Button2, 3, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.uxImport, 3, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.uxCancel, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.uxHelp, 5, 0)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(113, 480)
@@ -2219,14 +2219,23 @@ Partial Class OrmapSettingsForm
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(360, 29)
         Me.TableLayoutPanel1.TabIndex = 4
         '
-        'Button1
+        'uxReset
         '
-        Me.Button1.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Button1.Location = New System.Drawing.Point(63, 3)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(54, 23)
-        Me.Button1.TabIndex = 4
-        Me.Button1.Text = "Re&set"
+        Me.uxReset.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.uxReset.Location = New System.Drawing.Point(63, 3)
+        Me.uxReset.Name = "uxReset"
+        Me.uxReset.Size = New System.Drawing.Size(54, 23)
+        Me.uxReset.TabIndex = 4
+        Me.uxReset.Text = "Re&set"
+        '
+        'uxImport
+        '
+        Me.uxImport.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.uxImport.Location = New System.Drawing.Point(243, 3)
+        Me.uxImport.Name = "uxImport"
+        Me.uxImport.Size = New System.Drawing.Size(54, 23)
+        Me.uxImport.TabIndex = 5
+        Me.uxImport.Text = "&Import"
         '
         'uxCancel
         '
@@ -2253,15 +2262,6 @@ Partial Class OrmapSettingsForm
         Me.LeftToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal
         Me.LeftToolStripPanel.RowMargin = New System.Windows.Forms.Padding(3, 0, 0, 0)
         Me.LeftToolStripPanel.Size = New System.Drawing.Size(0, 0)
-        '
-        'Button2
-        '
-        Me.Button2.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Button2.Location = New System.Drawing.Point(243, 3)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(54, 23)
-        Me.Button2.TabIndex = 5
-        Me.Button2.Text = "&Import"
         '
         'OrmapSettingsForm
         '
@@ -2437,6 +2437,6 @@ Partial Class OrmapSettingsForm
     Friend WithEvents TextSize09600ScaleTextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents TextSize24000ScaleTextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents uxCancel As System.Windows.Forms.Button
-    Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents uxReset As System.Windows.Forms.Button
+    Friend WithEvents uxImport As System.Windows.Forms.Button
 End Class

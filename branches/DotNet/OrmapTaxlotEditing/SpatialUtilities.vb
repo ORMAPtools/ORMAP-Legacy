@@ -1555,7 +1555,7 @@ Public NotInheritable Class SpatialUtilities
 
             theTextSymbol.Size = theAnnotationSize
 
-            ' TEST: [NIS] Do we really need to wrap this back together (as was done in VB6 code)?
+            ' We need to wrap this back together (as was done in VB6 code)
             theTextElement.Symbol = theTextSymbol
             theAnnoElement = DirectCast(theTextElement, IAnnotationElement)
             theAnnotationFeature.Annotation = DirectCast(theAnnoElement, IElement)
