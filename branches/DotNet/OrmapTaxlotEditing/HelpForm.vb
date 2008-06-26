@@ -49,7 +49,7 @@ Public Class HelpForm
         Utilities.OpenHelp("Report Bug or Request New Feature", theRTFStream)
     End Sub
 
-    Private Sub RichTextBox1_LinkClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.LinkClickedEventArgs) Handles RichTextBox1.LinkClicked
+    Private Sub uxRichTextBox_LinkClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.LinkClickedEventArgs) Handles uxRichTextBox.LinkClicked
         System.Diagnostics.Process.Start(e.LinkText)
     End Sub
 

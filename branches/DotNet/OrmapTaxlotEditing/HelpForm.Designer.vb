@@ -24,7 +24,7 @@ Partial Class HelpForm
     Private Sub InitializeComponent()
         Me.TabControl1 = New System.Windows.Forms.TabControl
         Me.TabPage1 = New System.Windows.Forms.TabPage
-        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox
+        Me.uxRichTextBox = New System.Windows.Forms.RichTextBox
         Me.TabPage2 = New System.Windows.Forms.TabPage
         Me.WebBrowser1 = New System.Windows.Forms.WebBrowser
         Me.uxReportOrRequest = New System.Windows.Forms.Button
@@ -46,7 +46,7 @@ Partial Class HelpForm
         '
         'TabPage1
         '
-        Me.TabPage1.Controls.Add(Me.RichTextBox1)
+        Me.TabPage1.Controls.Add(Me.uxRichTextBox)
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
@@ -55,14 +55,14 @@ Partial Class HelpForm
         Me.TabPage1.Text = "Text"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
-        'RichTextBox1
+        'uxRichTextBox
         '
-        Me.RichTextBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.RichTextBox1.Location = New System.Drawing.Point(3, 3)
-        Me.RichTextBox1.Name = "RichTextBox1"
-        Me.RichTextBox1.Size = New System.Drawing.Size(651, 374)
-        Me.RichTextBox1.TabIndex = 0
-        Me.RichTextBox1.Text = ""
+        Me.uxRichTextBox.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.uxRichTextBox.Location = New System.Drawing.Point(3, 3)
+        Me.uxRichTextBox.Name = "uxRichTextBox"
+        Me.uxRichTextBox.Size = New System.Drawing.Size(651, 374)
+        Me.uxRichTextBox.TabIndex = 0
+        Me.uxRichTextBox.Text = ""
         '
         'TabPage2
         '
@@ -70,7 +70,7 @@ Partial Class HelpForm
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(657, 400)
+        Me.TabPage2.Size = New System.Drawing.Size(657, 380)
         Me.TabPage2.TabIndex = 2
         Me.TabPage2.Text = "Video"
         Me.TabPage2.UseVisualStyleBackColor = True
@@ -81,7 +81,7 @@ Partial Class HelpForm
         Me.WebBrowser1.Location = New System.Drawing.Point(3, 3)
         Me.WebBrowser1.MinimumSize = New System.Drawing.Size(20, 20)
         Me.WebBrowser1.Name = "WebBrowser1"
-        Me.WebBrowser1.Size = New System.Drawing.Size(651, 394)
+        Me.WebBrowser1.Size = New System.Drawing.Size(651, 374)
         Me.WebBrowser1.TabIndex = 5
         '
         'uxReportOrRequest
@@ -114,7 +114,7 @@ Partial Class HelpForm
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
     Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
     Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
-    Friend WithEvents RichTextBox1 As System.Windows.Forms.RichTextBox
+    Friend WithEvents uxRichTextBox As System.Windows.Forms.RichTextBox
     Friend WithEvents WebBrowser1 As System.Windows.Forms.WebBrowser
     Friend WithEvents uxReportOrRequest As System.Windows.Forms.Button
 End Class

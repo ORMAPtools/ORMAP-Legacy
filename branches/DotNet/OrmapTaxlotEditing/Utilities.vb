@@ -244,6 +244,12 @@ Public NotInheritable Class Utilities
 
     End Sub
 
+    ''' <summary>
+    ''' Opens the help form.
+    ''' </summary>
+    ''' <param name="helpFormText">The text displayed on the form.</param>
+    ''' <param name="theRTFStream">The .rtf file stream to populate the rich text box.</param>
+    ''' <remarks></remarks>
     Public Shared Sub OpenHelp(ByVal helpFormText As String, ByVal theRTFStream As Stream)
 
         ' Get the help form.
@@ -252,8 +258,12 @@ Public NotInheritable Class Utilities
 
         If Not (theRTFStream Is Nothing) Then
             Dim sr As New StreamReader(theRTFStream)
-            theHelpForm.RichTextBox1.LoadFile(theRTFStream, RichTextBoxStreamType.RichText)
+            theHelpForm.uxRichTextBox.LoadFile(theRTFStream, RichTextBoxStreamType.RichText)
             sr.Close()
+        End If
+
+        If helpFormText = "Report Bug or Request New Feature" Then
+            theHelpForm.uxReportOrRequest.Visible = False
         End If
 
         theHelpForm.Show()

@@ -248,7 +248,7 @@ Friend NotInheritable Class PropertiesForm
 
 #End Region
 
-    Private Sub uxReportOrRequest_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub uxReportOrRequest_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxReportOrRequest.Click
         Dim theRTFStream As System.IO.Stream = _
                 Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.ReportOrRequest_help.rtf")
         Utilities.OpenHelp("Report Bug or Request New Feature", theRTFStream)
