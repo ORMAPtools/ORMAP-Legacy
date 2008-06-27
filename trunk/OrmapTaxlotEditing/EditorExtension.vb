@@ -918,18 +918,22 @@ Public NotInheritable Class EditorExtension
         ' Create a file for output.
         Dim theFileStream As IO.Stream
         If IO.File.Exists(inLogFileName) Then
-            theFileStream = IO.File.Open(inLogFileName, IO.FileMode.Append, IO.FileAccess.ReadWrite, IO.FileShare.Read)
+            If DateDiff(DateInterval.Day, Now, IO.File.GetCreationTime(inLogFileName)) > 30 Then
+                IO.File.Delete(inLogFileName)
+                theFileStream = IO.File.Create(inLogFileName)
+            Else
+                theFileStream = IO.File.Open(inLogFileName, IO.FileMode.Append, IO.FileAccess.Write, IO.FileShare.Write)
+            End If
         Else
             theFileStream = IO.File.Create(inLogFileName)
         End If
-        
+
         ' Create a new text writer using the output stream, and add it to
         ' the trace listeners. 
         Dim theTextListener As New TextWriterTraceListener(theFileStream)
         theTextListener.Name = My.Application.Info.AssemblyName & "_FileLogTraceListener"
         Trace.Listeners.Add(theTextListener)
     End Sub
-
 
     ''' <summary>
     ''' Removes a trace listener for the event log.
