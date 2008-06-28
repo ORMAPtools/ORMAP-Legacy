@@ -1089,6 +1089,7 @@ Public NotInheritable Class SpatialUtilities
                             End If
                             Exit While
                         End If 'dictCandidates.count > 1
+                        anOverlayFeature = theOverlayFeatureCursor.NextFeature
                     End While
                 End If 'featurecursor is not nothing
             Else
