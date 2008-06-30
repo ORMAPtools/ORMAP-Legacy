@@ -52,6 +52,14 @@ Imports System.Reflection.Assembly
 #End Region
 
 #Region "Class Declaration"
+''' <summary>
+'''  Utilities class.
+''' </summary>
+''' <remarks>
+''' <para>Commonly used general procedures and functions.</para>
+''' <para><seealso cref="SpatialUtilities"/></para>
+''' <para><seealso cref="StringUtilities"/></para>
+''' </remarks>
 Public NotInheritable Class Utilities
 
 #Region "Built-In Class Members (Constructors, Etc.)"

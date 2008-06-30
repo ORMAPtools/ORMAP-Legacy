@@ -57,6 +57,12 @@ Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
 #End Region
 
+''' <summary>
+''' Provides an ArcMap Tool with functionality to 
+''' allow users to assign new taxlot numbers to Taxlot 
+''' features.
+''' </summary>
+''' <remarks><seealso cref="TaxlotAssignmentForm"/></remarks>
 <ComVisible(True)> _
 <ComClass(TaxlotAssignment.ClassId, TaxlotAssignment.InterfaceId, TaxlotAssignment.EventsId), _
 ProgId("ORMAPTaxlotEditing.TaxlotAssignment")> _

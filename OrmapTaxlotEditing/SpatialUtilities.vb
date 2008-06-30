@@ -61,9 +61,13 @@ Imports OrmapTaxlotEditing.DataMonitor
 
 #Region "Class Declaration"
 ''' <summary>
-'''  Spatial utility class.
+'''  Spatial utilities class.
 ''' </summary>
-''' <remarks>Commonly used ArcObjects procedures and functions.</remarks>
+''' <remarks>
+''' <para>Commonly used ArcObjects procedures and functions.</para>
+''' <para><seealso cref="StringUtilities"/></para>
+''' <para><seealso cref="Utilities"/></para>
+''' </remarks>
 Public NotInheritable Class SpatialUtilities
 
 #Region "Built-In Class Members (Constructors, Etc.)"

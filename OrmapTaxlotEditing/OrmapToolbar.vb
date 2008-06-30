@@ -43,6 +43,11 @@ Imports ESRI.ArcGIS.ADF.BaseClasses
 Imports ESRI.ArcGIS.esriSystem
 #End Region
 
+''' <summary>
+''' Provides an ArcMap CommandBar to hold the Commands and 
+''' Tools in this assembly.
+''' </summary>
+''' <remarks></remarks>
 <ComVisible(True)> _
 <ComClass(OrmapToolbar.ClassId, OrmapToolbar.InterfaceId, OrmapToolbar.EventsId), _
 ProgId("ORMAPTaxlotEditing.OrmapToolbar")> _

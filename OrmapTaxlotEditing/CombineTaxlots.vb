@@ -56,6 +56,11 @@ Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
 #End Region
 
+''' <summary>
+''' Provides an ArcMap Command with functionality to allow users to 
+''' combine Taxlot features.
+''' </summary>
+''' <remarks><seealso cref="CombineTaxlotsForm"/></remarks>
 <ComVisible(True)> _
 <ComClass(CombineTaxlots.ClassId, CombineTaxlots.InterfaceId, CombineTaxlots.EventsId), _
 ProgId("ORMAPTaxlotEditing.CombineTaxlots")> _
@@ -175,7 +180,7 @@ Public NotInheritable Class CombineTaxlots
                 Do Until theDataStatsEnum.MoveNext = False
                     .uxNewTaxlotNumber.Items.Add(theDataStatsEnum.Current.ToString)
                 Loop
-                
+
                 '-------------------------------
                 ' Set control defaults
                 '-------------------------------

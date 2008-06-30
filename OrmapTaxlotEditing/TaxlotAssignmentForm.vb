@@ -40,8 +40,13 @@
 Imports System.Runtime.InteropServices
 #End Region
 
+''' <summary>
+''' Partner form providing user interface for the TaxlotAssignment class.
+''' </summary>
+''' <remarks><seealso cref="TaxlotAssignment"/></remarks>
 <ComVisible(False)> _
-Public Class TaxlotAssignmentForm : Inherits System.Windows.Forms.Form
+Public Class TaxlotAssignmentForm
+    Inherits System.Windows.Forms.Form
 
     Public Sub New()
         ' This call is required by the Windows Form Designer.

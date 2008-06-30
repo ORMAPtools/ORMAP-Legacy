@@ -40,8 +40,13 @@
 Imports System.Runtime.InteropServices
 #End Region
 
+''' <summary>
+''' Partner form providing user interface for the CombineTaxlots class.
+''' </summary>
+''' <remarks><seealso cref="CombineTaxlots"/></remarks>
 <ComVisible(False)> _
 Public Class CombineTaxlotsForm
+    Inherits System.Windows.Forms.Form
 
     Public Sub New()
         ' This call is required by the Windows Form Designer.

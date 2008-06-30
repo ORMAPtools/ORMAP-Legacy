@@ -40,6 +40,10 @@
 Imports System.Runtime.InteropServices
 #End Region
 
+''' <summary>
+''' Partner form providing user interface for the LocateFeature class.
+''' </summary>
+''' <remarks><seealso cref="LocateFeature"/></remarks>
 <ComVisible(False)> _
 Public Class LocateFeatureForm
 

@@ -54,7 +54,8 @@ Imports OrmapTaxlotEditing.Utilities
 ''' <summary>
 '''  Data monitoring class for required ORMAP datasets.
 ''' </summary>
-''' <remarks>Keeps track of availability of valid ORMAP datasets in the map document.</remarks>
+''' <remarks>Keeps track of availability of valid ORMAP datasets 
+''' in the map document.</remarks>
 Public NotInheritable Class DataMonitor
 
 #Region "Class-Level Constants and Enumerations"
