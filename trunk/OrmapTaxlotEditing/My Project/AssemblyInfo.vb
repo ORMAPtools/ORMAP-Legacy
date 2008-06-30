@@ -14,7 +14,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("The ORMAP Taxlot Editing Toolbar gives the user tools to edit taxlots and related features in compliance with the ORMAP standard.")> 
 <Assembly: AssemblyCompany("ORMAP Tech Group")> 
 <Assembly: AssemblyProduct("ORMAP Taxlot Editing Toolbar")> 
-<Assembly: AssemblyCopyright("Copyright © 2008")> 
+<Assembly: AssemblyCopyright("Copyright © 2008 ORMAP Tech Group. All rights reserved.")> 
 <Assembly: AssemblyTrademark("")> 
 
 ' Note: Individual types can be set as ComVisible(True)

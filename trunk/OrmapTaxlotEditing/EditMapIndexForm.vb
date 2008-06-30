@@ -1,6 +1,6 @@
 #Region "Copyright 2008 ORMAP Tech Group"
 
-' File:  MapIndexForm.vb
+' File:  EditMapIndexForm.vb
 '
 ' Original Author:  OPET.NET Migration Team (Shad Campbell, James Moore, 
 '                   Nick Seigal)
@@ -40,8 +40,14 @@
 Imports System.Runtime.InteropServices
 #End Region
 
+''' <summary>
+''' Partner form providing user interface for the EditMapIndex class.
+''' </summary>
+''' <remarks><seealso cref="EditMapIndex"/></remarks>
 <ComVisible(False)> _
-Public Class EditMapIndexForm : Inherits System.Windows.Forms.Form
+Public Class EditMapIndexForm
+    Inherits System.Windows.Forms.Form
+
     Public Sub New()
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
@@ -49,4 +55,5 @@ Public Class EditMapIndexForm : Inherits System.Windows.Forms.Form
         ' Add any initialization after the InitializeComponent() call.
 
     End Sub
+
 End Class

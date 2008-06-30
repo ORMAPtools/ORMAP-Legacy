@@ -43,6 +43,14 @@ Imports System.Text
 #End Region
 
 #Region "Class Declaration"
+''' <summary>
+'''  String utilities class.
+''' </summary>
+''' <remarks>
+''' <para>Commonly used string manipulation procedures and functions.</para>
+''' <para><seealso cref="SpatialUtilities"/></para>
+''' <para><seealso cref="Utilities"/></para>
+''' </remarks>
 Public NotInheritable Class StringUtilities
 
 #Region "Built-In Class Members (Constructors, Etc.)"

@@ -45,7 +45,8 @@ Imports ESRI.ArcGIS.Catalog
 
 #Region "Class declaration"
 ''' <summary>
-''' Programmatically expose the ArcCatalog file dialog as one integral unit for simple access and use.
+''' Programmatically expose the ArcCatalog file dialog as 
+''' one integral unit for simple access and use.
 ''' </summary>
 ''' <remarks></remarks>
 Public Class CatalogFileDialog

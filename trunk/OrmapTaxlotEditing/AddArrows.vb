@@ -60,6 +60,14 @@ Imports System.Text
 
 #End Region
 
+''' <summary>
+''' Provides an ArcMap Tool with functionality to allow users to 
+''' add Arrows.
+''' </summary>
+''' <remarks>
+''' <para><seealso cref="AddArrowsForm"/></para>
+''' <para><seealso cref="DimensionArrowsForm"/></para>
+''' </remarks>
 <ComVisible(True)> _
 <ComClass(AddArrows.ClassId, AddArrows.InterfaceId, AddArrows.EventsId), _
 ProgId("ORMAPTaxlotEditing.AddArrows")> _

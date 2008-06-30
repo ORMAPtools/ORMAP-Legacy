@@ -45,6 +45,10 @@ Imports System.Windows.Forms
 Imports System.Runtime.InteropServices
 #End Region
 
+''' <summary>
+''' Partner form providing user interface for the PropertyPage class.
+''' </summary>
+''' <remarks><seealso cref="PropertyPage"/></remarks>
 <ComVisible(False)> _
 Friend NotInheritable Class PropertiesForm
     Inherits System.Windows.Forms.Form
@@ -247,12 +251,6 @@ Friend NotInheritable Class PropertiesForm
 #End Region
 
 #End Region
-
-    Private Sub uxReportOrRequest_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxReportOrRequest.Click
-        Dim theRTFStream As System.IO.Stream = _
-                Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.ReportOrRequest_help.rtf")
-        Utilities.OpenHelp("Report Bug or Request New Feature", theRTFStream)
-    End Sub
 
 End Class
 

@@ -48,6 +48,11 @@ Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.Framework
 #End Region
 
+''' <summary>
+''' Provides ArcMap Command with functionality to allow users 
+''' to toggle automatic field updates on and off.
+''' </summary>
+''' <remarks></remarks>
 <ComVisible(True)> _
 <ComClass(AutoUpdateAllToggle.ClassId, AutoUpdateAllToggle.InterfaceId, AutoUpdateAllToggle.EventsId), _
 ProgId("ORMAPTaxlotEditing.AutoUpdateAllToggle")> _

@@ -43,6 +43,11 @@ Imports System.Environment
 Imports System.Windows.Forms
 #End Region
 
+''' <summary>
+''' Provides functionality and user interface to 
+''' allow configuration of user settings.
+''' </summary>
+''' <remarks></remarks>
 <ComVisible(False)> _
 Public Class OrmapSettingsForm
 
@@ -184,7 +189,8 @@ Public Class OrmapSettingsForm
         If My.Computer.FileSystem.FileExists(theLocalFilePath) Then
             My.Computer.FileSystem.CopyFile(theLocalFilePath, theLocalFilePath & ".bak", True)
         Else
-            MessageBox.Show("the local settings file (user.config) is not available.", "Import Settings", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("The local settings file (user.config) is not available." & NewLine & _
+                    "Change one setting, save the settings, and try again.", "Import Settings", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End If
 
@@ -196,7 +202,7 @@ Public Class OrmapSettingsForm
             My.Computer.FileSystem.CopyFile(theSourceFilePath, theLocalFilePath, True)
             ReloadSettings()
         Else
-            MessageBox.Show("the source settings file (user.config) is not available at:" & NewLine & _
+            MessageBox.Show("The source settings file (user.config) is not available at:" & NewLine & _
                     My.Computer.FileSystem.GetParentPath(theSourceFilePath) & "." & NewLine & NewLine & _
                     "Copy your source settings file to this location and try again.", "Import Settings", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If

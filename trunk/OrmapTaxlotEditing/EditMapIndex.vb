@@ -56,6 +56,11 @@ Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
 #End Region
 
+''' <summary>
+''' Provides an ArcMap Command with functionality to 
+''' allow users to edit MapIndex component fields.
+''' </summary>
+''' <remarks><seealso cref="EditMapIndexForm"/></remarks>
 <ComVisible(True)> _
 <ComClass(EditMapIndex.ClassId, EditMapIndex.InterfaceId, EditMapIndex.EventsId), _
 ProgId("ORMAPTaxlotEditing.EditMapIndex")> _

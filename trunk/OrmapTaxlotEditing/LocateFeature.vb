@@ -55,6 +55,12 @@ Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
 #End Region
 
+''' <summary>
+''' Provides an ArcMap Command with functionality to 
+''' allow users to find and zoom to MapIndex or Taxlot 
+''' features.
+''' </summary>
+''' <remarks><seealso cref="LocateFeatureForm"/></remarks>
 <ComVisible(True)> _
 <ComClass(LocateFeature.ClassId, LocateFeature.InterfaceId, LocateFeature.EventsId), _
 ProgId("ORMAPTaxlotEditing.LocateFeature")> _

@@ -198,6 +198,12 @@ Public NotInheritable Class PropertyPage
         End Try
     End Sub
 
+    Private Sub uxReportOrRequest_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Dim theRTFStream As System.IO.Stream = _
+                Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.ReportOrRequest_help.rtf")
+        Utilities.OpenHelp("Report Bug or Request New Feature", theRTFStream)
+    End Sub
+
 #End Region
 
 #Region "Methods (none)"
@@ -445,6 +451,8 @@ Public NotInheritable Class PropertyPage
             AddHandler PartnerPropertiesForm.uxAllFieldsOption.CheckedChanged, AddressOf uxAllFieldsOption_CheckedChanged
             AddHandler PartnerPropertiesForm.uxSettings.Click, AddressOf uxSettings_Click
             AddHandler PartnerPropertiesForm.uxAbout.Click, AddressOf uxAbout_Click
+            AddHandler PartnerPropertiesForm.uxReportOrRequest.Click, AddressOf uxReportOrRequest_Click
+
         Catch ex As Exception
             EditorExtension.ProcessUnhandledException(ex)
         End Try
