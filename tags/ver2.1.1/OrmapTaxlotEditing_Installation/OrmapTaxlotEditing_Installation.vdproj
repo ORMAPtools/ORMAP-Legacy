@@ -639,12 +639,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_87C3F427CD53103BB7013B8C0DF6161E"
-        "OwnerKey" = "8:_577352F57C3F4F81BFBF5F3EC1FC5A0D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_8A260126390AB570F161AD651749C159"
         "OwnerKey" = "8:_45371C6D8E0E04FB6CB33BE18CB0CE2B"
         "MsmSig" = "8:_UNDEFINED"
@@ -1911,26 +1905,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_87C3F427CD53103BB7013B8C0DF6161E"
-            {
-            "SourcePath" = "8:OrmapTaxlotEditing.tlb"
-            "TargetName" = "8:OrmapTaxlotEditing.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_E33C79760C6B4FB39C8BDF049381D413"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8A260126390AB570F161AD651749C159"
             {
             "AssemblyRegister" = "3:1"
@@ -2358,14 +2332,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ORMAP Taxlot Editing Toolbar"
-        "ProductCode" = "8:{2D285D31-0332-40AC-A815-190B312F2BDE}"
-        "PackageCode" = "8:{5A9B5D2D-4C5B-43DF-8202-8C2858E19703}"
+        "ProductCode" = "8:{84090DCC-A9B4-480F-9F13-C29AE2633604}"
+        "PackageCode" = "8:{C255E1AA-4649-4EF3-A5B9-DCAC2C58A65A}"
         "UpgradeCode" = "8:{2B517D2C-8626-43F7-B78E-DBC51DB579D2}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.1.0"
+        "ProductVersion" = "8:2.1.1"
         "Manufacturer" = "8:ORMAP"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://sourceforge.net/projects/opet"
