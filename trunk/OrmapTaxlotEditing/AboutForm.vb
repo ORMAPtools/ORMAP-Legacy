@@ -41,6 +41,11 @@ Imports System.globalization
 Imports System.IO.Path
 #End Region
 
+''' <summary>
+''' Provides information about the extension, 
+''' including version and license.
+''' </summary>
+''' <remarks></remarks>
 Public NotInheritable Class AboutForm
 
     ''' <summary>

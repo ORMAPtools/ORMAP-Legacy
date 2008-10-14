@@ -48,6 +48,11 @@ Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.Geodatabase
 #End Region
 
+''' <summary>Provides business logic for the PropertyPage.</summary>
+''' <remarks>
+''' <para>This is where the user may control basic application settings.</para>
+''' <para><seealso cref="PropertiesForm"/></para>
+''' </remarks>
 <ComVisible(True)> _
 <ComClass(PropertyPage.ClassId, PropertyPage.InterfaceId, PropertyPage.EventsId), _
 ProgId("ORMAPTaxlotEditing.PropertyPage")> _

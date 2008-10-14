@@ -42,6 +42,13 @@
 Imports System.Runtime.InteropServices
 #End Region
 
+''' <summary>Provides business logic for the OrmapSettings UI.</summary>
+''' <remarks>
+''' <para>Not in use. Intent is to implement this class and move code here 
+''' from the OrmapSettings form so as to seperate the UI and business logic 
+''' layers.</para>
+''' <para><seealso cref="OrmapSettingsForm"/></para>
+''' </remarks>
 <ComVisible(False)> _
 Public NotInheritable Class OrmapSettings
 

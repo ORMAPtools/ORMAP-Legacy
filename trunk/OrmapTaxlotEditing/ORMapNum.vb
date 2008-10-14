@@ -95,7 +95,7 @@ Public NotInheritable Class ORMapNum
     Private _county As String
 
     ''' <summary>
-    ''' Two digit code for the County -- Default: 00.
+    ''' Two digit code for the County -- Default: user-defined.
     ''' </summary>
     Public Property County() As String
         Get
@@ -105,7 +105,7 @@ Public NotInheritable Class ORMapNum
             Dim length As Integer = value.Length
             Select Case length
                 Case Is < 2
-                    Dim sb As New StringBuilder("0", 2 - length)
+                    Dim sb As New StringBuilder("00", 2 - length)
                     sb.Append(value)
                     _county = sb.ToString
                 Case 2
@@ -121,7 +121,7 @@ Public NotInheritable Class ORMapNum
     Private _township As String
 
     ''' <summary>
-    ''' Two digit code for the township -- Default: 01.
+    ''' Two digit code for the township -- Default: 00.
     ''' </summary>
     Public Property Township() As String
         Get
@@ -140,7 +140,7 @@ Public NotInheritable Class ORMapNum
     Private _partialTownshipCode As String
 
     ''' <summary>
-    ''' Three digit code for the partial township code -- Default: .00.
+    ''' Three digit code for the partial township code -- Default: .00 (ORCS ver 1.4) or user-defined.
     ''' </summary>
     Public Property PartialTownshipCode() As String
         Get
@@ -160,7 +160,7 @@ Public NotInheritable Class ORMapNum
     Private _townshipDirectional As String
 
     ''' <summary>
-    ''' One digit directional for the township -- Default: N.
+    ''' One digit directional (N or S) for the township -- Default: N or user-defined.
     ''' </summary>
     Public Property TownshipDirectional() As String
         Get
@@ -200,7 +200,7 @@ Public NotInheritable Class ORMapNum
     Private _partialRangeCode As String
 
     ''' <summary>
-    ''' Three-digit code for the partial range code -- Default: .00.
+    ''' Three-digit code for the partial range code -- Default: .00 (ORCS ver 1.4) or user-defined.
     ''' </summary>
     Public Property PartialRangeCode() As String
         Get
@@ -220,7 +220,7 @@ Public NotInheritable Class ORMapNum
     Private _rangeDirectional As String
 
     ''' <summary>
-    ''' One digit code for the directional for the range -- Default: W.
+    ''' One digit code for the directional (E or W) for the range -- Default: W or user-defined.
     ''' </summary>
     Public Property RangeDirectional() As String
         Get
@@ -240,7 +240,7 @@ Public NotInheritable Class ORMapNum
     Private _section As String
 
     ''' <summary>
-    ''' Two digit code for the section number from 00 to 37 -- Default: 00.
+    ''' Two digit code for the section number from 00 to 37 -- Default: 00 (ORCS ver 1.4) or user-defined.
     ''' </summary>
     Public Property Section() As String
         Get
@@ -269,7 +269,7 @@ Public NotInheritable Class ORMapNum
     Private _quarter As String
 
     ''' <summary>
-    ''' One digit code for the quarter from A to J -- Default: 0.
+    ''' One digit code for the quarter from A to J -- Default: 0 (ORCS ver 1.4) or user-defined.
     ''' </summary>
     Public Property Quarter() As String
         Get
@@ -289,7 +289,7 @@ Public NotInheritable Class ORMapNum
     Private _quarterQuarter As String
 
     ''' <summary>
-    ''' One digit code for the quarter/quarter from A to J -- Default: 0.
+    ''' One digit code for the quarter/quarter from A to J -- Default: 0 (ORCS ver 1.4) or user-defined.
     ''' </summary>
     Public Property QuarterQuarter() As String
         Get
@@ -309,7 +309,7 @@ Public NotInheritable Class ORMapNum
     Private _suffixType As String
 
     ''' <summary>
-    ''' One digit code, S, D, T, or 0, for suffix type -- Default: 0.
+    ''' One digit code, S, D, T, or 0, for suffix type -- Default: 0 (ORCS ver 1.4) or user-defined.
     ''' </summary>
     Public Property SuffixType() As String
         Get
@@ -329,7 +329,7 @@ Public NotInheritable Class ORMapNum
     Private _suffixNumber As String
 
     ''' <summary>
-    ''' Three digit code for the suffix number from 000 to 999 -- Default: 000.
+    ''' Three digit code for the suffix number from 000 to 999 -- Default: 000 (ORCS ver 1.4) or user-defined..
     ''' </summary>
     Public Property SuffixNumber() As String
         Get
@@ -360,7 +360,7 @@ Public NotInheritable Class ORMapNum
     Private _anomaly As String
 
     ''' <summary>
-    ''' Two digit code for any oddball situations.
+    ''' Two digit code for any oddball situations -- Default: -- (ORCS ver 1.4) or user-defined..
     ''' </summary>
     Public Property Anomaly() As String
         Get

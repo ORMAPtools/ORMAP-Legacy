@@ -2,6 +2,10 @@ Imports System.ComponentModel
 Imports System.Configuration.Install
 Imports System.Runtime.InteropServices
 
+''' <summary>
+''' Class providing installation configuration.
+''' </summary>
+''' <remarks></remarks>
 Public Class InstallationConfiguration
 
     Public Sub New()
