@@ -15,6 +15,7 @@
         <component id="Post-transform Component" enabled="True" configuration="&lt;component id=&quot;Post-transform Component&quot; type=&quot;SandcastleBuilder.Components.PostTransformComponent&quot; assembly=&quot;{@SHFBFolder}SandcastleBuilder.Components.dll&quot;&gt;&#xD;&#xA;&lt;!-- Code colorizer files (required).&#xD;&#xA;                 Attributes:&#xD;&#xA;                    Stylesheet file (required)&#xD;&#xA;                    Script file (required)&#xD;&#xA;                    &quot;Copy&quot; image file (required) --&gt;&#xD;&#xA;&lt;colorizer stylesheet=&quot;{@SHFBFolder}Colorizer\highlight.css&quot; scriptFile=&quot;{@SHFBFolder}Colorizer\highlight.js&quot; copyImage=&quot;{@SHFBFolder}Colorizer\CopyCode.gif&quot; /&gt;&#xD;&#xA;&lt;!-- Base output path for the files (required).  This should match&#xD;&#xA;                 the parent folder of the output path of the HTML files (see&#xD;&#xA;                 SaveComponent). --&gt;&#xD;&#xA;&lt;outputPath value=&quot;Output\&quot; /&gt;&#xD;&#xA;&lt;!-- Logo image file (optional).  Filename is required. The height,&#xD;&#xA;                 width, altText, placement, and alignment attributes are&#xD;&#xA;                 optional. --&gt;&#xD;&#xA;&lt;logoFile filename=&quot;&quot; height=&quot;0&quot; width=&quot;0&quot; altText=&quot;&quot; placement=&quot;left&quot; alignment=&quot;left&quot; /&gt;&#xD;&#xA;&lt;/component&gt;" />
     </componentConfigurations>
     <apiFilter>
+        <filter entryType="Namespace" fullName="" isExposed="False" />
         <filter entryType="Namespace" fullName="OrmapTaxlotEditing" isExposed="True">
             <filter entryType="Interface" fullName="OrmapTaxlotEditing.AddArrows._AddArrows" filterName="AddArrows._AddArrows" isExposed="False" />
             <filter entryType="Interface" fullName="OrmapTaxlotEditing.AutoUpdateAllToggle._AutoUpdateAllToggle" filterName="AutoUpdateAllToggle._AutoUpdateAllToggle" isExposed="False" />
@@ -26,10 +27,11 @@
             <filter entryType="Interface" fullName="OrmapTaxlotEditing.PropertyPage._PropertyPage" filterName="PropertyPage._PropertyPage" isExposed="False" />
             <filter entryType="Interface" fullName="OrmapTaxlotEditing.TaxlotAssignment._TaxlotAssignment" filterName="TaxlotAssignment._TaxlotAssignment" isExposed="False" />
         </filter>
+        <filter entryType="Namespace" fullName="OrmapTaxlotEditing.My" isExposed="False" />
     </apiFilter>
     <ProjectSummary />
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
-    <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
+    <VisibleItems>Attributes, InheritedMembers, InheritedFrameworkMembers, Internals, Privates, Protected, SealedProtected</VisibleItems>
     <HtmlHelp1xCompilerPath path="" />
     <HtmlHelp2xCompilerPath path="" />
     <OutputPath>.\Help\</OutputPath>

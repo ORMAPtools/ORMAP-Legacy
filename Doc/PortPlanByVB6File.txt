@@ -24,7 +24,7 @@ PROCESSES
  A    * Coding standards.
  A    * Code review.
  A    * Integration testing.
- A  --> Beta testing support.
+ A    * Beta testing support.
 
 MODULES
  -    * AppSpecs  -  Port/rename (Non-functional, license agreement).
@@ -58,7 +58,7 @@ RELATED DOCUMENTS
  S    * TaxlotEditing.reg  -  Obsolete, use new deployment.
  -    * Register.vbs/Unregister.vbs  -  Obsolete, use new deployment.
  N    * gpl.rtf  -  Port/rename (updgrade GPL License v2 to v3).
- A  --> Arrows_help.rtf, etc.  -  Port/rewrite (in new help delivery format?)
+ A    * Arrows_help.rtf, etc.  -  Port/rewrite (in new help delivery format?)
 
 INSTALLER
  S    * Old Package  - Port to ClickOnce installer.
@@ -73,7 +73,7 @@ BY DEVELOPER
  A    * Coding standards.
  A    * Code review
  A    * Integration testing.
- A  --> Arrows_help.rtf, etc.  -  Port/rewrite (in new help delivery format?)
+ A    * Arrows_help.rtf, etc.  -  Port/rewrite (in new help delivery format?)
 
  J    * modUtils  -  Port/rewrite (significant effort).
  J    * globals  -  Obsolete or shared properties of EditorExtension.

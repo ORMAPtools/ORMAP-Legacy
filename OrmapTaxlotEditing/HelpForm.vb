@@ -40,6 +40,10 @@
 Imports System.Runtime.InteropServices
 #End Region
 
+''' <summary>
+''' Provides user interface for Help.
+''' </summary>
+''' <remarks></remarks>
 <ComVisible(False)> _
 Public Class HelpForm
 

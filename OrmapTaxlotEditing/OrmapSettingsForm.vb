@@ -47,7 +47,9 @@ Imports System.Windows.Forms
 ''' Provides functionality and user interface to 
 ''' allow configuration of user settings.
 ''' </summary>
-''' <remarks></remarks>
+''' <remarks>
+''' <para><seealso cref="OrmapSettings"/></para>
+''' </remarks>
 <ComVisible(False)> _
 Public Class OrmapSettingsForm
 

@@ -263,14 +263,13 @@ Public NotInheritable Class SpatialUtilities
             Dim theMapAcresFieldIndex As Integer = LocateFields(taxlotFClass, EditorExtension.TaxLotSettings.MapAcresField)
 
             '------------------------------------------
-            ' Set the area
+            ' Get the area
             '------------------------------------------
             Dim theArea As IArea
             theArea = DirectCast(editFeature.Shape, ESRI.ArcGIS.Geometry.IArea)
 
             '------------------------------------------
-            ' Get the county MapNumber from the MapIndex
-            ' layer and set the feature's MapNumber.
+            ' Get the county MapNumber from the MapIndex.
             '------------------------------------------
             Dim theCurrentMapNumber As String = GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
             If theCurrentMapNumber.Length = 0 Then
@@ -360,7 +359,7 @@ Public NotInheritable Class SpatialUtilities
             ' Taxlot has actual taxlot number. ORTaxlot requires a 5-digit number, so leading zeros have to be added.
             Dim theCurrentTaxlotValue As String = CStr(editFeature.Value(theTaxlotFieldIndex))
             theCurrentTaxlotValue = AddLeadingZeros(theCurrentTaxlotValue, ORMapNum.GetTaxlotFieldLength)
-
+            
             Dim theNewORTaxlot As String
             theNewORTaxlot = String.Concat(theORMapNumClass.GetORMapNum, theCurrentTaxlotValue)
 
@@ -384,17 +383,18 @@ Public NotInheritable Class SpatialUtilities
             End Select
 
             ' Recalculate ORTaxlot
-            If IsDBNull(editFeature.Value(theORTaxlotFieldIndex)) Then
-                Exit Sub
-            End If
-            ' Get the current and the new ORTaxlot Numbers
-            Dim theExistingORTaxlotString As String = CStr(editFeature.Value(theORTaxlotFieldIndex))
             Dim theNewORTaxlotString As String = generateORMAPTaxlotNumber(theORMapNumClass.GetORMapNum, editFeature, theCurrentTaxlotValue)
-            'If no changes, don't save value
-            If String.Compare(theExistingORTaxlotString, theNewORTaxlotString, True, CultureInfo.CurrentCulture) <> 0 Then
+            If Not IsDBNull(editFeature.Value(theORTaxlotFieldIndex)) Then
+                ' Compare existing value to new value. If no changes, don't save value.
+                Dim theExistingORTaxlotString As String = CStr(editFeature.Value(theORTaxlotFieldIndex))
+                If String.Compare(theExistingORTaxlotString, theNewORTaxlotString, True, CultureInfo.CurrentCulture) <> 0 Then
+                    editFeature.Value(theORTaxlotFieldIndex) = theNewORTaxlotString
+                End If
+            Else
+                ' Save new value.
                 editFeature.Value(theORTaxlotFieldIndex) = theNewORTaxlotString
             End If
-
+            
         Finally
             theORMapNumClass = Nothing
 
@@ -1555,6 +1555,8 @@ Public NotInheritable Class SpatialUtilities
             Dim theTextSymbol As ESRI.ArcGIS.Display.ITextSymbol
 
             theAnnoElement = DirectCast(theAnnotationFeature.Annotation, IAnnotationElement)
+            If theAnnoElement Is Nothing Then Exit Sub 'This can occur when the linked attribute expression evaluates to an empty string
+
             theTextElement = DirectCast(theAnnoElement, ITextElement)
             theTextSymbol = theTextElement.Symbol
 

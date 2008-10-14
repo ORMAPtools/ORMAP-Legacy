@@ -40,6 +40,12 @@
         "Entry"
         {
         "MsmKey" = "8:_087CB96EF7F4E91D2BDB050F58EF3272"
+        "OwnerKey" = "8:_2519590BD4FA5FB563B8917F77506336"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_087CB96EF7F4E91D2BDB050F58EF3272"
         "OwnerKey" = "8:_5AA90F30BCC546BB17CE45DFA22ED46A"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -447,6 +453,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4A8FB6F9769E07480B21B07D085696EA"
+        "OwnerKey" = "8:_577352F57C3F4F81BFBF5F3EC1FC5A0D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4BF0C53C0A99B6DB3D222CF163C93CB0"
         "OwnerKey" = "8:_577352F57C3F4F81BFBF5F3EC1FC5A0D"
         "MsmSig" = "8:_UNDEFINED"
@@ -533,12 +545,6 @@
         {
         "MsmKey" = "8:_644170591DB58208DD87085854661811"
         "OwnerKey" = "8:_2575E14C9563345AF781362A3A107641"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_644170591DB58208DD87085854661811"
-        "OwnerKey" = "8:_B5F3C879C996D201FEFFCF8B64AB5E34"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -634,12 +640,6 @@
         "Entry"
         {
         "MsmKey" = "8:_761FB36C9F6AD641AF5DB341DEAFA360"
-        "OwnerKey" = "8:_577352F57C3F4F81BFBF5F3EC1FC5A0D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_87C3F427CD53103BB7013B8C0DF6161E"
         "OwnerKey" = "8:_577352F57C3F4F81BFBF5F3EC1FC5A0D"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -766,12 +766,6 @@
         "Entry"
         {
         "MsmKey" = "8:_8A260126390AB570F161AD651749C159"
-        "OwnerKey" = "8:_ED06CDB1F72EA0C3F37ABBB4DAEA6476"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8A260126390AB570F161AD651749C159"
         "OwnerKey" = "8:_3B6DDC8335536F793B96728E2C2E1280"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -797,6 +791,12 @@
         {
         "MsmKey" = "8:_8A260126390AB570F161AD651749C159"
         "OwnerKey" = "8:_DB98EC6EBDDDB07C15ED34905196EDD0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8A260126390AB570F161AD651749C159"
+        "OwnerKey" = "8:_ED06CDB1F72EA0C3F37ABBB4DAEA6476"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1066,7 +1066,7 @@
         "Entry"
         {
         "MsmKey" = "8:_ED06CDB1F72EA0C3F37ABBB4DAEA6476"
-        "OwnerKey" = "8:_68E18EE56CAC701453790764982EDF5E"
+        "OwnerKey" = "8:_DB98EC6EBDDDB07C15ED34905196EDD0"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1115,6 +1115,12 @@
         {
         "MsmKey" = "8:_ED06CDB1F72EA0C3F37ABBB4DAEA6476"
         "OwnerKey" = "8:_3FEE9B7137EDF745953CC20ED8F66FDE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ED06CDB1F72EA0C3F37ABBB4DAEA6476"
+        "OwnerKey" = "8:_68E18EE56CAC701453790764982EDF5E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1240,12 +1246,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_ED06CDB1F72EA0C3F37ABBB4DAEA6476"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_3B6DDC8335536F793B96728E2C2E1280"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1271,6 +1271,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_DB98EC6EBDDDB07C15ED34905196EDD0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_ED06CDB1F72EA0C3F37ABBB4DAEA6476"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1419,7 +1425,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.SystemUI, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.SystemUI, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_087CB96EF7F4E91D2BDB050F58EF3272"
@@ -1450,7 +1456,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.GeoDatabaseUI, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.GeoDatabaseUI, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_1661633B1309B84904AA878A4CB2CDB6"
@@ -1481,7 +1487,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.CatalogUI, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.CatalogUI, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_2519590BD4FA5FB563B8917F77506336"
@@ -1512,7 +1518,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.3DAnalyst, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.3DAnalyst, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_2575E14C9563345AF781362A3A107641"
@@ -1543,7 +1549,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.GeoDatabaseExtensions, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.GeoDatabaseExtensions, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_3B6DDC8335536F793B96728E2C2E1280"
@@ -1574,7 +1580,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Carto, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Carto, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_3FEE9B7137EDF745953CC20ED8F66FDE"
@@ -1605,7 +1611,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Display, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Display, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_40DEFACFCDD0E8B2760EA014CC42513D"
@@ -1636,7 +1642,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Geometry, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Geometry, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_45371C6D8E0E04FB6CB33BE18CB0CE2B"
@@ -1663,11 +1669,31 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4A8FB6F9769E07480B21B07D085696EA"
+            {
+            "SourcePath" = "8:OrmapTaxlotEditing.tlb"
+            "TargetName" = "8:OrmapTaxlotEditing.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_E33C79760C6B4FB39C8BDF049381D413"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4BF0C53C0A99B6DB3D222CF163C93CB0"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.ArcMapUI, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.ArcMapUI, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_4BF0C53C0A99B6DB3D222CF163C93CB0"
@@ -1698,7 +1724,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.DataSourcesFile, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.DataSourcesFile, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_4F9991FD64466DEE85ACB3799E5525D6"
@@ -1729,7 +1755,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Catalog, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Catalog, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_5AA90F30BCC546BB17CE45DFA22ED46A"
@@ -1760,7 +1786,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.GeoDatabaseDistributed, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.GeoDatabaseDistributed, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_633F3A5E1FACA8058F44A06F2C777EA9"
@@ -1791,7 +1817,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.DataSourcesRaster, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.DataSourcesRaster, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_644170591DB58208DD87085854661811"
@@ -1822,7 +1848,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.GISClient, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.GISClient, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_68E18EE56CAC701453790764982EDF5E"
@@ -1853,7 +1879,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Framework, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Framework, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_69E860B327C9BFA8584AA40924C51CB3"
@@ -1884,7 +1910,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.CartoUI, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.CartoUI, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_761FB36C9F6AD641AF5DB341DEAFA360"
@@ -1911,31 +1937,11 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_87C3F427CD53103BB7013B8C0DF6161E"
-            {
-            "SourcePath" = "8:OrmapTaxlotEditing.tlb"
-            "TargetName" = "8:OrmapTaxlotEditing.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_E33C79760C6B4FB39C8BDF049381D413"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8A260126390AB570F161AD651749C159"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.System, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.System, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_8A260126390AB570F161AD651749C159"
@@ -1966,7 +1972,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Geoprocessing, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Geoprocessing, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_90255F63A972F15C63E5C7A698AC2DFC"
@@ -1997,7 +2003,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.GeoAnalyst, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.GeoAnalyst, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_98AFE360D06160D5B6FB950A91601800"
@@ -2028,7 +2034,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Animation, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Animation, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_A039B2332E7F541B538F3E3BBFED77D3"
@@ -2059,7 +2065,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.ADF, Version=9.2.4.1420, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.ADF, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_B41BA6900BCFF7376367DC5C0A22C841"
@@ -2090,7 +2096,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.DataSourcesNetCDF, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.DataSourcesNetCDF, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_B5F3C879C996D201FEFFCF8B64AB5E34"
@@ -2121,7 +2127,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Output, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Output, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_C0B21E102FEE0ACC0EDEE2D65BC547CB"
@@ -2152,7 +2158,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.GlobeCore, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.GlobeCore, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_C2ACA42767B421905165D542C1CC1CE1"
@@ -2183,7 +2189,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Editor, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Editor, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_CF0925986E938EBD35BAFD3FE1E8D393"
@@ -2214,7 +2220,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Geodatabase, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Geodatabase, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_DB98EC6EBDDDB07C15ED34905196EDD0"
@@ -2245,7 +2251,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Server, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.Server, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_ED06CDB1F72EA0C3F37ABBB4DAEA6476"
@@ -2276,7 +2282,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.DataSourcesGDB, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ESRI.ArcGIS.DataSourcesGDB, Version=9.3.0.1770, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_F2218F567CE5E60AAB08027345D0E0B9"
@@ -2358,14 +2364,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ORMAP Taxlot Editing Toolbar"
-        "ProductCode" = "8:{2D285D31-0332-40AC-A815-190B312F2BDE}"
-        "PackageCode" = "8:{5A9B5D2D-4C5B-43DF-8202-8C2858E19703}"
+        "ProductCode" = "8:{E61F1B0D-5AF8-4AC7-A602-6E715A6EB9C4}"
+        "PackageCode" = "8:{9C036D79-A880-42FE-AAA0-6A4C73F9CBA0}"
         "UpgradeCode" = "8:{2B517D2C-8626-43F7-B78E-DBC51DB579D2}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.1.0"
+        "ProductVersion" = "8:2.1.2"
         "Manufacturer" = "8:ORMAP"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://sourceforge.net/projects/opet"

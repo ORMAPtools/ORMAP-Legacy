@@ -139,9 +139,12 @@ Public NotInheritable Class StringUtilities
                     If Not IsNumeric(mapTaxlotIdValue.Substring(17, 1)) Then
                         hasAlphaQtrQtr = True
                     End If
+                Case 20
+                    '[Lane County]
+                    ' Note: Lane County has numeric qtr. sections and qtr.qtr. sections.
             End Select
 
-            'We must adjust the mask for clackamas county if there are no half ranges in the current string
+            'We must adjust the mask for Clackamas County if there are no half ranges in the current string
             If format.IndexOf("^"c) > 0 Then
                 If hasRangePart = False Then
                     format = format.Remove(format.IndexOf("^"c), 1)
@@ -207,13 +210,13 @@ Public NotInheritable Class StringUtilities
                         If String.CompareOrdinal(previousCharInMask, "Q") = 0 Then 'qtr qtr
                             If hasAlphaQtrQtr Then
                                 formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(17, 1))
-                            Else 'it is not alphabetical could be a number or a space
+                            Else 'it is not alphabetical; could be a number or a space
                                 Dim currentORMAPNumValue As String
                                 currentORMAPNumValue = mapTaxlotIdValue.Substring(17, 1).ToUpper(CultureInfo.CurrentCulture)
                                 If currentORMAPNumValue Like "[A-J]" Then
                                     formattedResult.Chars(positionInMask) = CChar(currentORMAPNumValue)
                                 Else
-                                    If countyCode <> 3 AndAlso countyCode <> 22 Then 'Clackamas County, Linn county wants the space/blank value left in the string NO ZEROES PLEASE
+                                    If countyCode <> 3 AndAlso countyCode <> 22 Then 'Clackamas County, Linn County wants the space/blank value left in the string NO ZEROES PLEASE
                                         formattedResult.Chars(positionInMask) = "0"c
                                     End If
                                 End If
@@ -221,13 +224,13 @@ Public NotInheritable Class StringUtilities
                         Else 'qtr
                             If hasAlphaQtr Then
                                 formattedResult.Chars(positionInMask) = CChar(mapTaxlotIdValue.Substring(16, 1))
-                            Else 'it is not alphabetical could be a number or a space
+                            Else 'it is not alphabetical; could be a number or a space
                                 Dim currentORMAPNum As String
                                 currentORMAPNum = mapTaxlotIdValue.Substring(16, 1)
                                 If currentORMAPNum Like "[A-J]" Then
                                     formattedResult.Chars(positionInMask) = CChar(currentORMAPNum)
                                 Else
-                                    If countyCode <> 3 AndAlso countyCode <> 22 Then 'Clackamas County, Linn county wants the space/blank value left in the string NO ZEROES PLEASE
+                                    If countyCode <> 3 AndAlso countyCode <> 22 Then 'Clackamas County, Linn County wants the space/blank value left in the string NO ZEROES PLEASE
                                         formattedResult.Chars(positionInMask) = "0"c
                                     End If
                                 End If

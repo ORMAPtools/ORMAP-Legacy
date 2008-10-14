@@ -62,6 +62,8 @@ Imports OrmapTaxlotEditing.Utilities
 'The attribute is placed at the assembly level.
 <Assembly: PermissionSetAttribute(SecurityAction.RequestMinimum, Name:="FullTrust")> 
 
+''' <summary>Provides the Editor extension implementation.</summary>
+''' Also contains core application level fields, methods, and event handlers<remarks></remarks>
 <ComVisible(True)> _
 <ComClass(EditorExtension.ClassId, EditorExtension.InterfaceId, EditorExtension.EventsId), _
 ProgId("ORMAPTaxlotEditing.EditorExtension")> _
@@ -553,13 +555,11 @@ Public NotInheritable Class EditorExtension
             ' Get the feature
             Dim theFeature As ESRI.ArcGIS.Geodatabase.IFeature
             theFeature = DirectCast(obj, IFeature)
+            If theFeature Is Nothing Then Exit Sub
 
-            ' Get the feature geometry
+            ' Get the geometry
             Dim theGeometry As ESRI.ArcGIS.Geometry.IGeometry
             theGeometry = theFeature.Shape
-            If theGeometry.IsEmpty Then
-                Exit Sub
-            End If
 
             If IsTaxlot(obj) Then
                 '[Edited object is a ORMAP taxlot feature...]
@@ -575,23 +575,28 @@ Public NotInheritable Class EditorExtension
                 Dim theAnnotationFeature As ESRI.ArcGIS.Carto.IAnnotationFeature
                 theAnnotationFeature = DirectCast(theFeature, IAnnotationFeature)
 
-                ' NOTE: [NIS] This does not appear to do the right thing. 
-                '       The feature is set to the geo feature instead of 
-                '       the anno, which results in the anno never being 
-                '       updated by the subsequent functions.
-                ''Get the parent feature
-                'Dim theParentID As Integer
-                'theParentID = theAnnotationFeature.LinkedFeatureID
-                'If theParentID > NotFoundIndex Then
-                '    '[Feature linked anno...]
-                '    theFeature = GetRelatedObjects(obj)
-                '    If theFeature Is Nothing Then Exit Sub
-                'Else
-                '    '[Not feature linked anno...]
-                '    ' Continue
-                'End If
+                'NOTE: [NIS] This does not appear to do the right thing. 
+                '      The feature is set to the geofeature instead of 
+                '      the anno, which results in the anno never being 
+                '      updated by the subsequent functions.
+                ' Get the parent feature
+                Dim theParentFeature As ESRI.ArcGIS.Geodatabase.IFeature
+                Dim theParentID As Integer
+                theParentID = theAnnotationFeature.LinkedFeatureID
+                If theParentID > NotFoundIndex Then
+                    '[Feature linked anno...]
+                    theParentFeature = GetRelatedObjects(obj)
+                    If theParentFeature Is Nothing Then Exit Sub
 
-                setMapIndexAndScale(obj, theFeature, theGeometry)
+                    theGeometry = theParentFeature.Shape
+                Else
+                    '[Not feature linked anno...]
+                    'Continue
+                End If
+
+                If theGeometry IsNot Nothing AndAlso Not theGeometry.IsEmpty Then
+                    setMapIndexAndScale(obj, theFeature, theGeometry)
+                End If
 
                 ' Set anno size based on the map scale.
                 SetAnnoSize(obj)
@@ -599,7 +604,9 @@ Public NotInheritable Class EditorExtension
                 '[Edited object is another kind of ORMAP feature (not taxlot or annotation)...]
                 ' Update MapScale and MapNumber (except for on the MapIndex feature class):
 
-                setMapIndexAndScale(obj, theFeature, theGeometry)
+                If theGeometry IsNot Nothing AndAlso Not theGeometry.IsEmpty Then
+                    setMapIndexAndScale(obj, theFeature, theGeometry)
+                End If
 
             End If
 
@@ -854,7 +861,7 @@ Public NotInheritable Class EditorExtension
     End Function
 
     ''' <summary>
-    ''' Set the map index (if the field exists) to the Map Index map index for the feature location.
+    ''' Set the map index (if the field exists) to the Map Index map index for the location geometry.
     ''' </summary>
     ''' <param name="obj">An object implementing <c>IObject</c>, either a Feature or a Row.</param>
     ''' <param name="theFeature">An object implementing <c>IFeature</c>.</param>
@@ -868,6 +875,10 @@ Public NotInheritable Class EditorExtension
         ' Get the Map Index map number field index.
         Dim theMapNumFieldIndex As Integer
         theMapNumFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
+
+        If theSearchGeometry Is Nothing Then Exit Sub
+        If theSearchGeometry.IsEmpty Then Exit Sub
+
         If theMapNumFieldIndex > NotFoundIndex AndAlso Not IsMapIndex(obj) Then
             ' Get the Map Index map number for the location of the new feature.
             theMapNumber = GetValueViaOverlay(theSearchGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
@@ -913,7 +924,10 @@ Public NotInheritable Class EditorExtension
     ''' Create a trace listener for a file log.
     ''' </summary>
     ''' <param name="inLogFileName">The file log filename.</param>
-    ''' <remarks>Once created, any <c>Trace</c> call will be written to this log.</remarks>
+    ''' <remarks>
+    ''' <para>Once created, any <c>Trace</c> call will be written to this log.</para>
+    ''' <para>This file will be replaced every 30 days.</para>
+    ''' </remarks>
     Private Shared Sub addTraceListenerForFileLog(ByVal inLogFileName As String)
         ' Create a file for output.
         Dim theFileStream As IO.Stream
