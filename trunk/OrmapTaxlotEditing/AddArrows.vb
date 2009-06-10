@@ -541,8 +541,8 @@ Public NotInheritable Class AddArrows
     '--HOOKS-             ' Retrieve the map scale from the overlaying Map Index layer
     '--HOOKS-             Dim theCurve As ICurve = DirectCast(theSketch, ICurve)
     '--HOOKS-             Dim theMIFclass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
-    '--HOOKS-             Dim theMapScale1 As Object = GetValueViaOverlay(theCurve.FromPoint, theMIFclass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
-    '--HOOKS-             Dim theMapScale2 As Object = GetValueViaOverlay(theCurve.ToPoint, theMIFclass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+    '--HOOKS-             Dim theMapScale1 As Object = GetValue(theCurve.FromPoint, theMIFclass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+    '--HOOKS-             Dim theMapScale2 As Object = GetValue(theCurve.ToPoint, theMIFclass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
     '--HOOKS- 
     '--HOOKS-             ' Insure that the map scales exist and that they are equal
     '--HOOKS-             If IsDBNull(theMapScale1) OrElse IsDBNull(theMapScale2) Then
@@ -674,7 +674,7 @@ Public NotInheritable Class AddArrows
     '--HOOKS-             theFeature.Value(lineTypeField) = theMapScale1
     '--HOOKS- 
     '--HOOKS-             ' Set the MapNumber Field
-    '--HOOKS-             Dim curMapNum As String = GetValueViaOverlay(theFeature.Shape, theMIFclass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+    '--HOOKS-             Dim curMapNum As String = GetValue(theFeature.Shape, theMIFclass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
     '--HOOKS-             lineTypeField = LocateFields(theHookFClass, (EditorExtension.MapIndexSettings.MapNumberField))
     '--HOOKS-             If lineTypeField = NotFoundIndex Then Exit Sub
     '--HOOKS-             theFeature.Value(lineTypeField) = curMapNum
@@ -859,7 +859,7 @@ Public NotInheritable Class AddArrows
 
             ' Get the current MapNumber
             Dim currentMapScale As String
-            currentMapScale = GetValueViaOverlay((theDimensionFeatureTemp.Shape), theMIFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+            currentMapScale = GetValue((theDimensionFeatureTemp.Shape), theMIFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
             Return CStr(CDbl(currentMapScale) / 12)
 
             theDimensionWSEditTemp.AbortEditOperation()
@@ -1124,7 +1124,7 @@ Public NotInheritable Class AddArrows
                 '--HOOKS-                     _doOnce = False
                 '--HOOKS-                     _theFromBreakPoint = _theStartPoint
                 '--HOOKS-                     ' Get the scale of the current mapindex
-                '--HOOKS-                     Dim mapIndexScale As String = GetValueViaOverlay(_theStartPoint, theMIFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+                '--HOOKS-                     Dim mapIndexScale As String = GetValue(_theStartPoint, theMIFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
                 '--HOOKS-                     mapIndexScale = ConvertToDescription(theMIFeatureClass.Fields, EditorExtension.MapIndexSettings.MapScaleField, mapIndexScale)
                 '-- END HOOKS
 
@@ -1198,7 +1198,7 @@ Public NotInheritable Class AddArrows
                         theField = LocateFields(theArrowFeatureClass, EditorExtension.CartographicLinesSettings.LineTypeField)
                         If theField = NotFoundIndex Then Exit Sub
                         ' Populate field values in the feature
-                        Dim curMapNum As String = GetValueViaOverlay(theFeature.Shape, theMIFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+                        Dim curMapNum As String = GetValue(theFeature.Shape, theMIFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
                         theFeature.Value(mapNumberField) = curMapNum
                         theFeature.Value(theField) = arrowLineStyle
                         theFeature.Store()
@@ -1219,7 +1219,7 @@ Public NotInheritable Class AddArrows
                         theFeature.Value(theField) = Format(Today, "MM/dd/yyyy")
 
                         ' Set the MapScale Field
-                        currentMapScale = GetValueViaOverlay(theFeature.Shape, theMIFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+                        currentMapScale = GetValue(theFeature.Shape, theMIFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
                         theField = LocateFields(theArrowFeatureClass, EditorExtension.MapIndexSettings.MapScaleField)
                         If theField = NotFoundIndex Then Exit Sub
                         theFeature.Value(theField) = currentMapScale
@@ -1405,7 +1405,7 @@ Public NotInheritable Class AddArrows
 
                             ' Get the current MapNumber
                             Dim currentMapNums As String
-                            currentMapNums = GetValueViaOverlay(theDimensionFeature.Shape, theMIFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+                            currentMapNums = GetValue(theDimensionFeature.Shape, theMIFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
                             theField = LocateFields(theDimensionArrowFC, EditorExtension.MapIndexSettings.MapNumberField)
                             theDimensionFeature.Value(theField) = currentMapNums
 

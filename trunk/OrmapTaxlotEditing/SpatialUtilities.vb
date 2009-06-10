@@ -271,7 +271,7 @@ Public NotInheritable Class SpatialUtilities
             '------------------------------------------
             ' Get the county MapNumber from the MapIndex.
             '------------------------------------------
-            Dim theCurrentMapNumber As String = GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+            Dim theCurrentMapNumber As String = GetValue(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
             If theCurrentMapNumber.Length = 0 Then
                 Exit Sub
             End If
@@ -840,6 +840,62 @@ Public NotInheritable Class SpatialUtilities
         End With
         Return theTaxlotFLayer
     End Function
+
+    ''' <summary>
+    ''' Calls the overloaded function GetValue and adds an empty string for the 
+    ''' orderBestByFieldName parameter.
+    ''' </summary>
+    ''' <param name="searchGeometry">The search geometry.</param>
+    ''' <param name="overlayFeatureClass">Overlaying feature class.</param>
+    ''' <param name="valueFieldName">Name of field to return value for.</param>
+    ''' <returns>Returns the value from the specified field (<paramref>valueFieldName</paramref>) 
+    ''' as a string.</returns>
+    ''' <remarks>See overloaded function GetValue</remarks>
+    Public Overloads Shared Function GetValue(ByVal searchGeometry As IGeometry, ByVal overlayFeatureClass As IFeatureClass, ByVal valueFieldName As String) As String
+        Return GetValue(searchGeometry, overlayFeatureClass, valueFieldName, String.Empty)
+    End Function
+
+
+    ''' <summary>
+    ''' Determine wether return the value from the GetValueViaOverlay function or use
+    ''' a value from the attribute override.
+    ''' </summary>
+    ''' <param name="searchGeometry">The search geometry.</param>
+    ''' <param name="overlayFeatureClass">Overlaying feature class.</param>
+    ''' <param name="valueFieldName">Name of field to return value for.</param>
+    ''' <param name="orderBestByFieldName">Name of field to order by in the 
+    ''' case of a tie in area/length of intersection.</param>
+    ''' <returns>Returns the value from the specified field (<paramref>valueFieldName</paramref>) 
+    ''' as a string.</returns>
+    ''' <remarks></remarks>
+    Public Overloads Shared Function GetValue(ByVal searchGeometry As IGeometry, ByVal overlayFeatureClass As IFeatureClass, ByVal valueFieldName As String, ByVal orderBestByFieldName As String) As String
+
+        Dim theValue As String = String.Empty
+        If EditorExtension.OverrideAutoAttribute Then
+            Select Case valueFieldName
+                Case EditorExtension.MapIndexSettings.MapNumberField
+                    theValue = EditorExtension.OverrideMapNumber
+
+                Case EditorExtension.MapIndexSettings.MapScaleField
+                    theValue = EditorExtension.OverrideMapScale
+
+                Case EditorExtension.MapIndexSettings.OrmapMapNumberField
+                    theValue = EditorExtension.OverrideORMapNumber
+
+                Case Else
+                    If MessageBox.Show("The manual attribute overide option only works for retrieving the MapNumber, MapScale, and ORMapNumber field values.  Would you like to use the 'Auto' method this time?  Choose 'Yes' to use the 'Auto' method or 'No' to not get the value", "Manual Override Not Available.", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = DialogResult.Yes Then
+                        theValue = GetValueViaOverlay(searchGeometry, overlayFeatureClass, valueFieldName, orderBestByFieldName)
+                    End If
+
+            End Select
+        Else
+            Return GetValueViaOverlay(searchGeometry, overlayFeatureClass, valueFieldName, orderBestByFieldName)
+        End If
+
+        Return theValue
+
+    End Function
+
 
     ''' <summary>
     ''' Overlay the passed in feature with a feature class to get a value from 
@@ -1529,7 +1585,7 @@ Public NotInheritable Class SpatialUtilities
         ' Update the annotation size to reflect current mapscale...
 
         ' Get the Map Index map scale
-        Dim theMapScale As String = GetValueViaOverlay(theGeometry, theMapIndexFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+        Dim theMapScale As String = GetValue(theGeometry, theMapIndexFeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
         If theMapScale.Length = 0 Then
             Exit Sub
         End If
@@ -1655,7 +1711,7 @@ Public NotInheritable Class SpatialUtilities
 
         ' Check for the existence of a current OR Map Number and Taxlot number
         Dim mapIndexValue As String = String.Empty
-        mapIndexValue = GetValueViaOverlay(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+        mapIndexValue = GetValue(thisGeometry, mapIndexFeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
         If mapIndexValue.Length = 0 Then
             returnValue = True
         End If
@@ -1799,12 +1855,12 @@ Public NotInheritable Class SpatialUtilities
         thisQueryFilter.WhereClause = whereClause
         Dim thisCursor As ICursor
         If isEditable Then
-            thisCursor = Table.Update(thisQueryFilter, False) 'non-recycling update cursor
+            thisCursor = table.Update(thisQueryFilter, False) 'non-recycling update cursor
         Else
-            thisCursor = Table.Search(thisQueryFilter, True) 'recycling search cursor
+            thisCursor = table.Search(thisQueryFilter, True) 'recycling search cursor
         End If
 
-        If Table.RowCount(thisQueryFilter) = 0 Then
+        If table.RowCount(thisQueryFilter) = 0 Then
             Return Nothing
         Else
             Return thisCursor

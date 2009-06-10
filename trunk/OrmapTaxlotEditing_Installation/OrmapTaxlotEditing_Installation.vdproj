@@ -453,12 +453,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_4A8FB6F9769E07480B21B07D085696EA"
-        "OwnerKey" = "8:_577352F57C3F4F81BFBF5F3EC1FC5A0D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_4BF0C53C0A99B6DB3D222CF163C93CB0"
         "OwnerKey" = "8:_577352F57C3F4F81BFBF5F3EC1FC5A0D"
         "MsmSig" = "8:_UNDEFINED"
@@ -623,6 +617,12 @@
         {
         "MsmKey" = "8:_69E860B327C9BFA8584AA40924C51CB3"
         "OwnerKey" = "8:_2519590BD4FA5FB563B8917F77506336"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6C53A80A8F59F3C6F356D4C8A0C63E2D"
+        "OwnerKey" = "8:_577352F57C3F4F81BFBF5F3EC1FC5A0D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1669,26 +1669,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4A8FB6F9769E07480B21B07D085696EA"
-            {
-            "SourcePath" = "8:OrmapTaxlotEditing.tlb"
-            "TargetName" = "8:OrmapTaxlotEditing.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_E33C79760C6B4FB39C8BDF049381D413"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4BF0C53C0A99B6DB3D222CF163C93CB0"
             {
             "AssemblyRegister" = "3:1"
@@ -1903,6 +1883,26 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6C53A80A8F59F3C6F356D4C8A0C63E2D"
+            {
+            "SourcePath" = "8:OrmapTaxlotEditing.tlb"
+            "TargetName" = "8:OrmapTaxlotEditing.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_E33C79760C6B4FB39C8BDF049381D413"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -2365,7 +2365,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ORMAP Taxlot Editing Toolbar"
         "ProductCode" = "8:{E61F1B0D-5AF8-4AC7-A602-6E715A6EB9C4}"
-        "PackageCode" = "8:{9C036D79-A880-42FE-AAA0-6A4C73F9CBA0}"
+        "PackageCode" = "8:{D330E483-FCE3-451A-8FBF-74874DEC9393}"
         "UpgradeCode" = "8:{2B517D2C-8626-43F7-B78E-DBC51DB579D2}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -2387,7 +2387,7 @@
         "UseSystemSearchPath" = "11:TRUE"
         "TargetPlatform" = "3:0"
         "PreBuildEvent" = "8:"
-        "PostBuildEvent" = "8:copy $(ProjectDir)\\$(Configuration) $(ProjectDir)\\Installer"
+        "PostBuildEvent" = "8:copy \"$(ProjectDir)$(Configuration)\" \"$(ProjectDir)Installer\""
         "RunPostBuildEvent" = "3:0"
         }
         "Registry"
@@ -2919,9 +2919,6 @@
                 {
                 }
             }
-        }
-        "VJSharpPlugin"
-        {
         }
     }
 }
