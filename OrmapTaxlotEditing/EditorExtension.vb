@@ -417,6 +417,79 @@ Public NotInheritable Class EditorExtension
         End Set
     End Property
 
+
+    Private Shared _overrideAutoAttribute As Boolean
+
+    ''' <summary>
+    ''' Override the auto-update (attributing) on edit events
+    ''' to use a specified maps values.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns><c>True</c> or <c>False</c>.</returns>
+    ''' <remarks>If true, field values are set manually via a switch in the locate  
+    ''' features tool (which records the mapnumber) instead of using auto-update.
+    ''' minimum set are auto-updated.</remarks>
+    Friend Shared Property OverrideAutoAttribute() As Boolean
+        Get
+            Return _overrideAutoAttribute
+        End Get
+        Set(ByVal value As Boolean)
+            _overrideAutoAttribute = value
+        End Set
+    End Property
+
+    Private Shared _overrideMapNumber As String
+
+    ''' <summary>
+    ''' The MapNumber to use if OverrideAutoAttribute is true.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A <c>String</c> object containing a mapnumber.</returns>
+    ''' <remarks></remarks>
+    Friend Shared Property OverrideMapNumber() As String
+        Get
+            Return _overrideMapNumber
+        End Get
+        Set(ByVal value As String)
+            _overrideMapNumber = value
+        End Set
+    End Property
+
+    Private Shared _overrideMapScale As String
+
+    ''' <summary>
+    ''' The MapScale to use if OverrideAutoAttribute is true.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A <c>String</c> object containing a map scale.</returns>
+    ''' <remarks></remarks>
+    Friend Shared Property OverrideMapScale() As String
+        Get
+            Return _overrideMapScale
+        End Get
+        Set(ByVal value As String)
+            _overrideMapScale = value
+        End Set
+    End Property
+
+    Private Shared _overrideORMapNumber As String
+
+    ''' <summary>
+    ''' The ORMapNumber to use if OverrideAutoAttribute is true.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A <c>String</c> object containing a ORMapNumber.</returns>
+    ''' <remarks></remarks>
+    Friend Shared Property OverrideORMapNumber() As String
+        Get
+            Return _overrideORMapNumber
+        End Get
+        Set(ByVal value As String)
+            _overrideORMapNumber = value
+        End Set
+    End Property
+
+
 #End Region
 
 #Region "Fields"
@@ -881,7 +954,7 @@ Public NotInheritable Class EditorExtension
 
         If theMapNumFieldIndex > NotFoundIndex AndAlso Not IsMapIndex(obj) Then
             ' Get the Map Index map number for the location of the new feature.
-            theMapNumber = GetValueViaOverlay(theSearchGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+            theMapNumber = GetValue(theSearchGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
             ' Set the feature map number.
             If Len(theMapNumber) > 0 Then
                 theFeature.Value(theMapNumFieldIndex) = theMapNumber
@@ -897,7 +970,7 @@ Public NotInheritable Class EditorExtension
         theMapScaleFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
         If theMapScaleFieldIndex > NotFoundIndex AndAlso Not IsMapIndex(obj) Then
             ' Get the Map Index map scale for the location of the new feature.
-            theMapScale = GetValueViaOverlay(theSearchGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+            theMapScale = GetValue(theSearchGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
             ' Set the feature map scale.
             If Len(theMapScale) > 0 Then
                 theFeature.Value(theMapScaleFieldIndex) = theMapScale

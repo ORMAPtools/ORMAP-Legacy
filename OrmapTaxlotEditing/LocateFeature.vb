@@ -58,7 +58,8 @@ Imports OrmapTaxlotEditing.Utilities
 ''' <summary>
 ''' Provides an ArcMap Command with functionality to 
 ''' allow users to find and zoom to MapIndex or Taxlot 
-''' features.
+''' features and/or specify a MapIndex (Map) to override the
+''' auto attributing of features via the on create event.
 ''' </summary>
 ''' <remarks><seealso cref="LocateFeatureForm"/></remarks>
 <ComVisible(True)> _
@@ -109,6 +110,8 @@ Public NotInheritable Class LocateFeature
 
     Private _application As IApplication
     Private _bitmapResourceName As String
+    Private _locateFeatureDockWinMgr As IDockableWindowManager
+    Private _locateFeatureDockWin As IDockableWindow
 
 #End Region
 
@@ -129,18 +132,19 @@ Public NotInheritable Class LocateFeature
         If value IsNot Nothing Then
             _partnerLocateFeatureForm = value
             ' Subscribe to partner form events.
-            AddHandler _partnerLocateFeatureForm.Load, AddressOf PartnerLocateFeatureForm_Load
             AddHandler _partnerLocateFeatureForm.uxMapNumber.TextChanged, AddressOf uxMapNumber_TextChanged
             AddHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
             AddHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
             AddHandler _partnerLocateFeatureForm.uxSelectFeatures.CheckedChanged, AddressOf uxSelectFeatures_CheckedChanged
+            AddHandler _partnerLocateFeatureForm.uxSetAttributeMode.Click, AddressOf uxSetAttributeMode_Click
+
         Else
             ' Unsubscribe to partner form events.
-            RemoveHandler _partnerLocateFeatureForm.Load, AddressOf PartnerLocateFeatureForm_Load
             RemoveHandler _partnerLocateFeatureForm.uxMapNumber.TextChanged, AddressOf uxMapNumber_TextChanged
             RemoveHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
             RemoveHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
             RemoveHandler _partnerLocateFeatureForm.uxSelectFeatures.CheckedChanged, AddressOf uxSelectFeatures_CheckedChanged
+            RemoveHandler _partnerLocateFeatureForm.uxSetAttributeMode.Click, AddressOf uxSetAttributeMode_Click
         End If
     End Sub
 
@@ -160,7 +164,7 @@ Public NotInheritable Class LocateFeature
 
 #Region "Event Handlers"
 
-    Private Sub PartnerLocateFeatureForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.Load
+    Private Sub PartnerLocateFeatureForm_Load()
 
         With PartnerLocateFeatureForm
             Try
@@ -198,6 +202,68 @@ Public NotInheritable Class LocateFeature
         End With
 
     End Sub
+
+
+
+    Private Sub uxSetAttributeMode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxSetAttributeMode.Click
+
+        With PartnerLocateFeatureForm
+
+            If EditorExtension.OverrideAutoAttribute Then
+                .uxSetAttributeMode.Text = "Set Manual"
+                .uxAttributeMode.Text = "Auto"
+                EditorExtension.OverrideAutoAttribute = False
+                .uxCurrentlyAttLbl.Visible = False
+                .uxCurrentlyAttNum.Visible = False
+                EditorExtension.OverrideMapScale = String.Empty
+                EditorExtension.OverrideORMapNumber = String.Empty
+                EditorExtension.OverrideMapNumber = String.Empty
+
+            Else
+
+                Try
+                    .UseWaitCursor = True
+
+                    Dim uxMapnumber As TextBox = .uxMapNumber
+                    Dim theMapNumber As String = uxMapnumber.Text.Trim
+
+                    If theMapNumber = String.Empty OrElse Not uxMapnumber.AutoCompleteCustomSource.Contains(theMapNumber) Then
+                        .UseWaitCursor = False
+                        MessageBox.Show("Invalid MapNumber. Please try again.", "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                        Exit Sub
+                    End If
+
+                    ' Get the mapscale from the MapIndex
+                    Dim theQueryFilter As IQueryFilter = New QueryFilter
+                    Dim theWhereClause As String = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] = '" & theMapNumber & "'"
+                    Dim theMapIndexFeatureClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
+                    theQueryFilter.WhereClause = formatWhereClause(theWhereClause, theMapIndexFeatureClass)
+                    Dim theFeatCursor As IFeatureCursor = theMapIndexFeatureClass.Search(theQueryFilter, True)
+                    Dim thisFeature As IFeature = theFeatCursor.NextFeature
+                    Dim theMapScaleFieldIdx As Integer = thisFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
+                    Dim theORMapNumberFieldIdx As Integer = thisFeature.Fields.FindField(EditorExtension.MapIndexSettings.OrmapMapNumberField)
+                    EditorExtension.OverrideMapScale = thisFeature.Value(theMapScaleFieldIdx).ToString()
+                    EditorExtension.OverrideORMapNumber = thisFeature.Value(theORMapNumberFieldIdx).ToString()
+                    EditorExtension.OverrideMapNumber = theMapNumber
+
+                    .uxSetAttributeMode.Text = "Set Auto"
+                    .uxAttributeMode.Text = "Manual Override"
+                    EditorExtension.OverrideAutoAttribute = True
+                    .uxCurrentlyAttLbl.Visible = True
+                    .uxCurrentlyAttNum.Visible = True
+                    .uxCurrentlyAttNum.Text = theMapNumber
+
+                Finally
+                    .UseWaitCursor = False
+                End Try
+
+            End If
+
+        End With
+
+    End Sub
+
+
 
     Private Sub uxMapNumber_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxMapNumber.TextChanged
 
@@ -288,7 +354,6 @@ Public NotInheritable Class LocateFeature
                 If theTaxlotVal = String.Empty Then
                     '[Looking for just a MapIndex...]
                     theXFlayer = MapIndexFeatureLayer
-
                     theWhereClause = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] = '" & theMapNumberVal & "'"
                 Else
                     '[Looking for a MapIndex and Taxlot...]
@@ -438,8 +503,9 @@ Public NotInheritable Class LocateFeature
                 PartnerLocateFeatureForm.uxTaxlot.Enabled = False
             End If
 
-            'PartnerLocateFeatureForm.ShowDialog() 'MODAL
-            PartnerLocateFeatureForm.Show() 'NON-MODAL
+            _locateFeatureDockWin.Show(Not _locateFeatureDockWin.IsVisible)
+            If _locateFeatureDockWin.IsVisible AndAlso PartnerLocateFeatureForm.uxMapNumber.AutoCompleteCustomSource.Count = 0 Then PartnerLocateFeatureForm_Load()
+
 
         Catch ex As Exception
             EditorExtension.ProcessUnhandledException(ex)
@@ -485,7 +551,18 @@ Public NotInheritable Class LocateFeature
                 'Disable tool if parent application is not ArcMap
                 If TypeOf hook Is IMxApplication Then
                     _application = DirectCast(hook, IApplication)
-                    setPartnerLocateFeatureForm(New LocateFeatureForm())
+
+                    'setPartnerLocateFeatureForm(New LocateFeatureForm())
+
+                    ' Get a reference to the dockable window
+                    _locateFeatureDockWinMgr = DirectCast(hook, IDockableWindowManager)
+                    Dim locateFeatureDockWinUID As New UID
+                    locateFeatureDockWinUID.Value = "{7c5bb546-215f-477a-8df4-16cc1c993309}"
+                    _locateFeatureDockWin = _locateFeatureDockWinMgr.GetDockableWindow(locateFeatureDockWinUID)
+                    setPartnerLocateFeatureForm(DirectCast(_locateFeatureDockWin.UserData, LocateFeatureForm))
+                    ' Close this when the application starts...
+                    _locateFeatureDockWin.Show(False)
+
                     MyBase.m_enabled = True
                 Else
                     MyBase.m_enabled = False
@@ -498,6 +575,14 @@ Public NotInheritable Class LocateFeature
             EditorExtension.ProcessUnhandledException(ex)
         End Try
     End Sub
+
+
+    Public Overrides ReadOnly Property Checked() As Boolean
+        Get
+            Checked = _locateFeatureDockWin.IsVisible()
+        End Get
+    End Property
+
 
     Public Overrides Sub OnClick()
         Try

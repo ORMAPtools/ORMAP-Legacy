@@ -570,7 +570,7 @@ Public NotInheritable Class DataMonitor
         If IsDBNull(inTaxlotFeature.Value(theTLTaxlotFieldIndex)) Then Exit Sub
         If IsDBNull(inTaxlotFeature.Value(theTLMapNumberFieldIndex)) Then Exit Sub
         If Not IsNumeric(inTaxlotFeature.Value(theTLTaxlotFieldIndex)) Then Exit Sub
-        If Not IsNumeric(inTaxlotFeature.Value(theTLMapNumberFieldIndex)) Then Exit Sub
+        '-- Comment out by Shad -- If Not IsNumeric(inTaxlotFeature.Value(theTLMapNumberFieldIndex)) Then Exit Sub
 
         ' Copy valid numbers to the CancelledNumbers table.
         ' Taxlots will send their numbers to the CancelledNumbers table
