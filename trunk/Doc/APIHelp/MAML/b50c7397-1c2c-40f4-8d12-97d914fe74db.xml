@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<developerOrientationDocument
+  xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <summary>
+    <para>
+    <mediaLink><image xlink:href="6b7ba21e-fe35-4c47-a68b-1201f63eadda"/></mediaLink>
+    </para>
+  </summary>
+  
+  <introduction>
+    <para>Welcome to the developer guide for the <application>ORMAP Taxlot Editing Toolbar</application>!</para>
+    
+    <para>Please read the following:</para>
+    
+    <para>
+    <mediaLink><image xlink:href="9d1c344f-2368-472a-83c8-4a743643214d"/></mediaLink>
+    </para>
+    
+    <para>
+    <mediaLinkInline><image xlink:href="02c0b241-fda1-44fa-96f0-38f3fb181ff7"/></mediaLinkInline>
+    <mediaLinkInline><image xlink:href="d5140b99-4ff7-4189-9743-ea91781ac2a8"/></mediaLinkInline>
+    </para>
+  </introduction>
+
+  <!-- <inThisSection>Optional description of content in this section</inThisSection> -->
+
+  <!-- <reference>Optional reference section</reference> -->
+
+  <!-- <relatedSections>Optional related sections info</relatedSections> -->
+
+  <!-- <externalResources>Optional external resources section</externalResources> -->
+
+  <relatedTopics>
+    <!-- One or more of the following:
+         - A local link
+         - An external link
+         - A code entity reference
+
+    <link xlink:href="Other Topic's ID">Link text</link>
+    <externalLink>
+        <linkText>Link text</linkText>
+        <linkAlternateText>Optional alternate link text</linkAlternateText>
+        <linkUri>URI</linkUri>
+    </externalLink>
+    <codeEntityReference>API member ID</codeEntityReference>
+
+    Examples:
+
+    <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+    <externalLink>
+        <linkText>SHFB on CodePlex</linkText>
+        <linkAlternateText>Go to CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SHFB</linkUri>
+    </externalLink>
+
+    <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+    <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+    <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+    <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+    <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+    <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+    <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+    -->
+  </relatedTopics>
+</developerOrientationDocument>
