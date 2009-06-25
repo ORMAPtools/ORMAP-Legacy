@@ -378,8 +378,7 @@ Public NotInheritable Class SpatialUtilities
                     '     on the left with zeros to make it always a 5-digit number (see comment
                     '     above).
                     ' Trim the map number to only the left 8 characters (no spaces)
-                    Dim sb As String = Left(theCurrentMapNumber, 8)
-                    editFeature.Value(theMapTaxlotFieldIndex) = String.Concat(sb, theCurrentTaxlotValue)
+                    editFeature.Value(theMapTaxlotFieldIndex) = String.Concat(theCurrentMapNumber.Substring(0, 8), theCurrentTaxlotValue)
             End Select
 
             ' Recalculate ORTaxlot
