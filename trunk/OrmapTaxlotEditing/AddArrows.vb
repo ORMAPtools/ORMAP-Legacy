@@ -1324,7 +1324,8 @@ Public NotInheritable Class AddArrows
                                 ' Create a line (iChange/.25) from the beginning
                                 theLine = New Line
                                 If indexNumber = 1 Then
-                                    If Shift = 0 Then 'shift not pressed
+                                    If Shift = 0 Then 'shift not pressed 
+                                        'jwm use this: If String.Compare(dimensionArrowSide, "RIGHT", True, System.Globalization.CultureInfo.CurrentCulture) = 0 Then
                                         If Trim$(UCase$(dimensionArrowSide)) = "RIGHT" Then
                                             theDimensionLine.QueryNormal(esriSegmentExtension.esriExtendAtFrom, (iChange / RatioCurve), False, ((iChange / RatioLine) / 1.75), theLine)
                                         ElseIf Trim$(UCase$(dimensionArrowSide)) = "LEFT" Then
