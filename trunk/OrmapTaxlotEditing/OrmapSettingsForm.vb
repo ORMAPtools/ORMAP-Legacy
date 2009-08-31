@@ -129,6 +129,19 @@ Public Class OrmapSettingsForm
         ImportSettings()
 
     End Sub
+    ''' <summary>
+    ''' Exports application settings values and keeps the dialog open. 
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub uxExport_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxExport.Click
+
+        ExportSettings()
+
+    End Sub
+
+
 
     ''' <summary>
     ''' Reloads saved application settings values and keeps the dialog open. 
@@ -196,8 +209,13 @@ Public Class OrmapSettingsForm
             Exit Sub
         End If
 
-        ' Get user supplied source path (common dialog).
-        Dim theSourceFilePath As String = My.Application.Info.DirectoryPath & "\user.config"
+        ' Prompt user for config file location
+        Dim theOpenFileDialog As New System.Windows.Forms.OpenFileDialog
+        theOpenFileDialog.Multiselect = False
+        theOpenFileDialog.Filter = "config files (*.config)|*.config"
+        If theOpenFileDialog.ShowDialog <> Windows.Forms.DialogResult.OK Then Exit Sub
+        If theOpenFileDialog.CheckFileExists = False And theOpenFileDialog.CheckPathExists = False Then Exit Sub
+        Dim theSourceFilePath As String = theOpenFileDialog.FileName
 
         ' Copy from source path to local path.
         If My.Computer.FileSystem.FileExists(theSourceFilePath) Then
@@ -210,6 +228,39 @@ Public Class OrmapSettingsForm
         End If
 
     End Sub
+
+
+    ''' <summary>
+    ''' Exports application settings values to a file.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub ExportSettings()
+
+        ' Get the local user.config file path
+        Dim config As System.Configuration.Configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal)
+        Dim theLocalFilePath As String = config.FilePath()
+
+        ' Create a back up of this file
+        If My.Computer.FileSystem.FileExists(theLocalFilePath) Then
+            My.Computer.FileSystem.CopyFile(theLocalFilePath, theLocalFilePath & ".bak", True)
+        Else
+            MessageBox.Show("The local settings file (user.config) is not available." & NewLine & _
+                    "Change one setting, save the settings, and try again.", "Import Settings", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Exit Sub
+        End If
+
+        ' Prompt user for config file location
+        Dim theSaveFileDialog As New System.Windows.Forms.SaveFileDialog
+        theSaveFileDialog.Filter = "config files (*.config)|*.config"
+        If theSaveFileDialog.ShowDialog <> Windows.Forms.DialogResult.OK Then Exit Sub
+        If theSaveFileDialog.CheckPathExists = False Then Exit Sub
+        Dim theExportFilePath As String = theSaveFileDialog.FileName
+
+        ' Copy from local path to export path.
+        My.Computer.FileSystem.CopyFile(theLocalFilePath, theExportFilePath, True)
+
+    End Sub
+
 
     ''' <summary>
     ''' Set the control binding sources for the form.
@@ -346,4 +397,6 @@ Public Class OrmapSettingsForm
     Private Sub TableLayoutPanel1_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles TableLayoutPanel1.Paint
 
     End Sub
+
+
 End Class
