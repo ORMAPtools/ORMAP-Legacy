@@ -296,7 +296,7 @@ Public NotInheritable Class SpatialUtilities
             ' layer and parse it into the ORMapNum 
             ' object(used below for field values).
             '------------------------------------------
-            Dim theORMapNum As String = GetValueViaOverlay(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+            Dim theORMapNum As String = GetValue(editFeature.ShapeCopy, mapIndexLayer.FeatureClass, EditorExtension.MapIndexSettings.OrmapMapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
             If Not theORMapNumClass.ParseNumber(theORMapNum) Then
                 ' Exit if parse failed
                 Exit Sub
