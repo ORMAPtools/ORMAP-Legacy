@@ -1604,23 +1604,30 @@ Public NotInheritable Class SpatialUtilities
             ' Gets the size of the annotation from the scale of the annotation dataset
             Dim theAnnotationSize As Double = getAnnoSizeByScale(theAnnoDataSet.Name, CInt(theMapScale))
 
-            ' Set the new annotation size
-            Dim theAnnoElement As IAnnotationElement
-            Dim theTextElement As ITextElement
-            Dim theTextSymbol As ESRI.ArcGIS.Display.ITextSymbol
+            Dim pwrkspedit As IWorkspaceEdit
+            pwrkspedit = DirectCast(theAnnoDataSet.Workspace, IWorkspaceEdit)
 
-            theAnnoElement = DirectCast(theAnnotationFeature.Annotation, IAnnotationElement)
-            If theAnnoElement Is Nothing Then Exit Sub 'This can occur when the linked attribute expression evaluates to an empty string
+            ' set the new annotation size
+            Dim theannoelement As IAnnotationElement
+            Dim thetextelement As ITextElement
+            Dim thetextsymbol As ESRI.ArcGIS.Display.ITextSymbol
 
-            theTextElement = DirectCast(theAnnoElement, ITextElement)
-            theTextSymbol = theTextElement.Symbol
+            theannoelement = DirectCast(theAnnotationFeature.Annotation, IAnnotationElement)
+            If theannoelement Is Nothing Then Exit Sub 'this can occur when the linked attribute expression evaluates to an empty string
 
-            theTextSymbol.Size = theAnnotationSize
+            thetextelement = DirectCast(theannoelement, ITextElement)
+            thetextsymbol = thetextelement.Symbol
 
-            ' We need to wrap this back together (as was done in VB6 code)
-            theTextElement.Symbol = theTextSymbol
-            theAnnoElement = DirectCast(theTextElement, IAnnotationElement)
-            theAnnotationFeature.Annotation = DirectCast(theAnnoElement, IElement)
+            thetextsymbol.Size = theAnnotationSize
+
+            ' we need to wrap this back together (as was done in vb6 code)
+            thetextelement.Symbol = thetextsymbol
+            theannoelement = DirectCast(thetextelement, IAnnotationElement)
+            theAnnotationFeature.Annotation = DirectCast(theannoelement, IElement)
+
+            ' update the annotation attribute "FontSize" in addition to the font size property...
+            Dim theUpdatedFeature As IFeature = DirectCast(theAnnotationFeature, IFeature)
+            theUpdatedFeature.Value(theUpdatedFeature.Fields.FindField("FontSize")) = theAnnotationSize
 
         End If
 
