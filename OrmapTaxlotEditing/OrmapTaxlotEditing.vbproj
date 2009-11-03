@@ -121,12 +121,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="LocateFeatureDockWin.vb" />
-    <Compile Include="LocateFeatureForm.Designer.vb">
-      <DependentUpon>LocateFeatureForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="LocateFeatureForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="EditMapIndexForm.Designer.vb">
       <DependentUpon>EditMapIndexForm.vb</DependentUpon>
     </Compile>
@@ -229,6 +223,12 @@
     <Compile Include="TaxlotAssignmentForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="LocateFeatureUserControl.Designer.vb">
+      <DependentUpon>LocateFeatureUserControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="LocateFeatureUserControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Utilities.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -330,10 +330,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>HelpForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LocateFeatureForm.resx">
-      <DependentUpon>LocateFeatureForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="EditMapIndexForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>EditMapIndexForm.vb</DependentUpon>
@@ -381,8 +377,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ORMAPToolBarResource.Designer.vb</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="LocateFeatureUserControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>LocateFeatureUserControl.vb</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />

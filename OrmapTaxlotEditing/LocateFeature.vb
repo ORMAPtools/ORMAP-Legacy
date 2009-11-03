@@ -61,7 +61,7 @@ Imports OrmapTaxlotEditing.Utilities
 ''' features and/or specify a MapIndex (Map) to override the
 ''' auto attributing of features via the on create event.
 ''' </summary>
-''' <remarks><seealso cref="LocateFeatureForm"/></remarks>
+''' <remarks><seealso cref="LocateFeatureDockWin"/><seealso cref="LocateFeatureUserControl"/></remarks>
 <ComVisible(True)> _
 <ComClass(LocateFeature.ClassId, LocateFeature.InterfaceId, LocateFeature.EventsId), _
 ProgId("ORMAPTaxlotEditing.LocateFeature")> _
@@ -117,34 +117,37 @@ Public NotInheritable Class LocateFeature
 
 #Region "Properties"
 
-    Private WithEvents _partnerLocateFeatureForm As LocateFeatureForm
+    Private WithEvents _partnerLocateFeatureUserControl As LocateFeatureUserControl
 
-    Friend ReadOnly Property PartnerLocateFeatureForm() As LocateFeatureForm
+    Friend ReadOnly Property PartnerLocateFeatureUserControl() As LocateFeatureUserControl
         Get
-            If _partnerLocateFeatureForm Is Nothing OrElse _partnerLocateFeatureForm.IsDisposed Then
-                setPartnerLocateFeatureForm(New LocateFeatureForm())
+            If _partnerLocateFeatureUserControl Is Nothing OrElse _partnerLocateFeatureUserControl.IsDisposed Then
+                setPartnerLocateFeatureUserControl(New LocateFeatureUserControl())
             End If
-            Return _partnerLocateFeatureForm
+            Return _partnerLocateFeatureUserControl
         End Get
     End Property
 
-    Private Sub setPartnerLocateFeatureForm(ByVal value As LocateFeatureForm)
+    Private Sub setPartnerLocateFeatureUserControl(ByVal value As LocateFeatureUserControl)
         If value IsNot Nothing Then
-            _partnerLocateFeatureForm = value
+            _partnerLocateFeatureUserControl = value
             ' Subscribe to partner form events.
-            AddHandler _partnerLocateFeatureForm.uxMapNumber.TextChanged, AddressOf uxMapNumber_TextChanged
-            AddHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
-            AddHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
-            AddHandler _partnerLocateFeatureForm.uxSelectFeatures.CheckedChanged, AddressOf uxSelectFeatures_CheckedChanged
-            AddHandler _partnerLocateFeatureForm.uxSetAttributeMode.Click, AddressOf uxSetAttributeMode_Click
-
+            AddHandler _partnerLocateFeatureUserControl.uxMapNumber.TextChanged, AddressOf uxMapNumber_TextChanged
+            AddHandler _partnerLocateFeatureUserControl.uxTaxlot.Enter, AddressOf uxTaxlot_Enter
+            AddHandler _partnerLocateFeatureUserControl.uxFind.Click, AddressOf uxFind_Click
+            AddHandler _partnerLocateFeatureUserControl.uxHelp.Click, AddressOf uxHelp_Click
+            AddHandler _partnerLocateFeatureUserControl.uxSelectFeatures.CheckedChanged, AddressOf uxSelectFeatures_CheckedChanged
+            AddHandler _partnerLocateFeatureUserControl.uxSetAttributeMode.Click, AddressOf uxSetAttributeMode_Click
+            AddHandler _partnerLocateFeatureUserControl.uxTimer.Tick, AddressOf uxTimer_Tick
         Else
             ' Unsubscribe to partner form events.
-            RemoveHandler _partnerLocateFeatureForm.uxMapNumber.TextChanged, AddressOf uxMapNumber_TextChanged
-            RemoveHandler _partnerLocateFeatureForm.uxFind.Click, AddressOf uxFind_Click
-            RemoveHandler _partnerLocateFeatureForm.uxHelp.Click, AddressOf uxHelp_Click
-            RemoveHandler _partnerLocateFeatureForm.uxSelectFeatures.CheckedChanged, AddressOf uxSelectFeatures_CheckedChanged
-            RemoveHandler _partnerLocateFeatureForm.uxSetAttributeMode.Click, AddressOf uxSetAttributeMode_Click
+            RemoveHandler _partnerLocateFeatureUserControl.uxMapNumber.TextChanged, AddressOf uxMapNumber_TextChanged
+            RemoveHandler _partnerLocateFeatureUserControl.uxTaxlot.Enter, AddressOf uxTaxlot_Enter
+            RemoveHandler _partnerLocateFeatureUserControl.uxFind.Click, AddressOf uxFind_Click
+            RemoveHandler _partnerLocateFeatureUserControl.uxHelp.Click, AddressOf uxHelp_Click
+            RemoveHandler _partnerLocateFeatureUserControl.uxSelectFeatures.CheckedChanged, AddressOf uxSelectFeatures_CheckedChanged
+            RemoveHandler _partnerLocateFeatureUserControl.uxSetAttributeMode.Click, AddressOf uxSetAttributeMode_Click
+            RemoveHandler _partnerLocateFeatureUserControl.uxTimer.Tick, AddressOf uxTimer_Tick
         End If
     End Sub
 
@@ -159,6 +162,7 @@ Public NotInheritable Class LocateFeature
         End Set
     End Property
 
+    Private _mapIndexHasBeenChanged As Boolean = False
 
 #End Region
 
@@ -166,7 +170,7 @@ Public NotInheritable Class LocateFeature
 
     Private Sub PartnerLocateFeatureForm_Load()
 
-        With PartnerLocateFeatureForm
+        With PartnerLocateFeatureUserControl
             Try
                 .UseWaitCursor = True
 
@@ -204,13 +208,17 @@ Public NotInheritable Class LocateFeature
     End Sub
 
 
+    Private Sub uxTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxTimer.Tick
+        PartnerLocateFeatureUserControl.uxEditingGroupBox.Enabled = EditorExtension.AllowedToAutoUpdateAllFields
+    End Sub
+
 
     Private Sub uxSetAttributeMode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxSetAttributeMode.Click
 
-        With PartnerLocateFeatureForm
+        With PartnerLocateFeatureUserControl
 
             If EditorExtension.OverrideAutoAttribute Then
-                .uxSetAttributeMode.Text = "Set Manual"
+                .uxSetAttributeMode.Text = "Set &Manual"
                 .uxAttributeMode.Text = "Auto"
                 EditorExtension.OverrideAutoAttribute = False
                 .uxCurrentlyAttLbl.Visible = False
@@ -246,7 +254,7 @@ Public NotInheritable Class LocateFeature
                     EditorExtension.OverrideORMapNumber = thisFeature.Value(theORMapNumberFieldIdx).ToString()
                     EditorExtension.OverrideMapNumber = theMapNumber
 
-                    .uxSetAttributeMode.Text = "Set Auto"
+                    .uxSetAttributeMode.Text = "Set &Auto"
                     .uxAttributeMode.Text = "Manual Override"
                     EditorExtension.OverrideAutoAttribute = True
                     .uxCurrentlyAttLbl.Visible = True
@@ -264,13 +272,14 @@ Public NotInheritable Class LocateFeature
     End Sub
 
 
+    Private Sub uxTaxlot_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxTaxlot.Enter
 
-    Private Sub uxMapNumber_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxMapNumber.TextChanged
+        If Not _mapIndexHasBeenChanged Then Exit Sub
 
-        With PartnerLocateFeatureForm
+        With PartnerLocateFeatureUserControl
             Try
                 .UseWaitCursor = True
-                
+
                 Dim uxMapnumber As TextBox = .uxMapNumber
                 Dim uxTaxlot As TextBox = .uxTaxlot
 
@@ -307,10 +316,8 @@ Public NotInheritable Class LocateFeature
                     Loop
 
                     uxTaxlot.AutoCompleteCustomSource.AddRange(taxlotStringList.ToArray)
+                    _mapIndexHasBeenChanged = False '-- reset 
 
-                Else
-                    uxTaxlot.AutoCompleteCustomSource.Clear()
-                    uxTaxlot.Text = String.Empty
                 End If
 
             Finally
@@ -318,17 +325,40 @@ Public NotInheritable Class LocateFeature
             End Try
 
         End With
+    End Sub
 
+
+    Private Sub uxMapNumber_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxMapNumber.TextChanged
+
+        Dim uxMapnumber As TextBox = PartnerLocateFeatureUserControl.uxMapNumber
+        Dim uxTaxlot As TextBox = PartnerLocateFeatureUserControl.uxTaxlot
+
+        If Not uxMapnumber.AutoCompleteCustomSource.Contains(uxMapnumber.Text.Trim) Then
+            If uxMapnumber.AutoCompleteCustomSource.Contains(uxMapnumber.Text.ToLower.Trim) Then
+                uxMapnumber.Text = uxMapnumber.Text.ToLower.Trim
+                uxMapnumber.SelectionStart = uxMapnumber.Text.Length
+            End If
+            If uxMapnumber.AutoCompleteCustomSource.Contains(uxMapnumber.Text.ToUpper.Trim) Then
+                uxMapnumber.Text = uxMapnumber.Text.ToUpper.Trim
+                uxMapnumber.SelectionStart = uxMapnumber.Text.Length
+            End If
+        End If
+
+        If uxMapnumber.AutoCompleteCustomSource.Contains(uxMapnumber.Text.Trim) Then
+            _mapIndexHasBeenChanged = True
+            uxTaxlot.AutoCompleteCustomSource.Clear()
+            uxTaxlot.Text = String.Empty
+        End If
 
     End Sub
 
     Private Sub uxFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxFind.Click
 
-        With PartnerLocateFeatureForm
+        With PartnerLocateFeatureUserControl
             Try
                 .UseWaitCursor = True
 
-                Dim uxMapnumber As TextBox = PartnerLocateFeatureForm.uxMapNumber
+                Dim uxMapnumber As TextBox = PartnerLocateFeatureUserControl.uxMapNumber
                 Dim theMapNumberVal As String = uxMapnumber.Text.Trim
 
                 If theMapNumberVal = String.Empty OrElse Not uxMapnumber.AutoCompleteCustomSource.Contains(theMapNumberVal) Then
@@ -396,7 +426,7 @@ Public NotInheritable Class LocateFeature
                         ' Flag the new selection
                         RefreshDisplaySelection()
                     End If
-                    
+
                     ZoomToEnvelope(theEnvelope)
                 End If
             Finally
@@ -408,7 +438,7 @@ Public NotInheritable Class LocateFeature
 
     Private Sub uxSelectFeatures_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxHelp.Click
 
-        uxSelectFeaturesChecked = PartnerLocateFeatureForm.uxSelectFeatures.Checked
+        uxSelectFeaturesChecked = PartnerLocateFeatureUserControl.uxSelectFeatures.Checked
 
     End Sub
 
@@ -480,9 +510,9 @@ Public NotInheritable Class LocateFeature
     Friend Sub DoButtonOperation()
 
         Try
-            PartnerLocateFeatureForm.uxMapNumber.Enabled = False
-            PartnerLocateFeatureForm.uxTaxlot.Enabled = False
-            PartnerLocateFeatureForm.uxFind.Enabled = False
+            PartnerLocateFeatureUserControl.uxMapNumber.Enabled = False
+            PartnerLocateFeatureUserControl.uxTaxlot.Enabled = False
+            PartnerLocateFeatureUserControl.uxFind.Enabled = False
 
             ' Check for valid data.
             CheckValidMapIndexDataProperties()
@@ -492,20 +522,27 @@ Public NotInheritable Class LocateFeature
                                 "Locate Feature", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             Else
-                PartnerLocateFeatureForm.uxMapNumber.Enabled = True
-                PartnerLocateFeatureForm.uxFind.Enabled = True
+                PartnerLocateFeatureUserControl.uxMapNumber.Enabled = True
+                PartnerLocateFeatureUserControl.uxFind.Enabled = True
             End If
 
             CheckValidTaxlotDataProperties()
             If HasValidTaxlotData Then
-                PartnerLocateFeatureForm.uxTaxlot.Enabled = True
+                PartnerLocateFeatureUserControl.uxTaxlot.Enabled = True
             Else
-                PartnerLocateFeatureForm.uxTaxlot.Enabled = False
+                PartnerLocateFeatureUserControl.uxTaxlot.Enabled = False
             End If
 
             _locateFeatureDockWin.Show(Not _locateFeatureDockWin.IsVisible)
-            If _locateFeatureDockWin.IsVisible AndAlso PartnerLocateFeatureForm.uxMapNumber.AutoCompleteCustomSource.Count = 0 Then PartnerLocateFeatureForm_Load()
+            If _locateFeatureDockWin.IsVisible AndAlso PartnerLocateFeatureUserControl.uxMapNumber.AutoCompleteCustomSource.Count = 0 Then PartnerLocateFeatureForm_Load()
 
+            If _locateFeatureDockWin.IsVisible() Then
+                PartnerLocateFeatureUserControl.uxTimer.Enabled = True
+                PartnerLocateFeatureUserControl.uxEditingGroupBox.Enabled = EditorExtension.AllowedToAutoUpdateAllFields
+                PartnerLocateFeatureUserControl.uxMapNumber.Focus()
+            Else
+                PartnerLocateFeatureUserControl.uxTimer.Enabled = False
+            End If
 
         Catch ex As Exception
             EditorExtension.ProcessUnhandledException(ex)
@@ -552,6 +589,7 @@ Public NotInheritable Class LocateFeature
                 If TypeOf hook Is IMxApplication Then
                     _application = DirectCast(hook, IApplication)
 
+                    '-- For testing
                     'setPartnerLocateFeatureForm(New LocateFeatureForm())
 
                     ' Get a reference to the dockable window
@@ -559,7 +597,7 @@ Public NotInheritable Class LocateFeature
                     Dim locateFeatureDockWinUID As New UID
                     locateFeatureDockWinUID.Value = "{7c5bb546-215f-477a-8df4-16cc1c993309}"
                     _locateFeatureDockWin = _locateFeatureDockWinMgr.GetDockableWindow(locateFeatureDockWinUID)
-                    setPartnerLocateFeatureForm(DirectCast(_locateFeatureDockWin.UserData, LocateFeatureForm))
+                    setPartnerLocateFeatureUserControl(DirectCast(_locateFeatureDockWin.UserData, LocateFeatureUserControl))
                     ' Close this when the application starts...
                     _locateFeatureDockWin.Show(False)
 
