@@ -2364,8 +2364,8 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ORMAP Taxlot Editing Toolbar"
-        "ProductCode" = "8:{E61F1B0D-5AF8-4AC7-A602-6E715A6EB9C4}"
-        "PackageCode" = "8:{D330E483-FCE3-451A-8FBF-74874DEC9393}"
+        "ProductCode" = "8:{9652C862-7511-4E2E-9485-2669EFA65489}"
+        "PackageCode" = "8:{F69840D9-D19B-45FC-A4D5-C0632ED26840}"
         "UpgradeCode" = "8:{2B517D2C-8626-43F7-B78E-DBC51DB579D2}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -2919,6 +2919,9 @@
                 {
                 }
             }
+        }
+        "VJSharpPlugin"
+        {
         }
     }
 }
