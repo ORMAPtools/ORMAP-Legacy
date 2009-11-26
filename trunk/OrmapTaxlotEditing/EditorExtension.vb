@@ -565,7 +565,10 @@ Public NotInheritable Class EditorExtension
                     ' Capture the mapnumber and taxlot and record them in CancelledNumbers.
                     ' Taxlots will send their numbers to the CancelledNumbers table
                     ' ONLY if they are unique in the map at the time of deletion/change.
-                    SendExtinctToCancelledNumbersTable(theTaxlotFeature, True)
+                    ' Don't write a NULL value to the cancelled numbers table.
+                    If Not IsDBNull(theRowChanges.OriginalValue(TaxlotFeatureLayer.FeatureClass.FindField(TaxLotSettings.TaxlotField))) Then
+                        SendExtinctToCancelledNumbersTable(theTaxlotFeature, True)
+                    End If
                 End If
 
                 ' Obtain OrmapMapNumber via overlay and calculate other field values.

@@ -376,9 +376,12 @@ Public NotInheritable Class LocateFeature
                     Exit Sub
                 End If
 
+                '-- Make sure these are set... turning the light bulb on/off will reset these.
+                If MapIndexFeatureLayer Is Nothing Then CheckValidMapIndexDataProperties()
+                If TaxlotFeatureLayer Is Nothing Then CheckValidTaxlotDataProperties()
+
                 Dim theQueryFilter As IQueryFilter = New QueryFilter
                 Dim theXFlayer As IFeatureLayer = Nothing '-- Set as either the MapIndex or Taxlot Feature Layer.
-
                 Dim theWhereClause As String
 
                 If theTaxlotVal = String.Empty Then
