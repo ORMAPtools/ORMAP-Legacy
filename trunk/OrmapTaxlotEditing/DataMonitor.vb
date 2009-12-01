@@ -8,8 +8,8 @@
 ' Date Created:  April 23, 2008
 '
 ' Copyright Holder:  ORMAP Tech Group  
-' Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at 
-' opet-developers@lists.sourceforge.net
+' Contact Info:  ORMAP Tech Group may be reached at 
+' ORMAP_ESRI_Programmers@listsmart.osl.state.or.us
 '
 ' This file is part of the ORMAP Taxlot Editing Toolbar.
 '
@@ -52,7 +52,7 @@ Imports OrmapTaxlotEditing.Utilities
 
 #Region "Class Declaration"
 ''' <summary>
-'''  Data monitoring class for required ORMAP datasets.
+''' Data monitoring class for required ORMAP datasets (singleton).
 ''' </summary>
 ''' <remarks>Keeps track of availability of valid ORMAP datasets 
 ''' in the map document.</remarks>

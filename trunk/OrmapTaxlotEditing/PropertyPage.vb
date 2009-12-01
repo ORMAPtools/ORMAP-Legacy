@@ -8,8 +8,8 @@
 ' Date Created:  January 8, 2008
 '
 ' Copyright Holder:  ORMAP Tech Group  
-' Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at 
-' opet-developers@lists.sourceforge.net
+' Contact Info:  ORMAP Tech Group may be reached at 
+' ORMAP_ESRI_Programmers@listsmart.osl.state.or.us
 '
 ' This file is part of the ORMAP Taxlot Editing Toolbar.
 '
@@ -492,7 +492,7 @@ Public NotInheritable Class PropertyPage
 
 #Region "COM Registration Function(s)"
     <ComRegisterFunction(), ComVisible(False)> _
-    Private Shared Sub RegisterFunction(ByVal registerType As Type)
+    Public Shared Sub RegisterFunction(ByVal registerType As Type)
         ' Required for ArcGIS Component Category Registrar support
         ArcGISCategoryRegistration(registerType)
 
@@ -502,7 +502,7 @@ Public NotInheritable Class PropertyPage
     End Sub
 
     <ComUnregisterFunction(), ComVisible(False)> _
-    Private Shared Sub UnregisterFunction(ByVal registerType As Type)
+    Public Shared Sub UnregisterFunction(ByVal registerType As Type)
         ' Required for ArcGIS Component Category Registrar support
         ArcGISCategoryUnregistration(registerType)
 

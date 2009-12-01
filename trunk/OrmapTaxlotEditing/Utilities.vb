@@ -8,8 +8,8 @@
 ' Date Created:  20080221
 '
 ' Copyright Holder:  ORMAP Tech Group  
-' Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at 
-' opet-developers@lists.sourceforge.net
+' Contact Info:  ORMAP Tech Group may be reached at 
+' ORMAP_ESRI_Programmers@listsmart.osl.state.or.us
 '
 ' This file is part of the ORMAP Taxlot Editing Toolbar.
 '
@@ -53,7 +53,7 @@ Imports System.Reflection.Assembly
 
 #Region "Class Declaration"
 ''' <summary>
-'''  Utilities class.
+''' Utilities class (singleton).
 ''' </summary>
 ''' <remarks>
 ''' <para>Commonly used general procedures and functions.</para>

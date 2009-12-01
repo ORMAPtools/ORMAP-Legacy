@@ -8,8 +8,8 @@
 ' Date Created:  January 8, 2008
 '
 ' Copyright Holder:  ORMAP Tech Group  
-' Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at 
-' opet-developers@lists.sourceforge.net
+' Contact Info:  ORMAP Tech Group may be reached at 
+' ORMAP_ESRI_Programmers@listsmart.osl.state.or.us
 '
 ' This file is part of the ORMAP Taxlot Editing Toolbar.
 '
@@ -62,7 +62,7 @@ Imports System.Text
 
 ''' <summary>
 ''' Provides an ArcMap Tool with functionality to allow users to 
-''' add Arrows.
+''' add dimension arrows, other arrows and hooks (not implemented).
 ''' </summary>
 ''' <remarks>
 ''' <para><seealso cref="AddArrowsForm"/></para>
@@ -734,7 +734,7 @@ Public NotInheritable Class AddArrows
     ''' temporary polyline from the given points and display it as a temporary 
     ''' line on the display
     ''' </remarks>
-    Private Sub DrawArrows()
+    Private Sub drawArrows()
 
         Try
             ' Set up line symbol to display temporary line
@@ -787,7 +787,7 @@ Public NotInheritable Class AddArrows
     ''' <param name="Y">An object that supports the IGeometry interface.</param>
     ''' <remarks>
     ''' </remarks>
-    Private Sub GetMousePoint(ByRef X As Integer, ByRef Y As Integer)
+    Private Sub getMousePoint(ByRef X As Integer, ByRef Y As Integer)
 
         Try
             ' Get the current map point (and invert the agent at that location)
@@ -836,7 +836,7 @@ Public NotInheritable Class AddArrows
     '''</returns>
     ''' <remarks>
     ''' </remarks>
-    Private Function GetCurrentMapScale(ByRef theMIFeatureClass As IFeatureClass) As String
+    Private Function getCurrentMapScale(ByRef theMIFeatureClass As IFeatureClass) As String
 
         Try
             Dim theDimensionArrowLayerTemp As IFeatureLayer = DataMonitor.CartographicLinesFeatureLayer
@@ -880,7 +880,7 @@ Public NotInheritable Class AddArrows
     '''</returns>
     ''' <remarks>
     ''' </remarks>
-    Private Function GetDimensionArrowSide() As String
+    Private Function getDimensionArrowSide() As String
 
         Try
             ' Determine point location is on the left or right by Dean Anderson, help of Nate Anderson
@@ -945,7 +945,7 @@ Public NotInheritable Class AddArrows
     '''</returns>
     ''' <remarks>
     ''' </remarks>
-    Private Function GetChange(ByRef theCurrentMapScale As String) As Short
+    Private Function getChange(ByRef theCurrentMapScale As String) As Short
 
         Try
 
@@ -1146,7 +1146,7 @@ Public NotInheritable Class AddArrows
                                 If _theArrowPt1 Is Nothing Then
                                     _theArrowPt1 = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
                                     _arrowPointsCollection.Add(_theArrowPt1)
-                                    DrawArrows()
+                                    drawArrows()
 
                                     'Clear existing point
                                     _theArrowPt1 = Nothing
@@ -1242,10 +1242,10 @@ Public NotInheritable Class AddArrows
                         _theArrowPt1 = _thePt
                     ElseIf _theArrowPt2 Is Nothing Then
                         _theArrowPt2 = _thePt
-                        DrawArrows()
+                        drawArrows()
                     ElseIf _theArrowPt3 Is Nothing Then
                         _theArrowPt3 = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(X, Y)
-                        DrawArrows()
+                        drawArrows()
 
                         ' Check to be sure the 2 points are not equal
                         If (_theArrowPt1.X = _theArrowPt2.X) AndAlso (_theArrowPt1.Y = _theArrowPt2.Y) Then
@@ -1255,10 +1255,10 @@ Public NotInheritable Class AddArrows
                         End If
 
                         ' Get the mapscale
-                        currentMapScale = GetCurrentMapScale(theMIFeatureClass)
+                        currentMapScale = getCurrentMapScale(theMIFeatureClass)
 
                         ' Get the side the dimension arrows should be on based upon the 3rd input point
-                        Dim dimensionArrowSide As String = GetDimensionArrowSide()
+                        Dim dimensionArrowSide As String = getDimensionArrowSide()
 
                         ' Create two dimension arrows, one on the left and one on the right
                         For indexNumber = 1 To 2
@@ -1276,7 +1276,7 @@ Public NotInheritable Class AddArrows
                                 _theArrowPtTemp2 = New ESRI.ArcGIS.Geometry.Point
 
                                 ' Set the distance of change for the dimension arrows based upon the mapscale
-                                Dim iChange As Integer = GetChange(currentMapScale)
+                                Dim iChange As Integer = getChange(currentMapScale)
 
                                 ' Get 3 calculated points for a hook and create the line from input
                                 theDimensionPoints.AddPoint(_theArrowPt1)
@@ -1616,7 +1616,7 @@ Public NotInheritable Class AddArrows
                     ' erase the old agent
                     EditorExtension.Editor.InvertAgent(_thePt, 0)
                     ' get the new point
-                    GetMousePoint(x, y)
+                    getMousePoint(x, y)
                 Else
                     _thePt = _theActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, y)
                 End If
@@ -1724,8 +1724,6 @@ Public NotInheritable Class AddArrows
 
 #End Region
 
-
-
 #End Region
 
 #Region "Implemented Interface Members"
@@ -1783,7 +1781,12 @@ Public NotInheritable Class AddArrows
 
 #Region " IDisposable Support "
 
-    ' This code added by Visual Basic to correctly implement the disposable pattern.
+    ''' <summary>
+    ''' Dispose of managed and unmanaged resources.
+    ''' </summary>
+    ''' <remarks>
+    ''' <para>This code added by Visual Basic to correctly implement the disposable pattern.</para>
+    ''' </remarks>
     Public Sub Dispose() Implements IDisposable.Dispose
         ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
         Dispose(True)

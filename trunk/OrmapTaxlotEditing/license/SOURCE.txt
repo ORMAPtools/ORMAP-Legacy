@@ -8,8 +8,8 @@ Date of Last Change: $Date$
 
 
 Copyright Holder:  ORMAP Tech Group  
-Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at 
-opet-developers@lists.sourceforge.net
+Contact Info:  ORMAP Tech Group may be reached at 
+ORMAP_ESRI_Programmers@listsmart.osl.state.or.us
 
 This program is free software; you can redistribute it and/or modify it 
 under the terms of the Lesser GNU General Public License as published by 
