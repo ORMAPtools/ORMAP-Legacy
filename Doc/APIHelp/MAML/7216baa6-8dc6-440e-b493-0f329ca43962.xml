@@ -9,7 +9,7 @@
   </summary>
   -->
 
-  <introduction>
+  <introduction address="Intro">
     <para>Required introduction</para>
   </introduction>
 
@@ -54,4 +54,6 @@
     <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
     -->
   </relatedTopics>
+  <para>&#160;</para>
+  <link xlink:href="#Intro">Back to the Top</link>
 </developerOrientationDocument>

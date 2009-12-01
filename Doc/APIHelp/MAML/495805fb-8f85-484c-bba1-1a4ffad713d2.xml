@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<developerWalkthroughDocument
+<developerConceptualDocument
   xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
   xmlns:xlink="http://www.w3.org/1999/xlink">
 
@@ -9,163 +9,228 @@
   </summary>
   -->
 
-  <introduction>
-    <para><application>The ORMAP Taxlot Editing Toolbar</application> application architecture 
-    is summarized in the class diagram (<localUri>ClassDiagram.cd</localUri>). Each component 
-    of the architecture is expressed there.</para>
+  <introduction address="Intro">
+    <para><application>The ORMAP Taxlot Editing Toolbar</application> application 
+    architecture is summarized in the Class Diagram (<localUri>ClassDiagram.cd
+    </localUri>). Each component of the architecture is expressed there.</para>
     
+    <para>This section explains the general architecture patterns used, including 
+    the application tiers, class types, and their relationships.
+    </para>
+    
+    <para>The classes in the application are organized into three tiers following 
+    a variation of the model-view-controler design pattern. In this variation, 
+    the view layer is implemented with very shallow graphical user interface 
+    classes with little or no behavior. The controler tier is divided into 
+    (a) interface-related classes which implement the required interfaces to 
+    extend ArcMap and handle all user-initiated events and (b) utility classes 
+    which provide support functions for the interface-related classes. The model 
+    tier is essentially provided by ArcObjects and is refered to here as the 
+    "Data Access Tier". The controler tier is refered to as the "Behavior Tier". 
+    The view tier is refered to as the "Interface Tier".</para>
+      
+    <!-- This will include sub-sections in the outline up to three
+    levels down.  It also uses custom lead-in text. -->
+    <autoOutline lead="List Of Class Types:">3</autoOutline>
+     
     <para>&#160;</para>
-    
-    <!-- Uncomment this to generate an outline of the section and sub-section
-         titles.  Specify a numeric value as the inner text to limit it to
-         a specific number of sub-topics when creating the outline.  Specify
-         zero (0) to limit it to top-level sections only.  -->
-    <autoOutline />
-
-    Application Architecture
-    	[Explain tiers and architecture pattern used]
-		[Link to Class Diagram]]
-    	[Link to Class Types]
-		
-	Class Diagram
-		[diagram]
-	
-	Class Types
-		[List of Sections]    
-		
-		Interface Tier
-		
-			Class-Linked Forms
-				Properties Form
-				Settings Form
-				Combine Taxlots Form
-				Locate Feature Form 
-					[and DockWin class]
-				Add Arrows Form
-				Dimension Arrows Form
-			Other Forms
-				[have behavior; no data access]
-				Help Form
-				About Form
-			
-		Behavior Tier
-		
-			Editor Extension
-			Toolbar
-			Property Page
-			Settings Accessor
-			Commands
-				Auto-Update-All Toggle Command
-				Combine Taxlots Command
-				Edit Map Index Command
-				Locate Feature Command (and DockWin class)
-			Tools
-				Add Arrows Tool
-				Taxlot Assignment Tool
-			Helper Classes
-				Utilities Class
-					[singleton]
-				String Utilities Class
-					[singleton]
-				Data Monitor Class
-					[singleton]
-				ORMapNum
-					[used by EditMapIndex]
-				CatalogFileDialog
-					[interface form provided by ArcObjects]
-		
-		Data Access Tier
-			[Provided by ArcObjects]
-		
-		Miscellaneous Classes and Components
-		
-			Form Designers
-			Settings Designers
-			Resources
-				License
-			    Compiled Resource File
-				...
-			Installer
-				Installation Configuration
-			
+    		
   </introduction>
-
-  <!-- <prerequisites>Optional prerequisites info</prerequisites> -->
-
-  <!-- One or more procedure or section with procedure -->
-  <procedure>
-    <title>Procedure #1</title>
-    <steps class="ordered">
-      <step>
-        <content>
-          <para>First step</para>
-        </content>
-      </step>
-      <step>
-        <content>
-          <para>Second step</para>
-        </content>
-      </step>
-    </steps>
-  </procedure>
-
-  <!-- Add one or more top-level section elements.  These are collapsible.
-       If using <autoOutline /> tag, add an address attribute to identify
-       it so that it can be jumped to with a hyperlink. -->
-  <section address="Section1">
-    <title>Section title</title>
+   
+  <section address="S1">
+    <title>Interface Tier</title>
     <content>
-      <procedure>
-        <title>Procedure #2</title>
-        <steps class="ordered">
-          <step>
-            <content>
-              <para>First step</para>
-            </content>
-          </step>
-          <step>
-            <content>
-              <para>Second step</para>
-            </content>
-          </step>
-        </steps>
-      </procedure>
+      <para>The user interface tier is implemented with very shallow graphical
+      user interface classes with little or no behavior.</para>
+    </content>
+    <sections>
+      <section address="S1.1">
+        <title>Class-Linked Forms</title>
+        <content>
+          <para>The user interface consists of a set of classes (primarily Forms)
+          each of which is paired with a controler class which implements the 
+          required interfaces to extend ArcMap and handle all user-initiated
+          events.</para>
+          <para>
+            <definitionTable>
+              <definedTerm>Properties Form</definedTerm>
+                <definition></definition>
+              <definedTerm>Settings Form</definedTerm>
+                <definition></definition>
+              <definedTerm>Combine Taxlots Form</definedTerm>
+                <definition></definition>
+	          <definedTerm>Locate Feature Dockable Window and User Control</definedTerm>
+	            <definition></definition>
+              <definedTerm>Add Arrows Form</definedTerm>
+                <definition></definition>
+              <definedTerm>Dimension Arrows Form</definedTerm>
+                <definition></definition>
+            </definitionTable>
+          </para>
+        </content>
+      </section>
+      <section address="S1.2">
+        <title>Other Forms</title>
+        <content>
+          <para>These form classes are unusual in that the do host their own
+          behavior. This approach is used because these classes are relatively 
+          independant of other features of the application, and do not require
+          data access or other complex behaviors.</para>
+          <para>
+            <definitionTable>
+              <definedTerm>Help Form</definedTerm>
+                <definition></definition>
+              <definedTerm>About Form</definedTerm>
+                <definition></definition>
+            </definitionTable>
+          </para>
+        </content>
+      </section>
+    </sections>
+  </section>
+  <section address="S2">
+    <title>Behavior Tier</title>
+    <content>
+      <!-- No <autoOutline /> in here so no outline -->
+      <para>The classes in this tier implement the application behavior.</para>
+    </content>
+    <sections>
+      <section address="S2.1">
+        <title>Core Functionality</title>
+        <content>
+          <para>These classes provide the core functionality of the application.
+          They implement the ArcObjects interfaces which allow them to extend the 
+          ESRI ArcMap user interface with additional toolbars and tools and to 
+          extend its Editor Extension behavior, providing an additional layer of 
+          behavior in response to edit events.</para>
+          <para>
+            <definitionTable>
+              <definedTerm>Editor Extension Class</definedTerm>
+                <definition></definition>
+              <definedTerm>Toolbar Class</definedTerm>
+                <definition></definition>
+            </definitionTable>
+          </para>
+        </content>
+      </section>
+      <section address="S2.2">
+        <title>User Configuration</title>
+        <content>
+          <para>These classes implement the interfaces and .NET framework members 
+          to provide access to the editor extensions properties and the 
+          application's custom user settings.</para>
+          <para>
+            <definitionTable>
+              <definedTerm>Property Page Class</definedTerm>
+                <definition></definition>
+              <definedTerm>Settings Accessor Class</definedTerm>
+                <definition></definition>
+            </definitionTable>
+          </para>
+        </content>
+      </section>
+      <section address="S2.3">
+        <title>Commands</title>
+        <content>
+          <para>These classes implement the ArcObjects ICommand interface which 
+          allows them to appear as commands on a toolbar or menu. All but the 
+          first have a form class associated with them.</para>
+          <para>
+            <definitionTable>
+              <definedTerm>Auto-Update-All Toggle Command</definedTerm>
+                <definition></definition>
+              <definedTerm>Combine Taxlots Command</definedTerm>
+                <definition></definition>
+              <definedTerm>Edit Map Index Command</definedTerm>
+                <definition></definition>
+              <definedTerm>Locate Feature Command (and Dockable Window)</definedTerm>
+                <definition></definition>
+            </definitionTable>
+          </para>
+        </content>
+      </section>
+      <section address="S2.4">
+        <title>Tools</title>
+        <content>
+          <para>These classes implement the ArcObjects ICommand and ITool 
+          interfaces which allow them to appear as tool commands on a toolbar 
+          or menu. Each has a main form class associated with it.</para>
+          <para>
+            <definitionTable>
+              <definedTerm>Add Arrows Tool</definedTerm>
+                <definition></definition>
+              <definedTerm>Taxlot Assignment Tool</definedTerm>
+                <definition></definition>
+            </definitionTable>
+          </para>
+        </content>
+      </section>
+      <section address="S2.5">
+        <title>Helper Classes</title>
+        <content>
+          <para>These classes are essentially utility classes which provide 
+          centralization for support functions for the interface-related 
+          classes.</para>
+          <para>
+            <definitionTable>
+              <definedTerm>Utilities Class (singleton)</definedTerm>
+                <definition></definition>
+              <definedTerm>String Utilities Class (singleton)</definedTerm>
+                <definition></definition>
+              <definedTerm>Data Monitor Class (singleton)</definedTerm>
+                <definition></definition>
+              <definedTerm>ORMapNum Class (used by EditMapIndex)</definedTerm>
+                <definition></definition>
+              <definedTerm>CatalogFileDialog Class (interface form provided by ArcObjects)</definedTerm>
+                <definition></definition>
+            </definitionTable>
+          </para>
+        </content>
+      </section>
+    </sections>
+  </section>
+  <section address="S3">
+    <title>Data Access Tier</title>
+    <content>
+      <para>The data access tier is provided by the ArcObjects data components.
+      These effectively abstract direct data manipulations and coordinate 
+      dynamic feature behavior.</para>
     </content>
   </section>
-
-  <!-- <nextSteps>Optional next steps info</nextSteps> -->
-
+  <section address="S4">
+    <title>Miscellaneous Classes and Components</title>
+    <content>
+      <para>The classes in this category play a support role. Either they are
+      automatically generated by Visual Studio, are static resource files, or
+      are part of the installer configuration.</para>
+      <para>
+      <definitionTable>
+        <definedTerm>Form Designers</definedTerm>
+          <definition></definition>
+        <definedTerm>Settings Designers</definedTerm>
+          <definition></definition>
+        <definedTerm>License File</definedTerm>
+          <definition></definition>
+        <definedTerm>Compiled Resource File</definedTerm>
+          <definition></definition>
+        <definedTerm>Installation Configuration</definedTerm>
+          <definition></definition>
+      </definitionTable>
+	  </para>
+    </content>
+  </section>
+      
   <relatedTopics>
-    <!-- One or more of the following:
-         - A local link
-         - An external link
-         - A code entity reference
-
-    <link xlink:href="Other Topic's ID">Link text</link>
-    <externalLink>
-        <linkText>Link text</linkText>
-        <linkAlternateText>Optional alternate link text</linkAlternateText>
-        <linkUri>URI</linkUri>
-    </externalLink>
-    <codeEntityReference>API member ID</codeEntityReference>
-
-    Examples:
-
-    <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+    <link topicType_id="1FE70836-AA7D-4515-B54B-E10C4B516E50" xlink:href="cb891d5c-8abe-4848-abcd-bb3302a1db4f">Class Diagram</link>
 
     <externalLink>
-        <linkText>SHFB on CodePlex</linkText>
-        <linkAlternateText>Go to CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SHFB</linkUri>
+        <linkText>Model-View-Controler on Wikipedia</linkText>
+        <linkAlternateText>Go to Model-View-Controler on Wikipedia</linkAlternateText>
+        <linkUri>http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller</linkUri>
+        <linkTarget>_blank</linkTarget>
     </externalLink>
-
-    <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
-    <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
-    <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
-    <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
-    <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
-    <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
-    <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
-    -->
+    
   </relatedTopics>
-</developerWalkthroughDocument>
+  <para>&#160;</para>
+  <link xlink:href="#Intro">Back to the Top</link>
+</developerConceptualDocument>
