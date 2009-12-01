@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder GUI" version="1.7.0.0" projectFile="G:\projects\OPET\trunk\Doc\APIHelp\APIHelp.shfb" started="6/13/2009 9:23:54 PM">
+<shfbBuild product="Sandcastle Help File Builder GUI" version="1.7.0.0" projectFile="G:\projects\OPET\trunk\Doc\APIHelp\APIHelp.shfb" started="11/30/2009 10:08:03 PM">
 <buildStep step="Initializing">
 </buildStep>
 <buildStep step="ClearWorkFolder">
@@ -34,12 +34,12 @@ Generating reflection information...
 MrefBuilder (v2.4.10520.1)
 Copyright c Microsoft 2006
 Info: Loaded 1 assemblies for reflection and 0 dependency assemblies.
-Info: Wrote information on 1 namespaces, 26 types, and 216 members
+Info: Wrote information on 1 namespaces, 28 types, and 237 members
         1 file(s) copied.
 XslTransform (v2.4.10520.1)
 Copyright c Microsoft 2005-2006
 Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\MergeDuplicates.xsl'.
-    Last step completed in 00:00:04.9529
+    Last step completed in 00:00:05.0936
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
@@ -47,25 +47,26 @@ Generating namespace summary information...
 </buildStep>
 <buildStep step="ApplyVisibilityProperties">
 Applying visibility properties to reflection information file
-    75 attribute nodes removed
+    81 attribute nodes removed
     0 explicit interface implementations removed
     45 local and base class EII elements removed
+    4657 inherited member elements removed
     9 protected members noted for removal
-    209 protected inherited framework members noted for removal
+    0 protected inherited framework members noted for removal
     Removing previously noted unwanted APIs and elements
-    Last step completed in 00:00:01.4531
+    Last step completed in 00:00:00.2812
 </buildStep>
 <buildStep step="TransformReflectionInfo">
 Transforming reflection output...
 [G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\TransformManifest.bat]
 XslTransform (v2.4.10520.1)
 Copyright c Microsoft 2005-2006
-Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\ApplyPrototypeDocModel.xsl'.
+Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\ApplyVSDocModel.xsl'.
 Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\AddGuidFilenames.xsl'.
 XslTransform (v2.4.10520.1)
 Copyright c Microsoft 2005-2006
 Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl'.
-    Last step completed in 00:00:02.5155
+    Last step completed in 00:00:01.5312
 </buildStep>
 <buildStep step="ModifyHelpTopicFilenames">
 Modifying help topic filenames in reflection information file
@@ -74,70 +75,125 @@ Modifying help topic filenames in reflection information file
 </buildStep>
 <buildStep step="CopyStandardContent">
 Copying standard help content...
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\alert_caution.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\alert_caution.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\alert_note.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\alert_note.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\alert_security.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\alert_security.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\Caution.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\Caution.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\CFW.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\CFW.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\collapse_all.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\collapse_all.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\copycode.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\copycode.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\expand_all.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\expand_all.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\LastChild.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\LastChild.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\NotLastChild.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\NotLastChild.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\privclass.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privclass.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\privdelegate.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privdelegate.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\privenum.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privenum.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\privevent.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privevent.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\privfield.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privfield.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\privinterface.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privinterface.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\privmethod.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privmethod.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\privproperty.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privproperty.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\privstructure.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privstructure.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\protclass.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protclass.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\protdelegate.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protdelegate.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\protenum.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protenum.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\protevent.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protevent.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\protfield.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protfield.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\protfield.png -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protfield.png
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\protinterface.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protinterface.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\protmethod.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protmethod.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\protoperator.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protoperator.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\protproperty.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protproperty.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\protstructure.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protstructure.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\pubclass.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubclass.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\pubdelegate.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubdelegate.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\pubenum.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubenum.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\pubevent.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubevent.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\pubfield.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubfield.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\pubinterface.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubinterface.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\pubmethod.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubmethod.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\puboperator.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\puboperator.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\pubproperty.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubproperty.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\pubstructure.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubstructure.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\security.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\security.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\icons\static.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\static.gif
-C:\Program Files\Sandcastle\Presentation\Prototype\scripts\CollapsibleSection.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\CollapsibleSection.js
-C:\Program Files\Sandcastle\Presentation\Prototype\scripts\CookieDataStore.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\CookieDataStore.js
-C:\Program Files\Sandcastle\Presentation\Prototype\scripts\ElementCollection.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\ElementCollection.js
-C:\Program Files\Sandcastle\Presentation\Prototype\scripts\EventUtilities.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\EventUtilities.js
-C:\Program Files\Sandcastle\Presentation\Prototype\scripts\LanguageFilter.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\LanguageFilter.js
-C:\Program Files\Sandcastle\Presentation\Prototype\scripts\MemberFilter.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\MemberFilter.js
-C:\Program Files\Sandcastle\Presentation\Prototype\scripts\script_prototype.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\script_prototype.js
-C:\Program Files\Sandcastle\Presentation\Prototype\scripts\SplitScreen.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\SplitScreen.js
-C:\Program Files\Sandcastle\Presentation\Prototype\scripts\StyleUtilities.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\StyleUtilities.js
-C:\Program Files\Sandcastle\Presentation\Prototype\styles\presentation.css -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\styles\presentation.css
-    Last step completed in 00:00:00.2969
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\adm.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\adm.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\adm_arch.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\adm_arch.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\adm_dev.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\adm_dev.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\adm_dev_arch.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\adm_dev_arch.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\alert_caution.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\alert_caution.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\alert_note.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\alert_note.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\alert_security.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\alert_security.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\arch.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\arch.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\big_adm.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\big_adm.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\big_arch.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\big_arch.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\big_dev.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\big_dev.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\big_kw.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\big_kw.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\box.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\box.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\Caution.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\Caution.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\CFW.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\CFW.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\collall.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\collall.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\collapse.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\collapse.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\collapse_all.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\collapse_all.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\copycode.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\copycode.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\copycodeHighlight.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\copycodeHighlight.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\dev.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\dev.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\dev_arch.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\dev_arch.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\dropdown.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\dropdown.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\dropdownHover.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\dropdownHover.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\drpdown.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\drpdown.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\drpdown_orange.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\drpdown_orange.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\drpdown_orange_up.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\drpdown_orange_up.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\drpup.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\drpup.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\exp.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\exp.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\expall.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\expall.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\expand_all.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\expand_all.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\filter1a.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\filter1a.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\filter1c.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\filter1c.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\footer.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\footer.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\gradient.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\gradient.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\greencheck.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\greencheck.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\greychck.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\greychck.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\header_prev_next.jpg -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\header_prev_next.jpg
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\header_sql_tutorial_blank.jpg -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\header_sql_tutorial_blank.jpg
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\header_sql_tutorial_logo.GIF -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\header_sql_tutorial_logo.GIF
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\kw.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\kw.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\kw_adm.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\kw_adm.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\kw_adm_arch.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\kw_adm_arch.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\kw_adm_dev.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\kw_adm_dev.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\kw_adm_dev_arch.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\kw_adm_dev_arch.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\kw_arch.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\kw_arch.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\kw_dev.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\kw_dev.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\kw_dev_arch.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\kw_dev_arch.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\LastChild.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\LastChild.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\load.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\load.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\load_hover.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\load_hover.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\note.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\note.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\pencil.GIF -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pencil.GIF
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\privclass.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privclass.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\privdelegate.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privdelegate.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\privenum.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privenum.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\privenumeration.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privenumeration.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\privevent.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privevent.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\privextension.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privextension.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\privfield.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privfield.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\privinterface.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privinterface.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\privmethod.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privmethod.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\privproperty.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privproperty.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\privstructure.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\privstructure.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\protclass.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protclass.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\protdelegate.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protdelegate.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\protenum.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protenum.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\protenumeration.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protenumeration.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\protevent.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protevent.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\protextension.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protextension.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\protfield.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protfield.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\protinterface.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protinterface.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\protmethod.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protmethod.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\protoperator.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protoperator.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\protproperty.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protproperty.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\protstructure.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\protstructure.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\pubclass.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubclass.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\pubdelegate.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubdelegate.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\pubenum.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubenum.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\pubenumeration.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubenumeration.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\pubevent.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubevent.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\pubextension.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubextension.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\pubfield.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubfield.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\pubinterface.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubinterface.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\pubmethod.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubmethod.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\puboperator.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\puboperator.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\pubproperty.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubproperty.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\pubstructure.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\pubstructure.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\requirements1a.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\requirements1a.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\requirements1c.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\requirements1c.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\save.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\save.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\save_hover.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\save_hover.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\security.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\security.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\seealso1a.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\seealso1a.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\seealso1c.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\seealso1c.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\static.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\static.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\icons\xna.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\icons\xna.gif
+C:\Program Files\Sandcastle\Presentation\vs2005\scripts\CheckboxMenu.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\CheckboxMenu.js
+C:\Program Files\Sandcastle\Presentation\vs2005\scripts\CommonUtilities.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\CommonUtilities.js
+C:\Program Files\Sandcastle\Presentation\vs2005\scripts\Dropdown.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\Dropdown.js
+C:\Program Files\Sandcastle\Presentation\vs2005\scripts\EventUtilities.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\EventUtilities.js
+C:\Program Files\Sandcastle\Presentation\vs2005\scripts\script_feedBack.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\script_feedBack.js
+C:\Program Files\Sandcastle\Presentation\vs2005\scripts\script_manifold.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\script_manifold.js
+C:\Program Files\Sandcastle\Presentation\vs2005\scripts\SplitScreen.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\SplitScreen.js
+C:\Program Files\Sandcastle\Presentation\vs2005\styles\Presentation.css -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\styles\Presentation.css
+C:\Program Files\Sandcastle\Presentation\vs2005\styles\Whidbey\presentation.css -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\styles\Whidbey\presentation.css
+    Last step completed in 00:00:00.6562
 </buildStep>
 <buildStep step="CopyConceptualContent">
 Copying conceptual content...
 Creating token shared content file...
 Copying images and creating the media map file...
     G:\projects\OPET\trunk\Doc\APIHelp\Images\About.png -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Media\About.png
-    G:\projects\OPET\trunk\OrmapTaxlotEditing\icons\lgplv3-88x31.png -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Media\lgplv3-88x31.png
-    G:\projects\OPET\trunk\OrmapTaxlotEditing\icons\ORMAPLogo.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Media\ORMAPLogo.gif
-    G:\projects\OPET\trunk\Doc\APIHelp\Images\SourceForgeLogo.png -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Media\SourceForgeLogo.png
     G:\projects\OPET\trunk\Doc\APIHelp\Images\ClassDiagram.png -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Media\ClassDiagram.png
+    G:\projects\OPET\trunk\OrmapTaxlotEditing\icons\lgplv3-88x31.png -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Media\lgplv3-88x31.png
+    G:\projects\OPET\trunk\Doc\APIHelp\Images\SourceForgeLogo.png -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Media\SourceForgeLogo.png
+    G:\projects\OPET\trunk\OrmapTaxlotEditing\icons\ORMAPLogo.gif -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Media\ORMAPLogo.gif
     G:\projects\OPET\trunk\Doc\APIHelp\Images\RegionsExample.jpg -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Media\RegionsExample.jpg
+    G:\projects\OPET\trunk\Doc\APIHelp\Images\SourceForgeLogo2.png -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Media\SourceForgeLogo2.png
 Generating conceptual topic files
     Parsing topic file 'G:\projects\OPET\trunk\Doc\APIHelp\MAML\b50c7397-1c2c-40f4-8d12-97d914fe74db.xml'
     G:\projects\OPET\trunk\Doc\APIHelp\MAML\b50c7397-1c2c-40f4-8d12-97d914fe74db.xml -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\ddueXml\b50c7397-1c2c-40f4-8d12-97d914fe74db.xml
@@ -167,6 +223,10 @@ Generating conceptual topic files
     G:\projects\OPET\trunk\Doc\APIHelp\MAML\cb891d5c-8abe-4848-abcd-bb3302a1db4f.xml -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\ddueXml\cb891d5c-8abe-4848-abcd-bb3302a1db4f.xml
     Parsing topic file 'G:\projects\OPET\trunk\Doc\APIHelp\MAML\610473ad-2a9b-41be-bf9d-923d7b7d6398.xml'
     G:\projects\OPET\trunk\Doc\APIHelp\MAML\610473ad-2a9b-41be-bf9d-923d7b7d6398.xml -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\ddueXml\610473ad-2a9b-41be-bf9d-923d7b7d6398.xml
+    Parsing topic file 'G:\projects\OPET\trunk\Doc\APIHelp\MAML\cc704d88-33aa-4098-aaae-02e90137b149.xml'
+    G:\projects\OPET\trunk\Doc\APIHelp\MAML\cc704d88-33aa-4098-aaae-02e90137b149.xml -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\ddueXml\cc704d88-33aa-4098-aaae-02e90137b149.xml
+    Parsing topic file 'G:\projects\OPET\trunk\Doc\APIHelp\MAML\c43f7f1a-6ef9-4b3a-978a-8210486be717.xml'
+    G:\projects\OPET\trunk\Doc\APIHelp\MAML\c43f7f1a-6ef9-4b3a-978a-8210486be717.xml -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\ddueXml\c43f7f1a-6ef9-4b3a-978a-8210486be717.xml
     Parsing topic file 'G:\projects\OPET\trunk\Doc\APIHelp\MAML\2cffa3e3-036f-451b-b75f-320ab62d91f9.xml'
     G:\projects\OPET\trunk\Doc\APIHelp\MAML\2cffa3e3-036f-451b-b75f-320ab62d91f9.xml -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\ddueXml\2cffa3e3-036f-451b-b75f-320ab62d91f9.xml
     Parsing topic file 'G:\projects\OPET\trunk\Doc\APIHelp\MAML\4a6b56e2-241a-4ba7-8419-98919c898d07.xml'
@@ -181,7 +241,7 @@ Generating conceptual topic files
 Creating conceptual topic configuration files...
     Content metadata
     Conceptual topic manifest
-    Last step completed in 00:00:00.0937
+    Last step completed in 00:00:00.1094
 </buildStep>
 <buildStep step="CopyAdditionalContent">
 Copying additional content files...
@@ -190,13 +250,13 @@ No additional content to copy
 </buildStep>
 <buildStep step="MergeTablesOfContent">
 Merging conceptual and additional tables of content...
-    Last step completed in 00:00:00.5625
+    Last step completed in 00:00:00.1094
 </buildStep>
 <buildStep step="CreateBuildAssemblerConfigs">
 Creating Sandcastle configuration files...
     sandcastle.config
     conceptual.config
-    Last step completed in 00:00:00.0781
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="MergeCustomConfigs">
 Merging custom build component configurations
@@ -204,7 +264,7 @@ G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\sandcastle.config
     No additional help attributes defined.  The 'HTML Help 2 Attributes' component was not added.
 G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\conceptual.config
     Removing unused ExampleComponent.
-    Last step completed in 00:00:00.0781
+    Last step completed in 00:00:00.0469
 </buildStep>
 <buildStep step="BuildConceptualTopics">
 Building conceptual help topics...
@@ -212,10 +272,10 @@ Building conceptual help topics...
 BuildAssembler (v2.4.10520.1)
 Copyright c Microsoft 2006
 Info: CopyFromFileComponent: Instantiating component.
-Info: CopyFromFileComponent: Loading data file 'C:\Program Files\Sandcastle\Presentation\Prototype\Transforms\skeleton_conceptual.xml'.
+Info: CopyFromFileComponent: Loading data file 'C:\Program Files\Sandcastle\Presentation\vs2005\Transforms\skeleton_conceptual.xml'.
 Info: CopyFromIndexComponent: Instantiating component.
 Info: CopyFromIndexComponent: Searching for files that match 'ddueXml\*.xml'.
-Info: CopyFromIndexComponent: Indexed 18 elements in 18 files.
+Info: CopyFromIndexComponent: Indexed 20 elements in 20 files.
 Info: CopyFromIndexComponent: Loaded 0 copy components.
 Info: SharedContentComponent: Instantiating component.
 Info: SharedContentComponent: Searching for files that match '_Tokens_.xml'.
@@ -224,7 +284,7 @@ Info: SharedContentComponent: Found 1 files in _Tokens_.xml.
 Info: SharedContentComponent: Loaded 1 shared content items.
 Info: CopyFromIndexComponent: Instantiating component.
 Info: CopyFromIndexComponent: Searching for files that match '_ContentMetadata_.xml'.
-Info: CopyFromIndexComponent: Indexed 19 elements in 1 files.
+Info: CopyFromIndexComponent: Indexed 21 elements in 1 files.
 Info: CopyFromIndexComponent: Loaded 0 copy components.
 Info: CodeBlockComponent: Instantiating component.
 Info: CodeBlockComponent: 
@@ -239,35 +299,44 @@ Info: PostTransformComponent:
     Post-Transform Component. Copyright c 2006-2008, Eric Woodruff, All Rights Reserved
     http://www.codeplex.com/SHFB
 Info: ResolveArtLinksComponent: Instantiating component.
-Info: ResolveArtLinksComponent: Indexed 6 art targets.
+Info: ResolveArtLinksComponent: Indexed 7 art targets.
 Info: SharedContentComponent: Instantiating component.
-Info: SharedContentComponent: Searching for files that match 'C:\Program Files\Sandcastle\Presentation\Prototype\content\shared_content.xml'.
-Info: SharedContentComponent: Loading shared content file 'C:\Program Files\Sandcastle\Presentation\Prototype\content\shared_content.xml'.
-Info: SharedContentComponent: Found 1 files in C:\Program Files\Sandcastle\Presentation\Prototype\content\shared_content.xml.
-Info: SharedContentComponent: Searching for files that match 'C:\Program Files\Sandcastle\Presentation\Prototype\content\feedback_content.xml'.
-Info: SharedContentComponent: Found 0 files in C:\Program Files\Sandcastle\Presentation\Prototype\content\feedback_content.xml.
-Info: SharedContentComponent: Searching for files that match 'C:\Program Files\Sandcastle\Presentation\Prototype\content\conceptual_content.xml'.
-Info: SharedContentComponent: Loading shared content file 'C:\Program Files\Sandcastle\Presentation\Prototype\content\conceptual_content.xml'.
-Info: SharedContentComponent: Found 1 files in C:\Program Files\Sandcastle\Presentation\Prototype\content\conceptual_content.xml.
+Info: SharedContentComponent: Searching for files that match 'C:\Program Files\Sandcastle\Presentation\vs2005\content\shared_content.xml'.
+Info: SharedContentComponent: Loading shared content file 'C:\Program Files\Sandcastle\Presentation\vs2005\content\shared_content.xml'.
+Info: SharedContentComponent: Found 1 files in C:\Program Files\Sandcastle\Presentation\vs2005\content\shared_content.xml.
+Info: SharedContentComponent: Searching for files that match 'C:\Program Files\Sandcastle\Presentation\vs2005\content\feedback_content.xml'.
+Info: SharedContentComponent: Loading shared content file 'C:\Program Files\Sandcastle\Presentation\vs2005\content\feedBack_content.xml'.
+Info: SharedContentComponent: Found 1 files in C:\Program Files\Sandcastle\Presentation\vs2005\content\feedback_content.xml.
+Info: SharedContentComponent: Searching for files that match 'C:\Program Files\Sandcastle\Presentation\vs2005\content\conceptual_content.xml'.
+Info: SharedContentComponent: Loading shared content file 'C:\Program Files\Sandcastle\Presentation\vs2005\content\conceptual_content.xml'.
+Info: SharedContentComponent: Found 1 files in C:\Program Files\Sandcastle\Presentation\vs2005\content\conceptual_content.xml.
 Info: SharedContentComponent: Searching for files that match 'SharedBuilderContent.xml'.
 Info: SharedContentComponent: Loading shared content file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
 Info: SharedContentComponent: Overriding shared content item 'producttitle' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'copycode' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
 Info: SharedContentComponent: Overriding shared content item 'locale' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
-Info: SharedContentComponent: Overriding shared content item 'copyright' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
 Info: SharedContentComponent: Found 1 files in SharedBuilderContent.xml.
 Info: SharedContentComponent: Searching for files that match 'PresentationStyleBuilderContent.xml'.
 Info: SharedContentComponent: Loading shared content file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
 Info: SharedContentComponent: Overriding shared content item 'header' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
 Info: SharedContentComponent: Overriding shared content item 'footer' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'fb_alias' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'fb_product' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'fb_body' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'fb_send' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'fb_headerfeedback' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'feedback_alias' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'feedback_product' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'feedback_body' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
 Info: SharedContentComponent: Found 1 files in PresentationStyleBuilderContent.xml.
-Info: SharedContentComponent: Loaded 92 shared content items.
+Info: SharedContentComponent: Loaded 199 shared content items.
 Info: ResolveConceptualLinksComponent: Instantiating component.
 Info: ResolveConceptualLinksComponent: Collected 1 targets directories.
 Info: ResolveReferenceLinksComponent2: Instantiating component.
 Info: ResolveReferenceLinksComponent2: Creating MSDN URL resolver.
 Info: ResolveReferenceLinksComponent2: Searching directory 'C:\Program Files\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
 Info: ResolveReferenceLinksComponent2: Searching directory 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working' for targets files of the form 'reflection.xml'.
-Info: ResolveReferenceLinksComponent2: Loaded 170442 reference targets.
+Info: ResolveReferenceLinksComponent2: Loaded 170425 reference targets.
 Info: SaveComponent: Instantiating component.
 Info: BuildAssembler: Building topic b50c7397-1c2c-40f4-8d12-97d914fe74db
 Info: BuildAssembler: Building topic 0a9e9d5f-bdf8-4595-b866-3b803adba269
@@ -283,12 +352,14 @@ Info: BuildAssembler: Building topic 50753b1c-1a0e-43d3-9d0f-7d96c878b28d
 Info: BuildAssembler: Building topic 495805fb-8f85-484c-bba1-1a4ffad713d2
 Info: BuildAssembler: Building topic cb891d5c-8abe-4848-abcd-bb3302a1db4f
 Info: BuildAssembler: Building topic 610473ad-2a9b-41be-bf9d-923d7b7d6398
+Info: BuildAssembler: Building topic cc704d88-33aa-4098-aaae-02e90137b149
+Info: BuildAssembler: Building topic c43f7f1a-6ef9-4b3a-978a-8210486be717
 Info: BuildAssembler: Building topic 2cffa3e3-036f-451b-b75f-320ab62d91f9
 Info: BuildAssembler: Building topic 4a6b56e2-241a-4ba7-8419-98919c898d07
 Info: BuildAssembler: Building topic 3edaf656-b469-4120-b5c7-d217f4e6ee95
 Info: BuildAssembler: Building topic 19b0121a-43e7-4c08-bcb9-cb2d21a6f375
-Info: Processed 18 topics
-    Last step completed in 00:00:19.0774
+Info: Processed 20 topics
+    Last step completed in 00:00:15.1090
 </buildStep>
 <buildStep step="BuildReferenceTopics">
 Building reference help topics...
@@ -296,14 +367,24 @@ Building reference help topics...
 BuildAssembler (v2.4.10520.1)
 Copyright c Microsoft 2006
 Info: CopyFromFileComponent: Instantiating component.
-Info: CopyFromFileComponent: Loading data file 'C:\Program Files\Sandcastle\Presentation\Prototype\transforms\skeleton.xml'.
+Info: CopyFromFileComponent: Loading data file 'C:\Program Files\Sandcastle\Presentation\vs2005\Transforms\skeleton.xml'.
 Info: CopyFromIndexComponent: Instantiating component.
 Info: CopyFromIndexComponent: Searching for files that match '*.xml'.
 Info: CopyFromIndexComponent: Searching for files that match 'reflection.xml'.
-Info: CopyFromIndexComponent: Indexed 170442 elements in 107 files.
+Info: CopyFromIndexComponent: Indexed 170425 elements in 107 files.
 Info: CopyFromIndexComponent: Loaded 0 copy components.
 Info: CopyFromIndexComponent: Instantiating component.
 Info: CopyFromIndexComponent: Loaded 0 copy components.
+Info: ForEachComponent: Instantiating component.
+Info: ForEachComponent: Loading subcomponents.
+Info: CopyFromIndexComponent: Instantiating component.
+Info: CopyFromIndexComponent: Loaded 0 copy components.
+Info: ForEachComponent: Loaded 1 subcomponents.
+Info: ForEachComponent: Instantiating component.
+Info: ForEachComponent: Loading subcomponents.
+Info: CopyFromIndexComponent: Instantiating component.
+Info: CopyFromIndexComponent: Loaded 0 copy components.
+Info: ForEachComponent: Loaded 1 subcomponents.
 Info: ForEachComponent: Instantiating component.
 Info: ForEachComponent: Loading subcomponents.
 Info: CopyFromIndexComponent: Instantiating component.
@@ -520,7 +601,7 @@ Warn: CopyFromIndexComponent: Entries for the key 'M:System.Data.SqlClient.SqlTr
 Warn: CopyFromIndexComponent: Entries for the key 'P:System.Data.SqlClient.SqlTransaction.Connection' occur in both 'C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.SqlClient.xml' and 'C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.xml'. The last entry will be used.
 Warn: CopyFromIndexComponent: Entries for the key 'P:System.Data.SqlClient.SqlTransaction.IsolationLevel' occur in both 'C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.SqlClient.xml' and 'C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.xml'. The last entry will be used.
 Info: CopyFromIndexComponent: Searching for files that match 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\OrmapTaxlotEditing.xml'.
-Info: CopyFromIndexComponent: Indexed 75745 elements in 66 files.
+Info: CopyFromIndexComponent: Indexed 75755 elements in 66 files.
 Info: CopyFromIndexComponent: Loaded 0 copy components.
 Info: ForEachComponent: Instantiating component.
 Info: ForEachComponent: Loading subcomponents.
@@ -555,134 +636,77 @@ Info: PostTransformComponent:
     Post-Transform Component. Copyright c 2006-2008, Eric Woodruff, All Rights Reserved
     http://www.codeplex.com/SHFB
 Info: SharedContentComponent: Instantiating component.
-Info: SharedContentComponent: Searching for files that match 'C:\Program Files\Sandcastle\Presentation\Prototype\content\shared_content.xml'.
-Info: SharedContentComponent: Loading shared content file 'C:\Program Files\Sandcastle\Presentation\Prototype\content\shared_content.xml'.
-Info: SharedContentComponent: Found 1 files in C:\Program Files\Sandcastle\Presentation\Prototype\content\shared_content.xml.
-Info: SharedContentComponent: Searching for files that match 'C:\Program Files\Sandcastle\Presentation\Prototype\content\reference_content.xml'.
-Info: SharedContentComponent: Loading shared content file 'C:\Program Files\Sandcastle\Presentation\Prototype\content\reference_content.xml'.
-Info: SharedContentComponent: Overriding shared content item 'remarkstitle' with value in file 'C:\Program Files\Sandcastle\Presentation\Prototype\content\reference_content.xml'.
-Info: SharedContentComponent: Found 1 files in C:\Program Files\Sandcastle\Presentation\Prototype\content\reference_content.xml.
-Info: SharedContentComponent: Searching for files that match 'C:\Program Files\Sandcastle\Presentation\Shared\content\syntax_content.xml'.
-Info: SharedContentComponent: Loading shared content file 'C:\Program Files\Sandcastle\Presentation\Shared\content\syntax_content.xml'.
-Info: SharedContentComponent: Found 1 files in C:\Program Files\Sandcastle\Presentation\Shared\content\syntax_content.xml.
+Info: SharedContentComponent: Searching for files that match 'C:\Program Files\Sandcastle\Presentation\vs2005\content\shared_content.xml'.
+Info: SharedContentComponent: Loading shared content file 'C:\Program Files\Sandcastle\Presentation\vs2005\content\shared_content.xml'.
+Info: SharedContentComponent: Found 1 files in C:\Program Files\Sandcastle\Presentation\vs2005\content\shared_content.xml.
+Info: SharedContentComponent: Searching for files that match 'C:\Program Files\Sandcastle\Presentation\vs2005\content\reference_content.xml'.
+Info: SharedContentComponent: Loading shared content file 'C:\Program Files\Sandcastle\Presentation\vs2005\content\reference_content.xml'.
+Info: SharedContentComponent: Found 1 files in C:\Program Files\Sandcastle\Presentation\vs2005\content\reference_content.xml.
+Info: SharedContentComponent: Searching for files that match 'C:\Program Files\Sandcastle\Presentation\shared\content\syntax_content.xml'.
+Info: SharedContentComponent: Loading shared content file 'C:\Program Files\Sandcastle\Presentation\shared\content\syntax_content.xml'.
+Info: SharedContentComponent: Found 1 files in C:\Program Files\Sandcastle\Presentation\shared\content\syntax_content.xml.
+Info: SharedContentComponent: Searching for files that match 'C:\Program Files\Sandcastle\Presentation\vs2005\content\feedback_content.xml'.
+Info: SharedContentComponent: Loading shared content file 'C:\Program Files\Sandcastle\Presentation\vs2005\content\feedBack_content.xml'.
+Info: SharedContentComponent: Found 1 files in C:\Program Files\Sandcastle\Presentation\vs2005\content\feedback_content.xml.
 Info: SharedContentComponent: Searching for files that match 'SharedBuilderContent.xml'.
 Info: SharedContentComponent: Loading shared content file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
 Info: SharedContentComponent: Overriding shared content item 'roottopictitle' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
 Info: SharedContentComponent: Overriding shared content item 'rootlink' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
-Info: SharedContentComponent: Overriding shared content item 'producttitle' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'runningheadertext' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
 Info: SharedContentComponent: Overriding shared content item 'locationinformation' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'assemblynameandmodule' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'copycode' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
 Info: SharedContentComponent: Overriding shared content item 'locale' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
-Info: SharedContentComponent: Overriding shared content item 'copyright' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\SharedBuilderContent.xml'.
 Info: SharedContentComponent: Found 1 files in SharedBuilderContent.xml.
 Info: SharedContentComponent: Searching for files that match 'PresentationStyleBuilderContent.xml'.
 Info: SharedContentComponent: Loading shared content file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
 Info: SharedContentComponent: Overriding shared content item 'header' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
 Info: SharedContentComponent: Overriding shared content item 'footer' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'fb_alias' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'fb_product' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'fb_body' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'fb_send' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'fb_headerfeedback' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'feedback_alias' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'feedback_product' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
+Info: SharedContentComponent: Overriding shared content item 'feedback_body' with value in file 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\PresentationStyleBuilderContent.xml'.
 Info: SharedContentComponent: Found 1 files in PresentationStyleBuilderContent.xml.
-Info: SharedContentComponent: Loaded 237 shared content items.
+Info: SharedContentComponent: Loaded 581 shared content items.
 Info: ResolveReferenceLinksComponent2: Instantiating component.
 Info: ResolveReferenceLinksComponent2: Creating MSDN URL resolver.
 Info: ResolveReferenceLinksComponent2: Searching directory 'C:\Program Files\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
 Info: ResolveReferenceLinksComponent2: Searching directory 'G:\projects\OPET\trunk\Doc\APIHelp\Help\Working' for targets files of the form 'reflection.xml'.
-Info: ResolveReferenceLinksComponent2: Loaded 170442 reference targets.
+Info: ResolveReferenceLinksComponent2: Loaded 170425 reference targets.
 Info: SaveComponent: Instantiating component.
 Info: BuildAssembler: Building topic R:Project
 Info: BuildAssembler: Building topic N:OrmapTaxlotEditing
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for N:OrmapTaxlotEditing
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.AboutForm
 Warn: ResolveReferenceLinksComponent2: MSDN URL not found for target 'T:System.Windows.Forms.Form'.
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AboutForm.Show
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AboutForm.ShowDialog
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AboutForm.ValidateChildren
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AboutForm.Validate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AboutForm.BeginInvoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AboutForm.GetChildAtPoint
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AboutForm.Invalidate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AboutForm.Invoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AboutForm.PerformLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AboutForm.ResumeLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AboutForm.Scale
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AboutForm.SetBounds
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.AddArrows
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Bitmap'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Caption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Category'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Checked'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.Cursor'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.Deactivate'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Finalize'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.HelpContextID'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.HelpFile'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_bitmap'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_caption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_category'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_checked'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.m_cursor'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.m_deactivate'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_enabled'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_helpFile'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_helpID'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_message'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_name'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_toolTip'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Message'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Name'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnContextMenu(System.Int32,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnDblClick'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnKeyDown(System.Int32,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnKeyUp(System.Int32,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnMouseDown(System.Int32,System.Int32,System.Int32,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnMouseMove(System.Int32,System.Int32,System.Int32,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnMouseUp(System.Int32,System.Int32,System.Int32,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.Refresh(System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Tooltip'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.UpdateBitmap(System.Drawing.Bitmap)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'AddArrowsForm'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'AddArrowsForm'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'DimensionArrowsForm'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'DimensionArrowsForm'.
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.AddArrows
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnKeyDown(System.Int32,System.Int32)'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnMouseDown(System.Int32,System.Int32,System.Int32,System.Int32)'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnMouseMove(System.Int32,System.Int32,System.Int32,System.Int32)'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.AddArrows
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnKeyDown(System.Int32,System.Int32)'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnMouseDown(System.Int32,System.Int32,System.Int32,System.Int32)'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnMouseMove(System.Int32,System.Int32,System.Int32,System.Int32)'.
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.AddArrows
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
+Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditing.AddArrows
 Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.AddArrows.ClassId
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditing.AddArrows.ClassId
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.AddArrows.ConvertToDescription(ESRI.ArcGIS.Geodatabase.IFields,System.String,System.String)
@@ -722,75 +746,28 @@ Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.AddArrows.UnregisterFu
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.AddArrows.UnregisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt; documentation for M:OrmapTaxlotEditing.AddArrows.UnregisterFunction(System.Type)
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.AddArrowsForm
-Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.AddArrowsForm.#ctor
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'AddArrows'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'AddArrows'.
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AddArrowsForm.Show
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AddArrowsForm.ShowDialog
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AddArrowsForm.ValidateChildren
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AddArrowsForm.Validate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AddArrowsForm.BeginInvoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AddArrowsForm.GetChildAtPoint
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AddArrowsForm.Invalidate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AddArrowsForm.Invoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AddArrowsForm.PerformLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AddArrowsForm.ResumeLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AddArrowsForm.Scale
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.AddArrowsForm.SetBounds
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.AddArrowsForm
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.AddArrowsForm.#ctor
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.AddArrowsForm.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.AddArrowsForm.#ctor
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.AutoUpdateAllToggle
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.AutoUpdateAllToggle
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.AutoUpdateAllToggle.#ctor
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Bitmap'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Caption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Category'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Checked'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Finalize'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.HelpContextID'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.HelpFile'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_bitmap'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_caption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_category'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_checked'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_enabled'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_helpFile'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_helpID'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_message'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_name'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_toolTip'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Message'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Name'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Tooltip'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.UpdateBitmap(System.Drawing.Bitmap)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Checked'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.AutoUpdateAllToggle
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.AutoUpdateAllToggle
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Checked'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
+Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditing.AutoUpdateAllToggle
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.AutoUpdateAllToggle.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.AutoUpdateAllToggle.#ctor
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.AutoUpdateAllToggle.Checked
@@ -816,7 +793,11 @@ Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.AutoUpdateAllToggle.Un
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.AutoUpdateAllToggle.UnregisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt; documentation for M:OrmapTaxlotEditing.AutoUpdateAllToggle.UnregisterFunction(System.Type)
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.CatalogFileDialog
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.CatalogFileDialog
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.CatalogFileDialog.#ctor
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.CatalogFileDialog
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.CatalogFileDialog
+Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditing.CatalogFileDialog
 Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CatalogFileDialog.SelectedObject
 Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CatalogFileDialog.SetFilter
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.CatalogFileDialog.#ctor
@@ -849,59 +830,21 @@ Warn: ShowMissingComponent: Missing &lt;param name=&quot;title&quot;/&gt; docume
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.CatalogFileDialog.ShowOpen
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.CatalogFileDialog.ShowSave
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.CombineTaxlots
-Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.CombineTaxlots.#ctor
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Bitmap'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Caption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Category'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Checked'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Finalize'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.HelpContextID'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.HelpFile'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_bitmap'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_caption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_category'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_checked'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_enabled'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_helpFile'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_helpID'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_message'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_name'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_toolTip'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Message'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Name'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Tooltip'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.UpdateBitmap(System.Drawing.Bitmap)'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'CombineTaxlotsForm'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'CombineTaxlotsForm'.
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.CombineTaxlots
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.CombineTaxlots.#ctor
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.CombineTaxlots
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.CombineTaxlots
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
+Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditing.CombineTaxlots
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.CombineTaxlots.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.CombineTaxlots.#ctor
 Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.CombineTaxlots.ClassId
@@ -923,98 +866,38 @@ Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.CombineTaxlots.Unregis
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.CombineTaxlots.UnregisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt; documentation for M:OrmapTaxlotEditing.CombineTaxlots.UnregisterFunction(System.Type)
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.CombineTaxlotsForm
-Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.CombineTaxlotsForm.#ctor
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'CombineTaxlots'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'CombineTaxlots'.
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CombineTaxlotsForm.Show
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CombineTaxlotsForm.ShowDialog
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CombineTaxlotsForm.ValidateChildren
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CombineTaxlotsForm.Validate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CombineTaxlotsForm.BeginInvoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CombineTaxlotsForm.GetChildAtPoint
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CombineTaxlotsForm.Invalidate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CombineTaxlotsForm.Invoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CombineTaxlotsForm.PerformLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CombineTaxlotsForm.ResumeLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CombineTaxlotsForm.Scale
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.CombineTaxlotsForm.SetBounds
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.CombineTaxlotsForm
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.CombineTaxlotsForm.#ctor
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.CombineTaxlotsForm.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.CombineTaxlotsForm.#ctor
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.DataMonitor
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.DimensionArrowsForm
-Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.DimensionArrowsForm.#ctor
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'AddArrows'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'AddArrows'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'AddArrowsForm'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'AddArrowsForm'.
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.DimensionArrowsForm.Show
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.DimensionArrowsForm.ShowDialog
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.DimensionArrowsForm.ValidateChildren
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.DimensionArrowsForm.Validate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.DimensionArrowsForm.BeginInvoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.DimensionArrowsForm.GetChildAtPoint
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.DimensionArrowsForm.Invalidate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.DimensionArrowsForm.Invoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.DimensionArrowsForm.PerformLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.DimensionArrowsForm.ResumeLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.DimensionArrowsForm.Scale
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.DimensionArrowsForm.SetBounds
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.DimensionArrowsForm
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.DimensionArrowsForm.#ctor
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.DimensionArrowsForm.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.DimensionArrowsForm.#ctor
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.EditMapIndex
-Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.EditMapIndex.#ctor
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Bitmap'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Caption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Category'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Checked'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Finalize'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.HelpContextID'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.HelpFile'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_bitmap'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_caption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_category'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_checked'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_enabled'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_helpFile'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_helpID'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_message'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_name'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_toolTip'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Message'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Name'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Tooltip'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.UpdateBitmap(System.Drawing.Bitmap)'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'EditMapIndexForm'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'EditMapIndexForm'.
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.EditMapIndex
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.EditMapIndex.#ctor
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.EditMapIndex
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.EditMapIndex
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
+Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditing.EditMapIndex
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.EditMapIndex.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.EditMapIndex.#ctor
 Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.EditMapIndex.ClassId
@@ -1036,28 +919,21 @@ Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.EditMapIndex.Unregiste
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.EditMapIndex.UnregisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt; documentation for M:OrmapTaxlotEditing.EditMapIndex.UnregisterFunction(System.Type)
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.EditMapIndexForm
-Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.EditMapIndexForm.#ctor
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'EditMapIndex'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'EditMapIndex'.
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.EditMapIndexForm.Show
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.EditMapIndexForm.ShowDialog
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.EditMapIndexForm.ValidateChildren
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.EditMapIndexForm.Validate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.EditMapIndexForm.BeginInvoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.EditMapIndexForm.GetChildAtPoint
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.EditMapIndexForm.Invalidate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.EditMapIndexForm.Invoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.EditMapIndexForm.PerformLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.EditMapIndexForm.ResumeLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.EditMapIndexForm.Scale
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.EditMapIndexForm.SetBounds
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.EditMapIndexForm
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.EditMapIndexForm.#ctor
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.EditMapIndexForm.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.EditMapIndexForm.#ctor
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.EditorExtension
-Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.EditorExtension.#ctor
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.esriSystem.IExtension'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.esriSystem.IExtensionAccelerators'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.esriSystem.IPersistVariant'.
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.EditorExtension
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.EditorExtension.#ctor
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.EditorExtension
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.EditorExtension
+Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditing.EditorExtension
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.EditorExtension.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.EditorExtension.#ctor
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.EditorExtension.ActiveViewEvents_FocusMapChanged
@@ -1068,11 +944,13 @@ Warn: ShowMissingComponent: Missing &lt;param name=&quot;Item&quot;/&gt; documen
 Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.EditorExtension.ClassId
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditing.EditorExtension.ClassId
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.EditorExtension.CreateAccelerators
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.esriSystem.IExtensionAccelerators.CreateAccelerators'.
 Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.EditorExtension.EventsId
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditing.EditorExtension.EventsId
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.EditorExtension.ID
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:OrmapTaxlotEditing.EditorExtension.ID
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.esriSystem.UID'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.esriSystem.IPersistVariant.ID'.
 Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.EditorExtension.InterfaceId
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditing.EditorExtension.InterfaceId
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.EditorExtension.Load(ESRI.ArcGIS.esriSystem.IVariantStream)
@@ -1080,7 +958,9 @@ Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTax
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;Stream&quot;/&gt; documentation for M:OrmapTaxlotEditing.EditorExtension.Load(ESRI.ArcGIS.esriSystem.IVariantStream)
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.esriSystem.IVariantStream'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.esriSystem.IVariantStream'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.esriSystem.IPersistVariant.Load(ESRI.ArcGIS.esriSystem.IVariantStream)'.
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.EditorExtension.Name
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.esriSystem.IExtension.Name'.
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.EditorExtension.RegisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.EditorExtension.RegisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt; documentation for M:OrmapTaxlotEditing.EditorExtension.RegisterFunction(System.Type)
@@ -1089,31 +969,25 @@ Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTax
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;Stream&quot;/&gt; documentation for M:OrmapTaxlotEditing.EditorExtension.Save(ESRI.ArcGIS.esriSystem.IVariantStream)
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.esriSystem.IVariantStream'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.esriSystem.IVariantStream'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.esriSystem.IPersistVariant.Save(ESRI.ArcGIS.esriSystem.IVariantStream)'.
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.EditorExtension.Shutdown
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.esriSystem.IExtension.Shutdown'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'Startup'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'Startup'.
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.EditorExtension.Startup(System.Object@)
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.esriSystem.IExtension.Startup(System.Object@)'.
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.EditorExtension.UnregisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.EditorExtension.UnregisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt; documentation for M:OrmapTaxlotEditing.EditorExtension.UnregisterFunction(System.Type)
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.HelpForm
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.HelpForm
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.HelpForm.#ctor
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.HelpForm.Show
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.HelpForm.ShowDialog
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.HelpForm.ValidateChildren
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.HelpForm.Validate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.HelpForm.BeginInvoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.HelpForm.GetChildAtPoint
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.HelpForm.Invalidate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.HelpForm.Invoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.HelpForm.PerformLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.HelpForm.ResumeLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.HelpForm.Scale
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.HelpForm.SetBounds
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.HelpForm.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.HelpForm.#ctor
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.InstallationConfiguration
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.InstallationConfiguration
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.InstallationConfiguration.#ctor
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.InstallationConfiguration
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.InstallationConfiguration.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.InstallationConfiguration.#ctor
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.InstallationConfiguration.Install(System.Collections.IDictionary)
@@ -1123,61 +997,29 @@ Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.InstallationConfigurat
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.InstallationConfiguration.Uninstall(System.Collections.IDictionary)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;savedState&quot;/&gt; documentation for M:OrmapTaxlotEditing.InstallationConfiguration.Uninstall(System.Collections.IDictionary)
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.LocateFeature
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'LocateFeatureDockWin'.
+Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'LocateFeatureDockWin'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'LocateFeatureUserControl'.
+Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'LocateFeatureUserControl'.
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.LocateFeature
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.LocateFeature.#ctor
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Bitmap'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Caption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Category'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Checked'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Finalize'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.HelpContextID'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.HelpFile'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_bitmap'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_caption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_category'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_checked'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_enabled'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_helpFile'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_helpID'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_message'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_name'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_toolTip'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Message'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Name'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Tooltip'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.UpdateBitmap(System.Drawing.Bitmap)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'LocateFeatureForm'.
-Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'LocateFeatureForm'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Checked'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.LocateFeature
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.LocateFeature
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Checked'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
+Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditing.LocateFeature
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.LocateFeature.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.LocateFeature.#ctor
+Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.LocateFeature.Checked
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:OrmapTaxlotEditing.LocateFeature.Checked
 Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.LocateFeature.ClassId
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditing.LocateFeature.ClassId
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.LocateFeature.Dispose
@@ -1196,26 +1038,77 @@ Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt;
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.LocateFeature.UnregisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.LocateFeature.UnregisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt; documentation for M:OrmapTaxlotEditing.LocateFeature.UnregisterFunction(System.Type)
-Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.LocateFeatureForm
-Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.LocateFeatureForm.#ctor
+Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.LocateFeatureDockWin
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Framework.IDockableWindowDef'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'LocateFeature'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'LocateFeature'.
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.LocateFeatureForm.Show
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.LocateFeatureForm.ShowDialog
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.LocateFeatureForm.ValidateChildren
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.LocateFeatureForm.Validate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.LocateFeatureForm.BeginInvoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.LocateFeatureForm.GetChildAtPoint
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.LocateFeatureForm.Invalidate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.LocateFeatureForm.Invoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.LocateFeatureForm.PerformLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.LocateFeatureForm.ResumeLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.LocateFeatureForm.Scale
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.LocateFeatureForm.SetBounds
-Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.LocateFeatureForm.#ctor
-Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.LocateFeatureForm.#ctor
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.LocateFeatureDockWin
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.LocateFeatureDockWin.#ctor
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.LocateFeatureDockWin
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.LocateFeatureDockWin
+Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditing.LocateFeatureDockWin
+Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.LocateFeatureDockWin.#ctor
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.LocateFeatureDockWin.#ctor
+Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.LocateFeatureDockWin.Caption
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:OrmapTaxlotEditing.LocateFeatureDockWin.Caption
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.Framework.IDockableWindowDef.Caption'.
+Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.LocateFeatureDockWin.ChildHWND
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:OrmapTaxlotEditing.LocateFeatureDockWin.ChildHWND
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.Framework.IDockableWindowDef.ChildHWND'.
+Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.LocateFeatureDockWin.ClassId
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditing.LocateFeatureDockWin.ClassId
+Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.LocateFeatureDockWin.EventsId
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditing.LocateFeatureDockWin.EventsId
+Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.LocateFeatureDockWin.InterfaceId
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditing.LocateFeatureDockWin.InterfaceId
+Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.LocateFeatureDockWin.Name
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:OrmapTaxlotEditing.LocateFeatureDockWin.Name
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.Framework.IDockableWindowDef.Name'.
+Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.LocateFeatureDockWin.OnCreate(System.Object)
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.LocateFeatureDockWin.OnCreate(System.Object)
+Warn: ShowMissingComponent: Missing &lt;param name=&quot;hook&quot;/&gt; documentation for M:OrmapTaxlotEditing.LocateFeatureDockWin.OnCreate(System.Object)
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.Framework.IDockableWindowDef.OnCreate(System.Object)'.
+Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.LocateFeatureDockWin.OnDestroy
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.LocateFeatureDockWin.OnDestroy
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.Framework.IDockableWindowDef.OnDestroy'.
+Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.LocateFeatureDockWin.RegisterFunction(System.Type)
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.LocateFeatureDockWin.RegisterFunction(System.Type)
+Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt; documentation for M:OrmapTaxlotEditing.LocateFeatureDockWin.RegisterFunction(System.Type)
+Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.LocateFeatureDockWin.UnregisterFunction(System.Type)
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.LocateFeatureDockWin.UnregisterFunction(System.Type)
+Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt; documentation for M:OrmapTaxlotEditing.LocateFeatureDockWin.UnregisterFunction(System.Type)
+Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.LocateFeatureDockWin.UserData
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:OrmapTaxlotEditing.LocateFeatureDockWin.UserData
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.Framework.IDockableWindowDef.UserData'.
+Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin
+Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin.Caption
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin.Caption
+Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin.ChildHWND
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin.ChildHWND
+Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin.Name
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin.Name
+Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin.OnCreate(System.Object)
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin.OnCreate(System.Object)
+Warn: ShowMissingComponent: Missing &lt;param name=&quot;hook&quot;/&gt; documentation for M:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin.OnCreate(System.Object)
+Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin.OnDestroy
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin.OnDestroy
+Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin.UserData
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:OrmapTaxlotEditing.LocateFeatureDockWin._LocateFeatureDockWin.UserData
+Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.LocateFeatureUserControl
+Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:OrmapTaxlotEditing.LocateFeatureUserControl
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.LocateFeatureUserControl
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.LocateFeatureUserControl.#ctor
+Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.LocateFeatureUserControl.#ctor
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.LocateFeatureUserControl.#ctor
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.ORMapNum
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.ORMapNum
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.ORMapNum.#ctor
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.ORMapNum
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.ORMapNum
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.ORMapNum.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.ORMapNum.#ctor
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.ORMapNum.Anomaly
@@ -1245,64 +1138,25 @@ Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.OrmapSettings
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'OrmapSettingsForm'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'OrmapSettingsForm'.
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.OrmapSettingsForm
-Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.OrmapSettingsForm.#ctor
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'OrmapSettings'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'OrmapSettings'.
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.OrmapSettingsForm.Show
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.OrmapSettingsForm.ShowDialog
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.OrmapSettingsForm.ValidateChildren
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.OrmapSettingsForm.Validate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.OrmapSettingsForm.BeginInvoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.OrmapSettingsForm.GetChildAtPoint
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.OrmapSettingsForm.Invalidate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.OrmapSettingsForm.Invoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.OrmapSettingsForm.PerformLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.OrmapSettingsForm.ResumeLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.OrmapSettingsForm.Scale
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.OrmapSettingsForm.SetBounds
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.OrmapSettingsForm
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.OrmapSettingsForm.#ctor
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.OrmapSettingsForm.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.OrmapSettingsForm.#ctor
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.OrmapToolbar
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar'.
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.OrmapToolbar
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.OrmapToolbar.#ctor
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(System.String)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(System.Guid)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(System.Type)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(System.String,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(System.Guid,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(System.Type,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(ESRI.ArcGIS.esriSystem.UID)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.BeginGroup'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar.Caption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar.GetItemInfo(System.Int32,ESRI.ArcGIS.SystemUI.IItemDef)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar.ItemCount'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.m_barCaption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.m_barID'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar.Name'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar'.
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.OrmapToolbar.AddItem
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(System.String)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(System.Guid)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(System.Type)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(System.String,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(System.Guid,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(System.Type,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommandBar.AddItem(ESRI.ArcGIS.esriSystem.UID)'.
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.OrmapToolbar
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.OrmapToolbar
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar.Caption'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseToolbar.Name'.
+Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditing.OrmapToolbar
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.OrmapToolbar.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.OrmapToolbar.#ctor
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.OrmapToolbar.Caption
@@ -1322,50 +1176,73 @@ Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.OrmapToolbar.Unregiste
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.OrmapToolbar.UnregisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt; documentation for M:OrmapTaxlotEditing.OrmapToolbar.UnregisterFunction(System.Type)
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.PropertyPage
-Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.PropertyPage.#ctor
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Framework.IComPropertyPage'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'PropertiesForm'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'PropertiesForm'.
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.PropertyPage
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.PropertyPage.#ctor
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.PropertyPage
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.PropertyPage
+Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditing.PropertyPage
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.PropertyPage.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.PropertyPage.#ctor
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.PropertyPage.Activate
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.Framework.IComPropertyPage.Activate'.
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.PropertyPage.Applies(ESRI.ArcGIS.esriSystem.ISet)
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.esriSystem.ISet'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.esriSystem.ISet'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.Framework.IComPropertyPage.Applies(ESRI.ArcGIS.esriSystem.ISet)'.
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.PropertyPage.Apply
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.Framework.IComPropertyPage.Apply'.
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.PropertyPage.Cancel
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.Framework.IComPropertyPage.Cancel'.
 Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.PropertyPage.ClassId
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditing.PropertyPage.ClassId
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.PropertyPage.Deactivate
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.Framework.IComPropertyPage.Deactivate'.
 Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.PropertyPage.EventsId
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditing.PropertyPage.EventsId
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.PropertyPage.Height
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.Framework.IComPropertyPage.Height'.
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.PropertyPage.HelpContextID(System.Int32)
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.Framework.IComPropertyPage.HelpContextID(System.Int32)'.
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.PropertyPage.HelpFile
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.Framework.IComPropertyPage.HelpFile'.
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.PropertyPage.Hide
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.Framework.IComPropertyPage.Hide'.
 Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.PropertyPage.InterfaceId
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditing.PropertyPage.InterfaceId
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.PropertyPage.IsPageDirty
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.Framework.IComPropertyPage.IsPageDirty'.
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.PropertyPage.PageSite
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Framework.IComPropertyPageSite'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.Framework.IComPropertyPage.PageSite'.
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.PropertyPage.Priority
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.Framework.IComPropertyPage.Priority'.
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.PropertyPage.RegisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.PropertyPage.RegisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt; documentation for M:OrmapTaxlotEditing.PropertyPage.RegisterFunction(System.Type)
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.PropertyPage.SetObjects(ESRI.ArcGIS.esriSystem.ISet)
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.esriSystem.ISet'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.esriSystem.ISet'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.Framework.IComPropertyPage.SetObjects(ESRI.ArcGIS.esriSystem.ISet)'.
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.PropertyPage.Show
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.Framework.IComPropertyPage.Show'.
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.PropertyPage.Title
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.Framework.IComPropertyPage.Title'.
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.PropertyPage.UnregisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.PropertyPage.UnregisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt; documentation for M:OrmapTaxlotEditing.PropertyPage.UnregisterFunction(System.Type)
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.PropertyPage.Width
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.Framework.IComPropertyPage.Width'.
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.SpatialUtilities
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'StringUtilities'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'StringUtilities'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'Utilities'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'Utilities'.
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.SpatialUtilities
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.SpatialUtilities
+Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.SpatialUtilities.GetValue
 Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.SpatialUtilities.GetValueViaOverlay
 Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.SpatialUtilities.LoadFCIntoMap
 Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.SpatialUtilities.LoadTableIntoMap
@@ -1431,6 +1308,16 @@ Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.Arc
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Carto.IFeatureLayer'.
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.SpatialUtilities.GetTaxlotFeatureLayer
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Carto.IFeatureLayer'.
+Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.SpatialUtilities.GetValue(ESRI.ArcGIS.Geometry.IGeometry,ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String)
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Geometry.IGeometry'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Geodatabase.IFeatureClass'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Geometry.IGeometry'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Geodatabase.IFeatureClass'.
+Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.SpatialUtilities.GetValue(ESRI.ArcGIS.Geometry.IGeometry,ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String,System.String)
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Geometry.IGeometry'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Geodatabase.IFeatureClass'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Geometry.IGeometry'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Geodatabase.IFeatureClass'.
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.SpatialUtilities.GetValueViaOverlay(ESRI.ArcGIS.Geometry.IGeometry,ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String)
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Geometry.IGeometry'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.Geodatabase.IFeatureClass'.
@@ -1494,90 +1381,32 @@ Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'SpatialUti
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'SpatialUtilities'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'Utilities'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'Utilities'.
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.StringUtilities
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.StringUtilities
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.StringUtilities.AddLeadingZeros(System.String,System.Int32)
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.StringUtilities.ExtractString(System.String,System.Int32,System.Int32)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;lowPart&quot;/&gt; documentation for M:OrmapTaxlotEditing.StringUtilities.ExtractString(System.String,System.Int32,System.Int32)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;highPart&quot;/&gt; documentation for M:OrmapTaxlotEditing.StringUtilities.ExtractString(System.String,System.Int32,System.Int32)
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.StringUtilities.GenerateMapTaxlotValue(System.String,System.String)
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.TaxlotAssignment
-Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.TaxlotAssignment.#ctor
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Bitmap'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Caption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Category'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Checked'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.Cursor'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.Deactivate'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Finalize'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.HelpContextID'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.HelpFile'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_bitmap'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_caption'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_category'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_checked'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.m_cursor'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.m_deactivate'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_enabled'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_helpFile'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_helpID'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_message'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_name'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'F:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.m_toolTip'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Message'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Name'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnContextMenu(System.Int32,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnDblClick'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnKeyDown(System.Int32,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnKeyUp(System.Int32,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnMouseDown(System.Int32,System.Int32,System.Int32,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnMouseMove(System.Int32,System.Int32,System.Int32,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnMouseUp(System.Int32,System.Int32,System.Int32,System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.Refresh(System.Int32)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Tooltip'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.UpdateBitmap(System.Drawing.Bitmap)'.
-Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'T:ESRI.ArcGIS.ADF.BaseClasses.BaseTool'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'TaxlotAssignmentForm'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'TaxlotAssignmentForm'.
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.TaxlotAssignment
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.TaxlotAssignment.#ctor
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnMouseDown(System.Int32,System.Int32,System.Int32,System.Int32)'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.TaxlotAssignment
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnClick'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.OnCreate(System.Object)'.
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'M:ESRI.ArcGIS.ADF.BaseClasses.BaseTool.OnMouseDown(System.Int32,System.Int32,System.Int32,System.Int32)'.
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.TaxlotAssignment
+Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'P:ESRI.ArcGIS.ADF.BaseClasses.BaseCommand.Enabled'.
+Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditing.TaxlotAssignment
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.TaxlotAssignment.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.TaxlotAssignment.#ctor
 Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.TaxlotAssignment.ClassId
@@ -1606,21 +1435,10 @@ Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.TaxlotAssignment.Unreg
 Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:OrmapTaxlotEditing.TaxlotAssignment.UnregisterFunction(System.Type)
 Warn: ShowMissingComponent: Missing &lt;param name=&quot;registerType&quot;/&gt; documentation for M:OrmapTaxlotEditing.TaxlotAssignment.UnregisterFunction(System.Type)
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.TaxlotAssignmentForm
-Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.TaxlotAssignmentForm.#ctor
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'TaxlotAssignment'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'TaxlotAssignment'.
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.TaxlotAssignmentForm.Show
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.TaxlotAssignmentForm.ShowDialog
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.TaxlotAssignmentForm.ValidateChildren
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.TaxlotAssignmentForm.Validate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.TaxlotAssignmentForm.BeginInvoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.TaxlotAssignmentForm.GetChildAtPoint
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.TaxlotAssignmentForm.Invalidate
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.TaxlotAssignmentForm.Invoke
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.TaxlotAssignmentForm.PerformLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.TaxlotAssignmentForm.ResumeLayout
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.TaxlotAssignmentForm.Scale
-Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.TaxlotAssignmentForm.SetBounds
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.TaxlotAssignmentForm
+Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.TaxlotAssignmentForm.#ctor
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.TaxlotAssignmentForm.#ctor
 Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditing.TaxlotAssignmentForm.#ctor
 Info: BuildAssembler: Building topic T:OrmapTaxlotEditing.Utilities
@@ -1628,6 +1446,10 @@ Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'SpatialUti
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'SpatialUtilities'.
 Warn: ResolveReferenceLinksComponent2: Unknown reference link target 'StringUtilities'.
 Warn: ResolveReferenceLinksComponent2: Invalid reference link target 'StringUtilities'.
+Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditing.Utilities
+Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditing.Utilities
+Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditing.Utilities
+Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditing.Utilities
 Info: BuildAssembler: Building topic Overload:OrmapTaxlotEditing.Utilities.SendEmailMessage
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.Utilities.FileExists(System.String)
 Info: BuildAssembler: Building topic F:OrmapTaxlotEditing.Utilities.NotFoundIndex
@@ -1636,16 +1458,16 @@ Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.Utilities.SendEmailMes
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.Utilities.SendEmailMessage(System.String,System.String[],System.String,System.String,System.String[])
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.Utilities.StartDoc(System.String)
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.Utilities.UserName
-Info: Processed 351 topics
-    Last step completed in 00:00:36.6861
+Info: Processed 334 topics
+    Last step completed in 00:00:35.7491
 </buildStep>
 <buildStep step="GenerateIntermediateTableOfContent">
 Generating intermediate table of content file...
 [G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\GenerateIntermediateTOC.bat]
 XslTransform (v2.4.10520.1)
 Copyright c Microsoft 2005-2006
-Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\CreatePrototypeToc.xsl'.
-    Last step completed in 00:00:00.7500
+Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\CreateVSToc.xsl'.
+    Last step completed in 00:00:00.5156
 </buildStep>
 <buildStep step="ExtractingHtmlInfo">
 Extracting HTML info for Help 1.x and/or website...
@@ -1655,7 +1477,7 @@ Copyright c 2008, Eric Woodruff, All Rights Reserved
 E-Mail: Eric@EWoodruff.us
 
 Using LCID '1033', code page '65001', encoding charset 'UTF-8'.
-Processed 369 HTML files
+Processed 354 HTML files
 Sorting keywords and generating See Also indices
 Saving Help 1.x keyword index to G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\DeveloperGuide.hhk
 Saving Help 1.x table of content to G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\DeveloperGuide.hhc
@@ -1667,7 +1489,7 @@ Generating HTML Help 1.x table of content file...
 </buildStep>
 <buildStep step="UpdateTableOfContent">
 Updating table of content with additional content items and determining default topic...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0469
 </buildStep>
 <buildStep step="GenerateHelpFileIndex">
 Generating HTML Help 1.x index file...
@@ -1675,7 +1497,7 @@ Generating HTML Help 1.x index file...
 </buildStep>
 <buildStep step="GenerateHelpProject">
 Generating HTML Help 1.x project file...
-    Last step completed in 00:00:00.0312
+    Last step completed in 00:00:00.0469
 </buildStep>
 <buildStep step="CompilingHelpFile">
 Compiling HTML Help 1.x file...
@@ -1692,11 +1514,11 @@ Compiling g:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\DeveloperGuide.
 
 Compile time: 0 minutes, 5 seconds
 
-371	Topics
+356	Topics
 
-3,170	Local links
+3,843	Local links
 
-378	Internet links
+375	Internet links
 
 0	Graphics
 
@@ -1704,19 +1526,19 @@ Compile time: 0 minutes, 5 seconds
 
 
 
-Created g:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\DeveloperGuide.chm, 1,154,469 bytes
+Created g:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\DeveloperGuide.chm, 1,201,471 bytes
 
-Compression decreased file by 3,799,377 bytes.
+Compression decreased file by 4,017,365 bytes.
 
-    Last step completed in 00:00:06.3435
+    Last step completed in 00:00:06.4061
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.6250
+    Last step completed in 00:00:00.6562
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully.  Total time: 00:01:15.7783
+Build completed successfully.  Total time: 00:01:08.8107
 
 </buildStep>
 </shfbBuild>

@@ -9,7 +9,7 @@
   </summary>
   -->
 
-  <introduction>
+  <introduction address="Intro">
   	<para>The <application>ORMAP Taxlot Editing Toolbar</application> is developed according to 
   	coding standards and practices. These standards are applied in designing, writing, testing and 
   	integrating code. They are also used by the development team during review of code. Code review 
@@ -1220,7 +1220,7 @@
 				
 				<para>&#160;</para>
 				
-				<para>For example, if you have a method returning an <codeInline>ArrayList<codeInline>,
+				<para>For example, if you have a method returning an <codeInline>ArrayList</codeInline>,
 				always return a valid ArrayList. If you have no items to return, then return a
 				valid ArrayList with 0 items. This will make it easy for the calling
 				application to just check for the “count” rather than doing an additional check
@@ -2352,9 +2352,12 @@
     <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
     -->
     <externalLink>
-        <linkText>FxCop</linkText>
+        <linkText>FxCop website</linkText>
         <linkAlternateText>Go to FxCop page on MSDN website</linkAlternateText>
         <linkUri>http://code.msdn.microsoft.com/codeanalysis/Release/ProjectReleases.aspx?ReleaseId=553</linkUri>
     </externalLink>
+    <para>&#160;</para>
   </relatedTopics>
+  <para>&#160;</para>
+  <link xlink:href="#Intro">Back to the Top</link>
 </developerOrientationDocument>

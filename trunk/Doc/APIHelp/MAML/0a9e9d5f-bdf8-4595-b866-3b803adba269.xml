@@ -9,7 +9,7 @@
   </summary>
   -->
 
-  <introduction>
+  <introduction address="Intro">
     <!-- Uncomment this to generate an outline of the section and sub-section
          titles.  Specify a numeric value as the inner text to limit it to
          a specific number of sub-topics when creating the outline.  Specify
@@ -84,4 +84,6 @@
     <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
     -->
   </relatedTopics>
+  <para>&#160;</para>
+  <link xlink:href="#Intro">Back to the Top</link>
 </developerConceptualDocument>
