@@ -8,8 +8,8 @@
 ' Date Created:  January 8, 2008
 '
 ' Copyright Holder:  ORMAP Tech Group  
-' Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at 
-' opet-developers@lists.sourceforge.net
+' Contact Info:  ORMAP Tech Group may be reached at 
+' ORMAP_ESRI_Programmers@listsmart.osl.state.or.us
 '
 ' This file is part of the ORMAP Taxlot Editing Toolbar.
 '
@@ -129,13 +129,13 @@ Public NotInheritable Class CombineTaxlots
         If value IsNot Nothing Then
             _partnerCombineTaxlotsForm = value
             ' Subscribe to partner form events.
-            AddHandler _partnerCombineTaxlotsForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
+            AddHandler _partnerCombineTaxlotsForm.Load, AddressOf PartnerCombineTaxlotsForm_Load
             AddHandler _partnerCombineTaxlotsForm.uxNewTaxlotNumber.SelectedIndexChanged, AddressOf uxNewTaxlotNumber_SelectedIndexChanged
             AddHandler _partnerCombineTaxlotsForm.uxCombine.Click, AddressOf uxCombine_Click
             AddHandler _partnerCombineTaxlotsForm.uxHelp.Click, AddressOf uxHelp_Click
         Else
             ' Unsubscribe to partner form events.
-            RemoveHandler _partnerCombineTaxlotsForm.Load, AddressOf PartnerTaxlotAssignmentForm_Load
+            RemoveHandler _partnerCombineTaxlotsForm.Load, AddressOf PartnerCombineTaxlotsForm_Load
             RemoveHandler _partnerCombineTaxlotsForm.uxNewTaxlotNumber.SelectedIndexChanged, AddressOf uxNewTaxlotNumber_SelectedIndexChanged
             RemoveHandler _partnerCombineTaxlotsForm.uxCombine.Click, AddressOf uxCombine_Click
             RemoveHandler _partnerCombineTaxlotsForm.uxHelp.Click, AddressOf uxHelp_Click
@@ -146,7 +146,7 @@ Public NotInheritable Class CombineTaxlots
 
 #Region "Event Handlers"
 
-    Private Sub PartnerTaxlotAssignmentForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.Load
+    Private Sub PartnerCombineTaxlotsForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles PartnerTaxlotAssignmentForm.Load
 
         If HasSelectedFeatureCount(TaxlotFeatureLayer, 1) Then
 

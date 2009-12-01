@@ -8,8 +8,8 @@
 ' Date Created:  January 8, 2008
 '
 ' Copyright Holder:  ORMAP Tech Group  
-' Contact Info:  ORMAP Tech Group (a.k.a. opet developers) may be reached at 
-' opet-developers@lists.sourceforge.net
+' Contact Info:  ORMAP Tech Group may be reached at 
+' ORMAP_ESRI_Programmers@listsmart.osl.state.or.us
 '
 ' This file is part of the ORMAP Taxlot Editing Toolbar.
 '
@@ -62,8 +62,12 @@ Imports OrmapTaxlotEditing.Utilities
 'The attribute is placed at the assembly level.
 <Assembly: PermissionSetAttribute(SecurityAction.RequestMinimum, Name:="FullTrust")> 
 
-''' <summary>Provides the Editor extension implementation.</summary>
-''' Also contains core application level fields, methods, and event handlers<remarks></remarks>
+''' <summary>
+''' Provides the Editor Extension implementation.
+''' </summary>
+''' <remarks>
+''' <para>Also contains core application-level fields, methods, and event handlers.</para>
+''' </remarks>
 <ComVisible(True)> _
 <ComClass(EditorExtension.ClassId, EditorExtension.InterfaceId, EditorExtension.EventsId), _
 ProgId("ORMAPTaxlotEditing.EditorExtension")> _
@@ -1404,5 +1408,3 @@ Public NotInheritable Class EditorExtension
 #End Region
 
 End Class
-
-
