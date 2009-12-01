@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder GUI" version="1.7.0.0" projectFile="G:\projects\OPET\trunk\Doc\APIHelp\APIHelp.shfb" started="11/30/2009 10:08:03 PM">
+<shfbBuild product="Sandcastle Help File Builder GUI" version="1.7.0.0" projectFile="G:\projects\OPET\trunk\Doc\APIHelp\APIHelp.shfb" started="11/30/2009 10:52:12 PM">
 <buildStep step="Initializing">
 </buildStep>
 <buildStep step="ClearWorkFolder">
@@ -39,7 +39,7 @@ Info: Wrote information on 1 namespaces, 28 types, and 237 members
 XslTransform (v2.4.10520.1)
 Copyright c Microsoft 2005-2006
 Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\MergeDuplicates.xsl'.
-    Last step completed in 00:00:05.0936
+    Last step completed in 00:00:05.0624
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
@@ -66,7 +66,7 @@ Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransfo
 XslTransform (v2.4.10520.1)
 Copyright c Microsoft 2005-2006
 Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl'.
-    Last step completed in 00:00:01.5312
+    Last step completed in 00:00:01.5000
 </buildStep>
 <buildStep step="ModifyHelpTopicFilenames">
 Modifying help topic filenames in reflection information file
@@ -235,7 +235,7 @@ Generating conceptual topic files
     G:\projects\OPET\trunk\Doc\APIHelp\MAML\3edaf656-b469-4120-b5c7-d217f4e6ee95.xml -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\ddueXml\3edaf656-b469-4120-b5c7-d217f4e6ee95.xml
     Parsing topic file 'G:\projects\OPET\trunk\Doc\APIHelp\MAML\19b0121a-43e7-4c08-bcb9-cb2d21a6f375.xml'
     G:\projects\OPET\trunk\Doc\APIHelp\MAML\19b0121a-43e7-4c08-bcb9-cb2d21a6f375.xml -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\ddueXml\19b0121a-43e7-4c08-bcb9-cb2d21a6f375.xml
-    Last step completed in 00:00:00.3594
+    Last step completed in 00:00:00.3750
 </buildStep>
 <buildStep step="CreateConceptualTopicConfigs">
 Creating conceptual topic configuration files...
@@ -359,7 +359,7 @@ Info: BuildAssembler: Building topic 4a6b56e2-241a-4ba7-8419-98919c898d07
 Info: BuildAssembler: Building topic 3edaf656-b469-4120-b5c7-d217f4e6ee95
 Info: BuildAssembler: Building topic 19b0121a-43e7-4c08-bcb9-cb2d21a6f375
 Info: Processed 20 topics
-    Last step completed in 00:00:15.1090
+    Last step completed in 00:00:15.9527
 </buildStep>
 <buildStep step="BuildReferenceTopics">
 Building reference help topics...
@@ -1459,7 +1459,7 @@ Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.Utilities.SendEmailMes
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.Utilities.StartDoc(System.String)
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.Utilities.UserName
 Info: Processed 334 topics
-    Last step completed in 00:00:35.7491
+    Last step completed in 00:00:35.6710
 </buildStep>
 <buildStep step="GenerateIntermediateTableOfContent">
 Generating intermediate table of content file...
@@ -1467,7 +1467,7 @@ Generating intermediate table of content file...
 XslTransform (v2.4.10520.1)
 Copyright c Microsoft 2005-2006
 Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\CreateVSToc.xsl'.
-    Last step completed in 00:00:00.5156
+    Last step completed in 00:00:00.6250
 </buildStep>
 <buildStep step="ExtractingHtmlInfo">
 Extracting HTML info for Help 1.x and/or website...
@@ -1481,7 +1481,7 @@ Processed 354 HTML files
 Sorting keywords and generating See Also indices
 Saving Help 1.x keyword index to G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\DeveloperGuide.hhk
 Saving Help 1.x table of content to G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\DeveloperGuide.hhc
-    Last step completed in 00:00:00.9531
+    Last step completed in 00:00:01.7187
 </buildStep>
 <buildStep step="GenerateHelpFormatTableOfContent">
 Generating HTML Help 1.x table of content file...
@@ -1489,7 +1489,7 @@ Generating HTML Help 1.x table of content file...
 </buildStep>
 <buildStep step="UpdateTableOfContent">
 Updating table of content with additional content items and determining default topic...
-    Last step completed in 00:00:00.0469
+    Last step completed in 00:00:00.0312
 </buildStep>
 <buildStep step="GenerateHelpFileIndex">
 Generating HTML Help 1.x index file...
@@ -1526,19 +1526,19 @@ Compile time: 0 minutes, 5 seconds
 
 
 
-Created g:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\DeveloperGuide.chm, 1,201,471 bytes
+Created g:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\DeveloperGuide.chm, 1,201,573 bytes
 
-Compression decreased file by 4,017,365 bytes.
+Compression decreased file by 4,017,287 bytes.
 
-    Last step completed in 00:00:06.4061
+    Last step completed in 00:00:06.6092
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.6562
+    Last step completed in 00:00:00.6094
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully.  Total time: 00:01:08.8107
+Build completed successfully.  Total time: 00:01:10.5607
 
 </buildStep>
 </shfbBuild>
