@@ -16,24 +16,15 @@
   	is performed manually by the following:</para>
     <para>
     <list class="bullet">
-  		<listItem>a peer developer</listItem>
-    	<listItem>the application architect</listItem>
-    	<listItem>the development team</listItem>
+  		<listItem>another developer on the development team</listItem>
+    	<listItem>the designated application architect</listItem>
+    	<listItem>the development team as a group</listItem>
     </list>
     </para>
     <para>In addition to manual review, some developers also find it useful to use 
     <application>FxCop</application>, an automated code checking tool, to flag code that may have 
     problems. The rules in <application>FxCop</application> don't perfectly match those in the 
     standards document. The standards document takes precedence where they conflict.</para>
-    
-    <para>&#160;</para>
-				
-	<!-- Uncomment this to generate an outline of the section and sub-section
-         titles.  Specify a numeric value as the inner text to limit it to
-         a specific number of sub-topics when creating the outline.  Specify
-         zero (0) to limit it to top-level sections only.  
-    <autoOutline />-->
-    <autoOutline />
     
     <para>&#160;</para>
     
@@ -47,7 +38,7 @@
 	  		
 	  	<!-- Uncomment this to create a sub-section outline
       	<autoOutline /> -->
-      	<autoOutline />
+      	<autoOutline lead="Table of Contents:" />
       	
       	<para>&#160;</para>
 		
@@ -441,10 +432,7 @@
 				<para>&#160;</para>
 				
 				<para>8.1.&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-				Use Pascal casing
-				for class names </para>
-				
-				<para>&#160;</para>
+				Use Pascal casing for class names </para>
 				
 				<para>
 				<code language="VB.NET">
@@ -456,13 +444,8 @@
 				</code>
 				</para>
 				
-				<para>&#160;</para>
-				
 				<para>8.2.&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-				Use Pascal casing
-				for method names.</para>
-				
-				<para>&#160;</para>
+				Use Pascal casing for method names.</para>
 				
 				<para>
 				<code language="VB.NET">
@@ -474,13 +457,8 @@
 				</code>
 				</para>
 								
-				<para>&#160;</para>
-				
 				<para>8.3.&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-				Use Camel casing
-				for variables and method parameters </para>
-				
-				<para>&#160;</para>
+				Use Camel casing for variables and method parameters </para>
 				
 				<para>
 				<code language="VB.NET">
@@ -495,15 +473,14 @@
 				</code>
 				</para>
 				
+				<para>8.4.&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+				Use the prefix <literal>I</literal> with Camel Casing for interfaces 
+				( Example: <codeInline>IEntity</codeInline> )</para>
+				
 				<para>&#160;</para>
 				
-				<para>8.4.&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-				Use the prefix
-				<literal>I</literal> with Camel Casing for interfaces ( Example: <codeInline>IEntity</codeInline> )</para>
-				
 				<para>8.5.&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-				Do not use
-				Hungarian notation to name variables. </para>
+				Do not use Hungarian notation to name variables. </para>
 				
 				<para>In earlier days most of the programmers liked it - having
 				the data type as a prefix for the variable name and using <literal>m_</literal> as prefix for
@@ -511,28 +488,24 @@
 				
 				<para>For example (not good): </para>
 				
-				<para>&#160;</para>
-				
 				<para>
 				<code language="VB.NET">
 				<![CDATA[
 				Dim m_sName As String
 				
-				<para>Dim nAge As Integer
+				Dim nAge As Integer
 				]]>
 				</code>
 				</para>
 				
-				<para>&#160;</para>
-				
-				<para>However, in .NET coding standards, <legacyBold>>this is not recommended</legacyBold>.
+				<para>However, in .NET coding standards, <legacyBold>this is not recommended</legacyBold>.
 				Usage of data type prefixes or suffixes (e.g. NameString) and the prefix <literal>m_</literal> to represent
 				member variables should not be used. Use All variables should use camel casing.</para>
 				
 				<para>&#160;</para>
 				
 				<alert class="note">
-					<para>Exception :</para>
+					<para>Exception:</para>
 				  	<para>UI controls are sometimes still usefully named using a form of Hungarian notation. 
 				  	See rule 7.13 below.</para>
 				</alert>
@@ -546,11 +519,7 @@
 				consistent with abbreviation practices. Developers should agree explicitly on
 				the abbreviation rules that will be followed.</para>
 				
-				<para>&#160;</para>
-				
 				<para>Good:</para>
-				
-				<para>&#160;</para>
 				
 				<para>
 				<code language="VB.NET">
@@ -561,11 +530,7 @@
 				</code>
 				</para>
 				
-				<para>&#160;</para>
-				
 				<para>Not Good:</para>
-				
-				<para>&#160;</para>
 				
 				<para>
 				<code language="VB.NET">
@@ -576,8 +541,6 @@
 				]]>
 				</code>
 				</para>
-				
-				<para>&#160;</para>
 				
 				<alert class="note">
 				  <para>Exception :</para>
@@ -599,22 +562,18 @@
 				<para>One exception in this case would be variables used for
 				iterations in loops: </para>
 				
-				<para>&#160;</para>
-				
 				<para>
 				<code language="VB.NET">
 				<![CDATA[
-				For i As Integer = 0 To count –	1
+				For i As Integer = 0 To count – 1
 					...
 				Next i
 				]]>
 				</code>
 				</para>
 								
-				<para>&#160;</para>
-				
 				<alert class="note">
-					<para>Exception :</para>
+					<para>Exception:</para>
 				  	<para>If the variable is used only as a counter for iteration and <legacyItalic>is 
 				  	not used anywhere else in the loop</legacyItalic>, you can opt to use a single 
 				  	generic character variable (e.g. <literal>i</literal> or <literal>n</literal>).</para>
@@ -623,14 +582,17 @@
 				<para>&#160;</para>
 				
 				<para>8.8.&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-				Do not use
-				underscores (<literal>_</literal>) anywhere in local variable names.</para>
+				Do not use underscores (<literal>_</literal>) anywhere in local variable names.</para>
+				
+				<para>&#160;</para>
 				
 				<para>8.9.&#160;&#160;&#160;&#160;&#160;&#160;&#160;
 				All private member
 				variables which are referenced by public or private properties must be prefixed
 				with underscore (<literal>_</literal>) so that they can be differentiated from other 
 				variables.</para>
+				
+				<para>&#160;</para>
 				
 				<para>8.10..&#160;&#160;&#160;&#160;&#160;
 				Do not use
@@ -640,13 +602,13 @@
 				</externalLink>. Although you can, do not bypass this restriction by enclosing the 
 				name in brackets (<literal>[ ]</literal>).</para>
 				
+				<para>&#160;</para>
+				
 				<para>8.11.&#160;&#160;&#160;&#160;&#160;
 				Prefix Boolean variables, properties and methods
 				with <literal>is</literal>, <literal>can</literal> or similar prefixes.</para>
 				
 				<para>For example: </para>
-				
-				<para>&#160;</para>
 				
 				<para>
 				<code language="VB.NET">
@@ -657,14 +619,14 @@
 				</code>
 				</para>
 				
-				<para>&#160;</para>
-				
 				<para>8.12.&#160;&#160;&#160;&#160;&#160;
 				Namespace names
 				should follow the standard pattern. The product name should be the name of the
 				project in the solution that builds the main assembly. </para>
 				
 				<para><codeInline><legacyItalic>OrganizationName</legacyItalic>.<legacyItalic>ProductName</legacyItalic>.<legacyItalic>TopLevelModule</legacyItalic>.<legacyItalic>BottomLevelModule</legacyItalic></codeInline></para>
+				
+				<para>&#160;</para>
 				
 				<para>8.13.&#160;&#160;&#160;&#160;&#160;
 				Use appropriate
@@ -856,8 +818,6 @@
 				
 				<para>&#160;</para>
 				
-				<para>&#160;</para>
-				
 				<para>8.14.&#160;&#160;&#160;&#160;&#160;
 				The file name
 				should match the class name.</para>
@@ -865,8 +825,12 @@
 				<para>For example, for the class <codeInline>HelloWorld</codeInline>, the file name
 				should be <localUri>HelloWorld.vb</localUri>. </para>
 				
+				<para>&#160;</para>
+				
 				<para>8.15.&#160;&#160;&#160;&#160;&#160;
 				Use Pascal Case for file names.</para>
+				
+				<para>&#160;</para>
 				
 				<para>8.16.&#160;&#160;&#160;&#160;&#160;
 				For more detailed
@@ -895,69 +859,54 @@
 				different tab settings, it really makes a huge mess of the formatting. Whenever 
 				possible, avoid fighting the IDE and just go with the flow.</para>
 				
+				<para>&#160;</para>
+				
 				<para>9.2.&#160;&#160;&#160;&#160;&#160;&#160;&#160;
 				Comments should
 				be indented to the same level as the code. </para>
 				
-				<para>&#160;</para>
-				
 				<para>Good:</para>
-				
-				<para>&#160;</para>
 				
 				<para>
 				<code language="VB.NET">
 				<![CDATA[
 				' Format a message and display
-				
 				Dim fullMessage As String = "Hello " & name
 				Dim currentTime As DateTime = DateTime.Now
 				Dim message As String =	fullMessage & ", the time is : " & _
-					currentTime.ToShortTimeString()
+				        currentTime.ToShortTimeString()
 				
 				MessageBox.Show(message)
 				]]>
 				</code>
 				</para>
 				
-				<para>&#160;</para>
-				
 				<para>Not Good:</para>
-				
-				<para>&#160;</para>
 				
 				<para>
 				<code language="VB.NET">
 				<![CDATA[
 				' Format a message and display
+				Dim fullMessage As String = "Hello " & name
+				Dim	currentTime As DateTime = DateTime.Now
+				Dim	message As String = fullMessage & ", the time is : " & _
+				        currentTime.ToShortTimeString()
 				
-					Dim fullMessage As String = "Hello " & name
-					Dim	currentTime As DateTime = DateTime.Now
-					Dim	message As String = fullMessage & ", the time is : " & _
-						currentTime.ToShortTimeString()
-					
-					MessageBox.Show(message)
+				MessageBox.Show(message)
 				]]>
 				</code>
 				</para>
-				
-				<para>&#160;</para>
 				
 				<para>9.3.&#160;&#160;&#160;&#160;&#160;&#160;&#160;
 				Use one blank
 				line to separate logical groups of code within a member. </para>
 				
-				<para>&#160;</para>
-				
 				<para>Good:</para>
-				
-				<para>&#160;</para>
 				
 				<para>
 				<code language="VB.NET">
 				<![CDATA[
 				' Format a message and display
-				
 				Function SayHello(name As String) As Boolean
 				    
 				    Dim fullMessage As String = "Hello " & name
@@ -980,11 +929,7 @@
 				</code>
 				</para>
 				
-				<para>&#160;</para>
-				
 				<para>Not Good:</para>
-				
-				<para>&#160;</para>
 				
 				<para>
 				<code language="VB.NET">
@@ -1007,8 +952,6 @@
 				</code>
 				</para>
 				
-				<para>&#160;</para>
-				
 				<para>9.4.&#160;&#160;&#160;&#160;&#160;&#160;&#160;
 				There should be one
 				and only one blank line between each member inside the class.</para>
@@ -1016,6 +959,8 @@
 				<para>Screen real-estate is valuable. Classes that require more
 				blank lines to separate related code chunks are probably in need of refactoring
 				into multiple classes. Use the #Region directive instead. </para>
+				
+				<para>&#160;</para>
 				
 				<para>9.5.&#160;&#160;&#160;&#160;&#160;&#160;&#160;
 				Organize code in
@@ -1075,6 +1020,8 @@
 				  	<para>Do not apply this rule to change the order within generated code.</para>
 				</alert>
 				
+				<para>&#160;</para>
+				
 				<para>9.6.&#160;&#160;&#160;&#160;&#160;&#160;&#160;
 				Use the <codeInline>#Region</codeInline> directive to group related pieces of
 				code together. If you create proper grouping using <codeInline>#Region</codeInline>, 
@@ -1091,11 +1038,15 @@
             <content>
                 <!-- TODO: Add named anchor: _Toc197487129 <para>10.&#160;&#160; Members</para> -->
 				
+				<para>&#160;</para>
+				
 				<para>10.1.&#160;&#160;&#160;&#160;
 				Avoid writing
 				very long members (properties, methods, event handlers, delegates, etc.). A member
 				should typically have no more than 25 lines of code. If a method has more than
 				25 lines of code, you should consider refactoring it into separate methods. </para>
+				
+				<para>&#160;</para>
 				
 				<para>10.2.&#160;&#160;&#160;&#160;
 				A method name
@@ -1104,11 +1055,7 @@
 				<para>Do not use misleading names. If the method name is obvious,
 				there is no need of documentation explaining what the method does. </para>
 				
-				<para>&#160;</para>
-				
 				<para>Good: </para>
-				
-				<para>&#160;</para>
 				
 				<para>
 				<code language="VB.NET">
@@ -1121,11 +1068,7 @@
 				</code>
 				</para>
 				
-				<para>&#160;</para>
-				
 				<para>Not Good: </para>
-				
-				<para>&#160;</para>
 				
 				<para>
 				<code language="VB.NET">
@@ -1138,18 +1081,12 @@
 				</code>
 				</para>
 				
-				<para>&#160;</para>
-				
 				<para>10.3.&#160;&#160;&#160;&#160;
 				A method should
 				do only one job. Do not combine more than one job in a single method, even if
 				those jobs are very small. </para>
 				
-				<para>&#160;</para>
-				
 				<para>Good: </para>
-				
-				<para>&#160;</para>
 				
 				<para>
 				<code language="VB.NET">
@@ -1172,11 +1109,7 @@
 				</code>
 				</para>
 				
-				<para>&#160;</para>
-				
 				<para>Not Good: </para>
-				
-				<para>&#160;</para>
 				
 				<para>
 				<code language="VB.NET">
@@ -1195,8 +1128,6 @@
 				]]>
 				</code>
 				</para>
-				
-				<para>&#160;</para>
 				
 				<para>10.4.&#160;&#160;&#160;&#160;
 				Avoid public
@@ -1218,8 +1149,6 @@
 				method returning a collection, return an empty collection instead of <literal>Null</literal>, 
 				if you have no data to return. </para>
 				
-				<para>&#160;</para>
-				
 				<para>For example, if you have a method returning an <codeInline>ArrayList</codeInline>,
 				always return a valid ArrayList. If you have no items to return, then return a
 				valid ArrayList with 0 items. This will make it easy for the calling
@@ -1232,18 +1161,13 @@
 				An event handler
 				should not contain the code to perform the required action. </para>
 				
-				<para>&#160;</para>
-				
 				<para>Instead, call another method from the event handler.</para>
 				
 				<para>&#160;</para>
 				
 				<para>10.8.&#160;&#160;&#160;&#160;
-				Do not
-				programmatically click a button to execute the same action you have written in
+				Do not programmatically click a button to execute the same action you have written in
 				the button click event. </para>
-				
-				<para>&#160;</para>
 				
 				<para>Rather, call the same method which is called by the button
 				click event handler.</para>
@@ -1260,18 +1184,23 @@
 				<para>&#160;</para>
 				
 				<para>11.1.&#160;&#160;&#160;&#160;
-				Declare variables
-				as close as possible to where it is first used. </para>
+				Declare variables as close as possible to where it is first used. </para>
+				
+				<para>&#160;</para>
 				
 				<para>11.2.&#160;&#160;&#160;&#160;
 				Use one variable
 				declaration per line.</para>
+				
+				<para>&#160;</para>
 				
 				<para>11.3.&#160;&#160;&#160;&#160;
 				Do not make
 				member variables public or protected. </para>
 				
 				<para>Keep them private and expose public/protected Properties. </para>
+				
+				<para>&#160;</para>
 				
 				<para>11.4.&#160;&#160;&#160;&#160;
 				Avoid using class-level
@@ -1284,6 +1213,8 @@
 				
 				<para>An exception can be made for private member fields that are
 				supporting properties.</para>
+				
+				<para>&#160;</para>
 				
 				<para>11.5.&#160;&#160;&#160;&#160;
 				Use the VB
@@ -1353,8 +1284,6 @@
 				]]>
 				</code>
 				</para>
-				
-				<para>&#160;</para>
 								
             </content>
         </section>
@@ -1365,23 +1294,30 @@
                 
 				<para>&#160;</para>
 				
-				<para>Clear and
-				meaningful comments, used judiciously, make code more maintainable.</para>
+				<para>Clear and	meaningful comments, used judiciously, make code more maintainable.</para>
+				
+				<para>&#160;</para>
 				
 				<para>12.1.&#160;&#160;&#160;&#160;
 				Do not write
 				comments for every line of code and every variable declared. </para>
+				
+				<para>&#160;</para>
 				
 				<para>12.2.&#160;&#160;&#160;&#160;
 				Use <legacyBold>'</legacyBold>
 				comments and <legacyBold>'''</legacyBold> for XML comments. Avoid end of line
 				comments except to clarify the use of a variable.</para>
 				
+				<para>&#160;</para>
+				
 				<para>12.3.&#160;&#160;&#160;&#160;
 				Write comments
 				wherever required, but good readable code will require less comments. If all
 				variables and method names are meaningful, that will make the code very
 				readable and will not need many comments. </para>
+				
+				<para>&#160;</para>
 				
 				<para>12.4.&#160;&#160;&#160;&#160;
 				Do not write
@@ -1390,25 +1326,35 @@
 				comment, it will lead to more confusion. Keep comments very close to the lines
 				of code being commented.</para>
 				
+				<para>&#160;</para>
+				
 				<para>12.5.&#160;&#160;&#160;&#160;
 				Fewer lines of
 				comments will generally make the code more readable, but if the code is not simple 
 				and there are too few comments, that is usually less readable. </para>
+				
+				<para>&#160;</para>
 				
 				<para>12.6.&#160;&#160;&#160;&#160;
 				If you must use
 				some complex or weird logic for any reason, document it very well with comments.
 				Use a <codeInline>HACK</codeInline> comment in these cases.</para>
 				
+				<para>&#160;</para>
+				
 				<para>12.7.&#160;&#160;&#160;&#160;
 				If you initialize
 				a numeric variable to a special number other than 0, -1 etc, document the
 				reason for choosing that value. </para>
 				
+				<para>&#160;</para>
+				
 				<para>12.8.&#160;&#160;&#160;&#160;
 				The bottom line
 				is, write clean, readable code such a way that it doesn't need many comments to
 				understand. </para>
+				
+				<para>&#160;</para>
 				
 				<para>12.9.&#160;&#160;&#160;&#160;
 				Perform spelling
@@ -1432,6 +1378,8 @@
 				errors with control structures in code as close as possible to where they occur
 				rather than with exception handlers.</para>
 				
+				<para>&#160;</para>
+				
 				<para>13.2.&#160;&#160;&#160;&#160;
 				Do not write <codeInline>Try...Catch</codeInline> blocks in all your members. </para>
 				
@@ -1445,6 +1393,8 @@
 				exception occurs, they will assume that the record already exists. This is
 				strictly not allowed. You should always explicitly check for errors rather than
 				waiting for exceptions to occur. </para>
+				
+				<para>&#160;</para>
 				
 				<para>13.3.&#160;&#160;&#160;&#160;
 				You should always
@@ -1475,37 +1425,22 @@
 				<para>
 				<code language="VB.NET">
 				<![CDATA[
-				<para>Dim d As Double = 0</para>
+				    Dim d As Double = 0
+				    Dim m As Double = 1 / d
+				    
+				    If Double.IsInfinity(m) Then
+				        ' Catch the divide-by-zero condition on floating point values.
+				        ...
+				    End If
 				
-				<para>Dim m As Double = 1 / d</para>
-				
-				<para>If Double.IsInfinity(m) Then</para>
-				
-				<para>    ' Catch the
-				divide-by-zero condition on floating point values.</para>
-				
-				<para>    ...</para>
-				
-				<para>End If</para>
-				
-				<para>&#160;</para>
-				
-				<para>Dim
-				i As Integer = 0</para>
-				
-				<para>Dim
-				k As Integer = 1</para>
-				
-				<para>If
-				i &lt;&gt; 0 Then</para>
-				
-				<para>   
-				' Perform the division only if the denominator is nonzero.</para>
-				
-				<para>   
-				k = k \ i</para>
-				
-				<para>End If</para>
+				    Dim i As Integer = 0
+				    Dim k As Integer = 1
+				    
+				    If i <> 0 Then
+						' Perform the division only if the denominator is nonzero.
+						k = k \ i  '\ returns an integer
+					End If
+				]]>
 				</code>
 				</para>
 				
@@ -1514,30 +1449,20 @@
 				<para>
 				<code language="VB.NET">
 				<![CDATA[
-				<para>Try</para>
+				    Try
+				        Dim d As Double = 0
+				        
+				        ' This statement does not throw, m becomes PositiveInfinity.
+			            Dim m As Double = 1 / d
+				        Dim i As Integer = 0
 				
-				<para>    Dim d As Double = 0</para>
-				
-				<para>    ' This statement does
-				not throw, m becomes PositiveInfinity.</para>
-				
-				<para>    Dim m As Double = 1 / d</para>
-				
-				<para>    Dim i As Integer = 0</para>
-				
-				<para>    ' This statement does
-				throw, but is inefficient.</para>
-				
-				<para>    Dim k As Integer = 1 \ i</para>
-				
-				<para>Catch ex As DivideByZeroException</para>
-				
-				<para>    ' Only Integer divisions
-				throw this exception.</para>
-				
-				<para>    ...</para>
-				
-				<para>End Try</para>
+				        ' This statement does throw, but is inefficient.
+				        Dim k As Integer = 1 \ i  '\ returns an integer	
+				        
+				    Catch ex As DivideByZeroException			        
+				        ' Only Integer divisions throw this exception.
+				        ...			
+				    End Try
 				]]>
 				</code>		
 				</para>
@@ -1555,10 +1480,14 @@
 				doing nothing is not responsible coding. In the worst case, if no clean-up or
 				recovery is possible, you should at least log the exception and proceed.</para>
 				
+				<para>&#160;</para>
+				
 				<para>13.5.&#160;&#160;&#160;&#160;
 				Use <codeInline>Try...Catch</codeInline> blocks for unexpected exceptions at
 				every entry point to the application. These are typically events, but also
 				include implemented interface properties and methods like Enabled().</para>
+				
+				<para>&#160;</para>
 				
 				<para>13.6.&#160;&#160;&#160;&#160;
 				Use <codeInline>Try...Catch</codeInline> blocks around any call to an
@@ -1566,34 +1495,46 @@
 				Expected errors should still be handled using control structures in code rather
 				than with exception handlers.</para>
 				
+				<para>&#160;</para>
+				
 				<para>13.7.&#160;&#160;&#160;&#160;
 				You can use <codeInline>Try...Catch</codeInline> blocks around any known source of
 				exceptions that can be recovered in place (in the same routine), but only if it
 				cannot be more effectively trapped and corrected using control structures in the
 				code.</para>
 				
+				<para>&#160;</para>
+				
 				<para>13.8.&#160;&#160;&#160;&#160;
 				Use a <codeInline>Try...Finally</codeInline>  block around any code that has variables
 				that should always be manually cleaned up before leaving a routine. Use <codeInline>Try...Catch...Finally</codeInline>  for variables that should always be
 				manually cleaned up upon an exception. </para>
+				
+				<para>&#160;</para>
 				
 				<para>13.9.&#160;&#160;&#160;&#160;
 				Validate
 				variables and parameters as much as possible (but avoiding redundancy) to
 				prevent unexpected exceptions before they happen. </para>
 				
-				<para>13.10.
+				<para>&#160;</para>
+				
+				<para>13.10.&#160;&#160;&#160;&#160;
 				Use Return and Exit calls to exit a procedure even if
 				inside a <codeInline>Try...Catch</codeInline> block. Do not use structured
 				exception handling to control program flow (i.e. don't use Exit Try for control flow).</para>
 				
-				<para>13.11.
+				<para>&#160;</para>
+				
+				<para>13.11.&#160;&#160;&#160;&#160;
 				Rethrow any
 				exception from any location that is not an entry point or other external
 				connection, so that procedures higher in the call stack also have a chance to
 				recover in place and clean up variables. </para>
 				
-				<para>13.12.
+				<para>&#160;</para>
+				
+				<para>13.12.&#160;&#160;&#160;&#160;
 				In the case of an
 				expected exception that is caught and handled, give a short, friendly, helpful message
 				to the user that an error has been caught, handled and logged. Log the actual
@@ -1601,12 +1542,16 @@
 				occurred, method and class name, and other useful details about the state of
 				the application or the data in use. </para>
 				
-				<para>13.13.
+				<para>&#160;</para>
+				
+				<para>13.13.&#160;&#160;&#160;&#160;
 				Error messages
 				should always use complete sentences with proper punctuation, capitalization
 				and spelling.</para>
 				
-				<para>13.14.
+				<para>&#160;</para>
+				
+				<para>13.14.&#160;&#160;&#160;&#160;
 				Error messages
 				should help the user to solve the problem. </para>
 				
@@ -1615,7 +1560,9 @@
 				helpful messages like &quot;The application failed to update the database.
 				Please make sure the login id and password are correct.&quot; </para>
 				
-				<para>13.15.
+				<para>&#160;</para>
+				
+				<para>13.15.&#160;&#160;&#160;&#160;
 				Do not write very
 				large <codeInline>Try...Catch</codeInline> blocks. </para>
 				
@@ -1627,7 +1574,9 @@
 				<para>Do not wrap every method in a <codeInline>Try...Catch</codeInline> block. This is unecessary and
 				creates bloated code.</para>
 				
-				<para>13.16.
+				<para>&#160;</para>
+				
+				<para>13.16.&#160;&#160;&#160;&#160;
 				There is no need
 				to catch unexpected general exceptions in all your members.</para>
 				
@@ -1641,7 +1590,9 @@
 				and log the error in addition to giving a friendly message to the user before
 				closing the application or allowing the user to ‘ignore and proceed'.</para>
 				
-				<para>13.17.
+				<para>&#160;</para>
+				
+				<para>13.17.&#160;&#160;&#160;&#160;
 				Always catch only
 				the specific exception, not a generic exception. </para>
 				
@@ -1689,9 +1640,8 @@
 				</code>
 				</para>
 				
-				<para>13.18.
-				When you re-throw
-				an exception, use the Throw
+				<para>13.18.&#160;&#160;&#160;&#160;
+				When you re-throw an exception, use the Throw
 				statement without specifying the original exception or other arguments. This
 				way, the original call stack is preserved.</para>
 				
@@ -1725,20 +1675,25 @@
 				</code>
 				</para>
 				
-				<para>13.19.
-				Always use
-				exception handlers where you communicate with external systems like network
+				<para>13.19.&#160;&#160;&#160;&#160;
+				Always use exception handlers where you communicate with external systems like network
 				devices, hardware devices, etc. </para>
 				
 				<para>Such systems are subject to failure anytime and error
 				checking is not usually reliable. In those cases, you should use exception
 				handlers and try to recover from error.</para>
 				
-				<para>13.20. Use <codeInline>Try...Catch...Finally</codeInline>  rather than simply Try...Catch. You can also use <codeInline>Try...Finally</codeInline>  without a Catch block. This gives the opportunity
-				to clean up after an exception or a return statement, even if no exception is
-				being caught. </para>
+				<para>&#160;</para>
 				
-				<para>13.21.
+				<para>13.20.&#160;&#160;&#160;&#160;
+				Use <codeInline>Try...Catch...Finally</codeInline>  rather than simply Try...Catch. 
+				You can also use <codeInline>Try...Finally</codeInline>  without a Catch block. This 
+				gives the opportunity to clean up after an exception or a return statement, even if no 
+				exception is being caught. </para>
+				
+				<para>&#160;</para>
+				
+				<para>13.21.&#160;&#160;&#160;&#160;
 				Use <codeInline>Try...Catch...Finally</codeInline>  in your data layer to catch all
 				database exceptions. </para>
 				
@@ -1748,15 +1703,18 @@
 				recording the exception, it could be re-thrown so that another layer in the
 				application can catch it and take appropriate action.</para>
 				
-				<para>13.22.
-				If you are
-				opening database connections, sockets, file stream etc, always close them in
+				<para>&#160;</para>
+				
+				<para>13.22.&#160;&#160;&#160;&#160;
+				If you are opening database connections, sockets, file stream etc, always close them in
 				the Finally block. </para>
 				
 				<para>This will ensure that even if an exception occurs after
 				opening the connection, it will be safely closed in the Finally block.</para>
 				
-				<para>13.23.
+				<para>&#160;</para>
+				
+				<para>13.23.&#160;&#160;&#160;&#160;
 				Make sure you
 				have a good logging class which can be configured to log errors, warning or
 				traces. </para>
@@ -1776,7 +1734,9 @@
 				  <linkUri>http://msdn2.microsoft.com/en-us/library/aa480461.aspx</linkUri>
 				</externalLink>.</para>
 				
-				<para>13.24.
+				<para>&#160;</para>
+				
+				<para>13.24.&#160;&#160;&#160;&#160;
 				Custom exceptions
 				should inherit from ApplicationException.</para>
 				
@@ -1800,6 +1760,8 @@
 				application into multiple assemblies. Group all independent utility classes
 				into a separate class library. All your database related files can be in
 				another class library. </para>
+				
+				<para>&#160;</para>
 				
 				<para>14.2.&#160;&#160;&#160;&#160;
 				Always watch for
@@ -1836,11 +1798,7 @@
 				</code>
 				</para>
 				
-				<para>&#160;</para>
-				
 				<para>Not Good:</para>
-				
-				<para>&#160;</para>
 				
 				<para>
 				<code language="VB.NET">
@@ -1871,10 +1829,12 @@
 				need to be changed. If you do use constants, declare them at the top of the
 				file. However, using constants is not recommended.</para>
 				
-				<para>14.4.&#160;&#160;&#160;&#160;
-				Do not hardcode strings. </para>
+				<para>&#160;</para>
 				
-				<para>Use resource files instead. </para>
+				<para>14.4.&#160;&#160;&#160;&#160;
+				Do not hardcode strings. Use resource files instead. </para>
+				
+				<para>&#160;</para>
 				
 				<para>14.5.&#160;&#160;&#160;&#160;
 				To compare strings use String.Compare(String, String, Boolean) to avoid issues 
@@ -1894,8 +1854,7 @@
 				</para>
 				
 				<para>14.6.&#160;&#160;&#160;&#160;
-				Use String.Empty
-				instead of  empty quotes ("").</para>
+				Use String.Empty instead of  empty quotes ("").</para>
 				
 				<para>Good:</para>
 				
@@ -1922,10 +1881,8 @@
 				</para>
 				
 				<para>14.7.&#160;&#160;&#160;&#160;
-				Use Enum wherever
-				related discrete values are needed. </para>
-				
-				<para>Do not use numbers or strings to indicate related discrete values. </para>
+				Use Enum wherever related discrete values are needed. Do not use numbers or 
+				strings to indicate related discrete values.</para>
 				
 				<para>Good: </para>
 				
@@ -1980,6 +1937,8 @@
 				<para>Get the application path programmatically and use relative
 				path. </para>
 				
+				<para>&#160;</para>
+				
 				<para>14.9.&#160;&#160;&#160;&#160;
 				Never assume that your code will run from drive &quot;C:&quot;. </para>
 				
@@ -1996,9 +1955,13 @@
 				Visual Studio 8\Common7\IDE\ItemTemplatesCache\VisualBasic\1033</localUri>. (This folder has the templates for VB, but you can
 				easily find the corresponding folders or any other language .NET language)</para>
 				
+				<para>&#160;</para>
+				
 				<para>14.11.
 				Use the AssemblyInfo file to fill in information like version number, 
 				description, company name, copyright notice etc.</para>
+				
+				<para>&#160;</para>
 				
 				<para>14.12.
 				In the
@@ -2008,6 +1971,8 @@
 				<para>Check for database connection in start up, if required. Give
 				a friendly message to the user in case of any problems. </para>
 				
+				<para>&#160;</para>
+				
 				<para>14.13.
 				If the required
 				configuration file is not found, the application should be able to create one
@@ -2016,6 +1981,8 @@
 				<para>If a wrong value found in the configuration file, the application
 				should throw an error or give a message and also should tell the user what the
 				correct values are.</para>
+				
+				<para>&#160;</para>
 				
 				<para>14.14.
 				Use Andale Mono
@@ -2046,8 +2013,7 @@
 				<para>&#160;</para>
 				
 				<para>15.1.&#160;&#160;&#160;&#160;
-				Follow the visual
-				design guidelines specified at <externalLink>
+				Follow the visual design guidelines specified at <externalLink>
 				  <linkText>http://msdn2.microsoft.com/en-us/library/ms997612.aspx</linkText>
 				  <linkUri>http://msdn2.microsoft.com/en-us/library/ms997612.aspx</linkUri>
 				</externalLink>
@@ -2062,6 +2028,8 @@
 				in this document all sizes are in pixels as these are the default units for
 				windows form elements in Visual Studio 2005. To convert to pixels, assume that
 				a horizontal DLU is 1.5 pixels and a vertical DLU is 1.65 pixels.</para>
+				
+				<para>&#160;</para>
 				
 				<para>15.2.&#160;&#160;&#160;&#160;
 				The following
@@ -2319,45 +2287,18 @@
     </sections>
   </section>
   
+  <para>&#160;</para>
+  
   <relatedTopics>
-    <!-- One or more of the following:
-         - A local link
-         - An external link
-         - A code entity reference
-
-    <link xlink:href="Other Topic's ID">Link text</link>
-    <externalLink>
-        <linkText>Link text</linkText>
-        <linkAlternateText>Optional alternate link text</linkAlternateText>
-        <linkUri>URI</linkUri>
-    </externalLink>
-    <codeEntityReference>API member ID</codeEntityReference>
-
-    Examples:
-
-    <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
-
-    <externalLink>
-        <linkText>SHFB on CodePlex</linkText>
-        <linkAlternateText>Go to CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SHFB</linkUri>
-    </externalLink>
-
-    <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
-    <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
-    <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
-    <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
-    <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
-    <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
-    <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
-    -->
+    
     <externalLink>
         <linkText>FxCop website</linkText>
         <linkAlternateText>Go to FxCop page on MSDN website</linkAlternateText>
         <linkUri>http://code.msdn.microsoft.com/codeanalysis/Release/ProjectReleases.aspx?ReleaseId=553</linkUri>
     </externalLink>
-    <para>&#160;</para>
+
   </relatedTopics>
+  
   <para>&#160;</para>
   <link xlink:href="#Intro">Back to the Top</link>
 </developerOrientationDocument>
