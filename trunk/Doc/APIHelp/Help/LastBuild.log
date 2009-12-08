@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder GUI" version="1.7.0.0" projectFile="G:\projects\OPET\trunk\Doc\APIHelp\APIHelp.shfb" started="12/2/2009 4:56:53 PM">
+<shfbBuild product="Sandcastle Help File Builder GUI" version="1.7.0.0" projectFile="G:\projects\OPET\trunk\Doc\APIHelp\APIHelp.shfb" started="12/7/2009 5:24:49 PM">
 <buildStep step="Initializing">
 </buildStep>
 <buildStep step="FindingTools">
@@ -14,7 +14,7 @@ Validating and copying documentation assembly information...
 </buildStep>
 <buildStep step="GenerateSharedContent">
 Generating shared content files (en-US, English (United States))...
-    Last step completed in 00:00:00.0469
+    Last step completed in 00:00:00.0312
 </buildStep>
 <buildStep step="CopyDependencies">
 Copying documentation assembly dependencies...
@@ -23,7 +23,7 @@ No dependencies to copy
 </buildStep>
 <buildStep step="GenerateApiFilter">
 Generating API filter for MRefBuilder...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0000
 </buildStep>
 <buildStep step="GenerateReflectionInfo">
 Generating reflection information...
@@ -36,11 +36,11 @@ Info: Wrote information on 1 namespaces, 28 types, and 237 members
 XslTransform (v2.4.10520.1)
 Copyright c Microsoft 2005-2006
 Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\MergeDuplicates.xsl'.
-    Last step completed in 00:00:05.8750
+    Last step completed in 00:00:06.4998
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0000
 </buildStep>
 <buildStep step="ApplyVisibilityProperties">
 Applying visibility properties to reflection information file
@@ -51,7 +51,7 @@ Applying visibility properties to reflection information file
     9 protected members noted for removal
     0 protected inherited framework members noted for removal
     Removing previously noted unwanted APIs and elements
-    Last step completed in 00:00:00.2813
+    Last step completed in 00:00:00.2969
 </buildStep>
 <buildStep step="TransformReflectionInfo">
 Transforming reflection output...
@@ -63,12 +63,12 @@ Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransfo
 XslTransform (v2.4.10520.1)
 Copyright c Microsoft 2005-2006
 Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl'.
-    Last step completed in 00:00:01.8594
+    Last step completed in 00:00:01.6093
 </buildStep>
 <buildStep step="ModifyHelpTopicFilenames">
 Modifying help topic filenames in reflection information file
     No changes required
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0000
 </buildStep>
 <buildStep step="CopyStandardContent">
 Copying standard help content...
@@ -178,7 +178,7 @@ C:\Program Files\Sandcastle\Presentation\vs2005\scripts\script_manifold.js -&gt;
 C:\Program Files\Sandcastle\Presentation\vs2005\scripts\SplitScreen.js -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\scripts\SplitScreen.js
 C:\Program Files\Sandcastle\Presentation\vs2005\styles\Presentation.css -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\styles\Presentation.css
 C:\Program Files\Sandcastle\Presentation\vs2005\styles\Whidbey\presentation.css -&gt; G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\styles\Whidbey\presentation.css
-    Last step completed in 00:00:00.8594
+    Last step completed in 00:00:00.6562
 </buildStep>
 <buildStep step="CopyConceptualContent">
 Copying conceptual content...
@@ -238,7 +238,7 @@ Generating conceptual topic files
 Creating conceptual topic configuration files...
     Content metadata
     Conceptual topic manifest
-    Last step completed in 00:00:00.1250
+    Last step completed in 00:00:00.1094
 </buildStep>
 <buildStep step="CopyAdditionalContent">
 Copying additional content files...
@@ -247,13 +247,13 @@ No additional content to copy
 </buildStep>
 <buildStep step="MergeTablesOfContent">
 Merging conceptual and additional tables of content...
-    Last step completed in 00:00:00.1250
+    Last step completed in 00:00:00.1094
 </buildStep>
 <buildStep step="CreateBuildAssemblerConfigs">
 Creating Sandcastle configuration files...
     sandcastle.config
     conceptual.config
-    Last step completed in 00:00:00.0313
+    Last step completed in 00:00:00.0312
 </buildStep>
 <buildStep step="MergeCustomConfigs">
 Merging custom build component configurations
@@ -261,7 +261,7 @@ G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\sandcastle.config
     No additional help attributes defined.  The 'HTML Help 2 Attributes' component was not added.
 G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\conceptual.config
     Removing unused ExampleComponent.
-    Last step completed in 00:00:00.0313
+    Last step completed in 00:00:00.0469
 </buildStep>
 <buildStep step="BuildConceptualTopics">
 Building conceptual help topics...
@@ -356,7 +356,7 @@ Info: BuildAssembler: Building topic 4a6b56e2-241a-4ba7-8419-98919c898d07
 Info: BuildAssembler: Building topic 3edaf656-b469-4120-b5c7-d217f4e6ee95
 Info: BuildAssembler: Building topic 19b0121a-43e7-4c08-bcb9-cb2d21a6f375
 Info: Processed 20 topics
-    Last step completed in 00:00:17.3438
+    Last step completed in 00:00:19.0618
 </buildStep>
 <buildStep step="BuildReferenceTopics">
 Building reference help topics...
@@ -1456,7 +1456,7 @@ Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.Utilities.SendEmailMes
 Info: BuildAssembler: Building topic M:OrmapTaxlotEditing.Utilities.StartDoc(System.String)
 Info: BuildAssembler: Building topic P:OrmapTaxlotEditing.Utilities.UserName
 Info: Processed 334 topics
-    Last step completed in 00:00:37.9219
+    Last step completed in 00:00:36.9517
 </buildStep>
 <buildStep step="GenerateIntermediateTableOfContent">
 Generating intermediate table of content file...
@@ -1464,7 +1464,7 @@ Generating intermediate table of content file...
 XslTransform (v2.4.10520.1)
 Copyright c Microsoft 2005-2006
 Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\CreateVSToc.xsl'.
-    Last step completed in 00:00:00.6719
+    Last step completed in 00:00:00.5156
 </buildStep>
 <buildStep step="ExtractingHtmlInfo">
 Extracting HTML info for Help 1.x and/or website...
@@ -1478,7 +1478,7 @@ Processed 354 HTML files
 Sorting keywords and generating See Also indices
 Saving Help 1.x keyword index to G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\DeveloperGuide.hhk
 Saving Help 1.x table of content to G:\projects\OPET\trunk\Doc\APIHelp\Help\Working\DeveloperGuide.hhc
-    Last step completed in 00:00:01.0938
+    Last step completed in 00:00:00.8906
 </buildStep>
 <buildStep step="GenerateHelpFormatTableOfContent">
 Generating HTML Help 1.x table of content file...
@@ -1486,7 +1486,7 @@ Generating HTML Help 1.x table of content file...
 </buildStep>
 <buildStep step="UpdateTableOfContent">
 Updating table of content with additional content items and determining default topic...
-    Last step completed in 00:00:00.0313
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="GenerateHelpFileIndex">
 Generating HTML Help 1.x index file...
@@ -1494,7 +1494,7 @@ Generating HTML Help 1.x index file...
 </buildStep>
 <buildStep step="GenerateHelpProject">
 Generating HTML Help 1.x project file...
-    Last step completed in 00:00:00.0313
+    Last step completed in 00:00:00.0312
 </buildStep>
 <buildStep step="CompilingHelpFile">
 Compiling HTML Help 1.x file...
@@ -1509,13 +1509,13 @@ Compiling g:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\DeveloperGuide.
 
 
 
-Compile time: 0 minutes, 6 seconds
+Compile time: 0 minutes, 5 seconds
 
 356	Topics
 
 3,843	Local links
 
-375	Internet links
+376	Internet links
 
 0	Graphics
 
@@ -1523,19 +1523,19 @@ Compile time: 0 minutes, 6 seconds
 
 
 
-Created g:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\DeveloperGuide.chm, 1,201,159 bytes
+Created g:\projects\OPET\trunk\Doc\APIHelp\Help\Working\Output\DeveloperGuide.chm, 1,201,421 bytes
 
-Compression decreased file by 4,017,186 bytes.
+Compression decreased file by 4,017,499 bytes.
 
-    Last step completed in 00:00:07.1875
+    Last step completed in 00:00:06.9060
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.8125
+    Last step completed in 00:00:00.6406
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully.  Total time: 00:01:15.9375
+Build completed successfully.  Total time: 00:01:15.9658
 
 </buildStep>
 </shfbBuild>

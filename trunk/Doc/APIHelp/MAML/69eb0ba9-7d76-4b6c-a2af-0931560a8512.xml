@@ -49,9 +49,26 @@
       graphical and command-line-based tools to build a help file in an automated 
       fashion.</para>
       
-      <para>Eric Woodruff presents excellent installation instructions (including 
-      some critical fixes) on the SHFB website:</para>
-      <para>
+      <para>The current supported and stable release of Sandcastle used to
+	  create this Guide is 1.7.0.0 Production (June 2, 2008). It can be 
+	  downloaded here:</para>
+	    
+	  <para>
+        <externalLink>
+          <linkText><application>SFHB Download</application></linkText>
+          <linkAlternateText>View SFHB Download</linkAlternateText>
+          <linkUri>http://shfb.codeplex.com/Release/ProjectReleases.aspx?ReleaseId=10445</linkUri>
+          <linkTarget>_blank</linkTarget>
+        </externalLink>
+      </para>
+      
+      <para>&#160;</para>
+        
+      <alert class="note">
+        <para>Eric Woodruff presents excellent additional installation instructions
+        (including some critical fixes) on the SHFB website:</para>
+        
+        <para>
         <externalLink>
           <linkText><application>SFHB Installation Instructions</application></linkText>
           <linkAlternateText>View SFHB Installation Instructions</linkAlternateText>
@@ -59,6 +76,9 @@
           <linkTarget>_blank</linkTarget>
         </externalLink>
       </para>
+      
+      </alert>
+      
     </content>
   </section>
 
@@ -66,9 +86,9 @@
     <title>Example Installation Steps</title>
     <content>
       <alert class="note">
-      <para>These are the steps I took to install Sandcastle Help File Builder
-      and supporting apps and extensions.</para>
-      <para><phrase>-- Nick Seigal, Thursday, March 26, 2009</phrase></para>
+        <para>These are the steps I took to install Sandcastle Help File Builder
+        and supporting apps and extensions.</para>
+        <para><phrase>-- Nick Seigal, Thursday, March 26, 2009</phrase></para>
       </alert>
       <procedure>
         <steps class="ordered">
