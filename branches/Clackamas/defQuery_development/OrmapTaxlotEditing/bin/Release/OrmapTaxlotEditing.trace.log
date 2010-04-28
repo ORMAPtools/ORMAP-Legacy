@@ -1,0 +1,663 @@
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/9/2010 6:00:36 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.Runtime.InteropServices.COMException (0x80004005): Error HRESULT E_FAIL has been returned from a call to a COM component.
+   at ESRI.ArcGIS.DataSourcesGDB.SdeWorkspaceFactoryClass.IWorkspaceFactory2_OpenFromFile(String fileName, Int32 hWnd)
+   at OrmapTaxlotEditing.SpatialUtilities.getWorkspace(CatalogFileDialog thisFileDialog) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 2029
+   at OrmapTaxlotEditing.SpatialUtilities.LoadFCIntoMap(String featureClassName, String dialogTitle) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1335
+   at OrmapTaxlotEditing.SpatialUtilities.LoadFCIntoMap(String featureClassName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1300
+   at OrmapTaxlotEditing.DataMonitor.loadDataIntoMap(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 625
+   at OrmapTaxlotEditing.DataMonitor.loadOptionSuccessful(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 609
+   at OrmapTaxlotEditing.DataMonitor.CheckData(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 506
+   at OrmapTaxlotEditing.DataMonitor.CheckValidMapIndexDataProperties() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 426
+   at OrmapTaxlotEditing.LocateFeature.DoButtonOperation() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 535
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/11/2010 5:15:48 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at OrmapTaxlotEditing.DisplayList.GetMapFromArcMap(IApplication application) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 140
+   at OrmapTaxlotEditing.DisplayList.AddLayers() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 202
+   at OrmapTaxlotEditing.DisplayList.LoadFormOperation() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 192
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/11/2010 5:23:14 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at OrmapTaxlotEditing.DisplayList.GetMapFromArcMap(IApplication application) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 140
+   at OrmapTaxlotEditing.DisplayList.AddLayers() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 204
+   at OrmapTaxlotEditing.DisplayList.LoadFormOperation() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 194
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/11/2010 5:24:07 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at OrmapTaxlotEditing.DisplayList.GetMapFromArcMap(IApplication application) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 140
+   at OrmapTaxlotEditing.DisplayList.AddLayers() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 204
+   at OrmapTaxlotEditing.DisplayList.LoadFormOperation() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 194
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/11/2010 5:48:32 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.Runtime.InteropServices.COMException (0x80004005): Error HRESULT E_FAIL has been returned from a call to a COM component.
+   at ESRI.ArcGIS.DataSourcesGDB.SdeWorkspaceFactoryClass.IWorkspaceFactory2_OpenFromFile(String fileName, Int32 hWnd)
+   at OrmapTaxlotEditing.SpatialUtilities.getWorkspace(CatalogFileDialog thisFileDialog) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 2029
+   at OrmapTaxlotEditing.SpatialUtilities.LoadFCIntoMap(String featureClassName, String dialogTitle) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1335
+   at OrmapTaxlotEditing.SpatialUtilities.LoadFCIntoMap(String featureClassName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1300
+   at OrmapTaxlotEditing.DataMonitor.loadDataIntoMap(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 625
+   at OrmapTaxlotEditing.DataMonitor.loadOptionSuccessful(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 609
+   at OrmapTaxlotEditing.DataMonitor.CheckData(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 506
+   at OrmapTaxlotEditing.DataMonitor.CheckValidMapIndexDataProperties() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 426
+   at OrmapTaxlotEditing.LocateFeature.DoButtonOperation() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 536
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/11/2010 5:48:37 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.Runtime.InteropServices.COMException (0x80004005): Error HRESULT E_FAIL has been returned from a call to a COM component.
+   at ESRI.ArcGIS.DataSourcesGDB.SdeWorkspaceFactoryClass.IWorkspaceFactory2_OpenFromFile(String fileName, Int32 hWnd)
+   at OrmapTaxlotEditing.SpatialUtilities.getWorkspace(CatalogFileDialog thisFileDialog) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 2029
+   at OrmapTaxlotEditing.SpatialUtilities.LoadFCIntoMap(String featureClassName, String dialogTitle) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1335
+   at OrmapTaxlotEditing.SpatialUtilities.LoadFCIntoMap(String featureClassName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1300
+   at OrmapTaxlotEditing.DataMonitor.loadDataIntoMap(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 625
+   at OrmapTaxlotEditing.DataMonitor.loadOptionSuccessful(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 609
+   at OrmapTaxlotEditing.DataMonitor.CheckData(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 506
+   at OrmapTaxlotEditing.DataMonitor.CheckValidMapIndexDataProperties() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 426
+   at OrmapTaxlotEditing.LocateFeature.DoButtonOperation() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 536
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/11/2010 6:17:28 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.Runtime.InteropServices.COMException (0x80004005): Error HRESULT E_FAIL has been returned from a call to a COM component.
+   at ESRI.ArcGIS.DataSourcesGDB.SdeWorkspaceFactoryClass.IWorkspaceFactory2_OpenFromFile(String fileName, Int32 hWnd)
+   at OrmapTaxlotEditing.SpatialUtilities.getWorkspace(CatalogFileDialog thisFileDialog) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 2029
+   at OrmapTaxlotEditing.SpatialUtilities.LoadFCIntoMap(String featureClassName, String dialogTitle) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1335
+   at OrmapTaxlotEditing.SpatialUtilities.LoadFCIntoMap(String featureClassName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1300
+   at OrmapTaxlotEditing.DataMonitor.loadDataIntoMap(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 625
+   at OrmapTaxlotEditing.DataMonitor.loadOptionSuccessful(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 609
+   at OrmapTaxlotEditing.DataMonitor.CheckData(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 506
+   at OrmapTaxlotEditing.DataMonitor.CheckValidMapIndexDataProperties() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 426
+   at OrmapTaxlotEditing.LocateFeature.DoButtonOperation() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 536
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/11/2010 11:42:26 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.DisplayList.AddLayers() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 171
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/15/2010 9:13:51 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.LocateFeature.ApplyDefinitionQuery() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 504
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/15/2010 9:13:56 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.LocateFeature.ApplyDefinitionQuery() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 504
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/16/2010 3:07:03 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.DisplayList.AddLayers() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 180
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/16/2010 3:10:44 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.DisplayList.AddLayers() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 180
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/16/2010 3:16:10 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.DisplayList.AddLayers() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 180
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/16/2010 3:23:21 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.DisplayList.AddLayers() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DisplayList.vb:line 180
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/17/2010 12:05:37 AM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.AccessViolationException: Attempted to read or write protected memory. This is often an indication that other memory is corrupt.
+   at ESRI.ArcGIS.Geometry.ITopologicalOperator.Intersect(IGeometry other, esriGeometryDimension resultDimension)
+   at OrmapTaxlotEditing.SpatialUtilities.GetValueViaOverlay(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1037
+   at OrmapTaxlotEditing.SpatialUtilities.GetValue(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 891
+   at OrmapTaxlotEditing.SpatialUtilities.CalculateTaxlotValues(IFeature editFeature, IFeatureLayer mapIndexLayer) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 274
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 579
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/17/2010 11:35:03 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.AccessViolationException: Attempted to read or write protected memory. This is often an indication that other memory is corrupt.
+   at ESRI.ArcGIS.Geometry.ITopologicalOperator.Intersect(IGeometry other, esriGeometryDimension resultDimension)
+   at OrmapTaxlotEditing.SpatialUtilities.GetValueViaOverlay(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1037
+   at OrmapTaxlotEditing.SpatialUtilities.GetValue(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 891
+   at OrmapTaxlotEditing.SpatialUtilities.CalculateTaxlotValues(IFeature editFeature, IFeatureLayer mapIndexLayer) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 274
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 579
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/17/2010 11:35:56 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.AccessViolationException: Attempted to read or write protected memory. This is often an indication that other memory is corrupt.
+   at ESRI.ArcGIS.Geometry.ITopologicalOperator.Intersect(IGeometry other, esriGeometryDimension resultDimension)
+   at OrmapTaxlotEditing.SpatialUtilities.GetValueViaOverlay(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1037
+   at OrmapTaxlotEditing.SpatialUtilities.GetValue(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 891
+   at OrmapTaxlotEditing.SpatialUtilities.CalculateTaxlotValues(IFeature editFeature, IFeatureLayer mapIndexLayer) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 274
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 579
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/18/2010 11:45:04 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.AccessViolationException: Attempted to read or write protected memory. This is often an indication that other memory is corrupt.
+   at ESRI.ArcGIS.Geometry.ITopologicalOperator.Intersect(IGeometry other, esriGeometryDimension resultDimension)
+   at OrmapTaxlotEditing.SpatialUtilities.GetValueViaOverlay(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1037
+   at OrmapTaxlotEditing.SpatialUtilities.GetValue(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 891
+   at OrmapTaxlotEditing.SpatialUtilities.CalculateTaxlotValues(IFeature editFeature, IFeatureLayer mapIndexLayer) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 274
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 579
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/18/2010 11:45:14 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.AccessViolationException: Attempted to read or write protected memory. This is often an indication that other memory is corrupt.
+   at ESRI.ArcGIS.Geometry.ITopologicalOperator.Intersect(IGeometry other, esriGeometryDimension resultDimension)
+   at OrmapTaxlotEditing.SpatialUtilities.GetValueViaOverlay(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1037
+   at OrmapTaxlotEditing.SpatialUtilities.GetValue(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 891
+   at OrmapTaxlotEditing.SpatialUtilities.CalculateTaxlotValues(IFeature editFeature, IFeatureLayer mapIndexLayer) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 274
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 579
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/18/2010 11:45:52 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.AccessViolationException: Attempted to read or write protected memory. This is often an indication that other memory is corrupt.
+   at ESRI.ArcGIS.Geometry.ITopologicalOperator.Intersect(IGeometry other, esriGeometryDimension resultDimension)
+   at OrmapTaxlotEditing.SpatialUtilities.GetValueViaOverlay(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1037
+   at OrmapTaxlotEditing.SpatialUtilities.GetValue(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 891
+   at OrmapTaxlotEditing.SpatialUtilities.CalculateTaxlotValues(IFeature editFeature, IFeatureLayer mapIndexLayer) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 274
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 579
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/18/2010 11:59:26 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.AccessViolationException: Attempted to read or write protected memory. This is often an indication that other memory is corrupt.
+   at ESRI.ArcGIS.Geometry.ITopologicalOperator.Intersect(IGeometry other, esriGeometryDimension resultDimension)
+   at OrmapTaxlotEditing.SpatialUtilities.GetValueViaOverlay(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1037
+   at OrmapTaxlotEditing.SpatialUtilities.GetValue(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 891
+   at OrmapTaxlotEditing.SpatialUtilities.CalculateTaxlotValues(IFeature editFeature, IFeatureLayer mapIndexLayer) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 274
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 579
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/19/2010 12:00:43 AM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.AccessViolationException: Attempted to read or write protected memory. This is often an indication that other memory is corrupt.
+   at ESRI.ArcGIS.Geometry.ITopologicalOperator.Intersect(IGeometry other, esriGeometryDimension resultDimension)
+   at OrmapTaxlotEditing.SpatialUtilities.GetValueViaOverlay(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1037
+   at OrmapTaxlotEditing.SpatialUtilities.GetValue(IGeometry searchGeometry, IFeatureClass overlayFeatureClass, String valueFieldName, String orderBestByFieldName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 891
+   at OrmapTaxlotEditing.SpatialUtilities.CalculateTaxlotValues(IFeature editFeature, IFeatureLayer mapIndexLayer) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 274
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 579
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/22/2010 3:22:38 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.ArgumentException: Value does not fall within the expected range.
+   at ESRI.ArcGIS.Carto.IMap.get_Layer(Int32 Index)
+   at OrmapTaxlotEditing.LocateFeature.ApplyDefinitionQuery() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 559
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/22/2010 3:32:19 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.ArgumentException: Value does not fall within the expected range.
+   at ESRI.ArcGIS.Carto.IMap.get_Layer(Int32 Index)
+   at OrmapTaxlotEditing.LocateFeature.ApplyDefinitionQuery() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 565
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/22/2010 3:44:44 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.ArgumentException: Value does not fall within the expected range.
+   at ESRI.ArcGIS.Carto.IMap.get_Layer(Int32 Index)
+   at OrmapTaxlotEditing.LocateFeature.ApplyDefinitionQuery() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 567
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/22/2010 3:49:27 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.ArgumentException: Value does not fall within the expected range.
+   at ESRI.ArcGIS.Carto.IMap.get_Layer(Int32 Index)
+   at OrmapTaxlotEditing.LocateFeature.ApplyDefinitionQuery() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 568
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/22/2010 3:50:50 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.ArgumentException: Argument 'Prompt' cannot be converted to type 'String'.
+   at Microsoft.VisualBasic.Interaction.MsgBox(Object Prompt, MsgBoxStyle Buttons, Object Title)
+   at OrmapTaxlotEditing.LocateFeature.ApplyDefinitionQuery() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 601
+   at OrmapTaxlotEditing.LocateFeature.uxDisplayChecked_CheckedChanged(Object sender, EventArgs e) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 530
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/22/2010 3:59:04 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.ArgumentException: Argument 'Prompt' cannot be converted to type 'String'.
+   at Microsoft.VisualBasic.Interaction.MsgBox(Object Prompt, MsgBoxStyle Buttons, Object Title)
+   at OrmapTaxlotEditing.LocateFeature.ApplyDefinitionQuery() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 604
+   at OrmapTaxlotEditing.LocateFeature.uxDisplayChecked_CheckedChanged(Object sender, EventArgs e) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 530
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/22/2010 4:00:19 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.Runtime.InteropServices.COMException (0x80004005): Error HRESULT E_FAIL has been returned from a call to a COM component.
+   at ESRI.ArcGIS.DataSourcesGDB.SdeWorkspaceFactoryClass.IWorkspaceFactory2_OpenFromFile(String fileName, Int32 hWnd)
+   at OrmapTaxlotEditing.SpatialUtilities.getWorkspace(CatalogFileDialog thisFileDialog) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 2029
+   at OrmapTaxlotEditing.SpatialUtilities.LoadFCIntoMap(String featureClassName, String dialogTitle) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1335
+   at OrmapTaxlotEditing.SpatialUtilities.LoadFCIntoMap(String featureClassName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1300
+   at OrmapTaxlotEditing.DataMonitor.loadDataIntoMap(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 625
+   at OrmapTaxlotEditing.DataMonitor.loadOptionSuccessful(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 609
+   at OrmapTaxlotEditing.DataMonitor.CheckData(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 506
+   at OrmapTaxlotEditing.DataMonitor.CheckValidMapIndexDataProperties() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 426
+   at OrmapTaxlotEditing.LocateFeature.DoButtonOperation() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 707
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/22/2010 4:00:51 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.ArgumentException: Argument 'Prompt' cannot be converted to type 'String'.
+   at Microsoft.VisualBasic.Interaction.MsgBox(Object Prompt, MsgBoxStyle Buttons, Object Title)
+   at OrmapTaxlotEditing.LocateFeature.ApplyDefinitionQuery() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 605
+   at OrmapTaxlotEditing.LocateFeature.uxDisplayChecked_CheckedChanged(Object sender, EventArgs e) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 530
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/30/2010 4:45:15 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.ArgumentException: Resource 'MapDefinition.bmp' cannot be found in class 'OrmapTaxlotEditing.MapDefinition'.
+   at System.Drawing.Bitmap..ctor(Type type, String resource)
+   at OrmapTaxlotEditing.MapDefinition..ctor() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\MapDefinition.vb:line 119
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/30/2010 4:47:53 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.ArgumentException: Resource 'MapDefinition.bmp' cannot be found in class 'OrmapTaxlotEditing.MapDefinition'.
+   at System.Drawing.Bitmap..ctor(Type type, String resource)
+   at OrmapTaxlotEditing.MapDefinition..ctor() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\MapDefinition.vb:line 119
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/30/2010 4:47:58 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.ArgumentException: Resource 'MapDefinition.bmp' cannot be found in class 'OrmapTaxlotEditing.MapDefinition'.
+   at System.Drawing.Bitmap..ctor(Type type, String resource)
+   at OrmapTaxlotEditing.MapDefinition..ctor() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\MapDefinition.vb:line 119
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/30/2010 5:02:06 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.ArgumentException: Resource 'MapDefinition.bmp' cannot be found in class 'OrmapTaxlotEditing.MapDefinition'.
+   at System.Drawing.Bitmap..ctor(Type type, String resource)
+   at OrmapTaxlotEditing.MapDefinition..ctor() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\MapDefinition.vb:line 119
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/30/2010 5:04:23 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.ArgumentException: Resource 'MapDefinition.bmp' cannot be found in class 'OrmapTaxlotEditing.MapDefinition'.
+   at System.Drawing.Bitmap..ctor(Type type, String resource)
+   at OrmapTaxlotEditing.MapDefinition..ctor() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\MapDefinition.vb:line 119
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+3/30/2010 5:04:23 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at OrmapTaxlotEditing.MapDefinition.CallForm() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\MapDefinition.vb:line 184
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/5/2010 3:45:57 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.Runtime.InteropServices.COMException (0x80041354): Objects in this class cannot be updated outside an edit session [sdeormap.JONMCD.tax_TaxLot]
+   at ESRI.ArcGIS.Geodatabase.IFeatureClass.Update(IQueryFilter filter, Boolean Recycling)
+   at OrmapTaxlotEditing.TaxlotAssignment.DoToolOperation(EsriMouseButtons Button, Int32 X, Int32 Y) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\TaxlotAssignment.vb:line 412
+   at OrmapTaxlotEditing.TaxlotAssignment.OnMouseDown(Int32 Button, Int32 Shift, Int32 X, Int32 Y) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\TaxlotAssignment.vb:line 611
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/6/2010 5:38:44 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.LocateFeature.DefinitionQuery(ILayer& theLayer, String& QueryString) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 691
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/6/2010 5:38:47 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.LocateFeature.DefinitionQuery(ILayer& theLayer, String& QueryString) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 691
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/6/2010 5:38:52 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.LocateFeature.DefinitionQuery(ILayer& theLayer, String& QueryString) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 691
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/6/2010 5:38:55 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.LocateFeature.DefinitionQuery(ILayer& theLayer, String& QueryString) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 691
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/6/2010 5:39:01 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.LocateFeature.DefinitionQuery(ILayer& theLayer, String& QueryString) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 691
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/6/2010 5:39:20 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.LocateFeature.DefinitionQuery(ILayer& theLayer, String& QueryString) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 691
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/6/2010 5:39:23 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.InvalidCastException: Unable to cast COM object of type 'System.__ComObject' to interface type 'ESRI.ArcGIS.Carto.IFeatureLayer'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{40A9E885-5533-11D0-98BE-00805F7CED21}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+   at OrmapTaxlotEditing.LocateFeature.DefinitionQuery(ILayer& theLayer, String& QueryString) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\LocateFeature.vb:line 691
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/21/2010 12:40:09 AM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.Runtime.InteropServices.COMException (0x80004005): Error HRESULT E_FAIL has been returned from a call to a COM component.
+   at ESRI.ArcGIS.DataSourcesGDB.SdeWorkspaceFactoryClass.IWorkspaceFactory2_OpenFromFile(String fileName, Int32 hWnd)
+   at OrmapTaxlotEditing.SpatialUtilities.getWorkspace(CatalogFileDialog thisFileDialog) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 2029
+   at OrmapTaxlotEditing.SpatialUtilities.LoadTableIntoMap(String objectClassName, String dialogTitle) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1413
+   at OrmapTaxlotEditing.SpatialUtilities.LoadTableIntoMap(String objectClassName) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\SpatialUtilities.vb:line 1376
+   at OrmapTaxlotEditing.DataMonitor.loadDataIntoMap(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 627
+   at OrmapTaxlotEditing.DataMonitor.loadOptionSuccessful(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 609
+   at OrmapTaxlotEditing.DataMonitor.CheckData(ESRIClassType classType, String className) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 506
+   at OrmapTaxlotEditing.DataMonitor.CheckValidCancelledNumbersTableDataProperties() in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 440
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 557
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/22/2010 3:10:56 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.Runtime.InteropServices.COMException (0x80041354): Objects in this class cannot be updated outside an edit session [sdeormap.jonmcd.TAX_TABLE_CANCELLEDNUMBERS]
+   at ESRI.ArcGIS.Geodatabase.ITable.CreateRow()
+   at OrmapTaxlotEditing.DataMonitor.SendExtinctToCancelledNumbersTable(IFeature inTaxlotFeature, Boolean isDuringOnChange) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 582
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 574
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/22/2010 3:17:18 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.Runtime.InteropServices.COMException (0x80041354): Objects in this class cannot be updated outside an edit session [sdeormap.jonmcd.TAX_TABLE_CANCELLEDNUMBERS]
+   at ESRI.ArcGIS.Geodatabase.ITable.CreateRow()
+   at OrmapTaxlotEditing.DataMonitor.SendExtinctToCancelledNumbersTable(IFeature inTaxlotFeature, Boolean isDuringOnChange) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 582
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 574
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/22/2010 4:04:39 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.Runtime.InteropServices.COMException (0x80041354): Objects in this class cannot be updated outside an edit session [sdeormap.jonmcd.TAX_TABLE_CANCELLEDNUMBERS]
+   at ESRI.ArcGIS.Geodatabase.ITable.CreateRow()
+   at OrmapTaxlotEditing.DataMonitor.SendExtinctToCancelledNumbersTable(IFeature inTaxlotFeature, Boolean isDuringOnChange) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 582
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 574
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/22/2010 6:04:24 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.Runtime.InteropServices.COMException (0x80041354): Objects in this class cannot be updated outside an edit session [sdeormap.jonmcd.TAX_TABLE_CANCELLEDNUMBERS]
+   at ESRI.ArcGIS.Geodatabase.ITable.CreateRow()
+   at OrmapTaxlotEditing.DataMonitor.SendExtinctToCancelledNumbersTable(IFeature inTaxlotFeature, Boolean isDuringOnChange) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 582
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 574
+__________________________________________________
+
+ArcMap.exe Error: 0 : 
+__________________________________________________
+4/27/2010 2:42:30 PM
+
+An unexpected exception occured.
+
+UNHANDLED EXCEPTION CALL STACK:
+System.Runtime.InteropServices.COMException (0x80041354): Objects in this class cannot be updated outside an edit session [sdeormap.jonmcd.TAX_TABLE_CANCELLEDNUMBERS]
+   at ESRI.ArcGIS.Geodatabase.ITable.CreateRow()
+   at OrmapTaxlotEditing.DataMonitor.SendExtinctToCancelledNumbersTable(IFeature inTaxlotFeature, Boolean isDuringOnChange) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\DataMonitor.vb:line 582
+   at OrmapTaxlotEditing.EditorExtension.EditEvents_OnChangeFeature(IObject obj) in C:\Documents and Settings\jonmcd\Desktop\opet\trunk\OrmapTaxlotEditing\EditorExtension.vb:line 574
+__________________________________________________
+
