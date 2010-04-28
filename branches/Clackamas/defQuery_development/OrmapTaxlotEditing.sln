@@ -6,10 +6,6 @@ EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "OrmapTaxlotEditing_Installation", "OrmapTaxlotEditing_Installation\OrmapTaxlotEditing_Installation.vdproj", "{5E4FF019-B0C0-456E-9A34-A0100128A536}"
 EndProject
 Global
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 1
-		SccLocalPath0 = .
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
