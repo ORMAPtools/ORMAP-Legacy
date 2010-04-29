@@ -163,7 +163,7 @@ Public NotInheritable Class MapDefinition
 
 #Region "Event Handlers"
     ''' <summary>
-    ''' assigns the mapnumber toeh uxDefinitionQueryTextBox.text
+    ''' assigns the mapnumber to the uxDefinitionQueryTextBox.text
     ''' </summary>
     ''' <remarks>None</remarks>
     Private Sub PartnerMapDefinitionForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles _ParnterMapDefinitionForm.Load
