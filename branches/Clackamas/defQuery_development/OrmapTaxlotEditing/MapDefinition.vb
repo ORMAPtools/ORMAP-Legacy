@@ -138,7 +138,10 @@ Public NotInheritable Class MapDefinition
             Return _partnerMapDefinitionForm
         End Get
     End Property
-
+    ''' <summary>
+    ''' Adds handlers for the partner Map Definition Form.
+    ''' </summary>
+    ''' <remarks>None</remarks>
     Private Sub setPartnerMapDefinitionForm(ByVal value As MapDefinitionForm)
 
         If value IsNot Nothing Then
@@ -159,18 +162,29 @@ Public NotInheritable Class MapDefinition
 #End Region
 
 #Region "Event Handlers"
-
+    ''' <summary>
+    ''' assigns the mapnumber toeh uxDefinitionQueryTextBox.text
+    ''' </summary>
+    ''' <remarks>None</remarks>
     Private Sub PartnerMapDefinitionForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles _ParnterMapDefinitionForm.Load
 
         _partnerMapDefinitionForm.uxDefinitonQueryTextBox.Text = _theMapNumber
 
     End Sub
+    ''' <summary>
+    ''' Cancels the form
+    ''' </summary>
+    ''' <remarks>None</remarks>
     Private Sub CancelSetDefinitionQuery_Click(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles _partnerMapDefinitionForm.uxCancelSetDefinitionQuery.Click
 
         _ApplyQuery = False
         _partnerMapDefinitionForm.Dispose()
 
     End Sub
+    ''' <summary>
+    ''' Applies the definition value
+    ''' </summary>
+    ''' <remarks>None</remarks>
     Private Sub SetMapDefinitionQuery_Click(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles _partnerMapDefinitionForm.uxSetMapDefinitionQuery.Click
 
         _theMapNumber = _partnerMapDefinitionForm.uxDefinitonQueryTextBox.Text

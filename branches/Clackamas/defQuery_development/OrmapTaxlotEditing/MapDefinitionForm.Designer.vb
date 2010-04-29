@@ -82,8 +82,9 @@ Partial Class MapDefinitionForm
         Me.Controls.Add(Me.uxSetMapDefinitionQuery)
         Me.Controls.Add(Me.uxDefinitonQueryTextBox)
         Me.Controls.Add(Me.uxEnterMapNumber)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "MapDefinitionForm"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Definition Query"
         Me.ResumeLayout(False)
         Me.PerformLayout()
