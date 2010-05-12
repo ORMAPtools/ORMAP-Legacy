@@ -1,0 +1,54 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+AssessorToolbar
+</name>
+</assembly>
+<members>
+<member name="P:AssessorToolbar.DrawSelectedArrows.Enabled">
+	<summary>
+ Called by ArcMap once per second to check if the command is enabled.
+ </summary>
+	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
+</member><member name="P:AssessorToolbar.DrawSelectedDangles.Enabled">
+	<summary>
+ Called by ArcMap once per second to check if the command is enabled.
+ </summary>
+	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
+</member><member name="P:AssessorToolbar.CalculateDecimalPlaces.Enabled">
+	<summary>
+ Called by ArcMap once per second to check if the command is enabled.
+ </summary>
+	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
+</member><member name="P:AssessorToolbar.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:AssessorToolbar.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:AssessorToolbar.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:AssessorToolbar.AssessorToolbar.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:AssessorToolbar.AssessorToolbar.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category unregistration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="P:AssessorToolbar.SnappingCommand.Enabled">
+	<summary>
+ Called by ArcMap once per second to check if the command is enabled.
+ </summary>
+	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
+</member>
+</members>
+</doc>
