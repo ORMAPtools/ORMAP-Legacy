@@ -1,0 +1,31 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+AssessorToolbar
+</name>
+</assembly>
+<members>
+<member name="P:AssessorToolbar.CalculateDecimalPlaces.Enabled">
+	<summary>
+ Called by ArcMap once per second to check if the command is enabled.
+ </summary>
+	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
+</member><member name="M:AssessorToolbar.AssessorToolbar.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:AssessorToolbar.AssessorToolbar.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category unregistration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="P:AssessorToolbar.SnappingCommand.Enabled">
+	<summary>
+ Called by ArcMap once per second to check if the command is enabled.
+ </summary>
+	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
+</member>
+</members>
+</doc>
