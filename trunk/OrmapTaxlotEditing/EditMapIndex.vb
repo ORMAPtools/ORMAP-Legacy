@@ -621,7 +621,7 @@ Public NotInheritable Class EditMapIndex
         ' jwm 6-13-08 Am validating based on Oregon Taxmap ESRI user group geodatabase schema design document dated 7/20/2006
         ' MapSuffixNum is a number between 0 and 999
 
-        'Dim theOldSetting As String = _ormapNumber.SuffixNumber
+        ''Dim theOldSetting As String = _ormapNumber.SuffixNumber
         Dim theValue As String = PartnerEditMapIndexForm.uxSuffixNumber.Text
         Dim theValueAsInt As Integer = 0
 
@@ -636,8 +636,8 @@ Public NotInheritable Class EditMapIndex
                 If _ormapNumber.IsValidNumber Then
                     PartnerEditMapIndexForm.uxSuffixNumber.Text = _ormapNumber.SuffixNumber
                     'Else
-                    '    _ormapNumber.SuffixNumber = theOldSetting
-                    '    PartnerEditMapIndexForm.uxSuffixNumber.Text = theOldSetting
+                    '_ormapNumber.SuffixNumber = theOldSetting
+                    'PartnerEditMapIndexForm.uxSuffixNumber.Text = theOldSetting
                 End If
             End If
         Else

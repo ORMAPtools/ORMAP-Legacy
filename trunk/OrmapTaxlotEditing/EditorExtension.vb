@@ -606,7 +606,8 @@ Public NotInheritable Class EditorExtension
         Try
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Sub
             If Not EditorExtension.AllowedToAutoUpdate Then Exit Sub
-            If Not IsOrmapFeature(obj) Then Exit Sub
+            'If Not IsOrmapFeature(obj) Then Exit Sub '--Commented out by shad to allow for updating of MapNumber and MapScale for non-ORMAP feature classes
+            If Not (TypeOf obj Is IFeature) Then Exit Sub '-- Added by shad to make sure obj is an IFeature
 
             ' Update the minimum auto-calculated fields
             UpdateMinimumAutoFields(DirectCast(obj, IFeature))

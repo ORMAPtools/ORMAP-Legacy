@@ -127,6 +127,19 @@
     <Compile Include="EditMapIndexForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="LocateFeatureUserControl.Designer.vb">
+      <DependentUpon>LocateFeatureUserControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="LocateFeatureUserControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MapDefinition.vb" />
+    <Compile Include="MapDefinitionForm.Designer.vb">
+      <DependentUpon>MapDefinitionForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MapDefinitionForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ORMapNum.vb" />
     <Compile Include="OrmapSettings.vb" />
     <Compile Include="OrmapSettingsForm.Designer.vb">
@@ -222,12 +235,6 @@
     </Compile>
     <Compile Include="TaxlotAssignmentForm.vb">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LocateFeatureUserControl.Designer.vb">
-      <DependentUpon>LocateFeatureUserControl.vb</DependentUpon>
-    </Compile>
-    <Compile Include="LocateFeatureUserControl.vb">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Utilities.vb" />
   </ItemGroup>
@@ -371,15 +378,19 @@
       <SubType>Designer</SubType>
       <DependentUpon>DimensionArrowsForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LocateFeatureUserControl.resx">
+      <DependentUpon>LocateFeatureUserControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MapDefinitionForm.resx">
+      <DependentUpon>MapDefinitionForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ORMAPToolBarResource.resx">
       <SubType>Designer</SubType>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ORMAPToolBarResource.Designer.vb</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LocateFeatureUserControl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>LocateFeatureUserControl.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

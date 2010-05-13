@@ -38,8 +38,13 @@ Partial Class LocateFeatureUserControl
         Me.MapnumberLabel = New System.Windows.Forms.Label
         Me.uxHelp = New System.Windows.Forms.Button
         Me.uxTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.uxDisplayGroupBox = New System.Windows.Forms.GroupBox
+        Me.uxSetDefinitionQuery = New System.Windows.Forms.Button
+        Me.uxClearDefinitionQuery = New System.Windows.Forms.Button
+        Me.uxORMAPProperties = New System.Windows.Forms.Button
         Me.GroupBox1.SuspendLayout()
         Me.uxEditingGroupBox.SuspendLayout()
+        Me.uxDisplayGroupBox.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -182,7 +187,7 @@ Partial Class LocateFeatureUserControl
         '
         'uxHelp
         '
-        Me.uxHelp.Location = New System.Drawing.Point(168, 171)
+        Me.uxHelp.Location = New System.Drawing.Point(162, 230)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
         Me.uxHelp.TabIndex = 35
@@ -194,10 +199,50 @@ Partial Class LocateFeatureUserControl
         '
         Me.uxTimer.Interval = 1000
         '
+        'uxDisplayGroupBox
+        '
+        Me.uxDisplayGroupBox.Controls.Add(Me.uxORMAPProperties)
+        Me.uxDisplayGroupBox.Controls.Add(Me.uxSetDefinitionQuery)
+        Me.uxDisplayGroupBox.Controls.Add(Me.uxClearDefinitionQuery)
+        Me.uxDisplayGroupBox.Location = New System.Drawing.Point(8, 172)
+        Me.uxDisplayGroupBox.Name = "uxDisplayGroupBox"
+        Me.uxDisplayGroupBox.Size = New System.Drawing.Size(239, 52)
+        Me.uxDisplayGroupBox.TabIndex = 36
+        Me.uxDisplayGroupBox.TabStop = False
+        Me.uxDisplayGroupBox.Text = "Definition Query"
+        '
+        'uxSetDefinitionQuery
+        '
+        Me.uxSetDefinitionQuery.Location = New System.Drawing.Point(9, 19)
+        Me.uxSetDefinitionQuery.Name = "uxSetDefinitionQuery"
+        Me.uxSetDefinitionQuery.Size = New System.Drawing.Size(75, 23)
+        Me.uxSetDefinitionQuery.TabIndex = 1
+        Me.uxSetDefinitionQuery.Text = "Set Query"
+        Me.uxSetDefinitionQuery.UseVisualStyleBackColor = True
+        '
+        'uxClearDefinitionQuery
+        '
+        Me.uxClearDefinitionQuery.Location = New System.Drawing.Point(91, 19)
+        Me.uxClearDefinitionQuery.Name = "uxClearDefinitionQuery"
+        Me.uxClearDefinitionQuery.Size = New System.Drawing.Size(64, 23)
+        Me.uxClearDefinitionQuery.TabIndex = 2
+        Me.uxClearDefinitionQuery.Text = "Clear"
+        Me.uxClearDefinitionQuery.UseVisualStyleBackColor = True
+        '
+        'uxORMAPProperties
+        '
+        Me.uxORMAPProperties.Location = New System.Drawing.Point(161, 19)
+        Me.uxORMAPProperties.Name = "uxORMAPProperties"
+        Me.uxORMAPProperties.Size = New System.Drawing.Size(67, 23)
+        Me.uxORMAPProperties.TabIndex = 3
+        Me.uxORMAPProperties.Text = "Properties"
+        Me.uxORMAPProperties.UseVisualStyleBackColor = True
+        '
         'LocateFeatureUserControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.uxDisplayGroupBox)
         Me.Controls.Add(Me.uxHelp)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.uxEditingGroupBox)
@@ -206,11 +251,12 @@ Partial Class LocateFeatureUserControl
         Me.Controls.Add(Me.TaxlotLabel)
         Me.Controls.Add(Me.MapnumberLabel)
         Me.Name = "LocateFeatureUserControl"
-        Me.Size = New System.Drawing.Size(250, 202)
+        Me.Size = New System.Drawing.Size(250, 269)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.uxEditingGroupBox.ResumeLayout(False)
         Me.uxEditingGroupBox.PerformLayout()
+        Me.uxDisplayGroupBox.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -230,5 +276,9 @@ Partial Class LocateFeatureUserControl
     Friend WithEvents MapnumberLabel As System.Windows.Forms.Label
     Friend WithEvents uxHelp As System.Windows.Forms.Button
     Friend WithEvents uxTimer As System.Windows.Forms.Timer
+    Friend WithEvents uxDisplayGroupBox As System.Windows.Forms.GroupBox
+    Friend WithEvents uxClearDefinitionQuery As System.Windows.Forms.Button
+    Friend WithEvents uxSetDefinitionQuery As System.Windows.Forms.Button
+    Friend WithEvents uxORMAPProperties As System.Windows.Forms.Button
 
 End Class
