@@ -559,56 +559,6 @@ Public NotInheritable Class LocateFeature
            Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.LocateFeature_help.rtf")
         OpenHelp("Locate Feature Help", theRTFStream)
 
-        ' Get the help form.
-        'Dim theHelpForm As New HelpForm
-        'theHelpForm.Text = "Locate Feature Help"
-
-        ' KLUDGE: [NIS] Remove comments if file is ready.
-        '' Open a custom help text file.
-        '' Note: Requires a specific file in the help subdirectory of the application directory.
-        'Dim theTextFilePath As String
-        'theTextFilePath = My.Application.Info.DirectoryPath & "\help\LocateFeatureHelp.rtf"
-        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theTextFilePath) Then
-        '    theHelpForm.RichTextBox1.LoadFile(theTextFilePath, RichTextBoxStreamType.RichText)
-        'Else
-        '    MessageBox.Show("No help file available in the directory " & NewLine & _
-        '            My.Application.Info.DirectoryPath & "\help" & ".")
-        '    theHelpForm.TabPage1.Hide()
-        'End If
-
-        ' KLUDGE: [NIS] Remove comments if file is ready.
-        ' Open a custom help pdf file.
-        ' Note: Requires a specific file in the help subdirectory of the application directory.
-        ' Requires Adobe Acrobat reader plug-in.
-        'Dim thePdfFilePath As String
-        'thePdfFilePath = My.Application.Info.DirectoryPath & "\help\LocateFeatureHelp.pdf"
-        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(thePdfFilePath) Then
-        '    Dim theUri As New System.Uri("file:///" & thePdfFilePath)
-        '    theHelpForm.WebBrowser1.Url = theUri
-        'Else
-        '    MessageBox.Show("No help file available in the directory " & NewLine & _
-        '            My.Application.Info.DirectoryPath & "\help" & ".")
-        '    theHelpForm.TabPage2.Hide()
-        'End If
-
-        ' KLUDGE: [NIS] Remove comments if file is ready.
-        '' Open a custom help video.
-        '' Note: Requires a specific file in the help\videos subdirectory of the application directory.
-        'Dim theVideoFilePath As String
-        'theVideoFilePath = My.Application.Info.DirectoryPath & "\help\videos\LocateFeature\LocateFeature.html"
-        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theVideoFilePath) Then
-        '    Dim theUri As New System.Uri("file:///" & theVideoFilePath)
-        '    theHelpForm.WebBrowser1.Url = theUri
-        'Else
-        '    MessageBox.Show("No help file available in the directory " & NewLine & _
-        '            My.Application.Info.DirectoryPath & "\help\videos\LocateFeature" & ".")
-        '    theHelpForm.TabPage2.Hide()
-        'End If
-
-        ' KLUDGE: [NIS] Remove comments if form will be used.
-        'theHelpForm.Width = 668
-        'theHelpForm.Height = 400
-        'theHelpForm.Show()
 
     End Sub
     ''' <summary>
@@ -679,6 +629,7 @@ Public NotInheritable Class LocateFeature
     ''' <summary>
     ''' This searches the table of contents for Layers that are identified as participating in the definition query.
     ''' A query sting has to be passed to this routine.
+    ''' <param name="QueryString"> The Definition Query String that is applied to specified features layers.</param>
     ''' </summary>
     ''' <remarks>None</remarks>
     Friend Sub ApplyTheDefinitionQuery(ByRef QueryString As String)
@@ -701,6 +652,8 @@ Public NotInheritable Class LocateFeature
     End Sub
     ''' <summary>
     ''' Called to apply a definition query to a layer.  An Ilayer object and the query needs to be passed to this routine.
+    ''' <param name="theLayer" >The Layer that the Definition Query is applies </param>
+    ''' <param name="QueryString">The query that is applied to the layer</param>
     ''' </summary>
     ''' <remarks>None</remarks>
     Friend Sub DefinitionQuery(ByRef theLayer As ILayer, ByRef QueryString As String) 'Mover to Editor Extension?
