@@ -626,6 +626,12 @@ Public NotInheritable Class LocateFeature
         StringList.Add("Map Index")
         Return StringList
     End Function
+    Friend Function CreateScaleString() As List(Of String)
+        Dim StringList As New List(Of String)
+        StringList.Add("PLSS Corner")
+        StringList.Add("PLSS Lines")
+        Return StringList
+    End Function
     ''' <summary>
     ''' This searches the table of contents for Layers that are identified as participating in the definition query.
     ''' A query sting has to be passed to this routine.
@@ -643,6 +649,22 @@ Public NotInheritable Class LocateFeature
             Do While Not theLayer Is Nothing
                 'MsgBox("the current layer is: " & theLayer.Name)
                 If theLayerList.Contains(theLayer.Name) Then
+                    DefinitionQuery(theLayer, QueryString)
+                End If
+                theLayer = theEnumLayerList.Next
+            Loop
+        End If
+
+        Dim theScaleLayerList As List(Of String) = CreateScaleString()
+        If theScaleLayerList.Count > 0 Then
+            Dim theMxDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+            Dim theMap As IMap = theMxDocument.FocusMap
+            Dim theEnumLayerList As IEnumLayer = theMap.Layers
+            theEnumLayerList.Reset()
+            Dim theLayer As ILayer = theEnumLayerList.Next
+            Do While Not theLayer Is Nothing
+                'MsgBox("the current layer is: " & theLayer.Name)
+                If theScaleLayerList.Contains(theLayer.Name) Then
                     DefinitionQuery(theLayer, QueryString)
                 End If
                 theLayer = theEnumLayerList.Next
