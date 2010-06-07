@@ -32,8 +32,8 @@
 
 #Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
-'SCC revision number: $Revision: 406 $
-'Date of Last Change: $Date: 2009-11-30 22:49:20 -0800 (Mon, 30 Nov 2009) $
+'SCC revision number: $Revision: 437 $
+'Date of Last Change: $Date: 2010-05-12 18:22:16 -0700 (Wed, 12 May 2010) $
 #End Region
 
 #Region "Imported Namespaces"
@@ -53,8 +53,6 @@ Imports OrmapTaxlotEditing.DataMonitor
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.StringUtilities
 Imports OrmapTaxlotEditing.Utilities
-Imports OrmapTaxlotEditing.OrmapSettings
-
 #End Region
 
 ''' <summary>
@@ -120,6 +118,7 @@ Public NotInheritable Class LocateFeature
 #Region "Properties"
 
     Private WithEvents _partnerLocateFeatureUserControl As LocateFeatureUserControl
+    Private WithEvents _partnerLocateDefinitionForm As MapDefinitionForm
 
     Friend ReadOnly Property PartnerLocateFeatureUserControl() As LocateFeatureUserControl
         Get
@@ -127,6 +126,14 @@ Public NotInheritable Class LocateFeature
                 setPartnerLocateFeatureUserControl(New LocateFeatureUserControl())
             End If
             Return _partnerLocateFeatureUserControl
+        End Get
+    End Property
+    Friend ReadOnly Property PartnerMapDefinitionForm() As MapDefinitionForm
+        Get
+            If _partnerLocateDefinitionForm Is Nothing OrElse _partnerLocateDefinitionForm.IsDisposed Then
+                setLocateDefinitionForm(New MapDefinitionForm())
+            End If
+            Return _partnerLocateDefinitionForm
         End Get
     End Property
 
@@ -141,6 +148,7 @@ Public NotInheritable Class LocateFeature
             AddHandler _partnerLocateFeatureUserControl.uxSelectFeatures.CheckedChanged, AddressOf uxSelectFeatures_CheckedChanged
             AddHandler _partnerLocateFeatureUserControl.uxSetAttributeMode.Click, AddressOf uxSetAttributeMode_Click
             AddHandler _partnerLocateFeatureUserControl.uxTimer.Tick, AddressOf uxTimer_Tick
+
             AddHandler _partnerLocateFeatureUserControl.uxORMAPProperties.Click, AddressOf uxORMAPProperties_Click
             AddHandler _partnerLocateFeatureUserControl.uxSetDefinitionQuery.Click, AddressOf uxSetDefinitionQuery_Click
             AddHandler _partnerLocateFeatureUserControl.uxClearDefinitionQuery.Click, AddressOf uxClearDefinitionQuery_Click
@@ -154,10 +162,31 @@ Public NotInheritable Class LocateFeature
             RemoveHandler _partnerLocateFeatureUserControl.uxSelectFeatures.CheckedChanged, AddressOf uxSelectFeatures_CheckedChanged
             RemoveHandler _partnerLocateFeatureUserControl.uxSetAttributeMode.Click, AddressOf uxSetAttributeMode_Click
             RemoveHandler _partnerLocateFeatureUserControl.uxTimer.Tick, AddressOf uxTimer_Tick
+
             RemoveHandler _partnerLocateFeatureUserControl.uxORMAPProperties.Click, AddressOf uxORMAPProperties_Click
             RemoveHandler _partnerLocateFeatureUserControl.uxSetDefinitionQuery.Click, AddressOf uxSetDefinitionQuery_Click
             RemoveHandler _partnerLocateFeatureUserControl.uxClearDefinitionQuery.Click, AddressOf uxClearDefinitionQuery_Click
+
+
         End If
+    End Sub
+
+    Private Sub setLocateDefinitionForm(ByVal value As MapDefinitionForm)
+
+        If value IsNot Nothing Then
+            _partnerLocateDefinitionForm = value
+            ' Subscribe to partner form events.
+            AddHandler _partnerLocateDefinitionForm.Load, AddressOf PartnerLocateDefinitionForm_Load
+            AddHandler _partnerLocateDefinitionForm.uxCancelSetDefinitionQuery.Click, AddressOf CancelLocateDefinitionQuery_Click
+            AddHandler _partnerLocateDefinitionForm.uxSetMapDefinitionQuery.Click, AddressOf SetMapDefinitionQuery_Click
+            AddHandler _partnerLocateDefinitionForm.uxMapNumberTextBox.TextChanged, AddressOf uxMapNumberTextBox_TextChanged
+        Else
+            ' Unsubscribe to partner form events.
+            RemoveHandler _partnerLocateDefinitionForm.Load, AddressOf PartnerLocateDefinitionForm_Load
+            RemoveHandler _partnerLocateDefinitionForm.uxCancelSetDefinitionQuery.Click, AddressOf CancelLocateDefinitionQuery_Click
+            RemoveHandler _partnerLocateDefinitionForm.uxSetMapDefinitionQuery.Click, AddressOf SetMapDefinitionQuery_Click
+        End If
+
     End Sub
 
     Private _uxSelectFeaturesChecked As Boolean = False
@@ -217,10 +246,9 @@ Public NotInheritable Class LocateFeature
 
 
     Private Sub uxTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxTimer.Tick
-
         PartnerLocateFeatureUserControl.uxEditingGroupBox.Enabled = EditorExtension.AllowedToAutoUpdateAllFields
-
     End Sub
+
 
     Private Sub uxSetAttributeMode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxSetAttributeMode.Click
 
@@ -360,6 +388,7 @@ Public NotInheritable Class LocateFeature
         End If
 
     End Sub
+
     Private Sub uxFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxFind.Click
 
         With PartnerLocateFeatureUserControl
@@ -452,105 +481,7 @@ Public NotInheritable Class LocateFeature
         uxSelectFeaturesChecked = PartnerLocateFeatureUserControl.uxSelectFeatures.Checked
 
     End Sub
-    
-#Region "OldCode"
 
-    'Private Sub uxMapNumberButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Calls the DisplayList Form to identify layers for mapnumber definition query
-    '    Dim theInputList As New ArrayList
-    '    If _theLayerList.Count <> 0 Then
-    '        theInputList = _theLayerList
-    '    Else
-    '        Try
-    '            Dim theMxDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
-    '            Dim theMap As IMap = theMxDocument.FocusMap
-    '            Dim theLayerCount As Integer = theMap.LayerCount()
-    '            Dim theAddSting As String
-    '            For count As Integer = 0 To theLayerCount - 1
-    '                Try
-    '                    Dim thisLayer As ILayer = theMap.Layer(count)
-    '                    Dim thisFeatureLayer As IFeatureLayer = DirectCast(thisLayer, IFeatureLayer)
-    '                    Dim thisFeatureClass As IFeatureClass = thisFeatureLayer.FeatureClass()
-    '                    If thisFeatureClass.FeatureType = esriFeatureType.esriFTSimple Or thisFeatureClass.FeatureType = esriFeatureType.esriFTAnnotation Then
-    '                        Dim theFields As IFields = thisFeatureClass.Fields
-    '                        Dim theFieldName As String = EditorExtension.MapIndexSettings.MapNumberField
-    '                        Dim i As Integer = theFields.FindField(theFieldName)
-    '                        If i > 0 Then
-    '                            Dim theDefQuery As IFeatureLayerDefinition2 = DirectCast(thisLayer, IFeatureLayerDefinition2)
-    '                            Dim theCheckDef As String = UCase(Mid(theDefQuery.DefinitionExpression, 1, 9))
-    '                            If UCase(theCheckDef) = UCase(EditorExtension.MapIndexSettings.MapNumberField) Then
-    '                                theAddSting = "1," & thisFeatureLayer.Name
-    '                            Else
-    '                                theAddSting = "0," & thisFeatureLayer.Name
-    '                            End If
-    '                            theInputList.Add(theAddSting)
-    '                            MsgBox(theAddSting)
-    '                        End If
-    '                    End If
-    '                Catch ex As Exception
-    '                    'MsgBox("Find out how to deal with topo layers")
-    '                End Try
-    '            Next count
-    '        Catch ex As Exception
-    '            EditorExtension.ProcessUnhandledException(ex)
-    '        End Try
-    '    End If
-
-    '    _theDisplayList.InputList(theInputList)
-    '    _theDisplayList.DisplayListForm_Load(_application)
-    '    _theLayerList = _theDisplayList.GetLayerList()
-
-    '    For i As Integer = 0 To _theLayerList.Count - 1
-    '        MsgBox("Returned : " & DirectCast(_theLayerList.Item(i), String))
-    '    Next i
-
-    '    If _theDisplayList.GetLayerList.Count <> 0 And PartnerLocateFeatureUserControl.uxMapNumber.Text <> "" Then
-    '        PartnerLocateFeatureUserControl.uxDisplay.Enabled = True
-    '    Else
-    '        PartnerLocateFeatureUserControl.uxDisplay.Enabled = False
-    '    End If
-
-    'End Sub
-    'Private Sub uxDisplayChecked_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles Definition Query
-    '    Try
-    '        If PartnerLocateFeatureUserControl.uxDisplay.CheckState = CheckState.Checked Then
-    '            _uxDisplayChecked = True
-    '        Else
-    '            _uxDisplayChecked = False
-    '        End If
-
-    '        ApplyDefinitionQuery()
-
-    '    Catch ex As Exception
-    '        EditorExtension.ProcessUnhandledException(ex)
-    '    End Try
-
-    'End Sub
-    'Private Sub ClearDefinitionQuery() 'Clears the definition Queries.  Currently not used.
-    '    Dim theMxDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
-    '    Dim theMap As IMap = theMxDocument.FocusMap
-    '    Dim theMapLayerCount As Integer = theMap.LayerCount()
-    '    Dim theLayerListCount As Integer = _theLayerList.Count
-    '    For theListCount As Integer = 0 To theLayerListCount - 1
-    '        Dim theLayerNameLen As Integer = Len(_theLayerList.Item(theListCount))
-    '        Dim theInputString As String = DirectCast(_theLayerList.Item(theListCount), String)
-    '        Dim theLayerName As String = Mid(theInputString, 3, theLayerNameLen)
-    '        For theMapCount As Integer = 0 To theMapLayerCount - 1
-    '            If theMap.Layer(theMapCount).Name = theLayerName Then
-    '                Dim thisLayer As ILayer = theMap.Layer(theMapCount)
-    '                Dim thisFeatureLayer As IFeatureLayer = DirectCast(thisLayer, IFeatureLayer)
-    '                Dim thisFeatureClass As IFeatureClass = thisFeatureLayer.FeatureClass
-    '                Dim theFields As IFields = thisFeatureClass.Fields
-    '                Dim theFieldName As String = EditorExtension.MapIndexSettings.MapNumberField
-    '                Dim theLayerDef As IFeatureLayerDefinition2 = DirectCast(thisLayer, IFeatureLayerDefinition2)
-    '                Dim i As Integer = theFields.FindField(theFieldName)
-    '                If i > 0 Then
-    '                    theLayerDef.DefinitionExpression = ""
-    '                End If
-    '            End If
-    '        Next theMapCount
-    '    Next theListCount
-    'End Sub
-#End Region
 
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxHelp.Click
         ' TODO: [NIS] Could be replaced with new help mechanism.
@@ -559,8 +490,60 @@ Public NotInheritable Class LocateFeature
            Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.LocateFeature_help.rtf")
         OpenHelp("Locate Feature Help", theRTFStream)
 
+        ' Get the help form.
+        'Dim theHelpForm As New HelpForm
+        'theHelpForm.Text = "Locate Feature Help"
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        '' Open a custom help text file.
+        '' Note: Requires a specific file in the help subdirectory of the application directory.
+        'Dim theTextFilePath As String
+        'theTextFilePath = My.Application.Info.DirectoryPath & "\help\LocateFeatureHelp.rtf"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theTextFilePath) Then
+        '    theHelpForm.RichTextBox1.LoadFile(theTextFilePath, RichTextBoxStreamType.RichText)
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help" & ".")
+        '    theHelpForm.TabPage1.Hide()
+        'End If
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        ' Open a custom help pdf file.
+        ' Note: Requires a specific file in the help subdirectory of the application directory.
+        ' Requires Adobe Acrobat reader plug-in.
+        'Dim thePdfFilePath As String
+        'thePdfFilePath = My.Application.Info.DirectoryPath & "\help\LocateFeatureHelp.pdf"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(thePdfFilePath) Then
+        '    Dim theUri As New System.Uri("file:///" & thePdfFilePath)
+        '    theHelpForm.WebBrowser1.Url = theUri
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help" & ".")
+        '    theHelpForm.TabPage2.Hide()
+        'End If
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        '' Open a custom help video.
+        '' Note: Requires a specific file in the help\videos subdirectory of the application directory.
+        'Dim theVideoFilePath As String
+        'theVideoFilePath = My.Application.Info.DirectoryPath & "\help\videos\LocateFeature\LocateFeature.html"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theVideoFilePath) Then
+        '    Dim theUri As New System.Uri("file:///" & theVideoFilePath)
+        '    theHelpForm.WebBrowser1.Url = theUri
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help\videos\LocateFeature" & ".")
+        '    theHelpForm.TabPage2.Hide()
+        'End If
+
+        ' KLUDGE: [NIS] Remove comments if form will be used.
+        'theHelpForm.Width = 668
+        'theHelpForm.Height = 400
+        'theHelpForm.Show()
 
     End Sub
+
+
     ''' <summary>
     ''' Calls the ORMAPSettingsForm.
     ''' </summary>
@@ -580,12 +563,8 @@ Public NotInheritable Class LocateFeature
     ''' <remarks>None</remarks>
     Private Sub uxSetDefinitionQuery_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxSetDefinitionQuery.click
 
-        Dim theMapDefinition As New MapDefinition
-        theMapDefinition.CallForm(_application, _partnerLocateFeatureUserControl.uxMapNumber.Text)
-        If theMapDefinition.ApplyQuery Then
-            Dim theDefinitionQuery As String = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] = '" & theMapDefinition.MapNumber & "'"
-            ApplyTheDefinitionQuery(theDefinitionQuery)
-        End If
+        setLocateDefinitionForm(New MapDefinitionForm())
+        _partnerLocateDefinitionForm.ShowDialog()
 
     End Sub
     ''' <summary>
@@ -595,13 +574,72 @@ Public NotInheritable Class LocateFeature
     Private Sub uxClearDefinitionQuery_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxClearDefinition.click
 
         Dim theDefinitionQuery As String = ""
-        ApplyTheDefinitionQuery(theDefinitionQuery)
+        Dim theLayerList As List(Of String) = CreateString()
+        ApplyTheDefinitionQuery(theDefinitionQuery, theLayerList)
+        theLayerList = ScaleString()
+        ApplyTheDefinitionQuery(theDefinitionQuery, theLayerList)
 
     End Sub
 
+    Private Sub PartnerLocateDefinitionForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles _ParnterMapDefinitionForm.Load
+
+        _partnerLocateDefinitionForm.uxMapNumberTextBox.Text = _partnerLocateFeatureUserControl.uxMapNumber.Text
+        _partnerLocateDefinitionForm.uxMapNumberTextBox.AutoCompleteCustomSource = _partnerLocateFeatureUserControl.uxMapNumber.AutoCompleteCustomSource
+        _partnerLocateDefinitionForm.uxMapNumberOption.Items.Add("  =  ")
+        _partnerLocateDefinitionForm.uxMapNumberOption.Items.Add("  <>  ")
+        _partnerLocateDefinitionForm.uxMapScaleOption.Items.Add("  =  ")
+        _partnerLocateDefinitionForm.uxMapScaleOption.Items.Add("  <>  ")
+
+        If Not Trim(_partnerLocateFeatureUserControl.uxMapNumber.Text) Is Nothing Then
+            Dim theMapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
+            Dim theQueryFilter As IQueryFilter = New QueryFilter
+            Dim theQueryString As String = EditorExtension.MapIndexSettings.MapNumberField & " = '" & _partnerLocateFeatureUserControl.uxMapNumber.Text & "'"
+            theQueryFilter.WhereClause = theQueryString
+            Dim theFeatureCursor As IFeatureCursor = theMapIndexFClass.Search(theQueryFilter, True)
+            Dim theFeature As IFeature = theFeatureCursor.NextFeature
+            If Not theFeature Is Nothing Then
+                Dim theFieldIdx As Integer = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
+                _partnerLocateDefinitionForm.uxMapScale.Text = theFeature.Value(theFieldIdx).ToString
+            End If
+        End If
+    End Sub
+
+    Private Sub CancelLocateDefinitionQuery_Click(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles _partnerMapDefinitionForm.uxCancelSetDefinitionQuery.Click
+
+        _partnerLocateDefinitionForm.Dispose()
+
+    End Sub
+
+    Private Sub SetMapDefinitionQuery_Click(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles _partnerMapDefinitionForm.uxSetMapDefinitionQuery.Click
+
+        Dim theQueryString As String
+        theQueryString = EditorExtension.MapIndexSettings.MapNumberField & Trim(_partnerLocateDefinitionForm.uxMapNumberOption.Text) & " '" & Trim(_partnerLocateDefinitionForm.uxMapNumberTextBox.Text) & "'"
+        Dim theLayerList As List(Of String) = CreateString() 'For testing purposes only
+        ApplyTheDefinitionQuery(theQueryString, theLayerList)
+        theQueryString = EditorExtension.MapIndexSettings.MapScaleField & " " & Trim(_partnerLocateDefinitionForm.uxMapScaleOption.Text) & " " & Trim(_partnerLocateDefinitionForm.uxMapScale.Text)
+        theLayerList = ScaleString()
+        ApplyTheDefinitionQuery(theQueryString, theLayerList)
+        _partnerLocateDefinitionForm.Dispose()
+
+    End Sub
+    Private Sub uxMapNumberTextBox_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs)
+        If Trim(_partnerLocateDefinitionForm.uxMapScale.Text) = "" Then
+            Dim theMapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
+            Dim theQueryFilter As IQueryFilter = New QueryFilter
+            Dim theQueryString As String = EditorExtension.MapIndexSettings.MapNumberField & " = '" & _partnerLocateDefinitionForm.uxMapNumberTextBox.Text & "'"
+            theQueryFilter.WhereClause = theQueryString
+            Dim theFeatureCursor As IFeatureCursor = theMapIndexFClass.Search(theQueryFilter, True)
+            Dim theFeature As IFeature = theFeatureCursor.NextFeature
+            If Not theFeature Is Nothing Then
+                Dim theFieldIdx As Integer = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
+                _partnerLocateDefinitionForm.uxMapScale.Text = theFeature.Value(theFieldIdx).ToString
+            End If
+        End If
+    End Sub
 #End Region
 
 #Region "Methods"
+
     ''' <summary>
     ''' This is for development purposes only.
     ''' </summary>
@@ -610,7 +648,7 @@ Public NotInheritable Class LocateFeature
         Dim StringList As New List(Of String)
         StringList.Add("Taxlot")
         StringList.Add("Reference Lines")
-        StringList.Add("CartographicLines")
+        StringList.Add("Cartographic Lines")
         StringList.Add("Anno 0010 Scale")
         StringList.Add("Anno 0020 Scale")
         StringList.Add("Anno 0030 Scale")
@@ -626,56 +664,41 @@ Public NotInheritable Class LocateFeature
         StringList.Add("Map Index")
         Return StringList
     End Function
-    Friend Function CreateScaleString() As List(Of String)
+    ''' <summary>
+    ''' This is for development purposes only.
+    ''' </summary>
+    ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
+    Friend Function ScaleString() As List(Of String)
         Dim StringList As New List(Of String)
         StringList.Add("PLSS Corner")
-        StringList.Add("PLSS Lines")
         Return StringList
     End Function
     ''' <summary>
     ''' This searches the table of contents for Layers that are identified as participating in the definition query.
     ''' A query sting has to be passed to this routine.
-    ''' <param name="QueryString"> The Definition Query String that is applied to specified features layers.</param>
+    ''' <paramref name="QueryString"> The query string applied to a list of layers</paramref>
+    ''' <paramref name="theLayerList"> a list(of String) with the name of the layers the definition query is applied</paramref>
     ''' </summary>
     ''' <remarks>None</remarks>
-    Friend Sub ApplyTheDefinitionQuery(ByRef QueryString As String)
-        Dim theLayerList As List(Of String) = CreateString()
+    Friend Sub ApplyTheDefinitionQuery(ByRef QueryString As String, ByRef theLayerList As List(Of String))
         If theLayerList.Count > 0 Then
             Dim theMxDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
             Dim theMap As IMap = theMxDocument.FocusMap
             Dim theEnumLayerList As IEnumLayer = theMap.Layers
             theEnumLayerList.Reset()
-            Dim theLayer As ILayer = theEnumLayerList.Next
-            Do While Not theLayer Is Nothing
+            Dim thisLayer As ILayer = theEnumLayerList.Next
+            Do While Not thisLayer Is Nothing
                 'MsgBox("the current layer is: " & theLayer.Name)
-                If theLayerList.Contains(theLayer.Name) Then
-                    DefinitionQuery(theLayer, QueryString)
+                If theLayerList.Contains(thisLayer.Name) Then
+                    DefinitionQuery(thisLayer, QueryString)
                 End If
-                theLayer = theEnumLayerList.Next
-            Loop
-        End If
-
-        Dim theScaleLayerList As List(Of String) = CreateScaleString()
-        If theScaleLayerList.Count > 0 Then
-            Dim theMxDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
-            Dim theMap As IMap = theMxDocument.FocusMap
-            Dim theEnumLayerList As IEnumLayer = theMap.Layers
-            theEnumLayerList.Reset()
-            Dim theLayer As ILayer = theEnumLayerList.Next
-            Do While Not theLayer Is Nothing
-                'MsgBox("the current layer is: " & theLayer.Name)
-                If theScaleLayerList.Contains(theLayer.Name) Then
-                    DefinitionQuery(theLayer, QueryString)
-                End If
-                theLayer = theEnumLayerList.Next
+                thisLayer = theEnumLayerList.Next
             Loop
         End If
 
     End Sub
     ''' <summary>
     ''' Called to apply a definition query to a layer.  An Ilayer object and the query needs to be passed to this routine.
-    ''' <param name="theLayer" >The Layer that the Definition Query is applies </param>
-    ''' <param name="QueryString">The query that is applied to the layer</param>
     ''' </summary>
     ''' <remarks>None</remarks>
     Friend Sub DefinitionQuery(ByRef theLayer As ILayer, ByRef QueryString As String) 'Mover to Editor Extension?
@@ -698,6 +721,11 @@ Public NotInheritable Class LocateFeature
 
 
     End Sub
+
+
+
+
+
     Friend Sub DoButtonOperation()
 
         Try
@@ -715,7 +743,6 @@ Public NotInheritable Class LocateFeature
             Else
                 PartnerLocateFeatureUserControl.uxMapNumber.Enabled = True
                 PartnerLocateFeatureUserControl.uxFind.Enabled = True
-                PartnerLocateFeatureUserControl.uxClearDefinitionQuery.Enabled = True 'Jon Added
             End If
 
             CheckValidTaxlotDataProperties()
@@ -742,7 +769,6 @@ Public NotInheritable Class LocateFeature
         End Try
 
     End Sub
-
 
 #End Region
 
@@ -923,10 +949,10 @@ Public NotInheritable Class LocateFeature
     End Sub
 
 #Region "ArcGIS Component Category Registrar generated code"
-    '''' <summary>
-    '''' Required method for ArcGIS Component Category registration -
-    '''' Do not modify the contents of this method with the code editor.
-    '''' </summary>
+    ''' <summary>
+    ''' Required method for ArcGIS Component Category registration -
+    ''' Do not modify the contents of this method with the code editor.
+    ''' </summary>
     Private Shared Sub ArcGISCategoryRegistration(ByVal registerType As Type)
         Dim regKey As String = String.Format("HKEY_CLASSES_ROOT\CLSID\{{{0}}}", registerType.GUID)
         MxCommands.Register(regKey)
