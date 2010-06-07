@@ -112,6 +112,10 @@ Partial Class MapDefinitionForm
         '
         'uxMapScale
         '
+        Me.uxMapScale.AllowDrop = True
+        Me.uxMapScale.AutoCompleteCustomSource.AddRange(New String() {"10", "20", "30", "40", "50", "60", "100", "200", "400", "800", "2000"})
+        Me.uxMapScale.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
+        Me.uxMapScale.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
         Me.uxMapScale.Location = New System.Drawing.Point(274, 58)
         Me.uxMapScale.Name = "uxMapScale"
         Me.uxMapScale.Size = New System.Drawing.Size(109, 20)
