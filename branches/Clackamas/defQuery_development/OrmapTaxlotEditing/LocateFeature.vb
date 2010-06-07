@@ -32,8 +32,8 @@
 
 #Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
-'SCC revision number: $Revision: 443 $
-'Date of Last Change: $Date: 2010-06-07 13:02:14 -0700 (Mon, 07 Jun 2010) $
+'SCC revision number: $Revision: 437 $
+'Date of Last Change: $Date: 2010-05-12 18:22:16 -0700 (Wed, 12 May 2010) $
 #End Region
 
 #Region "Imported Namespaces"
@@ -599,7 +599,7 @@ Public NotInheritable Class LocateFeature
             Dim theFeature As IFeature = theFeatureCursor.NextFeature
             If Not theFeature Is Nothing Then
                 Dim theFieldIdx As Integer = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
-                _partnerLocateDefinitionForm.uxMapScale.Text = theFeature.Value(theFieldIdx).ToString
+                _partnerLocateDefinitionForm.uxMapScale.Text = (DirectCast(theFeature.Value(theFieldIdx), Integer) / 12).ToString
             End If
         End If
     End Sub
@@ -616,24 +616,23 @@ Public NotInheritable Class LocateFeature
         theQueryString = EditorExtension.MapIndexSettings.MapNumberField & Trim(_partnerLocateDefinitionForm.uxMapNumberOption.Text) & " '" & Trim(_partnerLocateDefinitionForm.uxMapNumberTextBox.Text) & "'"
         Dim theLayerList As List(Of String) = CreateString() 'For testing purposes only
         ApplyTheDefinitionQuery(theQueryString, theLayerList)
-        theQueryString = EditorExtension.MapIndexSettings.MapScaleField & " " & Trim(_partnerLocateDefinitionForm.uxMapScaleOption.Text) & " " & Trim(_partnerLocateDefinitionForm.uxMapScale.Text)
+        Dim theMapScale As Integer = CType(_partnerLocateDefinitionForm.uxMapScale.Text, Integer) * 12
+        theQueryString = EditorExtension.MapIndexSettings.MapScaleField & " " & Trim(_partnerLocateDefinitionForm.uxMapScaleOption.Text) & " " & theMapScale
         theLayerList = ScaleString()
         ApplyTheDefinitionQuery(theQueryString, theLayerList)
         _partnerLocateDefinitionForm.Dispose()
 
     End Sub
     Private Sub uxMapNumberTextBox_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs)
-        If Trim(_partnerLocateDefinitionForm.uxMapScale.Text) = "" Then
-            Dim theMapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
-            Dim theQueryFilter As IQueryFilter = New QueryFilter
-            Dim theQueryString As String = EditorExtension.MapIndexSettings.MapNumberField & " = '" & _partnerLocateDefinitionForm.uxMapNumberTextBox.Text & "'"
-            theQueryFilter.WhereClause = theQueryString
-            Dim theFeatureCursor As IFeatureCursor = theMapIndexFClass.Search(theQueryFilter, True)
-            Dim theFeature As IFeature = theFeatureCursor.NextFeature
-            If Not theFeature Is Nothing Then
-                Dim theFieldIdx As Integer = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
-                _partnerLocateDefinitionForm.uxMapScale.Text = theFeature.Value(theFieldIdx).ToString
-            End If
+        Dim theMapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
+        Dim theQueryFilter As IQueryFilter = New QueryFilter
+        Dim theQueryString As String = EditorExtension.MapIndexSettings.MapNumberField & " = '" & _partnerLocateDefinitionForm.uxMapNumberTextBox.Text & "'"
+        theQueryFilter.WhereClause = theQueryString
+        Dim theFeatureCursor As IFeatureCursor = theMapIndexFClass.Search(theQueryFilter, True)
+        Dim theFeature As IFeature = theFeatureCursor.NextFeature
+        If Not theFeature Is Nothing Then
+            Dim theFieldIdx As Integer = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
+            _partnerLocateDefinitionForm.uxMapScale.Text = (DirectCast(theFeature.Value(theFieldIdx), Integer) / 12).ToString
         End If
     End Sub
 #End Region
