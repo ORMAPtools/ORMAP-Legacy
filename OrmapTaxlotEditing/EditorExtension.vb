@@ -516,7 +516,7 @@ Public NotInheritable Class EditorExtension
         Try
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Sub
             If Not EditorExtension.AllowedToAutoUpdate Then Exit Sub
-            If Not IsOrmapFeature(obj) Then Exit Sub
+            If Not (TypeOf obj Is IFeature) Then Exit Sub
 
             ' Update the minimum auto-calculated fields
             UpdateMinimumAutoFields(DirectCast(obj, IFeature))
@@ -606,8 +606,7 @@ Public NotInheritable Class EditorExtension
         Try
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Sub
             If Not EditorExtension.AllowedToAutoUpdate Then Exit Sub
-            'If Not IsOrmapFeature(obj) Then Exit Sub '--Commented out by shad to allow for updating of MapNumber and MapScale for non-ORMAP feature classes
-            If Not (TypeOf obj Is IFeature) Then Exit Sub '-- Added by shad to make sure obj is an IFeature
+            If Not (TypeOf obj Is IFeature) Then Exit Sub
 
             ' Update the minimum auto-calculated fields
             UpdateMinimumAutoFields(DirectCast(obj, IFeature))
@@ -709,7 +708,7 @@ Public NotInheritable Class EditorExtension
         Try
             If Not EditorExtension.CanEnableExtendedEditing Then Exit Sub
             If Not EditorExtension.AllowedToAutoUpdate Then Exit Sub
-            If Not IsOrmapFeature(obj) Then Exit Sub ' TODO: [NIS] Is this even needed here anymore?
+            If Not (TypeOf obj Is IFeature) Then Exit Sub
             If Not EditorExtension.AllowedToAutoUpdateAllFields Then Exit Sub
 
             ' Note: Must check here for if required data is available

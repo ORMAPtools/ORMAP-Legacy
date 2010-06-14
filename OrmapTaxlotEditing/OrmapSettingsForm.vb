@@ -41,6 +41,12 @@ Imports System.Runtime.InteropServices
 Imports System.Configuration
 Imports System.Environment
 Imports System.Windows.Forms
+Imports ESRI.ArcGIS.Carto
+Imports ESRI.ArcGIS.Geodatabase
+Imports OrmapTaxlotEditing.SpatialUtilities
+Imports OrmapTaxlotEditing.Utilities
+Imports OrmapTaxlotEditing.DefinitionQuerySettings
+
 #End Region
 
 ''' <summary>
@@ -84,6 +90,37 @@ Public Class OrmapSettingsForm
 #End Region
 
 #Region "Event Handlers"
+
+    ''' <summary>
+    ''' Loads the layers in the TOC into the CheckedBoxList and looks up whether they are to participate in the definition query or not.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub OrmapSettingsForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+        'DefinitionQuerySettings.Default.FeatureLayers.Clear()
+        'DefinitionQuerySettings.Default.Save()
+
+        Dim theTOCLayers As IEnumLayer = GetTOCLayersEnumerator(EsriLayerTypes.FeatureLayer)
+        theTOCLayers.Reset()
+
+        Dim thisFeatureLayer As IFeatureLayer
+        thisFeatureLayer = DirectCast(theTOCLayers.Next, IFeatureLayer)
+
+        While Not (thisFeatureLayer Is Nothing)
+            If thisFeatureLayer.FeatureClass.FindField("MapNumber") <> NotFoundIndex Then
+                If DefinitionQuerySettings.Default.FeatureLayers.Contains(thisFeatureLayer.Name) Then
+                    uxDefQueryLayers.Items.Add(thisFeatureLayer.Name, True)
+                Else
+                    uxDefQueryLayers.Items.Add(thisFeatureLayer.Name, False)
+                End If
+            End If
+            thisFeatureLayer = DirectCast(theTOCLayers.Next(), IFeatureLayer)
+        End While
+
+    End Sub
+
 
     ''' <summary>
     ''' Closes the form without saving any modified settings.
@@ -280,6 +317,7 @@ Public Class OrmapSettingsForm
         TaxlotNumberAnnoSettingsBindingSource.DataSource = EditorExtension.TaxlotNumberAnnoSettings
         DefaultValuesSettingsBindingSource.DataSource = EditorExtension.DefaultValuesSettings
 
+
     End Sub
 
     ''' <summary>
@@ -309,6 +347,20 @@ Public Class OrmapSettingsForm
         settings.Save()
         settings = DirectCast(DefaultValuesSettingsBindingSource.DataSource, ApplicationSettingsBase)
         settings.Save()
+
+        '-- Definition Query
+        For i As Integer = 0 To uxDefQueryLayers.Items.Count - 1
+            If uxDefQueryLayers.GetItemCheckState(i) = CheckState.Checked Then
+                If Not DefinitionQuerySettings.Default.FeatureLayers.Contains(uxDefQueryLayers.Items(i).ToString) Then
+                    DefinitionQuerySettings.Default.FeatureLayers.Add(uxDefQueryLayers.Items(i).ToString)
+                End If
+            Else
+                If DefinitionQuerySettings.Default.FeatureLayers.Contains(uxDefQueryLayers.Items(i).ToString) Then
+                    DefinitionQuerySettings.Default.FeatureLayers.Remove(uxDefQueryLayers.Items(i).ToString)
+                End If
+            End If
+        Next
+        DefinitionQuerySettings.Default.Save()
 
     End Sub
 
@@ -341,6 +393,7 @@ Public Class OrmapSettingsForm
         settings = DirectCast(DefaultValuesSettingsBindingSource.DataSource, ApplicationSettingsBase)
         settings.Reload()
 
+
     End Sub
 
     ''' <summary>
@@ -371,6 +424,8 @@ Public Class OrmapSettingsForm
         settings.Reset()
         settings = DirectCast(DefaultValuesSettingsBindingSource.DataSource, ApplicationSettingsBase)
         settings.Reset()
+        DefinitionQuerySettings.Default.FeatureLayers.Clear()
+        DefinitionQuerySettings.Default.Save()
 
     End Sub
 
@@ -393,10 +448,6 @@ Public Class OrmapSettingsForm
 
 #Region "Other Members (none)"
 #End Region
-
-    Private Sub TableLayoutPanel1_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles TableLayoutPanel1.Paint
-
-    End Sub
 
 
 End Class
