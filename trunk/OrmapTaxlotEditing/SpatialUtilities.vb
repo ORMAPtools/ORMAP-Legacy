@@ -571,52 +571,81 @@ Public NotInheritable Class SpatialUtilities
         inDisplay.DrawPoint(inGeometry)
     End Sub
 
+
+    ''' <summary>
+    ''' Gets the layers (recursively) from the TOC as an IEnumLayer.
+    ''' </summary>
+    ''' <param name="theEsriLayerType">An enumerator of layer types that be used to filter against the IEnumLayer.</param>
+    ''' <returns>An IEnumLayer containing the layers in the TOC</returns>
+    ''' <remarks>The function determines the UID for the layer type and applies it as a filter.</remarks>
+    Friend Shared Function GetTOCLayersEnumerator(ByVal theEsriLayerType As EsriLayerTypes) As IEnumLayer
+
+        Dim theMXDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        Dim theMap As IMap = theMXDocument.FocusMap
+        Dim theEnumLayer As IEnumLayer
+
+        If theEsriLayerType = EsriLayerTypes.AllLayerTypes Then
+            theEnumLayer = theMap.Layers
+        Else
+            Dim thisUID As New UID
+            Select Case theEsriLayerType
+                Case EsriLayerTypes.DataLayer
+                    thisUID.Value = "{6CA416B1-E160-11D2-9F4E-00C04F6BC78E}"
+                Case EsriLayerTypes.FeatureLayer
+                    thisUID.Value = "{40A9E885-5533-11d0-98BE-00805F7CED21}"
+                Case EsriLayerTypes.GeoFeatureLayer
+                    thisUID.Value = "{E156D7E5-22AF-11D3-9F99-00C04F6BC78E}"
+                Case EsriLayerTypes.GraphicsLayer
+                    thisUID.Value = "{34B2EF81-F4AC-11D1-A245-080009B6F22B}"
+                Case EsriLayerTypes.FDOGraphicsLayer
+                    thisUID.Value = "{5CEAE408-4C0A-437F-9DB3-054D83919850}"
+                Case EsriLayerTypes.CoverageAnnotationLayer
+                    thisUID.Value = "{0C22A4C7-DAFD-11D2-9F46-00C04F6BC78E}"
+                Case EsriLayerTypes.GroupLayer
+                    thisUID.Value = "{EDAD6644-1810-11D1-86AE-0000F8751720}"
+
+            End Select
+            theEnumLayer = theMap.Layers(thisUID, True)
+
+        End If
+
+        Return theEnumLayer
+
+    End Function
+
+
     ''' <summary>
     ''' Locate a feature layer by its dataset name.
     ''' </summary>
     ''' <param name="datasetName">The name of the dataset to find.</param>
     ''' <returns>A layer object of that supports the IFeatureLayer interface.</returns>
-    ''' <remarks>Searches in the TOC recursively (i.e. within group layers). 
-    ''' Returns the first feature layer with a matching dataset name.</remarks>
+    ''' <remarks>Searches in the TOC for FeatureLayers and  
+    ''' returns the first with a matching dataset name.</remarks>
     Public Shared Function FindFeatureLayerByDSName(ByVal datasetName As String) As ESRI.ArcGIS.Carto.IFeatureLayer
 
-        Dim theMXDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
-        Dim theMap As IMap = theMXDocument.FocusMap
-        Dim thisUID As New UID
+        Dim returnValue As IFeatureLayer = Nothing
 
-        Try
-            Dim returnValue As IFeatureLayer = Nothing
+        'We want a EnumLayer containing all FeatureLayer objects.
+        Dim theFeatureLayers As IEnumLayer = GetTOCLayersEnumerator(EsriLayerTypes.FeatureLayer)
 
-            ' Get a reference to the feature layers collection of the document. 
-            thisUID.Value = "{E156D7E5-22AF-11D3-9F99-00C04F6BC78E}"
-            'We want a EnumLayer containing all FeatureLayer objects.
-            Dim theFeatureLayers As IEnumLayer
-            theFeatureLayers = theMap.Layers(thisUID, True)
+        theFeatureLayers.Reset()
+        Dim thisFeatureLayer As IFeatureLayer
+        thisFeatureLayer = DirectCast(theFeatureLayers.Next, IFeatureLayer)
 
-            theFeatureLayers.Reset()
-            Dim thisFeatureLayer As IFeatureLayer
-            thisFeatureLayer = DirectCast(theFeatureLayers.Next, IFeatureLayer)
+        Dim thisDataSet As IDataset
 
-            Dim thisDataSet As IDataset
-
-            Do While Not (thisFeatureLayer Is Nothing)
-                thisDataSet = TryCast(thisFeatureLayer.FeatureClass, IDataset)
-                If thisDataSet IsNot Nothing Then
-                    If String.Compare(thisDataSet.Name, datasetName, True, CultureInfo.CurrentCulture) = 0 Then
-                        returnValue = DirectCast(thisFeatureLayer, IFeatureLayer)
-                        Exit Do
-                    End If
+        Do While Not (thisFeatureLayer Is Nothing)
+            thisDataSet = TryCast(thisFeatureLayer.FeatureClass, IDataset)
+            If thisDataSet IsNot Nothing Then
+                If String.Compare(thisDataSet.Name, datasetName, True, CultureInfo.CurrentCulture) = 0 Then
+                    returnValue = DirectCast(thisFeatureLayer, IFeatureLayer)
+                    Exit Do
                 End If
-                thisFeatureLayer = DirectCast(theFeatureLayers.Next(), IFeatureLayer)
-            Loop
+            End If
+            thisFeatureLayer = DirectCast(theFeatureLayers.Next(), IFeatureLayer)
+        Loop
 
-            Return returnValue
-
-        Finally
-            thisUID = Nothing
-            theMap = Nothing
-
-        End Try
+        Return returnValue
 
     End Function
 
@@ -1231,7 +1260,7 @@ Public NotInheritable Class SpatialUtilities
     ''' </summary>
     ''' <param name="theObject">A valid initialized geodatabase object</param>
     ''' <returns>True or False</returns>
-    ''' <remarks></remarks>
+    ''' <remarks>This function is not being used... can be deleted after review from other developers. - SC</remarks>
     Public Shared Function IsOrmapFeature(ByVal theObject As IObject) As Boolean
         ' ENHANCE: JWM Refactor to return enum of ORMAP feature class type
         Dim returnValue As Boolean = False
@@ -1827,9 +1856,10 @@ Public NotInheritable Class SpatialUtilities
     ''' for more information on where clause syntax flavors.</remarks>
     Public Shared Function formatWhereClause(ByVal inWhereClause As String, ByVal inFeatureClass As IFeatureClass) As String
 
-        Dim theDataset As IDataset = inFeatureClass.FeatureDataset
+        Dim theDataset As IDataset = DirectCast(inFeatureClass, IDataset)
         Dim theWorkspace As IWorkspace = theDataset.Workspace
         Dim theSQLSyntax As ISQLSyntax = DirectCast(theWorkspace, ISQLSyntax)
+
         Dim theDelimiterPrefix As String = theSQLSyntax.GetSpecialCharacter(esriSQLSpecialCharacters.esriSQL_DelimitedIdentifierPrefix)
         Dim theDelimiterSuffix As String = theSQLSyntax.GetSpecialCharacter(esriSQLSpecialCharacters.esriSQL_DelimitedIdentifierSuffix)
 

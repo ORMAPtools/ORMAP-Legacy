@@ -32,8 +32,8 @@
 
 #Region "Subversion Keyword Expansion"
 'Tag for this file: $Name$
-'SCC revision number: $Revision: 437 $
-'Date of Last Change: $Date: 2010-05-12 18:22:16 -0700 (Wed, 12 May 2010) $
+'SCC revision number: $Revision: 443 $
+'Date of Last Change: $Date: 2010-06-07 13:02:14 -0700 (Mon, 07 Jun 2010) $
 #End Region
 
 #Region "Imported Namespaces"
@@ -118,6 +118,7 @@ Public NotInheritable Class LocateFeature
 #Region "Properties"
 
     Private WithEvents _partnerLocateFeatureUserControl As LocateFeatureUserControl
+    'Private WithEvents _partnerLocateDefinitionForm As MapDefinitionForm
 
     Friend ReadOnly Property PartnerLocateFeatureUserControl() As LocateFeatureUserControl
         Get
@@ -127,6 +128,14 @@ Public NotInheritable Class LocateFeature
             Return _partnerLocateFeatureUserControl
         End Get
     End Property
+    'Friend ReadOnly Property PartnerMapDefinitionForm() As MapDefinitionForm
+    '    Get
+    '        If _partnerLocateDefinitionForm Is Nothing OrElse _partnerLocateDefinitionForm.IsDisposed Then
+    '            setLocateDefinitionForm(New MapDefinitionForm())
+    '        End If
+    '        Return _partnerLocateDefinitionForm
+    '    End Get
+    'End Property
 
     Private Sub setPartnerLocateFeatureUserControl(ByVal value As LocateFeatureUserControl)
         If value IsNot Nothing Then
@@ -139,11 +148,9 @@ Public NotInheritable Class LocateFeature
             AddHandler _partnerLocateFeatureUserControl.uxSelectFeatures.CheckedChanged, AddressOf uxSelectFeatures_CheckedChanged
             AddHandler _partnerLocateFeatureUserControl.uxSetAttributeMode.Click, AddressOf uxSetAttributeMode_Click
             AddHandler _partnerLocateFeatureUserControl.uxTimer.Tick, AddressOf uxTimer_Tick
-
             AddHandler _partnerLocateFeatureUserControl.uxORMAPProperties.Click, AddressOf uxORMAPProperties_Click
             AddHandler _partnerLocateFeatureUserControl.uxSetDefinitionQuery.Click, AddressOf uxSetDefinitionQuery_Click
             AddHandler _partnerLocateFeatureUserControl.uxClearDefinitionQuery.Click, AddressOf uxClearDefinitionQuery_Click
-
         Else
             ' Unsubscribe to partner form events.
             RemoveHandler _partnerLocateFeatureUserControl.uxMapNumber.TextChanged, AddressOf uxMapNumber_TextChanged
@@ -153,15 +160,13 @@ Public NotInheritable Class LocateFeature
             RemoveHandler _partnerLocateFeatureUserControl.uxSelectFeatures.CheckedChanged, AddressOf uxSelectFeatures_CheckedChanged
             RemoveHandler _partnerLocateFeatureUserControl.uxSetAttributeMode.Click, AddressOf uxSetAttributeMode_Click
             RemoveHandler _partnerLocateFeatureUserControl.uxTimer.Tick, AddressOf uxTimer_Tick
-
             RemoveHandler _partnerLocateFeatureUserControl.uxORMAPProperties.Click, AddressOf uxORMAPProperties_Click
             RemoveHandler _partnerLocateFeatureUserControl.uxSetDefinitionQuery.Click, AddressOf uxSetDefinitionQuery_Click
             RemoveHandler _partnerLocateFeatureUserControl.uxClearDefinitionQuery.Click, AddressOf uxClearDefinitionQuery_Click
-
-
         End If
     End Sub
 
+    Private _mapIndexHasBeenChanged As Boolean = False
 
     Private _uxSelectFeaturesChecked As Boolean = False
     Friend Property uxSelectFeaturesChecked() As Boolean
@@ -173,7 +178,35 @@ Public NotInheritable Class LocateFeature
         End Set
     End Property
 
-    Private _mapIndexHasBeenChanged As Boolean = False
+
+    Private WithEvents _partnerLocateDefinitionForm As MapDefinitionForm
+    Friend ReadOnly Property PartnerMapDefinitionForm() As MapDefinitionForm
+        Get
+            If _partnerLocateDefinitionForm Is Nothing OrElse _partnerLocateDefinitionForm.IsDisposed Then
+                setLocateDefinitionForm(New MapDefinitionForm())
+            End If
+            Return _partnerLocateDefinitionForm
+        End Get
+    End Property
+
+
+    Private Sub setLocateDefinitionForm(ByVal value As MapDefinitionForm)
+        If value IsNot Nothing Then
+            _partnerLocateDefinitionForm = value
+            ' Subscribe to partner form events.
+            'AddHandler _partnerLocateDefinitionForm.Load, AddressOf PartnerLocateDefinitionForm_Load
+            AddHandler _partnerLocateDefinitionForm.uxCancelSetDefinitionQuery.Click, AddressOf CancelLocateDefinitionQuery_Click
+            AddHandler _partnerLocateDefinitionForm.uxSetMapDefinitionQuery.Click, AddressOf SetMapDefinitionQuery_Click
+            AddHandler _partnerLocateDefinitionForm.uxMapNumber.TextChanged, AddressOf uxMapNumberTextBox_TextChanged
+        Else
+            ' Unsubscribe to partner form events.
+            'RemoveHandler _partnerLocateDefinitionForm.Load, AddressOf PartnerLocateDefinitionForm_Load
+            RemoveHandler _partnerLocateDefinitionForm.uxCancelSetDefinitionQuery.Click, AddressOf CancelLocateDefinitionQuery_Click
+            RemoveHandler _partnerLocateDefinitionForm.uxSetMapDefinitionQuery.Click, AddressOf SetMapDefinitionQuery_Click
+            RemoveHandler _partnerLocateDefinitionForm.uxMapNumber.TextChanged, AddressOf uxMapNumberTextBox_TextChanged
+        End If
+    End Sub
+
 
 #End Region
 
@@ -518,6 +551,7 @@ Public NotInheritable Class LocateFeature
     End Sub
 
 
+
     ''' <summary>
     ''' Calls the ORMAPSettingsForm.
     ''' </summary>
@@ -525,8 +559,8 @@ Public NotInheritable Class LocateFeature
     Private Sub uxORMAPProperties_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxORMAPProperties.click
 
         Dim theORMAPSettingsForm As New OrmapSettingsForm
-        Dim i As Integer = 5 'Index number of tab with mapnumber settings
-        theORMAPSettingsForm.uxSettingsTabs.SelectTab(i)
+        'Dim i As Integer = 5 'Index number of tab with mapnumber settings
+        theORMAPSettingsForm.uxSettingsTabs.SelectedTab = theORMAPSettingsForm.uxDefinitionQueryTab '.SelectTab(i)
         theORMAPSettingsForm.ShowDialog()
 
     End Sub
@@ -537,12 +571,17 @@ Public NotInheritable Class LocateFeature
     ''' <remarks>None</remarks>
     Private Sub uxSetDefinitionQuery_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxSetDefinitionQuery.click
 
-        Dim theMapDefinition As New MapDefinition
-        theMapDefinition.CallForm(_application, _partnerLocateFeatureUserControl.uxMapNumber.Text)
-        If theMapDefinition.ApplyQuery Then
-            Dim theDefinitionQuery As String = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] = '" & theMapDefinition.MapNumber & "'"
-            ApplyTheDefinitionQuery(theDefinitionQuery)
+        'setLocateDefinitionForm(New MapDefinitionForm())
+        _partnerLocateDefinitionForm.uxMapNumber.AutoCompleteCustomSource = _partnerLocateFeatureUserControl.uxMapNumber.AutoCompleteCustomSource
+        _partnerLocateDefinitionForm.uxMapNumber.Text = _partnerLocateFeatureUserControl.uxMapNumber.Text
+        _partnerLocateDefinitionForm.uxMapScale.Text = GetMapScale(_partnerLocateFeatureUserControl.uxMapNumber.Text)
+
+        If _partnerLocateDefinitionForm.uxMapNumberOption.SelectedIndex = NotFoundIndex Then
+            _partnerLocateDefinitionForm.uxMapNumberOption.SelectedIndex = 0
+            _partnerLocateDefinitionForm.uxMapScaleOption.SelectedIndex = 0
         End If
+
+        _partnerLocateDefinitionForm.ShowDialog()
 
     End Sub
     ''' <summary>
@@ -551,10 +590,109 @@ Public NotInheritable Class LocateFeature
     ''' <remarks>None</remarks>
     Private Sub uxClearDefinitionQuery_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles PartnerLocateFeatureForm.uxClearDefinition.click
 
-        Dim theDefinitionQuery As String = ""
-        ApplyTheDefinitionQuery(theDefinitionQuery)
+        ApplyTheDefinitionQuery(Nothing, Nothing)
+
+        'Dim theDefinitionQuery As String = ""
+        'Dim theLayerList As List(Of String) = CreateString()
+        'ApplyTheDefinitionQuery(theDefinitionQuery, theLayerList)
+        'theLayerList = ScaleString()
+        'ApplyTheDefinitionQuery(theDefinitionQuery, theLayerList)
 
     End Sub
+
+
+    'Private Sub PartnerLocateDefinitionForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles _ParnterMapDefinitionForm.Load
+    '    '_partnerLocateDefinitionForm.uxMapNumberTextBox.Text = _partnerLocateFeatureUserControl.uxMapNumber.Text
+    '    '_partnerLocateDefinitionForm.uxMapNumberTextBox.AutoCompleteCustomSource = _partnerLocateFeatureUserControl.uxMapNumber.AutoCompleteCustomSource
+    '    '_partnerLocateDefinitionForm.uxMapNumberOption.Items.Add("  =  ")
+    '    '_partnerLocateDefinitionForm.uxMapNumberOption.Items.Add("  <>  ")
+    '    '_partnerLocateDefinitionForm.uxMapScaleOption.Items.Add("  =  ")
+    '    '_partnerLocateDefinitionForm.uxMapScaleOption.Items.Add("  <>  ")
+
+    '    If Not Trim(_partnerLocateFeatureUserControl.uxMapNumber.Text) Is Nothing Then
+    '        Dim theMapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
+    '        Dim theQueryFilter As IQueryFilter = New QueryFilter
+    '        Dim theQueryString As String = EditorExtension.MapIndexSettings.MapNumberField & " = '" & _partnerLocateFeatureUserControl.uxMapNumber.Text & "'"
+    '        theQueryFilter.WhereClause = theQueryString
+    '        Dim theFeatureCursor As IFeatureCursor = theMapIndexFClass.Search(theQueryFilter, True)
+    '        Dim theFeature As IFeature = theFeatureCursor.NextFeature
+    '        If Not theFeature Is Nothing Then
+    '            Dim theFieldIdx As Integer = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
+    '            _partnerLocateDefinitionForm.uxMapScale.Text = (DirectCast(theFeature.Value(theFieldIdx), Integer) / 12).ToString
+    '        End If
+    '    End If
+
+    'End Sub
+
+    Private Sub CancelLocateDefinitionQuery_Click(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles _partnerMapDefinitionForm.uxCancelSetDefinitionQuery.Click
+
+        ' _partnerLocateDefinitionForm.Dispose()
+        _partnerLocateDefinitionForm.Close()
+
+    End Sub
+
+    Private Sub SetMapDefinitionQuery_Click(ByVal sender As Object, ByVal e As System.EventArgs) 'Handles _partnerMapDefinitionForm.uxSetMapDefinitionQuery.Click
+
+        With _partnerLocateDefinitionForm
+
+            Dim theMapNumber As String = .uxMapNumber.Text.Trim
+            If theMapNumber <> String.Empty AndAlso Not .uxMapNumber.AutoCompleteCustomSource.Contains(theMapNumber) Then
+                MessageBox.Show("Invalid MapNumber. Please try again.", "Definition Query", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            End If
+
+            Dim theMapScale As String = .uxMapScale.Text.Trim
+            If theMapScale <> String.Empty AndAlso Not .uxMapScale.AutoCompleteCustomSource.Contains(theMapScale) Then
+                .UseWaitCursor = False
+                MessageBox.Show("Invalid MapScale. Please try again.", "Definition Query", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            End If
+
+            If theMapScale <> String.Empty Then
+                ApplyTheDefinitionQuery(theMapNumber, (Integer.Parse(theMapScale) * 12).ToString)
+            Else
+                ApplyTheDefinitionQuery(theMapNumber, String.Empty)
+            End If
+
+            .Close()
+
+        End With
+
+        'Dim theQueryString As String
+        'theQueryString = EditorExtension.MapIndexSettings.MapNumberField & Trim(_partnerLocateDefinitionForm.uxMapNumberOption.Text) & " '" & Trim(_partnerLocateDefinitionForm.uxMapNumberTextBox.Text) & "'"
+        'Dim theLayerList As List(Of String) = CreateString() 'For testing purposes only
+        'ApplyTheDefinitionQuery(theQueryString, theLayerList)
+        'Dim theMapScale As Integer = CType(_partnerLocateDefinitionForm.uxMapScale.Text, Integer) * 12
+        'theQueryString = EditorExtension.MapIndexSettings.MapScaleField & " " & Trim(_partnerLocateDefinitionForm.uxMapScaleOption.Text) & " " & theMapScale
+        'theLayerList = ScaleString()
+        'ApplyTheDefinitionQuery(theQueryString, theLayerList)
+        '_partnerLocateDefinitionForm.Dispose()
+
+    End Sub
+
+    Private Sub uxMapNumberTextBox_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs)
+
+        _partnerLocateDefinitionForm.uxMapScale.Text = GetMapScale(_partnerLocateDefinitionForm.uxMapNumber.Text)
+
+        'Dim theMapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
+        'Dim theQueryFilter As IQueryFilter = New QueryFilter
+        'Dim theQueryString As String = EditorExtension.MapIndexSettings.MapNumberField & " = '" & _partnerLocateDefinitionForm.uxMapNumberTextBox.Text & "'"
+        'theQueryFilter.WhereClause = theQueryString
+        'Dim theFeatureCursor As IFeatureCursor = theMapIndexFClass.Search(theQueryFilter, True)
+        'Dim theFeature As IFeature = theFeatureCursor.NextFeature
+        'If Not theFeature Is Nothing Then
+        '    Dim theFieldIdx As Integer = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
+        '    _partnerLocateDefinitionForm.uxMapScale.Text = (DirectCast(theFeature.Value(theFieldIdx), Integer) / 12).ToString
+        'End If
+
+    End Sub
+
+
+#End Region
+
+
+
+
 
 
 #End Region
@@ -562,80 +700,184 @@ Public NotInheritable Class LocateFeature
 #Region "Methods"
 
 
+    '''' <summary>
+    '''' This is for development purposes only.
+    '''' </summary>
+    '''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
+    'Friend Function CreateString() As List(Of String) 'Temporary Function.  Needs to be deleted before deployment.
+    '    Dim StringList As New List(Of String)
+    '    StringList.Add("Taxlot")
+    '    StringList.Add("Reference Lines")
+    '    StringList.Add("Cartographic Lines")
+    '    StringList.Add("Anno 0010 Scale")
+    '    StringList.Add("Anno 0020 Scale")
+    '    StringList.Add("Anno 0030 Scale")
+    '    StringList.Add("Anno 0040 Scale")
+    '    StringList.Add("Anno 0050 Scale")
+    '    StringList.Add("Anno 0100 Scale")
+    '    StringList.Add("Anno 0200 Scale")
+    '    StringList.Add("Anno 2000 Scale")
+    '    StringList.Add("Taxlot Number Anno")
+    '    StringList.Add("Address Grid Anno")
+    '    StringList.Add("Taxlot Acres Anno")
+    '    StringList.Add("Situs Address Anno")
+    '    StringList.Add("Map Index")
+    '    Return StringList
+    'End Function
+
+
+    '''' <summary>
+    '''' This is for development purposes only.
+    '''' </summary>
+    '''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
+    'Friend Function ScaleString() As List(Of String)
+    '    Dim StringList As New List(Of String)
+    '    StringList.Add("PLSS Corner")
+    '    Return StringList
+    'End Function
+
+    '''' <summary>
+    '''' This searches the table of contents for Layers that are identified as participating in the definition query.
+    '''' A query sting has to be passed to this routine.
+    '''' <paramref name="QueryString"> The query string applied to a list of layers</paramref>
+    '''' <paramref name="theLayerList"> a list(of String) with the name of the layers the definition query is applied</paramref>
+    '''' </summary>
+    '''' <remarks>None</remarks>
+    'Friend Sub ApplyTheDefinitionQuery_OLD(ByRef QueryString As String, ByRef theLayerList As List(Of String))
+
+    '    If theLayerList.Count > 0 Then
+    '        Dim theMxDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+    '        Dim theMap As IMap = theMxDocument.FocusMap
+    '        Dim theEnumLayerList As IEnumLayer = theMap.Layers
+    '        theEnumLayerList.Reset()
+    '        Dim thisLayer As ILayer = theEnumLayerList.Next
+    '        Do While Not thisLayer Is Nothing
+    '            'MsgBox("the current layer is: " & theLayer.Name)
+    '            If theLayerList.Contains(thisLayer.Name) Then
+    '                DefinitionQuery(thisLayer, QueryString)
+    '            End If
+    '            thisLayer = theEnumLayerList.Next
+    '        Loop
+    '    End If
+
+    'End Sub
+
 
     ''' <summary>
-    ''' This is for development purposes only.
+    ''' This searches the table of contents for Layers that are identified as participating in the definition query and applies the Definition query to them.
     ''' </summary>
-    ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
-    Friend Function CreateString() As List(Of String) 'Temporary Function.  Needs to be deleted before deployment.
-        Dim StringList As New List(Of String)
-        StringList.Add("Taxlot")
-        StringList.Add("Reference Lines")
-        StringList.Add("CartographicLines")
-        StringList.Add("Anno 0010 Scale")
-        StringList.Add("Anno 0020 Scale")
-        StringList.Add("Anno 0030 Scale")
-        StringList.Add("Anno 0040 Scale")
-        StringList.Add("Anno 0050 Scale")
-        StringList.Add("Anno 0100 Scale")
-        StringList.Add("Anno 0200 Scale")
-        StringList.Add("Anno 2000 Scale")
-        StringList.Add("Taxlot Number Anno")
-        StringList.Add("Address Grid Anno")
-        StringList.Add("Taxlot Acres Anno")
-        StringList.Add("Situs Address Anno")
-        StringList.Add("Map Index")
-        Return StringList
-    End Function
-    ''' <summary>
-    ''' This searches the table of contents for Layers that are identified as participating in the definition query.
-    ''' A query sting has to be passed to this routine.
-    ''' </summary>
-    ''' <remarks>None</remarks>
-    Friend Sub ApplyTheDefinitionQuery(ByRef QueryString As String)
-        Dim theLayerList As List(Of String) = CreateString()
-        If theLayerList.Count > 0 Then
-            Dim theMxDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
-            Dim theMap As IMap = theMxDocument.FocusMap
-            Dim theEnumLayerList As IEnumLayer = theMap.Layers
-            theEnumLayerList.Reset()
-            Dim theLayer As ILayer = theEnumLayerList.Next
-            Do While Not theLayer Is Nothing
-                'MsgBox("the current layer is: " & theLayer.Name)
-                If theLayerList.Contains(theLayer.Name) Then
-                    DefinitionQuery(theLayer, QueryString)
+    ''' <param name="theMapNumber">The mapnumber to use in the definition query</param>
+    ''' <param name="theMapScale">The mapscale to use in the definition query</param>
+    ''' <remarks>The code checks to make sure the mapnumber and mapscale exist prior to assigning the definition query.</remarks>
+    Friend Sub ApplyTheDefinitionQuery(ByRef theMapNumber As String, ByVal theMapScale As String)
+
+        Dim theEnumLayerList As IEnumLayer = GetTOCLayersEnumerator(EsriLayerTypes.FeatureLayer)
+        theEnumLayerList.Reset()
+
+        Dim theFeatureLayer As IFeatureLayer = DirectCast(theEnumLayerList.Next, IFeatureLayer)
+        Dim theQueryString As String = String.Empty
+
+        Do While Not theFeatureLayer Is Nothing
+            If DefinitionQuerySettings.Default.FeatureLayers.Contains(theFeatureLayer.Name) Then
+                Dim theFeatureLayerDefinition As IFeatureLayerDefinition = DirectCast(theFeatureLayer, IFeatureLayerDefinition)
+
+                If theMapNumber Is Nothing AndAlso themapscale Is Nothing Then
+                    theFeatureLayerDefinition.DefinitionExpression = ""
+                Else
+                    theQueryString = String.Empty
+
+                    If Not theMapNumber Is Nothing AndAlso LocateFields(theFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField) <> NotFoundIndex Then
+                        theQueryString = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] " & _partnerLocateDefinitionForm.uxMapNumberOption.Text.Trim & " '" & theMapNumber & "'"
+                    End If
+
+                    If Not theMapScale Is Nothing AndAlso LocateFields(theFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField) <> NotFoundIndex Then
+                        If theQueryString <> String.Empty Then theQueryString += " AND "
+                        theQueryString += "[" & EditorExtension.MapIndexSettings.MapScaleField & "] " & _partnerLocateDefinitionForm.uxMapScaleOption.Text.Trim & " '" & theMapScale & "'"
+                    End If
+
+                    theFeatureLayerDefinition.DefinitionExpression = formatWhereClause(theQueryString, theFeatureLayer.FeatureClass)
+
                 End If
-                theLayer = theEnumLayerList.Next
-            Loop
+
+            End If
+            theFeatureLayer = DirectCast(theEnumLayerList.Next, IFeatureLayer)
+        Loop
+
+        Dim theArcMapDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        Dim theMap As IMap = theArcMapDoc.FocusMap
+        Dim theActiveView As IActiveView = DirectCast(theMap, IActiveView)
+        theActiveView.Refresh()
+
+        'If theLayerList.Count > 0 Then
+        '    Dim theMxDocument As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        '    Dim theMap As IMap = theMxDocument.FocusMap
+        '    Dim theEnumLayerList As IEnumLayer = theMap.Layers
+        '    theEnumLayerList.Reset()
+        '    Dim thisLayer As ILayer = theEnumLayerList.Next
+        '    Do While Not thisLayer Is Nothing
+        '        'MsgBox("the current layer is: " & theLayer.Name)
+        '        If theLayerList.Contains(thisLayer.Name) Then
+        '            DefinitionQuery(thisLayer, QueryString)
+        '        End If
+        '        thisLayer = theEnumLayerList.Next
+        '    Loop
+        'End If
+
+    End Sub
+
+
+    '''' <summary>
+    '''' Called to apply a definition query to a layer.  An Ilayer object and the query needs to be passed to this routine.
+    '''' </summary>
+    '''' <remarks>None</remarks>
+    'Friend Sub DefinitionQuery(ByRef theLayer As ILayer, ByRef QueryString As String) 'Mover to Editor Extension?
+    '    Try
+    '        If TypeOf theLayer Is IFeatureLayer And Not TypeOf theLayer Is IAnnotationSublayer Then
+    '            'MsgBox(theLayer.Name & " is a feature layer")
+    '            Dim theFeatureLayer As IFeatureLayer = DirectCast(theLayer, IFeatureLayer)
+    '            Dim theFeatureLayerDefinition As IFeatureLayerDefinition = DirectCast(theFeatureLayer, IFeatureLayerDefinition)
+    '            theFeatureLayerDefinition.DefinitionExpression = QueryString
+    '        Else
+    '            If TypeOf theLayer Is IAnnotationSublayer Then
+    '                'MsgBox(theLayer.Name & " is a annotation sublayer")
+    '            Else
+    '                'MsgBox(theLayer.Name & " is not a feature layer")
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        EditorExtension.ProcessUnhandledException(ex)
+    '    End Try
+
+
+    'End Sub
+
+    ''' <summary>
+    ''' Called to get the mapscale of the specified mapnumber
+    ''' </summary>
+    ''' <param name="theMapNumber">A MapNumber string</param>
+    ''' <remarks>Returns an empty string if no MapNumber exists.   Should this go in SpatialUtilites??</remarks>
+    Friend Function GetMapScale(ByVal theMapNumber As String) As String
+
+        Dim theMapScale As String = String.Empty
+
+        Dim theMapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
+        Dim theQueryString As String = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] = '" & theMapNumber & "'"
+
+        Dim theQueryFilter As IQueryFilter = New QueryFilter
+        theQueryFilter.SubFields = EditorExtension.MapIndexSettings.MapScaleField
+        theQueryFilter.WhereClause = formatWhereClause(theQueryString, theMapIndexFClass)
+
+        Dim theFeatureCursor As IFeatureCursor = theMapIndexFClass.Search(theQueryFilter, True)
+        Dim theFeature As IFeature = theFeatureCursor.NextFeature
+
+        If Not theFeature Is Nothing Then
+            Dim theFieldIdx As Integer = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
+            theMapScale = (DirectCast(theFeature.Value(theFieldIdx), Integer) / 12).ToString
         End If
 
-    End Sub
-    ''' <summary>
-    ''' Called to apply a definition query to a layer.  An Ilayer object and the query needs to be passed to this routine.
-    ''' </summary>
-    ''' <remarks>None</remarks>
-    Friend Sub DefinitionQuery(ByRef theLayer As ILayer, ByRef QueryString As String) 'Mover to Editor Extension?
-        Try
-            If TypeOf theLayer Is IFeatureLayer And Not TypeOf theLayer Is IAnnotationSublayer Then
-                'MsgBox(theLayer.Name & " is a feature layer")
-                Dim theFeatureLayer As IFeatureLayer = DirectCast(theLayer, IFeatureLayer)
-                Dim theFeatureLayerDefinition As IFeatureLayerDefinition = DirectCast(theFeatureLayer, IFeatureLayerDefinition)
-                theFeatureLayerDefinition.DefinitionExpression = QueryString
-            Else
-                If TypeOf theLayer Is IAnnotationSublayer Then
-                    'MsgBox(theLayer.Name & " is a annotation sublayer")
-                Else
-                    'MsgBox(theLayer.Name & " is not a feature layer")
-                End If
-            End If
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-        End Try
+        Return theMapScale
 
-
-    End Sub
-
-
+    End Function
 
 
 
@@ -685,7 +927,6 @@ Public NotInheritable Class LocateFeature
 
 #End Region
 
-#End Region
 
 #Region "Inherited Class Members"
 
@@ -732,6 +973,8 @@ Public NotInheritable Class LocateFeature
                     setPartnerLocateFeatureUserControl(DirectCast(_locateFeatureDockWin.UserData, LocateFeatureUserControl))
                     ' Close this when the application starts...
                     _locateFeatureDockWin.Show(False)
+
+                    setLocateDefinitionForm(New MapDefinitionForm())
 
                     MyBase.m_enabled = True
                 Else

@@ -101,6 +101,21 @@ Public NotInheritable Class Utilities
     End Enum
 
     ''' <summary>
+    ''' Enumeration of ESRI layer type filters that can be applied to a IEnumLayer.
+    ''' </summary>
+    Friend Enum EsriLayerTypes
+        AllLayerTypes
+        DataLayer
+        FeatureLayer
+        GeoFeatureLayer
+        GraphicsLayer
+        FDOGraphicsLayer
+        CoverageAnnotationLayer
+        GroupLayer
+    End Enum
+
+
+    ''' <summary>
     ''' Stores the current computer user name.
     ''' </summary>
     ''' <value></value>

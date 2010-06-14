@@ -109,15 +109,15 @@ Partial Class OrmapSettingsForm
         Dim TextSize04800ScaleLabel1 As System.Windows.Forms.Label
         Dim TextSize09600ScaleLabel1 As System.Windows.Forms.Label
         Dim TextSize24000ScaleLabel1 As System.Windows.Forms.Label
-        Me.TabPage0 = New System.Windows.Forms.TabPage
+        Me.uxAllTablesTab = New System.Windows.Forms.TabPage
         Me.AutoDateFieldTextBox = New System.Windows.Forms.TextBox
         Me.AllTablesSettingsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.AutoMethodFieldTextBox = New System.Windows.Forms.TextBox
         Me.AutoWhoFieldTextBox = New System.Windows.Forms.TextBox
-        Me.TabPage2 = New System.Windows.Forms.TabPage
+        Me.uxCartographicLinesTab = New System.Windows.Forms.TabPage
         Me.LineTypeFieldTextBox = New System.Windows.Forms.TextBox
         Me.CartographicLinesSettingsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.TabPage3 = New System.Windows.Forms.TabPage
+        Me.uxDefaultValuesTab = New System.Windows.Forms.TabPage
         Me.AnomalyTextBox = New System.Windows.Forms.TextBox
         Me.DefaultValuesSettingsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.CountyTextBox = New System.Windows.Forms.TextBox
@@ -129,7 +129,7 @@ Partial Class OrmapSettingsForm
         Me.RangePartTextBox = New System.Windows.Forms.TextBox
         Me.TownshipDirectionTextBox = New System.Windows.Forms.TextBox
         Me.TownshipPartTextBox = New System.Windows.Forms.TextBox
-        Me.TabPage4 = New System.Windows.Forms.TabPage
+        Me.uxMapIndexTab = New System.Windows.Forms.TabPage
         Me.CountyFieldTextBox = New System.Windows.Forms.TextBox
         Me.MapIndexSettingsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.MapNumberFieldTextBox = New System.Windows.Forms.TextBox
@@ -139,7 +139,7 @@ Partial Class OrmapSettingsForm
         Me.OrmapMapNumberFieldTextBox = New System.Windows.Forms.TextBox
         Me.PageNumberFieldTextBox = New System.Windows.Forms.TextBox
         Me.ReliabilityCodeFieldTextBox = New System.Windows.Forms.TextBox
-        Me.TabPage5 = New System.Windows.Forms.TabPage
+        Me.uxTableNamesTab = New System.Windows.Forms.TabPage
         Me.CancelledNumbersTableTextBox = New System.Windows.Forms.TextBox
         Me.TableNamesSettingsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.CartographicLinesFCTextBox = New System.Windows.Forms.TextBox
@@ -149,7 +149,7 @@ Partial Class OrmapSettingsForm
         Me.TaxCodeFCTextBox = New System.Windows.Forms.TextBox
         Me.TaxLotFCTextBox = New System.Windows.Forms.TextBox
         Me.TaxLotLinesFCTextBox = New System.Windows.Forms.TextBox
-        Me.TabPage6 = New System.Windows.Forms.TabPage
+        Me.uxTaxlotAcreageAnnoTab = New System.Windows.Forms.TabPage
         Me.TextSize00120ScaleTextBox = New System.Windows.Forms.TextBox
         Me.TaxlotAcreageAnnoSettingsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.TextSize00240ScaleTextBox = New System.Windows.Forms.TextBox
@@ -161,10 +161,10 @@ Partial Class OrmapSettingsForm
         Me.TextSize04800ScaleTextBox = New System.Windows.Forms.TextBox
         Me.TextSize09600ScaleTextBox = New System.Windows.Forms.TextBox
         Me.TextSize24000ScaleTextBox = New System.Windows.Forms.TextBox
-        Me.TabPage7 = New System.Windows.Forms.TabPage
+        Me.uxTaxlotLinesTab = New System.Windows.Forms.TabPage
         Me.LineTypeFieldTextBox1 = New System.Windows.Forms.TextBox
         Me.TaxLotLinesSettingsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.TabPage8 = New System.Windows.Forms.TabPage
+        Me.uxTaxlotNumberAnnoTab = New System.Windows.Forms.TabPage
         Me.TextSize00120ScaleTextBox1 = New System.Windows.Forms.TextBox
         Me.TaxlotNumberAnnoSettingsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.TextSize00240ScaleTextBox1 = New System.Windows.Forms.TextBox
@@ -176,7 +176,7 @@ Partial Class OrmapSettingsForm
         Me.TextSize04800ScaleTextBox1 = New System.Windows.Forms.TextBox
         Me.TextSize09600ScaleTextBox1 = New System.Windows.Forms.TextBox
         Me.TextSize24000ScaleTextBox1 = New System.Windows.Forms.TextBox
-        Me.TabPage9 = New System.Windows.Forms.TabPage
+        Me.uxTaxlotTab = New System.Windows.Forms.TabPage
         Me.AnomalyFieldTextBox = New System.Windows.Forms.TextBox
         Me.TaxLotSettingsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.CountyFieldTextBox1 = New System.Windows.Forms.TextBox
@@ -200,7 +200,7 @@ Partial Class OrmapSettingsForm
         Me.TownshipFieldTextBox = New System.Windows.Forms.TextBox
         Me.TownshipPartFieldTextBox = New System.Windows.Forms.TextBox
         Me.uxSettingsTabs = New System.Windows.Forms.TabControl
-        Me.TabPage1 = New System.Windows.Forms.TabPage
+        Me.uxAnnoTableNamesTab = New System.Windows.Forms.TabPage
         Me.Anno0010scaleFCTextBox1 = New System.Windows.Forms.TextBox
         Me.AnnoTableNamesSettingsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.Anno0020scaleFCTextBox1 = New System.Windows.Forms.TextBox
@@ -216,6 +216,9 @@ Partial Class OrmapSettingsForm
         Me.TaxCodeAnnoFCTextBox1 = New System.Windows.Forms.TextBox
         Me.TaxlotAcreageAnnoTextBox1 = New System.Windows.Forms.TextBox
         Me.TaxlotNumberAnnoFCTextBox1 = New System.Windows.Forms.TextBox
+        Me.uxDefinitionQueryTab = New System.Windows.Forms.TabPage
+        Me.Label1 = New System.Windows.Forms.Label
+        Me.uxDefQueryLayers = New System.Windows.Forms.CheckedListBox
         Me.BottomToolStripPanel = New System.Windows.Forms.ToolStripPanel
         Me.uxReload = New System.Windows.Forms.Button
         Me.uxSave = New System.Windows.Forms.Button
@@ -223,12 +226,12 @@ Partial Class OrmapSettingsForm
         Me.TopToolStripPanel = New System.Windows.Forms.ToolStripPanel
         Me.Panel1 = New System.Windows.Forms.Panel
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
+        Me.uxExport = New System.Windows.Forms.Button
         Me.uxReset = New System.Windows.Forms.Button
         Me.uxImport = New System.Windows.Forms.Button
         Me.uxCancel = New System.Windows.Forms.Button
         Me.RightToolStripPanel = New System.Windows.Forms.ToolStripPanel
         Me.LeftToolStripPanel = New System.Windows.Forms.ToolStripPanel
-        Me.uxExport = New System.Windows.Forms.Button
         AutoDateFieldLabel = New System.Windows.Forms.Label
         AutoMethodFieldLabel = New System.Windows.Forms.Label
         AutoWhoFieldLabel = New System.Windows.Forms.Label
@@ -315,27 +318,28 @@ Partial Class OrmapSettingsForm
         TextSize04800ScaleLabel1 = New System.Windows.Forms.Label
         TextSize09600ScaleLabel1 = New System.Windows.Forms.Label
         TextSize24000ScaleLabel1 = New System.Windows.Forms.Label
-        Me.TabPage0.SuspendLayout()
+        Me.uxAllTablesTab.SuspendLayout()
         CType(Me.AllTablesSettingsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TabPage2.SuspendLayout()
+        Me.uxCartographicLinesTab.SuspendLayout()
         CType(Me.CartographicLinesSettingsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TabPage3.SuspendLayout()
+        Me.uxDefaultValuesTab.SuspendLayout()
         CType(Me.DefaultValuesSettingsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TabPage4.SuspendLayout()
+        Me.uxMapIndexTab.SuspendLayout()
         CType(Me.MapIndexSettingsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TabPage5.SuspendLayout()
+        Me.uxTableNamesTab.SuspendLayout()
         CType(Me.TableNamesSettingsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TabPage6.SuspendLayout()
+        Me.uxTaxlotAcreageAnnoTab.SuspendLayout()
         CType(Me.TaxlotAcreageAnnoSettingsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TabPage7.SuspendLayout()
+        Me.uxTaxlotLinesTab.SuspendLayout()
         CType(Me.TaxLotLinesSettingsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TabPage8.SuspendLayout()
+        Me.uxTaxlotNumberAnnoTab.SuspendLayout()
         CType(Me.TaxlotNumberAnnoSettingsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TabPage9.SuspendLayout()
+        Me.uxTaxlotTab.SuspendLayout()
         CType(Me.TaxLotSettingsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.uxSettingsTabs.SuspendLayout()
-        Me.TabPage1.SuspendLayout()
+        Me.uxAnnoTableNamesTab.SuspendLayout()
         CType(Me.AnnoTableNamesSettingsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.uxDefinitionQueryTab.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
@@ -1114,22 +1118,22 @@ Partial Class OrmapSettingsForm
         TextSize24000ScaleLabel1.TabIndex = 18
         TextSize24000ScaleLabel1.Text = "Text Size 24000 Scale:"
         '
-        'TabPage0
+        'uxAllTablesTab
         '
-        Me.TabPage0.AutoScroll = True
-        Me.TabPage0.Controls.Add(AutoDateFieldLabel)
-        Me.TabPage0.Controls.Add(Me.AutoDateFieldTextBox)
-        Me.TabPage0.Controls.Add(AutoMethodFieldLabel)
-        Me.TabPage0.Controls.Add(Me.AutoMethodFieldTextBox)
-        Me.TabPage0.Controls.Add(AutoWhoFieldLabel)
-        Me.TabPage0.Controls.Add(Me.AutoWhoFieldTextBox)
-        Me.TabPage0.Location = New System.Drawing.Point(4, 40)
-        Me.TabPage0.Name = "TabPage0"
-        Me.TabPage0.Padding = New System.Windows.Forms.Padding(10)
-        Me.TabPage0.Size = New System.Drawing.Size(453, 424)
-        Me.TabPage0.TabIndex = 0
-        Me.TabPage0.Text = "All Tables"
-        Me.TabPage0.UseVisualStyleBackColor = True
+        Me.uxAllTablesTab.AutoScroll = True
+        Me.uxAllTablesTab.Controls.Add(AutoDateFieldLabel)
+        Me.uxAllTablesTab.Controls.Add(Me.AutoDateFieldTextBox)
+        Me.uxAllTablesTab.Controls.Add(AutoMethodFieldLabel)
+        Me.uxAllTablesTab.Controls.Add(Me.AutoMethodFieldTextBox)
+        Me.uxAllTablesTab.Controls.Add(AutoWhoFieldLabel)
+        Me.uxAllTablesTab.Controls.Add(Me.AutoWhoFieldTextBox)
+        Me.uxAllTablesTab.Location = New System.Drawing.Point(4, 22)
+        Me.uxAllTablesTab.Name = "uxAllTablesTab"
+        Me.uxAllTablesTab.Padding = New System.Windows.Forms.Padding(10)
+        Me.uxAllTablesTab.Size = New System.Drawing.Size(488, 442)
+        Me.uxAllTablesTab.TabIndex = 0
+        Me.uxAllTablesTab.Text = "All Tables"
+        Me.uxAllTablesTab.UseVisualStyleBackColor = True
         '
         'AutoDateFieldTextBox
         '
@@ -1159,18 +1163,18 @@ Partial Class OrmapSettingsForm
         Me.AutoWhoFieldTextBox.Size = New System.Drawing.Size(125, 20)
         Me.AutoWhoFieldTextBox.TabIndex = 5
         '
-        'TabPage2
+        'uxCartographicLinesTab
         '
-        Me.TabPage2.AutoScroll = True
-        Me.TabPage2.Controls.Add(LineTypeFieldLabel)
-        Me.TabPage2.Controls.Add(Me.LineTypeFieldTextBox)
-        Me.TabPage2.Location = New System.Drawing.Point(4, 40)
-        Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(10)
-        Me.TabPage2.Size = New System.Drawing.Size(453, 424)
-        Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "Cartographic Lines"
-        Me.TabPage2.UseVisualStyleBackColor = True
+        Me.uxCartographicLinesTab.AutoScroll = True
+        Me.uxCartographicLinesTab.Controls.Add(LineTypeFieldLabel)
+        Me.uxCartographicLinesTab.Controls.Add(Me.LineTypeFieldTextBox)
+        Me.uxCartographicLinesTab.Location = New System.Drawing.Point(4, 40)
+        Me.uxCartographicLinesTab.Name = "uxCartographicLinesTab"
+        Me.uxCartographicLinesTab.Padding = New System.Windows.Forms.Padding(10)
+        Me.uxCartographicLinesTab.Size = New System.Drawing.Size(488, 424)
+        Me.uxCartographicLinesTab.TabIndex = 1
+        Me.uxCartographicLinesTab.Text = "Cartographic Lines"
+        Me.uxCartographicLinesTab.UseVisualStyleBackColor = True
         '
         'LineTypeFieldTextBox
         '
@@ -1184,36 +1188,36 @@ Partial Class OrmapSettingsForm
         '
         Me.CartographicLinesSettingsBindingSource.DataSource = GetType(OrmapTaxlotEditing.CartographicLinesSettings)
         '
-        'TabPage3
+        'uxDefaultValuesTab
         '
-        Me.TabPage3.AutoScroll = True
-        Me.TabPage3.Controls.Add(AnomalyLabel)
-        Me.TabPage3.Controls.Add(Me.AnomalyTextBox)
-        Me.TabPage3.Controls.Add(CountyLabel)
-        Me.TabPage3.Controls.Add(Me.CountyTextBox)
-        Me.TabPage3.Controls.Add(MapSuffixNumberLabel)
-        Me.TabPage3.Controls.Add(Me.MapSuffixNumberTextBox)
-        Me.TabPage3.Controls.Add(MapSuffixTypeLabel)
-        Me.TabPage3.Controls.Add(Me.MapSuffixTypeTextBox)
-        Me.TabPage3.Controls.Add(QuarterQuarterSectionLabel)
-        Me.TabPage3.Controls.Add(Me.QuarterQuarterSectionTextBox)
-        Me.TabPage3.Controls.Add(QuarterSectionLabel)
-        Me.TabPage3.Controls.Add(Me.QuarterSectionTextBox)
-        Me.TabPage3.Controls.Add(RangeDirectionLabel)
-        Me.TabPage3.Controls.Add(Me.RangeDirectionTextBox)
-        Me.TabPage3.Controls.Add(RangePartLabel)
-        Me.TabPage3.Controls.Add(Me.RangePartTextBox)
-        Me.TabPage3.Controls.Add(TownshipDirectionLabel)
-        Me.TabPage3.Controls.Add(Me.TownshipDirectionTextBox)
-        Me.TabPage3.Controls.Add(TownshipPartLabel)
-        Me.TabPage3.Controls.Add(Me.TownshipPartTextBox)
-        Me.TabPage3.Location = New System.Drawing.Point(4, 40)
-        Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Padding = New System.Windows.Forms.Padding(10)
-        Me.TabPage3.Size = New System.Drawing.Size(453, 424)
-        Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "Default Values"
-        Me.TabPage3.UseVisualStyleBackColor = True
+        Me.uxDefaultValuesTab.AutoScroll = True
+        Me.uxDefaultValuesTab.Controls.Add(AnomalyLabel)
+        Me.uxDefaultValuesTab.Controls.Add(Me.AnomalyTextBox)
+        Me.uxDefaultValuesTab.Controls.Add(CountyLabel)
+        Me.uxDefaultValuesTab.Controls.Add(Me.CountyTextBox)
+        Me.uxDefaultValuesTab.Controls.Add(MapSuffixNumberLabel)
+        Me.uxDefaultValuesTab.Controls.Add(Me.MapSuffixNumberTextBox)
+        Me.uxDefaultValuesTab.Controls.Add(MapSuffixTypeLabel)
+        Me.uxDefaultValuesTab.Controls.Add(Me.MapSuffixTypeTextBox)
+        Me.uxDefaultValuesTab.Controls.Add(QuarterQuarterSectionLabel)
+        Me.uxDefaultValuesTab.Controls.Add(Me.QuarterQuarterSectionTextBox)
+        Me.uxDefaultValuesTab.Controls.Add(QuarterSectionLabel)
+        Me.uxDefaultValuesTab.Controls.Add(Me.QuarterSectionTextBox)
+        Me.uxDefaultValuesTab.Controls.Add(RangeDirectionLabel)
+        Me.uxDefaultValuesTab.Controls.Add(Me.RangeDirectionTextBox)
+        Me.uxDefaultValuesTab.Controls.Add(RangePartLabel)
+        Me.uxDefaultValuesTab.Controls.Add(Me.RangePartTextBox)
+        Me.uxDefaultValuesTab.Controls.Add(TownshipDirectionLabel)
+        Me.uxDefaultValuesTab.Controls.Add(Me.TownshipDirectionTextBox)
+        Me.uxDefaultValuesTab.Controls.Add(TownshipPartLabel)
+        Me.uxDefaultValuesTab.Controls.Add(Me.TownshipPartTextBox)
+        Me.uxDefaultValuesTab.Location = New System.Drawing.Point(4, 40)
+        Me.uxDefaultValuesTab.Name = "uxDefaultValuesTab"
+        Me.uxDefaultValuesTab.Padding = New System.Windows.Forms.Padding(10)
+        Me.uxDefaultValuesTab.Size = New System.Drawing.Size(488, 424)
+        Me.uxDefaultValuesTab.TabIndex = 2
+        Me.uxDefaultValuesTab.Text = "Default Values"
+        Me.uxDefaultValuesTab.UseVisualStyleBackColor = True
         '
         'AnomalyTextBox
         '
@@ -1299,31 +1303,31 @@ Partial Class OrmapSettingsForm
         Me.TownshipPartTextBox.Size = New System.Drawing.Size(25, 20)
         Me.TownshipPartTextBox.TabIndex = 39
         '
-        'TabPage4
+        'uxMapIndexTab
         '
-        Me.TabPage4.Controls.Add(CountyFieldLabel)
-        Me.TabPage4.Controls.Add(Me.CountyFieldTextBox)
-        Me.TabPage4.Controls.Add(MapNumberFieldLabel)
-        Me.TabPage4.Controls.Add(Me.MapNumberFieldTextBox)
-        Me.TabPage4.Controls.Add(MapScaleFieldLabel)
-        Me.TabPage4.Controls.Add(Me.MapScaleFieldTextBox)
-        Me.TabPage4.Controls.Add(MapSuffixNumberFieldLabel)
-        Me.TabPage4.Controls.Add(Me.MapSuffixNumberFieldTextBox)
-        Me.TabPage4.Controls.Add(MapSuffixTypeFieldLabel)
-        Me.TabPage4.Controls.Add(Me.MapSuffixTypeFieldTextBox)
-        Me.TabPage4.Controls.Add(OrmapMapNumberFieldLabel)
-        Me.TabPage4.Controls.Add(Me.OrmapMapNumberFieldTextBox)
-        Me.TabPage4.Controls.Add(PageNumberFieldLabel)
-        Me.TabPage4.Controls.Add(Me.PageNumberFieldTextBox)
-        Me.TabPage4.Controls.Add(ReliabilityCodeFieldLabel)
-        Me.TabPage4.Controls.Add(Me.ReliabilityCodeFieldTextBox)
-        Me.TabPage4.Location = New System.Drawing.Point(4, 40)
-        Me.TabPage4.Name = "TabPage4"
-        Me.TabPage4.Padding = New System.Windows.Forms.Padding(10)
-        Me.TabPage4.Size = New System.Drawing.Size(453, 424)
-        Me.TabPage4.TabIndex = 3
-        Me.TabPage4.Text = "Map Index"
-        Me.TabPage4.UseVisualStyleBackColor = True
+        Me.uxMapIndexTab.Controls.Add(CountyFieldLabel)
+        Me.uxMapIndexTab.Controls.Add(Me.CountyFieldTextBox)
+        Me.uxMapIndexTab.Controls.Add(MapNumberFieldLabel)
+        Me.uxMapIndexTab.Controls.Add(Me.MapNumberFieldTextBox)
+        Me.uxMapIndexTab.Controls.Add(MapScaleFieldLabel)
+        Me.uxMapIndexTab.Controls.Add(Me.MapScaleFieldTextBox)
+        Me.uxMapIndexTab.Controls.Add(MapSuffixNumberFieldLabel)
+        Me.uxMapIndexTab.Controls.Add(Me.MapSuffixNumberFieldTextBox)
+        Me.uxMapIndexTab.Controls.Add(MapSuffixTypeFieldLabel)
+        Me.uxMapIndexTab.Controls.Add(Me.MapSuffixTypeFieldTextBox)
+        Me.uxMapIndexTab.Controls.Add(OrmapMapNumberFieldLabel)
+        Me.uxMapIndexTab.Controls.Add(Me.OrmapMapNumberFieldTextBox)
+        Me.uxMapIndexTab.Controls.Add(PageNumberFieldLabel)
+        Me.uxMapIndexTab.Controls.Add(Me.PageNumberFieldTextBox)
+        Me.uxMapIndexTab.Controls.Add(ReliabilityCodeFieldLabel)
+        Me.uxMapIndexTab.Controls.Add(Me.ReliabilityCodeFieldTextBox)
+        Me.uxMapIndexTab.Location = New System.Drawing.Point(4, 22)
+        Me.uxMapIndexTab.Name = "uxMapIndexTab"
+        Me.uxMapIndexTab.Padding = New System.Windows.Forms.Padding(10)
+        Me.uxMapIndexTab.Size = New System.Drawing.Size(488, 442)
+        Me.uxMapIndexTab.TabIndex = 3
+        Me.uxMapIndexTab.Text = "Map Index"
+        Me.uxMapIndexTab.UseVisualStyleBackColor = True
         '
         'CountyFieldTextBox
         '
@@ -1393,32 +1397,32 @@ Partial Class OrmapSettingsForm
         Me.ReliabilityCodeFieldTextBox.Size = New System.Drawing.Size(125, 20)
         Me.ReliabilityCodeFieldTextBox.TabIndex = 31
         '
-        'TabPage5
+        'uxTableNamesTab
         '
-        Me.TabPage5.AutoScroll = True
-        Me.TabPage5.Controls.Add(CancelledNumbersTableLabel)
-        Me.TabPage5.Controls.Add(Me.CancelledNumbersTableTextBox)
-        Me.TabPage5.Controls.Add(CartographicLinesFCLabel)
-        Me.TabPage5.Controls.Add(Me.CartographicLinesFCTextBox)
-        Me.TabPage5.Controls.Add(MapIndexFCLabel)
-        Me.TabPage5.Controls.Add(Me.MapIndexFCTextBox)
-        Me.TabPage5.Controls.Add(PlatsFCLabel)
-        Me.TabPage5.Controls.Add(Me.PlatsFCTextBox)
-        Me.TabPage5.Controls.Add(ReferenceLinesFCLabel)
-        Me.TabPage5.Controls.Add(Me.ReferenceLinesFCTextBox)
-        Me.TabPage5.Controls.Add(TaxCodeFCLabel)
-        Me.TabPage5.Controls.Add(Me.TaxCodeFCTextBox)
-        Me.TabPage5.Controls.Add(TaxLotFCLabel)
-        Me.TabPage5.Controls.Add(Me.TaxLotFCTextBox)
-        Me.TabPage5.Controls.Add(TaxLotLinesFCLabel)
-        Me.TabPage5.Controls.Add(Me.TaxLotLinesFCTextBox)
-        Me.TabPage5.Location = New System.Drawing.Point(4, 40)
-        Me.TabPage5.Name = "TabPage5"
-        Me.TabPage5.Padding = New System.Windows.Forms.Padding(10)
-        Me.TabPage5.Size = New System.Drawing.Size(453, 424)
-        Me.TabPage5.TabIndex = 4
-        Me.TabPage5.Text = "Table Names"
-        Me.TabPage5.UseVisualStyleBackColor = True
+        Me.uxTableNamesTab.AutoScroll = True
+        Me.uxTableNamesTab.Controls.Add(CancelledNumbersTableLabel)
+        Me.uxTableNamesTab.Controls.Add(Me.CancelledNumbersTableTextBox)
+        Me.uxTableNamesTab.Controls.Add(CartographicLinesFCLabel)
+        Me.uxTableNamesTab.Controls.Add(Me.CartographicLinesFCTextBox)
+        Me.uxTableNamesTab.Controls.Add(MapIndexFCLabel)
+        Me.uxTableNamesTab.Controls.Add(Me.MapIndexFCTextBox)
+        Me.uxTableNamesTab.Controls.Add(PlatsFCLabel)
+        Me.uxTableNamesTab.Controls.Add(Me.PlatsFCTextBox)
+        Me.uxTableNamesTab.Controls.Add(ReferenceLinesFCLabel)
+        Me.uxTableNamesTab.Controls.Add(Me.ReferenceLinesFCTextBox)
+        Me.uxTableNamesTab.Controls.Add(TaxCodeFCLabel)
+        Me.uxTableNamesTab.Controls.Add(Me.TaxCodeFCTextBox)
+        Me.uxTableNamesTab.Controls.Add(TaxLotFCLabel)
+        Me.uxTableNamesTab.Controls.Add(Me.TaxLotFCTextBox)
+        Me.uxTableNamesTab.Controls.Add(TaxLotLinesFCLabel)
+        Me.uxTableNamesTab.Controls.Add(Me.TaxLotLinesFCTextBox)
+        Me.uxTableNamesTab.Location = New System.Drawing.Point(4, 40)
+        Me.uxTableNamesTab.Name = "uxTableNamesTab"
+        Me.uxTableNamesTab.Padding = New System.Windows.Forms.Padding(10)
+        Me.uxTableNamesTab.Size = New System.Drawing.Size(488, 424)
+        Me.uxTableNamesTab.TabIndex = 4
+        Me.uxTableNamesTab.Text = "Table Names"
+        Me.uxTableNamesTab.UseVisualStyleBackColor = True
         '
         'CancelledNumbersTableTextBox
         '
@@ -1488,35 +1492,35 @@ Partial Class OrmapSettingsForm
         Me.TaxLotLinesFCTextBox.Size = New System.Drawing.Size(260, 20)
         Me.TaxLotLinesFCTextBox.TabIndex = 31
         '
-        'TabPage6
+        'uxTaxlotAcreageAnnoTab
         '
-        Me.TabPage6.Controls.Add(TextSize00120ScaleLabel)
-        Me.TabPage6.Controls.Add(Me.TextSize00120ScaleTextBox)
-        Me.TabPage6.Controls.Add(TextSize00240ScaleLabel)
-        Me.TabPage6.Controls.Add(Me.TextSize00240ScaleTextBox)
-        Me.TabPage6.Controls.Add(TextSize00360ScaleLabel)
-        Me.TabPage6.Controls.Add(Me.TextSize00360ScaleTextBox)
-        Me.TabPage6.Controls.Add(TextSize00480ScaleLabel)
-        Me.TabPage6.Controls.Add(Me.TextSize00480ScaleTextBox)
-        Me.TabPage6.Controls.Add(TextSize00600ScaleLabel)
-        Me.TabPage6.Controls.Add(Me.TextSize00600ScaleTextBox)
-        Me.TabPage6.Controls.Add(TextSize01200ScaleLabel)
-        Me.TabPage6.Controls.Add(Me.TextSize01200ScaleTextBox)
-        Me.TabPage6.Controls.Add(TextSize02400ScaleLabel)
-        Me.TabPage6.Controls.Add(Me.TextSize02400ScaleTextBox)
-        Me.TabPage6.Controls.Add(TextSize04800ScaleLabel)
-        Me.TabPage6.Controls.Add(Me.TextSize04800ScaleTextBox)
-        Me.TabPage6.Controls.Add(TextSize09600ScaleLabel)
-        Me.TabPage6.Controls.Add(Me.TextSize09600ScaleTextBox)
-        Me.TabPage6.Controls.Add(TextSize24000ScaleLabel)
-        Me.TabPage6.Controls.Add(Me.TextSize24000ScaleTextBox)
-        Me.TabPage6.Location = New System.Drawing.Point(4, 40)
-        Me.TabPage6.Name = "TabPage6"
-        Me.TabPage6.Padding = New System.Windows.Forms.Padding(10)
-        Me.TabPage6.Size = New System.Drawing.Size(453, 424)
-        Me.TabPage6.TabIndex = 5
-        Me.TabPage6.Text = "Taxlot Acreage Anno"
-        Me.TabPage6.UseVisualStyleBackColor = True
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(TextSize00120ScaleLabel)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(Me.TextSize00120ScaleTextBox)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(TextSize00240ScaleLabel)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(Me.TextSize00240ScaleTextBox)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(TextSize00360ScaleLabel)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(Me.TextSize00360ScaleTextBox)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(TextSize00480ScaleLabel)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(Me.TextSize00480ScaleTextBox)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(TextSize00600ScaleLabel)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(Me.TextSize00600ScaleTextBox)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(TextSize01200ScaleLabel)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(Me.TextSize01200ScaleTextBox)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(TextSize02400ScaleLabel)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(Me.TextSize02400ScaleTextBox)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(TextSize04800ScaleLabel)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(Me.TextSize04800ScaleTextBox)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(TextSize09600ScaleLabel)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(Me.TextSize09600ScaleTextBox)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(TextSize24000ScaleLabel)
+        Me.uxTaxlotAcreageAnnoTab.Controls.Add(Me.TextSize24000ScaleTextBox)
+        Me.uxTaxlotAcreageAnnoTab.Location = New System.Drawing.Point(4, 40)
+        Me.uxTaxlotAcreageAnnoTab.Name = "uxTaxlotAcreageAnnoTab"
+        Me.uxTaxlotAcreageAnnoTab.Padding = New System.Windows.Forms.Padding(10)
+        Me.uxTaxlotAcreageAnnoTab.Size = New System.Drawing.Size(488, 424)
+        Me.uxTaxlotAcreageAnnoTab.TabIndex = 5
+        Me.uxTaxlotAcreageAnnoTab.Text = "Taxlot Acreage Anno"
+        Me.uxTaxlotAcreageAnnoTab.UseVisualStyleBackColor = True
         '
         'TextSize00120ScaleTextBox
         '
@@ -1602,17 +1606,17 @@ Partial Class OrmapSettingsForm
         Me.TextSize24000ScaleTextBox.Size = New System.Drawing.Size(25, 20)
         Me.TextSize24000ScaleTextBox.TabIndex = 19
         '
-        'TabPage7
+        'uxTaxlotLinesTab
         '
-        Me.TabPage7.Controls.Add(LineTypeFieldLabel1)
-        Me.TabPage7.Controls.Add(Me.LineTypeFieldTextBox1)
-        Me.TabPage7.Location = New System.Drawing.Point(4, 40)
-        Me.TabPage7.Name = "TabPage7"
-        Me.TabPage7.Padding = New System.Windows.Forms.Padding(10)
-        Me.TabPage7.Size = New System.Drawing.Size(453, 424)
-        Me.TabPage7.TabIndex = 6
-        Me.TabPage7.Text = "Taxlot Lines"
-        Me.TabPage7.UseVisualStyleBackColor = True
+        Me.uxTaxlotLinesTab.Controls.Add(LineTypeFieldLabel1)
+        Me.uxTaxlotLinesTab.Controls.Add(Me.LineTypeFieldTextBox1)
+        Me.uxTaxlotLinesTab.Location = New System.Drawing.Point(4, 22)
+        Me.uxTaxlotLinesTab.Name = "uxTaxlotLinesTab"
+        Me.uxTaxlotLinesTab.Padding = New System.Windows.Forms.Padding(10)
+        Me.uxTaxlotLinesTab.Size = New System.Drawing.Size(488, 442)
+        Me.uxTaxlotLinesTab.TabIndex = 6
+        Me.uxTaxlotLinesTab.Text = "Taxlot Lines"
+        Me.uxTaxlotLinesTab.UseVisualStyleBackColor = True
         '
         'LineTypeFieldTextBox1
         '
@@ -1626,35 +1630,35 @@ Partial Class OrmapSettingsForm
         '
         Me.TaxLotLinesSettingsBindingSource.DataSource = GetType(OrmapTaxlotEditing.TaxLotLinesSettings)
         '
-        'TabPage8
+        'uxTaxlotNumberAnnoTab
         '
-        Me.TabPage8.Controls.Add(TextSize00120ScaleLabel1)
-        Me.TabPage8.Controls.Add(Me.TextSize00120ScaleTextBox1)
-        Me.TabPage8.Controls.Add(TextSize00240ScaleLabel1)
-        Me.TabPage8.Controls.Add(Me.TextSize00240ScaleTextBox1)
-        Me.TabPage8.Controls.Add(TextSize00360ScaleLabel1)
-        Me.TabPage8.Controls.Add(Me.TextSize00360ScaleTextBox1)
-        Me.TabPage8.Controls.Add(TextSize00480ScaleLabel1)
-        Me.TabPage8.Controls.Add(Me.TextSize00480ScaleTextBox1)
-        Me.TabPage8.Controls.Add(TextSize00600ScaleLabel1)
-        Me.TabPage8.Controls.Add(Me.TextSize00600ScaleTextBox1)
-        Me.TabPage8.Controls.Add(TextSize01200ScaleLabel1)
-        Me.TabPage8.Controls.Add(Me.TextSize01200ScaleTextBox1)
-        Me.TabPage8.Controls.Add(TextSize02400ScaleLabel1)
-        Me.TabPage8.Controls.Add(Me.TextSize02400ScaleTextBox1)
-        Me.TabPage8.Controls.Add(TextSize04800ScaleLabel1)
-        Me.TabPage8.Controls.Add(Me.TextSize04800ScaleTextBox1)
-        Me.TabPage8.Controls.Add(TextSize09600ScaleLabel1)
-        Me.TabPage8.Controls.Add(Me.TextSize09600ScaleTextBox1)
-        Me.TabPage8.Controls.Add(TextSize24000ScaleLabel1)
-        Me.TabPage8.Controls.Add(Me.TextSize24000ScaleTextBox1)
-        Me.TabPage8.Location = New System.Drawing.Point(4, 40)
-        Me.TabPage8.Name = "TabPage8"
-        Me.TabPage8.Padding = New System.Windows.Forms.Padding(10)
-        Me.TabPage8.Size = New System.Drawing.Size(453, 424)
-        Me.TabPage8.TabIndex = 7
-        Me.TabPage8.Text = "Taxlot Number Anno"
-        Me.TabPage8.UseVisualStyleBackColor = True
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(TextSize00120ScaleLabel1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(Me.TextSize00120ScaleTextBox1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(TextSize00240ScaleLabel1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(Me.TextSize00240ScaleTextBox1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(TextSize00360ScaleLabel1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(Me.TextSize00360ScaleTextBox1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(TextSize00480ScaleLabel1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(Me.TextSize00480ScaleTextBox1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(TextSize00600ScaleLabel1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(Me.TextSize00600ScaleTextBox1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(TextSize01200ScaleLabel1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(Me.TextSize01200ScaleTextBox1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(TextSize02400ScaleLabel1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(Me.TextSize02400ScaleTextBox1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(TextSize04800ScaleLabel1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(Me.TextSize04800ScaleTextBox1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(TextSize09600ScaleLabel1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(Me.TextSize09600ScaleTextBox1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(TextSize24000ScaleLabel1)
+        Me.uxTaxlotNumberAnnoTab.Controls.Add(Me.TextSize24000ScaleTextBox1)
+        Me.uxTaxlotNumberAnnoTab.Location = New System.Drawing.Point(4, 40)
+        Me.uxTaxlotNumberAnnoTab.Name = "uxTaxlotNumberAnnoTab"
+        Me.uxTaxlotNumberAnnoTab.Padding = New System.Windows.Forms.Padding(10)
+        Me.uxTaxlotNumberAnnoTab.Size = New System.Drawing.Size(488, 424)
+        Me.uxTaxlotNumberAnnoTab.TabIndex = 7
+        Me.uxTaxlotNumberAnnoTab.Text = "Taxlot Number Anno"
+        Me.uxTaxlotNumberAnnoTab.UseVisualStyleBackColor = True
         '
         'TextSize00120ScaleTextBox1
         '
@@ -1740,58 +1744,58 @@ Partial Class OrmapSettingsForm
         Me.TextSize24000ScaleTextBox1.Size = New System.Drawing.Size(25, 20)
         Me.TextSize24000ScaleTextBox1.TabIndex = 19
         '
-        'TabPage9
+        'uxTaxlotTab
         '
-        Me.TabPage9.AutoScroll = True
-        Me.TabPage9.Controls.Add(AnomalyFieldLabel)
-        Me.TabPage9.Controls.Add(Me.AnomalyFieldTextBox)
-        Me.TabPage9.Controls.Add(CountyFieldLabel1)
-        Me.TabPage9.Controls.Add(Me.CountyFieldTextBox1)
-        Me.TabPage9.Controls.Add(MapAcresFieldLabel)
-        Me.TabPage9.Controls.Add(Me.MapAcresFieldTextBox)
-        Me.TabPage9.Controls.Add(MapNumberFieldLabel1)
-        Me.TabPage9.Controls.Add(Me.MapNumberFieldTextBox1)
-        Me.TabPage9.Controls.Add(MapSuffixNumberFieldLabel1)
-        Me.TabPage9.Controls.Add(Me.MapSuffixNumberFieldTextBox1)
-        Me.TabPage9.Controls.Add(MapSuffixTypeFieldLabel1)
-        Me.TabPage9.Controls.Add(Me.MapSuffixTypeFieldTextBox1)
-        Me.TabPage9.Controls.Add(MapTaxlotFieldLabel)
-        Me.TabPage9.Controls.Add(Me.MapTaxlotFieldTextBox)
-        Me.TabPage9.Controls.Add(MapTaxlotFormatMaskLabel)
-        Me.TabPage9.Controls.Add(Me.MapTaxlotFormatMaskTextBox)
-        Me.TabPage9.Controls.Add(OrmapMapNumberFieldLabel1)
-        Me.TabPage9.Controls.Add(Me.OrmapMapNumberFieldTextBox1)
-        Me.TabPage9.Controls.Add(OrmapTaxlotFieldLabel)
-        Me.TabPage9.Controls.Add(Me.OrmapTaxlotFieldTextBox)
-        Me.TabPage9.Controls.Add(QuarterQuarterSectionFieldLabel)
-        Me.TabPage9.Controls.Add(Me.QuarterQuarterSectionFieldTextBox)
-        Me.TabPage9.Controls.Add(QuarterSectionFieldLabel)
-        Me.TabPage9.Controls.Add(Me.QuarterSectionFieldTextBox)
-        Me.TabPage9.Controls.Add(RangeDirectionFieldLabel)
-        Me.TabPage9.Controls.Add(Me.RangeDirectionFieldTextBox)
-        Me.TabPage9.Controls.Add(RangeFieldLabel)
-        Me.TabPage9.Controls.Add(Me.RangeFieldTextBox)
-        Me.TabPage9.Controls.Add(RangePartFieldLabel)
-        Me.TabPage9.Controls.Add(Me.RangePartFieldTextBox)
-        Me.TabPage9.Controls.Add(SectionNumberFieldLabel)
-        Me.TabPage9.Controls.Add(Me.SectionNumberFieldTextBox)
-        Me.TabPage9.Controls.Add(SpecialInterestFieldLabel)
-        Me.TabPage9.Controls.Add(Me.SpecialInterestFieldTextBox)
-        Me.TabPage9.Controls.Add(TaxlotFieldLabel)
-        Me.TabPage9.Controls.Add(Me.TaxlotFieldTextBox)
-        Me.TabPage9.Controls.Add(TownshipDirectionFieldLabel)
-        Me.TabPage9.Controls.Add(Me.TownshipDirectionFieldTextBox)
-        Me.TabPage9.Controls.Add(TownshipFieldLabel)
-        Me.TabPage9.Controls.Add(Me.TownshipFieldTextBox)
-        Me.TabPage9.Controls.Add(TownshipPartFieldLabel)
-        Me.TabPage9.Controls.Add(Me.TownshipPartFieldTextBox)
-        Me.TabPage9.Location = New System.Drawing.Point(4, 40)
-        Me.TabPage9.Name = "TabPage9"
-        Me.TabPage9.Padding = New System.Windows.Forms.Padding(10)
-        Me.TabPage9.Size = New System.Drawing.Size(453, 424)
-        Me.TabPage9.TabIndex = 8
-        Me.TabPage9.Text = "Taxlot"
-        Me.TabPage9.UseVisualStyleBackColor = True
+        Me.uxTaxlotTab.AutoScroll = True
+        Me.uxTaxlotTab.Controls.Add(AnomalyFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.AnomalyFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(CountyFieldLabel1)
+        Me.uxTaxlotTab.Controls.Add(Me.CountyFieldTextBox1)
+        Me.uxTaxlotTab.Controls.Add(MapAcresFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.MapAcresFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(MapNumberFieldLabel1)
+        Me.uxTaxlotTab.Controls.Add(Me.MapNumberFieldTextBox1)
+        Me.uxTaxlotTab.Controls.Add(MapSuffixNumberFieldLabel1)
+        Me.uxTaxlotTab.Controls.Add(Me.MapSuffixNumberFieldTextBox1)
+        Me.uxTaxlotTab.Controls.Add(MapSuffixTypeFieldLabel1)
+        Me.uxTaxlotTab.Controls.Add(Me.MapSuffixTypeFieldTextBox1)
+        Me.uxTaxlotTab.Controls.Add(MapTaxlotFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.MapTaxlotFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(MapTaxlotFormatMaskLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.MapTaxlotFormatMaskTextBox)
+        Me.uxTaxlotTab.Controls.Add(OrmapMapNumberFieldLabel1)
+        Me.uxTaxlotTab.Controls.Add(Me.OrmapMapNumberFieldTextBox1)
+        Me.uxTaxlotTab.Controls.Add(OrmapTaxlotFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.OrmapTaxlotFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(QuarterQuarterSectionFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.QuarterQuarterSectionFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(QuarterSectionFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.QuarterSectionFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(RangeDirectionFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.RangeDirectionFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(RangeFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.RangeFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(RangePartFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.RangePartFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(SectionNumberFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.SectionNumberFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(SpecialInterestFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.SpecialInterestFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(TaxlotFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.TaxlotFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(TownshipDirectionFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.TownshipDirectionFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(TownshipFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.TownshipFieldTextBox)
+        Me.uxTaxlotTab.Controls.Add(TownshipPartFieldLabel)
+        Me.uxTaxlotTab.Controls.Add(Me.TownshipPartFieldTextBox)
+        Me.uxTaxlotTab.Location = New System.Drawing.Point(4, 22)
+        Me.uxTaxlotTab.Name = "uxTaxlotTab"
+        Me.uxTaxlotTab.Padding = New System.Windows.Forms.Padding(10)
+        Me.uxTaxlotTab.Size = New System.Drawing.Size(488, 442)
+        Me.uxTaxlotTab.TabIndex = 8
+        Me.uxTaxlotTab.Text = "Taxlot"
+        Me.uxTaxlotTab.UseVisualStyleBackColor = True
         '
         'AnomalyFieldTextBox
         '
@@ -1970,61 +1974,62 @@ Partial Class OrmapSettingsForm
         Me.uxSettingsTabs.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.uxSettingsTabs.Controls.Add(Me.TabPage5)
-        Me.uxSettingsTabs.Controls.Add(Me.TabPage1)
-        Me.uxSettingsTabs.Controls.Add(Me.TabPage0)
-        Me.uxSettingsTabs.Controls.Add(Me.TabPage4)
-        Me.uxSettingsTabs.Controls.Add(Me.TabPage9)
-        Me.uxSettingsTabs.Controls.Add(Me.TabPage7)
-        Me.uxSettingsTabs.Controls.Add(Me.TabPage2)
-        Me.uxSettingsTabs.Controls.Add(Me.TabPage6)
-        Me.uxSettingsTabs.Controls.Add(Me.TabPage8)
-        Me.uxSettingsTabs.Controls.Add(Me.TabPage3)
+        Me.uxSettingsTabs.Controls.Add(Me.uxTableNamesTab)
+        Me.uxSettingsTabs.Controls.Add(Me.uxAnnoTableNamesTab)
+        Me.uxSettingsTabs.Controls.Add(Me.uxAllTablesTab)
+        Me.uxSettingsTabs.Controls.Add(Me.uxMapIndexTab)
+        Me.uxSettingsTabs.Controls.Add(Me.uxTaxlotTab)
+        Me.uxSettingsTabs.Controls.Add(Me.uxTaxlotLinesTab)
+        Me.uxSettingsTabs.Controls.Add(Me.uxCartographicLinesTab)
+        Me.uxSettingsTabs.Controls.Add(Me.uxTaxlotAcreageAnnoTab)
+        Me.uxSettingsTabs.Controls.Add(Me.uxTaxlotNumberAnnoTab)
+        Me.uxSettingsTabs.Controls.Add(Me.uxDefaultValuesTab)
+        Me.uxSettingsTabs.Controls.Add(Me.uxDefinitionQueryTab)
         Me.uxSettingsTabs.Location = New System.Drawing.Point(0, 0)
         Me.uxSettingsTabs.Multiline = True
         Me.uxSettingsTabs.Name = "uxSettingsTabs"
         Me.uxSettingsTabs.SelectedIndex = 0
-        Me.uxSettingsTabs.Size = New System.Drawing.Size(461, 468)
+        Me.uxSettingsTabs.Size = New System.Drawing.Size(496, 468)
         Me.uxSettingsTabs.TabIndex = 0
         '
-        'TabPage1
+        'uxAnnoTableNamesTab
         '
-        Me.TabPage1.AutoScroll = True
-        Me.TabPage1.Controls.Add(Anno0010scaleFCLabel1)
-        Me.TabPage1.Controls.Add(Me.Anno0010scaleFCTextBox1)
-        Me.TabPage1.Controls.Add(Anno0020scaleFCLabel1)
-        Me.TabPage1.Controls.Add(Me.Anno0020scaleFCTextBox1)
-        Me.TabPage1.Controls.Add(Anno0030scaleFCLabel1)
-        Me.TabPage1.Controls.Add(Me.Anno0030scaleFCTextBox1)
-        Me.TabPage1.Controls.Add(Anno0040scaleFCLabel1)
-        Me.TabPage1.Controls.Add(Me.Anno0040scaleFCTextBox1)
-        Me.TabPage1.Controls.Add(Anno0050scaleFCLabel1)
-        Me.TabPage1.Controls.Add(Me.Anno0050scaleFCTextBox1)
-        Me.TabPage1.Controls.Add(Anno0100scaleFCLabel1)
-        Me.TabPage1.Controls.Add(Me.Anno0100scaleFCTextBox1)
-        Me.TabPage1.Controls.Add(Anno0200scaleFCLabel1)
-        Me.TabPage1.Controls.Add(Me.Anno0200scaleFCTextBox1)
-        Me.TabPage1.Controls.Add(Anno0400scaleFCLabel1)
-        Me.TabPage1.Controls.Add(Me.Anno0400scaleFCTextBox1)
-        Me.TabPage1.Controls.Add(Anno0800scaleFCLabel1)
-        Me.TabPage1.Controls.Add(Me.Anno0800scaleFCTextBox1)
-        Me.TabPage1.Controls.Add(Anno2000scaleFCLabel1)
-        Me.TabPage1.Controls.Add(Me.Anno2000scaleFCTextBox1)
-        Me.TabPage1.Controls.Add(LotsAnnoFCLabel1)
-        Me.TabPage1.Controls.Add(Me.LotsAnnoFCTextBox1)
-        Me.TabPage1.Controls.Add(TaxCodeAnnoFCLabel1)
-        Me.TabPage1.Controls.Add(Me.TaxCodeAnnoFCTextBox1)
-        Me.TabPage1.Controls.Add(TaxlotAcreageAnnoLabel1)
-        Me.TabPage1.Controls.Add(Me.TaxlotAcreageAnnoTextBox1)
-        Me.TabPage1.Controls.Add(TaxlotNumberAnnoFCLabel1)
-        Me.TabPage1.Controls.Add(Me.TaxlotNumberAnnoFCTextBox1)
-        Me.TabPage1.Location = New System.Drawing.Point(4, 40)
-        Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(10)
-        Me.TabPage1.Size = New System.Drawing.Size(453, 424)
-        Me.TabPage1.TabIndex = 9
-        Me.TabPage1.Text = "Anno Table Names"
-        Me.TabPage1.UseVisualStyleBackColor = True
+        Me.uxAnnoTableNamesTab.AutoScroll = True
+        Me.uxAnnoTableNamesTab.Controls.Add(Anno0010scaleFCLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.Anno0010scaleFCTextBox1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Anno0020scaleFCLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.Anno0020scaleFCTextBox1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Anno0030scaleFCLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.Anno0030scaleFCTextBox1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Anno0040scaleFCLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.Anno0040scaleFCTextBox1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Anno0050scaleFCLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.Anno0050scaleFCTextBox1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Anno0100scaleFCLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.Anno0100scaleFCTextBox1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Anno0200scaleFCLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.Anno0200scaleFCTextBox1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Anno0400scaleFCLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.Anno0400scaleFCTextBox1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Anno0800scaleFCLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.Anno0800scaleFCTextBox1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Anno2000scaleFCLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.Anno2000scaleFCTextBox1)
+        Me.uxAnnoTableNamesTab.Controls.Add(LotsAnnoFCLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.LotsAnnoFCTextBox1)
+        Me.uxAnnoTableNamesTab.Controls.Add(TaxCodeAnnoFCLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.TaxCodeAnnoFCTextBox1)
+        Me.uxAnnoTableNamesTab.Controls.Add(TaxlotAcreageAnnoLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.TaxlotAcreageAnnoTextBox1)
+        Me.uxAnnoTableNamesTab.Controls.Add(TaxlotNumberAnnoFCLabel1)
+        Me.uxAnnoTableNamesTab.Controls.Add(Me.TaxlotNumberAnnoFCTextBox1)
+        Me.uxAnnoTableNamesTab.Location = New System.Drawing.Point(4, 22)
+        Me.uxAnnoTableNamesTab.Name = "uxAnnoTableNamesTab"
+        Me.uxAnnoTableNamesTab.Padding = New System.Windows.Forms.Padding(10)
+        Me.uxAnnoTableNamesTab.Size = New System.Drawing.Size(488, 442)
+        Me.uxAnnoTableNamesTab.TabIndex = 9
+        Me.uxAnnoTableNamesTab.Text = "Anno Table Names"
+        Me.uxAnnoTableNamesTab.UseVisualStyleBackColor = True
         '
         'Anno0010scaleFCTextBox1
         '
@@ -2142,6 +2147,38 @@ Partial Class OrmapSettingsForm
         Me.TaxlotNumberAnnoFCTextBox1.Size = New System.Drawing.Size(260, 20)
         Me.TaxlotNumberAnnoFCTextBox1.TabIndex = 55
         '
+        'uxDefinitionQueryTab
+        '
+        Me.uxDefinitionQueryTab.AutoScroll = True
+        Me.uxDefinitionQueryTab.Controls.Add(Me.Label1)
+        Me.uxDefinitionQueryTab.Controls.Add(Me.uxDefQueryLayers)
+        Me.uxDefinitionQueryTab.Location = New System.Drawing.Point(4, 40)
+        Me.uxDefinitionQueryTab.Name = "uxDefinitionQueryTab"
+        Me.uxDefinitionQueryTab.Padding = New System.Windows.Forms.Padding(10)
+        Me.uxDefinitionQueryTab.Size = New System.Drawing.Size(488, 424)
+        Me.uxDefinitionQueryTab.TabIndex = 10
+        Me.uxDefinitionQueryTab.Text = "Definition Query"
+        Me.uxDefinitionQueryTab.UseVisualStyleBackColor = True
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(27, 13)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(335, 13)
+        Me.Label1.TabIndex = 1
+        Me.Label1.Text = "Select Feature Classes that will participate in the Definition Query tool:"
+        '
+        'uxDefQueryLayers
+        '
+        Me.uxDefQueryLayers.CheckOnClick = True
+        Me.uxDefQueryLayers.FormattingEnabled = True
+        Me.uxDefQueryLayers.Location = New System.Drawing.Point(30, 34)
+        Me.uxDefQueryLayers.Name = "uxDefQueryLayers"
+        Me.uxDefQueryLayers.Size = New System.Drawing.Size(234, 379)
+        Me.uxDefQueryLayers.Sorted = True
+        Me.uxDefQueryLayers.TabIndex = 0
+        '
         'BottomToolStripPanel
         '
         Me.BottomToolStripPanel.Location = New System.Drawing.Point(10, 84)
@@ -2194,7 +2231,7 @@ Partial Class OrmapSettingsForm
         Me.Panel1.Controls.Add(Me.uxSettingsTabs)
         Me.Panel1.Location = New System.Drawing.Point(10, 10)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(461, 468)
+        Me.Panel1.Size = New System.Drawing.Size(496, 468)
         Me.Panel1.TabIndex = 6
         '
         'TableLayoutPanel1
@@ -2207,7 +2244,7 @@ Partial Class OrmapSettingsForm
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 62.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.uxExport, 5, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.uxReset, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.uxSave, 0, 0)
@@ -2215,12 +2252,21 @@ Partial Class OrmapSettingsForm
         Me.TableLayoutPanel1.Controls.Add(Me.uxImport, 3, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.uxCancel, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.uxHelp, 6, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(51, 480)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(86, 480)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(422, 29)
         Me.TableLayoutPanel1.TabIndex = 4
+        '
+        'uxExport
+        '
+        Me.uxExport.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.uxExport.Location = New System.Drawing.Point(303, 3)
+        Me.uxExport.Name = "uxExport"
+        Me.uxExport.Size = New System.Drawing.Size(54, 23)
+        Me.uxExport.TabIndex = 6
+        Me.uxExport.Text = "&Export"
         '
         'uxReset
         '
@@ -2266,20 +2312,11 @@ Partial Class OrmapSettingsForm
         Me.LeftToolStripPanel.RowMargin = New System.Windows.Forms.Padding(3, 0, 0, 0)
         Me.LeftToolStripPanel.Size = New System.Drawing.Size(0, 0)
         '
-        'uxExport
-        '
-        Me.uxExport.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.uxExport.Location = New System.Drawing.Point(303, 3)
-        Me.uxExport.Name = "uxExport"
-        Me.uxExport.Size = New System.Drawing.Size(54, 23)
-        Me.uxExport.TabIndex = 6
-        Me.uxExport.Text = "&Export"
-        '
         'OrmapSettingsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(482, 526)
+        Me.ClientSize = New System.Drawing.Size(517, 526)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.BottomToolStripPanel)
         Me.Controls.Add(Me.TopToolStripPanel)
@@ -2295,52 +2332,54 @@ Partial Class OrmapSettingsForm
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "ORMAP Taxlot Editing Settings"
         Me.TopMost = True
-        Me.TabPage0.ResumeLayout(False)
-        Me.TabPage0.PerformLayout()
+        Me.uxAllTablesTab.ResumeLayout(False)
+        Me.uxAllTablesTab.PerformLayout()
         CType(Me.AllTablesSettingsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TabPage2.ResumeLayout(False)
-        Me.TabPage2.PerformLayout()
+        Me.uxCartographicLinesTab.ResumeLayout(False)
+        Me.uxCartographicLinesTab.PerformLayout()
         CType(Me.CartographicLinesSettingsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TabPage3.ResumeLayout(False)
-        Me.TabPage3.PerformLayout()
+        Me.uxDefaultValuesTab.ResumeLayout(False)
+        Me.uxDefaultValuesTab.PerformLayout()
         CType(Me.DefaultValuesSettingsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TabPage4.ResumeLayout(False)
-        Me.TabPage4.PerformLayout()
+        Me.uxMapIndexTab.ResumeLayout(False)
+        Me.uxMapIndexTab.PerformLayout()
         CType(Me.MapIndexSettingsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TabPage5.ResumeLayout(False)
-        Me.TabPage5.PerformLayout()
+        Me.uxTableNamesTab.ResumeLayout(False)
+        Me.uxTableNamesTab.PerformLayout()
         CType(Me.TableNamesSettingsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TabPage6.ResumeLayout(False)
-        Me.TabPage6.PerformLayout()
+        Me.uxTaxlotAcreageAnnoTab.ResumeLayout(False)
+        Me.uxTaxlotAcreageAnnoTab.PerformLayout()
         CType(Me.TaxlotAcreageAnnoSettingsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TabPage7.ResumeLayout(False)
-        Me.TabPage7.PerformLayout()
+        Me.uxTaxlotLinesTab.ResumeLayout(False)
+        Me.uxTaxlotLinesTab.PerformLayout()
         CType(Me.TaxLotLinesSettingsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TabPage8.ResumeLayout(False)
-        Me.TabPage8.PerformLayout()
+        Me.uxTaxlotNumberAnnoTab.ResumeLayout(False)
+        Me.uxTaxlotNumberAnnoTab.PerformLayout()
         CType(Me.TaxlotNumberAnnoSettingsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TabPage9.ResumeLayout(False)
-        Me.TabPage9.PerformLayout()
+        Me.uxTaxlotTab.ResumeLayout(False)
+        Me.uxTaxlotTab.PerformLayout()
         CType(Me.TaxLotSettingsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.uxSettingsTabs.ResumeLayout(False)
-        Me.TabPage1.ResumeLayout(False)
-        Me.TabPage1.PerformLayout()
+        Me.uxAnnoTableNamesTab.ResumeLayout(False)
+        Me.uxAnnoTableNamesTab.PerformLayout()
         CType(Me.AnnoTableNamesSettingsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.uxDefinitionQueryTab.ResumeLayout(False)
+        Me.uxDefinitionQueryTab.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents TabPage0 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage4 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage5 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage6 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage7 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage8 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage9 As System.Windows.Forms.TabPage
+    Friend WithEvents uxAllTablesTab As System.Windows.Forms.TabPage
+    Friend WithEvents uxCartographicLinesTab As System.Windows.Forms.TabPage
+    Friend WithEvents uxDefaultValuesTab As System.Windows.Forms.TabPage
+    Friend WithEvents uxMapIndexTab As System.Windows.Forms.TabPage
+    Friend WithEvents uxTableNamesTab As System.Windows.Forms.TabPage
+    Friend WithEvents uxTaxlotAcreageAnnoTab As System.Windows.Forms.TabPage
+    Friend WithEvents uxTaxlotLinesTab As System.Windows.Forms.TabPage
+    Friend WithEvents uxTaxlotNumberAnnoTab As System.Windows.Forms.TabPage
+    Friend WithEvents uxTaxlotTab As System.Windows.Forms.TabPage
     Friend WithEvents uxSettingsTabs As System.Windows.Forms.TabControl
     Friend WithEvents BottomToolStripPanel As System.Windows.Forms.ToolStripPanel
     Friend WithEvents uxReload As System.Windows.Forms.Button
@@ -2378,7 +2417,7 @@ Partial Class OrmapSettingsForm
     Friend WithEvents PageNumberFieldTextBox As System.Windows.Forms.TextBox
     Friend WithEvents ReliabilityCodeFieldTextBox As System.Windows.Forms.TextBox
     Friend WithEvents TableNamesSettingsBindingSource As System.Windows.Forms.BindingSource
-    Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
+    Friend WithEvents uxAnnoTableNamesTab As System.Windows.Forms.TabPage
     Friend WithEvents Anno0010scaleFCTextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents AnnoTableNamesSettingsBindingSource As System.Windows.Forms.BindingSource
     Friend WithEvents Anno0020scaleFCTextBox1 As System.Windows.Forms.TextBox
@@ -2452,4 +2491,7 @@ Partial Class OrmapSettingsForm
     Friend WithEvents uxReset As System.Windows.Forms.Button
     Friend WithEvents uxImport As System.Windows.Forms.Button
     Friend WithEvents uxExport As System.Windows.Forms.Button
+    Friend WithEvents uxDefinitionQueryTab As System.Windows.Forms.TabPage
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents uxDefQueryLayers As System.Windows.Forms.CheckedListBox
 End Class
