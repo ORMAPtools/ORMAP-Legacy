@@ -1127,10 +1127,10 @@ Partial Class OrmapSettingsForm
         Me.uxAllTablesTab.Controls.Add(Me.AutoMethodFieldTextBox)
         Me.uxAllTablesTab.Controls.Add(AutoWhoFieldLabel)
         Me.uxAllTablesTab.Controls.Add(Me.AutoWhoFieldTextBox)
-        Me.uxAllTablesTab.Location = New System.Drawing.Point(4, 22)
+        Me.uxAllTablesTab.Location = New System.Drawing.Point(4, 40)
         Me.uxAllTablesTab.Name = "uxAllTablesTab"
         Me.uxAllTablesTab.Padding = New System.Windows.Forms.Padding(10)
-        Me.uxAllTablesTab.Size = New System.Drawing.Size(488, 442)
+        Me.uxAllTablesTab.Size = New System.Drawing.Size(488, 424)
         Me.uxAllTablesTab.TabIndex = 0
         Me.uxAllTablesTab.Text = "All Tables"
         Me.uxAllTablesTab.UseVisualStyleBackColor = True
@@ -1321,10 +1321,10 @@ Partial Class OrmapSettingsForm
         Me.uxMapIndexTab.Controls.Add(Me.PageNumberFieldTextBox)
         Me.uxMapIndexTab.Controls.Add(ReliabilityCodeFieldLabel)
         Me.uxMapIndexTab.Controls.Add(Me.ReliabilityCodeFieldTextBox)
-        Me.uxMapIndexTab.Location = New System.Drawing.Point(4, 22)
+        Me.uxMapIndexTab.Location = New System.Drawing.Point(4, 40)
         Me.uxMapIndexTab.Name = "uxMapIndexTab"
         Me.uxMapIndexTab.Padding = New System.Windows.Forms.Padding(10)
-        Me.uxMapIndexTab.Size = New System.Drawing.Size(488, 442)
+        Me.uxMapIndexTab.Size = New System.Drawing.Size(488, 424)
         Me.uxMapIndexTab.TabIndex = 3
         Me.uxMapIndexTab.Text = "Map Index"
         Me.uxMapIndexTab.UseVisualStyleBackColor = True
@@ -1610,10 +1610,10 @@ Partial Class OrmapSettingsForm
         '
         Me.uxTaxlotLinesTab.Controls.Add(LineTypeFieldLabel1)
         Me.uxTaxlotLinesTab.Controls.Add(Me.LineTypeFieldTextBox1)
-        Me.uxTaxlotLinesTab.Location = New System.Drawing.Point(4, 22)
+        Me.uxTaxlotLinesTab.Location = New System.Drawing.Point(4, 40)
         Me.uxTaxlotLinesTab.Name = "uxTaxlotLinesTab"
         Me.uxTaxlotLinesTab.Padding = New System.Windows.Forms.Padding(10)
-        Me.uxTaxlotLinesTab.Size = New System.Drawing.Size(488, 442)
+        Me.uxTaxlotLinesTab.Size = New System.Drawing.Size(488, 424)
         Me.uxTaxlotLinesTab.TabIndex = 6
         Me.uxTaxlotLinesTab.Text = "Taxlot Lines"
         Me.uxTaxlotLinesTab.UseVisualStyleBackColor = True
@@ -1789,10 +1789,10 @@ Partial Class OrmapSettingsForm
         Me.uxTaxlotTab.Controls.Add(Me.TownshipFieldTextBox)
         Me.uxTaxlotTab.Controls.Add(TownshipPartFieldLabel)
         Me.uxTaxlotTab.Controls.Add(Me.TownshipPartFieldTextBox)
-        Me.uxTaxlotTab.Location = New System.Drawing.Point(4, 22)
+        Me.uxTaxlotTab.Location = New System.Drawing.Point(4, 40)
         Me.uxTaxlotTab.Name = "uxTaxlotTab"
         Me.uxTaxlotTab.Padding = New System.Windows.Forms.Padding(10)
-        Me.uxTaxlotTab.Size = New System.Drawing.Size(488, 442)
+        Me.uxTaxlotTab.Size = New System.Drawing.Size(488, 424)
         Me.uxTaxlotTab.TabIndex = 8
         Me.uxTaxlotTab.Text = "Taxlot"
         Me.uxTaxlotTab.UseVisualStyleBackColor = True
@@ -2023,10 +2023,10 @@ Partial Class OrmapSettingsForm
         Me.uxAnnoTableNamesTab.Controls.Add(Me.TaxlotAcreageAnnoTextBox1)
         Me.uxAnnoTableNamesTab.Controls.Add(TaxlotNumberAnnoFCLabel1)
         Me.uxAnnoTableNamesTab.Controls.Add(Me.TaxlotNumberAnnoFCTextBox1)
-        Me.uxAnnoTableNamesTab.Location = New System.Drawing.Point(4, 22)
+        Me.uxAnnoTableNamesTab.Location = New System.Drawing.Point(4, 40)
         Me.uxAnnoTableNamesTab.Name = "uxAnnoTableNamesTab"
         Me.uxAnnoTableNamesTab.Padding = New System.Windows.Forms.Padding(10)
-        Me.uxAnnoTableNamesTab.Size = New System.Drawing.Size(488, 442)
+        Me.uxAnnoTableNamesTab.Size = New System.Drawing.Size(488, 424)
         Me.uxAnnoTableNamesTab.TabIndex = 9
         Me.uxAnnoTableNamesTab.Text = "Anno Table Names"
         Me.uxAnnoTableNamesTab.UseVisualStyleBackColor = True
@@ -2175,7 +2175,7 @@ Partial Class OrmapSettingsForm
         Me.uxDefQueryLayers.FormattingEnabled = True
         Me.uxDefQueryLayers.Location = New System.Drawing.Point(30, 34)
         Me.uxDefQueryLayers.Name = "uxDefQueryLayers"
-        Me.uxDefQueryLayers.Size = New System.Drawing.Size(234, 379)
+        Me.uxDefQueryLayers.Size = New System.Drawing.Size(432, 379)
         Me.uxDefQueryLayers.Sorted = True
         Me.uxDefQueryLayers.TabIndex = 0
         '

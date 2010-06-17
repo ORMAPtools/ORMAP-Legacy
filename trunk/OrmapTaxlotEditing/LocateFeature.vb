@@ -726,6 +726,9 @@ Public NotInheritable Class LocateFeature
 
         Dim theMapScale As String = String.Empty
 
+        '-- theMapIndexFeatureLayer is cleared when a user starts editing so check and reset it if needed.
+        If MapIndexFeatureLayer Is Nothing Then CheckValidMapIndexDataProperties()
+
         Dim theMapIndexFClass As IFeatureClass = MapIndexFeatureLayer.FeatureClass
         Dim theQueryString As String = "[" & EditorExtension.MapIndexSettings.MapNumberField & "] = '" & theMapNumber & "'"
 
@@ -738,7 +741,9 @@ Public NotInheritable Class LocateFeature
 
         If Not theFeature Is Nothing Then
             Dim theFieldIdx As Integer = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
-            theMapScale = (DirectCast(theFeature.Value(theFieldIdx), Integer) / 12).ToString
+            If IsNumeric(theFeature.Value(theFieldIdx)) Then
+                theMapScale = (DirectCast(theFeature.Value(theFieldIdx), Integer) / 12).ToString
+            End If
         End If
 
         Return theMapScale
