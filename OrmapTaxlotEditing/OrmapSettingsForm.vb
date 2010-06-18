@@ -99,45 +99,25 @@ Public Class OrmapSettingsForm
     ''' <remarks></remarks>
     Private Sub OrmapSettingsForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
-        'DefinitionQuerySettings.Default.FeatureLayers.Clear()
-        'DefinitionQuerySettings.Default.Save()
-
         Dim theTOCLayers As IEnumLayer = GetTOCLayersEnumerator(EsriLayerTypes.FeatureLayer)
         theTOCLayers.Reset()
 
-        Dim thisLayer As ILayer
-        thisLayer = DirectCast(theTOCLayers.Next, ILayer)
         Dim thisFeatureLayer As IFeatureLayer
+        thisFeatureLayer = DirectCast(theTOCLayers.Next, IFeatureLayer)
 
-        While Not (thisLayer Is Nothing)
-            If TypeOf thisLayer Is IFeatureLayer Then
-                thisFeatureLayer = DirectCast(thisLayer, IFeatureLayer)
+        While Not (thisFeatureLayer Is Nothing)
+            If thisFeatureLayer.Valid Then ' make sure the featurelayer is valid.
+                ' If the feature layer does not contain a MapNumber OR a MapScale then do not display it.
                 If thisFeatureLayer.FeatureClass.FindField("MapNumber") <> NotFoundIndex Or thisFeatureLayer.FeatureClass.FindField("MapScale") <> NotFoundIndex Then
-                    If DefinitionQuerySettings.Default.FeatureLayers.Contains(thisLayer.Name) Then
-                        uxDefQueryLayers.Items.Add(thisLayer.Name, True)
+                    If DefinitionQuerySettings.Default.FeatureLayers.Contains(thisFeatureLayer.Name) Then
+                        uxDefQueryLayers.Items.Add(thisFeatureLayer.Name, True)
                     Else
-                        uxDefQueryLayers.Items.Add(thisLayer.Name, False)
+                        uxDefQueryLayers.Items.Add(thisFeatureLayer.Name, False)
                     End If
                 End If
             End If
-            thisLayer = DirectCast(theTOCLayers.Next, ILayer)
+            thisFeatureLayer = DirectCast(theTOCLayers.Next(), IFeatureLayer)
         End While
-
-
-
-        'Dim thisFeatureLayer As IFeatureLayer
-        'thisFeatureLayer = DirectCast(theTOCLayers.Next, IFeatureLayer)
-
-        'While Not (thisFeatureLayer Is Nothing)
-        '    If thisFeatureLayer.FeatureClass.FindField("MapNumber") <> NotFoundIndex Then
-        '        If DefinitionQuerySettings.Default.FeatureLayers.Contains(thisFeatureLayer.Name) Then
-        '            uxDefQueryLayers.Items.Add(thisFeatureLayer.Name, True)
-        '        Else
-        '            uxDefQueryLayers.Items.Add(thisFeatureLayer.Name, False)
-        '        End If
-        '    End If
-        '    thisFeatureLayer = DirectCast(theTOCLayers.Next(), IFeatureLayer)
-        'End While
 
     End Sub
 

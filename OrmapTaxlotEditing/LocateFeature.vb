@@ -681,8 +681,8 @@ Public NotInheritable Class LocateFeature
         Dim theFeatureLayer As IFeatureLayer = DirectCast(theEnumLayerList.Next, IFeatureLayer)
         Dim theQueryString As String = String.Empty
 
-        Do While Not theFeatureLayer Is Nothing
-            If DefinitionQuerySettings.Default.FeatureLayers.Contains(theFeatureLayer.Name) Then
+        Do While theFeatureLayer IsNot Nothing
+            If theFeatureLayer.Valid AndAlso DefinitionQuerySettings.Default.FeatureLayers.Contains(theFeatureLayer.Name) Then
                 Dim theFeatureLayerDefinition As IFeatureLayerDefinition = DirectCast(theFeatureLayer, IFeatureLayerDefinition)
 
                 ' If the MapNumber and the MapScale are nothing then clear the definition query for that layer.
