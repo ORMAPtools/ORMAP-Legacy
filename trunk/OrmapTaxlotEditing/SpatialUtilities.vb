@@ -573,7 +573,7 @@ Public NotInheritable Class SpatialUtilities
 
 
     ''' <summary>
-    ''' Gets the layers (recursively) from the TOC as an IEnumLayer.
+    ''' Gets the layers (recursively) from the TOC as an IEnumLayer. NOTE: Important to check for valid feature layers.  This does not check.
     ''' </summary>
     ''' <param name="theEsriLayerType">An enumerator of layer types that be used to filter against the IEnumLayer.</param>
     ''' <returns>An IEnumLayer containing the layers in the TOC</returns>
@@ -627,19 +627,20 @@ Public NotInheritable Class SpatialUtilities
 
         'We want a EnumLayer containing all FeatureLayer objects.
         Dim theFeatureLayers As IEnumLayer = GetTOCLayersEnumerator(EsriLayerTypes.FeatureLayer)
-
         theFeatureLayers.Reset()
-        Dim thisFeatureLayer As IFeatureLayer
-        thisFeatureLayer = DirectCast(theFeatureLayers.Next, IFeatureLayer)
+
+        Dim thisFeatureLayer As IFeatureLayer = DirectCast(theFeatureLayers.Next, IFeatureLayer)
 
         Dim thisDataSet As IDataset
 
-        Do While Not (thisFeatureLayer Is Nothing)
-            thisDataSet = TryCast(thisFeatureLayer.FeatureClass, IDataset)
-            If thisDataSet IsNot Nothing Then
-                If String.Compare(thisDataSet.Name, datasetName, True, CultureInfo.CurrentCulture) = 0 Then
-                    returnValue = DirectCast(thisFeatureLayer, IFeatureLayer)
-                    Exit Do
+        Do While thisFeatureLayer IsNot Nothing
+            If thisFeatureLayer.Valid Then
+                thisDataSet = TryCast(thisFeatureLayer.FeatureClass, IDataset)
+                If thisDataSet IsNot Nothing Then
+                    If String.Compare(thisDataSet.Name, datasetName, True, CultureInfo.CurrentCulture) = 0 Then
+                        returnValue = DirectCast(thisFeatureLayer, IFeatureLayer)
+                        Exit Do
+                    End If
                 End If
             End If
             thisFeatureLayer = DirectCast(theFeatureLayers.Next(), IFeatureLayer)
