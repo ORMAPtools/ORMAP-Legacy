@@ -68,12 +68,14 @@ Public NotInheritable Class OrmapAnnotateToolbar
         AddItem("OrmapTaxlotEditing.CreateAnnotation")
         BeginGroup() 'Separator
         AddItem("OrmapTaxlotEditing.TransposeAnnotation")
-        AddItem("OrmapTaxlotEditing.RotateAnnotation")
+        AddItem("OrmapTaxlotEditing.InvertAnnotation")
         BeginGroup() 'Separator
-        AddItem("OrmapTaxlotEditing.StandardSpaceOneSide")
-        AddItem("OrmapTaxlotEditing.StandardSpaceEitherSide")
-        AddItem("OrmapTaxlotEditing.BigSpaceOneSide")
-        AddItem("OrmapTaxlotEditing.BigSpaceEitherSide")
+        AddItem("OrmapTaxlotEditing.MoveDown")
+        AddItem("OrmapTaxlotEditing.MoveUp")
+        AddItem("OrmapTaxlotEditing.StandardBothSidesDown")
+        AddItem("OrmapTaxlotEditing.StandardBothSidesUp")
+        AddItem("OrmapTaxlotEditing.WideBothSidesDown")
+        AddItem("OrmapTaxlotEditing.WideBothSidesUp")
 
     End Sub
 

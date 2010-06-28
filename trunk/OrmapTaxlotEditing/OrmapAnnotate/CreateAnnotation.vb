@@ -60,6 +60,7 @@ Imports OrmapTaxlotEditing.DataMonitor
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.EditorExtension
 Imports OrmapTaxlotEditing.Utilities
+Imports OrmapTaxlotEditing.AnnotationUtilities
 
 #End Region
 
@@ -91,8 +92,6 @@ Public NotInheritable Class CreateAnnotation
 
 #Region "Constructors"
 
-    'Private m_application As IApplication
-
     ' A creatable COM class must have a Public Sub New() 
     ' with no parameters, otherwise, the class will not be 
     ' registered in the COM registry and cannot be created 
@@ -100,7 +99,6 @@ Public NotInheritable Class CreateAnnotation
     Public Sub New()
         MyBase.New()
 
-        ' TODO: Define values for the public properties
         MyBase.m_category = "OrmapAnnotate"  'localizable text 
         MyBase.m_caption = "CreateAnnotation"   'localizable text 
         MyBase.m_message = "Creates Distance and Direction annotation with user-selected placement preferences"   'localizable text 
@@ -108,7 +106,6 @@ Public NotInheritable Class CreateAnnotation
         MyBase.m_name = MyBase.m_category & "_CreateAnnotation"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
 
         Try
-            'TODO: change bitmap name if necessary
             Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
         Catch ex As Exception
@@ -324,7 +321,7 @@ Public NotInheritable Class CreateAnnotation
     Friend Sub DoButtonOperation()
 
         Try
-            CheckValidMapIndexDataProperties()
+            DataMonitor.CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
@@ -345,8 +342,6 @@ Public NotInheritable Class CreateAnnotation
         Dim theLayer As IFeatureLayer
         Dim theMxDoc As IMxDocument
         Dim theMap As IMap
-        Dim theEnumLayer As IEnumLayer
-        Dim thisGeoLayersUID As IUID = New UID
         Dim theSelectedFeaturesCursor As IFeatureCursor
         Dim theSelectedFeature As IFeature
         Dim theGeometry As IGeometry
@@ -358,7 +353,6 @@ Public NotInheritable Class CreateAnnotation
         'TODO:  This layer enumeration needs to be rewritten as a function... it gets used three times here:
         '       Once for the Geo Feature Layers and twice for the Anno Feature Layers
         '       Should be something like getLayerByUid(ByVal theUid as IUID) as IFeatureLayer
-        thisGeoLayersUID.Value = "{E156D7E5-22AF-11D3-9F99-00C04F6BC78E}"
         theMxDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
         theMap = theMxDoc.FocusMap
 
@@ -368,18 +362,18 @@ Public NotInheritable Class CreateAnnotation
         Dim theActiveView As IActiveView = CType(theMap, IActiveView)
         Dim theMapExtent As IEnvelope = theActiveView.Extent
 
-        DataMonitor.CheckValidMapIndexDataProperties()
-
         'Enumerate all the feature layers in the map
         'NOTE=> IEnumLayer will NOT return annotation feature classes... they are handled as graphics layers (IFDOGraphicsLayer)
-        theEnumLayer = theMap.Layers(CType(thisGeoLayersUID, UID), True)
-        theEnumLayer.Reset()
-        'Loop through the scene layers
+        Dim thisGeoLayersUID As IUID = New UID
+        thisGeoLayersUID.Value = "{E156D7E5-22AF-11D3-9F99-00C04F6BC78E}"
+        Dim theEnumLayer As IEnumLayer = GetLayerEnum(theMap, thisGeoLayersUID)
+
+        'Loop through the layers
         theLayer = CType(theEnumLayer.Next, IFeatureLayer)
         Dim theAnnoFcCollection As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer)
 
         Do Until (theLayer Is Nothing)
-            'Eliminate layers that are turned off
+            'Eliminate layers that are turned off or not feature layers 
             If theLayer.Visible AndAlso TypeOf theLayer Is IFeatureLayer Then
 
                 'Now get selected features in this layer. If not, skip to next Layer
@@ -412,27 +406,12 @@ Public NotInheritable Class CreateAnnotation
                         theMapScale = GetValue(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
 
                         'Get annoFC based on MapScale
-                        theAnnoFCName = getAnnoFCNameByMapScale(theMapScale)
+                        theAnnoFCName = GetAnnoFCName(theMapScale)
 
                         'Annotation layers are Feature Dataset Objects and the enum needs the UID for IFDOGraphicsLayer
-                        'NOTE=> See ArcObjects IMaps.Layers for list of map layer UIDs
-                        Dim thisFDOLayersUID As IUID = New UID
-                        thisFDOLayersUID.Value = "{5CEAE408-4C0A-437F-9DB3-054D83919850}"
-                        Dim theAnnoEnumLayer As IEnumLayer = theMap.Layers(CType(thisFDOLayersUID, UID), True)
-                        Dim theAnnoFeatureClass As IFeatureClass = Nothing
-                        Dim theAnnoLayer As IFeatureLayer
-                        theAnnoEnumLayer.Reset()
-                        theAnnoLayer = CType(theAnnoEnumLayer.Next, IFeatureLayer)
+                        'NOTE=> See ArcObjects IMaps.Layers for list of map layer UID
 
-                        'Now go through anno feature class enum looking for name that matches the map index based on map scale
-                        Do While Not (theAnnoLayer Is Nothing)
-                            If String.Compare(theAnnoLayer.Name, theAnnoFCName, True, CultureInfo.CurrentCulture) = 0 Then
-                                theAnnoFeatureClass = theAnnoLayer.FeatureClass
-                                Exit Do
-                            End If
-                            theAnnoLayer = CType(theAnnoEnumLayer.Next, IFeatureLayer)
-                        Loop
-
+                        Dim theAnnoFeatureClass As IFeatureClass = GetAnnoFeatureClass(theMap, theAnnoFCName)
                         Dim theFeatureLayerPropsCollection As IAnnotateLayerPropertiesCollection2
                         theFeatureLayerPropsCollection = CType(theGeoFeatureLayer.AnnotationProperties, IAnnotateLayerPropertiesCollection2)
                         theFeatureLayerPropsCollection.Clear()
@@ -455,7 +434,7 @@ Public NotInheritable Class CreateAnnotation
                         'next Oid from the sequence (even if earlier Oid's were deleted). 
                         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                         If theAnnoFcCollection.Count = 0 Or Not theAnnoFcCollection.ContainsKey(theAnnoFCName) Then
-                            theAnnoFcCollection.Add(theAnnoFCName, getMaxOidByAnnoFC(theAnnoFeatureClass) - 1)
+                            theAnnoFcCollection.Add(theAnnoFCName, GetMaxOidByAnnoFC(theAnnoFeatureClass) - 1)
                         End If
 
                         theSelectedFeature = theSelectedFeaturesCursor.NextFeature
@@ -466,6 +445,7 @@ Public NotInheritable Class CreateAnnotation
             theLayer = CType(theEnumLayer.Next, IFeatureLayer)
         Loop
 
+        'TODO:  Make this a separate method (pass in theAnnoFcCollection)
         'Now process all the new annotation (since the converter creates new SymbolIDs, adds FeatureIDs, and does not place any of the 
         'ORMAP-required pieces such as MapNumber, user, date, etc).
         Dim thisFDOLayersUID2 As IUID = New UID
@@ -498,7 +478,7 @@ Public NotInheritable Class CreateAnnotation
 
 #Region "Methods"
     Private Sub convertLabelsToGDBAnnotation(ByVal theMap As IMap, ByVal theGeoFeatureLayer As IGeoFeatureLayer, ByVal theAnnoFeatureClass As IFeatureClass, ByVal isFeatureLinked As Boolean, ByVal theFeatureClass As IFeatureClass)
-        'TODO:  Remove theFeatureClass after testing... looking at alterations to AnnoClass and Symbols... 
+        'TODO:  (RG) Remove theFeatureClass after testing... looking at alterations to AnnoClass and Symbols... 
         '       => Doesn't matter if converter is set to annoFC and annoFC workspace or not... still adds
         '          the AnnoClass and new Symbols to the annoFC and NOT the line FC used as source... WHAT???
         Dim theConvertLabelsToAnnotation As IConvertLabelsToAnnotation = New ConvertLabelsToAnnotationClass()
@@ -508,14 +488,14 @@ Public NotInheritable Class CreateAnnotation
                                               esriLabelWhichFeatures.esriSelectedFeatures, True, theTrackCancel, Nothing)
 
         If Not theGeoFeatureLayer Is Nothing Then
-            Dim theAnnoDataset As IDataset = CType(theAnnoFeatureClass, IDataset)
-            Dim theAnnoWorkspace As IFeatureWorkspace = CType(theAnnoDataset.Workspace, IFeatureWorkspace)
+            Dim theAnnoDataset As IDataset = DirectCast(theAnnoFeatureClass, IDataset)
+            Dim theAnnoWorkspace As IFeatureWorkspace = DirectCast(theAnnoDataset.Workspace, IFeatureWorkspace)
 
             'Add the layer information to the converter object. Specify the parameters of the output annotation feature class here as well
-            'TODO: Need to test if this works for feature linked anno
+            'TODO: (RG) Need to test if this works for feature linked anno
             theConvertLabelsToAnnotation.AddFeatureLayer(theGeoFeatureLayer, _
                                                        theAnnoFeatureClass.AliasName, _
-                                                       theAnnoWorkspace, CType(theAnnoFeatureClass.FeatureDataset, IFeatureDataset), _
+                                                       theAnnoWorkspace, DirectCast(theAnnoFeatureClass.FeatureDataset, IFeatureDataset), _
                                                        isFeatureLinked, True, False, False, False, "")
 
             theGeoFeatureLayer.DisplayAnnotation = True
@@ -532,7 +512,7 @@ Public NotInheritable Class CreateAnnotation
 
         theLabelEngineLayerProperties = New LabelEngineLayerProperties
 
-        theAnnoLayerProperties = CType(theLabelEngineLayerProperties, IAnnotateLayerProperties)
+        theAnnoLayerProperties = DirectCast(theLabelEngineLayerProperties, IAnnotateLayerProperties)
 
         Dim theLineLabelPosition As ILineLabelPosition
         theLineLabelPosition = New LineLabelPosition
@@ -541,7 +521,7 @@ Public NotInheritable Class CreateAnnotation
         If String.Compare(theAnnoClassName, "Direction", True, CultureInfo.CurrentCulture) = 0 Then
             theAnnoLayerProperties.Class = "Direction"
             theLabelEngineLayerProperties.IsExpressionSimple = False
-            'TODO:  This will break if ArcGIS stops using VBA for labeling... maybe rewrite as Python?
+            'TODO:  (RG) This will break if ArcGIS stops using VBA for labeling... maybe rewrite as Python?
             '       => Should wait to see what ArcPy.Mapping does... maybe it can be used
             theLabelEngineLayerProperties.Expression = "Function FindLabel ([Direction]) " & vbCrLf & _
             "strTemp = [Direction]" & vbCrLf & _
@@ -564,7 +544,7 @@ Public NotInheritable Class CreateAnnotation
             "FindLabel = strDegree & strMinute & strSecond" & vbCrLf & _
             "End Function"
 
-            'TODO:  Redundant use of if blocks for Direction and Distance... rewrite
+            'TODO:  (RG) Redundant use of if blocks for Direction and Distance... rewrite
             If IsDirection Then
                 isTop = True
                 If IsBothSides Or IsBothAbove Then
@@ -627,13 +607,18 @@ Public NotInheritable Class CreateAnnotation
             .ProduceCurvedLabels = IsCurved
         End With
 
+        'TODO:  (RG) Look into the use ISymbolCollectionElement here... ESRI warns about not redundantly storing the same symbol
+        '       with each feature in the feature class since annotation feature classes are created with a symbol collection 
+        '       and the TextElements of annotation features can reference symbols in this collection. Can't really say how 
+        '       this works with the converter, however, since it is the converter that is populating the anno feature class.
+
         Dim theSymbolCollection As ISymbolCollection2 = New SymbolCollectionClass()
         Dim theAnnoClass As IAnnoClass
-        theAnnoClass = CType(theAnnoFeatureClass.Extension, IAnnoClass)
-        theSymbolCollection = CType(theAnnoClass.SymbolCollection, ISymbolCollection2)
+        theAnnoClass = DirectCast(theAnnoFeatureClass.Extension, IAnnoClass)
+        theSymbolCollection = DirectCast(theAnnoClass.SymbolCollection, ISymbolCollection2)
 
-        'TODO: Assign "34" to variable (or constant)
-        theLabelEngineLayerProperties.Symbol = CType(theSymbolCollection.Symbol(getSymbolIdByName(theAnnoFeatureClass, "34")), ITextSymbol)
+        'TODO: (RG) Assign "34" to variable (or constant)
+        theLabelEngineLayerProperties.Symbol = DirectCast(theSymbolCollection.Symbol(GetSymbolId(theAnnoFeatureClass, "34")), ITextSymbol)
 
         Dim theBasicOverposterLayerProps As IBasicOverposterLayerProperties
         theBasicOverposterLayerProps = New BasicOverposterLayerProperties
@@ -642,53 +627,26 @@ Public NotInheritable Class CreateAnnotation
         theBasicOverposterLayerProps.LineOffset = getLineOffset(theLabelEngineLayerProperties.Symbol.Size, isTop)
 
         If IsBigLine Then
+            'TODO:  (RG) There should be different size offsets for different scales...
             theBasicOverposterLayerProps.LineOffset = theBasicOverposterLayerProps.LineOffset + 60
         End If
 
         theLabelEngineLayerProperties.BasicOverposterLayerProperties = theBasicOverposterLayerProps
 
         Dim theOverposterLayerProperties As IOverposterLayerProperties2
-        theOverposterLayerProperties = CType(theLabelEngineLayerProperties.OverposterLayerProperties, IOverposterLayerProperties2)
+        theOverposterLayerProperties = DirectCast(theLabelEngineLayerProperties.OverposterLayerProperties, IOverposterLayerProperties2)
         theOverposterLayerProperties.TagUnplaced = False
-        theLabelEngineLayerProperties.OverposterLayerProperties = CType(theOverposterLayerProperties, IOverposterLayerProperties)
+        theLabelEngineLayerProperties.OverposterLayerProperties = DirectCast(theOverposterLayerProperties, IOverposterLayerProperties)
 
-        theFeatureLayerPropsCollection.Add(CType(theLabelEngineLayerProperties, IAnnotateLayerProperties))
+        theFeatureLayerPropsCollection.Add(DirectCast(theLabelEngineLayerProperties, IAnnotateLayerProperties))
     End Sub
-
-    Private Function getAnnoFCNameByMapScale(ByVal theScale As String) As String
-        'TODO: Need to put Case Else handler in here
-        Dim theName As String = String.Empty
-        Select Case CInt(theScale)
-            Case 120
-                theName = EditorExtension.AnnoTableNamesSettings.Anno0010scaleFC
-            Case 240
-                theName = EditorExtension.AnnoTableNamesSettings.Anno0020scaleFC
-            Case 360
-                theName = EditorExtension.AnnoTableNamesSettings.Anno0030scaleFC
-            Case 480
-                theName = EditorExtension.AnnoTableNamesSettings.Anno0040scaleFC
-            Case 600
-                theName = EditorExtension.AnnoTableNamesSettings.Anno0050scaleFC
-            Case 1200
-                theName = EditorExtension.AnnoTableNamesSettings.Anno0100scaleFC
-            Case 2400
-                theName = EditorExtension.AnnoTableNamesSettings.Anno0200scaleFC
-            Case 4800
-                theName = EditorExtension.AnnoTableNamesSettings.Anno0400scaleFC
-            Case 9600
-                theName = EditorExtension.AnnoTableNamesSettings.Anno0800scaleFC
-            Case 24000
-                theName = EditorExtension.AnnoTableNamesSettings.Anno2000scaleFC
-        End Select
-        Return theName
-    End Function
 
     Private Sub processNewAnnotation(ByVal theAnnoFeatureClass As IFeatureClass, ByVal theMinOid As Integer)
         Dim thisOid As Integer
         Dim theMaxOid As Integer
-        Dim theAnnoDataset As IDataset = CType(theAnnoFeatureClass, IDataset)
-        Dim theAnnoWorkspace As IFeatureWorkspace = CType(theAnnoDataset.Workspace, IFeatureWorkspace)
-        Dim theAnnoWorkspaceEditControl As IWorkspaceEditControl = CType(theAnnoWorkspace, IWorkspaceEditControl)
+        Dim theAnnoDataset As IDataset = DirectCast(theAnnoFeatureClass, IDataset)
+        Dim theAnnoWorkspace As IFeatureWorkspace = DirectCast(theAnnoDataset.Workspace, IFeatureWorkspace)
+        Dim theAnnoWorkspaceEditControl As IWorkspaceEditControl = DirectCast(theAnnoWorkspace, IWorkspaceEditControl)
 
         EditorExtension.Editor.StartEditing(theAnnoDataset.Workspace)
 
@@ -701,16 +659,16 @@ Public NotInheritable Class CreateAnnotation
         theQueryDef.SubFields = "MAX(OBJECTID)"
         theIdCursor = theQueryDef.Evaluate
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        '--DESIGN COMMENT--
-        'Need to do some bookkeeping on the anno that was just created by the label to anno converter:
-        '1- Delete FeatureID (converter puts it in even when not feature-linking)
-        '2- Set dummpy MapNumber. If left <Null>, EditEvents_OnCreateFeature will not set correct value
-        '3- Set AutoMethod to Calculated
-        '4- Set AnnotationClassID to index for "34" (Distance and Bearing subtype
-        '5- Need to set correct Symbol
-        '6- Need to insert the new row (RowBuffer [fires OnCreate event])
-        '7- Need to delete the old row (Row [fires the OnDelete event])
-        '8- Need to delete the 'Distance' and 'Direction' symbols addded to the anno feature class
+        '-- DESIGN COMMENT --
+        '   Need to do some bookkeeping on the anno that was just created by the label to anno converter:
+        '   1- Delete FeatureID (converter puts it in even when not feature-linking)
+        '   2- Set dummpy MapNumber. If left <Null>, EditEvents_OnCreateFeature will not set correct value
+        '   3- Set AutoMethod to Calculated
+        '   4- Set AnnotationClassID to index for "34" (Distance and Bearing subtype
+        '   5- Need to set correct Symbol
+        '   6- Need to insert the new row (RowBuffer [fires OnCreate event])
+        '   7- Need to delete the old row (Row [fires the OnDelete event])
+        '   8- Need to delete the 'Distance' and 'Direction' symbols addded to the anno feature class
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         theRow = theIdCursor.NextRow
         Dim theFeatureIdIndex As Integer = theAnnoFeatureClass.FindField("FeatureID")
@@ -721,23 +679,23 @@ Public NotInheritable Class CreateAnnotation
         Dim theInsertCursor As ICursor
         Dim theSymbolName As String = AnnoClassName
         Dim theAnnoClassName As String = AnnoClassName
-        Dim theSymbolId As Integer = getSymbolIdByName(theAnnoFeatureClass, theSymbolName)
+        Dim theSymbolId As Integer = GetSymbolId(theAnnoFeatureClass, theSymbolName)
 
         'Force simple edits to trigger the EditorExtension.EditEvents_OnCreate event handler 
         theAnnoWorkspaceEditControl.SetStoreEventsRequired()
 
         theMaxOid = CInt(theRow.Value(0))
-        Dim theTable As ITable = CType(theAnnoFeatureClass, ITable)
+        Dim theTable As ITable = DirectCast(theAnnoFeatureClass, ITable)
         For thisOid = theMinOid To theMaxOid
             Dim theOldRow As IRow = theTable.GetRow(thisOid)
             theOldRow.Value(theSymbolIdIndex) = theSymbolId
-            'TODO:  System throws exception on InsertRow if line source direction or bearing is <null>... need to handle
+            'TODO:  (RG) System throws exception on InsertRow if line source direction or bearing is <null>... need to handle
             '       => Will acutally crash in SpatialUtilities.SetAnnoSize called from EditorExtension.EdidEvents_OnCreateFeature
             '               theGeometry = theFeature.Shape
             '               If theGeometry.IsEmpty Then
             '       throws exception because theFeature.Shape is null (neither empty nor present)
 
-            'TODO:  Verify how this works when Autoupdate is on and when it is off
+            'TODO:  (RG) Verify how this works when Autoupdate is on and when it is off
 
             'This is cleanest way (i.e., the way that actually WORKS) to ensure correct AnnoClassID, SymbolID, and MapNumber are 
             'placed (including by the the OnCreate event in EditorExtension
@@ -745,11 +703,11 @@ Public NotInheritable Class CreateAnnotation
                 theOldRow.Store()
                 Dim theRowBuffer As IRowBuffer = theOldRow
                 theRowBuffer.Value(theFeatureIdIndex) = System.DBNull.Value
-                'TODO:  Should insert a DBNull for MapNumber if AutoUpdate is turned off, otherwise insert a dummy value (so that
-                '       EditorExtension_OnCreate will populate it with the correct MapNumber)
+                'TODO:  (RG) Should insert a DBNull for MapNumber if AutoUpdate is turned off, otherwise insert a dummy value 
+                '       (so that EditorExtension_OnCreate will populate it with the correct MapNumber)
                 theRowBuffer.Value(theMapNumberIndex) = "1.1.1"
                 theRowBuffer.Value(theAutoMethodIndex) = "CON"
-                theRowBuffer.Value(theAnnoClassIdIndex) = getSubtypeCode(theAnnoFeatureClass, theAnnoClassName)
+                theRowBuffer.Value(theAnnoClassIdIndex) = GetSubtypeCode(theAnnoFeatureClass, theAnnoClassName)
                 theInsertCursor = theTable.Insert(True)
                 theInsertCursor.InsertRow(theRowBuffer)
                 theOldRow.Delete()
@@ -761,45 +719,9 @@ Public NotInheritable Class CreateAnnotation
         EditorExtension.Editor.StopEditing(True)
     End Sub
 
-    Private Function getSubtypeCode(ByVal theAnnoFeatureClass As IFeatureClass, ByVal theName As String) As Integer
-        'TODO:  Need exception handling
-        Dim theSubtypes As ISubtypes = CType(theAnnoFeatureClass, ISubtypes)
-        Dim theEnumSubtypes As IEnumSubtype = theSubtypes.Subtypes
-        Dim theSubtypeName As String
-        Dim theSubtypeCode As Integer
-        theEnumSubtypes.Reset()
-        Do Until theEnumSubtypes Is Nothing
-            theSubtypeName = theEnumSubtypes.Next(theSubtypeCode)
-            If theSubtypeName = theName Then
-                Exit Do
-            End If
-        Loop
-        Return theSubtypeCode
-    End Function
-    Private Function getSymbolIdByName(ByVal theAnnoFeatureClass As IFeatureClass, ByVal theName As String) As Integer
-        'TODO:  Need exception handling
-        Dim theSymbolCollection As ISymbolCollection2 = New SymbolCollectionClass()
-        Dim theSymbolIdentifier As ISymbolIdentifier2 = New SymbolIdentifierClass()
-        Dim theAnnoClass As IAnnoClass
-        Dim theSymbolId As Integer = Nothing
-
-        'Get the Symbol ID defined in the anno feature class for Symbol Name "34" (Distance/Bearing)
-        theAnnoClass = CType(theAnnoFeatureClass.Extension, IAnnoClass)
-        theSymbolCollection = CType(theAnnoClass.SymbolCollection, ISymbolCollection2)
-        theSymbolCollection.Reset()
-        theSymbolIdentifier = CType(theSymbolCollection.Next, ISymbolIdentifier2)
-        Do Until theSymbolIdentifier Is Nothing
-            If String.Compare(theSymbolIdentifier.Name, theName, True, CultureInfo.CurrentCulture) = 0 Then
-                theSymbolId = theSymbolIdentifier.ID
-                Exit Do
-            End If
-            theSymbolIdentifier = CType(theSymbolCollection.Next, ISymbolIdentifier2)
-        Loop
-        Return theSymbolId
-    End Function
-
     Private Function getLineOffset(ByVal thisSize As Double, ByVal isTop As Boolean) As Double
         'These formulas were based on desired annotation placement results for Polk County. 
+        'thisSize is the font size of the selected annotation's annotation feature class
         Dim theLineOffset As Double
         If isTop Then
             If IsStandardAbove Then
@@ -839,27 +761,6 @@ Public NotInheritable Class CreateAnnotation
             End If
         End If
         Return theLineOffset
-    End Function
-
-    Private Function getMaxOidByAnnoFC(ByVal theAnnoFeatureClass As IFeatureClass) As Integer
-        Dim theMaxOid As Integer = 0
-        Dim theAnnoDataset As IDataset = CType(theAnnoFeatureClass, IDataset)
-        Dim theAnnoWorkspace As IFeatureWorkspace = CType(theAnnoDataset.Workspace, IFeatureWorkspace)
-        Dim theAnnoWorkspaceEditControl As IWorkspaceEditControl = CType(theAnnoWorkspace, IWorkspaceEditControl)
-
-        'Get the max ID from this anno layer (it will be the anno just created by the label to anno converter)
-        Dim theQueryDef As IQueryDef
-        Dim theRow As IRow
-        Dim theIdCursor As ICursor
-        theQueryDef = theAnnoWorkspace.CreateQueryDef
-        theQueryDef.Tables = theAnnoDataset.Name
-        theQueryDef.SubFields = "MAX(OBJECTID)"
-        theIdCursor = theQueryDef.Evaluate
-        If Not theIdCursor Is Nothing Then
-            theRow = theIdCursor.NextRow
-            theMaxOid = CInt(theRow.Value(0))
-        End If
-        Return theMaxOid
     End Function
 
 #End Region
