@@ -64,20 +64,6 @@ Namespace My.Resources
             End Set
         End Property
         
-        Friend Shared ReadOnly Property BigSpaceEitherSide() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("BigSpaceEitherSide", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        Friend Shared ReadOnly Property BigSpaceOneSide() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("BigSpaceOneSide", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
         Friend Shared ReadOnly Property CreateAnnotation() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("CreateAnnotation", resourceCulture)
@@ -85,23 +71,37 @@ Namespace My.Resources
             End Get
         End Property
         
-        Friend Shared ReadOnly Property RotateAnnotation() As System.Drawing.Bitmap
+        Friend Shared ReadOnly Property InvertAnnotation() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("RotateAnnotation", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("InvertAnnotation", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
-        Friend Shared ReadOnly Property StandardSpaceEitherSide() As System.Drawing.Bitmap
+        Friend Shared ReadOnly Property MoveDown() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("StandardSpaceEitherSide", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("MoveDown", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
-        Friend Shared ReadOnly Property StandardSpaceOneSide() As System.Drawing.Bitmap
+        Friend Shared ReadOnly Property MoveUp() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("StandardSpaceOneSide", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("MoveUp", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend Shared ReadOnly Property StandardBothSidesDown() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("StandardBothSidesDown", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend Shared ReadOnly Property StandardBothSidesUp() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("StandardBothSidesUp", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -109,6 +109,20 @@ Namespace My.Resources
         Friend Shared ReadOnly Property TransposeAnnotation() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("TransposeAnnotation", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend Shared ReadOnly Property WideBothSidesDown() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("WideBothSidesDown", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend Shared ReadOnly Property WideBothSidesUp() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("WideBothSidesUp", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

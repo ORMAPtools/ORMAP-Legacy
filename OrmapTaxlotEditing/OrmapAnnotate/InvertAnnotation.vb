@@ -64,9 +64,9 @@ Imports OrmapTaxlotEditing.AnnotationUtilities
 
 #End Region
 
-<ComClass(TransposeAnnotation.ClassId, TransposeAnnotation.InterfaceId, TransposeAnnotation.EventsId), _
- ProgId("OrmapTaxlotEditing.TransposeAnnotation")> _
-Public NotInheritable Class TransposeAnnotation
+<ComClass(InvertAnnotation.ClassId, InvertAnnotation.InterfaceId, InvertAnnotation.EventsId), _
+ ProgId("OrmapTaxlotEditing.InvertAnnotation")> _
+Public NotInheritable Class InvertAnnotation
     Inherits BaseCommand
     Implements IDisposable
 
@@ -85,17 +85,19 @@ Public NotInheritable Class TransposeAnnotation
         MyBase.New()
 
         MyBase.m_category = "OrmapAnnotate"  'localizable text 
-        MyBase.m_caption = "TransposeAnnotation"   'localizable text 
-        MyBase.m_message = "Transposes Distance and Direction annotation (annotation on top is moved to bottom and vice versa)"   'localizable text 
-        MyBase.m_toolTip = "Transpose Distance && Direction annotation" 'localizable text 
-        MyBase.m_name = MyBase.m_category & "_TransposeAnnotation"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
+        MyBase.m_caption = "InvertAnnotation"   'localizable text 
+        MyBase.m_message = "Inverts Distance and Direction annotation (annotation on top is moved to bottom and vice versa)"   'localizable text 
+        MyBase.m_toolTip = "Inverts Distance && Direction annotation" 'localizable text 
+        MyBase.m_name = MyBase.m_category & "_InvertAnnotation"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
 
         Try
+            'TODO: change bitmap name if necessary
             Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
         Catch ex As Exception
             System.Diagnostics.Trace.WriteLine(ex.Message, "Invalid Bitmap")
         End Try
+
 
     End Sub
 #End Region
@@ -123,10 +125,11 @@ Public NotInheritable Class TransposeAnnotation
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
-                                "Create Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                                "Rotate Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
-            MoveAnnotationElements(False, True, False, False, False, False)
+            'Transpose annotation, set invert flag to true
+            MoveAnnotationElements(True, True, False, False, False, False)
         Catch ex As Exception
             EditorExtension.ProcessUnhandledException(ex)
         End Try
@@ -160,7 +163,6 @@ Public NotInheritable Class TransposeAnnotation
 #End Region
 
 #Region "Methods"
-
     Public Overrides Sub OnCreate(ByVal hook As Object)
         If Not hook Is Nothing Then
             _application = CType(hook, IApplication)
@@ -175,6 +177,8 @@ Public NotInheritable Class TransposeAnnotation
 
         ' TODO:  Add other initialization code
     End Sub
+
+
 
     Public Overrides Sub OnClick()
         DoButtonOperation()
@@ -254,9 +258,9 @@ Public NotInheritable Class TransposeAnnotation
     ' These  GUIDs provide the COM identity for this class 
     ' and its COM interfaces. If you change them, existing 
     ' clients will no longer be able to access the class.
-    Public Const ClassId As String = "6759a6be-84be-4eaa-955a-c34755abc4b2"
-    Public Const InterfaceId As String = "27433845-b0e0-4b30-8bca-6f52c2e75ae2"
-    Public Const EventsId As String = "b1c1fff7-e5f0-4a4d-91fb-9c7270f10abf"
+    Public Const ClassId As String = "08a8e612-84c5-450e-9c34-75da80825745"
+    Public Const InterfaceId As String = "81d1315d-0aa1-4334-9ead-1c49700edfbe"
+    Public Const EventsId As String = "0c8b84f5-da18-4d25-a917-3127c1916e59"
 #End Region
 
 #Region "COM Registration Function(s)"

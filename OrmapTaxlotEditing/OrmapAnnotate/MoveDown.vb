@@ -64,9 +64,9 @@ Imports OrmapTaxlotEditing.AnnotationUtilities
 
 #End Region
 
-<ComClass(TransposeAnnotation.ClassId, TransposeAnnotation.InterfaceId, TransposeAnnotation.EventsId), _
- ProgId("OrmapTaxlotEditing.TransposeAnnotation")> _
-Public NotInheritable Class TransposeAnnotation
+<ComClass(MoveDown.ClassId, MoveDown.InterfaceId, MoveDown.EventsId), _
+ ProgId("OrmapTaxlotEditing.MoveDown")> _
+Public NotInheritable Class MoveDown
     Inherits BaseCommand
     Implements IDisposable
 
@@ -84,13 +84,15 @@ Public NotInheritable Class TransposeAnnotation
     Public Sub New()
         MyBase.New()
 
+        ' TODO: Define values for the public properties
         MyBase.m_category = "OrmapAnnotate"  'localizable text 
-        MyBase.m_caption = "TransposeAnnotation"   'localizable text 
-        MyBase.m_message = "Transposes Distance and Direction annotation (annotation on top is moved to bottom and vice versa)"   'localizable text 
-        MyBase.m_toolTip = "Transpose Distance && Direction annotation" 'localizable text 
-        MyBase.m_name = MyBase.m_category & "_TransposeAnnotation"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
+        MyBase.m_caption = "MoveDown"   'localizable text 
+        MyBase.m_message = "Moves annotation down"   'localizable text 
+        MyBase.m_toolTip = "Moves annotation down" 'localizable text 
+        MyBase.m_name = MyBase.m_category & "_MoveDown"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
 
         Try
+            'TODO: change bitmap name if necessary
             Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
             MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
         Catch ex As Exception
@@ -126,7 +128,7 @@ Public NotInheritable Class TransposeAnnotation
                                 "Create Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
-            MoveAnnotationElements(False, True, False, False, False, False)
+            MoveAnnotationElements(False, False, False, True, False, False)
         Catch ex As Exception
             EditorExtension.ProcessUnhandledException(ex)
         End Try
@@ -254,9 +256,9 @@ Public NotInheritable Class TransposeAnnotation
     ' These  GUIDs provide the COM identity for this class 
     ' and its COM interfaces. If you change them, existing 
     ' clients will no longer be able to access the class.
-    Public Const ClassId As String = "6759a6be-84be-4eaa-955a-c34755abc4b2"
-    Public Const InterfaceId As String = "27433845-b0e0-4b30-8bca-6f52c2e75ae2"
-    Public Const EventsId As String = "b1c1fff7-e5f0-4a4d-91fb-9c7270f10abf"
+    Public Const ClassId As String = "3914a0e1-c058-48b3-babb-bbe25bfb1e57"
+    Public Const InterfaceId As String = "6b07e4f7-1803-4a6b-b062-79dd8bbaf8a3"
+    Public Const EventsId As String = "bb943f32-0ae8-4b5a-a42a-039936399f52"
 #End Region
 
 #Region "COM Registration Function(s)"
@@ -294,6 +296,7 @@ Public NotInheritable Class TransposeAnnotation
 #End Region
 
 #End Region
+
 
 End Class
 
