@@ -1,0 +1,502 @@
+
+
+#Region "Imported Namespaces"
+'Imports com.esri.arcgis.support.ms.stdole
+Imports System.Runtime.InteropServices
+Imports System.Drawing
+Imports System.Windows.Forms
+Imports System.Environment
+Imports System.Globalization
+Imports System.Drawing.Text
+Imports stdole
+Imports ESRI.ArcGIS.ADF.BaseClasses
+Imports ESRI.ArcGIS.ADF.CATIDs
+Imports ESRI.ArcGIS.ArcMapUI
+Imports ESRI.ArcGIS.Editor
+Imports ESRI.ArcGIS.Framework
+Imports ESRI.ArcGIS.Geodatabase
+Imports ESRI.ArcGIS.Carto
+Imports ESRI.ArcGIS.Geometry
+Imports ESRI.ArcGIS.esriSystem
+Imports ESRI.ArcGIS.Display
+Imports ESRI.ArcGIS.SystemUI
+Imports OrmapTaxlotEditing.DataMonitor
+Imports OrmapTaxlotEditing.SpatialUtilities
+Imports OrmapTaxlotEditing.EditorExtension
+Imports OrmapTaxlotEditing.Utilities
+#End Region
+
+#Region "Class Declaration"
+''' <summary>
+''' Spatial utilities class (singleton).
+''' </summary>
+''' <remarks>
+''' <para>Commonly used ArcObjects procedures and functions.</para>
+''' <para><seealso cref="StringUtilities"/></para>
+''' <para><seealso cref="Utilities"/></para>
+''' </remarks>
+
+Public NotInheritable Class AnnotationUtilities
+
+#Region "Class-Level Constants and Enumerations"
+    Const Pi As Double = 3.1415926535897931
+    Const WideLine As Integer = 60
+
+    'Annotation placement constants
+    Const DistanceBothSides As Double = 2.55
+    Const DistanceBothAbove As Double = 1.75
+    Const DistanceBothBelow As Double = 1.99
+
+    Public Enum AnnotationPlacement As Integer
+        BothSides
+        BothSidesWide
+        BothAbove
+        BothBelow
+    End Enum
+
+#End Region
+
+#Region "Built-In Class Members (Constructors, Etc.)"
+
+#Region "Constructors"
+
+    ''' <summary>
+    ''' Private empty constructor to prevent instantiation.
+    ''' </summary>
+    ''' <remarks>This class follows the singleton pattern and thus has a 
+    ''' private constructor and all shared members. Instances of types 
+    ''' that define only shared members do not need to be created, so no
+    ''' constructor should be needed. However, many compilers will 
+    ''' automatically add a public default constructor if no constructor 
+    ''' is specified. To prevent this an empty private constructor is 
+    ''' added.</remarks>
+    Private Sub New()
+    End Sub
+
+#End Region
+
+#End Region
+
+#Region "Public Members"
+
+    Public Shared Function GetAnnoFCName(ByVal theMapScale As String) As String
+        'TODO: (RG) Need to put Case Else and exception handler in here
+        Dim theAnnoFCName As String = String.Empty
+        Select Case CInt(theMapScale)
+            Case 120
+                theAnnoFCName = EditorExtension.AnnoTableNamesSettings.Anno0010scaleFC
+            Case 240
+                theAnnoFCName = EditorExtension.AnnoTableNamesSettings.Anno0020scaleFC
+            Case 360
+                theAnnoFCName = EditorExtension.AnnoTableNamesSettings.Anno0030scaleFC
+            Case 480
+                theAnnoFCName = EditorExtension.AnnoTableNamesSettings.Anno0040scaleFC
+            Case 600
+                theAnnoFCName = EditorExtension.AnnoTableNamesSettings.Anno0050scaleFC
+            Case 1200
+                theAnnoFCName = EditorExtension.AnnoTableNamesSettings.Anno0100scaleFC
+            Case 2400
+                theAnnoFCName = EditorExtension.AnnoTableNamesSettings.Anno0200scaleFC
+            Case 4800
+                theAnnoFCName = EditorExtension.AnnoTableNamesSettings.Anno0400scaleFC
+            Case 9600
+                theAnnoFCName = EditorExtension.AnnoTableNamesSettings.Anno0800scaleFC
+            Case 24000
+                theAnnoFCName = EditorExtension.AnnoTableNamesSettings.Anno2000scaleFC
+        End Select
+        Return theAnnoFCName
+    End Function
+
+    Public Shared Function GetSubtypeCode(ByVal theAnnoFeatureClass As IFeatureClass, ByVal theSubtypeName As String) As Integer
+        'TODO:  (RG) Need exception handling
+        Dim theSubtypes As ISubtypes = DirectCast(theAnnoFeatureClass, ISubtypes)
+        Dim theEnumSubtypes As IEnumSubtype = theSubtypes.Subtypes
+        Dim thisSubtypeName As String
+        Dim thisSubtypeCode As Integer
+        theEnumSubtypes.Reset()
+        Do Until theEnumSubtypes Is Nothing
+            thisSubtypeName = theEnumSubtypes.Next(thisSubtypeCode)
+            If thisSubtypeName = theSubtypeName Then
+                Exit Do
+            End If
+        Loop
+        Return thisSubtypeCode
+    End Function
+
+    Public Shared Function GetSymbolId(ByVal theAnnoFeatureClass As IFeatureClass, ByVal theSymbolName As String) As Integer
+        'TODO:  (RG) Need exception handling
+        Dim theSymbolCollection As ISymbolCollection2 = New SymbolCollectionClass()
+        Dim thisSymbolIdentifier As ISymbolIdentifier2 = New SymbolIdentifierClass()
+        Dim theAnnoClass As IAnnoClass
+        Dim theSymbolId As Integer = Nothing
+
+        'Get the Symbol ID defined in the anno feature class for Symbol Name "34" (Distance/Bearing)
+        theAnnoClass = DirectCast(theAnnoFeatureClass.Extension, IAnnoClass)
+        theSymbolCollection = DirectCast(theAnnoClass.SymbolCollection, ISymbolCollection2)
+        theSymbolCollection.Reset()
+        thisSymbolIdentifier = DirectCast(theSymbolCollection.Next, ISymbolIdentifier2)
+        Do Until thisSymbolIdentifier Is Nothing
+            If String.Compare(thisSymbolIdentifier.Name, theSymbolName, True, CultureInfo.CurrentCulture) = 0 Then
+                theSymbolId = thisSymbolIdentifier.ID
+                Exit Do
+            End If
+            thisSymbolIdentifier = DirectCast(theSymbolCollection.Next, ISymbolIdentifier2)
+        Loop
+        Return theSymbolId
+    End Function
+
+    Public Shared Function GetMaxOidByAnnoFC(ByVal theAnnoFeatureClass As IFeatureClass) As Integer
+        Dim theMaxOid As Integer = Nothing
+        Dim theAnnoDataset As IDataset = DirectCast(theAnnoFeatureClass, IDataset)
+        Dim theAnnoWorkspace As IFeatureWorkspace = DirectCast(theAnnoDataset.Workspace, IFeatureWorkspace)
+        Dim theAnnoWorkspaceEditControl As IWorkspaceEditControl = DirectCast(theAnnoWorkspace, IWorkspaceEditControl)
+
+        'Get the max ID from this anno layer (it will be the anno just created by the label to anno converter)
+        Dim theQueryDef As IQueryDef
+        Dim thisRow As IRow
+        Dim theIdCursor As ICursor
+        theQueryDef = theAnnoWorkspace.CreateQueryDef
+        theQueryDef.Tables = theAnnoDataset.Name
+        theQueryDef.SubFields = "MAX(OBJECTID)"
+        theIdCursor = theQueryDef.Evaluate
+        If Not theIdCursor Is Nothing Then
+            thisRow = theIdCursor.NextRow
+            'TODO:  (RG) Should really do a find for the field index to the OID... its always 0, but really should check anyways... 
+            theMaxOid = CInt(thisRow.Value(0))
+        End If
+        Return theMaxOid
+    End Function
+
+    Public Shared Function GetLayerEnum(ByVal theMap As IMap, ByVal theUid As IUID) As IEnumLayer
+        'Main reason this was embedded in a function is that it performs the reset... hence each call saves one line of code
+        Dim thisEnumLayer As IEnumLayer
+        'TODO:  (RG) Try block and exception handling needed here... 
+        thisEnumLayer = theMap.Layers(DirectCast(theUid, UID), True)
+        thisEnumLayer.Reset()
+
+        Return thisEnumLayer
+
+    End Function
+
+    Public Shared Function GetAnnoFeatureClass(ByVal theMap As IMap, ByVal theAnnoFCName As String) As IFeatureClass
+        Dim thisFDOLayersUID As IUID = New UID
+        thisFDOLayersUID.Value = "{5CEAE408-4C0A-437F-9DB3-054D83919850}"
+        Dim theAnnoEnumLayer As IEnumLayer = GetLayerEnum(theMap, thisFDOLayersUID)
+        Dim thisAnnoFeatureClass As IFeatureClass = Nothing
+        Dim thisAnnoLayer As IFeatureLayer
+        thisAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
+
+        'Now go through anno feature class enum looking for name that matches the map index based on map scale
+        Do While Not (thisAnnoLayer Is Nothing)
+            If String.Compare(thisAnnoLayer.Name, theAnnoFCName, True, CultureInfo.CurrentCulture) = 0 Then
+                thisAnnoFeatureClass = thisAnnoLayer.FeatureClass
+                Exit Do
+            End If
+            thisAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
+        Loop
+
+        Return thisAnnoFeatureClass
+    End Function
+
+    Public Overloads Shared Function CalculateCentroid(ByVal theEnvelope As IEnvelope) As ESRI.ArcGIS.Geometry.IPoint
+        'Overloaded to calculate a centroid from either:
+        '1- An envelope of type IEnvelope
+        '2- A set of points of type IPoint defining a polygon
+        Dim thePoint As IPoint = New ESRI.ArcGIS.Geometry.Point
+
+        'Call the overloaded CalculateCentriod function with X/Y coords from envelope
+        thePoint = CalculateCentroid(theEnvelope.LowerLeft.X, theEnvelope.UpperRight.X, theEnvelope.LowerLeft.Y, theEnvelope.UpperRight.Y)
+
+        Return thePoint
+
+    End Function
+
+    Public Overloads Shared Function CalculateCentroid(ByVal theLowerLeftX As Double, ByVal theUpperRightX As Double, ByVal theLowerLeftY As Double, ByVal theUpperRightY As Double) As ESRI.ArcGIS.Geometry.IPoint
+        'Overloaded to calculate a centroid from either:
+        '1- An envelope of type IEnvelope
+        '2- A set of points of type IPoint defining a polygon
+        Dim thePoint As IPoint = New ESRI.ArcGIS.Geometry.Point
+
+        'Calculate a mean X/Y point from two sets of X/Y coordinates (Lower Left X/Y, Upper Right X/Y)
+        thePoint.PutCoords((theLowerLeftX + theUpperRightX) / 2.0#, _
+                            (theLowerLeftY + theUpperRightY) / 2.0#)
+
+        Return thePoint
+
+    End Function
+
+    Public Overloads Shared Sub MoveElement(ByVal theToPoint As IPoint, ByVal theFromPoint As IPoint, ByVal theGraphicsContainer As IGraphicsContainer, ByVal theElement As IElement)
+        'Overloaded to move an element based on either:
+        '1- A pair of points of type IPoint
+        '2- A vector of type ILine
+
+        'Create a vector line between the two points 
+        Dim theMoveVector As ILine = New ESRI.ArcGIS.Geometry.Line
+        theMoveVector.PutCoords(theToPoint, theFromPoint)
+
+        'Call the overloaded MoveElement function with the vector
+        MoveElement(theMoveVector, theGraphicsContainer, theElement)
+
+    End Sub
+
+    Public Overloads Shared Sub MoveElement(ByVal theMoveVector As ILine, ByVal theGraphicsContainer As IGraphicsContainer, ByVal theElement As IElement)
+        'Overloaded to move an element based on either:
+        '1- A pair of points of type IPoint
+        '2- A vector of type ILine
+
+        'Move the annotation
+        Dim transform2D As ITransform2D = DirectCast(theElement, ITransform2D)
+        transform2D.MoveVector(theMoveVector)
+
+        'Transformation complete, now update the source objects with the new geometry
+        finishTransform(theGraphicsContainer, theElement, transform2D)
+
+    End Sub
+
+    Public Shared Sub RotateElement(ByVal theRotationPoint As IPoint, ByVal theGraphicsContainer As IGraphicsContainer, ByVal theElement As IElement)
+        'Rotate the annotation 180 degrees (pi)
+        Dim transform2D As ITransform2D = DirectCast(theElement, ITransform2D)
+        transform2D.Rotate(theRotationPoint, Pi)
+
+        'Transformation complete, now update the source objects with the new geometry
+        finishTransform(theGraphicsContainer, theElement, transform2D)
+
+    End Sub
+
+    Public Shared Function GetAnnoEnvelope(ByVal theDisplay As IDisplay, ByVal theElement As IElement) As IEnvelope
+        Dim theBoundaryEnvelope As IEnvelope = New Envelope
+        theElement.QueryBounds(theDisplay, theBoundaryEnvelope)
+        Return theBoundaryEnvelope
+    End Function
+
+    Public Shared Function GetMoveDistance(ByVal isStandardSpace As Boolean, ByVal isBothSides As Boolean, ByVal theTextElement As ITextElement) As Double
+        Dim theLineWidth As Double = New Double
+
+        'Polk County uses Font Sizes = MapScale/240
+        'The cartographers use an additional map unit offset for "big" lines 
+        '    100     3
+        '    200     6
+        '    400    12
+        '    800    24
+        '   1000    48
+        '   2000    60
+        If isStandardSpace Then
+            If isBothSides Then
+                theLineWidth = theTextElement.Symbol.Size * 2
+            ElseIf Not isBothSides Then
+                theLineWidth = theTextElement.Symbol.Size * 1.5
+            End If
+        ElseIf Not isStandardSpace Then
+            Dim theScaleOffset As Integer = CInt(theTextElement.Symbol.Size Mod 1.5)
+            If isBothSides Then
+                theLineWidth = theTextElement.Symbol.Size * 2 + theScaleOffset
+            ElseIf Not isBothSides Then
+                theLineWidth = theTextElement.Symbol.Size * 1.5 + theScaleOffset
+            End If
+        End If
+        Return theLineWidth
+    End Function
+
+    Public Shared Sub MoveAnnotationElements(ByVal isInverted As Boolean, ByVal isTransposed As Boolean, ByVal isMoveUp As Boolean, _
+                                                ByVal isMoveDown As Boolean, ByVal isStandardSpace As Boolean, ByVal isWideSpace As Boolean)
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' -- DESIGN COMMENT --
+        '   NOTE=>  Annotation movement only works for annotation created and placed by the CreateAnnotation class. This class 
+        '           places annotation based on a set of rules which comply with annotation spacing, fonts, and font sizes used
+        '           in Polk County taxmaps. 
+        '
+        '   Moving distance and bearing annotation is accomplished by forming mathematical relationships relating to a "virtual" line. 
+        '   Distances between the "upper" and "lower" annotation varies depending on its relative location to this line. Annotation on
+        '   different sides of the line, both above the line, or both below the line have different distances between them. These
+        '   distances are calculated relative to the centroid of the annotation's envelopes, and are dependent on font size. These 
+        '   distances also vary if the line is "standard" or "big" (wide). Annotation may be placed with wide spacing if it will be
+        '   located next to map index boundaries, taxcode lines, subdivision boundaries, etc. 
+        '
+        '   Constants were calculated by checking envelope centroid distances for a number of annotation sets of different scales 
+        '   placed above, below, and on both sides of the line at 100, 200, and 400 scales. These constants were calculated 
+        '   from the formula:
+        '
+        '       K = Distance / FontSize
+        '
+        '   and work out to the following values:
+        '
+        '           Anno Location           K
+        '           --------------         ----
+        '           Both Sides             2.55   
+        '           Both Above             1.75
+        '           Both Below             1.99
+        '
+        '   These scaling constants work for annotation font sizes that are based on the formula:
+        '
+        '       FontSize = MapScale / 240 
+
+        Dim theMxDoc As IMxDocument
+        Dim theMap As IMap
+        theMxDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        theMap = theMxDoc.FocusMap
+
+        Dim theActiveView As IActiveView = DirectCast(theMap, IActiveView)
+        Dim theMapExtent As IEnvelope = theActiveView.Extent
+
+        DataMonitor.CheckValidMapIndexDataProperties()
+
+        Dim thisFDOLayersUID As IUID = New UID
+        thisFDOLayersUID.Value = "{5CEAE408-4C0A-437F-9DB3-054D83919850}"
+        Dim theAnnoEnumLayer As IEnumLayer = GetLayerEnum(theMap, thisFDOLayersUID)
+        Dim theAnnoFeatureClass As IFeatureClass = Nothing
+        Dim thisAnnoLayer As IFeatureLayer
+        thisAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
+
+        'Now go through anno feature class enum looking for selected features
+        Do While Not (thisAnnoLayer Is Nothing)
+            Dim theAnnoSelection As IFeatureSelection = DirectCast(thisAnnoLayer, IFeatureSelection)
+            If theAnnoSelection.SelectionSet.Count Mod 2 > 0 Then
+                MessageBox.Show("Odd number of annotation items selected... This tool works" & NewLine & _
+                " with pairs of annotation, so you must select them in sets of two.", _
+                "Transpose Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Sub
+            End If
+            Dim theSelectedAnnoCursor As IFeatureCursor
+            theSelectedAnnoCursor = SpatialUtilities.GetSelectedFeatures(thisAnnoLayer)
+            If Not theSelectedAnnoCursor Is Nothing Then
+                EditorExtension.Editor.StartOperation()
+
+                'Get the graphics container... without this, the transform2D will transform the envelope, but NOT the annotation itself!!!! 
+                Dim theGraphicsContainer As IGraphicsContainer = DirectCast(theMxDoc.ActivatedView, IGraphicsContainer)
+
+                'Now loop through the selection set... since transpose works on pairs of anno, only do half the loops
+                Dim i As Integer
+                For i = 1 To theAnnoSelection.SelectionSet.Count Step 2
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    ' -- DESIGN COMMENT --
+                    '   There are a number of ways this next section can be written, but due to the fairly convoluted concept of 
+                    '   moving two pieces of annotation, I decided to leave it this way. I almost never use object names which 
+                    '   imply ordinal relationships (such as 1st, 2nd, etc.), but in this case it clarifies the underlying process
+                    '   since this code must work on annotation pairs.
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    'Get the selected features (needed for the transform2d since it accesses the underlying geometry of the annotation)
+                    Dim the1stSelectedFeature As IFeature = theSelectedAnnoCursor.NextFeature
+                    Dim the2ndSelectedFeature As IFeature = theSelectedAnnoCursor.NextFeature
+
+                    'Get the selected annotation features annotation elements (needed to do transform and update the graphics container)
+                    Dim the1stSelectedAnnoFeature As IAnnotationFeature = DirectCast(the1stSelectedFeature, IAnnotationFeature)
+                    Dim the2ndSelectedAnnoFeature As IAnnotationFeature = DirectCast(the2ndSelectedFeature, IAnnotationFeature)
+
+                    'Calculate a move vector from the X, Y pairs for the 1st and 2nd element's envelopes (mean of lower left & upper right corners)
+                    Dim theMoveVector As ILine = New ESRI.ArcGIS.Geometry.Line
+
+                    If isInverted Then
+                        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                        ' -- DESIGN COMMENT --
+                        '   The envelope used to calculate the rotation point (centroid) must be retrieved from an element's QueryBounds method. 
+                        '   This method takes into account the annotation's text area, whereas the element's envelope is a polyline. Using
+                        '   its centroid will actually offset the location of the annotation since the polyline's MaxY is just beneath the text.
+                        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                        'To invert the annotation as a pair, must rotate each element then transpose them
+                        RotateElement(CalculateCentroid(GetAnnoEnvelope(theActiveView.ScreenDisplay, the1stSelectedAnnoFeature.Annotation)), _
+                                        theGraphicsContainer, the1stSelectedAnnoFeature.Annotation)
+                        RotateElement(CalculateCentroid(GetAnnoEnvelope(theActiveView.ScreenDisplay, the2ndSelectedAnnoFeature.Annotation)), _
+                                        theGraphicsContainer, the2ndSelectedAnnoFeature.Annotation)
+                    End If
+
+                    theMoveVector.PutCoords(CalculateCentroid(GetAnnoEnvelope(theActiveView.ScreenDisplay, the1stSelectedAnnoFeature.Annotation)), _
+                                            CalculateCentroid(GetAnnoEnvelope(theActiveView.ScreenDisplay, the2ndSelectedAnnoFeature.Annotation)))
+
+                    Dim theTextElement As ITextElement = DirectCast(the1stSelectedAnnoFeature.Annotation, ITextElement)
+                    Dim theAnnoPlacement As AnnotationPlacement = GetAnnoPlacement(theTextElement.Symbol.Size, theMoveVector.Length)
+                    Dim theToDistance As Double
+                    Dim theNewVector As ILine = New ESRI.ArcGIS.Geometry.Line
+
+                    If isTransposed Then
+                        MoveElement(theMoveVector, theGraphicsContainer, the1stSelectedAnnoFeature.Annotation)
+                        theMoveVector.ReverseOrientation()
+                        MoveElement(theMoveVector, theGraphicsContainer, the2ndSelectedAnnoFeature.Annotation)
+                    ElseIf isMoveDown Then
+                        MoveElement(theMoveVector, theGraphicsContainer, the1stSelectedAnnoFeature.Annotation)
+                        If isStandardSpace Then
+                            theToDistance = DistanceBothSides * theTextElement.Symbol.Size
+                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                            theMoveVector = theNewVector
+                        ElseIf isWideSpace Then
+                            theToDistance = DistanceBothSides * theTextElement.Symbol.Size + WideLine
+                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                            theMoveVector = theNewVector
+                        ElseIf theAnnoPlacement = AnnotationPlacement.BothSides Or theAnnoPlacement = AnnotationPlacement.BothSidesWide Then
+                            theToDistance = DistanceBothBelow * theTextElement.Symbol.Size
+                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                            theMoveVector = theNewVector
+                        End If
+                        MoveElement(theMoveVector, theGraphicsContainer, the2ndSelectedAnnoFeature.Annotation)
+                    ElseIf isMoveUp Then
+                        theMoveVector.ReverseOrientation()
+                        MoveElement(theMoveVector, theGraphicsContainer, the2ndSelectedAnnoFeature.Annotation)
+                        If isStandardSpace Then
+                            theToDistance = DistanceBothSides * theTextElement.Symbol.Size
+                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                            theMoveVector = theNewVector
+                        ElseIf isWideSpace Then
+                            theToDistance = DistanceBothSides * theTextElement.Symbol.Size + WideLine
+                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                            theMoveVector = theNewVector
+                        ElseIf theAnnoPlacement = AnnotationPlacement.BothSides Or theAnnoPlacement = AnnotationPlacement.BothSidesWide Then
+                            theToDistance = DistanceBothAbove * theTextElement.Symbol.Size
+                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                            theMoveVector = theNewVector
+                        End If
+                        MoveElement(theMoveVector, theGraphicsContainer, the1stSelectedAnnoFeature.Annotation)
+                    End If
+
+                Next
+                theActiveView.Refresh()
+                If isInverted Then
+                    EditorExtension.Editor.StopOperation("Invert Annotation")
+                ElseIf isTransposed Then
+                    EditorExtension.Editor.StopOperation("Transpose Annotation")
+                ElseIf isMoveUp Then
+                    EditorExtension.Editor.StopOperation("Move Annotation Up")
+                ElseIf isMoveDown Then
+                    EditorExtension.Editor.StopOperation("Move Annotation Down")
+                End If
+            End If
+            thisAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
+        Loop
+    End Sub
+
+    Public Shared Function GetAnnoPlacement(ByVal theFontSize As Double, ByVal theCalculatedDistance As Double) As AnnotationPlacement
+        Dim thisAnnoPlacement As AnnotationPlacement
+
+        'Checks for annotation placement (based on the scale constants and the font size for the annotation feature class)
+        If DistanceBothSides = calculateAnnoSpacing(theCalculatedDistance, theFontSize) Then
+            thisAnnoPlacement = AnnotationPlacement.BothSides
+        ElseIf DistanceBothAbove = calculateAnnoSpacing(theCalculatedDistance, theFontSize) Then
+            thisAnnoPlacement = AnnotationPlacement.BothAbove
+        ElseIf DistanceBothBelow = calculateAnnoSpacing(theCalculatedDistance, theFontSize) Then
+            thisAnnoPlacement = AnnotationPlacement.BothBelow
+        ElseIf DistanceBothSides = calculateAnnoSpacing(theCalculatedDistance - WideLine, theFontSize) Then
+            thisAnnoPlacement = AnnotationPlacement.BothSidesWide
+        Else
+            'TODO:  Throw exception... calculated distance not standard
+        End If
+        Return thisAnnoPlacement
+    End Function
+
+#End Region
+
+#Region "Private Members"
+
+    Private Shared Sub finishTransform(ByVal theGraphicsContainer As IGraphicsContainer, ByVal theElement As IElement, ByVal theTransform As ITransform2D)
+        'Update the source objects with the new geometry
+        theElement = DirectCast(theTransform, IElement)
+        theGraphicsContainer.UpdateElement(theElement)
+    End Sub
+
+    Private Shared Function calculateAnnoSpacing(ByVal theDistance As Double, ByVal theFontSize As Double) As Double
+        Dim theAnnoSpacing As Double
+        theAnnoSpacing = Math.Round(theDistance / theFontSize, 2, MidpointRounding.AwayFromZero)
+        Return theAnnoSpacing
+    End Function
+
+#End Region
+
+End Class
+#End Region
