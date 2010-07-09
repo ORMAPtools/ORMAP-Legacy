@@ -36,24 +36,14 @@
 #End Region
 
 #Region "Imported Namespaces"
-Imports System.Runtime.InteropServices
-Imports System.Drawing
 Imports System.Windows.Forms
 Imports System.Environment
 Imports System.Globalization
-Imports System.Drawing.Text
-Imports ESRI.ArcGIS.ADF.BaseClasses
-Imports ESRI.ArcGIS.ADF.CATIDs
 Imports ESRI.ArcGIS.ArcMapUI
-Imports ESRI.ArcGIS.Editor
-Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.Geodatabase
 Imports ESRI.ArcGIS.Carto
 Imports ESRI.ArcGIS.Geometry
-Imports ESRI.ArcGIS.esriSystem
 Imports ESRI.ArcGIS.Display
-Imports ESRI.ArcGIS.SystemUI
-Imports OrmapTaxlotEditing.DataMonitor
 Imports OrmapTaxlotEditing.SpatialUtilities
 Imports OrmapTaxlotEditing.EditorExtension
 Imports OrmapTaxlotEditing.Utilities
@@ -70,6 +60,11 @@ Imports OrmapTaxlotEditing.Utilities
 Public NotInheritable Class AnnotationUtilities
 
 #Region "Class-Level Constants and Enumerations"
+    '------------------------------------------
+    ' Some constants could be redefined as settings
+    '------------------------------------------
+
+    Public Const AnnotationClassName As String = "34"
     Public Const Pi As Double = 3.1415926535897931
     Public Const WideLine As Integer = 60
 
@@ -255,7 +250,7 @@ Public NotInheritable Class AnnotationUtilities
     End Function
 
     ''' <summary>
-    ''' Moves an annotation element based on its to and from point values
+    ''' Moves an annotation element based on its TO and FROM point values
     ''' </summary>
     ''' <param name="theToPoint">The point to be used as the "to" point of the move vector.</param>
     ''' <param name="theFromPoint">The point to be used as the "from" point of the move vector.</param>
@@ -369,8 +364,9 @@ Public NotInheritable Class AnnotationUtilities
             Dim theAnnoSelection As IFeatureSelection = DirectCast(thisAnnoLayer, IFeatureSelection)
             If theAnnoSelection.SelectionSet.Count Mod 2 > 0 Then
                 MessageBox.Show("Odd number of annotation items selected... This tool works" & NewLine & _
-                " with pairs of annotation, so you must select them in sets of two.", _
-                "Transpose Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                "with pairs of annotation, so you must select them in sets " & NewLine & _
+                "of two (within each annotation feature class).", _
+                "Move  Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
             Dim theSelectedAnnoCursor As IFeatureCursor = SpatialUtilities.GetSelectedFeatures(thisAnnoLayer)

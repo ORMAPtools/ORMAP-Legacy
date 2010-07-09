@@ -100,14 +100,12 @@ Public NotInheritable Class OrmapAnnotateToolbar
 #Region "Properties"
     Public Overrides ReadOnly Property Caption() As String
         Get
-            'TODO: Replace bar caption
             Return "ORMAP Annotate (.NET)"
         End Get
     End Property
 
     Public Overrides ReadOnly Property Name() As String
         Get
-            'TODO: Replace bar ID
             Return "OrmapAnnotateToolbar"
         End Get
     End Property

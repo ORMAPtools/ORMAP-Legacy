@@ -63,7 +63,7 @@ Imports OrmapTaxlotEditing.AnnotationUtilities
 
 ''' <summary>
 ''' Provides an ArcMap Tool with functionality to 
-''' allow users to create Distance and Bearing
+''' allow users to create Distance and Direction
 ''' annotation from Line Feature Classes that contain
 ''' appropriately formatted Distance and Direction
 ''' attributes.
@@ -136,6 +136,11 @@ Public NotInheritable Class CreateAnnotation
 #End Region
 
 #Region "Properties"
+    '------------------------------------------
+    ' Translate the form controls into Properties
+    '------------------------------------------
+    ' This is where the Controller (or Presenter) couples the form (View) and the class (Model) 
+
     Private WithEvents _partnerCreateAnnotationForm As CreateAnnotationForm
 
     Friend ReadOnly Property PartnerCreateAnnotationForm() As CreateAnnotationForm
@@ -152,7 +157,8 @@ Public NotInheritable Class CreateAnnotation
     Private _annoClassName As String
     Public ReadOnly Property AnnoClassName() As String
         Get
-            _annoClassName = "34"
+            ' Value from constant... could eventually be a setting
+            _annoClassName = AnnotationUtilities.AnnotationClassName
             Return _annoClassName
         End Get
     End Property
@@ -166,11 +172,14 @@ Public NotInheritable Class CreateAnnotation
     End Property
 
     Private _isParallel As Boolean
-    Public ReadOnly Property IsParallel() As Boolean
+    Public Property IsParallel() As Boolean
         Get
             _isParallel = PartnerCreateAnnotationForm.uxParallel.Checked
             Return _isParallel
         End Get
+        Set(ByVal value As Boolean)
+            _isParallel = value
+        End Set
     End Property
 
     Private _isHorizontal As Boolean
@@ -191,6 +200,7 @@ Public NotInheritable Class CreateAnnotation
 
     Private _isAbove As Boolean
     Public Property IsAbove() As Boolean
+        ' Property is set programmatically
         Get
             Return _isAbove
         End Get
@@ -201,6 +211,7 @@ Public NotInheritable Class CreateAnnotation
 
     Private _isBelow As Boolean
     Public Property IsBelow() As Boolean
+        ' Property is set programmatically
         Get
             Return _isBelow
         End Get
@@ -307,6 +318,7 @@ Public NotInheritable Class CreateAnnotation
 
     Private _upperValue As topPosition
     Public ReadOnly Property UpperValue() As topPosition
+        ' Property is set programmatically; enum allows for easier processing later
         Get
             If IsDistance Then
                 _upperValue = topPosition.distance
@@ -332,10 +344,12 @@ Public NotInheritable Class CreateAnnotation
             ' Subscribe to partner form events.
             AddHandler _partnerCreateAnnotationForm.uxCreateAnno.Click, AddressOf uxCreateAnno_Click
             AddHandler _partnerCreateAnnotationForm.uxOptionsCancel.Click, AddressOf uxCancel_Click
+            AddHandler _partnerCreateAnnotationForm.uxHelp.Click, AddressOf uxHelp_Click
         Else
             ' Unsubscribe to partner form events.
             RemoveHandler _partnerCreateAnnotationForm.uxCreateAnno.Click, AddressOf uxCreateAnno_Click
             RemoveHandler _partnerCreateAnnotationForm.uxOptionsCancel.Click, AddressOf uxCancel_Click
+            RemoveHandler _partnerCreateAnnotationForm.uxHelp.Click, AddressOf uxHelp_Click
         End If
     End Sub
     Friend Sub DoButtonOperation()
@@ -353,12 +367,16 @@ Public NotInheritable Class CreateAnnotation
 
         Catch ex As Exception
             EditorExtension.ProcessUnhandledException(ex)
-
         End Try
 
     End Sub
-    Private Sub uxCreateAnno_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
+    Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Dim theRTFStream As System.IO.Stream = Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.CreateAnnotation_help.rtf")
+        OpenHelp("Create Annotation Help", theRTFStream)
+    End Sub
+
+    Private Sub uxCreateAnno_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Dim theLayer As IFeatureLayer
         Dim theMxDoc As IMxDocument
         Dim theMap As IMap
@@ -424,7 +442,7 @@ Public NotInheritable Class CreateAnnotation
 
                     setLabelProperties(theFeatureLayerPropsCollection, theAnnoFeatureClass, "Direction")
                     setLabelProperties(theFeatureLayerPropsCollection, theAnnoFeatureClass, "Distance")
-                    ConvertLabelsToAnnotation(theMap, theGeoFeatureLayer, theAnnoFeatureClass, False, theLayer.FeatureClass)
+                    convertLabelsToAnnotation(theMap, theGeoFeatureLayer, theAnnoFeatureClass, False, theLayer.FeatureClass)
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                     '--DESIGN COMMENT--
                     'Call to processNewAnnotation was originally set here, but opening and closing the edit session destroyed
@@ -571,9 +589,9 @@ Public NotInheritable Class CreateAnnotation
                 "End Function"
 
                 If UpperValue = topPosition.direction Then
-                    setToUpper(isTop)
+                    isTop = True
                 Else
-                    setToLower(isTop)
+                    isTop = False
                 End If
 
             ElseIf String.Compare(theAnnoClassName, "Distance", True, CultureInfo.CurrentCulture) = 0 Then
@@ -585,12 +603,12 @@ Public NotInheritable Class CreateAnnotation
                 theLabelEngineLayerProperties.Expression = "FormatNumber([Distance], 2)"
 
                 If UpperValue = topPosition.distance Then
-                    setToUpper(isTop)
+                    isTop = True
                 Else
-                    setToLower(isTop)
+                    isTop = False
                 End If
-
             End If
+            setAnnoPlacement(isTop)
 
             With theLineLabelPosition
                 .Above = IsAbove
@@ -621,8 +639,7 @@ Public NotInheritable Class CreateAnnotation
             theAnnoClass = DirectCast(theAnnoFeatureClass.Extension, IAnnoClass)
             theSymbolCollection = DirectCast(theAnnoClass.SymbolCollection, ISymbolCollection2)
 
-            'TODO: (RG) Assign "34" to variable (or constant)
-            theLabelEngineLayerProperties.Symbol = DirectCast(theSymbolCollection.Symbol(GetSymbolId(theAnnoFeatureClass, "34")), ITextSymbol)
+            theLabelEngineLayerProperties.Symbol = DirectCast(theSymbolCollection.Symbol(GetSymbolId(theAnnoFeatureClass, AnnoClassName)), ITextSymbol)
 
             Dim theBasicOverposterLayerProps As IBasicOverposterLayerProperties
             theBasicOverposterLayerProps = New BasicOverposterLayerProperties
@@ -654,8 +671,8 @@ Public NotInheritable Class CreateAnnotation
         '   Need to do some bookkeeping on the anno that was just created by the label to anno converter:
         '   1- Delete FeatureID (converter puts it in even when not feature-linking)
         '   2- Set dummy MapNumber. If left <Null>, EditEvents_OnCreateFeature will not set correct value
-        '   3- Set AutoMethod to Calculated
-        '   4- Set AnnotationClassID to index for "34" (Distance and Bearing subtype
+        '   3- Set AutoMethod to "Converted"
+        '   4- Set AnnotationClassID to index for "34" (Distance and Bearing subtype)
         '   5- Need to set correct Symbol
         '   6- Need to insert the new row (RowBuffer [fires OnCreate event])
         '   7- Need to delete the old row (Row [fires the OnDelete event])
@@ -667,8 +684,12 @@ Public NotInheritable Class CreateAnnotation
             Dim theAnnoWorkspaceEditControl As IWorkspaceEditControl = DirectCast(theAnnoWorkspace, IWorkspaceEditControl)
 
             EditorExtension.Editor.StartEditing(theAnnoDataset.Workspace)
+            EditorExtension.Editor.StartOperation()
 
-            'Get the max ID from this anno layer (it will be the anno just created by the label to anno converter)
+            '------------------------------------------
+            ' Get the max ID from this anno layer
+            '------------------------------------------
+            ' It will be the last anno feature created by the label to anno converter
             Dim theQueryDef As IQueryDef
             Dim theRow As IRow
             Dim theIdCursor As ICursor
@@ -677,6 +698,9 @@ Public NotInheritable Class CreateAnnotation
             theQueryDef.SubFields = "MAX(OBJECTID)"
             theIdCursor = theQueryDef.Evaluate
             theRow = theIdCursor.NextRow
+            '------------------------------------------
+            ' Set up field indexes
+            '------------------------------------------
             Dim theFeatureIdIndex As Integer = theAnnoFeatureClass.FindField("FeatureID")
             Dim theMapNumberIndex As Integer = theAnnoFeatureClass.FindField("MapNumber")
             Dim theAutoMethodIndex As Integer = theAnnoFeatureClass.FindField("AutoMethod")
@@ -695,19 +719,20 @@ Public NotInheritable Class CreateAnnotation
 
             Dim theTable As ITable = DirectCast(theAnnoFeatureClass, ITable)
             Dim thisOid As Integer
+            '------------------------------------------
+            ' Cycle through each new anno feature
+            '------------------------------------------
+            ' Process all anno in this feature class which was added by the converter... 
+            ' theMinOid comes from the anno feature class collection dictionary for this 
+            ' anno feature class which was populated earlier
             For thisOid = theMinOid To theMaxOid
                 Dim theOldRow As IRow = theTable.GetRow(thisOid)
                 theOldRow.Value(theSymbolIdIndex) = theSymbolId
-                'TODO:  (RG) System throws exception on InsertRow if line source direction or bearing is <null>... need to handle
-                '       => Will acutally crash in SpatialUtilities.SetAnnoSize called from EditorExtension.EdidEvents_OnCreateFeature
-                '               theGeometry = theFeature.Shape
-                '               If theGeometry.IsEmpty Then
-                '       throws exception because theFeature.Shape is null (neither empty nor present)
-
-                'TODO:  (RG) Verify how this works when Autoupdate is on and when it is off
+                'TODO:  (RG) System throws exception on InsertRow if line source direction or bearing is <null>... 
+                '       Will currently alert user and skip this feature, but need to handle better... 
 
                 'This is cleanest way (i.e., the way that actually WORKS) to ensure correct AnnoClassID, SymbolID, and MapNumber are 
-                'placed (including by the the OnCreate event in EditorExtension
+                'placed (including by the the OnCreate event in EditorExtension)
                 theOldRow.Store()
                 Dim theRowBuffer As IRowBuffer = theOldRow
                 theRowBuffer.Value(theFeatureIdIndex) = System.DBNull.Value
@@ -729,13 +754,17 @@ Public NotInheritable Class CreateAnnotation
             EditorExtension.ProcessUnhandledException(ex)
         End Try
 
+        EditorExtension.Editor.StopOperation("Process New Annotation")
         EditorExtension.Editor.StopEditing(True)
     End Sub
 
     Private Function getLineOffset(ByVal thisSize As Double, ByVal isTop As Boolean) As Double
-        'These formulas were based on desired annotation placement results for Polk County. 
-        'thisSize is the font size of the selected annotation's annotation feature class, and 
-        'is assumed to equal MapScale / 240
+        '------------------------------------------
+        ' Calculate the line offset distances
+        '------------------------------------------
+        ' These formulas were based on desired annotation placement results for Polk County. 
+        ' thisSize is the font size of the selected annotation's annotation feature class, and 
+        ' is assumed to equal MapScale / 240
         Dim theLineOffset As Double
         If isTop Then
             If IsStandardAbove Then
@@ -777,28 +806,29 @@ Public NotInheritable Class CreateAnnotation
         Return theLineOffset
     End Function
 
-    Private Sub setToUpper(ByVal isTop As Boolean)
-        isTop = True
-        If IsBothSides Or IsBothAbove Then
-            IsAbove = True
-            IsBelow = False
-        ElseIf IsBothBelow Then
-            IsAbove = False
-            IsBelow = True
-        End If
-
-    End Sub
-
-    Private Sub setToLower(ByVal isTop As Boolean)
-        isTop = False
-        If IsBothSides Or IsBothBelow Then
-            IsAbove = False
-            IsBelow = True
-        ElseIf IsBothAbove Then
-            IsAbove = True
-            IsBelow = False
-        End If
-
+    Private Sub setAnnoPlacement(ByVal isTop As Boolean)
+        '------------------------------------------
+        ' Set anno placement based on user form settings
+        '------------------------------------------
+        ' Set class properties according to how user wants to place annotation
+        Select Case isTop
+            Case True
+                If IsBothSides Or IsBothAbove Then
+                    IsAbove = True
+                    IsBelow = False
+                ElseIf IsBothBelow Then
+                    IsAbove = False
+                    IsBelow = True
+                End If
+            Case False
+                If IsBothSides Or IsBothBelow Then
+                    IsAbove = False
+                    IsBelow = True
+                ElseIf IsBothAbove Then
+                    IsAbove = True
+                    IsBelow = False
+                End If
+        End Select
     End Sub
 
 #End Region

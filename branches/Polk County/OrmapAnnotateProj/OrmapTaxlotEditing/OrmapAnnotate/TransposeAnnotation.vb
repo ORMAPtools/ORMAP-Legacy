@@ -83,9 +83,9 @@ Public NotInheritable Class TransposeAnnotation
         MyBase.New()
 
         MyBase.m_category = "OrmapAnnotate"  'localizable text 
-        MyBase.m_caption = "Transpose Annotation"   'localizable text 
-        MyBase.m_message = "Transpose Distance and Direction annotation (annotation on top is moved to bottom and vice versa)"   'localizable text 
-        MyBase.m_toolTip = "Transpose Distance && Direction annotation" 'localizable text 
+        MyBase.m_caption = "Flip Annotation"   'localizable text 
+        MyBase.m_message = "Flip Distance and Direction annotation (annotation on top is moved to bottom and vice versa)"   'localizable text 
+        MyBase.m_toolTip = "Flip Distance && Direction annotation" 'localizable text 
         MyBase.m_name = MyBase.m_category & "_TransposeAnnotation"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
 
         Try

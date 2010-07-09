@@ -83,9 +83,9 @@ Public NotInheritable Class InvertAnnotation
         MyBase.New()
 
         MyBase.m_category = "OrmapAnnotate"  'localizable text 
-        MyBase.m_caption = "InvertAnnotation"   'localizable text 
-        MyBase.m_message = "Inverts Distance and Direction annotation (annotation on top is moved to bottom and vice versa)"   'localizable text 
-        MyBase.m_toolTip = "Inverts Distance && Direction annotation" 'localizable text 
+        MyBase.m_caption = "Rotate Annotation"   'localizable text 
+        MyBase.m_message = "Rotate Distance and Direction annotation)"   'localizable text 
+        MyBase.m_toolTip = "Rotate Distance && Direction annotation" 'localizable text 
         MyBase.m_name = MyBase.m_category & "_InvertAnnotation"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
 
         Try
