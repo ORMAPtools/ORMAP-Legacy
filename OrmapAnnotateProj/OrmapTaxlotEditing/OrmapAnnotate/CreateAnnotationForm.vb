@@ -54,4 +54,13 @@ Public Class CreateAnnotationForm
         ' Add any initialization after the InitializeComponent() call.
 
     End Sub
+
+    Private Sub uxParallel_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles uxParallel.CheckedChanged
+        If uxParallel.Checked Then
+            uxCurved.Enabled = True
+        Else
+            uxCurved.Enabled = False
+            uxCurved.Checked = False
+        End If
+    End Sub
 End Class

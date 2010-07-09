@@ -28,13 +28,13 @@ Partial Class CreateAnnotationForm
         Me.uxBothAbove = New System.Windows.Forms.RadioButton
         Me.uxBothBelow = New System.Windows.Forms.RadioButton
         Me.uxPosition = New System.Windows.Forms.GroupBox
-        Me.uxCurved = New System.Windows.Forms.RadioButton
         Me.uxParallel = New System.Windows.Forms.RadioButton
         Me.uxHorizontal = New System.Windows.Forms.RadioButton
         Me.uxPerpendicular = New System.Windows.Forms.RadioButton
         Me.uxDirection = New System.Windows.Forms.RadioButton
         Me.uxDistance = New System.Windows.Forms.RadioButton
         Me.uxOrientation = New System.Windows.Forms.GroupBox
+        Me.uxCurved = New System.Windows.Forms.CheckBox
         Me.uxTopValue = New System.Windows.Forms.GroupBox
         Me.uxLineWidth = New System.Windows.Forms.GroupBox
         Me.uxWideLine = New System.Windows.Forms.RadioButton
@@ -47,7 +47,9 @@ Partial Class CreateAnnotationForm
         Me.uxStandardBelow = New System.Windows.Forms.RadioButton
         Me.uxReferenceScale = New System.Windows.Forms.TextBox
         Me.uxReferenceScaleLabel = New System.Windows.Forms.Label
+        Me.uxHelp = New System.Windows.Forms.Button
         Me.uxPosition.SuspendLayout()
+        Me.uxOrientation.SuspendLayout()
         Me.uxTopValue.SuspendLayout()
         Me.uxLineWidth.SuspendLayout()
         Me.uxOffsetAbove.SuspendLayout()
@@ -122,21 +124,12 @@ Partial Class CreateAnnotationForm
         Me.uxPosition.TabStop = False
         Me.uxPosition.Text = "Postion"
         '
-        'uxCurved
-        '
-        Me.uxCurved.AutoSize = True
-        Me.uxCurved.Location = New System.Drawing.Point(160, 36)
-        Me.uxCurved.Name = "uxCurved"
-        Me.uxCurved.Size = New System.Drawing.Size(59, 17)
-        Me.uxCurved.TabIndex = 17
-        Me.uxCurved.Text = "Curved"
-        Me.uxCurved.UseVisualStyleBackColor = True
-        '
         'uxParallel
         '
         Me.uxParallel.AutoSize = True
         Me.uxParallel.Checked = True
-        Me.uxParallel.Location = New System.Drawing.Point(160, 60)
+        Me.uxParallel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.uxParallel.Location = New System.Drawing.Point(24, 71)
         Me.uxParallel.Name = "uxParallel"
         Me.uxParallel.Size = New System.Drawing.Size(59, 17)
         Me.uxParallel.TabIndex = 18
@@ -147,7 +140,8 @@ Partial Class CreateAnnotationForm
         'uxHorizontal
         '
         Me.uxHorizontal.AutoSize = True
-        Me.uxHorizontal.Location = New System.Drawing.Point(160, 83)
+        Me.uxHorizontal.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.uxHorizontal.Location = New System.Drawing.Point(24, 48)
         Me.uxHorizontal.Name = "uxHorizontal"
         Me.uxHorizontal.Size = New System.Drawing.Size(72, 17)
         Me.uxHorizontal.TabIndex = 19
@@ -157,7 +151,8 @@ Partial Class CreateAnnotationForm
         'uxPerpendicular
         '
         Me.uxPerpendicular.AutoSize = True
-        Me.uxPerpendicular.Location = New System.Drawing.Point(160, 107)
+        Me.uxPerpendicular.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.uxPerpendicular.Location = New System.Drawing.Point(24, 24)
         Me.uxPerpendicular.Name = "uxPerpendicular"
         Me.uxPerpendicular.Size = New System.Drawing.Size(90, 17)
         Me.uxPerpendicular.TabIndex = 20
@@ -190,6 +185,10 @@ Partial Class CreateAnnotationForm
         '
         'uxOrientation
         '
+        Me.uxOrientation.Controls.Add(Me.uxCurved)
+        Me.uxOrientation.Controls.Add(Me.uxParallel)
+        Me.uxOrientation.Controls.Add(Me.uxPerpendicular)
+        Me.uxOrientation.Controls.Add(Me.uxHorizontal)
         Me.uxOrientation.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.uxOrientation.Location = New System.Drawing.Point(136, 12)
         Me.uxOrientation.Name = "uxOrientation"
@@ -197,6 +196,17 @@ Partial Class CreateAnnotationForm
         Me.uxOrientation.TabIndex = 17
         Me.uxOrientation.TabStop = False
         Me.uxOrientation.Text = "Orientation"
+        '
+        'uxCurved
+        '
+        Me.uxCurved.AutoSize = True
+        Me.uxCurved.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.uxCurved.Location = New System.Drawing.Point(54, 94)
+        Me.uxCurved.Name = "uxCurved"
+        Me.uxCurved.Size = New System.Drawing.Size(60, 17)
+        Me.uxCurved.TabIndex = 19
+        Me.uxCurved.Text = "Curved"
+        Me.uxCurved.UseVisualStyleBackColor = True
         '
         'uxTopValue
         '
@@ -335,21 +345,27 @@ Partial Class CreateAnnotationForm
         Me.uxReferenceScaleLabel.TabIndex = 26
         Me.uxReferenceScaleLabel.Text = "Annotation Reference Scale"
         '
+        'uxHelp
+        '
+        Me.uxHelp.Location = New System.Drawing.Point(147, 271)
+        Me.uxHelp.Name = "uxHelp"
+        Me.uxHelp.Size = New System.Drawing.Size(75, 23)
+        Me.uxHelp.TabIndex = 27
+        Me.uxHelp.Text = "Help"
+        Me.uxHelp.UseVisualStyleBackColor = True
+        '
         'CreateAnnotationForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.uxOptionsCancel
         Me.ClientSize = New System.Drawing.Size(391, 306)
+        Me.Controls.Add(Me.uxHelp)
         Me.Controls.Add(Me.uxReferenceScaleLabel)
         Me.Controls.Add(Me.uxReferenceScale)
         Me.Controls.Add(Me.uxOffsetBelow)
         Me.Controls.Add(Me.uxOffsetAbove)
         Me.Controls.Add(Me.uxLineWidth)
-        Me.Controls.Add(Me.uxPerpendicular)
-        Me.Controls.Add(Me.uxHorizontal)
-        Me.Controls.Add(Me.uxParallel)
-        Me.Controls.Add(Me.uxCurved)
         Me.Controls.Add(Me.uxOptionsCancel)
         Me.Controls.Add(Me.uxCreateAnno)
         Me.Controls.Add(Me.uxPosition)
@@ -361,6 +377,8 @@ Partial Class CreateAnnotationForm
         Me.TopMost = True
         Me.uxPosition.ResumeLayout(False)
         Me.uxPosition.PerformLayout()
+        Me.uxOrientation.ResumeLayout(False)
+        Me.uxOrientation.PerformLayout()
         Me.uxTopValue.ResumeLayout(False)
         Me.uxTopValue.PerformLayout()
         Me.uxLineWidth.ResumeLayout(False)
@@ -379,7 +397,6 @@ Partial Class CreateAnnotationForm
     Friend WithEvents uxBothAbove As System.Windows.Forms.RadioButton
     Friend WithEvents uxBothBelow As System.Windows.Forms.RadioButton
     Friend WithEvents uxPosition As System.Windows.Forms.GroupBox
-    Friend WithEvents uxCurved As System.Windows.Forms.RadioButton
     Friend WithEvents uxParallel As System.Windows.Forms.RadioButton
     Friend WithEvents uxHorizontal As System.Windows.Forms.RadioButton
     Friend WithEvents uxPerpendicular As System.Windows.Forms.RadioButton
@@ -398,5 +415,7 @@ Partial Class CreateAnnotationForm
     Friend WithEvents uxStandardBelow As System.Windows.Forms.RadioButton
     Friend WithEvents uxReferenceScale As System.Windows.Forms.TextBox
     Friend WithEvents uxReferenceScaleLabel As System.Windows.Forms.Label
+    Friend WithEvents uxCurved As System.Windows.Forms.CheckBox
+    Friend WithEvents uxHelp As System.Windows.Forms.Button
 
 End Class
