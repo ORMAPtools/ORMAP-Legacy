@@ -146,7 +146,7 @@ Public NotInheritable Class CreateAnnotation
     Friend ReadOnly Property PartnerCreateAnnotationForm() As CreateAnnotationForm
         Get
             If _partnerCreateAnnotationForm Is Nothing OrElse _partnerCreateAnnotationForm.IsDisposed Then
-                setPartnerAnnotationOptionsForm(New CreateAnnotationForm())
+                setPartnerCreateAnnotationForm(New CreateAnnotationForm())
             End If
             Return _partnerCreateAnnotationForm
         End Get
@@ -338,7 +338,7 @@ Public NotInheritable Class CreateAnnotation
     End Sub
 
 
-    Private Sub setPartnerAnnotationOptionsForm(ByVal value As CreateAnnotationForm)
+    Private Sub setPartnerCreateAnnotationForm(ByVal value As CreateAnnotationForm)
         If value IsNot Nothing Then
             _partnerCreateAnnotationForm = value
             ' Subscribe to partner form events.
@@ -353,12 +353,19 @@ Public NotInheritable Class CreateAnnotation
         End If
     End Sub
     Friend Sub DoButtonOperation()
-
         Try
+            Dim theMxDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+            Dim theMap As IMap = theMxDoc.FocusMap
             DataMonitor.CheckValidMapIndexDataProperties()
             If Not HasValidMapIndexData Then
                 MessageBox.Show("Missing data: Valid ORMAP MapIndex layer not found in the map." & NewLine & _
                                 "Please load this dataset into your map.", _
+                                "Create Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Sub
+            ElseIf theMap.SelectionCount < 1 Then
+                MessageBox.Show("Missing data: No line features have been selected." & NewLine & _
+                                "Please select at least one line feature which has." & NewLine & _
+                                "Distance and Direction attributes.", _
                                 "Create Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
@@ -378,19 +385,14 @@ Public NotInheritable Class CreateAnnotation
 
     Private Sub uxCreateAnno_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Dim theLayer As IFeatureLayer
-        Dim theMxDoc As IMxDocument
-        Dim theMap As IMap
         Dim theGeometry As IGeometry
         Dim theAnnoFCName As String
 
         'TODO:  Put a wait cursor in here... 
         'PartnerCreateAnnotationForm.UseWaitCursor = False
 
-        'TODO:  This layer enumeration needs to be rewritten as a function... it gets used three times here:
-        '       Once for the Geo Feature Layers and twice for the Anno Feature Layers
-        '       Should be something like getLayerByUid(ByVal theUid as IUID) as IFeatureLayer
-        theMxDoc = DirectCast(EditorExtension.Application.Document, IMxDocument)
-        theMap = theMxDoc.FocusMap
+        Dim theMxDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
+        Dim theMap As IMap = theMxDoc.FocusMap
 
         'Set the reference (Line offsets are based on 1:1200 scale default)
         theMap.MapScale = ReferenceScale
@@ -408,7 +410,16 @@ Public NotInheritable Class CreateAnnotation
             Dim theSelectedFeaturesCursor As IFeatureCursor = SpatialUtilities.GetSelectedFeatures(theLayer)
 
             If Not theSelectedFeaturesCursor Is Nothing Then
-                Dim theGeoFeatureLayer As IGeoFeatureLayer = CType(theLayer, IGeoFeatureLayer)
+                'Verify that Distance and Direction attributes are present 
+                If theSelectedFeaturesCursor.FindField("Direction") < 0 Or theSelectedFeaturesCursor.FindField("Distance") < 0 Then
+                    MessageBox.Show("Missing data: Direction and/or Distance attributes are missing" & NewLine & _
+                                    "from the line feature(s) you have selected. You can only use" & NewLine & _
+                                    "line feature classes which have these attributes present.", _
+                                    "Create Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                    'ElseIf theSelectedFeaturesCursor = 
+                    Exit Sub
+                End If
+                Dim theGeoFeatureLayer As IGeoFeatureLayer = DirectCast(theLayer, IGeoFeatureLayer)
                 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                 '--DESIGN COMMENT--
                 'Clear the selected features (done for the conversion engine... can only use one of three options):
@@ -422,53 +433,67 @@ Public NotInheritable Class CreateAnnotation
                 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                 Dim thisSelectedFeature As IFeature
                 thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
-                Dim theFeatureSelection As IFeatureSelection = CType(theLayer, IFeatureSelection)
+
+                'Set up theConverterFeatureSelection, which holds one selected line feature at a time (see note above)
+                Dim theConverterFeatureSelection As IFeatureSelection = CType(theLayer, IFeatureSelection)
                 Do Until thisSelectedFeature Is Nothing
-                    'Now reselect just this feature for the conversion engine
-                    theFeatureSelection.Clear()
-                    theFeatureSelection.Add(thisSelectedFeature)
-                    theGeometry = thisSelectedFeature.Shape
+                    'Verify selected feature is a line feature type
+                    If Not thisSelectedFeature.Shape.GeometryType = esriGeometryType.esriGeometryPolyline And _
+                        Not thisSelectedFeature.Shape.GeometryType = esriGeometryType.esriGeometryLine Then
+                        MessageBox.Show("Wrong Type: A feature was selected which is NOT a line feature." & NewLine & _
+                                        "Only line features can be used for Distance and Bearing annotation." & NewLine & _
+                                        "Annotation from this feature will be skipped.", _
+                                        "Create Annotation", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Else
+                        'Clear the selection set, then add just this feature to the selection set for the conversion engine
+                        theConverterFeatureSelection.Clear()
+                        theConverterFeatureSelection.Add(thisSelectedFeature)
+                        theGeometry = thisSelectedFeature.Shape
 
-                    Dim theMapScale As String
-                    theMapScale = GetValue(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+                        Dim theMapScale As String
+                        theMapScale = GetValue(theGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
 
-                    'Get annoFC based on MapScale
-                    theAnnoFCName = GetAnnoFCName(theMapScale)
+                        'Get annoFC based on MapScale
+                        theAnnoFCName = GetAnnoFCName(theMapScale)
 
-                    Dim theAnnoFeatureClass As IFeatureClass = GetAnnoFeatureClass(theAnnoFCName)
-                    Dim theFeatureLayerPropsCollection As IAnnotateLayerPropertiesCollection2
-                    theFeatureLayerPropsCollection = CType(theGeoFeatureLayer.AnnotationProperties, IAnnotateLayerPropertiesCollection2)
-                    theFeatureLayerPropsCollection.Clear()
+                        Dim theAnnoFeatureClass As IFeatureClass = GetAnnoFeatureClass(theAnnoFCName)
+                        Dim theFeatureLayerPropsCollection As IAnnotateLayerPropertiesCollection2
+                        theFeatureLayerPropsCollection = CType(theGeoFeatureLayer.AnnotationProperties, IAnnotateLayerPropertiesCollection2)
+                        theFeatureLayerPropsCollection.Clear()
 
-                    setLabelProperties(theFeatureLayerPropsCollection, theAnnoFeatureClass, "Direction")
-                    setLabelProperties(theFeatureLayerPropsCollection, theAnnoFeatureClass, "Distance")
-                    convertLabelsToAnnotation(theMap, theGeoFeatureLayer, theAnnoFeatureClass, False, theLayer.FeatureClass)
-                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    '--DESIGN COMMENT--
-                    'Call to processNewAnnotation was originally set here, but opening and closing the edit session destroyed
-                    'theSelectedFeaturesCursor pointer even though that cursor is completely unrelated to the insert cursor 
-                    'created in processNewAnnotation (NextFeature would fail, sometimes returning a record twice, and then
-                    'skipping the final record). Spent a lot of time messing around with selection sets as well, but ended up
-                    'with same problem. 
+                        setLabelProperties(theFeatureLayerPropsCollection, theAnnoFeatureClass, "Direction")
+                        setLabelProperties(theFeatureLayerPropsCollection, theAnnoFeatureClass, "Distance")
+                        convertLabelsToAnnotation(theMap, theGeoFeatureLayer, theAnnoFeatureClass, False, theLayer.FeatureClass)
+                        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                        '--DESIGN COMMENT--
+                        'Call to processNewAnnotation was originally set here, but opening and closing the edit session destroyed
+                        'theSelectedFeaturesCursor pointer even though that cursor is completely unrelated to the insert cursor 
+                        'created in processNewAnnotation (NextFeature would fail, sometimes returning a record twice, and then
+                        'skipping the final record). Spent a lot of time messing around with selection sets as well, but ended up
+                        'with same problem. 
 
-                    'To solve, had to build a dictionary of the annotation feature classes being updated by the conversion
-                    'engine. This is used later for processing all of the new annotation added to each anno feature class.
-                    'Becuase the annotation feature classes retain deleted OID values, the collection stores the OID minus 1 (because
-                    'the last two OIDs were inserted by convertLabelsToGDBAnnotation for Distance and Direction which uses the
-                    'next Oid from the sequence (even if earlier Oid's were deleted). 
-                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    If theAnnoFcCollection.Count = 0 Or Not theAnnoFcCollection.ContainsKey(theAnnoFCName) Then
-                        theAnnoFcCollection.Add(theAnnoFCName, GetMaxOidByAnnoFC(theAnnoFeatureClass) - 1)
+                        'To solve, had to build a dictionary of the annotation feature classes being updated by the conversion
+                        'engine. This is used later for processing all of the new annotation added to each anno feature class.
+                        'Becuase the annotation feature classes retain deleted OID values, the collection stores the OID minus 1 (because
+                        'the last two OIDs were inserted by convertLabelsToGDBAnnotation for Distance and Direction which uses the
+                        'next Oid from the sequence (even if earlier Oid's were deleted). 
+
+                        'UPDATE 7/20/2010- Spoke to techs at ESRI IUC in San Diego. Was told that issue relates to symbol definition.
+                        'Basically, a symbol must be defined in the Line Feature Class that EXACTLY matches the symbol defined in the
+                        'Annotation Feature Class for the specified annotation class. This is not practical for this situation since
+                        'no symbols are defined in the Line Feature Class since the symbol is scale dependent. So this workaround is
+                        'still the best solution. 
+                        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                        If theAnnoFcCollection.Count = 0 Or Not theAnnoFcCollection.ContainsKey(theAnnoFCName) Then
+                            theAnnoFcCollection.Add(theAnnoFCName, GetMaxOidByAnnoFC(theAnnoFeatureClass) - 1)
+                        End If
                     End If
-
                     thisSelectedFeature = theSelectedFeaturesCursor.NextFeature
                 Loop
-
             End If
             theLayer = CType(theEnumLayer.Next, IFeatureLayer)
         Loop
 
-        'TODO:  Make this a separate method (pass in theAnnoFcCollection)
         'Now process all the new annotation (since the converter creates new SymbolIDs, adds FeatureIDs, and does not place any of the 
         'ORMAP-required pieces such as MapNumber, user, date, etc).
         Dim theAnnoEnumLayer As IEnumLayer = SpatialUtilities.GetTOCLayersEnumerator(EsriLayerTypes.FDOGraphicsLayer)
@@ -516,9 +541,6 @@ Public NotInheritable Class CreateAnnotation
                 Dim theAnnoDataset As IDataset = DirectCast(theAnnoFeatureClass, IDataset)
                 Dim theAnnoWorkspace As IFeatureWorkspace = DirectCast(theAnnoDataset.Workspace, IFeatureWorkspace)
 
-                'Add the layer information to the converter object. Specify the parameters of the output annotation feature class here as well
-                'TODO: (RG) Need to test if this works for feature linked anno
-
                 '------------------------------------------
                 ' Add the feature to the converter
                 '------------------------------------------
@@ -564,7 +586,7 @@ Public NotInheritable Class CreateAnnotation
                 '------------------------------------------
                 ' Set up the label expression
                 '------------------------------------------
-                ' TODO:  (RG) This will break if ArcGIS stops using VBA for 
+                ' TODO:  (RG) This will break when ArcGIS stops using VBA for 
                 ' labeling... maybe rewrite as Python?
                 '       => Should wait to see what ArcPy.Mapping does... maybe it can be used
                 theLabelEngineLayerProperties.Expression = "Function FindLabel ([Direction]) " & vbCrLf & _
@@ -736,14 +758,6 @@ Public NotInheritable Class CreateAnnotation
                 theOldRow.Store()
                 Dim theRowBuffer As IRowBuffer = theOldRow
                 theRowBuffer.Value(theFeatureIdIndex) = System.DBNull.Value
-                'TODO:  (RG) This isn't working right... If toggle to auto update is turned off, should 
-                '       set the MapNumber to null. But must be set to "1.1.1" if auto update is turned
-                '       on, otherwise, it won't update the MapNumber when On_Create is fired.
-                If EditorExtension.AllowedToAutoUpdate Then
-                    theRowBuffer.Value(theMapNumberIndex) = "1.1.1"
-                ElseIf Not EditorExtension.AllowedToAutoUpdate Then
-                    theRowBuffer.Value(theMapNumberIndex) = System.DBNull.Value
-                End If
                 theRowBuffer.Value(theAutoMethodIndex) = "CON"
                 theRowBuffer.Value(theAnnoClassIdIndex) = GetSubtypeCode(theAnnoFeatureClass, theAnnoClassName)
                 theInsertCursor = theTable.Insert(True)
