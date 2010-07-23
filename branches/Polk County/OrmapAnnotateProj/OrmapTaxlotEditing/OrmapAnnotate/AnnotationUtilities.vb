@@ -181,7 +181,11 @@ Public NotInheritable Class AnnotationUtilities
         Dim theAnnoClass As IAnnoClass
         Dim theReturnValue As Integer = Nothing
 
-        'Get the Symbol ID defined in the anno feature class for Symbol Name representing Distance/Bearing (should be "34")
+        '------------------------------------------
+        'Get the Symbol ID 
+        '------------------------------------------
+        'Defined in the anno feature class for Symbol Name  
+        'representing Distance/Bearing (should be "34")
         theAnnoClass = DirectCast(theAnnoFeatureClass.Extension, IAnnoClass)
         theSymbolCollection = DirectCast(theAnnoClass.SymbolCollection, ISymbolCollection2)
         theSymbolCollection.Reset()
@@ -209,7 +213,10 @@ Public NotInheritable Class AnnotationUtilities
         Dim theAnnoWorkspace As IFeatureWorkspace = DirectCast(theAnnoDataset.Workspace, IFeatureWorkspace)
         Dim theAnnoWorkspaceEditControl As IWorkspaceEditControl = DirectCast(theAnnoWorkspace, IWorkspaceEditControl)
 
-        'Get the max ID from this anno layer (it will be the anno just created by the label to anno converter)
+        '------------------------------------------
+        'Get the max ID from this anno layer 
+        '------------------------------------------
+        '(it will be the anno just created by the label to anno converter)
         Dim theQueryDef As IQueryDef
         Dim thisRow As IRow
         Dim theIdCursor As ICursor
@@ -237,7 +244,9 @@ Public NotInheritable Class AnnotationUtilities
         Dim thisAnnoLayer As IFeatureLayer
         thisAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
 
-        'Now go through anno feature class enum looking for name that matches the map index based on map scale
+        '------------------------------------------
+        'Find anno feature class (based on name)
+        '------------------------------------------
         Do While Not (thisAnnoLayer Is Nothing)
             If String.Compare(thisAnnoLayer.Name, theAnnoFCName, True, CultureInfo.CurrentCulture) = 0 Then
                 thisAnnoFeatureClass = thisAnnoLayer.FeatureClass
@@ -258,11 +267,15 @@ Public NotInheritable Class AnnotationUtilities
     ''' <param name="theElement">The annotation element to be moved.</param>
     ''' <remarks>Moves the element based on "to" and "from" points</remarks>
     Public Overloads Shared Sub MoveElement(ByVal theToPoint As IPoint, ByVal theFromPoint As IPoint, ByVal theGraphicsContainer As IGraphicsContainer, ByVal theElement As IElement)
+        '------------------------------------------
         'Create a vector line between the two points 
+        '------------------------------------------
         Dim theMoveVector As ILine = New ESRI.ArcGIS.Geometry.Line
         theMoveVector.PutCoords(theToPoint, theFromPoint)
 
+        '------------------------------------------
         'Call the overloaded MoveElement function with the vector
+        '------------------------------------------
         MoveElement(theMoveVector, theGraphicsContainer, theElement)
 
     End Sub
@@ -275,11 +288,16 @@ Public NotInheritable Class AnnotationUtilities
     ''' <param name="theElement">The annotation element to be moved.</param>
     ''' <remarks>Moves the element based on a move vector.</remarks>
     Public Overloads Shared Sub MoveElement(ByVal theMoveVector As ILine, ByVal theGraphicsContainer As IGraphicsContainer, ByVal theElement As IElement)
+        '------------------------------------------
         'Move the annotation using ITansform2D
+        '------------------------------------------
         Dim transform2D As ITransform2D = DirectCast(theElement, ITransform2D)
         transform2D.MoveVector(theMoveVector)
 
-        'Transformation complete, now update the source objects with the new geometry
+        '------------------------------------------
+        'Transformation complete
+        '------------------------------------------
+        'Update the source objects with the new geometry
         finishTransform(theGraphicsContainer, theElement, transform2D)
 
     End Sub
@@ -292,11 +310,15 @@ Public NotInheritable Class AnnotationUtilities
     ''' <param name="theElement">The annotation element to be rotated.</param>
     ''' <remarks>Rotates the annotation element 180 degrees (pi) around a specified point.</remarks>
     Public Shared Sub RotateElement(ByVal theRotationPoint As IPoint, ByVal theGraphicsContainer As IGraphicsContainer, ByVal theElement As IElement)
+        '------------------------------------------
         'Rotate the annotation 180 degrees (pi)
+        '------------------------------------------
         Dim transform2D As ITransform2D = DirectCast(theElement, ITransform2D)
         transform2D.Rotate(theRotationPoint, Pi)
 
+        '------------------------------------------
         'Transformation complete, now update the source objects with the new geometry
+        '------------------------------------------
         finishTransform(theGraphicsContainer, theElement, transform2D)
 
     End Sub
@@ -316,7 +338,7 @@ Public NotInheritable Class AnnotationUtilities
 
     Public Shared Sub MoveAnnotationElements(ByVal isInverted As Boolean, ByVal isTransposed As Boolean, ByVal isMoveUp As Boolean, _
                                                 ByVal isMoveDown As Boolean, ByVal isStandardSpace As Boolean, ByVal isWideSpace As Boolean)
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        '------------------------------------------
         ' -- DESIGN COMMENT --
         '   NOTE=>  Annotation movement only works for annotation created and placed by the CreateAnnotation class. This class 
         '           places annotation based on a set of rules which comply with annotation spacing, fonts, and font sizes used
@@ -343,6 +365,7 @@ Public NotInheritable Class AnnotationUtilities
         '           Both Above             1.75
         '           Both Below             1.99
         '
+        '------------------------------------------
 
         Dim theMxDoc As IMxDocument
         Dim theMap As IMap
@@ -354,19 +377,24 @@ Public NotInheritable Class AnnotationUtilities
 
         DataMonitor.CheckValidMapIndexDataProperties()
 
+        '------------------------------------------
+        'Get the annotation layer
+        '------------------------------------------
         Dim theAnnoEnumLayer As IEnumLayer = SpatialUtilities.GetTOCLayersEnumerator(EsriLayerTypes.FDOGraphicsLayer)
         Dim theAnnoFeatureClass As IFeatureClass = Nothing
         Dim thisAnnoLayer As IFeatureLayer
         thisAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
 
+        '------------------------------------------
         'Now go through anno feature class enum looking for selected features
+        '------------------------------------------
         Do While Not (thisAnnoLayer Is Nothing)
             Dim theAnnoSelection As IFeatureSelection = DirectCast(thisAnnoLayer, IFeatureSelection)
             If theAnnoSelection.SelectionSet.Count Mod 2 > 0 Then
-                MessageBox.Show("Odd number of annotation items selected... This tool works" & NewLine & _
-                "with pairs of annotation, so you must select them in sets " & NewLine & _
-                "of two (within each annotation feature class).", _
-                "Move  Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                MessageBox.Show("Cannot Move Annotation: Odd number of annotation items selected... " & NewLine & _
+                                "This tool works with pairs of annotation, so you must select them in " & NewLine & _
+                                "sets of two (within each annotation feature class).", _
+                                "Move Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
             End If
             Dim theSelectedAnnoCursor As IFeatureCursor = SpatialUtilities.GetSelectedFeatures(thisAnnoLayer)
@@ -374,10 +402,16 @@ Public NotInheritable Class AnnotationUtilities
                 'NOTE:  Each annotation feature class will have all of its features moved as a single edit operation.
                 EditorExtension.Editor.StartOperation()
 
-                'Get the graphics container... without this, the transform2D will transform the envelope, but NOT the annotation itself!!!! 
+                '------------------------------------------
+                'Get the graphics container 
+                '------------------------------------------
+                'Without this, the transform2D will transform the envelope, but NOT the annotation itself!!!!
                 Dim theGraphicsContainer As IGraphicsContainer = DirectCast(theMxDoc.ActivatedView, IGraphicsContainer)
 
-                'Now loop through the selection set... since actions work on pairs of anno, only do half the loops
+                '------------------------------------------
+                'Now loop through the selection set
+                '------------------------------------------
+                'Since actions work on pairs of anno, only do half the loops
                 Dim i As Integer
                 For i = 1 To theAnnoSelection.SelectionSet.Count Step 2
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -387,11 +421,27 @@ Public NotInheritable Class AnnotationUtilities
                     '   ordinal relationships (such as 1st, 2nd, etc.), but in this case it clarifies the underlying process since
                     '   this code must work on annotation pairs and actions are based entirely on which element is selected first.
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    'Get the selected features (needed for the transform2d since it accesses the underlying geometry of the annotation)
+                    '------------------------------------------
+                    'Get the selected features 
+                    '------------------------------------------
+                    'Needed for the transform2d since it accesses the underlying geometry of the annotation
                     Dim the1stSelectedFeature As IFeature = theSelectedAnnoCursor.NextFeature
                     Dim the2ndSelectedFeature As IFeature = theSelectedAnnoCursor.NextFeature
 
-                    'Get the selected annotation features annotation elements (needed to do transform and update the graphics container)
+                    If the1stSelectedFeature.OID = the2ndSelectedFeature.OID Then
+                        MessageBox.Show("Cannot Move Annotation: ESRI BUG- All Annotation Classes " & NewLine & _
+                                        "MUST be turned on in the TOC. Turn all Annotation Classes  " & NewLine & _
+                                        "back on to bypass this bug. If this does not resolve issue,  " & NewLine & _
+                                        "use [Editor > Options  > ORMAP Taxlot Editor and click" & NewLine & _
+                                        "[ Report Bug or Request New Feature ].", _
+                                        "Move Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                        Exit Sub
+                    End If
+
+                    '------------------------------------------
+                    'Get the selected annotation features annotation elements 
+                    '------------------------------------------
+                    'Needed to do transform and update the graphics container
                     Dim the1stSelectedAnnoFeature As IAnnotationFeature = DirectCast(the1stSelectedFeature, IAnnotationFeature)
                     Dim the2ndSelectedAnnoFeature As IAnnotationFeature = DirectCast(the2ndSelectedFeature, IAnnotationFeature)
 
@@ -402,14 +452,19 @@ Public NotInheritable Class AnnotationUtilities
                         '   This method takes into account the annotation's text area, whereas the element's envelope is a polyline. Using
                         '   its centroid will actually offset the location of the annotation since the polyline's MaxY is just beneath the text.
                         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                        '------------------------------------------
                         'To invert the annotation as a pair, must rotate each element then transpose them
+                        '------------------------------------------
                         RotateElement(GetCenterOfEnvelope(GetAnnoEnvelope(theActiveView.ScreenDisplay, the1stSelectedAnnoFeature.Annotation)), _
                                         theGraphicsContainer, the1stSelectedAnnoFeature.Annotation)
                         RotateElement(GetCenterOfEnvelope(GetAnnoEnvelope(theActiveView.ScreenDisplay, the2ndSelectedAnnoFeature.Annotation)), _
                                         theGraphicsContainer, the2ndSelectedAnnoFeature.Annotation)
                     End If
 
-                    'Calculate a move vector from the X, Y pairs for the 1st and 2nd element's envelopes (mean of lower left & upper right corners)
+                    '------------------------------------------
+                    'Calculate a move vector  
+                    '------------------------------------------
+                    'from the X, Y pairs of the 1st and 2nd element's envelopes (mean of lower left & upper right corners)
                     Dim theMoveVector As ILine = New ESRI.ArcGIS.Geometry.Line
 
                     theMoveVector.PutCoords(GetCenterOfEnvelope(GetAnnoEnvelope(theActiveView.ScreenDisplay, the1stSelectedAnnoFeature.Annotation)), _
@@ -417,6 +472,13 @@ Public NotInheritable Class AnnotationUtilities
 
                     Dim theTextElement As ITextElement = DirectCast(the1stSelectedAnnoFeature.Annotation, ITextElement)
                     Dim theAnnoPlacement As AnnotationPlacement = GetAnnoPlacement(theTextElement.Symbol.Size, theMoveVector.Length)
+                    If theAnnoPlacement = -1 And Not isTransposed Then
+                        MessageBox.Show("Cannot Move Annotation: Selected annotation is at non-standard" & NewLine & _
+                                        "placement (was not created by Create Annotation tool or has" & NewLine & _
+                                        "been moved). Placement tools cannot reposition annotation.", _
+                                        "Move Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                        Exit For
+                    End If
                     Dim theToDistance As Double
                     Dim theNewVector As ILine = New ESRI.ArcGIS.Geometry.Line
 
@@ -425,6 +487,9 @@ Public NotInheritable Class AnnotationUtilities
 
                     'TODO:  (RG)- A lot of redundant code here... should be refactored
 
+                    '------------------------------------------
+                    'Move the element
+                    '------------------------------------------
                     'Each action below is exclusionary, so placed in nested If-Then-ElseIf blocks
                     If isTransposed Then
                         MoveElement(theMoveVector, theGraphicsContainer, the1stSelectedAnnoFeature.Annotation)
@@ -467,10 +532,13 @@ Public NotInheritable Class AnnotationUtilities
 
                 Next
                 theActiveView.Refresh()
+                '------------------------------------------
+                'Label and close the edit operation
+                '------------------------------------------
                 If isInverted Then
-                    EditorExtension.Editor.StopOperation("Invert Annotation")
+                    EditorExtension.Editor.StopOperation("Rotate Annotation")
                 ElseIf isTransposed Then
-                    EditorExtension.Editor.StopOperation("Transpose Annotation")
+                    EditorExtension.Editor.StopOperation("Flip Annotation")
                 ElseIf isMoveUp Then
                     EditorExtension.Editor.StopOperation("Move Annotation Up")
                 ElseIf isMoveDown Then
@@ -483,8 +551,10 @@ Public NotInheritable Class AnnotationUtilities
 
     Public Shared Function GetAnnoPlacement(ByVal theFontSize As Double, ByVal theCalculatedDistance As Double) As AnnotationPlacement
         Dim thisAnnoPlacement As AnnotationPlacement
-
-        'Checks for annotation placement (based on the scale constants and the font size for the annotation feature class)
+        '------------------------------------------
+        'Checks annotation placement 
+        '------------------------------------------
+        'Based on the scale constants and the font size for the annotation feature class
         If DistanceBothSides = calculateAnnoSpacing(theCalculatedDistance, theFontSize) Then
             thisAnnoPlacement = AnnotationPlacement.BothSides
         ElseIf DistanceBothAbove = calculateAnnoSpacing(theCalculatedDistance, theFontSize) Then
@@ -494,16 +564,21 @@ Public NotInheritable Class AnnotationUtilities
         ElseIf DistanceBothSides = calculateAnnoSpacing(theCalculatedDistance - WideLine, theFontSize) Then
             thisAnnoPlacement = AnnotationPlacement.BothSidesWide
         Else
-            'TODO:  Throw exception... calculated distance not standard
+            thisAnnoPlacement = DirectCast(-1, AnnotationPlacement)
         End If
         Return thisAnnoPlacement
     End Function
 
     Public Shared Function GetMoveDistance(ByVal isStandardSpace As Boolean, ByVal isBothSides As Boolean, ByVal theTextElement As ITextElement) As Double
-        'Currently unused... this code was written to handle moving annotation when cartographer is using asymmetric offsets (top or bottom only)
+        '------------------------------------------
+        'Currently unused... 
+        '------------------------------------------
+        'This code was written to handle moving annotation when cartographer is using asymmetric offsets (top or bottom only)
         'and may be needed for the next phase of the OrmapAnnotation project
 
-        'NOTE=> Code NOT COMPLETE
+        '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        '!!!  NOTE=> Code NOT COMPLETE  !!!
+        '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         Dim theLineWidth As Double = New Double
 
@@ -537,7 +612,9 @@ Public NotInheritable Class AnnotationUtilities
 #Region "Private Members"
 
     Private Shared Sub finishTransform(ByVal theGraphicsContainer As IGraphicsContainer, ByVal theElement As IElement, ByVal theTransform As ITransform2D)
+        '------------------------------------------
         'Update the source objects with the new geometry
+        '------------------------------------------
         theElement = DirectCast(theTransform, IElement)
         theGraphicsContainer.UpdateElement(theElement)
     End Sub
