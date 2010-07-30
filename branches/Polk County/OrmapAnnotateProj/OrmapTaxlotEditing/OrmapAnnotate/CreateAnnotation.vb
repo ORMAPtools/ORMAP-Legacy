@@ -368,6 +368,11 @@ Public NotInheritable Class CreateAnnotation
                                 "Distance and Direction attributes.", _
                                 "Create Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
                 Exit Sub
+            ElseIf theMap.SelectionCount > 999 Then
+                MessageBox.Show("Too much data: You have selected more than 999 features. The" & NewLine & _
+                                "system cannot process more than 999 line features at a time", _
+                                "Create Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                Exit Sub
             End If
 
             PartnerCreateAnnotationForm.ShowDialog()
@@ -413,10 +418,8 @@ Public NotInheritable Class CreateAnnotation
                 'Verify that Distance and Direction attributes are present 
                 If theSelectedFeaturesCursor.FindField("Direction") < 0 Or theSelectedFeaturesCursor.FindField("Distance") < 0 Then
                     MessageBox.Show("Missing data: Direction and/or Distance attributes are missing" & NewLine & _
-                                    "from the line feature(s) you have selected. You can only use" & NewLine & _
-                                    "line feature classes which have these attributes present.", _
+                                    "from the selected feature in " + theLayer.Name + ".", _
                                     "Create Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                    'ElseIf theSelectedFeaturesCursor = 
                     Exit Sub
                 End If
                 Dim theGeoFeatureLayer As IGeoFeatureLayer = DirectCast(theLayer, IGeoFeatureLayer)
@@ -464,6 +467,9 @@ Public NotInheritable Class CreateAnnotation
                         setLabelProperties(theFeatureLayerPropsCollection, theAnnoFeatureClass, "Direction")
                         setLabelProperties(theFeatureLayerPropsCollection, theAnnoFeatureClass, "Distance")
                         convertLabelsToAnnotation(theMap, theGeoFeatureLayer, theAnnoFeatureClass, False, theLayer.FeatureClass)
+
+
+
                         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                         '--DESIGN COMMENT--
                         'Call to processNewAnnotation was originally set here, but opening and closing the edit session destroyed
@@ -512,7 +518,22 @@ Public NotInheritable Class CreateAnnotation
                 End If
                 theAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
             Loop
+            '------------------------------------------
+            ' Process the new annotation
+            '------------------------------------------
+            ' Remove the feature ID
+            ' Reset the AnnotationClassID
+            ' Reset the SymbolID
             processNewAnnotation(thisAnnoFeatureClass, CInt(thisPair.Value))
+
+            '------------------------------------------
+            ' Now clean up the mess left by the converter
+            '------------------------------------------
+            ' Delete "Direction" and "Distance" subtypes
+            ' Delete "Direction" and "Distance" annotation classes
+            ' Delete "Direction" and "Distance" symbols
+            cleanAnnoCollection(thisAnnoFeatureClass)
+
             theAnnoEnumLayer.Reset()
             theAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
         Next thisPair
@@ -843,6 +864,49 @@ Public NotInheritable Class CreateAnnotation
                     IsBelow = False
                 End If
         End Select
+    End Sub
+
+    Private Sub cleanAnnoCollection(ByVal theAnnoFC As IFeatureClass)
+        '------------------------------------------
+        ' Now clean up the mess left by the converter
+        '------------------------------------------
+        ' The converter chucks all kinds of "Direction" or "Distance" into the annotation feature class as 
+        ' subtypes, annotation classes, and symbols. They must all be removed AFTER processNewAnnotation
+        ' has reassigned all new annotation classes to the correct annotation class and symbol. 
+        Dim theDirectionSubtypeId As Integer = 0
+        Dim theDistanceSubtypeId As Integer = 0
+
+        'Delete the subtypes for "Direction" and "Distance"
+        theDirectionSubtypeId = GetSubtypeCode(theAnnoFC, "Direction", 9)
+        theDistanceSubtypeId = GetSubtypeCode(theAnnoFC, "Distance", 8)
+        Dim theSubtypes As ISubtypes = DirectCast(theAnnoFC, ISubtypes)
+        If theDirectionSubtypeId > 0 Then
+            theSubtypes.DeleteSubtype(theDirectionSubtypeId)
+        End If
+        If theDistanceSubtypeId > 0 Then
+            theSubtypes.DeleteSubtype(theDistanceSubtypeId)
+        End If
+
+        Dim theAnnoClassExtenstion As IAnnotationClassExtension = DirectCast(theAnnoFC.Extension, IAnnotationClassExtension)
+        Dim theSymbolCollection As ISymbolCollection2 = DirectCast(theAnnoClassExtenstion.SymbolCollection, ISymbolCollection2)
+        Dim theAnnoLayerPropCollection As IAnnotateLayerPropertiesCollection2 = DirectCast(theAnnoClassExtenstion.AnnoProperties, IAnnotateLayerPropertiesCollection2)
+        Dim theAnnoClassAdmin As IAnnoClassAdmin = CType(theAnnoFC.Extension, IAnnoClassAdmin)
+
+        Try
+            'Remove all the annotation classes named "Direction" or "Distance" 
+            theAnnoLayerPropCollection.Remove(theDirectionSubtypeId)
+            theAnnoLayerPropCollection.Remove(theDistanceSubtypeId)
+
+            'Remove all symbols named "Direction" or "Distance"
+            theSymbolCollection.Remove(GetSymbolId(theAnnoFC, "Direction"))
+            theSymbolCollection.Remove(GetSymbolId(theAnnoFC, "Distance"))
+
+            'Now update the AnnotateLayerPropertiesCollection so it stores the removals
+            theAnnoClassAdmin.UpdateProperties()
+        Catch ex As Exception
+            EditorExtension.ProcessUnhandledException(ex)
+        End Try
+
     End Sub
 
 #End Region

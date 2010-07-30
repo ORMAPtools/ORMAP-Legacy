@@ -147,9 +147,13 @@ Public NotInheritable Class AnnotationUtilities
     ''' <param name="theSubtypeName">Name of the Subtype for which you need the Subtype Code.</param>
     ''' <returns>An Symbol Id as an integer.</returns>
     ''' <remarks></remarks>
-    Public Shared Function GetSubtypeCode(ByVal theAnnoFeatureClass As IFeatureClass, ByVal theSubtypeName As String) As Integer
+    Public Shared Function GetSubtypeCode(ByVal theAnnoFeatureClass As IFeatureClass, ByVal theSubtypeName As String, _
+                                          Optional ByVal stringLength As Integer = 0) As Integer
         'Cannot use SpatialUtilities.ConvertCodeValueDomainToCode here since this is an annotation subtype, and not a domain.
         Dim theReturnValue As Integer = Nothing
+        If stringLength = 0 Then
+            stringLength = Len(theSubtypeName)
+        End If
 
         'TODO:  (RG) Need exception handling
         Dim theSubtypes As ISubtypes = DirectCast(theAnnoFeatureClass, ISubtypes)
@@ -159,7 +163,7 @@ Public NotInheritable Class AnnotationUtilities
         theEnumSubtypes.Reset()
         Do Until theEnumSubtypes Is Nothing
             thisSubtypeName = theEnumSubtypes.Next(thisSubtypeCode)
-            If thisSubtypeName = theSubtypeName Then
+            If String.Compare(thisSubtypeName, 0, theSubtypeName, 0, stringLength, CultureInfo.CurrentCulture, CompareOptions.IgnoreCase) >= 0 Then
                 theReturnValue = thisSubtypeCode
                 Exit Do
             End If
