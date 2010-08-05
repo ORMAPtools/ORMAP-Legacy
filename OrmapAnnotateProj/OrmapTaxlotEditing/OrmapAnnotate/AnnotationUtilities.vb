@@ -259,6 +259,7 @@ Public NotInheritable Class AnnotationUtilities
             thisAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
         Loop
 
+
         Return thisAnnoFeatureClass
     End Function
 
@@ -433,12 +434,20 @@ Public NotInheritable Class AnnotationUtilities
                     Dim the2ndSelectedFeature As IFeature = theSelectedAnnoCursor.NextFeature
 
                     If the1stSelectedFeature.OID = the2ndSelectedFeature.OID Then
-                        MessageBox.Show("Cannot Move Annotation: ESRI BUG- All Annotation Classes " & NewLine & _
-                                        "MUST be turned on in the TOC. Turn all Annotation Classes  " & NewLine & _
-                                        "back on to bypass this bug. If this does not resolve issue,  " & NewLine & _
-                                        "use [Editor > Options  > ORMAP Taxlot Editor and click" & NewLine & _
+                        '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                        ' -- DESIGN COMMENT --
+                        ' There appears to be an ESRI bug here when some of the anno classes are turned off in 
+                        ' the TOC... The selection set has multiple item pairs, but OID doesn't change when it hits 
+                        ' theSelectedAnnoCursor.NextFeature. Thus the envelope means and thus distance are the same.
+                        '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                        MessageBox.Show("Cannot Move Annotation: ESRI BUG- All Annotation Classes MUST " & NewLine & _
+                                        "be turned on in the TOC to bypass this bug. If this does not resolve" & NewLine & _
+                                        "the issue, use [Editor > Options  > ORMAP Taxlot Editor and click" & NewLine & _
                                         "[ Report Bug or Request New Feature ].", _
                                         "Move Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                        EditorExtension.Editor.AbortOperation()
+                        theAnnoSelection.Clear()
+                        theActiveView.Refresh()
                         Exit Sub
                     End If
 
@@ -556,16 +565,31 @@ Public NotInheritable Class AnnotationUtilities
     Public Shared Function GetAnnoPlacement(ByVal theFontSize As Double, ByVal theCalculatedDistance As Double) As AnnotationPlacement
         Dim thisAnnoPlacement As AnnotationPlacement
         '------------------------------------------
-        'Checks annotation placement 
+        ' Checks annotation placement 
         '------------------------------------------
-        'Based on the scale constants and the font size for the annotation feature class
-        If DistanceBothSides = calculateAnnoSpacing(theCalculatedDistance, theFontSize) Then
+        ' Based on the scale constants and the font size for the annotation feature class to determine
+        ' which type of anno is being moved (both sides, both above, etc.). Uses a "fuzzy" tolerance
+        ' of plus or minus 0.01 to compensate for round-off errors.
+        Dim thisPlacementRatio As Double
+        Dim theUpperBound As Double
+        Dim theLowerBound As Double
+        If theCalculatedDistance - WideLine < 0 Then
+            thisPlacementRatio = calculateAnnoSpacing(theCalculatedDistance, theFontSize)
+        Else
+            thisPlacementRatio = calculateAnnoSpacing(theCalculatedDistance - WideLine, theFontSize)
+        End If
+
+        theUpperBound = thisPlacementRatio + 0.01
+        theLowerBound = thisPlacementRatio - 0.01
+
+        'If distance constants fall between the upper and lower boundaries, then set appropriate anno placement value 
+        If DistanceBothSides <= theUpperBound And DistanceBothSides >= theLowerBound Then
             thisAnnoPlacement = AnnotationPlacement.BothSides
-        ElseIf DistanceBothAbove = calculateAnnoSpacing(theCalculatedDistance, theFontSize) Then
+        ElseIf DistanceBothAbove <= theUpperBound And DistanceBothAbove >= theLowerBound Then
             thisAnnoPlacement = AnnotationPlacement.BothAbove
-        ElseIf DistanceBothBelow = calculateAnnoSpacing(theCalculatedDistance, theFontSize) Then
+        ElseIf DistanceBothBelow <= theUpperBound And DistanceBothBelow >= theLowerBound Then
             thisAnnoPlacement = AnnotationPlacement.BothBelow
-        ElseIf DistanceBothSides = calculateAnnoSpacing(theCalculatedDistance - WideLine, theFontSize) Then
+        ElseIf DistanceBothSides <= theUpperBound And DistanceBothSides >= theLowerBound Then
             thisAnnoPlacement = AnnotationPlacement.BothSidesWide
         Else
             thisAnnoPlacement = DirectCast(-1, AnnotationPlacement)
@@ -575,7 +599,7 @@ Public NotInheritable Class AnnotationUtilities
 
     Public Shared Function GetMoveDistance(ByVal isStandardSpace As Boolean, ByVal isBothSides As Boolean, ByVal theTextElement As ITextElement) As Double
         '------------------------------------------
-        'Currently unused... 
+        'CODE IS CURRENTLY UNUSED... May be needed later
         '------------------------------------------
         'This code was written to handle moving annotation when cartographer is using asymmetric offsets (top or bottom only)
         'and may be needed for the next phase of the OrmapAnnotation project
