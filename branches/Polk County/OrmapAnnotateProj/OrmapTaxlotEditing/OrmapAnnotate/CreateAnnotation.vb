@@ -316,6 +316,17 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    Private _annoFeatureLayer As IFeatureLayer
+    Public Property AnnoFeatureLayer() As IFeatureLayer
+        Get
+            Return _annoFeatureLayer
+        End Get
+        Set(ByVal value As IFeatureLayer)
+            _annoFeatureLayer = value
+        End Set
+    End Property
+
+
     Private _upperValue As topPosition
     Public ReadOnly Property UpperValue() As topPosition
         ' Property is set programmatically; enum allows for easier processing later
@@ -460,6 +471,13 @@ Public NotInheritable Class CreateAnnotation
                         theAnnoFCName = GetAnnoFCName(theMapScale)
 
                         Dim theAnnoFeatureClass As IFeatureClass = GetAnnoFeatureClass(theAnnoFCName)
+                        If theAnnoFeatureClass Is Nothing Then
+                            MessageBox.Show("Missing data: The annotation feature class" & NewLine & _
+                                theAnnoFCName & " is not loaded." & NewLine & _
+                                "Please load this dataset into your map.", _
+                                "Create Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                            Exit Sub
+                        End If
                         Dim theFeatureLayerPropsCollection As IAnnotateLayerPropertiesCollection2
                         theFeatureLayerPropsCollection = CType(theGeoFeatureLayer.AnnotationProperties, IAnnotateLayerPropertiesCollection2)
                         theFeatureLayerPropsCollection.Clear()
@@ -467,8 +485,6 @@ Public NotInheritable Class CreateAnnotation
                         setLabelProperties(theFeatureLayerPropsCollection, theAnnoFeatureClass, "Direction")
                         setLabelProperties(theFeatureLayerPropsCollection, theAnnoFeatureClass, "Distance")
                         convertLabelsToAnnotation(theMap, theGeoFeatureLayer, theAnnoFeatureClass, False, theLayer.FeatureClass)
-
-
 
                         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                         '--DESIGN COMMENT--
@@ -484,11 +500,18 @@ Public NotInheritable Class CreateAnnotation
                         'the last two OIDs were inserted by convertLabelsToGDBAnnotation for Distance and Direction which uses the
                         'next Oid from the sequence (even if earlier Oid's were deleted). 
 
-                        'UPDATE 7/20/2010- Spoke to techs at ESRI IUC in San Diego. Was told that issue relates to symbol definition.
+                        'UPDATE 7/20/2010- Spoke to programmer at ESRI IUC in San Diego. Was told that issue relates to symbol definition.
                         'Basically, a symbol must be defined in the Line Feature Class that EXACTLY matches the symbol defined in the
                         'Annotation Feature Class for the specified annotation class. This is not practical for this situation since
                         'no symbols are defined in the Line Feature Class since the symbol is scale dependent. So this workaround is
                         'still the best solution. 
+
+                        'UPDATE 8/2/2010- Moving processNewAnnotation outside of selected feature loop caused issue with converter
+                        'creating sequenced sets of Distance and Direction annotation classes and symbols (E.g., Distance, Distance_1,
+                        'Distance_2, ... , Distance_999). At Distance_999, system would crash. Created exception to verify less than
+                        '999 features have been selected (technically, it could be 999 features per annotation feature class, but
+                        'for now left at 999 selected features total). Also, created new method cleanNewAnnotation which will remove
+                        'all Distance and Direction subtypes, annotation classes, and symbols. 
                         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                         If theAnnoFcCollection.Count = 0 Or Not theAnnoFcCollection.ContainsKey(theAnnoFCName) Then
                             theAnnoFcCollection.Add(theAnnoFCName, GetMaxOidByAnnoFC(theAnnoFeatureClass) - 1)
@@ -532,7 +555,7 @@ Public NotInheritable Class CreateAnnotation
             ' Delete "Direction" and "Distance" subtypes
             ' Delete "Direction" and "Distance" annotation classes
             ' Delete "Direction" and "Distance" symbols
-            cleanAnnoCollection(thisAnnoFeatureClass)
+            cleanNewAnnotation(thisAnnoFeatureClass)
 
             theAnnoEnumLayer.Reset()
             theAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
@@ -730,18 +753,6 @@ Public NotInheritable Class CreateAnnotation
             EditorExtension.Editor.StartOperation()
 
             '------------------------------------------
-            ' Get the max ID from this anno layer
-            '------------------------------------------
-            ' It will be the last anno feature created by the label to anno converter
-            Dim theQueryDef As IQueryDef
-            Dim theRow As IRow
-            Dim theIdCursor As ICursor
-            theQueryDef = theAnnoWorkspace.CreateQueryDef
-            theQueryDef.Tables = theAnnoDataset.Name
-            theQueryDef.SubFields = "MAX(OBJECTID)"
-            theIdCursor = theQueryDef.Evaluate
-            theRow = theIdCursor.NextRow
-            '------------------------------------------
             ' Set up field indexes
             '------------------------------------------
             Dim theFeatureIdIndex As Integer = theAnnoFeatureClass.FindField("FeatureID")
@@ -757,8 +768,12 @@ Public NotInheritable Class CreateAnnotation
             'Force simple edits to trigger the EditorExtension.EditEvents_OnCreate event handler 
             theAnnoWorkspaceEditControl.SetStoreEventsRequired()
 
+            '------------------------------------------
+            ' Get the max ID from this anno feature class
+            '------------------------------------------
+            ' It will be the last anno feature created by the label to anno converter
             Dim theMaxOid As Integer
-            theMaxOid = CInt(theRow.Value(0))
+            theMaxOid = GetMaxOidByAnnoFC(theAnnoFeatureClass)
 
             Dim theTable As ITable = DirectCast(theAnnoFeatureClass, ITable)
             Dim thisOid As Integer
@@ -767,7 +782,7 @@ Public NotInheritable Class CreateAnnotation
             '------------------------------------------
             ' Process all anno in this feature class which was added by the converter... 
             ' theMinOid comes from the anno feature class collection dictionary for this 
-            ' anno feature class which was populated earlier
+            ' anno feature class (was the max Oid before first piece of anno was created)
             For thisOid = theMinOid To theMaxOid
                 Dim theOldRow As IRow = theTable.GetRow(thisOid)
                 theOldRow.Value(theSymbolIdIndex) = theSymbolId
@@ -866,13 +881,13 @@ Public NotInheritable Class CreateAnnotation
         End Select
     End Sub
 
-    Private Sub cleanAnnoCollection(ByVal theAnnoFC As IFeatureClass)
+    Private Sub cleanNewAnnotation(ByVal theAnnoFC As IFeatureClass)
         '------------------------------------------
         ' Now clean up the mess left by the converter
         '------------------------------------------
-        ' The converter chucks all kinds of "Direction" or "Distance" into the annotation feature class as 
-        ' subtypes, annotation classes, and symbols. They must all be removed AFTER processNewAnnotation
-        ' has reassigned all new annotation classes to the correct annotation class and symbol. 
+        ' The converter chucks all kinds of "Direction" or "Distance" subtypes, annotation classes, 
+        ' and symbols into the annotation feature class. They must all be removed AFTER 
+        ' processNewAnnotation has reassigned "34" to the new annotation class and symbol. 
         Dim theDirectionSubtypeId As Integer = 0
         Dim theDistanceSubtypeId As Integer = 0
 
@@ -906,7 +921,6 @@ Public NotInheritable Class CreateAnnotation
         Catch ex As Exception
             EditorExtension.ProcessUnhandledException(ex)
         End Try
-
     End Sub
 
 #End Region
