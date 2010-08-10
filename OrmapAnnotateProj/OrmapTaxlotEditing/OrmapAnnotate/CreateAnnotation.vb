@@ -911,16 +911,27 @@ Public NotInheritable Class CreateAnnotation
                     theSubtypes.DeleteSubtype(subtypeCode)
                     theAnnoLayerPropCollection.Remove(subtypeCode)
                     theSymbolCollection.Remove(GetSymbolId(theAnnoFC, subtypeName))
-                    theAnnoClassAdmin.UpdateProperties()
-                    'Now re-enumerate the subtypes since one has been deleted and the anno fc updated
-                    theEnumSubtype = theSubtypes.Subtypes
-                    theEnumSubtype.Reset()
                 Catch ex As Exception
                     EditorExtension.ProcessUnhandledException(ex)
                 End Try
             End If
             subtypeName = theEnumSubtype.Next(subtypeCode)
         End While
+        theAnnoClassAdmin.UpdateProperties()
+        'There may still be embedded Distance and Direction anno classes and symbols not associated with subtypes
+        'Clean these out...
+        Dim i As Integer
+        For i = 0 To theAnnoLayerPropCollection.Count - 1
+            If Not theAnnoLayerPropCollection.Properties(i).Class Is Nothing Then
+                If String.Compare(theAnnoLayerPropCollection.Properties(i).Class, 0, "Direction", 0, 9, CultureInfo.CurrentCulture, CompareOptions.IgnoreCase) = 0 Or _
+                   String.Compare(theAnnoLayerPropCollection.Properties(i).Class, 0, "Distance", 0, 8, CultureInfo.CurrentCulture, CompareOptions.IgnoreCase) = 0 Then
+                    theAnnoLayerPropCollection.Remove(i)
+                    theSymbolCollection.Remove(GetSymbolId(theAnnoFC, theAnnoLayerPropCollection.Properties(i).Class))
+                End If
+            End If
+        Next
+        theAnnoClassAdmin.UpdateProperties()
+
     End Sub
 
 #End Region
