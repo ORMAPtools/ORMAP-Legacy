@@ -178,24 +178,27 @@ Public NotInheritable Class AnnotationUtilities
     ''' <param name="theSymbolName">The name of the symbol for which the symbol id is being sought.</param>
     ''' <returns>The Symbol Id as an integer.</returns>
     ''' <remarks></remarks>
-    Public Shared Function GetSymbolId(ByVal theAnnoFeatureClass As IFeatureClass, ByVal theSymbolName As String) As Integer
+    Public Shared Function GetSymbolId(ByVal theAnnoFeatureClass As IFeatureClass, ByVal theSymbolName As String, _
+                                       Optional ByVal stringLength As Integer = 0) As Integer
         'TODO:  (RG) Need exception handling
         Dim theSymbolCollection As ISymbolCollection2 = New SymbolCollectionClass()
         Dim thisSymbolIdentifier As ISymbolIdentifier2 = New SymbolIdentifierClass()
         Dim theAnnoClass As IAnnoClass
         Dim theReturnValue As Integer = Nothing
+        If stringLength = 0 Then
+            stringLength = Len(theSymbolName)
+        End If
 
         '------------------------------------------
         'Get the Symbol ID 
         '------------------------------------------
         'Defined in the anno feature class for Symbol Name  
-        'representing Distance/Bearing (should be "34")
         theAnnoClass = DirectCast(theAnnoFeatureClass.Extension, IAnnoClass)
         theSymbolCollection = DirectCast(theAnnoClass.SymbolCollection, ISymbolCollection2)
         theSymbolCollection.Reset()
         thisSymbolIdentifier = DirectCast(theSymbolCollection.Next, ISymbolIdentifier2)
         Do Until thisSymbolIdentifier Is Nothing
-            If String.Compare(thisSymbolIdentifier.Name, theSymbolName, True, CultureInfo.CurrentCulture) = 0 Then
+            If String.Compare(thisSymbolIdentifier.Name, 0, theSymbolName, 0, stringLength, True, CultureInfo.CurrentCulture) = 0 Then
                 theReturnValue = thisSymbolIdentifier.ID
                 Exit Do
             End If
