@@ -790,7 +790,7 @@ Public NotInheritable Class CreateAnnotation
                 '       Will currently alert user and skip this feature, but need to handle better... 
 
                 'This is cleanest way (i.e., the way that actually WORKS) to ensure correct AnnoClassID, SymbolID, and MapNumber are 
-                'placed (including by the the OnCreate event in EditorExtension)
+                'placed (including firing the the OnCreate event in EditorExtension)
                 theOldRow.Store()
                 Dim theRowBuffer As IRowBuffer = theOldRow
                 theRowBuffer.Value(theFeatureIdIndex) = System.DBNull.Value
@@ -883,44 +883,44 @@ Public NotInheritable Class CreateAnnotation
 
     Private Sub cleanNewAnnotation(ByVal theAnnoFC As IFeatureClass)
         '------------------------------------------
-        ' Now clean up the mess left by the converter
+        ' Cleans up the mess left by the converter
         '------------------------------------------
         ' The converter chucks all kinds of "Direction" or "Distance" subtypes, annotation classes, 
-        ' and symbols into the annotation feature class. They must all be removed AFTER 
-        ' processNewAnnotation has reassigned "34" to the new annotation class and symbol. 
-        Dim theDirectionSubtypeId As Integer = 0
-        Dim theDistanceSubtypeId As Integer = 0
+        ' and symbols into the annotation feature class(es). They must all be removed AFTER 
+        ' processNewAnnotation has reassigned them to the correct annotation class and symbol. 
 
-        'Delete the subtypes for "Direction" and "Distance"
-        theDirectionSubtypeId = GetSubtypeCode(theAnnoFC, "Direction", 9)
-        theDistanceSubtypeId = GetSubtypeCode(theAnnoFC, "Distance", 8)
         Dim theSubtypes As ISubtypes = DirectCast(theAnnoFC, ISubtypes)
-        If theDirectionSubtypeId > 0 Then
-            theSubtypes.DeleteSubtype(theDirectionSubtypeId)
-        End If
-        If theDistanceSubtypeId > 0 Then
-            theSubtypes.DeleteSubtype(theDistanceSubtypeId)
-        End If
+        Dim theEnumSubtype As IEnumSubtype = theSubtypes.Subtypes
+        theEnumSubtype.Reset()
+        Dim subtypeName As String
+        Dim subtypeCode As Integer
+
+        subtypeName = theEnumSubtype.Next(subtypeCode)
 
         Dim theAnnoClassExtenstion As IAnnotationClassExtension = DirectCast(theAnnoFC.Extension, IAnnotationClassExtension)
         Dim theSymbolCollection As ISymbolCollection2 = DirectCast(theAnnoClassExtenstion.SymbolCollection, ISymbolCollection2)
         Dim theAnnoLayerPropCollection As IAnnotateLayerPropertiesCollection2 = DirectCast(theAnnoClassExtenstion.AnnoProperties, IAnnotateLayerPropertiesCollection2)
-        Dim theAnnoClassAdmin As IAnnoClassAdmin = CType(theAnnoFC.Extension, IAnnoClassAdmin)
+        Dim theAnnoClassAdmin As IAnnoClassAdmin = DirectCast(theAnnoFC.Extension, IAnnoClassAdmin)
 
-        Try
-            'Remove all the annotation classes named "Direction" or "Distance" 
-            theAnnoLayerPropCollection.Remove(theDirectionSubtypeId)
-            theAnnoLayerPropCollection.Remove(theDistanceSubtypeId)
-
-            'Remove all symbols named "Direction" or "Distance"
-            theSymbolCollection.Remove(GetSymbolId(theAnnoFC, "Direction"))
-            theSymbolCollection.Remove(GetSymbolId(theAnnoFC, "Distance"))
-
-            'Now update the AnnotateLayerPropertiesCollection so it stores the removals
-            theAnnoClassAdmin.UpdateProperties()
-        Catch ex As Exception
-            EditorExtension.ProcessUnhandledException(ex)
-        End Try
+        While Not subtypeName Is Nothing
+            'Look for Distance and Direction subtypes
+            If String.Compare(subtypeName, 0, "Direction", 0, 9, CultureInfo.CurrentCulture, CompareOptions.IgnoreCase) = 0 Or _
+               String.Compare(subtypeName, 0, "Distance", 0, 8, CultureInfo.CurrentCulture, CompareOptions.IgnoreCase) = 0 Then
+                Try
+                    'Delete the subtype, annotation class, and symbol for "Direction" or "Distance" 
+                    theSubtypes.DeleteSubtype(subtypeCode)
+                    theAnnoLayerPropCollection.Remove(subtypeCode)
+                    theSymbolCollection.Remove(GetSymbolId(theAnnoFC, subtypeName))
+                    theAnnoClassAdmin.UpdateProperties()
+                    'Now re-enumerate the subtypes since one has been deleted and the anno fc updated
+                    theEnumSubtype = theSubtypes.Subtypes
+                    theEnumSubtype.Reset()
+                Catch ex As Exception
+                    EditorExtension.ProcessUnhandledException(ex)
+                End Try
+            End If
+            subtypeName = theEnumSubtype.Next(subtypeCode)
+        End While
     End Sub
 
 #End Region
