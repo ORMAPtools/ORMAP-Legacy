@@ -316,6 +316,7 @@
     <EmbeddedResource Include="help\ReportOrRequest_help.rtf" />
     <EmbeddedResource Include="help\Settings_help.rtf" />
     <EmbeddedResource Include="help\CreateAnnotation_help.rtf" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="My Project\DataSources\AllTablesSettings.datasource" />
     <None Include="My Project\DataSources\AnnoTableNamesSettings.datasource" />
     <None Include="My Project\DataSources\CartographicLinesSettings.datasource" />
@@ -347,10 +348,6 @@
     <None Include="settings\CartographicLinesSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>CartographicLinesSettings.Designer.vb</LastGenOutput>
-    </None>
-    <None Include="ClassDiagram.cd">
-      <SubType>
-      </SubType>
     </None>
     <None Include="settings\DefaultValuesSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
