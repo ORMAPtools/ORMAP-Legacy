@@ -184,7 +184,7 @@ Public NotInheritable Class AnnotationUtilities
         Dim theSymbolCollection As ISymbolCollection2 = New SymbolCollectionClass()
         Dim thisSymbolIdentifier As ISymbolIdentifier2 = New SymbolIdentifierClass()
         Dim theAnnoClass As IAnnoClass
-        Dim theReturnValue As Integer = Nothing
+        Dim theReturnValue As Integer = -1
         If stringLength = 0 Then
             stringLength = Len(theSymbolName)
         End If
@@ -229,7 +229,8 @@ Public NotInheritable Class AnnotationUtilities
         Dim theIdCursor As ICursor
         theQueryDef = theAnnoWorkspace.CreateQueryDef
         theQueryDef.Tables = theAnnoDataset.Name
-        theQueryDef.SubFields = "MAX(OBJECTID)"
+        theQueryDef.SubFields = "OBJECTID"
+        theQueryDef.WhereClause = "OBJECTID = (SELECT MAX(OBJECTID) FROM " + theQueryDef.Tables + ")"
         theIdCursor = theQueryDef.Evaluate
         If Not theIdCursor Is Nothing Then
             thisRow = theIdCursor.NextRow
