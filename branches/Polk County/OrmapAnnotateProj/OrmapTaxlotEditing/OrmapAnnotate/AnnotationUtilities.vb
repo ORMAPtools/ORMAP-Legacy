@@ -227,15 +227,17 @@ Public NotInheritable Class AnnotationUtilities
         Dim theQueryDef As IQueryDef
         Dim thisRow As IRow
         Dim theIdCursor As ICursor
+        Dim theIdList As SortedList = New SortedList
         theQueryDef = theAnnoWorkspace.CreateQueryDef
         theQueryDef.Tables = theAnnoDataset.Name
-        theQueryDef.SubFields = "OBJECTID"
-        theQueryDef.WhereClause = "OBJECTID = (SELECT MAX(OBJECTID) FROM " + theQueryDef.Tables + ")"
         theIdCursor = theQueryDef.Evaluate
+        thisRow = theIdCursor.NextRow
         If Not theIdCursor Is Nothing Then
-            thisRow = theIdCursor.NextRow
-            'TODO:  (RG) Should really do a find for the field index to the OID... its always 0, but should check anyways... 
-            theMaxOid = CInt(thisRow.Value(0))
+            Do Until thisRow Is Nothing
+                theIdList.Add(thisRow.Value(0), thisRow.Value(0))
+                thisRow = theIdCursor.NextRow
+            Loop
+            theMaxOid = CInt(theIdList.GetKey(theIdList.Count - 1))
         End If
         Return theMaxOid
     End Function
@@ -386,169 +388,157 @@ Public NotInheritable Class AnnotationUtilities
 
         DataMonitor.CheckValidMapIndexDataProperties()
 
-        '------------------------------------------
-        'Get the annotation layer
-        '------------------------------------------
-        Dim theAnnoEnumLayer As IEnumLayer = SpatialUtilities.GetTOCLayersEnumerator(EsriLayerTypes.FDOGraphicsLayer)
-        Dim theAnnoFeatureClass As IFeatureClass = Nothing
-        Dim thisAnnoLayer As IFeatureLayer
-        thisAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
+        Dim theFeatureCollection As Collection = New Collection
+        Dim theEnumFeature As IEnumFeature = CType(theMap.FeatureSelection, IEnumFeature)
+        Dim theEnumFeatureSetup As IEnumFeatureSetup = CType(theEnumFeature, IEnumFeatureSetup)
+        theEnumFeatureSetup.AllFields = True
+        Dim thisFeature As IFeature = theEnumFeature.Next
+        Do While Not thisFeature Is Nothing
+            theFeatureCollection.Add(thisFeature)
+            thisFeature = theEnumFeature.Next
+        Loop
+        If theFeatureCollection.Count Mod 2 > 0 Then
+            MessageBox.Show("Cannot Move Annotation: Odd number of annotation items selected... " & NewLine & _
+                            "This tool works with pairs of annotation, so you must select them in " & NewLine & _
+                            "sets of two (within each annotation feature class).", _
+                            "Move Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            Exit Sub
+        End If
+        Dim theTopSelectedFeature As IFeature
+        Dim theBottomSelectedFeature As IFeature
 
-        '------------------------------------------
-        'Now go through anno feature class enum looking for selected features
-        '------------------------------------------
-        Do While Not (thisAnnoLayer Is Nothing)
-            Dim theAnnoSelection As IFeatureSelection = DirectCast(thisAnnoLayer, IFeatureSelection)
-            If theAnnoSelection.SelectionSet.Count Mod 2 > 0 Then
-                MessageBox.Show("Cannot Move Annotation: Odd number of annotation items selected... " & NewLine & _
-                                "This tool works with pairs of annotation, so you must select them in " & NewLine & _
-                                "sets of two (within each annotation feature class).", _
-                                "Move Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                Exit Sub
-            End If
-            Dim theSelectedAnnoCursor As IFeatureCursor = SpatialUtilities.GetSelectedFeatures(thisAnnoLayer)
-            If Not theSelectedAnnoCursor Is Nothing Then
-                'NOTE:  Each annotation feature class will have all of its features moved as a single edit operation.
+
+        If theFeatureCollection.Count > 0 Then
+
+            '------------------------------------------
+            'Get the graphics container 
+            '------------------------------------------
+            'Without this, the transform2D will transform the envelope, but NOT the annotation itself!!!!
+            Dim theGraphicsContainer As IGraphicsContainer = DirectCast(theMxDoc.ActivatedView, IGraphicsContainer)
+
+            '------------------------------------------
+            'Now loop through the feature collection
+            '------------------------------------------
+            'Since actions work on pairs of anno, double i on each iteration
+            Dim i As Integer
+            For i = 1 To theFeatureCollection.Count - 1 Step 2
+                '------------------------------------------
+                'Load the annotation feature pairs
+                '------------------------------------------
+                'Needed for the transform2d since it accesses the underlying geometry of the annotation
+                theTopSelectedFeature = CType(theFeatureCollection.Item(i), IFeature)
+                theBottomSelectedFeature = CType(theFeatureCollection.Item(i + 1), IFeature)
+
+                Dim theAnnoFeatureClass As IFeatureClass = GetAnnoFeatureClass(theTopSelectedFeature.Class.AliasName)
                 EditorExtension.Editor.StartOperation()
 
-                '------------------------------------------
-                'Get the graphics container 
-                '------------------------------------------
-                'Without this, the transform2D will transform the envelope, but NOT the annotation itself!!!!
-                Dim theGraphicsContainer As IGraphicsContainer = DirectCast(theMxDoc.ActivatedView, IGraphicsContainer)
+                If theTopSelectedFeature.OID = theBottomSelectedFeature.OID Then
+                    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    ' -- DESIGN COMMENT --
+                    ' There appears to be an ESRI bug here when some of the anno classes are turned off in 
+                    ' the TOC... The selection set has multiple item pairs, but OID doesn't change when it hits 
+                    ' theSelectedAnnoCursor.NextFeature. Thus the envelope means and thus distance are the same.
+                    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    MessageBox.Show("Cannot Move Annotation: ESRI BUG- All Annotation Classes MUST " & NewLine & _
+                                    "be turned on in the TOC to bypass this bug. If this does not resolve" & NewLine & _
+                                    "the issue, use [Editor > Options  > ORMAP Taxlot Editor and click" & NewLine & _
+                                    "[ Report Bug or Request New Feature ].", _
+                                    "Move Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                    EditorExtension.Editor.AbortOperation()
+                    theActiveView.Refresh()
+                    Exit Sub
+                End If
 
                 '------------------------------------------
-                'Now loop through the selection set
+                'Get the selected annotation features annotation elements 
                 '------------------------------------------
-                'Since actions work on pairs of anno, only do half the loops
-                Dim i As Integer
-                For i = 1 To theAnnoSelection.SelectionSet.Count Step 2
+                'Needed to do transform and update the graphics container
+                Dim theTopAnnoFeature As IAnnotationFeature = DirectCast(theTopSelectedFeature, IAnnotationFeature)
+                Dim theBottomAnnoFeature As IAnnotationFeature = DirectCast(theBottomSelectedFeature, IAnnotationFeature)
+
+                If isInverted Then
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                     ' -- DESIGN COMMENT --
-                    '   There are a number of ways this next section can be written, but due to the fairly convoluted concept of 
-                    '   moving two pieces of annotation, I decided to leave it this way. I almost never use object names which imply
-                    '   ordinal relationships (such as 1st, 2nd, etc.), but in this case it clarifies the underlying process since
-                    '   this code must work on annotation pairs and actions are based entirely on which element is selected first.
+                    '   The envelope used to calculate the rotation point (centroid) must be retrieved from an element's QueryBounds method. 
+                    '   This method takes into account the annotation's text area, whereas the element's envelope is a polyline. Using
+                    '   its centroid will actually offset the location of the annotation since the polyline's MaxY is just beneath the text.
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                     '------------------------------------------
-                    'Get the selected features 
+                    'To invert the annotation as a pair, must rotate each element then transpose them
                     '------------------------------------------
-                    'Needed for the transform2d since it accesses the underlying geometry of the annotation
-                    Dim the1stSelectedFeature As IFeature = theSelectedAnnoCursor.NextFeature
-                    Dim the2ndSelectedFeature As IFeature = theSelectedAnnoCursor.NextFeature
+                    RotateElement(GetCenterOfEnvelope(GetAnnoEnvelope(theActiveView.ScreenDisplay, theTopAnnoFeature.Annotation)), _
+                                    theGraphicsContainer, theTopAnnoFeature.Annotation)
+                    RotateElement(GetCenterOfEnvelope(GetAnnoEnvelope(theActiveView.ScreenDisplay, theBottomAnnoFeature.Annotation)), _
+                                    theGraphicsContainer, theBottomAnnoFeature.Annotation)
+                End If
 
-                    If the1stSelectedFeature.OID = the2ndSelectedFeature.OID Then
-                        '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                        ' -- DESIGN COMMENT --
-                        ' There appears to be an ESRI bug here when some of the anno classes are turned off in 
-                        ' the TOC... The selection set has multiple item pairs, but OID doesn't change when it hits 
-                        ' theSelectedAnnoCursor.NextFeature. Thus the envelope means and thus distance are the same.
-                        '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                        MessageBox.Show("Cannot Move Annotation: ESRI BUG- All Annotation Classes MUST " & NewLine & _
-                                        "be turned on in the TOC to bypass this bug. If this does not resolve" & NewLine & _
-                                        "the issue, use [Editor > Options  > ORMAP Taxlot Editor and click" & NewLine & _
-                                        "[ Report Bug or Request New Feature ].", _
-                                        "Move Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                        EditorExtension.Editor.AbortOperation()
-                        theAnnoSelection.Clear()
-                        theActiveView.Refresh()
-                        Exit Sub
+                '------------------------------------------
+                'Calculate a move vector  
+                '------------------------------------------
+                'from the X, Y pairs of the 1st and 2nd element's envelopes (mean of lower left & upper right corners)
+                Dim theMoveVector As ILine = New ESRI.ArcGIS.Geometry.Line
+
+                theMoveVector.PutCoords(GetCenterOfEnvelope(GetAnnoEnvelope(theActiveView.ScreenDisplay, theTopAnnoFeature.Annotation)), _
+                                        GetCenterOfEnvelope(GetAnnoEnvelope(theActiveView.ScreenDisplay, theBottomAnnoFeature.Annotation)))
+
+                Dim theTextElement As ITextElement = DirectCast(theTopAnnoFeature.Annotation, ITextElement)
+                Dim theAnnoPlacement As AnnotationPlacement = GetAnnoPlacement(theTextElement.Symbol.Size, theMoveVector.Length)
+                If theAnnoPlacement = -1 And Not isTransposed Then
+                    MessageBox.Show("Cannot Move Annotation: Selected annotation is at non-standard" & NewLine & _
+                                    "placement (was not created by Create Annotation tool or has" & NewLine & _
+                                    "been moved). Placement tools cannot reposition annotation.", _
+                                    "Move Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                    Exit For
+                End If
+                Dim theToDistance As Double
+                Dim theNewVector As ILine = New ESRI.ArcGIS.Geometry.Line
+
+                'NOTE=> All movement is from theMoveVector's 'From' end to its 'To' end, so resized vectors utilize
+                '       the esriExtendAtFrom constant with a recalculated 'To' point in the QueryTangent method
+
+                '------------------------------------------
+                'Move the element
+                '------------------------------------------
+                'Each action below is exclusionary, so placed in nested If-Then-ElseIf blocks
+                If isTransposed Then
+                    MoveElement(theMoveVector, theGraphicsContainer, theTopAnnoFeature.Annotation)
+                    theMoveVector.ReverseOrientation()
+                    MoveElement(theMoveVector, theGraphicsContainer, theBottomAnnoFeature.Annotation)
+                ElseIf isMoveDown Then
+                    MoveElement(theMoveVector, theGraphicsContainer, theTopAnnoFeature.Annotation)
+                    If isStandardSpace Then
+                        theToDistance = DistanceBothSides * theTextElement.Symbol.Size
+                        theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                        theMoveVector = theNewVector
+                    ElseIf isWideSpace Then
+                        theToDistance = DistanceBothSides * theTextElement.Symbol.Size + WideLine
+                        theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                        theMoveVector = theNewVector
+                    ElseIf theAnnoPlacement = AnnotationPlacement.BothSides Or theAnnoPlacement = AnnotationPlacement.BothSidesWide Then
+                        theToDistance = DistanceBothBelow * theTextElement.Symbol.Size
+                        theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                        theMoveVector = theNewVector
                     End If
-
-                    '------------------------------------------
-                    'Get the selected annotation features annotation elements 
-                    '------------------------------------------
-                    'Needed to do transform and update the graphics container
-                    Dim the1stSelectedAnnoFeature As IAnnotationFeature = DirectCast(the1stSelectedFeature, IAnnotationFeature)
-                    Dim the2ndSelectedAnnoFeature As IAnnotationFeature = DirectCast(the2ndSelectedFeature, IAnnotationFeature)
-
-                    If isInverted Then
-                        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                        ' -- DESIGN COMMENT --
-                        '   The envelope used to calculate the rotation point (centroid) must be retrieved from an element's QueryBounds method. 
-                        '   This method takes into account the annotation's text area, whereas the element's envelope is a polyline. Using
-                        '   its centroid will actually offset the location of the annotation since the polyline's MaxY is just beneath the text.
-                        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                        '------------------------------------------
-                        'To invert the annotation as a pair, must rotate each element then transpose them
-                        '------------------------------------------
-                        RotateElement(GetCenterOfEnvelope(GetAnnoEnvelope(theActiveView.ScreenDisplay, the1stSelectedAnnoFeature.Annotation)), _
-                                        theGraphicsContainer, the1stSelectedAnnoFeature.Annotation)
-                        RotateElement(GetCenterOfEnvelope(GetAnnoEnvelope(theActiveView.ScreenDisplay, the2ndSelectedAnnoFeature.Annotation)), _
-                                        theGraphicsContainer, the2ndSelectedAnnoFeature.Annotation)
+                    MoveElement(theMoveVector, theGraphicsContainer, theBottomAnnoFeature.Annotation)
+                ElseIf isMoveUp Then
+                    theMoveVector.ReverseOrientation()
+                    MoveElement(theMoveVector, theGraphicsContainer, theBottomAnnoFeature.Annotation)
+                    If isStandardSpace Then
+                        theToDistance = DistanceBothSides * theTextElement.Symbol.Size
+                        theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                        theMoveVector = theNewVector
+                    ElseIf isWideSpace Then
+                        theToDistance = DistanceBothSides * theTextElement.Symbol.Size + WideLine
+                        theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                        theMoveVector = theNewVector
+                    ElseIf theAnnoPlacement = AnnotationPlacement.BothSides Or theAnnoPlacement = AnnotationPlacement.BothSidesWide Then
+                        theToDistance = DistanceBothAbove * theTextElement.Symbol.Size
+                        theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                        theMoveVector = theNewVector
                     End If
+                    MoveElement(theMoveVector, theGraphicsContainer, theTopAnnoFeature.Annotation)
+                End If
 
-                    '------------------------------------------
-                    'Calculate a move vector  
-                    '------------------------------------------
-                    'from the X, Y pairs of the 1st and 2nd element's envelopes (mean of lower left & upper right corners)
-                    Dim theMoveVector As ILine = New ESRI.ArcGIS.Geometry.Line
-
-                    theMoveVector.PutCoords(GetCenterOfEnvelope(GetAnnoEnvelope(theActiveView.ScreenDisplay, the1stSelectedAnnoFeature.Annotation)), _
-                                            GetCenterOfEnvelope(GetAnnoEnvelope(theActiveView.ScreenDisplay, the2ndSelectedAnnoFeature.Annotation)))
-
-                    Dim theTextElement As ITextElement = DirectCast(the1stSelectedAnnoFeature.Annotation, ITextElement)
-                    Dim theAnnoPlacement As AnnotationPlacement = GetAnnoPlacement(theTextElement.Symbol.Size, theMoveVector.Length)
-                    If theAnnoPlacement = -1 And Not isTransposed Then
-                        MessageBox.Show("Cannot Move Annotation: Selected annotation is at non-standard" & NewLine & _
-                                        "placement (was not created by Create Annotation tool or has" & NewLine & _
-                                        "been moved). Placement tools cannot reposition annotation.", _
-                                        "Move Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                        Exit For
-                    End If
-                    Dim theToDistance As Double
-                    Dim theNewVector As ILine = New ESRI.ArcGIS.Geometry.Line
-
-                    'NOTE=> All movement is from theMoveVector's 'From' end to its 'To' end, so resized vectors utilize
-                    '       the esriExtendAtFrom constant with a recalculated 'To' point in the QueryTangent method
-
-                    'TODO:  (RG)- A lot of redundant code here... should be refactored
-
-                    '------------------------------------------
-                    'Move the element
-                    '------------------------------------------
-                    'Each action below is exclusionary, so placed in nested If-Then-ElseIf blocks
-                    If isTransposed Then
-                        MoveElement(theMoveVector, theGraphicsContainer, the1stSelectedAnnoFeature.Annotation)
-                        theMoveVector.ReverseOrientation()
-                        MoveElement(theMoveVector, theGraphicsContainer, the2ndSelectedAnnoFeature.Annotation)
-                    ElseIf isMoveDown Then
-                        MoveElement(theMoveVector, theGraphicsContainer, the1stSelectedAnnoFeature.Annotation)
-                        If isStandardSpace Then
-                            theToDistance = DistanceBothSides * theTextElement.Symbol.Size
-                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
-                            theMoveVector = theNewVector
-                        ElseIf isWideSpace Then
-                            theToDistance = DistanceBothSides * theTextElement.Symbol.Size + WideLine
-                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
-                            theMoveVector = theNewVector
-                        ElseIf theAnnoPlacement = AnnotationPlacement.BothSides Or theAnnoPlacement = AnnotationPlacement.BothSidesWide Then
-                            theToDistance = DistanceBothBelow * theTextElement.Symbol.Size
-                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
-                            theMoveVector = theNewVector
-                        End If
-                        MoveElement(theMoveVector, theGraphicsContainer, the2ndSelectedAnnoFeature.Annotation)
-                    ElseIf isMoveUp Then
-                        theMoveVector.ReverseOrientation()
-                        MoveElement(theMoveVector, theGraphicsContainer, the2ndSelectedAnnoFeature.Annotation)
-                        If isStandardSpace Then
-                            theToDistance = DistanceBothSides * theTextElement.Symbol.Size
-                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
-                            theMoveVector = theNewVector
-                        ElseIf isWideSpace Then
-                            theToDistance = DistanceBothSides * theTextElement.Symbol.Size + WideLine
-                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
-                            theMoveVector = theNewVector
-                        ElseIf theAnnoPlacement = AnnotationPlacement.BothSides Or theAnnoPlacement = AnnotationPlacement.BothSidesWide Then
-                            theToDistance = DistanceBothAbove * theTextElement.Symbol.Size
-                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
-                            theMoveVector = theNewVector
-                        End If
-                        MoveElement(theMoveVector, theGraphicsContainer, the1stSelectedAnnoFeature.Annotation)
-                    End If
-
-                Next
-                theActiveView.Refresh()
                 '------------------------------------------
                 'Label and close the edit operation
                 '------------------------------------------
@@ -561,9 +551,9 @@ Public NotInheritable Class AnnotationUtilities
                 ElseIf isMoveDown Then
                     EditorExtension.Editor.StopOperation("Move Annotation Down")
                 End If
-            End If
-            thisAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
-        Loop
+            Next
+            theActiveView.Refresh()
+        End If
     End Sub
 
     Public Shared Function GetAnnoPlacement(ByVal theFontSize As Double, ByVal theCalculatedDistance As Double) As AnnotationPlacement
