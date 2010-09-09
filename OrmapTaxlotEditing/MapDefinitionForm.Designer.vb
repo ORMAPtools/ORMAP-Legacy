@@ -57,7 +57,7 @@ Partial Class MapDefinitionForm
         Me.uxMapNumber.AllowDrop = True
         Me.uxMapNumber.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
         Me.uxMapNumber.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
-        Me.uxMapNumber.Location = New System.Drawing.Point(295, 30)
+        Me.uxMapNumber.Location = New System.Drawing.Point(296, 31)
         Me.uxMapNumber.Name = "uxMapNumber"
         Me.uxMapNumber.Size = New System.Drawing.Size(110, 20)
         Me.uxMapNumber.TabIndex = 0
@@ -221,7 +221,7 @@ Partial Class MapDefinitionForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(450, 214)
+        Me.ClientSize = New System.Drawing.Size(442, 209)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)

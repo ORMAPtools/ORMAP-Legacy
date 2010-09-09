@@ -621,24 +621,29 @@ Public NotInheritable Class LocateFeature
 
         With _partnerLocateDefinitionForm
 
+            Dim useMapNumber As Boolean = .uxUseMapNumber.Checked
+            Dim useMapScale As Boolean = .uxUseMapScale.Checked
+
             '  Validate the MapNumber and MapScale text boxes before applying the definition query.
             Dim theMapNumber As String = .uxMapNumber.Text.Trim
-            If theMapNumber <> String.Empty AndAlso Not .uxMapNumber.AutoCompleteCustomSource.Contains(theMapNumber) Then
+            If useMapNumber AndAlso theMapNumber <> String.Empty AndAlso Not .uxMapNumber.AutoCompleteCustomSource.Contains(theMapNumber) Then
                 MessageBox.Show("Invalid MapNumber. Please try again.", "Definition Query", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 Exit Sub
             End If
             Dim theMapScale As String = .uxMapScale.Text.Trim
-            If theMapScale <> String.Empty AndAlso Not .uxMapScale.AutoCompleteCustomSource.Contains(theMapScale) Then
+            If theMapScale = String.Empty Then useMapScale = False ' if the MapScale is an empty string then don't use it.
+            If useMapScale AndAlso Not .uxMapScale.AutoCompleteCustomSource.Contains(theMapScale) Then
                 .UseWaitCursor = False
                 MessageBox.Show("Invalid MapScale. Please try again.", "Definition Query", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 Exit Sub
             End If
 
-            ' If the MapScale is not empty then do some math to convert it (ie 1:100 = 1200) otherwise pass an empty string.
-            If theMapScale <> String.Empty Then
+            '  If the MapScale is not empty then do some math to convert it (ie 1:100 = 1200) otherwise pass an empty string.
+            If useMapNumber And useMapScale Then
                 ApplyTheDefinitionQuery(theMapNumber, (Integer.Parse(theMapScale) * 12).ToString)
             Else
-                ApplyTheDefinitionQuery(theMapNumber, String.Empty)
+                If useMapNumber Then ApplyTheDefinitionQuery(theMapNumber, )
+                If useMapScale Then ApplyTheDefinitionQuery(, (Integer.Parse(theMapScale) * 12).ToString)
             End If
 
             .Close()
@@ -696,8 +701,11 @@ Public NotInheritable Class LocateFeature
                     End If
                     ' Make sure the feature class has a MapScale field before applying a Definition Query with MapNumber
                     If Not theMapScale Is Nothing AndAlso LocateFields(theFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField) <> NotFoundIndex Then
-                        If theQueryString <> String.Empty Then theQueryString += " AND "
-                        theQueryString += "[" & EditorExtension.MapIndexSettings.MapScaleField & "] " & _partnerLocateDefinitionForm.uxMapScaleOption.Text.Trim & " '" & theMapScale & "'"
+                        If theQueryString <> String.Empty Then
+                            If _partnerLocateDefinitionForm.uxAnd.Checked Then theQueryString += " AND "
+                            If _partnerLocateDefinitionForm.uxOr.Checked Then theQueryString += " OR "
+                        End If
+                        theQueryString += "[" & EditorExtension.MapIndexSettings.MapScaleField & "] " & _partnerLocateDefinitionForm.uxMapScaleOption.Text.Trim & " " & theMapScale
                     End If
 
                     theFeatureLayerDefinition.DefinitionExpression = formatWhereClause(theQueryString, theFeatureLayer.FeatureClass)
