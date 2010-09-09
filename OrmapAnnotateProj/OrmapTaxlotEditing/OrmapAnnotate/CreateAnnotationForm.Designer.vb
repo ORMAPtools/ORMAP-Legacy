@@ -48,6 +48,7 @@ Partial Class CreateAnnotationForm
         Me.uxReferenceScale = New System.Windows.Forms.TextBox
         Me.uxReferenceScaleLabel = New System.Windows.Forms.Label
         Me.uxHelp = New System.Windows.Forms.Button
+        Me.uxProgressBar = New System.Windows.Forms.ProgressBar
         Me.uxPosition.SuspendLayout()
         Me.uxOrientation.SuspendLayout()
         Me.uxTopValue.SuspendLayout()
@@ -59,7 +60,7 @@ Partial Class CreateAnnotationForm
         'uxCreateAnno
         '
         Me.uxCreateAnno.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.uxCreateAnno.Location = New System.Drawing.Point(291, 271)
+        Me.uxCreateAnno.Location = New System.Drawing.Point(190, 273)
         Me.uxCreateAnno.Name = "uxCreateAnno"
         Me.uxCreateAnno.Size = New System.Drawing.Size(93, 23)
         Me.uxCreateAnno.TabIndex = 0
@@ -69,7 +70,7 @@ Partial Class CreateAnnotationForm
         'uxOptionsCancel
         '
         Me.uxOptionsCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.uxOptionsCancel.Location = New System.Drawing.Point(8, 271)
+        Me.uxOptionsCancel.Location = New System.Drawing.Point(8, 273)
         Me.uxOptionsCancel.Name = "uxOptionsCancel"
         Me.uxOptionsCancel.Size = New System.Drawing.Size(75, 23)
         Me.uxOptionsCancel.TabIndex = 1
@@ -225,7 +226,7 @@ Partial Class CreateAnnotationForm
         Me.uxLineWidth.Controls.Add(Me.uxWideLine)
         Me.uxLineWidth.Controls.Add(Me.uxStandardLine)
         Me.uxLineWidth.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.uxLineWidth.Location = New System.Drawing.Point(263, 156)
+        Me.uxLineWidth.Location = New System.Drawing.Point(263, 138)
         Me.uxLineWidth.Name = "uxLineWidth"
         Me.uxLineWidth.Size = New System.Drawing.Size(121, 74)
         Me.uxLineWidth.TabIndex = 23
@@ -261,7 +262,7 @@ Partial Class CreateAnnotationForm
         Me.uxOffsetAbove.Controls.Add(Me.uxDoubleAbove)
         Me.uxOffsetAbove.Controls.Add(Me.uxStandardAbove)
         Me.uxOffsetAbove.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.uxOffsetAbove.Location = New System.Drawing.Point(8, 156)
+        Me.uxOffsetAbove.Location = New System.Drawing.Point(8, 138)
         Me.uxOffsetAbove.Name = "uxOffsetAbove"
         Me.uxOffsetAbove.Size = New System.Drawing.Size(121, 74)
         Me.uxOffsetAbove.TabIndex = 24
@@ -297,7 +298,7 @@ Partial Class CreateAnnotationForm
         Me.uxOffsetBelow.Controls.Add(Me.uxDoubleBelow)
         Me.uxOffsetBelow.Controls.Add(Me.uxStandardBelow)
         Me.uxOffsetBelow.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.uxOffsetBelow.Location = New System.Drawing.Point(136, 156)
+        Me.uxOffsetBelow.Location = New System.Drawing.Point(136, 138)
         Me.uxOffsetBelow.Name = "uxOffsetBelow"
         Me.uxOffsetBelow.Size = New System.Drawing.Size(121, 74)
         Me.uxOffsetBelow.TabIndex = 24
@@ -330,7 +331,7 @@ Partial Class CreateAnnotationForm
         '
         'uxReferenceScale
         '
-        Me.uxReferenceScale.Location = New System.Drawing.Point(8, 239)
+        Me.uxReferenceScale.Location = New System.Drawing.Point(8, 218)
         Me.uxReferenceScale.Name = "uxReferenceScale"
         Me.uxReferenceScale.Size = New System.Drawing.Size(55, 20)
         Me.uxReferenceScale.TabIndex = 25
@@ -339,20 +340,27 @@ Partial Class CreateAnnotationForm
         'uxReferenceScaleLabel
         '
         Me.uxReferenceScaleLabel.AutoSize = True
-        Me.uxReferenceScaleLabel.Location = New System.Drawing.Point(65, 243)
+        Me.uxReferenceScaleLabel.Location = New System.Drawing.Point(65, 222)
         Me.uxReferenceScaleLabel.Name = "uxReferenceScaleLabel"
-        Me.uxReferenceScaleLabel.Size = New System.Drawing.Size(141, 13)
+        Me.uxReferenceScaleLabel.Size = New System.Drawing.Size(87, 13)
         Me.uxReferenceScaleLabel.TabIndex = 26
-        Me.uxReferenceScaleLabel.Text = "Annotation Reference Scale"
+        Me.uxReferenceScaleLabel.Text = "Reference Scale"
         '
         'uxHelp
         '
-        Me.uxHelp.Location = New System.Drawing.Point(147, 271)
+        Me.uxHelp.Location = New System.Drawing.Point(8, 244)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
         Me.uxHelp.TabIndex = 27
         Me.uxHelp.Text = "Help"
         Me.uxHelp.UseVisualStyleBackColor = True
+        '
+        'uxProgressBar
+        '
+        Me.uxProgressBar.Location = New System.Drawing.Point(190, 244)
+        Me.uxProgressBar.Name = "uxProgressBar"
+        Me.uxProgressBar.Size = New System.Drawing.Size(194, 15)
+        Me.uxProgressBar.TabIndex = 28
         '
         'CreateAnnotationForm
         '
@@ -360,6 +368,7 @@ Partial Class CreateAnnotationForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.uxOptionsCancel
         Me.ClientSize = New System.Drawing.Size(391, 306)
+        Me.Controls.Add(Me.uxProgressBar)
         Me.Controls.Add(Me.uxHelp)
         Me.Controls.Add(Me.uxReferenceScaleLabel)
         Me.Controls.Add(Me.uxReferenceScale)
@@ -417,5 +426,6 @@ Partial Class CreateAnnotationForm
     Friend WithEvents uxReferenceScaleLabel As System.Windows.Forms.Label
     Friend WithEvents uxCurved As System.Windows.Forms.CheckBox
     Friend WithEvents uxHelp As System.Windows.Forms.Button
+    Friend WithEvents uxProgressBar As System.Windows.Forms.ProgressBar
 
 End Class

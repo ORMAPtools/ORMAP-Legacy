@@ -340,6 +340,16 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    'Private _progressBar As System.Windows.Forms.ProgressBar
+    'Public Property ProgressBar() As System.Windows.Forms.ProgressBar
+    '    Get
+    '        Return _progressBar
+    '    End Get
+    '    Set(ByVal value As System.Windows.Forms.ProgressBar)
+    '        _progressBar = value
+    '    End Set
+    'End Property
+
 #End Region
 
 #Region "Event Handlers"
@@ -356,6 +366,7 @@ Public NotInheritable Class CreateAnnotation
             AddHandler _partnerCreateAnnotationForm.uxCreateAnno.Click, AddressOf uxCreateAnno_Click
             AddHandler _partnerCreateAnnotationForm.uxOptionsCancel.Click, AddressOf uxCancel_Click
             AddHandler _partnerCreateAnnotationForm.uxHelp.Click, AddressOf uxHelp_Click
+            'AddHandler _partnerCreateAnnotationForm.uxProgressBar
         Else
             ' Unsubscribe to partner form events.
             RemoveHandler _partnerCreateAnnotationForm.uxCreateAnno.Click, AddressOf uxCreateAnno_Click
@@ -416,7 +427,6 @@ Public NotInheritable Class CreateAnnotation
         Dim theMapExtent As IEnvelope = theActiveView.Extent
         Dim theEnumLayer As IEnumLayer = SpatialUtilities.GetTOCLayersEnumerator(EsriLayerTypes.FeatureLayer)
 
-
         'processNewAnnotation will fire an edit session which will clear all of the selected features.
         'Therefore, store all selected features in a collection and iterate through the collection
         'selecting each feature in the collection using the SpatialUtilities.SetSelectedFeature method
@@ -430,10 +440,13 @@ Public NotInheritable Class CreateAnnotation
             thisFeature = theEnumFeature.Next
         Loop
 
+        PartnerCreateAnnotationForm.uxProgressBar.Maximum = 1000
+        PartnerCreateAnnotationForm.uxProgressBar.Minimum = 0
+        PartnerCreateAnnotationForm.uxProgressBar.Step = CInt(1000 / theFeatureCollection.Count)
+
         clearall(theMxDoc)
         theActiveView.Refresh()
 
-        'Dim theAnnoFcCollection As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer)
         Dim theAnnoFcCollection As Collection = New Collection
 
         'Prime the layer for looping
@@ -441,24 +454,24 @@ Public NotInheritable Class CreateAnnotation
         Dim theConverterFeatureSelection As IFeatureSelection = CType(theLayer, IFeatureSelection)
 
         Dim thisFeatureIndex As Integer = 1
+
         Do Until theFeatureCollection.Count = 0
             thisFeature = CType(theFeatureCollection.Item(thisFeatureIndex), IFeature)
 
+            'Check to see if the current feature is in the current layer. If not, reset the layer enum
             If theLayer.Name <> thisFeature.Class.AliasName Then
                 theEnumLayer.Reset()
                 theLayer = DirectCast(theEnumLayer.Next, IFeatureLayer)
             End If
             'Loop through the layers
             Do Until (theLayer Is Nothing)
-                If (theLayer.Name = thisFeature.Class.AliasName) Then
 
+                If (theLayer.Name = thisFeature.Class.AliasName) Then
                     'Set the selected feature from theFeatureCollection
                     SpatialUtilities.SetSelectedFeature(theLayer, thisFeature, True, True)
 
-                    'If Not thisFeature Is Nothing Then
-                    '    'Verify that Distance and Direction attributes are present 
+                    'Verify that Distance and Direction attributes are present 
                     If thisFeature.Fields.FindField("Direction") < 0 Or thisFeature.Fields.FindField("Distance") < 0 Then
-                        'If theSelectedFeaturesCursor.FindField("Direction") < 0 Or theSelectedFeaturesCursor.FindField("Distance") < 0 Then
                         MessageBox.Show("Missing data: Direction and/or Distance attributes are missing" & NewLine & _
                                         "from the selected feature in " + theLayer.Name + ".", _
                                         "Create Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
@@ -479,7 +492,6 @@ Public NotInheritable Class CreateAnnotation
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
                     theConverterFeatureSelection = CType(theLayer, IFeatureSelection)
-                    'Do While Not thisSelectedFeature Is Nothing
                     'Verify selected feature is a line feature type
                     If Not thisFeature.Shape.GeometryType = esriGeometryType.esriGeometryPolyline And _
                         Not thisFeature.Shape.GeometryType = esriGeometryType.esriGeometryLine Then
@@ -511,6 +523,8 @@ Public NotInheritable Class CreateAnnotation
                         setLabelProperties(theFeatureLayerPropsCollection, theAnnoFeatureClass, "Direction")
                         setLabelProperties(theFeatureLayerPropsCollection, theAnnoFeatureClass, "Distance")
                         convertLabelsToAnnotation(theMap, theGeoFeatureLayer, theAnnoFeatureClass, False, theLayer.FeatureClass)
+
+                        PartnerCreateAnnotationForm.uxProgressBar.PerformStep()
 
                         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                         '--DESIGN COMMENT--
@@ -564,11 +578,10 @@ Public NotInheritable Class CreateAnnotation
                         processNewAnnotation(theAnnoFeatureClass, GetMaxOidByAnnoFC(theAnnoFeatureClass) - 1, theMapNumber)
 
                         If theAnnoFcCollection.Count = 0 Or Not theAnnoFcCollection.Contains(theAnnoFeatureClass.AliasName) Then
-                            theAnnoFcCollection.Add(theAnnoFeatureClass)
+                            theAnnoFcCollection.Add(theAnnoFeatureClass, theAnnoFeatureClass.AliasName)
                         End If
                         theConverterFeatureSelection.Clear()
                         theConverterFeatureSelection.SelectionChanged()
-                        theActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, Nothing, Nothing)
                         theFeatureCollection.Remove(thisFeatureIndex)
                     End If
                     Exit Do
@@ -576,33 +589,15 @@ Public NotInheritable Class CreateAnnotation
                 theLayer = CType(theEnumLayer.Next, IFeatureLayer)
             Loop
         Loop
+        PartnerCreateAnnotationForm.uxProgressBar.Value = 0
 
         'Now process all the new annotation (since the converter creates new SymbolIDs, adds FeatureIDs, and does not place any of the 
         'ORMAP-required pieces such as MapNumber, user, date, etc).
-        'Dim theAnnoEnumLayer As IEnumLayer = SpatialUtilities.GetTOCLayersEnumerator(EsriLayerTypes.FDOGraphicsLayer)
-        'Dim thisAnnoFeatureClass As IFeatureClass = Nothing
-        'Dim theAnnoLayer As IFeatureLayer
-        'theAnnoEnumLayer.Reset()
-        'theAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
-
-        'Dim thisPair As KeyValuePair(Of String, Integer)
         Dim i As Integer
         For i = 1 To theAnnoFcCollection.Count
-            'For Each thisPair In theAnnoFcCollection
             cleanNewAnnotation(CType(theAnnoFcCollection.Item(i), IFeatureClass))
-            ''Get the Annotation Feature Class
-            'Do While Not (theAnnoLayer Is Nothing)
-            '    If String.Compare(theAnnoLayer.Name, thisPair.Key, True, CultureInfo.CurrentCulture) = 0 Then
-            '        thisAnnoFeatureClass = theAnnoLayer.FeatureClass
-            '        Exit Do
-            '    End If
-            '    theAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
-            'Loop
-
-            'theAnnoEnumLayer.Reset()
-            'theAnnoLayer = DirectCast(theAnnoEnumLayer.Next, IFeatureLayer)
         Next i
-
+        PartnerCreateAnnotationForm.uxProgressBar.Value = 0
         theAnnoFcCollection = Nothing
         theActiveView.Refresh()
     End Sub
@@ -828,11 +823,9 @@ Public NotInheritable Class CreateAnnotation
             Dim theAutoMethodIndex As Integer = theAnnoFeatureClass.FindField("AutoMethod")
             Dim theAnnoClassIdIndex As Integer = theAnnoFeatureClass.FindField("AnnotationClassID")
             Dim theSymbolIdIndex As Integer = theAnnoFeatureClass.FindField("SymbolID")
-            'Dim theInsertCursor As ICursor
             Dim theSymbolName As String = AnnoClassName
             Dim theAnnoClassName As String = AnnoClassName
             Dim theSymbolId As Integer = GetSymbolId(theAnnoFeatureClass, theSymbolName)
-
 
             '------------------------------------------
             ' Get the max ID from this anno feature class
@@ -864,14 +857,6 @@ Public NotInheritable Class CreateAnnotation
 
         EditorExtension.Editor.StopOperation("Process New Annotation")
         EditorExtension.Editor.StopEditing(True)
-
-        '------------------------------------------
-        ' Now clean up the mess left by the converter
-        '------------------------------------------
-        ' Delete "Direction" and "Distance" subtypes
-        ' Delete "Direction" and "Distance" annotation classes
-        ' Delete "Direction" and "Distance" symbols
-        'cleanNewAnnotation(theAnnoFeatureClass)
 
     End Sub
 
@@ -983,7 +968,13 @@ Public NotInheritable Class CreateAnnotation
         '           CreateAnnotation effort. There is no way to know, however, if they can handle cleaning up annotation
         '           feature classes that have other types of non-CreateAnnotion related issues.
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        'Remove "Direction" and "Distance" subtypes
+
+        '------------------------------------------
+        ' Now clean up the mess left by the converter
+        '------------------------------------------
+        ' Delete "Direction" and "Distance" subtypes
+        ' Delete "Direction" and "Distance" annotation classes
+        ' Delete "Direction" and "Distance" symbols
         While Not subtypeName Is Nothing
             'Remove Distance and Direction subtypes
             If String.Compare(subtypeName, 0, "Direction", 0, 9, CultureInfo.CurrentCulture, CompareOptions.IgnoreCase) = 0 Or _
@@ -1004,6 +995,11 @@ Public NotInheritable Class CreateAnnotation
         theAnnoClassAdmin.UpdateProperties()
 
         'May still be embedded Distance and Direction anno classes and symbols not associated with subtypes, so clean them out
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' --DESIGN COMMENT--
+        ' Step through these backwards... for some unknown reasons, the collection sometimes ends up with null values
+        ' (this appears to be coming from the conversion engine) and crashes. Starting with the last object in the
+        ' collection seems to allow the system to skip the undefined objects in the properties collection. 
         Dim i As Integer
         Dim symbolName As String
         Dim symbolID As Integer
