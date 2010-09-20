@@ -483,74 +483,76 @@ Public NotInheritable Class AnnotationUtilities
 
                 Dim theTextElement As ITextElement = DirectCast(theTopAnnoFeature.Annotation, ITextElement)
                 Dim theAnnoPlacement As AnnotationPlacement = GetAnnoPlacement(theTextElement.Symbol.Size, theMoveVector.Length)
-                If theAnnoPlacement = -1 And Not isTransposed Then
-                    MessageBox.Show("Cannot Move Annotation: Selected annotation is at non-standard" & NewLine & _
-                                    "placement (was not created by Create Annotation tool or has" & NewLine & _
-                                    "been moved). Placement tools cannot reposition annotation.", _
-                                    "Move Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
-                    Exit For
-                End If
-                Dim theToDistance As Double
-                Dim theNewVector As ILine = New ESRI.ArcGIS.Geometry.Line
-
-                'NOTE=> All movement is from theMoveVector's 'From' end to its 'To' end, so resized vectors utilize
-                '       the esriExtendAtFrom constant with a recalculated 'To' point in the QueryTangent method
-
-                '------------------------------------------
-                'Move the element
-                '------------------------------------------
-                'Each action below is exclusionary, so placed in nested If-Then-ElseIf blocks
-                If isTransposed Then
-                    MoveElement(theMoveVector, theGraphicsContainer, theTopAnnoFeature.Annotation)
-                    theMoveVector.ReverseOrientation()
-                    MoveElement(theMoveVector, theGraphicsContainer, theBottomAnnoFeature.Annotation)
-                ElseIf isMoveDown Then
-                    MoveElement(theMoveVector, theGraphicsContainer, theTopAnnoFeature.Annotation)
-                    If isStandardSpace Then
-                        theToDistance = DistanceBothSides * theTextElement.Symbol.Size
-                        theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
-                        theMoveVector = theNewVector
-                    ElseIf isWideSpace Then
-                        theToDistance = DistanceBothSides * theTextElement.Symbol.Size + WideLine
-                        theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
-                        theMoveVector = theNewVector
-                    ElseIf theAnnoPlacement = AnnotationPlacement.BothSides Or theAnnoPlacement = AnnotationPlacement.BothSidesWide Then
-                        theToDistance = DistanceBothBelow * theTextElement.Symbol.Size
-                        theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
-                        theMoveVector = theNewVector
+                Try
+                    If theAnnoPlacement = -1 And Not isTransposed Then
+                        MessageBox.Show("Cannot Move Annotation: A pair of annotation is at non-standard" & NewLine & _
+                                        "placement (was not created by Create Annotation tool or has" & NewLine & _
+                                        "been moved). Movement of this annotation pair will be skipped.", _
+                                        "Move Annotation", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                        Exit Try
                     End If
-                    MoveElement(theMoveVector, theGraphicsContainer, theBottomAnnoFeature.Annotation)
-                ElseIf isMoveUp Then
-                    theMoveVector.ReverseOrientation()
-                    MoveElement(theMoveVector, theGraphicsContainer, theBottomAnnoFeature.Annotation)
-                    If isStandardSpace Then
-                        theToDistance = DistanceBothSides * theTextElement.Symbol.Size
-                        theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
-                        theMoveVector = theNewVector
-                    ElseIf isWideSpace Then
-                        theToDistance = DistanceBothSides * theTextElement.Symbol.Size + WideLine
-                        theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
-                        theMoveVector = theNewVector
-                    ElseIf theAnnoPlacement = AnnotationPlacement.BothSides Or theAnnoPlacement = AnnotationPlacement.BothSidesWide Then
-                        theToDistance = DistanceBothAbove * theTextElement.Symbol.Size
-                        theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
-                        theMoveVector = theNewVector
-                    End If
-                    MoveElement(theMoveVector, theGraphicsContainer, theTopAnnoFeature.Annotation)
-                End If
+                    Dim theToDistance As Double
+                    Dim theNewVector As ILine = New ESRI.ArcGIS.Geometry.Line
 
-                '------------------------------------------
-                'Label and close the edit operation
-                '------------------------------------------
-                If isInverted Then
-                    EditorExtension.Editor.StopOperation("Rotate Annotation")
-                ElseIf isTransposed Then
-                    EditorExtension.Editor.StopOperation("Flip Annotation")
-                ElseIf isMoveUp Then
-                    EditorExtension.Editor.StopOperation("Move Annotation Up")
-                ElseIf isMoveDown Then
-                    EditorExtension.Editor.StopOperation("Move Annotation Down")
-                End If
+                    'NOTE=> All movement is from theMoveVector's 'From' end to its 'To' end, so resized vectors utilize
+                    '       the esriExtendAtFrom constant with a recalculated 'To' point in the QueryTangent method
+
+                    '------------------------------------------
+                    'Move the element
+                    '------------------------------------------
+                    'Each action below is exclusionary, so placed in nested If-Then-ElseIf blocks
+                    If isTransposed Then
+                        MoveElement(theMoveVector, theGraphicsContainer, theTopAnnoFeature.Annotation)
+                        theMoveVector.ReverseOrientation()
+                        MoveElement(theMoveVector, theGraphicsContainer, theBottomAnnoFeature.Annotation)
+                    ElseIf isMoveDown Then
+                        MoveElement(theMoveVector, theGraphicsContainer, theTopAnnoFeature.Annotation)
+                        If isStandardSpace Then
+                            theToDistance = DistanceBothSides * theTextElement.Symbol.Size
+                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                            theMoveVector = theNewVector
+                        ElseIf isWideSpace Then
+                            theToDistance = DistanceBothSides * theTextElement.Symbol.Size + WideLine
+                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                            theMoveVector = theNewVector
+                        ElseIf theAnnoPlacement = AnnotationPlacement.BothSides Or theAnnoPlacement = AnnotationPlacement.BothSidesWide Then
+                            theToDistance = DistanceBothBelow * theTextElement.Symbol.Size
+                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                            theMoveVector = theNewVector
+                        End If
+                        MoveElement(theMoveVector, theGraphicsContainer, theBottomAnnoFeature.Annotation)
+                    ElseIf isMoveUp Then
+                        theMoveVector.ReverseOrientation()
+                        MoveElement(theMoveVector, theGraphicsContainer, theBottomAnnoFeature.Annotation)
+                        If isStandardSpace Then
+                            theToDistance = DistanceBothSides * theTextElement.Symbol.Size
+                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                            theMoveVector = theNewVector
+                        ElseIf isWideSpace Then
+                            theToDistance = DistanceBothSides * theTextElement.Symbol.Size + WideLine
+                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                            theMoveVector = theNewVector
+                        ElseIf theAnnoPlacement = AnnotationPlacement.BothSides Or theAnnoPlacement = AnnotationPlacement.BothSidesWide Then
+                            theToDistance = DistanceBothAbove * theTextElement.Symbol.Size
+                            theMoveVector.QueryTangent(esriSegmentExtension.esriExtendAtFrom, 0, False, theToDistance, theNewVector)
+                            theMoveVector = theNewVector
+                        End If
+                        MoveElement(theMoveVector, theGraphicsContainer, theTopAnnoFeature.Annotation)
+                    End If
+                Finally
+                    '------------------------------------------
+                    'Label and stop the edit operation
+                    '------------------------------------------
+                    If isInverted Then
+                        EditorExtension.Editor.StopOperation("Rotate Annotation")
+                    ElseIf isTransposed Then
+                        EditorExtension.Editor.StopOperation("Flip Annotation")
+                    ElseIf isMoveUp Then
+                        EditorExtension.Editor.StopOperation("Move Annotation Up")
+                    ElseIf isMoveDown Then
+                        EditorExtension.Editor.StopOperation("Move Annotation Down")
+                    End If
+                End Try
             Next
             theActiveView.Refresh()
         End If
