@@ -1,0 +1,12 @@
+C:\StringMask\Project1\obj\Debug\Interop.VBScript_RegExp_55.dll
+C:\StringMask\Project1\obj\Debug\Project1.vbproj.ResolveComReference.cache
+C:\StringMask\Project1\bin\ORMAP_TEST.exe
+C:\StringMask\Project1\bin\ORMAP_TEST.pdb
+C:\StringMask\Project1\bin\ORMAP_TEST.xml
+C:\StringMask\Project1\bin\Interop.VBScript_RegExp_55.dll
+C:\StringMask\Project1\obj\Debug\ResolveAssemblyReference.cache
+C:\StringMask\Project1\obj\Debug\ORMAP_TEST.Form1.resources
+C:\StringMask\Project1\obj\Debug\Project1.vbproj.GenerateResource.Cache
+C:\StringMask\Project1\obj\Debug\ORMAP_TEST.exe
+C:\StringMask\Project1\obj\Debug\ORMAP_TEST.xml
+C:\StringMask\Project1\obj\Debug\ORMAP_TEST.pdb

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Project1">
+</Property><Property Name="Solution File" Value="C:\StringMask\Project1\Project1.sln">
+</Property><Property Name="Date" Value="Thursday, December 09, 2010">
+</Property><Property Name="Time" Value="8:40 AM">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="Project1.sln" Description="File successfully backed up as C:\StringMask\Project1\Backup\Project1.sln">
+</Event><Event ErrorLevel="0" Project="Project1" Source="Project1.vbproj" Description="Project file successfully backed up as C:\StringMask\Project1\Backup\Project1.vbproj">
+</Event><Event ErrorLevel="0" Project="Project1" Source="AssemblyInfo.vb" Description="File successfully backed up as C:\StringMask\Project1\Backup\AssemblyInfo.vb">
+</Event><Event ErrorLevel="0" Project="Project1" Source="Form1.Designer.vb" Description="File successfully backed up as C:\StringMask\Project1\Backup\Form1.Designer.vb">
+</Event><Event ErrorLevel="0" Project="Project1" Source="Form1.vb" Description="File successfully backed up as C:\StringMask\Project1\Backup\Form1.vb">
+</Event><Event ErrorLevel="0" Project="Project1" Source="_UpgradeReport.htm" Description="File successfully backed up as C:\StringMask\Project1\Backup\_UpgradeReport.htm">
+</Event><Event ErrorLevel="0" Project="Project1" Source="Form1.resX" Description="File successfully backed up as C:\StringMask\Project1\Backup\Form1.resX">
+</Event><Event ErrorLevel="0" Project="Project1" Source="Project1.vbproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="Project1" Source="Project1.vbproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="Project1.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="Project1.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="Project1" Source="Project1.vbproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>
