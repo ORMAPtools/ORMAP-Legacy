@@ -1,0 +1,26 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+ORMAP_TEST
+</name>
+</assembly>
+<members>
+<member name="M:ORMAP_TEST.Form1.CreateMapTaxlotValue(System.String,System.String)">
+	<summary>
+	</summary>
+	<param name="mapTaxlotIDValue"></param>
+	<param name="formatString"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ORMAP_TEST.Form1.CreateParcelID(System.String,System.String)">
+	<summary>
+ Create a parcel ID from a mask.
+ </summary>
+	<param name="valueToMask"></param>
+	<param name="maskToApply"></param>
+	<returns> If a value is passed in that is not numeric then just pass it straight through else return a parcel id with or without leading zeros</returns>
+	<remarks>I use the Format function with user-defined string formats which consist of either all (@) characters or all ampersands</remarks>
+</member>
+</members>
+</doc>
