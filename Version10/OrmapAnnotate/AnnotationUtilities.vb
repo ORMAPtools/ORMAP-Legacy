@@ -60,19 +60,36 @@ Imports OrmapTaxlotEditing.Utilities
 Public NotInheritable Class AnnotationUtilities
 
 #Region "Class-Level Constants and Enumerations"
-    '------------------------------------------
-    ' Some constants could be redefined as settings
-    '------------------------------------------
+
+    ''' <summary>
+    ''' Sets constants used by various annotation-related methods. AnnotationClassName
+    ''' must be set to "34" (ORMAP standard for Bearing and Distance annotation
+    ''' for the CreateAnnotation class to perform correctly. 
+    ''' Some or all of these could be defined through settings, but would require
+    ''' changes to the underlying Settings component of the OrmapTaxlotEditing project.
+    ''' </summary>
+    ''' <remarks></remarks>
 
     Public Const AnnotationClassName As String = "34"
     Public Const Pi As Double = 3.1415926535897931
     Public Const WideLine As Integer = 60
 
-    'Annotation placement constants
+    '------------------------------------------
+    'Annotation pair distance constants
+    '------------------------------------------
+    'These were calculated from mean distances of annotation pairs
+    'placed by the Label-to-Annotation converter. When multiplied
+    'by the appropriate font, these will maintain distances between
+    'the annotation pairs 
     Public Const DistanceBothSides As Double = 2.55
     Public Const DistanceBothAbove As Double = 1.75
     Public Const DistanceBothBelow As Double = 1.99
 
+    '------------------------------------------
+    'Annotation placement object
+    '------------------------------------------
+    'Used to control where annotation is placed relative to the
+    'source line
     Public Enum AnnotationPlacement As Integer
         BothSides
         BothSidesWide
@@ -636,15 +653,28 @@ Public NotInheritable Class AnnotationUtilities
 #End Region
 
 #Region "Private Members"
+    ''' <summary>
+    ''' Update the source objects with the new geometry
+    ''' </summary>
+    ''' <param name="theGraphicsContainer">The move vector which defines the element's movement.</param>
+    ''' <param name="theElement">The annotation element to be rotated.</param>
+    ''' <param name="theTransform">The type of Transform (2D or 3D).</param>
+    ''' <remarks>Rotates the annotation element 180 degrees (pi) around a specified point.</remarks>
 
     Private Shared Sub finishTransform(ByVal theGraphicsContainer As IGraphicsContainer, ByVal theElement As IElement, ByVal theTransform As ITransform2D)
-        '------------------------------------------
-        'Update the source objects with the new geometry
-        '------------------------------------------
         theElement = DirectCast(theTransform, IElement)
         theGraphicsContainer.UpdateElement(theElement)
     End Sub
-
+    ''' <summary>
+    ''' Divides the mean distance between annotation pairs by the font
+    ''' size from the annotation feature class to compare against the
+    ''' placement constants to determine which type of annotation pair
+    ''' is selected (both above, both below, or both sides)
+    ''' </summary>
+    ''' <param name="theDistance"></param>
+    ''' <param name="theFontSize"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Shared Function calculateAnnoSpacing(ByVal theDistance As Double, ByVal theFontSize As Double) As Double
         Dim theAnnoSpacing As Double
         theAnnoSpacing = Math.Round(theDistance / theFontSize, 2, MidpointRounding.AwayFromZero)
