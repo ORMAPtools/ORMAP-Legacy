@@ -1002,6 +1002,8 @@ Public NotInheritable Class CreateAnnotation
                     theSubtypes.DeleteSubtype(subtypeCode)
                     theAnnoLayerPropCollection.Remove(subtypeCode)
                     theSymbolCollection.Remove(GetSymbolId(theAnnoFC, subtypeName))
+                    'Update the anno FCs property collection to reflect all the subtype removals (need an updated count below)... 
+                    theAnnoClassAdmin.UpdateProperties()
                 Catch ex As Exception
                     EditorExtension.ProcessUnhandledException(ex)
                 End Try
