@@ -1,0 +1,316 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+dimensionArrows
+</name>
+</assembly>
+<members>
+<member name="M:dimensionArrows.contextMenu.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:dimensionArrows.contextMenu.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category unregistration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="T:dimensionArrows.contextMenu">
+	<summary>
+ Create a context menu using IMultiItem
+ </summary>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.curvedArrows.Deactivate">
+	<summary>
+ Clean up the screen and reset the subtype if the command exits
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.curvedArrows.OnKeyDown(System.Int32,System.Int32)">
+	<summary>
+ Handles keyDown events specific to this class
+ </summary>
+	<param name="keyCode"></param>
+	<param name="Shift"></param>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.curvedArrows.setArrowOffset(System.Int32,System.Int32)">
+	<summary>
+ Sets the offset distance from an imaginary line between the two arrow points
+ </summary>
+	<param name="X"></param>
+	<param name="Y"></param>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.curvedArrows.CreateContextMenu(ESRI.ArcGIS.Framework.IApplication)">
+	<summary>Create a context menu for this class</summary>
+	<param name="application">An IApplication Interface</param>
+	<remarks>Uses constant values to fill in the list</remarks>
+</member><member name="T:dimensionArrows.curvedArrows">
+	<summary>
+ Place a pair of curved dimension arrows for bearings and distances.
+ Two clicks position the points of the arrows and a third click sets the offset from
+ an imaginary line between the points.
+ 0 to 4 dashes may be added to the ends of the arrows using the keyboard.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:dimensionArrows.arrowUtilities.EsriMouseButtons">
+	<summary>
+ Enumeration of ESRI mouse button constant values.
+ </summary>
+</member><member name="T:dimensionArrows.arrowUtilities.arrowCategories">
+	<summary>
+ Enumeration of arrow types.
+ </summary>
+</member><member name="T:dimensionArrows.arrowUtilities.arrowStyles">
+	<summary>
+ Enumeration of single arrow styles
+ </summary>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.getDataFrameCoords(System.Int32,System.Int32)">
+	<summary>
+ Converts mouse screen coordinates to data frame coordinates
+ </summary>
+	<param name="X">The mouse X position</param>
+	<param name="Y">The mouse Y position</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.getSnapPoint(ESRI.ArcGIS.Geometry.IPoint)">
+	<summary>
+ If snapping is on, finds the snap point
+ </summary>
+	<param name="point"></param>
+	<returns></returns>
+	<remarks>If there is no snap point the original point is returned</remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.getScreenCoords(ESRI.ArcGIS.Geometry.IPoint)">
+	<summary>
+ Converts a geographic to a screen point
+ </summary>
+	<param name="geoPoint"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.setLineFeedback(ESRI.ArcGIS.Geometry.IPoint)">
+	<summary>
+ Set up the arrow display after the first mouse click
+ </summary>
+	<param name="point">Mouse position in data frame coordinates</param>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.placeArrows(ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint)">
+	<summary>
+ Places the arrows after the last mouse click
+ </summary>
+	<param name="endPoint">Mouse position in data frame coordinates</param>
+	<param name="secondPoint">Option second mouse point for arrows that 
+ require three points</param>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.perpendicularAngle">
+	<summary>
+ Finds the angle perpendicular to the selected line for straight opposing arrows
+ </summary>
+	<returns>the perpendicular angle</returns>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.SetScale(ESRI.ArcGIS.Geometry.IPoint)">
+	<summary>
+ Finds the map scale based on the underlying MapIndex polygon and saves it in
+ the _arrowScale variable
+ </summary>
+	<param name="point">The first arrow point</param>
+	<remarks>If there is no map index a scale of 1 (1"=100') is set</remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.getArrowGeometry(ESRI.ArcGIS.Geometry.IPoint)">
+	<summary>
+ Get the geometry of the paired arrows
+ </summary>
+	<param name="endPoint">Mouse position in data frame coordinates</param>
+	<returns>An IPolyLineArray of two elements</returns>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.saveSubtype">
+	<summary>
+ Save the current feature class and subtype
+ </summary>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.setArrowSubtype(System.Int64)">
+	<summary>
+ Set the subtype of the arrows
+ </summary>
+	<param name="subtypeNumber">The subtype number to set</param>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.resetSubtype">
+	<summary>
+ Reset the feature class and subtype after placing the arrow
+ </summary>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.showLineFeedback(ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint)">
+	<summary>
+ Show the arrows while moving the mouse
+ </summary>
+	<param name="endPoint">Mouse position in data frame coordinates</param>
+	<param name="secondPoint">Option second mouse point for arrows that 
+ require three points</param>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.getSingleArrowGeometry(ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint)">
+	<summary>
+ Get the geometry for a single arrow
+ </summary>
+	<param name="endPoint">Mouse position in data frame coordinates</param>
+	<param name="secondPoint">Optional second mouse point for arrows that 
+ require three points</param>
+	<returns>The arrow geometry as an IPolyLine</returns>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.findArrowSubtype">
+	<summary>
+ Finds the arrow subtype based on the current edit layer
+ </summary>
+	<returns>The subtype number</returns>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.drawArrowImage(ESRI.ArcGIS.Geometry.IPolyline)">
+	<summary>
+ Draws the arrow image to the screen
+ </summary>
+	<param name="arrow">Input polyline</param>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.keyCommands(System.Int32,System.Int32)">
+	<summary>
+ KeyDown events 
+ </summary>
+	<param name="keyCode">the key code</param>
+	<param name="shift">the control/shift/alt key status</param>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.placeFreeformArrow">
+	<summary>
+ Places a freeform arrow when the user double-clicks or selects finish from
+ the context menu
+ </summary>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.checkDataView">
+	<summary>
+ Checks to see that the map in is data view. If not gives the option to change it.
+ </summary>
+	<returns>If the return is false the tool is cancelled</returns>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.clearAll">
+	<summary>
+ Clears the graphics container
+ </summary>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.WriteXML">
+	<summary>
+ Write the the XML settings file
+ </summary>
+	<remarks>Not used in this version</remarks>
+</member><member name="M:dimensionArrows.arrowUtilities.ReadXML(System.Int32)">
+	<summary>
+ Reads the XML settings file
+ </summary>
+	<param name="arrowType">The arrow geometry being extracted from the file</param>
+	<returns>A formatted string with coordinate pairs</returns>
+	<remarks>The XML file is in the program installation folder</remarks>
+</member><member name="M:dimensionArrows.landHook.Deactivate">
+	<summary>
+ Clean up the screen and reset the subtype if the command exits
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.landHook.CreateContextMenu(ESRI.ArcGIS.Framework.IApplication)">
+	<summary>Create a context menu for this class</summary>
+	<param name="application"></param>
+	<remarks>Uses constants to fill in the list</remarks>
+</member><member name="T:dimensionArrows.landHook">
+	<summary>
+ Creates a land hook
+ </summary>
+	<remarks>The basic land hook definition is stored in the XML file</remarks>
+</member><member name="P:dimensionArrows.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:dimensionArrows.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="P:dimensionArrows.My.Resources.Resources.dimensionArrowGeometry">
+	<summary>
+  Looks up a localized string similar to &lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;!--Arrow definitions for the dimensionArrows toolbar--&gt;
+&lt;arrowDef&gt;
+  &lt;straight&gt;
+    &lt;segments count="1"/&gt;
+    &lt;segment points="0,0,20,0"/&gt;
+  &lt;/straight&gt;
+  &lt;landHookFlipped&gt;
+    &lt;segments count="2"/&gt;
+    &lt;segment points="0,0,-20,0" /&gt;
+    &lt;segment points="-20,0,-15,5" /&gt;
+  &lt;/landHookFlipped&gt;
+  &lt;landHook&gt;
+    &lt;segments count="2"/&gt;
+    &lt;segment points="0,0,-20,0" /&gt;
+    &lt;segment points="-20,0,-15,-5" /&gt;
+  &lt;/landHook&gt;
+  &lt;curved0&gt;
+   &lt;segments count="10" [rest of string was truncated]";.
+</summary>
+</member><member name="T:dimensionArrows.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:dimensionArrows.arrowTools.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:dimensionArrows.arrowTools.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category unregistration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:dimensionArrows.singleArrow.Deactivate">
+	<summary>
+ Clean up the screen and reset the subtype if the command exits
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.singleArrow.CreateContextMenu(ESRI.ArcGIS.Framework.IApplication)">
+	<summary>Create a context menu for this class</summary>
+	<param name="application"></param>
+	<remarks></remarks>
+</member><member name="T:dimensionArrows.singleArrow">
+	<summary>
+ Places a single arrow in one of four styles
+ </summary>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.dimensionArrowExtension.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:dimensionArrows.dimensionArrowExtension.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category unregistration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:dimensionArrows.dimensionArrowExtension.StateCheck(System.Boolean)">
+	<summary>
+ Determine extension state
+ </summary>
+</member><member name="P:dimensionArrows.dimensionArrowExtension.Name">
+	<summary>
+ Name of extension. Do not exceed 31 characters
+ </summary>
+</member><member name="M:dimensionArrows.straightArrows.Deactivate">
+	<summary>
+ Clean up the screen and reset the subtype if the command exits
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:dimensionArrows.straightArrows.CreateContextMenu(ESRI.ArcGIS.Framework.IApplication)">
+	<summary>Create a context menu</summary>
+	<param name="application"></param>
+	<remarks></remarks>
+</member><member name="T:dimensionArrows.straightArrows">
+	<summary>
+ Places a pair of opposing straight arrows
+ </summary>
+	<remarks></remarks>
+</member>
+</members>
+</doc>
