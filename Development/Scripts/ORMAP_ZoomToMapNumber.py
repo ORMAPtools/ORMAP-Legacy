@@ -15,6 +15,14 @@ import ORMAP_LayersConfig as OrmapLayers
 MapNumber = arcpy.GetParameterAsText(0)
 PageSize = arcpy.GetParameterAsText(1)
 
+#LOAD THE PAGE INFORMATION
+import ORMAP_18x20MapConfig
+import ORMAP_18x24MapConfig
+if PageSize=='18x20':
+    PageConfig = ORMAP_18x20MapConfig
+else:
+    PageConfig = ORMAP_18x24MapConfig
+
 #REFERENCE MAP DOCUMENT
 MXD = MAP.MapDocument("CURRENT")
 
@@ -47,7 +55,7 @@ else:
 cancelledRow = None  
 if len(MAP.ListTableViews(MXD, OrmapLayers.CANCELLEDNUMBERS_TABLE, mainDF))>0:
     cancelledTable = MAP.ListTableViews(MXD, OrmapLayers.CANCELLEDNUMBERS_TABLE, mainDF)[0]
-    cancelledCursor = arcpy.SearchCursor(cancelledTable.name, "MapNumber = '" + MapNumber + "'", "", "", "SortOrder")
+    cancelledCursor = arcpy.SearchCursor(cancelledTable.name, "MapNumber = '" + MapNumber + "'", "", "", PageConfig.CancelledSortField)
     cancelledRow = cancelledCursor.next()
 else:
     sys.exit("Unable to find Cancelled Numbers table.  Please check your TOC and config file.")  
@@ -83,13 +91,6 @@ arcpy.AddMessage("")
 geom = mapIndexRow.shape
 featureExtent = geom.extent
 
-#LOAD THE PAGE INFORMATION
-import ORMAP_18x20MapConfig
-import ORMAP_18x24MapConfig
-if PageSize=='18x20':
-    PageConfig = ORMAP_18x20MapConfig
-else:
-    PageConfig = ORMAP_18x24MapConfig
 
 if pageLayoutRow==None:
     #SET PAGE LAYOUT LOCATIONS FROM CONFIG

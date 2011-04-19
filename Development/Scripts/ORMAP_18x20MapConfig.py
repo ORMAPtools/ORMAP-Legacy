@@ -34,3 +34,4 @@ CountyName='DESCHUTES COUNTY'
 CountyNameDist=0.4
 MapScaleDist=0.7361
 MaxCancelledRows = 100
+CancelledSortField='OBJECTID'
