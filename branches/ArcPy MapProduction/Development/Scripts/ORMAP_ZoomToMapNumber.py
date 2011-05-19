@@ -332,6 +332,15 @@ if sRange1 <> "0":
     sRange = sRange1
 sRange = sRange + sRange2
 
+#BUILD PARTIAL RANGE TEXT
+sRP = ""
+if sRangePart == "25":
+    sRP = " 1/4"
+if sRangePart == "50":
+    sRP = " 1/2"
+if sRangePart == "75":
+    sRP = " 3/4"
+
 #BUILD SECTION TEXT TO EXCLUDE LEADING ZEROS
 sSection = ""
 if sSection1 <> "0":
@@ -400,6 +409,9 @@ if sQtr <> "0":
 if sQtrQtr <> "0":
     shortMapTitle += sQtrQtr
 
+#ADD CITY NAME IF EXISTS TO SHORT TITLES
+if CityName != None:
+    shortMapTitle += "\n" + CityName.replace(",","\n")
  
 #CREATE TEXT FOR LONG MAP TITLE BASED ON SCALE FORMATS PROVIDED BY DOR.
 sLongMapTitle = ""
@@ -407,15 +419,15 @@ sMapScale = "1\" = " + str(int(MapScale)/12) + "'"
 if MapScale == "24000":
     sLongMapTitle = "T." + str(sTP) + str(sTownship) + str(sTownDir) + ". R." + str(sRange) + str(sRangeDir) + ". W.M."
 elif MapScale == "4800":
-    sLongMapTitle = "SECTION " + str(sSection) + " T." + str(sTP) + str(sTownship) + str(sTownDir) + ". R." + str(sRange) + str(sRangeDir) + ". W.M."
+    sLongMapTitle = "SECTION " + str(sSection) + " T." + str(sTownship) + str(sTP)  + str(sTownDir) + ". R." + str(sRange) + str(sRP) + str(sRangeDir) + ". W.M."
 elif MapScale == "2400":
-    sLongMapTitle = str(sSectionText) + " SEC." + str(sSection) + " T." + str(sTP) + str(sTownship) + str(sTownDir) + ". R." + str(sRange) + str(sRangeDir) + ". W.M."
+    sLongMapTitle = str(sSectionText) + " SEC." + str(sSection) + " T." + str(sTownship) + str(sTP) + str(sTownDir) + ". R." + str(sRange) + str(sRP)  + str(sRangeDir) + ". W.M."
 elif MapScale == "1200":
-    sLongMapTitle = str(sSectionText) + " SEC." + str(sSection) + " T." + str(sTP) + str(sTownship) + str(sTownDir) + ". R." + str(sRange) + str(sRangeDir) + ". W.M."
+    sLongMapTitle = str(sSectionText) + " SEC." + str(sSection) + " T." + str(sTownship) + str(sTP)  + str(sTownDir) + ". R." + str(sRange) + str(sRP)  + str(sRangeDir) + ". W.M."
 else:
-    sLongMapTitle = str(sSectionText) + " SEC." + str(sSection) + " T." + str(sTP) + str(sTownship) + str(sTownDir) + ". R." + str(sRange) + str(sRangeDir) + ". W.M."
+    sLongMapTitle = str(sSectionText) + " SEC." + str(sSection) + " T." + str(sTownship) + str(sTP)  + str(sTownDir) + ". R." + str(sRange) + str(sRP)  + str(sRangeDir) + ". W.M."
     if str(sSectionText)=="":
-        sLongMapTitle = "SECTION " + str(sSection) + " T." + str(sTP) + str(sTownship) + str(sTownDir) + ". R." + str(sRange) + str(sRangeDir) + ". W.M."
+        sLongMapTitle = "SECTION " + str(sSection) + " T." + str(sTownship) + str(sTP) + str(sTownDir) + ". R." + str(sRange) + str(sRP)  + str(sRangeDir) + ". W.M."
     if str(sSection)=="":
         sLongMapTitle = "T." + str(sTP) + str(sTownship) + str(sTownDir) + ". R." + str(sRange) + str(sRangeDir) + ". W.M."
 
@@ -488,15 +500,15 @@ for elm in MAP.ListLayoutElements(MXD):
         elm.elementPositionY = ScaleBarY
 
     if elm.name == "CanMapNumber":
-        elm.text = " "
+        elm.text = " " #-- Important that this element has some text in it (event just a single space) so ArcMap does not "lose" it.
         cancelledElm2 = None
         if len(MAP.ListLayoutElements(MXD, "TEXT_ELEMENT", "CanMapNumber2"))>0:
             cancelledElm2 = MAP.ListLayoutElements(MXD, "TEXT_ELEMENT", "CanMapNumber2")[0]
-            cancelledElm2.text = " "
+            cancelledElm2.text = " " #-- Important that this element has some text in it (event just a single space) so ArcMap does not "lose" it.
         cancelledElm3 = None
         if len(MAP.ListLayoutElements(MXD, "TEXT_ELEMENT", "CanMapNumber3"))>0:
             cancelledElm3 = MAP.ListLayoutElements(MXD, "TEXT_ELEMENT", "CanMapNumber3")[0]
-            cancelledElm3.text = " "
+            cancelledElm3.text = " " #-- Important that this element has some text in it (event just a single space) so ArcMap does not "lose" it.
             
         n = 0
         maxRows = PageConfig.MaxCancelledRows
@@ -525,21 +537,23 @@ for elm in MAP.ListLayoutElements(MXD):
             n += 1
             cancelledRow = cancelledCursor.next()
 
+        elm.text = PageConfig.CancelledNumberPrefix + "\n" + elm.text.strip() if elm.text != " " else " " #-- Important that this element has some text in it (event just a single space) so ArcMap does not "lose" it.
         elm.elementPositionX = CancelNumX
         elm.elementPositionY = CancelNumY
         if cancelledElm2 != None:
-            cancelledElm2.text = cancelledElm2.text.strip() if cancelledElm2.text != " " else " "
+            cancelledElm2.text = cancelledElm2.text.strip() if cancelledElm2.text != " " else " " #-- Important that this element has some text in it (event just a single space) so ArcMap does not "lose" it.
             cancelledElm2.elementPositionX = elm.elementPositionX + cancelledElm2.elementWidth + .05
             cancelledElm2.elementPositionY = elm.elementPositionY
             if cancelledElm3 != None:
-                cancelledElm3.text = cancelledElm3.text.strip() if cancelledElm3.text != " " else " "
+                cancelledElm3.text = cancelledElm3.text.strip() if cancelledElm3.text != " " else " " #-- Important that this element has some text in it (event just a single space) so ArcMap does not "lose" it.
                 cancelledElm3.elementPositionX = cancelledElm2.elementPositionX + cancelledElm3.elementWidth + .05
                 cancelledElm3.elementPositionY = elm.elementPositionY
+
             
 
 
 #MODIFY MAIN DATAFRAME PROPERTIES            
-mainDF.extent = mapExtent #featureExtent
+mainDF.extent = mapExtent
 mainDF.scale = MapScale
 mainDF.rotation = MapAngle
 
