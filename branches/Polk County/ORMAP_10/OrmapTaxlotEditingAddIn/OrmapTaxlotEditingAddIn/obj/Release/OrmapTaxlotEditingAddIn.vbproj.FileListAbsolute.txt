@@ -1,0 +1,14 @@
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\bin\Release\OrmapTaxlotEditingAddIn.dll.config
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\bin\Release\OrmapTaxlotEditingAddIn.dll
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\bin\Release\OrmapTaxlotEditingAddIn.pdb
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\bin\Release\OrmapTaxlotEditingAddIn.xml
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\obj\Release\ResolveAssemblyReference.cache
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\obj\Release\OrmapTaxlotEditingAddIn.HelpForm.resources
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\obj\Release\OrmapTaxlotEditingAddIn.Resources.resources
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\obj\Release\OrmapTaxlotEditingAddIn.CreateAnnotationForm.resources
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\obj\Release\GenerateResource-ResGen.read.1.tlog
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\obj\Release\GenerateResource-ResGen.write.1.tlog
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\obj\Release\OrmapTaxlotEditingAddIn.dll
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\obj\Release\OrmapTaxlotEditingAddIn.xml
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\obj\Release\OrmapTaxlotEditingAddIn.pdb
+S:\Robert\projects\source\VB.NET\AddIns\ArcMap\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\bin\Release\OrmapTaxlotEditingAddIn.esriAddIn
