@@ -381,6 +381,371 @@ OrmapTaxlotEditingAddIn
 		<para><seealso cref="T:OrmapTaxlotEditingAddIn.MoveUp"/></para>
 		<para><seealso cref="T:OrmapTaxlotEditingAddIn.MoveDown"/></para>
 	</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.Application">
+	<summary>
+ The ArcMap Application associated with the Editor object.
+ </summary>
+	<value></value>
+	<returns>An object that supports <c>IApplication</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setApplication(ESRI.ArcGIS.Framework.IApplication)">
+	<summary>
+	</summary>
+	<param name="value">An object that supports <c>IApplication</c>.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.Editor">
+	<summary>
+ The ArcMap Editor object.
+ </summary>
+	<value></value>
+	<returns>An object that supports <c>IEditor2</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setEditor(ESRI.ArcGIS.Editor.IEditor2)">
+	<summary>
+	</summary>
+	<param name="value">An object that supports <c>IEditor2</c>.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents">
+	<summary>
+ The ArcMap EditEvents object associated with the Editor.
+ </summary>
+	<value></value>
+	<returns>An object that supports <c>IEditEvents_Event</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setEditEvents(ESRI.ArcGIS.Editor.IEditEvents_Event)">
+	<summary>
+	</summary>
+	<param name="value">An object that supports <c>IEditEvents_Event</c>.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents">
+	<summary>
+ The ArcMap ActiveViewEvents object.
+ </summary>
+	<value></value>
+	<returns>An object that supports <c>IActiveViewEvents_Event</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setActiveViewEvents(ESRI.ArcGIS.Carto.IActiveViewEvents_Event)">
+	<summary>
+	</summary>
+	<param name="value">An object that supports <c>IActiveViewEvents_Event</c>.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TableNamesSettings">
+	<summary>
+ The ORMAP TableNamesSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>TableNamesSettings</c> object.</returns>
+	<remarks>The object contains all settings for ORMAP table names.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AnnoTableNamesSettings">
+	<summary>
+ The ORMAP AnnoTableNamesSettings object.
+ </summary>
+	<value></value>
+	<returns>An <c>AnnoTableNamesSettings</c> object.</returns>
+	<remarks>The object contains all settings for ORMAP anno table names.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllTablesSettings">
+	<summary>
+ The ORMAP AllTablesSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>AllTablesSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for all ORMAP tables.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.MapIndexSettings">
+	<summary>
+ The ORMAP MapIndexSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>MapIndexSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP MapIndex table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxLotSettings">
+	<summary>
+ The ORMAP TaxlotSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>TaxLotSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP Taxlot table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxLotLinesSettings">
+	<summary>
+ The ORMAP TaxLotLinesSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>TaxLotLinesSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP TaxLotLines table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.CartographicLinesSettings">
+	<summary>
+ The ORMAP CartographicLinesSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>CartographicLinesSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP CartographicLines table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxlotAcreageAnnoSettings">
+	<summary>
+ The ORMAP TaxlotAcreageAnnoSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>TaxlotAcreageAnnoSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP TaxlotAcreageAnno table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxlotNumberAnnoSettings">
+	<summary>
+ The ORMAP TaxlotNumberAnnoSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>TaxlotNumberAnnoSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP TaxlotNumberAnno table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.DefaultValuesSettings">
+	<summary>
+ The ORMAP DefaultValuesSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>DefaultValuesSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP DefaultValues table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.CanEnableExtendedEditing">
+	<summary>
+ Can enable the set of ORMAP taxlot tools. 
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.HasValidLicense">
+	<summary>
+ Has a valid ArcMap license level. 
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setHasValidLicense(System.Boolean)">
+	<summary>
+	</summary>
+	<param name="value">A boolean value.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.IsValidWorkspace">
+	<summary>
+ Is a valid workspace. 
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setIsValidWorkspace(System.Boolean)">
+	<summary>
+	</summary>
+	<param name="value">A boolean value.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllowedToEditTaxlots">
+	<summary>
+ Allowed to enable the set of ORMAP taxlot tools. 
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks>Tools may not be enabled still (see <see>CanEnableExtendedEditing</see>).</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllowedToAutoUpdate">
+	<summary>
+ Allowed to auto-update fields on edit events when the ORMAP taxlot tools are allowed. 
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks>Some field auto-updates may not be enabled still (see <see>AllowedToAutoUpdateAllFields</see>).</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllowedToAutoUpdateAllFields">
+	<summary>
+ Allowed to auto-update all fields on edit events 
+ when the ORMAP taxlot tools are allowed. 
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks>If true, field auto-updates are enabled 
+ for the maximum set of fields; If false, just the 
+ minimum set are auto-updated.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideAutoAttribute">
+	<summary>
+ Override the auto-update (attributing) on edit events
+ to use a specified maps values.
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks>If true, field values are set manually via a switch in the locate  
+ features tool (which records the mapnumber) instead of using auto-update.
+ minimum set are auto-updated.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideMapNumber">
+	<summary>
+ The MapNumber to use if OverrideAutoAttribute is true.
+ </summary>
+	<value></value>
+	<returns>A <c>String</c> object containing a mapnumber.</returns>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideMapScale">
+	<summary>
+ The MapScale to use if OverrideAutoAttribute is true.
+ </summary>
+	<value></value>
+	<returns>A <c>String</c> object containing a map scale.</returns>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideORMapNumber">
+	<summary>
+ The ORMapNumber to use if OverrideAutoAttribute is true.
+ </summary>
+	<value></value>
+	<returns>A <c>String</c> object containing a ORMapNumber.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnChangeFeature(ESRI.ArcGIS.Geodatabase.IObject)">
+	<summary>
+ Updates fields based on the feature that was just changed.
+ </summary>
+	<param name="obj">The feature that was just changed.</param>
+	<remarks>Handles EditEvents.OnCreateFeature events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnCreateFeature(ESRI.ArcGIS.Geodatabase.IObject)">
+	<summary>
+ Updates fields based on the feature that was just created.
+ </summary>
+	<param name="obj">The feature that was just created.</param>
+	<remarks>Handles EditEvents.OnCreateFeature events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnDeleteFeature(ESRI.ArcGIS.Geodatabase.IObject)">
+	<summary>
+ Records in the Cancelled Numbers object class the map number
+ and taxlot number from the feature that was just deleted.
+ </summary>
+	<param name="obj">The feature that was just deleted.</param>
+	<remarks>Handles EditEvents.OnDeleteFeature events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnStartEditing">
+	<summary>
+ Event handler.
+ </summary>
+	<remarks>Handles EditEvents.OnStartEditing events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnStopEditing(System.Boolean)">
+	<summary>
+ Event handler.
+ </summary>
+	<remarks>Handles EditEvents.OnStopEditing events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents_FocusMapChanged">
+	<summary>
+ Event handler.
+ </summary>
+	<remarks>Handles ActiveViewEvents.FocusMapChanged events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents_ItemAdded(System.Object)">
+	<summary>
+ Event handler.
+ </summary>
+	<remarks>Handles ActiveViewEvents.ItemAdded events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents_ItemDeleted(System.Object)">
+	<summary>
+ Event handler.
+ </summary>
+	<remarks>Handles ActiveViewEvents.ItemDeleted events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setAccelerator(ESRI.ArcGIS.Framework.IAcceleratorTable,ESRI.ArcGIS.esriSystem.UID,System.Int32,System.Boolean,System.Boolean,System.Boolean)">
+	<summary>
+ Set a keyboard accelerator. 
+ </summary>
+	<param name="acceleratorTable">The accelerator table to store the accelerators in.</param>
+	<param name="classID">the ClassID of the command to trigger by the accelerator.</param>
+	<param name="key">The key to use.</param>
+	<param name="usesCtrl"><italic>Flag.</italic> Uses Ctrl key modification.</param>
+	<param name="usesAlt"><italic>Flag.</italic> Uses Alt key modification.</param>
+	<param name="usesShift"><italic>Flag.</italic> Uses Shift key modification.</param>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.validateLicense(ESRI.ArcGIS.esriSystem.esriLicenseProductCode)">
+	<summary>
+ Validate the license (e.g. ArcEditor or ArcInfo).
+ </summary>
+	<param name="requiredProductCode">An <c>"esriLicenseProductCode"</c> enumerated item.</param>
+	<returns><c>True</c> or <c>False</c>, depending on the licence validity.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setMapIndexAndScale(ESRI.ArcGIS.Geodatabase.IObject,ESRI.ArcGIS.Geodatabase.IFeature,ESRI.ArcGIS.Geometry.IGeometry)">
+	<summary>
+ Set the map index (if the field exists) to the Map Index map index for the location geometry.
+ </summary>
+	<param name="obj">An object implementing <c>IObject</c>, either a Feature or a Row.</param>
+	<param name="theFeature">An object implementing <c>IFeature</c>.</param>
+	<param name="theSearchGeometry">An object implementing <c>IGeometry</c>.</param>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.addTraceListenerForEventLog">
+	<summary>
+ Creates a trace listener for the event log.
+ </summary>
+	<remarks>Once created, any <c>Trace</c> call will be written to this log.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.addTraceListenerForFileLog(System.String)">
+	<summary>
+ Create a trace listener for a file log.
+ </summary>
+	<param name="inLogFileName">The file log filename.</param>
+	<remarks>
+		<para>Once created, any <c>Trace</c> call will be written to this log.</para>
+		<para>This file will be replaced every 30 days.</para>
+	</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.removeTraceListenerForEventLog">
+	<summary>
+ Removes a trace listener for the event log.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.removeTraceListenerForFileLog">
+	<summary>
+ Removes a trace listener for a file log.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ProcessUnhandledException(System.Exception)">
+	<summary>
+ Process any unhandled exceptions that occur in the application.
+ </summary>
+	<param name="ex">The unhandled exception.</param>
+	<remarks>
+		<para>This code is called by all UI entry points in the application (e.g. button click events)
+ when an unhandled exception occurs.</para>
+		<para>You could also achieve this by handling the Application.ThreadException event, however
+ the VS2005 debugger will break before this event is called.</para>
+	</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.Name">
+	<summary>
+ Sets the name of the extension.
+ </summary>
+	<value>The name of the extension.</value>
+	<returns>The name.</returns>
+	<remarks>Must not exceed 31 characters.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.Shutdown">
+	<summary>
+ Shuts down the extension.
+ </summary>
+	<remarks><see cref="M:OrmapTaxlotEditingAddIn.EditorExtension.Startup(System.Object@)"/></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.Startup(System.Object@)">
+	<summary>
+ Starts up the extension with the given initialization data.
+ </summary>
+	<param name="initializationData">A reference to the object with 
+ which this extension is registered (Editor).</param>
+	<remarks>
+		<para>
+ Registered in this case with the <bold>ESRI Editor Extensions</bold> 
+ category.
+ </para>
+		<para>
+ Any extension that is registered with an application is automatically 
+ loaded and unloaded by the application; the end user does nothing to 
+ load or unload. For example, an extension that has been added to the 
+ ESRI Mx Extensions category will be started when ArcMap is started and 
+ will be shutdown when ArcMap is shutdown. In this case, the editor
+ extension is loaded when the ArcMap Editor object is loaded, which 
+ occurs when ArcMap is started. So this startup event occurs when
+ ArcMap is started (rather than when an edit session is started).
+ </para>
+	</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.CreateAccelerators">
+	<summary>
+ Create the keyboard accelerators for this extension.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category unregistration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="T:OrmapTaxlotEditingAddIn.EditorExtension">
+	<summary>
+ Provides the Editor Extension implementation.
+ </summary>
+	<remarks>
+		<para>Also contains core application-level fields, methods, and event handlers.</para>
+	</remarks>
 </member><member name="M:OrmapTaxlotEditingAddIn.MoveUpButton.OnClick">
 	<summary>
  ESRI AddIn button OnClick event handler
@@ -2012,371 +2377,6 @@ the annotation pairs
 		<para>Commonly used general procedures and functions.</para>
 		<para><seealso cref="T:OrmapTaxlotEditingAddIn.SpatialUtilities"/></para>
 		<para><seealso cref="T:OrmapTaxlotEditingAddIn.StringUtilities"/></para>
-	</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.Application">
-	<summary>
- The ArcMap Application associated with the Editor object.
- </summary>
-	<value></value>
-	<returns>An object that supports <c>IApplication</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setApplication(ESRI.ArcGIS.Framework.IApplication)">
-	<summary>
-	</summary>
-	<param name="value">An object that supports <c>IApplication</c>.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.Editor">
-	<summary>
- The ArcMap Editor object.
- </summary>
-	<value></value>
-	<returns>An object that supports <c>IEditor2</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setEditor(ESRI.ArcGIS.Editor.IEditor2)">
-	<summary>
-	</summary>
-	<param name="value">An object that supports <c>IEditor2</c>.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents">
-	<summary>
- The ArcMap EditEvents object associated with the Editor.
- </summary>
-	<value></value>
-	<returns>An object that supports <c>IEditEvents_Event</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setEditEvents(ESRI.ArcGIS.Editor.IEditEvents_Event)">
-	<summary>
-	</summary>
-	<param name="value">An object that supports <c>IEditEvents_Event</c>.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents">
-	<summary>
- The ArcMap ActiveViewEvents object.
- </summary>
-	<value></value>
-	<returns>An object that supports <c>IActiveViewEvents_Event</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setActiveViewEvents(ESRI.ArcGIS.Carto.IActiveViewEvents_Event)">
-	<summary>
-	</summary>
-	<param name="value">An object that supports <c>IActiveViewEvents_Event</c>.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TableNamesSettings">
-	<summary>
- The ORMAP TableNamesSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>TableNamesSettings</c> object.</returns>
-	<remarks>The object contains all settings for ORMAP table names.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AnnoTableNamesSettings">
-	<summary>
- The ORMAP AnnoTableNamesSettings object.
- </summary>
-	<value></value>
-	<returns>An <c>AnnoTableNamesSettings</c> object.</returns>
-	<remarks>The object contains all settings for ORMAP anno table names.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllTablesSettings">
-	<summary>
- The ORMAP AllTablesSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>AllTablesSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for all ORMAP tables.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.MapIndexSettings">
-	<summary>
- The ORMAP MapIndexSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>MapIndexSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP MapIndex table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxLotSettings">
-	<summary>
- The ORMAP TaxlotSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>TaxLotSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP Taxlot table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxLotLinesSettings">
-	<summary>
- The ORMAP TaxLotLinesSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>TaxLotLinesSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP TaxLotLines table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.CartographicLinesSettings">
-	<summary>
- The ORMAP CartographicLinesSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>CartographicLinesSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP CartographicLines table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxlotAcreageAnnoSettings">
-	<summary>
- The ORMAP TaxlotAcreageAnnoSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>TaxlotAcreageAnnoSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP TaxlotAcreageAnno table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxlotNumberAnnoSettings">
-	<summary>
- The ORMAP TaxlotNumberAnnoSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>TaxlotNumberAnnoSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP TaxlotNumberAnno table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.DefaultValuesSettings">
-	<summary>
- The ORMAP DefaultValuesSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>DefaultValuesSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP DefaultValues table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.CanEnableExtendedEditing">
-	<summary>
- Can enable the set of ORMAP taxlot tools. 
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.HasValidLicense">
-	<summary>
- Has a valid ArcMap license level. 
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setHasValidLicense(System.Boolean)">
-	<summary>
-	</summary>
-	<param name="value">A boolean value.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.IsValidWorkspace">
-	<summary>
- Is a valid workspace. 
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setIsValidWorkspace(System.Boolean)">
-	<summary>
-	</summary>
-	<param name="value">A boolean value.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllowedToEditTaxlots">
-	<summary>
- Allowed to enable the set of ORMAP taxlot tools. 
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks>Tools may not be enabled still (see <see>CanEnableExtendedEditing</see>).</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllowedToAutoUpdate">
-	<summary>
- Allowed to auto-update fields on edit events when the ORMAP taxlot tools are allowed. 
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks>Some field auto-updates may not be enabled still (see <see>AllowedToAutoUpdateAllFields</see>).</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllowedToAutoUpdateAllFields">
-	<summary>
- Allowed to auto-update all fields on edit events 
- when the ORMAP taxlot tools are allowed. 
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks>If true, field auto-updates are enabled 
- for the maximum set of fields; If false, just the 
- minimum set are auto-updated.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideAutoAttribute">
-	<summary>
- Override the auto-update (attributing) on edit events
- to use a specified maps values.
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks>If true, field values are set manually via a switch in the locate  
- features tool (which records the mapnumber) instead of using auto-update.
- minimum set are auto-updated.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideMapNumber">
-	<summary>
- The MapNumber to use if OverrideAutoAttribute is true.
- </summary>
-	<value></value>
-	<returns>A <c>String</c> object containing a mapnumber.</returns>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideMapScale">
-	<summary>
- The MapScale to use if OverrideAutoAttribute is true.
- </summary>
-	<value></value>
-	<returns>A <c>String</c> object containing a map scale.</returns>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideORMapNumber">
-	<summary>
- The ORMapNumber to use if OverrideAutoAttribute is true.
- </summary>
-	<value></value>
-	<returns>A <c>String</c> object containing a ORMapNumber.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnChangeFeature(ESRI.ArcGIS.Geodatabase.IObject)">
-	<summary>
- Updates fields based on the feature that was just changed.
- </summary>
-	<param name="obj">The feature that was just changed.</param>
-	<remarks>Handles EditEvents.OnCreateFeature events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnCreateFeature(ESRI.ArcGIS.Geodatabase.IObject)">
-	<summary>
- Updates fields based on the feature that was just created.
- </summary>
-	<param name="obj">The feature that was just created.</param>
-	<remarks>Handles EditEvents.OnCreateFeature events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnDeleteFeature(ESRI.ArcGIS.Geodatabase.IObject)">
-	<summary>
- Records in the Cancelled Numbers object class the map number
- and taxlot number from the feature that was just deleted.
- </summary>
-	<param name="obj">The feature that was just deleted.</param>
-	<remarks>Handles EditEvents.OnDeleteFeature events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnStartEditing">
-	<summary>
- Event handler.
- </summary>
-	<remarks>Handles EditEvents.OnStartEditing events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnStopEditing(System.Boolean)">
-	<summary>
- Event handler.
- </summary>
-	<remarks>Handles EditEvents.OnStopEditing events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents_FocusMapChanged">
-	<summary>
- Event handler.
- </summary>
-	<remarks>Handles ActiveViewEvents.FocusMapChanged events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents_ItemAdded(System.Object)">
-	<summary>
- Event handler.
- </summary>
-	<remarks>Handles ActiveViewEvents.ItemAdded events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents_ItemDeleted(System.Object)">
-	<summary>
- Event handler.
- </summary>
-	<remarks>Handles ActiveViewEvents.ItemDeleted events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setAccelerator(ESRI.ArcGIS.Framework.IAcceleratorTable,ESRI.ArcGIS.esriSystem.UID,System.Int32,System.Boolean,System.Boolean,System.Boolean)">
-	<summary>
- Set a keyboard accelerator. 
- </summary>
-	<param name="acceleratorTable">The accelerator table to store the accelerators in.</param>
-	<param name="classID">the ClassID of the command to trigger by the accelerator.</param>
-	<param name="key">The key to use.</param>
-	<param name="usesCtrl"><italic>Flag.</italic> Uses Ctrl key modification.</param>
-	<param name="usesAlt"><italic>Flag.</italic> Uses Alt key modification.</param>
-	<param name="usesShift"><italic>Flag.</italic> Uses Shift key modification.</param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.validateLicense(ESRI.ArcGIS.esriSystem.esriLicenseProductCode)">
-	<summary>
- Validate the license (e.g. ArcEditor or ArcInfo).
- </summary>
-	<param name="requiredProductCode">An <c>"esriLicenseProductCode"</c> enumerated item.</param>
-	<returns><c>True</c> or <c>False</c>, depending on the licence validity.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setMapIndexAndScale(ESRI.ArcGIS.Geodatabase.IObject,ESRI.ArcGIS.Geodatabase.IFeature,ESRI.ArcGIS.Geometry.IGeometry)">
-	<summary>
- Set the map index (if the field exists) to the Map Index map index for the location geometry.
- </summary>
-	<param name="obj">An object implementing <c>IObject</c>, either a Feature or a Row.</param>
-	<param name="theFeature">An object implementing <c>IFeature</c>.</param>
-	<param name="theSearchGeometry">An object implementing <c>IGeometry</c>.</param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.addTraceListenerForEventLog">
-	<summary>
- Creates a trace listener for the event log.
- </summary>
-	<remarks>Once created, any <c>Trace</c> call will be written to this log.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.addTraceListenerForFileLog(System.String)">
-	<summary>
- Create a trace listener for a file log.
- </summary>
-	<param name="inLogFileName">The file log filename.</param>
-	<remarks>
-		<para>Once created, any <c>Trace</c> call will be written to this log.</para>
-		<para>This file will be replaced every 30 days.</para>
-	</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.removeTraceListenerForEventLog">
-	<summary>
- Removes a trace listener for the event log.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.removeTraceListenerForFileLog">
-	<summary>
- Removes a trace listener for a file log.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ProcessUnhandledException(System.Exception)">
-	<summary>
- Process any unhandled exceptions that occur in the application.
- </summary>
-	<param name="ex">The unhandled exception.</param>
-	<remarks>
-		<para>This code is called by all UI entry points in the application (e.g. button click events)
- when an unhandled exception occurs.</para>
-		<para>You could also achieve this by handling the Application.ThreadException event, however
- the VS2005 debugger will break before this event is called.</para>
-	</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.Name">
-	<summary>
- Sets the name of the extension.
- </summary>
-	<value>The name of the extension.</value>
-	<returns>The name.</returns>
-	<remarks>Must not exceed 31 characters.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.Shutdown">
-	<summary>
- Shuts down the extension.
- </summary>
-	<remarks><see cref="M:OrmapTaxlotEditingAddIn.EditorExtension.Startup(System.Object@)"/></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.Startup(System.Object@)">
-	<summary>
- Starts up the extension with the given initialization data.
- </summary>
-	<param name="initializationData">A reference to the object with 
- which this extension is registered (Editor).</param>
-	<remarks>
-		<para>
- Registered in this case with the <bold>ESRI Editor Extensions</bold> 
- category.
- </para>
-		<para>
- Any extension that is registered with an application is automatically 
- loaded and unloaded by the application; the end user does nothing to 
- load or unload. For example, an extension that has been added to the 
- ESRI Mx Extensions category will be started when ArcMap is started and 
- will be shutdown when ArcMap is shutdown. In this case, the editor
- extension is loaded when the ArcMap Editor object is loaded, which 
- occurs when ArcMap is started. So this startup event occurs when
- ArcMap is started (rather than when an edit session is started).
- </para>
-	</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.CreateAccelerators">
-	<summary>
- Create the keyboard accelerators for this extension.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ArcGISCategoryRegistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ArcGISCategoryUnregistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category unregistration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="T:OrmapTaxlotEditingAddIn.EditorExtension">
-	<summary>
- Provides the Editor Extension implementation.
- </summary>
-	<remarks>
-		<para>Also contains core application-level fields, methods, and event handlers.</para>
 	</remarks>
 </member><member name="M:OrmapTaxlotEditingAddIn.MoveDownButton.OnClick">
 	<summary>
