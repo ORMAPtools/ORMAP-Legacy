@@ -61,6 +61,10 @@ Imports ESRI.ArcGIS.SystemUI
 'Imports OrmapTaxlotEditing.AnnotationUtilities
 
 #End Region
+
+''' <summary>
+''' Move annotation down, inserting adequate distance to span a wide line.
+''' </summary>
 Public NotInheritable Class WideBothSidesDown
     Implements IDisposable
 
@@ -100,13 +104,6 @@ Public NotInheritable Class WideBothSidesDown
 
 #Region "Custom Class Members"
 
-#Region "Fields"
-
-    Private _application As IApplication
-    Private _bitmapResourceName As String
-
-#End Region
-
 #Region "Properties"
 
 #End Region
@@ -116,7 +113,10 @@ Public NotInheritable Class WideBothSidesDown
 #End Region
 
 #Region "Methods"
-    Friend Sub DoButtonOperation()
+    ''' <summary>
+    ''' Code entrance point from WideBothSidesDownButton OnClick event.
+    ''' </summary>
+    Friend Shared Sub DoButtonOperation()
 
         Try
             DataMonitor.CheckValidMapIndexDataProperties()
@@ -145,7 +145,7 @@ Public NotInheritable Class WideBothSidesDown
     ''' Called by ArcMap once per second to check if the command is enabled.
     ''' </summary>
     ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
-    Public ReadOnly Property Enabled() As Boolean
+    Public Shared ReadOnly Property Enabled() As Boolean
         Get
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
@@ -194,14 +194,6 @@ Public NotInheritable Class WideBothSidesDown
                 '   e.g. component.Dispose()
 
             End If
-
-            ' Free "native" (shared unmanaged) resources, whether 
-            ' explicitly called or called by the runtime.
-
-            ' Call the appropriate methods to clean up 
-            ' unmanaged resources here.
-            _bitmapResourceName = Nothing
-            'MyBase.m_bitmap = Nothing
 
             ' Flag that disposing has been finished.
             _isDuringDispose = False

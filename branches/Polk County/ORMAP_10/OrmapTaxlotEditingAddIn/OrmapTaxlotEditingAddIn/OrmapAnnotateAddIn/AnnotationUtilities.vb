@@ -392,69 +392,50 @@ Public NotInheritable Class AnnotationUtilities
     ''' <param name="isStandardSpace">Boolean value to determine if annotation has standard space</param>
     ''' <param name="isWideSpace">Boolean value to determine if annotation has wide space</param>
     ''' <remarks>
+    ''' <para>
     ''' Annotation movement only works for annotation created and placed by the CreateAnnotation class. This class
-    ''' places annotation based on a set of rules which comply with annotation spacing, fonts, and font sizes used
+    ''' creates and places annotation based on a set of rules which comply with annotation spacing, fonts, and font sizes used
     ''' in Polk County taxmaps.
-    ''' 
-    ''' Moving distance and bearing annotation is accomplished by describing mathematical relationships relating to a "virtual"  
-    ''' line (the taxlot line). Distances between the "upper" and "lower" annotation varies depending on its relative location 
+    ''' </para>
+    ''' <para>
+    ''' Moving Distance and Bearing annotation is accomplished by describing mathematical relationships relating to a "virtual"  
+    ''' line (the source line feature), which is not feature-linked to the annotation. Although this line may or may not be present
+    ''' or visible when annotation is displayed, the annotation pairs' only relationship to this line is mathematical. 
+    ''' </para>
+    ''' <para>
+    ''' Distance between the "upper" and "lower" annotation varies depending on their location relative
     ''' to this line. Annotation on different sides of the line, both above the line, or both below the line have different 
-    ''' distances between them. These distances are calculated relative to the centroid of the annotation's envelopes, and are 
-    ''' dependent on font size. These distances also vary if the line is "standard" or "big" (wide). Annotation may be placed 
+    ''' distances between them (as placed by the IConvertLabelsToAnnotation ArcObjects interface implemented by this class). 
+    ''' These distances are calculated relative to the centroid of the annotation's envelopes, and are 
+    ''' dependent on font size. These distances also vary if the line is "standard" or "big" (wide). Annotation is placed 
     ''' with wide spacing if it will be located next to map index boundaries, taxcode lines, subdivision boundaries, etc. 
-    '''
+    ''' </para>
+    ''' <para>
     ''' Constants were calculated by checking envelope centroid distances for a number of annotation sets of different scales 
-    ''' placed above, below, and on both sides of the line at 100, 200, and 400 scales. These constants were calculated 
-    ''' from the formula:
-    '''
-    '''     K = Distance / FontSize
-    '''
-    ''' and work out to the following values:
-    '''
-    '''         Anno Location           K
-    '''         --------------         ----
-    '''         Both Sides             2.55   
-    '''         Both Above             1.75
-    '''         Both Below             1.99
-    '''</remarks>
+    ''' placed (by IConvertLablesToAnnotation) above, below, and on both sides of the line at 100, 200, and 400 scales. 
+    ''' These constants were calculated from the formula:
+    ''' </para>
+    ''' <code lang="text">
+    ''' 
+    '''                 K = Distance / FontSize
+    ''' 
+    '''                Anno Location           K
+    '''                -------------          ----
+    '''                Both Sides             2.55
+    '''                Both Above             1.75
+    '''                Both Below             1.99
+    ''' </code>
+    ''' </remarks>
+
     Public Shared Sub MoveAnnotationElements(ByVal isInverted As Boolean, ByVal isTransposed As Boolean, ByVal isMoveUp As Boolean, _
                                                 ByVal isMoveDown As Boolean, ByVal isStandardSpace As Boolean, ByVal isWideSpace As Boolean)
-        '------------------------------------------
-        ' -- DESIGN COMMENT --
-        '   NOTE=>  Annotation movement only works for annotation created and placed by the CreateAnnotation class. This class 
-        '           places annotation based on a set of rules which comply with annotation spacing, fonts, and font sizes used
-        '           in Polk County taxmaps. 
-        '
-        '   Moving distance and bearing annotation is accomplished by describing mathematical relationships relating to a "virtual"  
-        '   line (the taxlot line). Distances between the "upper" and "lower" annotation varies depending on its relative location 
-        '   to this line. Annotation on different sides of the line, both above the line, or both below the line have different 
-        '   distances between them. These distances are calculated relative to the centroid of the annotation's envelopes, and are 
-        '   dependent on font size. These distances also vary if the line is "standard" or "big" (wide). Annotation may be placed 
-        '   with wide spacing if it will be located next to map index boundaries, taxcode lines, subdivision boundaries, etc. 
-        '
-        '   Constants were calculated by checking envelope centroid distances for a number of annotation sets of different scales 
-        '   placed above, below, and on both sides of the line at 100, 200, and 400 scales. These constants were calculated 
-        '   from the formula:
-        '
-        '       K = Distance / FontSize
-        '
-        '   and work out to the following values:
-        '
-        '           Anno Location           K
-        '           --------------         ----
-        '           Both Sides             2.55   
-        '           Both Above             1.75
-        '           Both Below             1.99
-        '
-        '------------------------------------------
-
         Dim theMxDoc As IMxDocument
         Dim theMap As IMap
         theMxDoc = My.Document
         theMap = theMxDoc.FocusMap
 
         Dim theActiveView As IActiveView = DirectCast(theMap, IActiveView)
-        Dim theMapExtent As IEnvelope = theActiveView.Extent
+        'Dim theMapExtent As IEnvelope = theActiveView.Extent
 
         DataMonitor.CheckValidMapIndexDataProperties()
 
@@ -499,7 +480,7 @@ Public NotInheritable Class AnnotationUtilities
                 theTopSelectedFeature = CType(theFeatureCollection.Item(i), IFeature)
                 theBottomSelectedFeature = CType(theFeatureCollection.Item(i + 1), IFeature)
 
-                Dim theAnnoFeatureClass As IFeatureClass = GetAnnoFeatureClass(theTopSelectedFeature.Class.AliasName)
+                'Dim theAnnoFeatureClass As IFeatureClass = GetAnnoFeatureClass(theTopSelectedFeature.Class.AliasName)
                 EditorExtension.Editor.StartOperation()
 
                 If theTopSelectedFeature.OID = theBottomSelectedFeature.OID Then
@@ -634,6 +615,13 @@ Public NotInheritable Class AnnotationUtilities
     ''' <param name="theFontSize">The font size of the associated annotation feature class</param>
     ''' <param name="theCalculatedDistance">Scale constant for associated annotation feature class</param>
     ''' <returns>The AnnotationPlacement enumeration</returns>
+    ''' <remarks>
+    ''' Uses a "fuzzy" tolerance to determine if the distance between pairs of annotation are + or -
+    ''' 0.01 ft of where they should be (based on font size) if the CreateAnnotation tool placed the
+    ''' annotation. Annotation are placed relative to a line feature, but not feature linked to it.
+    ''' Therefore the tool has to know how much to move the annotation as if the line where there. 
+    ''' It cannot do this correctly if the distance between the annotation pairs is too great. 
+    ''' </remarks>
     Public Shared Function GetAnnoPlacement(ByVal theFontSize As Double, ByVal theCalculatedDistance As Double) As AnnotationPlacement
         Dim thisAnnoPlacement As AnnotationPlacement
         '------------------------------------------

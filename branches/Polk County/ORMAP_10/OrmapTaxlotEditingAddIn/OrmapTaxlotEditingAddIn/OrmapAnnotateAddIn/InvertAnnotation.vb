@@ -62,7 +62,9 @@ Imports ESRI.ArcGIS.SystemUI
 
 #End Region
 
-
+''' <summary>
+''' Rotates annotation 180 degrees around a point
+''' </summary>
 Public NotInheritable Class InvertAnnotation
     Implements IDisposable
 
@@ -77,37 +79,17 @@ Public NotInheritable Class InvertAnnotation
     ' with no parameters, otherwise, the class will not be 
     ' registered in the COM registry and cannot be created 
     ' via CreateObject.
+    ''' <summary>
+    ''' Constructor.
+    ''' </summary>
     Public Sub New()
-        'MyBase.New()
-
-        'MyBase.m_category = "OrmapAnnotate"  'localizable text 
-        'MyBase.m_caption = "Rotate Annotation"   'localizable text 
-        'MyBase.m_message = "Rotate Distance and Direction annotation)"   'localizable text 
-        'MyBase.m_toolTip = "Rotate Distance && Direction annotation" 'localizable text 
-        'MyBase.m_name = MyBase.m_category & "_InvertAnnotation"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
-
-        'Try
-        '    'TODO: change bitmap name if necessary
-        '    Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
-        '    MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
-        'Catch ex As Exception
-        '    System.Diagnostics.Trace.WriteLine(ex.Message, "Invalid Bitmap")
-        'End Try
-
-
     End Sub
+
 #End Region
 
 #End Region
 
 #Region "Custom Class Members"
-
-#Region "Fields"
-
-    Private _application As IApplication
-    Private _bitmapResourceName As String
-
-#End Region
 
 #Region "Properties (none)"
 
@@ -119,7 +101,10 @@ Public NotInheritable Class InvertAnnotation
 
 #Region "Methods"
 
-    Friend Sub DoButtonOperation()
+    ''' <summary>
+    ''' Code entrance point from InvertAnnotationButton OnClick event.
+    ''' </summary>
+    Friend Shared Sub DoButtonOperation()
 
         Try
             DataMonitor.CheckValidMapIndexDataProperties()
@@ -149,7 +134,7 @@ Public NotInheritable Class InvertAnnotation
     ''' Called by ArcMap once per second to check if the command is enabled.
     ''' </summary>
     ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
-    Public ReadOnly Property Enabled() As Boolean
+    Public Shared ReadOnly Property Enabled() As Boolean
         Get
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
@@ -198,14 +183,6 @@ Public NotInheritable Class InvertAnnotation
                 '   e.g. component.Dispose()
 
             End If
-
-            ' Free "native" (shared unmanaged) resources, whether 
-            ' explicitly called or called by the runtime.
-
-            ' Call the appropriate methods to clean up 
-            ' unmanaged resources here.
-            _bitmapResourceName = Nothing
-            'MyBase.m_bitmap = Nothing
 
             ' Flag that disposing has been finished.
             _isDuringDispose = False

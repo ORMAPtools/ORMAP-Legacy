@@ -1,16 +1,22 @@
-﻿Public Class MoveUpButton
-  Inherits ESRI.ArcGIS.Desktop.AddIns.Button
+﻿''' <summary>
+''' ESRI AddIn button events
+''' </summary>
+Public Class MoveUpButton
+    Inherits ESRI.ArcGIS.Desktop.AddIns.Button
 
-  Public Sub New()
+    Public Sub New()
 
-  End Sub
+    End Sub
 
-  Protected Overrides Sub OnClick()
-        Dim _moveUp As MoveUp = New MoveUp
-        _moveUp.DoButtonOperation()
-  End Sub
+    ''' <summary>
+    ''' ESRI AddIn button OnClick event handler
+    ''' </summary>
+    Protected Overrides Sub OnClick()
+        'Dim _moveUp As MoveUp = New MoveUp
+        MoveUp.DoButtonOperation()
+    End Sub
 
-  Protected Overrides Sub OnUpdate()
+    Protected Overrides Sub OnUpdate()
 
-  End Sub
+    End Sub
 End Class

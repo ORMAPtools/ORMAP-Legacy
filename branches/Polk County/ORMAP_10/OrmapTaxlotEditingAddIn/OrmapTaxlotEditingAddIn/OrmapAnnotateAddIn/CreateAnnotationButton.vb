@@ -1,16 +1,22 @@
-﻿Public Class CreateAnnotationButton
-  Inherits ESRI.ArcGIS.Desktop.AddIns.Button
+﻿''' <summary>
+''' ESRI AddIn button events
+''' </summary>
+Public Class CreateAnnotationButton
+    Inherits ESRI.ArcGIS.Desktop.AddIns.Button
 
-  Public Sub New()
+    Public Sub New()
 
-  End Sub
+    End Sub
 
-  Protected Overrides Sub OnClick()
-        Dim _createAnnotation As CreateAnnotation = New CreateAnnotation
+    ''' <summary>
+    ''' ESRI AddIn button OnClick event handler
+    ''' </summary>
+    Protected Overrides Sub OnClick()
+        Dim _createAnnotation As CreateAnnotation = New CreateAnnotation()
         _createAnnotation.DoButtonOperation()
-  End Sub
+    End Sub
 
-  Protected Overrides Sub OnUpdate()
+    Protected Overrides Sub OnUpdate()
 
-  End Sub
+    End Sub
 End Class

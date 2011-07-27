@@ -1,16 +1,22 @@
-﻿Public Class InvertAnnotationButton
-  Inherits ESRI.ArcGIS.Desktop.AddIns.Button
+﻿''' <summary>
+''' ESRI AddIn button events
+''' </summary>
+Public Class InvertAnnotationButton
+    Inherits ESRI.ArcGIS.Desktop.AddIns.Button
 
-  Public Sub New()
+    Public Sub New()
 
-  End Sub
+    End Sub
 
-  Protected Overrides Sub OnClick()
-        Dim _invertAnnotation As InvertAnnotation = New InvertAnnotation
-        _invertAnnotation.DoButtonOperation()
-  End Sub
+    ''' <summary>
+    ''' ESRI AddIn button OnClick event handler
+    ''' </summary>
+    Protected Overrides Sub OnClick()
+        'Dim _invertAnnotation As InvertAnnotation = New InvertAnnotation
+        InvertAnnotation.DoButtonOperation()
+    End Sub
 
-  Protected Overrides Sub OnUpdate()
+    Protected Overrides Sub OnUpdate()
 
-  End Sub
+    End Sub
 End Class

@@ -6,377 +6,353 @@ OrmapTaxlotEditingAddIn
 </name>
 </assembly>
 <members>
-<member name="P:OrmapTaxlotEditingAddIn.EditorExtension.Application">
+<member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation.TopPosition.Distance">
 	<summary>
- The ArcMap Application associated with the Editor object.
+ The distance value (from the Distance field of the line feature class)
  </summary>
-	<value></value>
-	<returns>An object that supports <c>IApplication</c>.</returns>
 	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setApplication(ESRI.ArcGIS.Framework.IApplication)">
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation.TopPosition.Direction">
 	<summary>
-	</summary>
-	<param name="value">An object that supports <c>IApplication</c>.</param>
+ The direction (bearing) value (from the Direction field of the line feature class)
+ </summary>
 	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.Editor">
+</member><member name="T:OrmapTaxlotEditingAddIn.CreateAnnotation.TopPosition">
 	<summary>
- The ArcMap Editor object.
+ Identifies which annotation element of the pair is placed "on top"
  </summary>
-	<value></value>
-	<returns>An object that supports <c>IEditor2</c>.</returns>
 	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setEditor(ESRI.ArcGIS.Editor.IEditor2)">
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._annoClassName">
 	<summary>
-	</summary>
-	<param name="value">An object that supports <c>IEditor2</c>.</param>
+ Form Class Name setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.AnnoClassName">
+	<summary>
+ Gets the name of the anno class.
+ </summary>
+	<value>
+ The name of the anno class.
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isCurved">
+	<summary>
+ Form Curved setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsCurved">
+	<summary>
+ Gets a value indicating whether this instance is curved.
+ </summary>
+	<value>
+		<c>true</c> if this instance is curved; otherwise, <c>false</c>.
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isParallel">
+	<summary>
+ Form Parallel setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsParallel">
+	<summary>
+ Gets or sets a value indicating whether this instance is parallel.
+ </summary>
+	<value>
+		<c>true</c> if this instance is parallel; otherwise, <c>false</c>.
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isHorizontal">
+	<summary>
+ Form Horizontal setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsHorizontal">
+	<summary>
+ Gets a value indicating whether this instance is horizontal.
+ </summary>
+	<value>
+		<c>true</c> if this instance is horizontal; otherwise, <c>false</c>.
+ 
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isPerpendicular">
+	<summary>
+ Form  Perpendicular setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsPerpendicular">
+	<summary>
+ Gets a value indicating whether this instance is perpendicular.
+ </summary>
+	<value>
+		<c>true</c> if this instance is perpendicular; otherwise, <c>false</c>.
+ 
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isAbove">
+	<summary>
+ Form Above setting
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsAbove">
+	<summary>
+ Gets or sets a value indicating whether this instance is above.
+ </summary>
+	<value>
+		<c>true</c> if this instance is above; otherwise, <c>false</c>.
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isBelow">
+	<summary>
+ Form Both Below setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsBelow">
+	<summary>
+ Gets or sets a value indicating whether this instance is below.
+ </summary>
+	<value>
+		<c>true</c> if this instance is below; otherwise, <c>false</c>.
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isBothSides">
+	<summary>
+ Form Both Sides setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsBothSides">
+	<summary>
+ Gets a value indicating whether this instance is on both sides of line.
+ </summary>
+	<value>
+		<c>true</c> if this instance is on both sides; otherwise, <c>false</c>.
+ 
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isBothAbove">
+	<summary>
+ Form Both Above setting
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsBothAbove">
+	<summary>
+ Gets a value indicating whether annotation pairs are both above line.
+ </summary>
+	<value>
+		<c>true</c> if this instance is both above; otherwise, <c>false</c>.
+ 
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isBothBelow">
+	<summary>
+ Form Both Below setting
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsBothBelow">
+	<summary>
+ Gets a value indicating whether annotation pairs are both below the line.
+ </summary>
+	<value>
+		<c>true</c> if this instance is both below; otherwise, <c>false</c>.
+ 
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isStandardAbove">
+	<summary>
+ Form Standard Above setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsStandardAbove">
+	<summary>
+ Gets a value indicating whether annotation is standard offset above line.
+ </summary>
+	<value>
+		<c>true</c> if this instance is above standard; otherwise, <c>false</c>.
+ 
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isDoubleAbove">
+	<summary>
+ Form Double Above setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsDoubleAbove">
+	<summary>
+ Gets a value indicating whether this instance is double offset above line.
+ </summary>
+	<value>
+		<c>true</c> if this instance is double above; otherwise, <c>false</c>.
+ 
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isStandardBelow">
+	<summary>
+ Form Standard Below setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsStandardBelow">
+	<summary>
+ Gets a value indicating whether annotation is standard offset below line.
+ </summary>
+	<value>
+		<c>true</c> if this instance is below standard; otherwise, <c>false</c>.
+ 
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isDoubleBelow">
+	<summary>
+ Form Double Below setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsDoubleBelow">
+	<summary>
+ Gets a value indicating whether this instance is double offset below line.
+ </summary>
+	<value>
+		<c>true</c> if this instance is double below; otherwise, <c>false</c>.
+ 
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isStandardLine">
+	<summary>
+ Form Standard line setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsStandardLine">
+	<summary>
+ Gets a value indicating whether this instance is standard line.
+ </summary>
+	<value>
+		<c>true</c> if this instance is standard line; otherwise, <c>false</c>.
+ 
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._wideLine">
+	<summary>
+ Form Wide line setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsWideLine">
+	<summary>
+ Gets a value indicating whether this instance is wide line.
+ </summary>
+	<value>
+		<c>true</c> if this instance is wide line; otherwise, <c>false</c>.
+ 
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isDirection">
+	<summary>
+ Form "Direction" setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsDirection">
+	<summary>
+ Gets a value indicating whether this instance is "Direction".
+ </summary>
+	<value>
+		<c>true</c> if this instance is Direction; otherwise, <c>false</c>.
+ 
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._isDistance">
+	<summary>
+ Form "Distance" setting.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsDistance">
+	<summary>
+ Gets a value indicating whether this instance is Distance.
+ </summary>
+	<value>
+		<c>true</c> if this instance is Distance; otherwise, <c>false</c>.
+ 
+ </value>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._referenceScale">
+	<summary>
+ Form Reference scale value.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.ReferenceScale">
+	<summary>
+ Gets the reference scale.
+ </summary>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._annoFeatureLayer">
+	<summary>
+ Form Annotation Feature Layer value.
+ </summary>
+</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation._upperValue">
+	<summary>
+ Form Upper Value setting
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.UpperValue">
+	<summary>
+ Gets the upper value.
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.uxCancel_Click(System.Object,System.EventArgs)">
+	<summary>
+ Handles [Cancel] button click
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
 	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents">
+</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.uxHelp_Click(System.Object,System.EventArgs)">
 	<summary>
- The ArcMap EditEvents object associated with the Editor.
+ Handles [Help] button click
  </summary>
-	<value></value>
-	<returns>An object that supports <c>IEditEvents_Event</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setEditEvents(ESRI.ArcGIS.Editor.IEditEvents_Event)">
-	<summary>
-	</summary>
-	<param name="value">An object that supports <c>IEditEvents_Event</c>.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents">
-	<summary>
- The ArcMap ActiveViewEvents object.
- </summary>
-	<value></value>
-	<returns>An object that supports <c>IActiveViewEvents_Event</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setActiveViewEvents(ESRI.ArcGIS.Carto.IActiveViewEvents_Event)">
-	<summary>
-	</summary>
-	<param name="value">An object that supports <c>IActiveViewEvents_Event</c>.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TableNamesSettings">
-	<summary>
- The ORMAP TableNamesSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>TableNamesSettings</c> object.</returns>
-	<remarks>The object contains all settings for ORMAP table names.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AnnoTableNamesSettings">
-	<summary>
- The ORMAP AnnoTableNamesSettings object.
- </summary>
-	<value></value>
-	<returns>An <c>AnnoTableNamesSettings</c> object.</returns>
-	<remarks>The object contains all settings for ORMAP anno table names.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllTablesSettings">
-	<summary>
- The ORMAP AllTablesSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>AllTablesSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for all ORMAP tables.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.MapIndexSettings">
-	<summary>
- The ORMAP MapIndexSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>MapIndexSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP MapIndex table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxLotSettings">
-	<summary>
- The ORMAP TaxlotSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>TaxLotSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP Taxlot table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxLotLinesSettings">
-	<summary>
- The ORMAP TaxLotLinesSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>TaxLotLinesSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP TaxLotLines table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.CartographicLinesSettings">
-	<summary>
- The ORMAP CartographicLinesSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>CartographicLinesSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP CartographicLines table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxlotAcreageAnnoSettings">
-	<summary>
- The ORMAP TaxlotAcreageAnnoSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>TaxlotAcreageAnnoSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP TaxlotAcreageAnno table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxlotNumberAnnoSettings">
-	<summary>
- The ORMAP TaxlotNumberAnnoSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>TaxlotNumberAnnoSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP TaxlotNumberAnno table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.DefaultValuesSettings">
-	<summary>
- The ORMAP DefaultValuesSettings object.
- </summary>
-	<value></value>
-	<returns>A <c>DefaultValuesSettings</c> object.</returns>
-	<remarks>The object contains all field name settings for the ORMAP DefaultValues table.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.CanEnableExtendedEditing">
-	<summary>
- Can enable the set of ORMAP taxlot tools. 
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.HasValidLicense">
-	<summary>
- Has a valid ArcMap license level. 
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setHasValidLicense(System.Boolean)">
-	<summary>
-	</summary>
-	<param name="value">A boolean value.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.IsValidWorkspace">
-	<summary>
- Is a valid workspace. 
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setIsValidWorkspace(System.Boolean)">
-	<summary>
-	</summary>
-	<param name="value">A boolean value.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllowedToEditTaxlots">
-	<summary>
- Allowed to enable the set of ORMAP taxlot tools. 
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks>Tools may not be enabled still (see <see>CanEnableExtendedEditing</see>).</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllowedToAutoUpdate">
-	<summary>
- Allowed to auto-update fields on edit events when the ORMAP taxlot tools are allowed. 
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks>Some field auto-updates may not be enabled still (see <see>AllowedToAutoUpdateAllFields</see>).</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllowedToAutoUpdateAllFields">
-	<summary>
- Allowed to auto-update all fields on edit events 
- when the ORMAP taxlot tools are allowed. 
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks>If true, field auto-updates are enabled 
- for the maximum set of fields; If false, just the 
- minimum set are auto-updated.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideAutoAttribute">
-	<summary>
- Override the auto-update (attributing) on edit events
- to use a specified maps values.
- </summary>
-	<value></value>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks>If true, field values are set manually via a switch in the locate  
- features tool (which records the mapnumber) instead of using auto-update.
- minimum set are auto-updated.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideMapNumber">
-	<summary>
- The MapNumber to use if OverrideAutoAttribute is true.
- </summary>
-	<value></value>
-	<returns>A <c>String</c> object containing a mapnumber.</returns>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideMapScale">
-	<summary>
- The MapScale to use if OverrideAutoAttribute is true.
- </summary>
-	<value></value>
-	<returns>A <c>String</c> object containing a map scale.</returns>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideORMapNumber">
-	<summary>
- The ORMapNumber to use if OverrideAutoAttribute is true.
- </summary>
-	<value></value>
-	<returns>A <c>String</c> object containing a ORMapNumber.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnChangeFeature(ESRI.ArcGIS.Geodatabase.IObject)">
-	<summary>
- Updates fields based on the feature that was just changed.
- </summary>
-	<param name="obj">The feature that was just changed.</param>
-	<remarks>Handles EditEvents.OnCreateFeature events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnCreateFeature(ESRI.ArcGIS.Geodatabase.IObject)">
-	<summary>
- Updates fields based on the feature that was just created.
- </summary>
-	<param name="obj">The feature that was just created.</param>
-	<remarks>Handles EditEvents.OnCreateFeature events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnDeleteFeature(ESRI.ArcGIS.Geodatabase.IObject)">
-	<summary>
- Records in the Cancelled Numbers object class the map number
- and taxlot number from the feature that was just deleted.
- </summary>
-	<param name="obj">The feature that was just deleted.</param>
-	<remarks>Handles EditEvents.OnDeleteFeature events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnStartEditing">
-	<summary>
- Event handler.
- </summary>
-	<remarks>Handles EditEvents.OnStartEditing events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnStopEditing(System.Boolean)">
-	<summary>
- Event handler.
- </summary>
-	<remarks>Handles EditEvents.OnStopEditing events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents_FocusMapChanged">
-	<summary>
- Event handler.
- </summary>
-	<remarks>Handles ActiveViewEvents.FocusMapChanged events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents_ItemAdded(System.Object)">
-	<summary>
- Event handler.
- </summary>
-	<remarks>Handles ActiveViewEvents.ItemAdded events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents_ItemDeleted(System.Object)">
-	<summary>
- Event handler.
- </summary>
-	<remarks>Handles ActiveViewEvents.ItemDeleted events.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setAccelerator(ESRI.ArcGIS.Framework.IAcceleratorTable,ESRI.ArcGIS.esriSystem.UID,System.Int32,System.Boolean,System.Boolean,System.Boolean)">
-	<summary>
- Set a keyboard accelerator. 
- </summary>
-	<param name="acceleratorTable">The accelerator table to store the accelerators in.</param>
-	<param name="classID">the ClassID of the command to trigger by the accelerator.</param>
-	<param name="key">The key to use.</param>
-	<param name="usesCtrl"><italic>Flag.</italic> Uses Ctrl key modification.</param>
-	<param name="usesAlt"><italic>Flag.</italic> Uses Alt key modification.</param>
-	<param name="usesShift"><italic>Flag.</italic> Uses Shift key modification.</param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.validateLicense(ESRI.ArcGIS.esriSystem.esriLicenseProductCode)">
-	<summary>
- Validate the license (e.g. ArcEditor or ArcInfo).
- </summary>
-	<param name="requiredProductCode">An <c>"esriLicenseProductCode"</c> enumerated item.</param>
-	<returns><c>True</c> or <c>False</c>, depending on the licence validity.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setMapIndexAndScale(ESRI.ArcGIS.Geodatabase.IObject,ESRI.ArcGIS.Geodatabase.IFeature,ESRI.ArcGIS.Geometry.IGeometry)">
-	<summary>
- Set the map index (if the field exists) to the Map Index map index for the location geometry.
- </summary>
-	<param name="obj">An object implementing <c>IObject</c>, either a Feature or a Row.</param>
-	<param name="theFeature">An object implementing <c>IFeature</c>.</param>
-	<param name="theSearchGeometry">An object implementing <c>IGeometry</c>.</param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.addTraceListenerForEventLog">
-	<summary>
- Creates a trace listener for the event log.
- </summary>
-	<remarks>Once created, any <c>Trace</c> call will be written to this log.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.addTraceListenerForFileLog(System.String)">
-	<summary>
- Create a trace listener for a file log.
- </summary>
-	<param name="inLogFileName">The file log filename.</param>
+	<param name="sender"></param>
+	<param name="e"></param>
 	<remarks>
-		<para>Once created, any <c>Trace</c> call will be written to this log.</para>
-		<para>This file will be replaced every 30 days.</para>
-	</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.removeTraceListenerForEventLog">
+ Opens the Ormap Annotate help documentation
+ </remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.uxCreateAnno_Click(System.Object,System.EventArgs)">
 	<summary>
- Removes a trace listener for the event log.
+ Handles the [Create Annotation] button click event
  </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.removeTraceListenerForFileLog">
-	<summary>
- Removes a trace listener for a file log.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ProcessUnhandledException(System.Exception)">
-	<summary>
- Process any unhandled exceptions that occur in the application.
- </summary>
-	<param name="ex">The unhandled exception.</param>
+	<param name="sender"></param>
+	<param name="e"></param>
 	<remarks>
-		<para>This code is called by all UI entry points in the application (e.g. button click events)
- when an unhandled exception occurs.</para>
-		<para>You could also achieve this by handling the Application.ThreadException event, however
- the VS2005 debugger will break before this event is called.</para>
-	</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.Name">
+ Implements the IConvertLabelsToAnnotation interface to collect Distance and Direction values from the line
+ feature class and convert them to properly scaled and symbolized ORMAP annotation. Conversion occurs in a
+ scratch file geodatabased, and then is copied into the appropriate annotation tables
+ </remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.DoButtonOperation">
 	<summary>
- Sets the name of the extension.
+ The form entrance operation called by the AddIn button OnClick event
  </summary>
-	<value>The name of the extension.</value>
-	<returns>The name.</returns>
-	<remarks>Must not exceed 31 characters.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.Shutdown">
+</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.setPartnerCreateAnnotationForm(OrmapTaxlotEditingAddIn.CreateAnnotationForm)">
 	<summary>
- Shuts down the extension.
+ Creates the controller for the Create Annotation form and sets up event handler delegates
  </summary>
-	<remarks><see cref="M:OrmapTaxlotEditingAddIn.EditorExtension.Startup(System.Object@)"/></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.Startup(System.Object@)">
+	<param name="value">A form of type CreateAnnotationForm</param>
+</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.processNewAnnotation(Microsoft.VisualBasic.Collection,ESRI.ArcGIS.Geodatabase.IFeatureWorkspace)">
 	<summary>
- Starts up the extension with the given initialization data.
+ Collects all needed ORMAP data for the new annotation and copies it from the scratch workspace into
+ the appropriate ORMAP annotation feature class
  </summary>
-	<param name="initializationData">A reference to the object with 
- which this extension is registered (Editor).</param>
+	<param name="theAnnoFcCollection">The collection of selected annotation feature classes</param>
+	<param name="theScratchAnnoWorkspace">The scratch file geodatabase workspace</param>
 	<remarks>
-		<para>
- Registered in this case with the <bold>ESRI Editor Extensions</bold> 
- category.
- </para>
-		<para>
- Any extension that is registered with an application is automatically 
- loaded and unloaded by the application; the end user does nothing to 
- load or unload. For example, an extension that has been added to the 
- ESRI Mx Extensions category will be started when ArcMap is started and 
- will be shutdown when ArcMap is shutdown. In this case, the editor
- extension is loaded when the ArcMap Editor object is loaded, which 
- occurs when ArcMap is started. So this startup event occurs when
- ArcMap is started (rather than when an edit session is started).
- </para>
-	</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.CreateAccelerators">
+ The EditorExtension On_Create event will overlay the anno with the map index and determine the MapNumber. This is incorrect, 
+ as the MapNumber is based on overlay of map index and line feature from which the anno is derived. Correct MapNumber is 
+ calculated during anno conversion and carried in TextString of Direction anno. the second newFeature.Store() method below 
+ assigns the correct MapNumber, and since its already fired (On_Create), it now trips the EditorExtension On_Update event, 
+ which won't perform the overlay and calculate the incorrect MapNumber.
+ </remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.clearall(ESRI.ArcGIS.ArcMapUI.IMxDocument)">
 	<summary>
- Create the keyboard accelerators for this extension.
+ Clears all selected features in the current map document
  </summary>
+	<param name="ThisDocument">The active map document.</param>
+	<remarks>There is probably a way to do this using ArcObjects, but gave up trying to find it.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.convertLabelsToAnnotation(ESRI.ArcGIS.Carto.IMap,ESRI.ArcGIS.Carto.IGeoFeatureLayer,ESRI.ArcGIS.Geodatabase.IFeatureClass,System.Boolean,ESRI.ArcGIS.Geodatabase.IFeatureWorkspace)">
+	<summary>
+ Implements the IConvertLabelsToAnnotation interface to create new bearing and distance 
+ annotation from the selected line(s).
+ </summary>
+	<param name="theMap">The currently selected map.</param>
+	<param name="theGeoFeatureLayer">The geo feature layer of the selected source line feature.</param>
+	<param name="theAnnoFeatureClass">The appropriate annotation feature class based on scale.</param>
+	<param name="isFeatureLinked">Boolean value for defining whether annotation is feature linked (not supported in this version).</param>
+	<param name="theScratchAnnoWorkspace">The file geodatabase scratch workspace into which new annotation will be placed.</param>
 	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ArcGISCategoryRegistration(System.Type)">
+</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.setLabelProperties(ESRI.ArcGIS.Carto.IAnnotateLayerPropertiesCollection2,ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String,System.String)">
 	<summary>
- Required method for ArcGIS Component Category registration -
- Do not modify the contents of this method with the code editor.
+ Sets up the correct label placements based on type (Distance or Direction) and form settings.
  </summary>
-</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ArcGISCategoryUnregistration(System.Type)">
-	<summary>
- Required method for ArcGIS Component Category unregistration -
- Do not modify the contents of this method with the code editor.
- </summary>
-</member><member name="T:OrmapTaxlotEditingAddIn.EditorExtension">
-	<summary>
- Provides the Editor Extension implementation.
- </summary>
+	<param name="theFeatureLayerPropsCollection">The annotation properties collection source line feature.</param>
+	<param name="theAnnoFeatureClass">The appropriate annotation feature class (based MapIndex).</param>
+	<param name="theAnnoClassName">The annotation class name (should be "34").</param>
 	<remarks>
-		<para>Also contains core application-level fields, methods, and event handlers.</para>
-	</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.MoveDown.Enabled">
+ The map number must be embedded in the label now since annotation can be created in various map indices
+ simultaneously. Once annotation is created, there is no way of knowing what its map number is, and this
+ must be used later to populate the MapNumber field of the annotation feature class.
+ </remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.getLineOffset(System.Double,System.Boolean)">
+	<summary>
+ Uses form property settings to determine how annotation should be placed relative to the source line
+ from which it is created.
+ </summary>
+	<param name="thisSize">The font size of the associated annotation feature class.</param>
+	<param name="isTop">The form property defining which element should be place "on top" (distance or direction).</param>
+	<returns>The distance used to offset the annotation pairs from the source line feature.</returns>
+	<remarks>The fontsize is roughly calculated by MapScale / 240.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.setAnnoPlacement(System.Boolean)">
+	<summary>
+ Determines annotation placement based on form settings.
+ </summary>
+	<param name="isTop">Form property defining which element is "on top".</param>
+	<remarks>Sets whether Direction or Distance is place "above" the line.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.Enabled">
 	<summary>
  Called by ArcMap once per second to check if the command is enabled.
  </summary>
+	<returns>Boolean collective determining if tool can be enabled</returns>
 	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.MoveDown.Dispose(System.Boolean)">
+</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.Dispose(System.Boolean)">
 	<summary>
  Dispose of managed and unmanaged resources.
  </summary>
@@ -391,6 +367,382 @@ OrmapTaxlotEditingAddIn
  runtime from inside the finalizer and you should not reference 
  other objects. Only unmanaged resources can be disposed.</para>
 	</remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.CreateAnnotation">
+	<summary>
+ Allows creation of Distance and Direction annotation from Line Feature Classes that contain
+ appropriately formatted Distance and Direction attributes.
+ </summary>
+	<remarks>
+ Annotation Feature Classes must have definitions for an Annotation Class named "34" and a
+ Symbol named "34" (with appropriately defined font size and type information). The tool will 
+ use these definitions for new annotation.
+ <para><seealso cref="T:OrmapTaxlotEditingAddIn.InvertAnnotation"/></para>
+		<para><seealso cref="T:OrmapTaxlotEditingAddIn.TransposeAnnotation"/></para>
+		<para><seealso cref="T:OrmapTaxlotEditingAddIn.MoveUp"/></para>
+		<para><seealso cref="T:OrmapTaxlotEditingAddIn.MoveDown"/></para>
+	</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.MoveUpButton.OnClick">
+	<summary>
+ ESRI AddIn button OnClick event handler
+ </summary>
+</member><member name="T:OrmapTaxlotEditingAddIn.MoveUpButton">
+	<summary>
+ ESRI AddIn button events
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.StandardBothSidesDownButton.OnClick">
+	<summary>
+ ESRI AddIn button OnClick event handler
+ </summary>
+</member><member name="T:OrmapTaxlotEditingAddIn.StandardBothSidesDownButton">
+	<summary>
+ ESRI AddIn button events
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.StandardBothSidesUp.DoButtonOperation">
+	<summary>
+ Code entrance point from StandardBothSidesUpButton OnClick event.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.StandardBothSidesUp.Enabled">
+	<summary>
+ Called by ArcMap once per second to check if the command is enabled.
+ </summary>
+	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.StandardBothSidesUp.Dispose(System.Boolean)">
+	<summary>
+ Dispose of managed and unmanaged resources.
+ </summary>
+	<param name="disposing">True or False.</param>
+	<remarks>
+		<para>Member of System::IDisposable.</para>
+		<para>Dispose executes in two distinct scenarios. 
+ If disposing equals true, the method has been called directly
+ or indirectly by a user's code. Managed and unmanaged resources
+ can be disposed.</para>
+		<para>If disposing equals false, the method has been called by the 
+ runtime from inside the finalizer and you should not reference 
+ other objects. Only unmanaged resources can be disposed.</para>
+	</remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.StandardBothSidesUp">
+	<summary>
+ Move annotation up, inserting adequate distance to span a standard line.
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.#ctor">
+	<summary>
+ Private empty constructor to prevent instantiation.
+ </summary>
+	<remarks>This class follows the singleton pattern and thus has a 
+ private constructor and all shared members. Instances of types 
+ that define only shared members do not need to be created, so no
+ constructor should be needed. However, many compilers will 
+ automatically add a public default constructor if no constructor 
+ is specified. To prevent this an empty private constructor is 
+ added.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.TaxlotFeatureLayer">
+	<summary>
+ Property to hold the Taxlot Feature Layer.
+ </summary>
+	<value></value>
+	<returns>An object implementing IFeatureLayer.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.setTaxlotFeatureLayer(ESRI.ArcGIS.Carto.IFeatureLayer@)">
+	<summary>
+ Validate and set the TaxlotFeatureLayer property.
+ </summary>
+	<param name="value"></param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.MapIndexFeatureLayer">
+	<summary>
+ Property to hold the Map Index Feature Layer.
+ </summary>
+	<value></value>
+	<returns>An object implementing <c>IFeatureLayer</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.setMapIndexFeatureLayer(ESRI.ArcGIS.Carto.IFeatureLayer@)">
+	<summary>
+ Validate and set the MapIndexFeatureLayer property.
+ </summary>
+	<param name="value">An object implementing <c>IFeatureLayer</c>.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.CancelledNumbersTable">
+	<summary>
+ Property to hold the Cancelled Numbers Table Standalone Table.
+ </summary>
+	<value></value>
+	<returns>An object implementing <c>IStandaloneTable</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.setCancelledNumbersTable(ESRI.ArcGIS.Carto.IStandaloneTable@)">
+	<summary>
+ Validate and set the CancelledNumbersTable property.
+ </summary>
+	<param name="value">An object implementing <c>IStandaloneTable</c>.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.ReferenceLinesFeatureLayer">
+	<summary>
+ Property to hold the Reference Lines Feature Layer.
+ </summary>
+	<value></value>
+	<returns>An object implementing <c>IFeatureLayer</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.setReferenceLinesFeatureLayer(ESRI.ArcGIS.Carto.IFeatureLayer@)">
+	<summary>
+ Validate and set the ReferenceLinesFeatureLayer property.
+ </summary>
+	<param name="value">An object implementing <c>IFeatureLayer</c>.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.TaxlotLinesFeatureLayer">
+	<summary>
+ Property to hold the Taxlot Lines Feature Layer.
+ </summary>
+	<value></value>
+	<returns>An object implementing <c>IFeatureLayer</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.setTaxlotLinesFeatureLayer(ESRI.ArcGIS.Carto.IFeatureLayer@)">
+	<summary>
+ Validate and set the TaxlotLinesFeatureLayer property.
+ </summary>
+	<param name="value">An object implementing <c>IFeatureLayer</c>.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.CartographicLinesFeatureLayer">
+	<summary>
+ Property to hold the Cartographic Lines Feature Layer.
+ </summary>
+	<value></value>
+	<returns>An object implementing <c>IFeatureLayer</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.setCartographicLinesFeatureLayer(ESRI.ArcGIS.Carto.IFeatureLayer@)">
+	<summary>
+ Validate and set the CartographicLinesFeatureLayer property.
+ </summary>
+	<param name="value">An object implementing <c>IFeatureLayer</c>.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.HasValidMapIndexData">
+	<summary>
+ Returns the valid and available status of the MapIndex data.
+ </summary>
+	<value>The valid and available status of the MapIndex data.</value>
+	<returns><c>True</c> or <c>False</c>, depending on whether the data is valid.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SetHasValidMapIndexData(System.Boolean)">
+	<summary>
+ Validate and set the property.
+ </summary>
+	<param name="value">A boolean value.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.HasValidTaxlotData">
+	<summary>
+ Returns the valid and available status of the Taxlot data.
+ </summary>
+	<value>The valid and available status of the Taxlot data.</value>
+	<returns><c>True</c> or <c>False</c>, depending on the status.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SetHasValidTaxlotData(System.Boolean)">
+	<summary>
+ Validate and set the HasValidTaxlotData property.
+ </summary>
+	<param name="value">A boolean value.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.HasValidCancelledNumbersTableData">
+	<summary>
+ Returns the valid and available status of the CancelledNumbersTable data.
+ </summary>
+	<value>The valid and available status of the CancelledNumbersTable data.</value>
+	<returns><c>True</c> or <c>False</c>, depending on the status.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SetHasValidCancelledNumbersTableData(System.Boolean)">
+	<summary>
+ Validate and set the HasValidCancelledNumbersTableData property.
+ </summary>
+	<param name="value">A boolean value.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.HasValidReferenceLinesData">
+	<summary>
+ Returns the valid and available status of the ReferenceLines data.
+ </summary>
+	<value>The valid and available status of the ReferenceLines data.</value>
+	<returns><c>True</c> or <c>False</c>, depending on the status.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SetHasValidReferenceLinesData(System.Boolean)">
+	<summary>
+ Validate and set the HasValidReferenceLinesData property.
+ </summary>
+	<param name="value">A boolean value.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.HasValidTaxlotLinesData">
+	<summary>
+ Returns the valid and available status of the TaxlotLines data.
+ </summary>
+	<value>The valid and available status of the TaxlotLines data.</value>
+	<returns><c>True</c> or <c>False</c>, depending on the status.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SetHasValidTaxlotLinesData(System.Boolean)">
+	<summary>
+ Validate and set the HasValidTaxlotLinesData property.
+ </summary>
+	<param name="value">A boolean value.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.HasValidCartographicLinesData">
+	<summary>
+ Returns the valid and available status of the CartographicLines data.
+ </summary>
+	<value>The valid and available status of the CartographicLines data.</value>
+	<returns><c>True</c> or <c>False</c>, depending on the status.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SetHasValidCartographicLinesData(System.Boolean)">
+	<summary>
+ Validate and set the HasValidCartographicLinesData property.
+ </summary>
+	<param name="value">A boolean value.</param>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.ClearAllValidDataProperties">
+	<summary>
+ Clear all the HasValid...Data properties.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckAllValidDataProperties">
+	<summary>
+ Check all the HasValid...Data properties.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckValidTaxlotDataProperties">
+	<summary>
+ Check and set Taxlot status and layer properties.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckValidMapIndexDataProperties">
+	<summary>
+ Check and set MapIndex status and layer properties.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckValidCancelledNumbersTableDataProperties">
+	<summary>
+ Check and set CancelledNumbersTable status and layer properties.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckValidReferenceLinesDataProperties">
+	<summary>
+ Check and set ReferenceLines status and layer properties.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckValidTaxlotLinesDataProperties">
+	<summary>
+ Check and set TaxlotLines status and layer properties.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckValidCartographicLinesDataProperties">
+	<summary>
+ Check and set CartographicLines status and layer properties.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckData(OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType,System.String)">
+	<summary>
+ Check data (will attempt to load and/or validate data).
+ </summary>
+	<param name="classType">An <see cref="T:OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType"/> enumerated item.</param>
+	<param name="className">The class dataset name.</param>
+	<returns><c>True</c> or <c>False</c>, depending on the status.</returns>
+	<remarks>Look for data in the map. Load the data if not found. Validate the data if found or loaded.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.FindDataLayerInMap(System.String)">
+	<summary>
+ Find a data layer in the current map, based on the dataset name.
+ </summary>
+	<param name="featureClassName"></param>
+	<returns>An object that implements <c>IFeatureLayer</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.FindDataTableInMap(System.String)">
+	<summary>
+ Find a standalone table in the current map, based on the dataset name.
+ </summary>
+	<param name="objectClassName"></param>
+	<returns>An object that implements <c>IStandaloneTable</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SendExtinctToCancelledNumbersTable(ESRI.ArcGIS.Geodatabase.IFeature,System.Boolean)">
+	<summary>
+ Captures the mapnumber and taxlot and records them in the CancelledNumbers table if they are extinct.
+ </summary>
+	<param name="inTaxlotFeature">The feature to get the numbers from.</param>
+	<param name="isDuringOnChange">Whether the check is being called from within an OnChange event handler.</param>
+	<remarks>
+		<para>Taxlots will send their numbers to the CancelledNumbers table 
+ ONLY if they are "extinct" (unique in the map at the time of deletion/change).
+ </para>
+		<para>
+ If this check is being called from within an OnChange event handler, 
+ then it will use the feature's original values rather than its current 
+ values.
+ </para>
+		<para>
+ Features with null or non-numeric values will not be written to the table. 
+ This will effectively exclude roads, rails, water, and nontl polygons which
+ have non-numeric Taxlot field values.
+ </para>
+	</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.loadOptionSuccessful(OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType,System.String)">
+	<summary>
+ Load a standalone table into the current map.
+ </summary>
+	<param name="classType">An <see cref="T:OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType"/> enumerated item.</param>
+	<param name="className">The class dataset name.</param>
+	<returns><c>True</c> or <c>False</c>, depending on the status of the load.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.loadDataIntoMap(OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType,System.String)">
+	<summary>
+ Load a data layer into the current map.
+ </summary>
+	<param name="classType">An <see cref="T:OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType"/> enumerated item.</param>
+	<param name="className">The class dataset name.</param>
+	<returns><c>True</c> or <c>False</c>, depending on the status of the load.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.validateData(OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType,System.String)">
+	<summary>
+ Checks data for valid schema.
+ </summary>
+	<param name="classType">The class type (ObjectClass or FeatureClass).</param>
+	<param name="className">The class to validate.</param>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks>' Valid schema in this case means the right feature type 
+ and required fields.</remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.DataMonitor">
+	<summary>
+ Data monitoring class for required ORMAP datasets (singleton).
+ </summary>
+	<remarks>Keeps track of availability of valid ORMAP datasets 
+ in the map document.</remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.HelpForm">
+	<summary>
+ Provides user interface for Help.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.StandardBothSidesDown.DoButtonOperation">
+	<summary>
+ Code entrance point from StandardBothsidesDownButton OnClick event.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.StandardBothSidesDown.Enabled">
+	<summary>
+ Called by ArcMap once per second to check if the command is enabled.
+ </summary>
+	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.StandardBothSidesDown.Dispose(System.Boolean)">
+	<summary>
+ Dispose of managed and unmanaged resources.
+ </summary>
+	<param name="disposing">True or False.</param>
+	<remarks>
+		<para>Member of System::IDisposable.</para>
+		<para>Dispose executes in two distinct scenarios. 
+ If disposing equals true, the method has been called directly
+ or indirectly by a user's code. Managed and unmanaged resources
+ can be disposed.</para>
+		<para>If disposing equals false, the method has been called by the 
+ runtime from inside the finalizer and you should not reference 
+ other objects. Only unmanaged resources can be disposed.</para>
+	</remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.StandardBothSidesDown">
+	<summary>
+ Move annotation down, inserting adequate distance to span a standard line.
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.TransposeAnnotation.DoButtonOperation">
+	<summary>
+ Code entrance point from TransposeAnnotationButton OnClick event.
+ </summary>
 </member><member name="P:OrmapTaxlotEditingAddIn.TransposeAnnotation.Enabled">
 	<summary>
  Called by ArcMap once per second to check if the command is enabled.
@@ -411,11 +763,476 @@ OrmapTaxlotEditingAddIn
  runtime from inside the finalizer and you should not reference 
  other objects. Only unmanaged resources can be disposed.</para>
 	</remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.TransposeAnnotation">
+	<summary>
+ Flip the locations of the "top" and "bottom" pieces of annotation.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.MoveUp.#ctor">
+	<summary>
+ Constructor
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.MoveUp.DoButtonOperation">
+	<summary>
+ Code entrance point from MoveUpButton OnClick event.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.MoveUp.Enabled">
+	<summary>
+ Called by ArcMap once per second to check if the command is enabled.
+ </summary>
+	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.MoveUp.Dispose(System.Boolean)">
+	<summary>
+ Dispose of managed and unmanaged resources.
+ </summary>
+	<param name="disposing">True or False.</param>
+	<remarks>
+		<para>Member of System::IDisposable.</para>
+		<para>Dispose executes in two distinct scenarios. 
+ If disposing equals true, the method has been called directly
+ or indirectly by a user's code. Managed and unmanaged resources
+ can be disposed.</para>
+		<para>If disposing equals false, the method has been called by the 
+ runtime from inside the finalizer and you should not reference 
+ other objects. Only unmanaged resources can be disposed.</para>
+	</remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.MoveUp">
+	<summary>
+ Move annotation up, maintaining distance between pairs when they are on the same side of the line.
+ </summary>
+	<remarks>This will remove spacing between annotation pairs that are on both sides of a standard or wide line</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.StringUtilities.#ctor">
+	<summary>
+ Private empty constructor to prevent instantiation.
+ </summary>
+	<remarks>This class follows the singleton pattern and thus has a 
+ private constructor and all shared members. Instances of types 
+ that define only shared members do not need to be created, so no
+ constructor should be needed. However, many compilers will 
+ automatically add a public default constructor if no constructor 
+ is specified. To prevent this an empty private constructor is 
+ added.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.StringUtilities.AddLeadingZeros(System.String,System.Int32)">
+	<summary>
+ Add leading zeros if necessary.
+ </summary>
+	<param name="currentValue">The string to pad with zeros.</param>
+	<param name="width">The final length of the string.</param>
+	<returns>A string of length width characters.</returns>
+	<remarks>Creates a string of width characters padded on the left with zeros.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.StringUtilities.GenerateMapTaxlotValue(System.String,System.String)">
+	<summary>
+  Use the ORMapTaxlot value to create a MapTaxlot value based on a formatting mask.
+ </summary>
+	<param name="mapTaxlotIdValue">The ORTaxlot value</param>
+	<param name="format">The formatting mask as defined for each county</param>
+	<returns>A formatted string that can be used as parcel ID or/and as a MapTaxlot value</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.StringUtilities.ExtractString(System.String,System.Int32,System.Int32)">
+	<summary>
+ Isolate elements of a string.
+ </summary>
+	<param name="whole">The string to isolate the substring from.</param>
+	<param name="lowPart"></param>
+	<param name="highPart"></param>
+	<returns>A string that is a substring of theWholeString.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.StringUtilities.stripLeadingZeros(System.String)">
+	<summary>
+ Trims leading zeros from a string.
+ </summary>
+	<param name="stringToParse"></param>
+	<returns>A copy of the string without leading zeros</returns>
+	<remarks></remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.StringUtilities">
+	<summary>
+ String utilities class (singleton).
+ </summary>
+	<remarks>
+		<para>Commonly used string manipulation procedures and functions.</para>
+		<para><seealso cref="T:OrmapTaxlotEditingAddIn.SpatialUtilities"/></para>
+		<para><seealso cref="T:OrmapTaxlotEditingAddIn.Utilities"/></para>
+	</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.WideBothSidesDown.DoButtonOperation">
+	<summary>
+ Code entrance point from WideBothSidesDownButton OnClick event.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.WideBothSidesDown.Enabled">
+	<summary>
+ Called by ArcMap once per second to check if the command is enabled.
+ </summary>
+	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.WideBothSidesDown.Dispose(System.Boolean)">
+	<summary>
+ Dispose of managed and unmanaged resources.
+ </summary>
+	<param name="disposing">True or False.</param>
+	<remarks>
+		<para>Member of System::IDisposable.</para>
+		<para>Dispose executes in two distinct scenarios. 
+ If disposing equals true, the method has been called directly
+ or indirectly by a user's code. Managed and unmanaged resources
+ can be disposed.</para>
+		<para>If disposing equals false, the method has been called by the 
+ runtime from inside the finalizer and you should not reference 
+ other objects. Only unmanaged resources can be disposed.</para>
+	</remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.WideBothSidesDown">
+	<summary>
+ Move annotation down, inserting adequate distance to span a wide line.
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.WideBothSidesUpButton.OnClick">
+	<summary>
+ ESRI AddIn button OnClick event handler
+ </summary>
+</member><member name="T:OrmapTaxlotEditingAddIn.WideBothSidesUpButton">
+	<summary>
+ ESRI AddIn button events
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.WideBothSidesUp.DoButtonOperation">
+	<summary>
+ Code entrance point from WideBothSidesUpButton OnClick event.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.WideBothSidesUp.Enabled">
+	<summary>
+ Called by ArcMap once per second to check if the command is enabled.
+ </summary>
+	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.WideBothSidesUp.Dispose(System.Boolean)">
+	<summary>
+ Dispose of managed and unmanaged resources.
+ </summary>
+	<param name="disposing">True or False.</param>
+	<remarks>
+		<para>Member of System::IDisposable.</para>
+		<para>Dispose executes in two distinct scenarios. 
+ If disposing equals true, the method has been called directly
+ or indirectly by a user's code. Managed and unmanaged resources
+ can be disposed.</para>
+		<para>If disposing equals false, the method has been called by the 
+ runtime from inside the finalizer and you should not reference 
+ other objects. Only unmanaged resources can be disposed.</para>
+	</remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.WideBothSidesUp">
+	<summary>
+ Move annotation up, inserting adequate distance to span a wide line.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.CreateAnnotationButton">
+	<summary>
+Returns 'Polk_County_OrmapTaxlotEditingAddIn_CreateAnnotationButton', the id declared for Add-in Button class 'CreateAnnotationButton'
+</summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.TransposeAnnotationButton">
+	<summary>
+Returns 'Polk_County_OrmapTaxlotEditingAddIn_TransposeAnnotationButton', the id declared for Add-in Button class 'TransposeAnnotationButton'
+</summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.InvertAnnotationButton">
+	<summary>
+Returns 'Polk_County_OrmapTaxlotEditingAddIn_InvertAnnotationButton', the id declared for Add-in Button class 'InvertAnnotationButton'
+</summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.MoveDownButton">
+	<summary>
+Returns 'Polk_County_OrmapTaxlotEditingAddIn_MoveDownButton', the id declared for Add-in Button class 'MoveDownButton'
+</summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.StandardBothSidesDownButton">
+	<summary>
+Returns 'Polk_County_OrmapTaxlotEditingAddIn_StandardBothSidesDownButton', the id declared for Add-in Button class 'StandardBothSidesDownButton'
+</summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.WideBothSidesDownButton">
+	<summary>
+Returns 'Polk_County_OrmapTaxlotEditingAddIn_WideBothSidesDownButton', the id declared for Add-in Button class 'WideBothSidesDownButton'
+</summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.MoveUpButton">
+	<summary>
+Returns 'Polk_County_OrmapTaxlotEditingAddIn_MoveUpButton', the id declared for Add-in Button class 'MoveUpButton'
+</summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.StandardBothSidesUpButton">
+	<summary>
+Returns 'Polk_County_OrmapTaxlotEditingAddIn_StandardBothSidesUpButton', the id declared for Add-in Button class 'StandardBothSidesUpButton'
+</summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.WideBothSidesUpButton">
+	<summary>
+Returns 'Polk_County_OrmapTaxlotEditingAddIn_WideBothSidesUpButton', the id declared for Add-in Button class 'WideBothSidesUpButton'
+</summary>
+</member><member name="T:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs">
+	<summary>
+A class for looking up Add-in id strings declared in the associated configuration xml file (.esriaddinx).
+</summary>
+</member><member name="T:OrmapTaxlotEditingAddIn.My.ThisAddIn">
+	<summary>
+A class for looking up declarative information in the associated configuration xml file (.esriaddinx).
+</summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.My.Internal.AddInStartupObject.GetThis">
+	<summary>
+ Expose this instance of Add-in class externally
+ </summary>
+</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.AnnotationClassName">
+	<summary>
+ Set to "34" (ORMAP standard name for Bearing and Distance annotation)
+ </summary>
+	<remarks>Needed for the CreateAnnotation class to perform correctly</remarks>
+</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.Pi">
+	<summary>
+ The value 3.1415926535897931
+ </summary>
+	<remarks></remarks>
+</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.WideLine">
+	<summary>
+ Default distance for wide-line spacing (60 ft)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.DistanceBothSides">
+	<summary>
+ Annotation pair distance constant 2.55
+ </summary>
+	<remarks>
+calculated from mean distances of annotation pairs
+placed by the Label-to-Annotation converter. When multiplied
+by the appropriate font, will maintain distances between
+the annotation pairs 
+</remarks>
+</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.DistanceBothAbove">
+	<summary>
+ Annotation pair distance constant 1.75
+ </summary>
+	<remarks>
+calculated from mean distances of annotation pairs
+placed by the Label-to-Annotation converter. When multiplied
+by the appropriate font, will maintain distances between
+the annotation pairs 
+</remarks>
+</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.DistanceBothBelow">
+	<summary>
+ Annotation pair distance constant 1.99
+ </summary>
+	<remarks>
+calculated from mean distances of annotation pairs
+placed by the Label-to-Annotation converter. When multiplied
+by the appropriate font, will maintain distances between
+the annotation pairs 
+</remarks>
+</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.AnnotationPlacement.BothSides">
+	<summary>
+ Annotation placed on both sides of the line with standard spacing
+ </summary>
+	<remarks></remarks>
+</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.AnnotationPlacement.BothSidesWide">
+	<summary>
+ Annotation placed on both sides of the line with wide spacing
+ </summary>
+	<remarks></remarks>
+</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.AnnotationPlacement.BothAbove">
+	<summary>
+ Annotation placed above the line
+ </summary>
+	<remarks></remarks>
+</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.AnnotationPlacement.BothBelow">
+	<summary>
+ Annotation placed below the line
+ </summary>
+	<remarks></remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.AnnotationUtilities.AnnotationPlacement">
+	<summary>
+ Defines how annotation was originally placed related to its source line
+ </summary>
+	<remarks>Used to control where annotation is placed relative to the source line</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.#ctor">
+	<summary>
+ Private empty constructor to prevent instantiation.
+ </summary>
+	<remarks>This class follows the singleton pattern and thus has a 
+ private constructor and all shared members. Instances of types 
+ that define only shared members do not need to be created, so no
+ constructor should be needed. However, many compilers will 
+ automatically add a public default constructor if no constructor 
+ is specified. To prevent this an empty private constructor is 
+ added.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetAnnoFeatureClassName(System.String)">
+	<summary>
+ Gets the name of the Annotation Feature Class based on the Map Scale.
+ </summary>
+	<param name="theMapScale">The Map Scale from which to determine the Annotation Feature Class name.</param>
+	<returns>The Annotation Feature Class name as a string.</returns>
+	<remarks>
+ Uses ORMAP Settings to find name of appropriate annotation feature class.
+ NOTE=&gt; This is identical method to SpatialUtilities.getAnnoSizeByScale which
+ couldn't be used because is private to that class.
+ </remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetSubtypeCode(ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String,System.Int32)">
+	<summary>
+ Gets the Subtype Code for the desired Subtype name. 
+ </summary>
+	<param name="theAnnoFeatureClass">Name of the field to draw the domain from.</param>
+	<param name="theSubtypeName">Name of the Subtype for which the Subtype Code is needed.</param>
+	<param name="stringLength">Optional string length of theSubtypeName.</param>
+	<returns>An Symbol Id as an integer.</returns>
+	<remarks>
+ String length can be used to extract only a portion of the subtype name. For example, a name of 
+ "34- Distance and Bearing" could be sent with a length of 2, and therefore only "34" would
+ be evaluated.
+ </remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetSymbolId(ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String,System.Int32)">
+	<summary>
+ Gets the Symbol ID value based on the Symbol Name
+ </summary>
+	<param name="theAnnoFeatureClass">The Annotation Feature Class containing the appropriate symbol set.</param>
+	<param name="theSymbolName">The name of the symbol for which the symbol id needed.</param>
+	<param name="stringLength">Optional string length of theSubtypeName.</param>
+	<returns>The Symbol Id as an integer.</returns>
+	<remarks>
+ String length can be used to extract only a portion of the subtype name. For example, a name of 
+ "34- Distance and Bearing" could be sent with a length of 2, and therefore only "34" would
+ be evaluated.
+ </remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetAnnoFeatureClass(System.String)">
+	<summary>
+ Gets the Annotation Feature Class based on the name.
+ </summary>
+	<param name="theAnnoFCName">The name of the desired Annotation Feature Class.</param>
+	<returns>The feature class with the specified name.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.MoveElement(ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Carto.IGraphicsContainer,ESRI.ArcGIS.Carto.IElement)">
+	<summary>
+ Moves an annotation element based on its TO and FROM point values
+ </summary>
+	<param name="theToPoint">The point to be used as the "to" point of the move vector.</param>
+	<param name="theFromPoint">The point to be used as the "from" point of the move vector.</param>
+	<param name="theGraphicsContainer">The graphics container which holds the annotation element.</param>
+	<param name="theElement">The annotation element to be moved.</param>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.MoveElement(ESRI.ArcGIS.Geometry.ILine,ESRI.ArcGIS.Carto.IGraphicsContainer,ESRI.ArcGIS.Carto.IElement)">
+	<summary>
+ Moves an annotation element based on a move vector
+ </summary>
+	<param name="theMoveVector">The move vector which defines the element's movement.</param>
+	<param name="theGraphicsContainer">The graphics container which holds the annotation element.</param>
+	<param name="theElement">The annotation element to be moved.</param>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.RotateElement(ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Carto.IGraphicsContainer,ESRI.ArcGIS.Carto.IElement)">
+	<summary>
+ Rotates an annotation element around a specified point.
+ </summary>
+	<param name="theRotationPoint">The about which the annotation element will be rotated.</param>
+	<param name="theGraphicsContainer">The graphics container which holds the annotation element.</param>
+	<param name="theElement">The annotation element to be rotated.</param>
+	<remarks>Rotates the annotation element 180 degrees (pi) around a specified point.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetAnnoEnvelope(ESRI.ArcGIS.Display.IDisplay,ESRI.ArcGIS.Carto.IElement)">
+	<summary>
+ Gets the annotation envelop. 
+ </summary>
+	<param name="theDisplay">The current map display.</param>
+	<param name="theElement">The annotation element for which the envelop is returned.</param>
+	<returns>The annotation element's graphic envelope.</returns>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.MoveAnnotationElements(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+	<summary>
+ Moves annotation elements based on boolean settings
+ </summary>
+	<param name="isInverted">Boolean value to determine if annotation should be inverted (rotated)</param>
+	<param name="isTransposed">Boolean value to determine if annotation should be transposed (flipped)</param>
+	<param name="isMoveUp">Boolean value to determine if annotation should be moved "up"</param>
+	<param name="isMoveDown">Boolean value to determine if annotation should be moved "down"</param>
+	<param name="isStandardSpace">Boolean value to determine if annotation has standard space</param>
+	<param name="isWideSpace">Boolean value to determine if annotation has wide space</param>
+	<remarks>
+		<para>
+ Annotation movement only works for annotation created and placed by the CreateAnnotation class. This class
+ creates and places annotation based on a set of rules which comply with annotation spacing, fonts, and font sizes used
+ in Polk County taxmaps.
+ </para>
+		<para>
+ Moving Distance and Bearing annotation is accomplished by describing mathematical relationships relating to a "virtual"  
+ line (the source line feature), which is not feature-linked to the annotation. Although this line may or may not be present
+ or visible when annotation is displayed, the annotation pairs' only relationship to this line is mathematical. 
+ </para>
+		<para>
+ Distance between the "upper" and "lower" annotation varies depending on their location relative
+ to this line. Annotation on different sides of the line, both above the line, or both below the line have different 
+ distances between them (as placed by the IConvertLabelsToAnnotation ArcObjects interface implemented by this class). 
+ These distances are calculated relative to the centroid of the annotation's envelopes, and are 
+ dependent on font size. These distances also vary if the line is "standard" or "big" (wide). Annotation is placed 
+ with wide spacing if it will be located next to map index boundaries, taxcode lines, subdivision boundaries, etc. 
+ </para>
+		<para>
+ Constants were calculated by checking envelope centroid distances for a number of annotation sets of different scales 
+ placed (by IConvertLablesToAnnotation) above, below, and on both sides of the line at 100, 200, and 400 scales. 
+ These constants were calculated from the formula:
+ </para>
+		<code lang="text">
+ 
+                 K = Distance / FontSize
+ 
+                Anno Location           K
+                -------------          ----
+                Both Sides             2.55
+                Both Above             1.75
+                Both Below             1.99
+ </code>
+	</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetAnnoPlacement(System.Double,System.Double)">
+	<summary>
+ Sets enumeration value based on how annotation was originally placed relative to its source line
+ </summary>
+	<param name="theFontSize">The font size of the associated annotation feature class</param>
+	<param name="theCalculatedDistance">Scale constant for associated annotation feature class</param>
+	<returns>The AnnotationPlacement enumeration</returns>
+	<remarks>
+ Uses a "fuzzy" tolerance to determine if the distance between pairs of annotation are + or -
+ 0.01 ft of where they should be (based on font size) if the CreateAnnotation tool placed the
+ annotation. Annotation are placed relative to a line feature, but not feature linked to it.
+ Therefore the tool has to know how much to move the annotation as if the line where there. 
+ It cannot do this correctly if the distance between the annotation pairs is too great. 
+ </remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetMoveDistance(System.Boolean,System.Boolean,ESRI.ArcGIS.Carto.ITextElement)">
+	<summary>
+ Planned for future version
+ </summary>
+	<param name="isStandardSpace">Boolean for identifying standard spacing</param>
+	<param name="isBothSides">Boolean for identifying annotation placement relative to the line</param>
+	<param name="theTextElement">Annotation text element</param>
+	<returns>The distance annotation should be moved</returns>
+	<remarks>
+ Unused. May be included in future release for moving annotation when the user is relying on 
+ asymmetric offsets (top or bottom only)
+ </remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.finishTransform(ESRI.ArcGIS.Carto.IGraphicsContainer,ESRI.ArcGIS.Carto.IElement,ESRI.ArcGIS.Geometry.ITransform2D)">
+	<summary>
+ Update the source objects with the new geometry
+ </summary>
+	<param name="theGraphicsContainer">Contains the annotation element.</param>
+	<param name="theElement">The annotation element.</param>
+	<param name="theTransform">The type of Transform (2D or 3D).</param>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.calculateAnnoSpacing(System.Double,System.Double)">
+	<summary>
+ Calculates the distance annotation pairs should be spaced.
+ </summary>
+	<param name="theDistance">The distance between the annotation pairs</param>
+	<param name="theFontSize">Font size of the annotation feature class</param>
+	<returns>The calculated spacing between the annotation pairs</returns>
+	<remarks>
+ Divides the mean distance between annotation pairs by the font
+ size from the annotation feature class to compare against the
+ placement constants to determine which type of annotation pair
+ is selected (both above, both below, or both sides)
+</remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.AnnotationUtilities">
+	<summary>
+ Annotation utilities class (static).
+ </summary>
+	<remarks>
+		<para>Commonly used annotation methods and functions.</para>
+	</remarks>
 </member><member name="T:OrmapTaxlotEditingAddIn.CreateAnnotationForm">
 	<summary>
  Partner form providing user interface for the CreateAnnotation class.
  </summary>
 	<remarks><seealso cref="T:OrmapTaxlotEditingAddIn.CreateAnnotation"/></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotationButton.OnClick">
+	<summary>
+ ESRI AddIn button OnClick event handler
+ </summary>
+</member><member name="T:OrmapTaxlotEditingAddIn.CreateAnnotationButton">
+	<summary>
+ ESRI AddIn button events
+ </summary>
 </member><member name="E:OrmapTaxlotEditingAddIn.ORMapNum.OnChange">
 	<summary>
  Event triggered when ORMAP number changes.
@@ -516,367 +1333,6 @@ OrmapTaxlotEditingAddIn
  multipurpose class that allows an ORMapNum to be either 
  created or parsed, manipulated, or validated against the 
  current ORMapNum model.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:OrmapTaxlotEditingAddIn.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:OrmapTaxlotEditingAddIn.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member><member name="M:OrmapTaxlotEditingAddIn.StringUtilities.#ctor">
-	<summary>
- Private empty constructor to prevent instantiation.
- </summary>
-	<remarks>This class follows the singleton pattern and thus has a 
- private constructor and all shared members. Instances of types 
- that define only shared members do not need to be created, so no
- constructor should be needed. However, many compilers will 
- automatically add a public default constructor if no constructor 
- is specified. To prevent this an empty private constructor is 
- added.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.StringUtilities.AddLeadingZeros(System.String,System.Int32)">
-	<summary>
- Add leading zeros if necessary.
- </summary>
-	<param name="currentValue">The string to pad with zeros.</param>
-	<param name="width">The final length of the string.</param>
-	<returns>A string of length width characters.</returns>
-	<remarks>Creates a string of width characters padded on the left with zeros.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.StringUtilities.GenerateMapTaxlotValue(System.String,System.String)">
-	<summary>
-  Use the ORMapTaxlot value to create a MapTaxlot value based on a formatting mask.
- </summary>
-	<param name="mapTaxlotIdValue">The ORTaxlot value</param>
-	<param name="format">The formatting mask as defined for each county</param>
-	<returns>A formatted string that can be used as parcel ID or/and as a MapTaxlot value</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.StringUtilities.ExtractString(System.String,System.Int32,System.Int32)">
-	<summary>
- Isolate elements of a string.
- </summary>
-	<param name="whole">The string to isolate the substring from.</param>
-	<param name="lowPart"></param>
-	<param name="highPart"></param>
-	<returns>A string that is a substring of theWholeString.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.StringUtilities.stripLeadingZeros(System.String)">
-	<summary>
- Trims leading zeros from a string.
- </summary>
-	<param name="stringToParse"></param>
-	<returns>A copy of the string without leading zeros</returns>
-	<remarks></remarks>
-</member><member name="T:OrmapTaxlotEditingAddIn.StringUtilities">
-	<summary>
- String utilities class (singleton).
- </summary>
-	<remarks>
-		<para>Commonly used string manipulation procedures and functions.</para>
-		<para><seealso cref="T:OrmapTaxlotEditingAddIn.SpatialUtilities"/></para>
-		<para><seealso cref="T:OrmapTaxlotEditingAddIn.Utilities"/></para>
-	</remarks>
-</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.AnnotationClassName">
-	<summary>
- Set to "34" (ORMAP standard name for Bearing and Distance annotation)
- </summary>
-	<remarks>Needed for the CreateAnnotation class to perform correctly</remarks>
-</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.Pi">
-	<summary>
- The value 3.1415926535897931
- </summary>
-	<remarks></remarks>
-</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.WideLine">
-	<summary>
- Default distance for wide-line spacing (60 ft)
- </summary>
-	<remarks></remarks>
-</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.DistanceBothSides">
-	<summary>
- Annotation pair distance constant 2.55
- </summary>
-	<remarks>
-calculated from mean distances of annotation pairs
-placed by the Label-to-Annotation converter. When multiplied
-by the appropriate font, will maintain distances between
-the annotation pairs 
-</remarks>
-</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.DistanceBothAbove">
-	<summary>
- Annotation pair distance constant 1.75
- </summary>
-	<remarks>
-calculated from mean distances of annotation pairs
-placed by the Label-to-Annotation converter. When multiplied
-by the appropriate font, will maintain distances between
-the annotation pairs 
-</remarks>
-</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.DistanceBothBelow">
-	<summary>
- Annotation pair distance constant 1.99
- </summary>
-	<remarks>
-calculated from mean distances of annotation pairs
-placed by the Label-to-Annotation converter. When multiplied
-by the appropriate font, will maintain distances between
-the annotation pairs 
-</remarks>
-</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.AnnotationPlacement.BothSides">
-	<summary>
- Annotation placed on both sides of the line with standard spacing
- </summary>
-	<remarks></remarks>
-</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.AnnotationPlacement.BothSidesWide">
-	<summary>
- Annotation placed on both sides of the line with wide spacing
- </summary>
-	<remarks></remarks>
-</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.AnnotationPlacement.BothAbove">
-	<summary>
- Annotation placed above the line
- </summary>
-	<remarks></remarks>
-</member><member name="F:OrmapTaxlotEditingAddIn.AnnotationUtilities.AnnotationPlacement.BothBelow">
-	<summary>
- Annotation placed below the line
- </summary>
-	<remarks></remarks>
-</member><member name="T:OrmapTaxlotEditingAddIn.AnnotationUtilities.AnnotationPlacement">
-	<summary>
- Defines how annotation was originally placed related to its source line
- </summary>
-	<remarks>Used to control where annotation is placed relative to the source line</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.#ctor">
-	<summary>
- Private empty constructor to prevent instantiation.
- </summary>
-	<remarks>This class follows the singleton pattern and thus has a 
- private constructor and all shared members. Instances of types 
- that define only shared members do not need to be created, so no
- constructor should be needed. However, many compilers will 
- automatically add a public default constructor if no constructor 
- is specified. To prevent this an empty private constructor is 
- added.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetAnnoFeatureClassName(System.String)">
-	<summary>
- Gets the name of the Annotation Feature Class based on the Map Scale.
- </summary>
-	<param name="theMapScale">The Map Scale from which to determine the Annotation Feature Class name.</param>
-	<returns>The Annotation Feature Class name as a string.</returns>
-	<remarks>
- Uses ORMAP Settings to find name of appropriate annotation feature class.
- NOTE=&gt; This is identical method to SpatialUtilities.getAnnoSizeByScale which
- couldn't be used because is private to that class.
- </remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetSubtypeCode(ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String,System.Int32)">
-	<summary>
- Gets the Subtype Code for the desired Subtype name. 
- </summary>
-	<param name="theAnnoFeatureClass">Name of the field to draw the domain from.</param>
-	<param name="theSubtypeName">Name of the Subtype for which the Subtype Code is needed.</param>
-	<returns>An Symbol Id as an integer.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetSymbolId(ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String,System.Int32)">
-	<summary>
- Gets the Symbol ID value based on the Symbol Name
- </summary>
-	<param name="theAnnoFeatureClass">The Annotation Feature Class containing the appropriate symbol set.</param>
-	<param name="theSymbolName">The name of the symbol for which the symbol id needed.</param>
-	<returns>The Symbol Id as an integer.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetAnnoFeatureClass(System.String)">
-	<summary>
- Gets the Annotation Feature Class based on the name.
- </summary>
-	<param name="theAnnoFCName">The name of the desired Annotation Feature Class.</param>
-	<returns>An object which implements IFeatureClass.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.MoveElement(ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Carto.IGraphicsContainer,ESRI.ArcGIS.Carto.IElement)">
-	<summary>
- Moves an annotation element based on its TO and FROM point values
- </summary>
-	<param name="theToPoint">The point to be used as the "to" point of the move vector.</param>
-	<param name="theFromPoint">The point to be used as the "from" point of the move vector.</param>
-	<param name="theGraphicsContainer">The graphics container which holds the annotation element.</param>
-	<param name="theElement">The annotation element to be moved.</param>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.MoveElement(ESRI.ArcGIS.Geometry.ILine,ESRI.ArcGIS.Carto.IGraphicsContainer,ESRI.ArcGIS.Carto.IElement)">
-	<summary>
- Moves an annotation element based on a move vector
- </summary>
-	<param name="theMoveVector">The move vector which defines the element's movement.</param>
-	<param name="theGraphicsContainer">The graphics container which holds the annotation element.</param>
-	<param name="theElement">The annotation element to be moved.</param>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.RotateElement(ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Carto.IGraphicsContainer,ESRI.ArcGIS.Carto.IElement)">
-	<summary>
- Rotates an annotation element around a specified point.
- </summary>
-	<param name="theRotationPoint">The about which the annotation element will be rotated.</param>
-	<param name="theGraphicsContainer">The graphics container which holds the annotation element.</param>
-	<param name="theElement">The annotation element to be rotated.</param>
-	<remarks>Rotates the annotation element 180 degrees (pi) around a specified point.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetAnnoEnvelope(ESRI.ArcGIS.Display.IDisplay,ESRI.ArcGIS.Carto.IElement)">
-	<summary>
- Gets the annotation envelop 
- </summary>
-	<param name="theDisplay">The current map display.</param>
-	<param name="theElement">The annotation element for which the envelop is returned.</param>
-	<returns>An object which implements IEnvelope.</returns>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.MoveAnnotationElements(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
-	<summary>
- Moves annotation elements based on boolean settings
- </summary>
-	<param name="isInverted">Boolean value to determine if annotation should be inverted (rotated)</param>
-	<param name="isTransposed">Boolean value to determine if annotation should be transposed (flipped)</param>
-	<param name="isMoveUp">Boolean value to determine if annotation should be moved "up"</param>
-	<param name="isMoveDown">Boolean value to determine if annotation should be moved "down"</param>
-	<param name="isStandardSpace">Boolean value to determine if annotation has standard space</param>
-	<param name="isWideSpace">Boolean value to determine if annotation has wide space</param>
-	<remarks>
- Annotation movement only works for annotation created and placed by the CreateAnnotation class. This class
- places annotation based on a set of rules which comply with annotation spacing, fonts, and font sizes used
- in Polk County taxmaps.
- 
- Moving distance and bearing annotation is accomplished by describing mathematical relationships relating to a "virtual"  
- line (the taxlot line). Distances between the "upper" and "lower" annotation varies depending on its relative location 
- to this line. Annotation on different sides of the line, both above the line, or both below the line have different 
- distances between them. These distances are calculated relative to the centroid of the annotation's envelopes, and are 
- dependent on font size. These distances also vary if the line is "standard" or "big" (wide). Annotation may be placed 
- with wide spacing if it will be located next to map index boundaries, taxcode lines, subdivision boundaries, etc. 
-
- Constants were calculated by checking envelope centroid distances for a number of annotation sets of different scales 
- placed above, below, and on both sides of the line at 100, 200, and 400 scales. These constants were calculated 
- from the formula:
-
-     K = Distance / FontSize
-
- and work out to the following values:
-
-         Anno Location           K
-         --------------         ----
-         Both Sides             2.55   
-         Both Above             1.75
-         Both Below             1.99
-</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetAnnoPlacement(System.Double,System.Double)">
-	<summary>
- Sets enumeration value based on how annotation was originally placed relative to its source line
- </summary>
-	<param name="theFontSize">The font size of the associated annotation feature class</param>
-	<param name="theCalculatedDistance">Scale constant for associated annotation feature class</param>
-	<returns>The AnnotationPlacement enumeration</returns>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.GetMoveDistance(System.Boolean,System.Boolean,ESRI.ArcGIS.Carto.ITextElement)">
-	<summary>
- Planned for future version
- </summary>
-	<param name="isStandardSpace">Boolean for identifying standard spacing</param>
-	<param name="isBothSides">Boolean for identifying annotation placement relative to the line</param>
-	<param name="theTextElement">Annotation text element</param>
-	<returns>The distance annotation should be moved</returns>
-	<remarks>
- Unused. May be included in future release for moving annotation when the user is relying on 
- asymmetric offsets (top or bottom only)
- </remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.finishTransform(ESRI.ArcGIS.Carto.IGraphicsContainer,ESRI.ArcGIS.Carto.IElement,ESRI.ArcGIS.Geometry.ITransform2D)">
-	<summary>
- Update the source objects with the new geometry
- </summary>
-	<param name="theGraphicsContainer">The move vector which defines the element's movement.</param>
-	<param name="theElement">The annotation element.</param>
-	<param name="theTransform">The type of Transform (2D or 3D).</param>
-	<remarks>Rotates the annotation element 180 degrees (pi) around a specified point.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.AnnotationUtilities.calculateAnnoSpacing(System.Double,System.Double)">
-	<summary>
- Calculates the distance annotation pairs should be spaced.
- </summary>
-	<param name="theDistance">The distance between the annotation pairs</param>
-	<param name="theFontSize">Font size of the annotation feature class</param>
-	<returns></returns>
-	<remarks>
- Divides the mean distance between annotation pairs by the font
- size from the annotation feature class to compare against the
- placement constants to determine which type of annotation pair
- is selected (both above, both below, or both sides)
-</remarks>
-</member><member name="T:OrmapTaxlotEditingAddIn.AnnotationUtilities">
-	<summary>
- Annotation utilities class (singleton).
- </summary>
-	<remarks>
-		<para>Commonly used annotation methods and functions.</para>
-	</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.CreateAnnotationButton">
-	<summary>
-Returns 'Polk_County_OrmapTaxlotEditingAddIn_CreateAnnotationButton', the id declared for Add-in Button class 'CreateAnnotationButton'
-</summary>
-</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.TransposeAnnotationButton">
-	<summary>
-Returns 'Polk_County_OrmapTaxlotEditingAddIn_TransposeAnnotationButton', the id declared for Add-in Button class 'TransposeAnnotationButton'
-</summary>
-</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.InvertAnnotationButton">
-	<summary>
-Returns 'Polk_County_OrmapTaxlotEditingAddIn_InvertAnnotationButton', the id declared for Add-in Button class 'InvertAnnotationButton'
-</summary>
-</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.MoveDownButton">
-	<summary>
-Returns 'Polk_County_OrmapTaxlotEditingAddIn_MoveDownButton', the id declared for Add-in Button class 'MoveDownButton'
-</summary>
-</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.StandardBothSidesDownButton">
-	<summary>
-Returns 'Polk_County_OrmapTaxlotEditingAddIn_StandardBothSidesDownButton', the id declared for Add-in Button class 'StandardBothSidesDownButton'
-</summary>
-</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.WideBothSidesDownButton">
-	<summary>
-Returns 'Polk_County_OrmapTaxlotEditingAddIn_WideBothSidesDownButton', the id declared for Add-in Button class 'WideBothSidesDownButton'
-</summary>
-</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.MoveUpButton">
-	<summary>
-Returns 'Polk_County_OrmapTaxlotEditingAddIn_MoveUpButton', the id declared for Add-in Button class 'MoveUpButton'
-</summary>
-</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.StandardBothSidesUpButton">
-	<summary>
-Returns 'Polk_County_OrmapTaxlotEditingAddIn_StandardBothSidesUpButton', the id declared for Add-in Button class 'StandardBothSidesUpButton'
-</summary>
-</member><member name="P:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs.WideBothSidesUpButton">
-	<summary>
-Returns 'Polk_County_OrmapTaxlotEditingAddIn_WideBothSidesUpButton', the id declared for Add-in Button class 'WideBothSidesUpButton'
-</summary>
-</member><member name="T:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs">
-	<summary>
-A class for looking up Add-in id strings declared in the associated configuration xml file (.esriaddinx).
-</summary>
-</member><member name="T:OrmapTaxlotEditingAddIn.My.ThisAddIn">
-	<summary>
-A class for looking up declarative information in the associated configuration xml file (.esriaddinx).
-</summary>
-</member><member name="M:OrmapTaxlotEditingAddIn.My.Internal.AddInStartupObject.GetThis">
-	<summary>
- Expose this instance of Add-in class externally
- </summary>
-</member><member name="P:OrmapTaxlotEditingAddIn.WideBothSidesDown.Enabled">
-	<summary>
- Called by ArcMap once per second to check if the command is enabled.
- </summary>
-	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.WideBothSidesDown.Dispose(System.Boolean)">
-	<summary>
- Dispose of managed and unmanaged resources.
- </summary>
-	<param name="disposing">True or False.</param>
-	<remarks>
-		<para>Member of System::IDisposable.</para>
-		<para>Dispose executes in two distinct scenarios. 
- If disposing equals true, the method has been called directly
- or indirectly by a user's code. Managed and unmanaged resources
- can be disposed.</para>
-		<para>If disposing equals false, the method has been called by the 
- runtime from inside the finalizer and you should not reference 
- other objects. Only unmanaged resources can be disposed.</para>
-	</remarks>
 </member><member name="M:OrmapTaxlotEditingAddIn.SpatialUtilities.#ctor">
 	<summary>
  Private empty constructor to prevent instantiation.
@@ -1345,485 +1801,6 @@ A class for looking up declarative information in the associated configuration x
 		<para><seealso cref="T:OrmapTaxlotEditingAddIn.StringUtilities"/></para>
 		<para><seealso cref="T:OrmapTaxlotEditingAddIn.Utilities"/></para>
 	</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.#ctor">
-	<summary>
- Private empty constructor to prevent instantiation.
- </summary>
-	<remarks>This class follows the singleton pattern and thus has a 
- private constructor and all shared members. Instances of types 
- that define only shared members do not need to be created, so no
- constructor should be needed. However, many compilers will 
- automatically add a public default constructor if no constructor 
- is specified. To prevent this an empty private constructor is 
- added.</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.TaxlotFeatureLayer">
-	<summary>
- Property to hold the Taxlot Feature Layer.
- </summary>
-	<value></value>
-	<returns>An object implementing IFeatureLayer.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.setTaxlotFeatureLayer(ESRI.ArcGIS.Carto.IFeatureLayer@)">
-	<summary>
- Validate and set the TaxlotFeatureLayer property.
- </summary>
-	<param name="value"></param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.MapIndexFeatureLayer">
-	<summary>
- Property to hold the Map Index Feature Layer.
- </summary>
-	<value></value>
-	<returns>An object implementing <c>IFeatureLayer</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.setMapIndexFeatureLayer(ESRI.ArcGIS.Carto.IFeatureLayer@)">
-	<summary>
- Validate and set the MapIndexFeatureLayer property.
- </summary>
-	<param name="value">An object implementing <c>IFeatureLayer</c>.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.CancelledNumbersTable">
-	<summary>
- Property to hold the Cancelled Numbers Table Standalone Table.
- </summary>
-	<value></value>
-	<returns>An object implementing <c>IStandaloneTable</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.setCancelledNumbersTable(ESRI.ArcGIS.Carto.IStandaloneTable@)">
-	<summary>
- Validate and set the CancelledNumbersTable property.
- </summary>
-	<param name="value">An object implementing <c>IStandaloneTable</c>.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.ReferenceLinesFeatureLayer">
-	<summary>
- Property to hold the Reference Lines Feature Layer.
- </summary>
-	<value></value>
-	<returns>An object implementing <c>IFeatureLayer</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.setReferenceLinesFeatureLayer(ESRI.ArcGIS.Carto.IFeatureLayer@)">
-	<summary>
- Validate and set the ReferenceLinesFeatureLayer property.
- </summary>
-	<param name="value">An object implementing <c>IFeatureLayer</c>.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.TaxlotLinesFeatureLayer">
-	<summary>
- Property to hold the Taxlot Lines Feature Layer.
- </summary>
-	<value></value>
-	<returns>An object implementing <c>IFeatureLayer</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.setTaxlotLinesFeatureLayer(ESRI.ArcGIS.Carto.IFeatureLayer@)">
-	<summary>
- Validate and set the TaxlotLinesFeatureLayer property.
- </summary>
-	<param name="value">An object implementing <c>IFeatureLayer</c>.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.CartographicLinesFeatureLayer">
-	<summary>
- Property to hold the Cartographic Lines Feature Layer.
- </summary>
-	<value></value>
-	<returns>An object implementing <c>IFeatureLayer</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.setCartographicLinesFeatureLayer(ESRI.ArcGIS.Carto.IFeatureLayer@)">
-	<summary>
- Validate and set the CartographicLinesFeatureLayer property.
- </summary>
-	<param name="value">An object implementing <c>IFeatureLayer</c>.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.HasValidMapIndexData">
-	<summary>
- Returns the valid and available status of the MapIndex data.
- </summary>
-	<value>The valid and available status of the MapIndex data.</value>
-	<returns><c>True</c> or <c>False</c>, depending on whether the data is valid.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SetHasValidMapIndexData(System.Boolean)">
-	<summary>
- Validate and set the property.
- </summary>
-	<param name="value">A boolean value.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.HasValidTaxlotData">
-	<summary>
- Returns the valid and available status of the Taxlot data.
- </summary>
-	<value>The valid and available status of the Taxlot data.</value>
-	<returns><c>True</c> or <c>False</c>, depending on the status.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SetHasValidTaxlotData(System.Boolean)">
-	<summary>
- Validate and set the HasValidTaxlotData property.
- </summary>
-	<param name="value">A boolean value.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.HasValidCancelledNumbersTableData">
-	<summary>
- Returns the valid and available status of the CancelledNumbersTable data.
- </summary>
-	<value>The valid and available status of the CancelledNumbersTable data.</value>
-	<returns><c>True</c> or <c>False</c>, depending on the status.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SetHasValidCancelledNumbersTableData(System.Boolean)">
-	<summary>
- Validate and set the HasValidCancelledNumbersTableData property.
- </summary>
-	<param name="value">A boolean value.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.HasValidReferenceLinesData">
-	<summary>
- Returns the valid and available status of the ReferenceLines data.
- </summary>
-	<value>The valid and available status of the ReferenceLines data.</value>
-	<returns><c>True</c> or <c>False</c>, depending on the status.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SetHasValidReferenceLinesData(System.Boolean)">
-	<summary>
- Validate and set the HasValidReferenceLinesData property.
- </summary>
-	<param name="value">A boolean value.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.HasValidTaxlotLinesData">
-	<summary>
- Returns the valid and available status of the TaxlotLines data.
- </summary>
-	<value>The valid and available status of the TaxlotLines data.</value>
-	<returns><c>True</c> or <c>False</c>, depending on the status.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SetHasValidTaxlotLinesData(System.Boolean)">
-	<summary>
- Validate and set the HasValidTaxlotLinesData property.
- </summary>
-	<param name="value">A boolean value.</param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.DataMonitor.HasValidCartographicLinesData">
-	<summary>
- Returns the valid and available status of the CartographicLines data.
- </summary>
-	<value>The valid and available status of the CartographicLines data.</value>
-	<returns><c>True</c> or <c>False</c>, depending on the status.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SetHasValidCartographicLinesData(System.Boolean)">
-	<summary>
- Validate and set the HasValidCartographicLinesData property.
- </summary>
-	<param name="value">A boolean value.</param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.ClearAllValidDataProperties">
-	<summary>
- Clear all the HasValid...Data properties.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckAllValidDataProperties">
-	<summary>
- Check all the HasValid...Data properties.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckValidTaxlotDataProperties">
-	<summary>
- Check and set Taxlot status and layer properties.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckValidMapIndexDataProperties">
-	<summary>
- Check and set MapIndex status and layer properties.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckValidCancelledNumbersTableDataProperties">
-	<summary>
- Check and set CancelledNumbersTable status and layer properties.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckValidReferenceLinesDataProperties">
-	<summary>
- Check and set ReferenceLines status and layer properties.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckValidTaxlotLinesDataProperties">
-	<summary>
- Check and set TaxlotLines status and layer properties.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckValidCartographicLinesDataProperties">
-	<summary>
- Check and set CartographicLines status and layer properties.
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.CheckData(OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType,System.String)">
-	<summary>
- Check data (will attempt to load and/or validate data).
- </summary>
-	<param name="classType">An <see cref="T:OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType"/> enumerated item.</param>
-	<param name="className">The class dataset name.</param>
-	<returns><c>True</c> or <c>False</c>, depending on the status.</returns>
-	<remarks>Look for data in the map. Load the data if not found. Validate the data if found or loaded.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.FindDataLayerInMap(System.String)">
-	<summary>
- Find a data layer in the current map, based on the dataset name.
- </summary>
-	<param name="featureClassName"></param>
-	<returns>An object that implements <c>IFeatureLayer</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.FindDataTableInMap(System.String)">
-	<summary>
- Find a standalone table in the current map, based on the dataset name.
- </summary>
-	<param name="objectClassName"></param>
-	<returns>An object that implements <c>IStandaloneTable</c>.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.SendExtinctToCancelledNumbersTable(ESRI.ArcGIS.Geodatabase.IFeature,System.Boolean)">
-	<summary>
- Captures the mapnumber and taxlot and records them in the CancelledNumbers table if they are extinct.
- </summary>
-	<param name="inTaxlotFeature">The feature to get the numbers from.</param>
-	<param name="isDuringOnChange">Whether the check is being called from within an OnChange event handler.</param>
-	<remarks>
-		<para>Taxlots will send their numbers to the CancelledNumbers table 
- ONLY if they are "extinct" (unique in the map at the time of deletion/change).
- </para>
-		<para>
- If this check is being called from within an OnChange event handler, 
- then it will use the feature's original values rather than its current 
- values.
- </para>
-		<para>
- Features with null or non-numeric values will not be written to the table. 
- This will effectively exclude roads, rails, water, and nontl polygons which
- have non-numeric Taxlot field values.
- </para>
-	</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.loadOptionSuccessful(OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType,System.String)">
-	<summary>
- Load a standalone table into the current map.
- </summary>
-	<param name="classType">An <see cref="T:OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType"/> enumerated item.</param>
-	<param name="className">The class dataset name.</param>
-	<returns><c>True</c> or <c>False</c>, depending on the status of the load.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.loadDataIntoMap(OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType,System.String)">
-	<summary>
- Load a data layer into the current map.
- </summary>
-	<param name="classType">An <see cref="T:OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType"/> enumerated item.</param>
-	<param name="className">The class dataset name.</param>
-	<returns><c>True</c> or <c>False</c>, depending on the status of the load.</returns>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.DataMonitor.validateData(OrmapTaxlotEditingAddIn.DataMonitor.ESRIClassType,System.String)">
-	<summary>
- Checks data for valid schema.
- </summary>
-	<param name="classType">The class type (ObjectClass or FeatureClass).</param>
-	<param name="className">The class to validate.</param>
-	<returns><c>True</c> or <c>False</c>.</returns>
-	<remarks>' Valid schema in this case means the right feature type 
- and required fields.</remarks>
-</member><member name="T:OrmapTaxlotEditingAddIn.DataMonitor">
-	<summary>
- Data monitoring class for required ORMAP datasets (singleton).
- </summary>
-	<remarks>Keeps track of availability of valid ORMAP datasets 
- in the map document.</remarks>
-</member><member name="T:OrmapTaxlotEditingAddIn.HelpForm">
-	<summary>
- Provides user interface for Help.
- </summary>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.InvertAnnotation.Enabled">
-	<summary>
- Called by ArcMap once per second to check if the command is enabled.
- </summary>
-	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.InvertAnnotation.Dispose(System.Boolean)">
-	<summary>
- Dispose of managed and unmanaged resources.
- </summary>
-	<param name="disposing">True or False.</param>
-	<remarks>
-		<para>Member of System::IDisposable.</para>
-		<para>Dispose executes in two distinct scenarios. 
- If disposing equals true, the method has been called directly
- or indirectly by a user's code. Managed and unmanaged resources
- can be disposed.</para>
-		<para>If disposing equals false, the method has been called by the 
- runtime from inside the finalizer and you should not reference 
- other objects. Only unmanaged resources can be disposed.</para>
-	</remarks>
-</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation.topPosition.distance">
-	<summary>
- The distance value (from the Distance field of the line feature class)
- </summary>
-	<remarks></remarks>
-</member><member name="F:OrmapTaxlotEditingAddIn.CreateAnnotation.topPosition.direction">
-	<summary>
- The direction (bearing) value (from the Direction field of the line feature class)
- </summary>
-	<remarks></remarks>
-</member><member name="T:OrmapTaxlotEditingAddIn.CreateAnnotation.topPosition">
-	<summary>
- Identifies which annotation element of the pair is placed "on top"
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.uxCancel_Click(System.Object,System.EventArgs)">
-	<summary>
- Handles [Cancel] button click
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.uxHelp_Click(System.Object,System.EventArgs)">
-	<summary>
- Handles [Help] button click
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks>
- Opens the Ormap Annotate help documentation
- </remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.uxCreateAnno_Click(System.Object,System.EventArgs)">
-	<summary>
- Handles the [Create Annotation] button click event
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks>
- Implements the IConvertLabelsToAnnotation interface to collect Distance and Direction values from the line
- feature class and convert them to properly scaled and symbolized ORMAP annotation. Conversion occurs in a
- scratch file geodatabased, and then is copied into the appropriate annotation tables
- </remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.DoButtonOperation">
-	<summary>
- The form entrance operation called by the AddIn button click event
- </summary>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.setPartnerCreateAnnotationForm(OrmapTaxlotEditingAddIn.CreateAnnotationForm)">
-	<summary>
- Creates the controller for the Create Annotation form and sets up event handler delegates
- </summary>
-	<param name="value">A form of type CreateAnnotationForm</param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.processNewAnnotation(Microsoft.VisualBasic.Collection,ESRI.ArcGIS.Geodatabase.IFeatureWorkspace)">
-	<summary>
- Collects all the needed ORMAP data for the new annotation and copies from the scratch workspace into
- the appropriate ORMAP annotation feature class
- </summary>
-	<param name="theAnnoFcCollection"></param>
-	<param name="theScratchAnnoWorkspace"></param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.clearall(ESRI.ArcGIS.ArcMapUI.IMxDocument)">
-	<summary>
- Clears all selected features in the current map document
- </summary>
-	<param name="ThisDocument">An object implementing the IMxDocument interface</param>
-	<remarks>There is probably a way to do this using ArcObjects, but gave up trying to find it</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.convertLabelsToAnnotation(ESRI.ArcGIS.Carto.IMap,ESRI.ArcGIS.Carto.IGeoFeatureLayer,ESRI.ArcGIS.Geodatabase.IFeatureClass,System.Boolean,ESRI.ArcGIS.Geodatabase.IFeatureWorkspace)">
-	<summary>
- Implements the IConvertLabelsToAnnotation interface to create new bearing and distance 
- annotation from the selected line(s)
- </summary>
-	<param name="theMap">The currently selected map</param>
-	<param name="theGeoFeatureLayer">The geo feature layer of the selected source line feature</param>
-	<param name="theAnnoFeatureClass">The appropriate annotation feature class based on scale</param>
-	<param name="isFeatureLinked">Boolean value for defining whether annotation is feature linked (not supported in this version)</param>
-	<param name="theScratchAnnoWorkspace">An object implementing the IFeatureLayer workspace</param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.setLabelProperties(ESRI.ArcGIS.Carto.IAnnotateLayerPropertiesCollection2,ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String,System.String)">
-	<summary>
- Sets up the correct label placements based on type (Distance or Direction)
- </summary>
-	<param name="theFeatureLayerPropsCollection">The annotation properties collection source line feature</param>
-	<param name="theAnnoFeatureClass">The appropriate annotation feature class (based MapIndex)</param>
-	<param name="theAnnoClassName">The annotation class name (should be "34")</param>
-	<remarks>
- The map number must be embedded in the label now since annotation can be created in various map indices
- simultaneously. Once annotation is created, there is no way of knowing what its map number is, and this
- must be used later to populate the MapNumber field of the annotation feature class
- </remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.getLineOffset(System.Double,System.Boolean)">
-	<summary>
- Uses form property settings to determine how annotation should be placed relative to the source line
- from which it is created.
- </summary>
-	<param name="thisSize">The font size of the associated annotation feature class</param>
-	<param name="isTop">The form property defining which element should be place "on top" (distance or direction)</param>
-	<returns>The distance used to offset the annotation pairs from the source line feature</returns>
-	<remarks>The fontsize is determined to be roughly to MapScale / 240</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.setAnnoPlacement(System.Boolean)">
-	<summary>
- Determines annotation place based on form settings
- </summary>
-	<param name="isTop">Form property defining which element is "on top"</param>
-	<remarks></remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.cleanNewAnnotation(ESRI.ArcGIS.Geodatabase.IFeatureClass)">
-	<summary>
- Cleans "Direction" and "Distance" subtypes, annotation classes, and symbols from the associated
- annotation feature classes. These are placed by the label-to-annotation engine
- </summary>
-	<param name="theAnnoFC">The name of the annotation feature class</param>
-	<remarks>Obsolete. Current version uses scratch workspace which is discarded</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.getMapIndexAndScale(ESRI.ArcGIS.Geodatabase.IObject,ESRI.ArcGIS.Geodatabase.IFeature,ESRI.ArcGIS.Geometry.IGeometry)">
-	<summary>
- Obsolete.
- </summary>
-	<param name="obj"></param>
-	<param name="theFeature"></param>
-	<param name="theSearchGeometry"></param>
-	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.CreateAnnotation.Enabled">
-	<summary>
- Called by ArcMap once per second to check if the command is enabled.
- </summary>
-	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.CreateAnnotation.Dispose(System.Boolean)">
-	<summary>
- Dispose of managed and unmanaged resources.
- </summary>
-	<param name="disposing">True or False.</param>
-	<remarks>
-		<para>Member of System::IDisposable.</para>
-		<para>Dispose executes in two distinct scenarios. 
- If disposing equals true, the method has been called directly
- or indirectly by a user's code. Managed and unmanaged resources
- can be disposed.</para>
-		<para>If disposing equals false, the method has been called by the 
- runtime from inside the finalizer and you should not reference 
- other objects. Only unmanaged resources can be disposed.</para>
-	</remarks>
-</member><member name="T:OrmapTaxlotEditingAddIn.CreateAnnotation">
-	<summary>
- ArcMap Tool which allows users to create Distance and Direction annotation from Line Feature Classes that contain
- appropriately formatted Distance and Direction attributes.
- </summary>
-	<remarks>
- NOTE=&gt; Annotation Feature Classes must have definitions for an Annotation Class named "34" and a
- Symbol named "34" (with appropriately defined font size and type information). The tool will 
- use these definitions for new annotation.''' <para><seealso cref="T:OrmapTaxlotEditingAddIn.InvertAnnotation"/></para>
-		<para><seealso cref="T:OrmapTaxlotEditingAddIn.TransposeAnnotation"/></para>
-		<para><seealso cref="T:OrmapTaxlotEditingAddIn.MoveUp"/></para>
-		<para><seealso cref="T:OrmapTaxlotEditingAddIn.MoveDown"/></para>
-	</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.MoveUp.Enabled">
-	<summary>
- Called by ArcMap once per second to check if the command is enabled.
- </summary>
-	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.MoveUp.Dispose(System.Boolean)">
-	<summary>
- Dispose of managed and unmanaged resources.
- </summary>
-	<param name="disposing">True or False.</param>
-	<remarks>
-		<para>Member of System::IDisposable.</para>
-		<para>Dispose executes in two distinct scenarios. 
- If disposing equals true, the method has been called directly
- or indirectly by a user's code. Managed and unmanaged resources
- can be disposed.</para>
-		<para>If disposing equals false, the method has been called by the 
- runtime from inside the finalizer and you should not reference 
- other objects. Only unmanaged resources can be disposed.</para>
-	</remarks>
 </member><member name="P:OrmapTaxlotEditingAddIn.CatalogFileDialog.Name">
 	<summary>
  The dialog name.
@@ -1901,12 +1878,29 @@ A class for looking up declarative information in the associated configuration x
  one integral unit for simple access and use.
  </summary>
 	<remarks></remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.StandardBothSidesDown.Enabled">
+</member><member name="M:OrmapTaxlotEditingAddIn.InvertAnnotationButton.OnClick">
+	<summary>
+ ESRI AddIn button OnClick event handler
+ </summary>
+</member><member name="T:OrmapTaxlotEditingAddIn.InvertAnnotationButton">
+	<summary>
+ ESRI AddIn button events
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.MoveDown.#ctor">
+	<summary>
+ Constructor
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.MoveDown.DoButtonOperation">
+	<summary>
+ Code entrance point from MoveDownButton OnClick event.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.MoveDown.Enabled">
 	<summary>
  Called by ArcMap once per second to check if the command is enabled.
  </summary>
 	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.StandardBothSidesDown.Dispose(System.Boolean)">
+</member><member name="M:OrmapTaxlotEditingAddIn.MoveDown.Dispose(System.Boolean)">
 	<summary>
  Dispose of managed and unmanaged resources.
  </summary>
@@ -1921,46 +1915,24 @@ A class for looking up declarative information in the associated configuration x
  runtime from inside the finalizer and you should not reference 
  other objects. Only unmanaged resources can be disposed.</para>
 	</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.WideBothSidesUp.Enabled">
+</member><member name="M:OrmapTaxlotEditingAddIn.MoveDown.Dispose">
 	<summary>
- Called by ArcMap once per second to check if the command is enabled.
+ This code added by Visual Basic to correctly implement the disposable pattern.
  </summary>
-	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.WideBothSidesUp.Dispose(System.Boolean)">
+	<remarks></remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.MoveDown">
 	<summary>
- Dispose of managed and unmanaged resources.
+ Move annotation down, maintaining distance between pairs when they are on the same side of the line.
  </summary>
-	<param name="disposing">True or False.</param>
-	<remarks>
-		<para>Member of System::IDisposable.</para>
-		<para>Dispose executes in two distinct scenarios. 
- If disposing equals true, the method has been called directly
- or indirectly by a user's code. Managed and unmanaged resources
- can be disposed.</para>
-		<para>If disposing equals false, the method has been called by the 
- runtime from inside the finalizer and you should not reference 
- other objects. Only unmanaged resources can be disposed.</para>
-	</remarks>
-</member><member name="P:OrmapTaxlotEditingAddIn.StandardBothSidesUp.Enabled">
+	<remarks>This will remove spacing between annotation pairs that are on both sides of a standard or wide line</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.StandardBothSidesUpButton.OnClick">
 	<summary>
- Called by ArcMap once per second to check if the command is enabled.
+ ESRI AddIn button OnClick event handler
  </summary>
-	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
-</member><member name="M:OrmapTaxlotEditingAddIn.StandardBothSidesUp.Dispose(System.Boolean)">
+</member><member name="T:OrmapTaxlotEditingAddIn.StandardBothSidesUpButton">
 	<summary>
- Dispose of managed and unmanaged resources.
+ ESRI AddIn button events
  </summary>
-	<param name="disposing">True or False.</param>
-	<remarks>
-		<para>Member of System::IDisposable.</para>
-		<para>Dispose executes in two distinct scenarios. 
- If disposing equals true, the method has been called directly
- or indirectly by a user's code. Managed and unmanaged resources
- can be disposed.</para>
-		<para>If disposing equals false, the method has been called by the 
- runtime from inside the finalizer and you should not reference 
- other objects. Only unmanaged resources can be disposed.</para>
-	</remarks>
 </member><member name="M:OrmapTaxlotEditingAddIn.Utilities.#ctor">
 	<summary>
  Private empty constructor to prevent instantiation.
@@ -2041,6 +2013,440 @@ A class for looking up declarative information in the associated configuration x
 		<para><seealso cref="T:OrmapTaxlotEditingAddIn.SpatialUtilities"/></para>
 		<para><seealso cref="T:OrmapTaxlotEditingAddIn.StringUtilities"/></para>
 	</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.Application">
+	<summary>
+ The ArcMap Application associated with the Editor object.
+ </summary>
+	<value></value>
+	<returns>An object that supports <c>IApplication</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setApplication(ESRI.ArcGIS.Framework.IApplication)">
+	<summary>
+	</summary>
+	<param name="value">An object that supports <c>IApplication</c>.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.Editor">
+	<summary>
+ The ArcMap Editor object.
+ </summary>
+	<value></value>
+	<returns>An object that supports <c>IEditor2</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setEditor(ESRI.ArcGIS.Editor.IEditor2)">
+	<summary>
+	</summary>
+	<param name="value">An object that supports <c>IEditor2</c>.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents">
+	<summary>
+ The ArcMap EditEvents object associated with the Editor.
+ </summary>
+	<value></value>
+	<returns>An object that supports <c>IEditEvents_Event</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setEditEvents(ESRI.ArcGIS.Editor.IEditEvents_Event)">
+	<summary>
+	</summary>
+	<param name="value">An object that supports <c>IEditEvents_Event</c>.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents">
+	<summary>
+ The ArcMap ActiveViewEvents object.
+ </summary>
+	<value></value>
+	<returns>An object that supports <c>IActiveViewEvents_Event</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setActiveViewEvents(ESRI.ArcGIS.Carto.IActiveViewEvents_Event)">
+	<summary>
+	</summary>
+	<param name="value">An object that supports <c>IActiveViewEvents_Event</c>.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TableNamesSettings">
+	<summary>
+ The ORMAP TableNamesSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>TableNamesSettings</c> object.</returns>
+	<remarks>The object contains all settings for ORMAP table names.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AnnoTableNamesSettings">
+	<summary>
+ The ORMAP AnnoTableNamesSettings object.
+ </summary>
+	<value></value>
+	<returns>An <c>AnnoTableNamesSettings</c> object.</returns>
+	<remarks>The object contains all settings for ORMAP anno table names.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllTablesSettings">
+	<summary>
+ The ORMAP AllTablesSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>AllTablesSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for all ORMAP tables.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.MapIndexSettings">
+	<summary>
+ The ORMAP MapIndexSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>MapIndexSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP MapIndex table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxLotSettings">
+	<summary>
+ The ORMAP TaxlotSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>TaxLotSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP Taxlot table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxLotLinesSettings">
+	<summary>
+ The ORMAP TaxLotLinesSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>TaxLotLinesSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP TaxLotLines table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.CartographicLinesSettings">
+	<summary>
+ The ORMAP CartographicLinesSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>CartographicLinesSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP CartographicLines table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxlotAcreageAnnoSettings">
+	<summary>
+ The ORMAP TaxlotAcreageAnnoSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>TaxlotAcreageAnnoSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP TaxlotAcreageAnno table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.TaxlotNumberAnnoSettings">
+	<summary>
+ The ORMAP TaxlotNumberAnnoSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>TaxlotNumberAnnoSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP TaxlotNumberAnno table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.DefaultValuesSettings">
+	<summary>
+ The ORMAP DefaultValuesSettings object.
+ </summary>
+	<value></value>
+	<returns>A <c>DefaultValuesSettings</c> object.</returns>
+	<remarks>The object contains all field name settings for the ORMAP DefaultValues table.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.CanEnableExtendedEditing">
+	<summary>
+ Can enable the set of ORMAP taxlot tools. 
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.HasValidLicense">
+	<summary>
+ Has a valid ArcMap license level. 
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setHasValidLicense(System.Boolean)">
+	<summary>
+	</summary>
+	<param name="value">A boolean value.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.IsValidWorkspace">
+	<summary>
+ Is a valid workspace. 
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setIsValidWorkspace(System.Boolean)">
+	<summary>
+	</summary>
+	<param name="value">A boolean value.</param>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllowedToEditTaxlots">
+	<summary>
+ Allowed to enable the set of ORMAP taxlot tools. 
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks>Tools may not be enabled still (see <see>CanEnableExtendedEditing</see>).</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllowedToAutoUpdate">
+	<summary>
+ Allowed to auto-update fields on edit events when the ORMAP taxlot tools are allowed. 
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks>Some field auto-updates may not be enabled still (see <see>AllowedToAutoUpdateAllFields</see>).</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.AllowedToAutoUpdateAllFields">
+	<summary>
+ Allowed to auto-update all fields on edit events 
+ when the ORMAP taxlot tools are allowed. 
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks>If true, field auto-updates are enabled 
+ for the maximum set of fields; If false, just the 
+ minimum set are auto-updated.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideAutoAttribute">
+	<summary>
+ Override the auto-update (attributing) on edit events
+ to use a specified maps values.
+ </summary>
+	<value></value>
+	<returns><c>True</c> or <c>False</c>.</returns>
+	<remarks>If true, field values are set manually via a switch in the locate  
+ features tool (which records the mapnumber) instead of using auto-update.
+ minimum set are auto-updated.</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideMapNumber">
+	<summary>
+ The MapNumber to use if OverrideAutoAttribute is true.
+ </summary>
+	<value></value>
+	<returns>A <c>String</c> object containing a mapnumber.</returns>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideMapScale">
+	<summary>
+ The MapScale to use if OverrideAutoAttribute is true.
+ </summary>
+	<value></value>
+	<returns>A <c>String</c> object containing a map scale.</returns>
+	<remarks></remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.OverrideORMapNumber">
+	<summary>
+ The ORMapNumber to use if OverrideAutoAttribute is true.
+ </summary>
+	<value></value>
+	<returns>A <c>String</c> object containing a ORMapNumber.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnChangeFeature(ESRI.ArcGIS.Geodatabase.IObject)">
+	<summary>
+ Updates fields based on the feature that was just changed.
+ </summary>
+	<param name="obj">The feature that was just changed.</param>
+	<remarks>Handles EditEvents.OnCreateFeature events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnCreateFeature(ESRI.ArcGIS.Geodatabase.IObject)">
+	<summary>
+ Updates fields based on the feature that was just created.
+ </summary>
+	<param name="obj">The feature that was just created.</param>
+	<remarks>Handles EditEvents.OnCreateFeature events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnDeleteFeature(ESRI.ArcGIS.Geodatabase.IObject)">
+	<summary>
+ Records in the Cancelled Numbers object class the map number
+ and taxlot number from the feature that was just deleted.
+ </summary>
+	<param name="obj">The feature that was just deleted.</param>
+	<remarks>Handles EditEvents.OnDeleteFeature events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnStartEditing">
+	<summary>
+ Event handler.
+ </summary>
+	<remarks>Handles EditEvents.OnStartEditing events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.EditEvents_OnStopEditing(System.Boolean)">
+	<summary>
+ Event handler.
+ </summary>
+	<remarks>Handles EditEvents.OnStopEditing events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents_FocusMapChanged">
+	<summary>
+ Event handler.
+ </summary>
+	<remarks>Handles ActiveViewEvents.FocusMapChanged events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents_ItemAdded(System.Object)">
+	<summary>
+ Event handler.
+ </summary>
+	<remarks>Handles ActiveViewEvents.ItemAdded events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ActiveViewEvents_ItemDeleted(System.Object)">
+	<summary>
+ Event handler.
+ </summary>
+	<remarks>Handles ActiveViewEvents.ItemDeleted events.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setAccelerator(ESRI.ArcGIS.Framework.IAcceleratorTable,ESRI.ArcGIS.esriSystem.UID,System.Int32,System.Boolean,System.Boolean,System.Boolean)">
+	<summary>
+ Set a keyboard accelerator. 
+ </summary>
+	<param name="acceleratorTable">The accelerator table to store the accelerators in.</param>
+	<param name="classID">the ClassID of the command to trigger by the accelerator.</param>
+	<param name="key">The key to use.</param>
+	<param name="usesCtrl"><italic>Flag.</italic> Uses Ctrl key modification.</param>
+	<param name="usesAlt"><italic>Flag.</italic> Uses Alt key modification.</param>
+	<param name="usesShift"><italic>Flag.</italic> Uses Shift key modification.</param>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.validateLicense(ESRI.ArcGIS.esriSystem.esriLicenseProductCode)">
+	<summary>
+ Validate the license (e.g. ArcEditor or ArcInfo).
+ </summary>
+	<param name="requiredProductCode">An <c>"esriLicenseProductCode"</c> enumerated item.</param>
+	<returns><c>True</c> or <c>False</c>, depending on the licence validity.</returns>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.setMapIndexAndScale(ESRI.ArcGIS.Geodatabase.IObject,ESRI.ArcGIS.Geodatabase.IFeature,ESRI.ArcGIS.Geometry.IGeometry)">
+	<summary>
+ Set the map index (if the field exists) to the Map Index map index for the location geometry.
+ </summary>
+	<param name="obj">An object implementing <c>IObject</c>, either a Feature or a Row.</param>
+	<param name="theFeature">An object implementing <c>IFeature</c>.</param>
+	<param name="theSearchGeometry">An object implementing <c>IGeometry</c>.</param>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.addTraceListenerForEventLog">
+	<summary>
+ Creates a trace listener for the event log.
+ </summary>
+	<remarks>Once created, any <c>Trace</c> call will be written to this log.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.addTraceListenerForFileLog(System.String)">
+	<summary>
+ Create a trace listener for a file log.
+ </summary>
+	<param name="inLogFileName">The file log filename.</param>
+	<remarks>
+		<para>Once created, any <c>Trace</c> call will be written to this log.</para>
+		<para>This file will be replaced every 30 days.</para>
+	</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.removeTraceListenerForEventLog">
+	<summary>
+ Removes a trace listener for the event log.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.removeTraceListenerForFileLog">
+	<summary>
+ Removes a trace listener for a file log.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ProcessUnhandledException(System.Exception)">
+	<summary>
+ Process any unhandled exceptions that occur in the application.
+ </summary>
+	<param name="ex">The unhandled exception.</param>
+	<remarks>
+		<para>This code is called by all UI entry points in the application (e.g. button click events)
+ when an unhandled exception occurs.</para>
+		<para>You could also achieve this by handling the Application.ThreadException event, however
+ the VS2005 debugger will break before this event is called.</para>
+	</remarks>
+</member><member name="P:OrmapTaxlotEditingAddIn.EditorExtension.Name">
+	<summary>
+ Sets the name of the extension.
+ </summary>
+	<value>The name of the extension.</value>
+	<returns>The name.</returns>
+	<remarks>Must not exceed 31 characters.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.Shutdown">
+	<summary>
+ Shuts down the extension.
+ </summary>
+	<remarks><see cref="M:OrmapTaxlotEditingAddIn.EditorExtension.Startup(System.Object@)"/></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.Startup(System.Object@)">
+	<summary>
+ Starts up the extension with the given initialization data.
+ </summary>
+	<param name="initializationData">A reference to the object with 
+ which this extension is registered (Editor).</param>
+	<remarks>
+		<para>
+ Registered in this case with the <bold>ESRI Editor Extensions</bold> 
+ category.
+ </para>
+		<para>
+ Any extension that is registered with an application is automatically 
+ loaded and unloaded by the application; the end user does nothing to 
+ load or unload. For example, an extension that has been added to the 
+ ESRI Mx Extensions category will be started when ArcMap is started and 
+ will be shutdown when ArcMap is shutdown. In this case, the editor
+ extension is loaded when the ArcMap Editor object is loaded, which 
+ occurs when ArcMap is started. So this startup event occurs when
+ ArcMap is started (rather than when an edit session is started).
+ </para>
+	</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.CreateAccelerators">
+	<summary>
+ Create the keyboard accelerators for this extension.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ArcGISCategoryRegistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category registration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.EditorExtension.ArcGISCategoryUnregistration(System.Type)">
+	<summary>
+ Required method for ArcGIS Component Category unregistration -
+ Do not modify the contents of this method with the code editor.
+ </summary>
+</member><member name="T:OrmapTaxlotEditingAddIn.EditorExtension">
+	<summary>
+ Provides the Editor Extension implementation.
+ </summary>
+	<remarks>
+		<para>Also contains core application-level fields, methods, and event handlers.</para>
+	</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.MoveDownButton.OnClick">
+	<summary>
+ ESRI AddIn button OnClick event handler
+ </summary>
+</member><member name="T:OrmapTaxlotEditingAddIn.MoveDownButton">
+	<summary>
+ ESRI AddIn button events
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.WideBothSidesDownButton.OnClick">
+	<summary>
+ ESRI AddIn button OnClick event handler
+ </summary>
+</member><member name="T:OrmapTaxlotEditingAddIn.WideBothSidesDownButton">
+	<summary>
+ ESRI AddIn button events
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.TransposeAnnotationButton.OnClick">
+	<summary>
+ ESRI AddIn button OnClick event handler
+ </summary>
+</member><member name="T:OrmapTaxlotEditingAddIn.TransposeAnnotationButton">
+	<summary>
+ ESRI AddIn button events
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.InvertAnnotation.#ctor">
+	<summary>
+ Constructor.
+ </summary>
+</member><member name="M:OrmapTaxlotEditingAddIn.InvertAnnotation.DoButtonOperation">
+	<summary>
+ Code entrance point from InvertAnnotationButton OnClick event.
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.InvertAnnotation.Enabled">
+	<summary>
+ Called by ArcMap once per second to check if the command is enabled.
+ </summary>
+	<remarks>WARNING: Do not put computation-intensive code here.</remarks>
+</member><member name="M:OrmapTaxlotEditingAddIn.InvertAnnotation.Dispose(System.Boolean)">
+	<summary>
+ Dispose of managed and unmanaged resources.
+ </summary>
+	<param name="disposing">True or False.</param>
+	<remarks>
+		<para>Member of System::IDisposable.</para>
+		<para>Dispose executes in two distinct scenarios. 
+ If disposing equals true, the method has been called directly
+ or indirectly by a user's code. Managed and unmanaged resources
+ can be disposed.</para>
+		<para>If disposing equals false, the method has been called by the 
+ runtime from inside the finalizer and you should not reference 
+ other objects. Only unmanaged resources can be disposed.</para>
+	</remarks>
+</member><member name="T:OrmapTaxlotEditingAddIn.InvertAnnotation">
+	<summary>
+ Rotates annotation 180 degrees around a point
+ </summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:OrmapTaxlotEditingAddIn.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:OrmapTaxlotEditingAddIn.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member>
 </members>
 </doc>

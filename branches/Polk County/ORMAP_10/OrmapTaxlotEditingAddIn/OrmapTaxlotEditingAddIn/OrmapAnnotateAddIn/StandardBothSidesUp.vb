@@ -62,6 +62,10 @@ Imports ESRI.ArcGIS.SystemUI
 
 #End Region
 
+
+''' <summary>
+''' Move annotation up, inserting adequate distance to span a standard line.
+''' </summary>
 Public NotInheritable Class StandardBothSidesUp
     Implements IDisposable
 
@@ -77,36 +81,13 @@ Public NotInheritable Class StandardBothSidesUp
     ' registered in the COM registry and cannot be created 
     ' via CreateObject.
     Public Sub New()
-        MyBase.New()
-
-        'MyBase.m_category = "OrmapAnnotate"  'localizable text 
-        'MyBase.m_caption = "Move Up Standard Space"   'localizable text 
-        'MyBase.m_message = "Moves selected annotation up and inserts standard space"   'localizable text 
-        'MyBase.m_toolTip = "Move up && insert standard space" 'localizable text 
-        'MyBase.m_name = "_StandardBothSidesUp"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
-
-        'Try
-        '    'TODO: change bitmap name if necessary
-        '    Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
-        '    MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
-        'Catch ex As Exception
-        '    System.Diagnostics.Trace.WriteLine(ex.Message, "Invalid Bitmap")
-        'End Try
-
-
     End Sub
+
 #End Region
 
 #End Region
 
 #Region "Custom Class Members"
-
-#Region "Fields"
-
-    Private _application As IApplication
-    Private _bitmapResourceName As String
-
-#End Region
 
 #Region "Properties"
 
@@ -117,7 +98,10 @@ Public NotInheritable Class StandardBothSidesUp
 #End Region
 
 #Region "Methods"
-    Friend Sub DoButtonOperation()
+    ''' <summary>
+    ''' Code entrance point from StandardBothSidesUpButton OnClick event.
+    ''' </summary>
+    Friend Shared Sub DoButtonOperation()
 
         Try
             DataMonitor.CheckValidMapIndexDataProperties()
@@ -146,7 +130,7 @@ Public NotInheritable Class StandardBothSidesUp
     ''' Called by ArcMap once per second to check if the command is enabled.
     ''' </summary>
     ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
-    Public ReadOnly Property Enabled() As Boolean
+    Public Shared ReadOnly Property Enabled() As Boolean
         Get
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
@@ -194,14 +178,6 @@ Public NotInheritable Class StandardBothSidesUp
                 '   e.g. component.Dispose()
 
             End If
-
-            ' Free "native" (shared unmanaged) resources, whether 
-            ' explicitly called or called by the runtime.
-
-            ' Call the appropriate methods to clean up 
-            ' unmanaged resources here.
-            _bitmapResourceName = Nothing
-            'MyBase.m_bitmap = Nothing
 
             ' Flag that disposing has been finished.
             _isDuringDispose = False

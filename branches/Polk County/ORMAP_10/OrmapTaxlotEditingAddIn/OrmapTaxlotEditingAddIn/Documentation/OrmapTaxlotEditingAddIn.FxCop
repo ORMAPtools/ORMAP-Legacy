@@ -1,0 +1,2049 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.36" Name="My FxCop Project">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="False">c:\program files\microsoft fxcop 1.36\Xml\FxCopReport.xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
+  <Spelling Locale="en-US" />
+  <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+  <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
+  <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
+ </ProjectOptions>
+ <Targets>
+  <AssemblyReferenceDirectories>
+   <Directory>$(ProjectDir)/../../../../../../Program Files/ArcGIS/DeveloperKit10.0/DotNet/</Directory>
+  </AssemblyReferenceDirectories>
+  <Target Name="$(ProjectDir)/../bin/Release/OrmapTaxlotEditingAddIn.dll" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="1.36">
+  <Targets>
+   <Target Name="$(ProjectDir)/../bin/Release/OrmapTaxlotEditingAddIn.dll">
+    <Modules>
+     <Module Name="ormaptaxloteditingaddin.dll">
+      <Messages>
+       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2011-07-25 15:29:59Z">
+        <Issue>
+         <Item>'OrmapTaxlotEditingAddIn.dll'</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Excluded" Created="2011-07-25 15:29:59Z">
+        <Issue Name="NoStrongName">
+         <Item>'OrmapTaxlotEditingAddIn.dll'</Item>
+        </Issue>
+        <Notes>
+         <User Name="gumtowr">
+          <Note Id="0" />
+         </User>
+        </Notes>
+       </Message>
+       <Message Id="Ormap" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-07-25 15:29:59Z">
+        <Issue Name="Assembly">
+         <Item>Ormap</Item>
+         <Item>'OrmapTaxlotEditingAddIn.dll'</Item>
+        </Issue>
+        <Notes>
+         <User Name="gumtowr">
+          <Note Id="2" />
+         </User>
+        </Notes>
+       </Message>
+       <Message Id="Taxlot" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2011-07-25 15:29:59Z">
+        <Issue Name="Assembly">
+         <Item>Taxlot</Item>
+         <Item>'OrmapTaxlotEditingAddIn.dll'</Item>
+        </Issue>
+        <Notes>
+         <User Name="gumtowr">
+          <Note Id="1" />
+         </User>
+        </Notes>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="OrmapTaxlotEditingAddIn">
+        <Types>
+         <Type Name="AnnotationUtilities">
+          <Members>
+           <Member Name="#GetSubtypeCode(ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String,System.Int32)">
+            <Messages>
+             <Message TypeName="DefaultParametersShouldNotBeUsed" Category="Microsoft.Design" CheckId="CA1026" Status="Excluded" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'AnnotationUtilities.GetSubtypeCode(IFeatureClass, String, Integer)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="gumtowr">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetSymbolId(ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String,System.Int32)">
+            <Messages>
+             <Message TypeName="DefaultParametersShouldNotBeUsed" Category="Microsoft.Design" CheckId="CA1026" Status="Excluded" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'AnnotationUtilities.GetSymbolId(IFeatureClass, String, Integer)'</Item>
+              </Issue>
+              <Notes>
+               <User Name="gumtowr">
+                <Note Id="6" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#MoveAnnotationElements(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <Messages>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'AnnotationUtilities.MoveAnnotationElements(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'AnnotationUtilities.MoveAnnotationElements(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'AnnotationUtilities.MoveAnnotationElements(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="AnnotationUtilities+AnnotationPlacement">
+          <Messages>
+           <Message TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034" Status="Excluded" Created="2011-07-25 15:29:59Z">
+            <Issue>
+             <Item>'AnnotationUtilities.AnnotationPlacement'</Item>
+            </Issue>
+            <Notes>
+             <User Name="gumtowr">
+              <Note Id="7" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="CatalogFileDialog">
+          <Members>
+           <Member Name="#.ctor()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'CatalogFileDialog.New()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SetAllowMultiSelect(System.Boolean)">
+            <Messages>
+             <Message Id="Multi" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Member">
+               <Item>Multi</Item>
+               <Item>'CatalogFileDialog.SetAllowMultiSelect(Boolean)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SetFilter(ESRI.ArcGIS.Catalog.IGxObjectFilter,System.Boolean,System.Boolean)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'CatalogFileDialog.SetFilter(IGxObjectFilter, Boolean, Boolean)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ShowOpen()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'CatalogFileDialog.ShowOpen()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ShowSave()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'CatalogFileDialog.ShowSave()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="CreateAnnotation">
+          <Members>
+           <Member Name="#convertLabelsToAnnotation(ESRI.ArcGIS.Carto.IMap,ESRI.ArcGIS.Carto.IGeoFeatureLayer,ESRI.ArcGIS.Geodatabase.IFeatureClass,System.Boolean,ESRI.ArcGIS.Geodatabase.IFeatureWorkspace)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'CreateAnnotation.convertLabelsToAnnotation(IMap, IGeoFeatureLayer, IFeatureClass, Boolean, IFeatureWorkspace)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2011-07-25 15:29:59Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'CreateAnnotation.convertLabelsToAnnotation(IMap, IGeoFeatureLayer, IFeatureClass, Boolean, IFeatureWorkspace)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DoButtonOperation()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'CreateAnnotation.DoButtonOperation()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'CreateAnnotation.DoButtonOperation()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'CreateAnnotation.DoButtonOperation()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'CreateAnnotation.DoButtonOperation()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'CreateAnnotation.DoButtonOperation()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Enabled">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2011-07-25 15:29:59Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'CreateAnnotation.Enabled()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#processNewAnnotation(Microsoft.VisualBasic.Collection,ESRI.ArcGIS.Geodatabase.IFeatureWorkspace)">
+            <Messages>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'CreateAnnotation.processNewAnnotation(Collection, IFeatureWorkspace)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#setLabelProperties(ESRI.ArcGIS.Carto.IAnnotateLayerPropertiesCollection2,ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String,System.String)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Local">
+               <Item>'theLabelEngineLayerProperties'</Item>
+               <Item>'IAnnotateLayerProperties'</Item>
+               <Item>'CreateAnnotation.setLabelProperties(IAnnotateLayerPropertiesCollection2, IFeatureClass, String, String)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'CreateAnnotation.setLabelProperties(IAnnotateLayerPropertiesCollection2, IFeatureClass, String, String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#uxCreateAnno_Click(System.Object,System.EventArgs)">
+            <Messages>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'CreateAnnotation.uxCreateAnno_Click(Object, EventArgs)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'CreateAnnotation.uxCreateAnno_Click(Object, EventArgs)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'CreateAnnotation.uxCreateAnno_Click(Object, EventArgs)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'CreateAnnotation.uxCreateAnno_Click(Object, EventArgs)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="CreateAnnotation+TopPosition">
+          <Messages>
+           <Message TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034" Status="Excluded" Created="2011-07-25 17:45:25Z">
+            <Issue>
+             <Item>'CreateAnnotation.TopPosition'</Item>
+            </Issue>
+            <Notes>
+             <User Name="gumtowr">
+              <Note Id="8" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="DataMonitor">
+          <Members>
+           <Member Name="#loadOptionSuccessful(OrmapTaxlotEditingAddIn.DataMonitor+ESRIClassType,System.String)">
+            <Messages>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'DataMonitor.loadOptionSuccessful(DataMonitor.ESRIClassType, String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#validateData(OrmapTaxlotEditingAddIn.DataMonitor+ESRIClassType,System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="EditorExtension">
+          <Members>
+           <Member Name="#ActiveViewEvents_FocusMapChanged()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.ActiveViewEvents_FocusMapChanged()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ActiveViewEvents_ItemAdded(System.Object)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.ActiveViewEvents_ItemAdded(Object)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ActiveViewEvents_ItemDeleted(System.Object)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.ActiveViewEvents_ItemDeleted(Object)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ArcGISCategoryRegistration(System.Type)">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'EditorExtension.ArcGISCategoryRegistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ArcGISCategoryUnregistration(System.Type)">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'String.Format(String, Object)'</Item>
+               <Item>'EditorExtension.ArcGISCategoryUnregistration(Type)'</Item>
+               <Item>'String.Format(IFormatProvider, String, ParamArray Object())'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CreateAccelerators()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.CreateAccelerators()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#EditEvents_OnChangeFeature(ESRI.ArcGIS.Geodatabase.IObject)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Parameter">
+               <Item>'obj'</Item>
+               <Item>'IFeature'</Item>
+               <Item>'EditorExtension.EditEvents_OnChangeFeature(IObject)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+              <Issue Name="Parameter">
+               <Item>'obj'</Item>
+               <Item>'IFeature'</Item>
+               <Item>'EditorExtension.EditEvents_OnChangeFeature(IObject)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+              <Issue Name="Parameter">
+               <Item>'obj'</Item>
+               <Item>'IFeature'</Item>
+               <Item>'EditorExtension.EditEvents_OnChangeFeature(IObject)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnChangeFeature(IObject)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnChangeFeature(IObject)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnChangeFeature(IObject)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnChangeFeature(IObject)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#EditEvents_OnCreateFeature(ESRI.ArcGIS.Geodatabase.IObject)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Parameter">
+               <Item>'obj'</Item>
+               <Item>'IFeature'</Item>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+              <Issue Name="Parameter">
+               <Item>'obj'</Item>
+               <Item>'IFeature'</Item>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnCreateFeature(IObject)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#EditEvents_OnDeleteFeature(ESRI.ArcGIS.Geodatabase.IObject)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Parameter">
+               <Item>'obj'</Item>
+               <Item>'IFeature'</Item>
+               <Item>'EditorExtension.EditEvents_OnDeleteFeature(IObject)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnDeleteFeature(IObject)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnDeleteFeature(IObject)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnDeleteFeature(IObject)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnDeleteFeature(IObject)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#EditEvents_OnStartEditing()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnStartEditing()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#EditEvents_OnStopEditing(System.Boolean)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.EditEvents_OnStopEditing(Boolean)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ID">
+            <Accessors>
+             <Accessor Name="#get_ID()">
+              <Messages>
+               <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'EditorExtension.ID.Get()'</Item>
+                 <Item>'Exception'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Load(ESRI.ArcGIS.esriSystem.IVariantStream)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.Load(IVariantStream)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.Load(IVariantStream)'</Item>
+               <Item>'Marshal.ReleaseComObject(Object)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.Load(IVariantStream)'&#xD;&#xA;   -&gt;'EditorExtension.Load(IVariantStream)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OverrideAutoAttribute">
+            <Accessors>
+             <Accessor Name="#set_OverrideAutoAttribute(System.Boolean)">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'EditorExtension.OverrideAutoAttribute.Set(Boolean)'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#OverrideMapNumber">
+            <Accessors>
+             <Accessor Name="#set_OverrideMapNumber(System.String)">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'EditorExtension.OverrideMapNumber.Set(String)'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#OverrideMapScale">
+            <Accessors>
+             <Accessor Name="#set_OverrideMapScale(System.String)">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'EditorExtension.OverrideMapScale.Set(String)'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#OverrideORMapNumber">
+            <Accessors>
+             <Accessor Name="#set_OverrideORMapNumber(System.String)">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'EditorExtension.OverrideORMapNumber.Set(String)'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#ProcessUnhandledException(System.Exception)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CatalogFileDialog.New()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CatalogFileDialog.SetFilter(IGxObjectFilter, Boolean, Boolean)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CatalogFileDialog.ShowOpen()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CatalogFileDialog.ShowSave()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CreateAnnotation.DoButtonOperation()'&#xD;&#xA;   -&gt;'CreateAnnotationButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'AnnotationUtilities.MoveAnnotationElements(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'InvertAnnotation.DoButtonOperation()'&#xD;&#xA;   -&gt;'InvertAnnotationButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'MoveDown.DoButtonOperation()'&#xD;&#xA;   -&gt;'MoveDownButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'MoveUp.DoButtonOperation()'&#xD;&#xA;   -&gt;'MoveUpButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'SpatialUtilities.CalculateTaxlotValues(IFeature, IFeatureLayer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'StandardBothSidesDown.DoButtonOperation()'&#xD;&#xA;   -&gt;'StandardBothSidesDownButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'StandardBothSidesUp.DoButtonOperation()'&#xD;&#xA;   -&gt;'StandardBothSidesUpButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'TransposeAnnotation.DoButtonOperation()'&#xD;&#xA;   -&gt;'TransposeAnnotationButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'WideBothSidesDown.DoButtonOperation()'&#xD;&#xA;   -&gt;'WideBothSidesDownButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'WideBothSidesUp.DoButtonOperation()'&#xD;&#xA;   -&gt;'WideBothSidesUpButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidTaxlotDataProperties()'&#xD;&#xA;   -&gt;'SpatialUtilities.CalculateTaxlotValues(IFeature, IFeatureLayer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ActiveViewEvents_FocusMapChanged()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ActiveViewEvents_ItemAdded(Object)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ActiveViewEvents_ItemDeleted(Object)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.CreateAccelerators()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ID.Get()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.Load(IVariantStream)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.Save(IVariantStream)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.Shutdown()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.Startup(ByRef Object)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'StringUtilities.AddLeadingZeros(String, Integer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'StringUtilities.ExtractString(String, Integer, Integer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'StringUtilities.stripLeadingZeros(String)'&#xD;&#xA;   -&gt;'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'Utilities.FileExists(String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.GetVersionInfo(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'Utilities.StartDoc(String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CatalogFileDialog.New()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CatalogFileDialog.SetFilter(IGxObjectFilter, Boolean, Boolean)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CatalogFileDialog.ShowOpen()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CatalogFileDialog.ShowSave()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CreateAnnotation.DoButtonOperation()'&#xD;&#xA;   -&gt;'CreateAnnotationButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'AnnotationUtilities.MoveAnnotationElements(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'InvertAnnotation.DoButtonOperation()'&#xD;&#xA;   -&gt;'InvertAnnotationButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'MoveDown.DoButtonOperation()'&#xD;&#xA;   -&gt;'MoveDownButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'MoveUp.DoButtonOperation()'&#xD;&#xA;   -&gt;'MoveUpButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'SpatialUtilities.CalculateTaxlotValues(IFeature, IFeatureLayer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'StandardBothSidesDown.DoButtonOperation()'&#xD;&#xA;   -&gt;'StandardBothSidesDownButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'StandardBothSidesUp.DoButtonOperation()'&#xD;&#xA;   -&gt;'StandardBothSidesUpButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'TransposeAnnotation.DoButtonOperation()'&#xD;&#xA;   -&gt;'TransposeAnnotationButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'WideBothSidesDown.DoButtonOperation()'&#xD;&#xA;   -&gt;'WideBothSidesDownButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'WideBothSidesUp.DoButtonOperation()'&#xD;&#xA;   -&gt;'WideBothSidesUpButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidTaxlotDataProperties()'&#xD;&#xA;   -&gt;'SpatialUtilities.CalculateTaxlotValues(IFeature, IFeatureLayer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ActiveViewEvents_FocusMapChanged()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ActiveViewEvents_ItemAdded(Object)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ActiveViewEvents_ItemDeleted(Object)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.CreateAccelerators()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ID.Get()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.Load(IVariantStream)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.Save(IVariantStream)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.Shutdown()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.Startup(ByRef Object)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'StringUtilities.AddLeadingZeros(String, Integer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'StringUtilities.ExtractString(String, Integer, Integer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'StringUtilities.stripLeadingZeros(String)'&#xD;&#xA;   -&gt;'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'Utilities.FileExists(String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductName.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'Utilities.StartDoc(String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CatalogFileDialog.New()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CatalogFileDialog.SetFilter(IGxObjectFilter, Boolean, Boolean)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CatalogFileDialog.ShowOpen()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CatalogFileDialog.ShowSave()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'CreateAnnotation.DoButtonOperation()'&#xD;&#xA;   -&gt;'CreateAnnotationButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'AnnotationUtilities.MoveAnnotationElements(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'InvertAnnotation.DoButtonOperation()'&#xD;&#xA;   -&gt;'InvertAnnotationButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'MoveDown.DoButtonOperation()'&#xD;&#xA;   -&gt;'MoveDownButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'MoveUp.DoButtonOperation()'&#xD;&#xA;   -&gt;'MoveUpButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'SpatialUtilities.CalculateTaxlotValues(IFeature, IFeatureLayer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'StandardBothSidesDown.DoButtonOperation()'&#xD;&#xA;   -&gt;'StandardBothSidesDownButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'StandardBothSidesUp.DoButtonOperation()'&#xD;&#xA;   -&gt;'StandardBothSidesUpButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'TransposeAnnotation.DoButtonOperation()'&#xD;&#xA;   -&gt;'TransposeAnnotationButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'WideBothSidesDown.DoButtonOperation()'&#xD;&#xA;   -&gt;'WideBothSidesDownButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidMapIndexDataProperties()'&#xD;&#xA;   -&gt;'WideBothSidesUp.DoButtonOperation()'&#xD;&#xA;   -&gt;'WideBothSidesUpButton.OnClick()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'DataMonitor.validateData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckData(DataMonitor.ESRIClassType, String)'&#xD;&#xA;   -&gt;'DataMonitor.CheckValidTaxlotDataProperties()'&#xD;&#xA;   -&gt;'SpatialUtilities.CalculateTaxlotValues(IFeature, IFeatureLayer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ActiveViewEvents_FocusMapChanged()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ActiveViewEvents_ItemAdded(Object)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ActiveViewEvents_ItemDeleted(Object)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.CreateAccelerators()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ID.Get()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.Load(IVariantStream)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.Save(IVariantStream)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.Shutdown()'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.Startup(ByRef Object)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'StringUtilities.AddLeadingZeros(String, Integer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'StringUtilities.ExtractString(String, Integer, Integer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'StringUtilities.stripLeadingZeros(String)'&#xD;&#xA;   -&gt;'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'Utilities.FileExists(String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'FileVersionInfo.ProductVersion.Get()'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'EditorExtension.ProcessUnhandledException(Exception)'&#xD;&#xA;   -&gt;'Utilities.StartDoc(String)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.DateTime.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'Date.ToString()'</Item>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+               <Item>'Date.ToString(IFormatProvider)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'EditorExtension.ProcessUnhandledException(Exception)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RegisterFunction(System.Type)">
+            <Messages>
+             <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.RegisterFunction(Type)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Save(ESRI.ArcGIS.esriSystem.IVariantStream)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.Save(IVariantStream)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.Save(IVariantStream)'</Item>
+               <Item>'Marshal.ReleaseComObject(Object)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'EditorExtension.Save(IVariantStream)'&#xD;&#xA;   -&gt;'EditorExtension.Save(IVariantStream)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Shutdown()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.Shutdown()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Startup(System.Object&amp;)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.Startup(ByRef Object)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#UnregisterFunction(System.Type)">
+            <Messages>
+             <Message TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'EditorExtension.UnregisterFunction(Type)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="InvertAnnotation">
+          <Members>
+           <Member Name="#DoButtonOperation()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'InvertAnnotation.DoButtonOperation()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'InvertAnnotation.DoButtonOperation()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="MoveDown">
+          <Members>
+           <Member Name="#DoButtonOperation()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'MoveDown.DoButtonOperation()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'MoveDown.DoButtonOperation()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="MoveUp">
+          <Members>
+           <Member Name="#DoButtonOperation()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'MoveUp.DoButtonOperation()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'MoveUp.DoButtonOperation()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ORMapNum">
+          <Messages>
+           <Message Id="Num" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+            <Issue Name="Type">
+             <Item>Num</Item>
+             <Item>'ORMapNum'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#GetMapNumFieldLength()">
+            <Messages>
+             <Message Id="Num" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Member">
+               <Item>Num</Item>
+               <Item>'ORMapNum.GetMapNumFieldLength()'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2011-07-25 15:29:59Z">
+              <Issue Certainty="50">
+               <Item>'ORMapNum.GetMapNumFieldLength()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetOrmapMapNumber()">
+            <Messages>
+             <Message Id="Ormap" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Member">
+               <Item>Ormap</Item>
+               <Item>'ORMapNum.GetOrmapMapNumber()'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2011-07-25 15:29:59Z">
+              <Issue Certainty="50">
+               <Item>'ORMapNum.GetOrmapMapNumber()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetORMapNum()">
+            <Messages>
+             <Message Id="Num" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Member">
+               <Item>Num</Item>
+               <Item>'ORMapNum.GetORMapNum()'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2011-07-25 15:29:59Z">
+              <Issue Certainty="50">
+               <Item>'ORMapNum.GetORMapNum()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetORTaxlotFieldLength()">
+            <Messages>
+             <Message Id="Taxlot" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Member">
+               <Item>Taxlot</Item>
+               <Item>'ORMapNum.GetORTaxlotFieldLength()'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2011-07-25 15:29:59Z">
+              <Issue Certainty="50">
+               <Item>'ORMapNum.GetORTaxlotFieldLength()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetTaxlotFieldLength()">
+            <Messages>
+             <Message Id="Taxlot" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Member">
+               <Item>Taxlot</Item>
+               <Item>'ORMapNum.GetTaxlotFieldLength()'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2011-07-25 15:29:59Z">
+              <Issue Certainty="50">
+               <Item>'ORMapNum.GetTaxlotFieldLength()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SpatialUtilities">
+          <Members>
+           <Member Name="#AddCodesToCombo(System.String,ESRI.ArcGIS.Geodatabase.IFeatureClass,System.Windows.Forms.ComboBox,System.Object,System.Boolean)">
+            <Messages>
+             <Message Id="inCurrent" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2011-07-25 15:29:59Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'SpatialUtilities.AddCodesToCombo(String, IFeatureClass, ComboBox, Object, Boolean)'</Item>
+               <Item>inCurrent</Item>
+               <Item>'inCurrentValue'</Item>
+               <Item>incurrent</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CalculateTaxlotValues(ESRI.ArcGIS.Geodatabase.IFeature,ESRI.ArcGIS.Carto.IFeatureLayer)">
+            <Messages>
+             <Message Id="Taxlot" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Member">
+               <Item>Taxlot</Item>
+               <Item>'SpatialUtilities.CalculateTaxlotValues(IFeature, IFeatureLayer)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.Double.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'Double.ToString()'</Item>
+               <Item>'SpatialUtilities.CalculateTaxlotValues(IFeature, IFeatureLayer)'</Item>
+               <Item>'Double.ToString(IFormatProvider)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'SpatialUtilities.CalculateTaxlotValues(IFeature, IFeatureLayer)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.CalculateTaxlotValues(IFeature, IFeatureLayer)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DoSpatialQuery(ESRI.ArcGIS.Geodatabase.IFeatureClass,ESRI.ArcGIS.Geometry.IGeometry,ESRI.ArcGIS.Geodatabase.esriSpatialRelEnum,System.String,System.Boolean)">
+            <Messages>
+             <Message TypeName="DefaultParametersShouldNotBeUsed" Category="Microsoft.Design" CheckId="CA1026" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'SpatialUtilities.DoSpatialQuery(IFeatureClass, IGeometry, esriSpatialRelEnum, String, Boolean)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#FindFeatureLayerByDSName(System.String)">
+            <Messages>
+             <Message Id="dataset" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2011-07-25 15:29:59Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'SpatialUtilities.FindFeatureLayerByDSName(String)'</Item>
+               <Item>dataset</Item>
+               <Item>'datasetName'</Item>
+               <Item>dataSet</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#FindStandaloneTableByDSName(System.String)">
+            <Messages>
+             <Message Id="dataset" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2011-07-25 15:29:59Z">
+              <Issue Name="MemberParameterShouldBeCompoundWord">
+               <Item>'SpatialUtilities.FindStandaloneTableByDSName(String)'</Item>
+               <Item>dataset</Item>
+               <Item>'datasetName'</Item>
+               <Item>dataSet</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#FlashFeature(ESRI.ArcGIS.Geodatabase.IFeature,ESRI.ArcGIS.ArcMapUI.IMxDocument,System.Int32)">
+            <Messages>
+             <Message Id="Mx" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-07-25 15:29:59Z">
+              <Issue Name="MemberParameter">
+               <Item>'SpatialUtilities.FlashFeature(IFeature, IMxDocument, Integer)'</Item>
+               <Item>Mx</Item>
+               <Item>'theMxDoc'</Item>
+               <Item>MX</Item>
+              </Issue>
+             </Message>
+             <Message Id="Mx" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+              <Issue Name="MemberParameter">
+               <Item>'SpatialUtilities.FlashFeature(IFeature, IMxDocument, Integer)'</Item>
+               <Item>Mx</Item>
+               <Item>'theMxDoc'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#flashLine(ESRI.ArcGIS.Display.IScreenDisplay,ESRI.ArcGIS.Geometry.IGeometry,System.Int32)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Local">
+               <Item>'theLineSymbol'</Item>
+               <Item>'ISymbol'</Item>
+               <Item>'SpatialUtilities.flashLine(IScreenDisplay, IGeometry, Integer)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#flashPoint(ESRI.ArcGIS.Display.IScreenDisplay,ESRI.ArcGIS.Geometry.IGeometry,System.Int32)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Local">
+               <Item>'theMarkerSymbol'</Item>
+               <Item>'ISymbol'</Item>
+               <Item>'SpatialUtilities.flashPoint(IScreenDisplay, IGeometry, Integer)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#flashPolygon(ESRI.ArcGIS.Display.IScreenDisplay,ESRI.ArcGIS.Geometry.IGeometry,System.Int32)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Local">
+               <Item>'theFillSymbol'</Item>
+               <Item>'ISymbol'</Item>
+               <Item>'SpatialUtilities.flashPolygon(IScreenDisplay, IGeometry, Integer)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#formatWhereClause(System.String,ESRI.ArcGIS.Geodatabase.IFeatureClass)">
+            <Messages>
+             <Message Id="format" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Member">
+               <Item>format</Item>
+               <Item>'SpatialUtilities.formatWhereClause(String, IFeatureClass)'</Item>
+               <Item>Format</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetSelectedFeatures(ESRI.ArcGIS.Carto.IFeatureLayer&amp;,System.Boolean)">
+            <Messages>
+             <Message TypeName="DefaultParametersShouldNotBeUsed" Category="Microsoft.Design" CheckId="CA1026" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetSelectedFeatures(ByRef IFeatureLayer, Boolean)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2011-07-25 15:29:59Z">
+              <Issue Level="CriticalWarning">
+               <Item>'layer'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetValue(ESRI.ArcGIS.Geometry.IGeometry,ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String,System.String)">
+            <Messages>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetValue(IGeometry, IFeatureClass, String, String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetValueViaOverlay(ESRI.ArcGIS.Geometry.IGeometry,ESRI.ArcGIS.Geodatabase.IFeatureClass,System.String,System.String)">
+            <Messages>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'SpatialUtilities.GetValueViaOverlay(IGeometry, IFeatureClass, String, String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.GetValueViaOverlay(IGeometry, IFeatureClass, String, String)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.GetValueViaOverlay(IGeometry, IFeatureClass, String, String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#HasSelectedFeatureCount(ESRI.ArcGIS.Carto.IFeatureLayer,System.Int32)">
+            <Messages>
+             <Message Id="inLayer" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2011-07-25 15:29:59Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'SpatialUtilities.HasSelectedFeatureCount(IFeatureLayer, Integer)'</Item>
+               <Item>inLayer</Item>
+               <Item>'inLayer'</Item>
+               <Item>inlayer</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsOrmapFeature(ESRI.ArcGIS.Geodatabase.IObject)">
+            <Messages>
+             <Message Id="Ormap" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Member">
+               <Item>Ormap</Item>
+               <Item>'SpatialUtilities.IsOrmapFeature(IObject)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsTaxlot(ESRI.ArcGIS.Geodatabase.IObject)">
+            <Messages>
+             <Message Id="Taxlot" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Member">
+               <Item>Taxlot</Item>
+               <Item>'SpatialUtilities.IsTaxlot(IObject)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsTaxlotNumberLocallyUnique(System.String,ESRI.ArcGIS.Geometry.IGeometry,System.Boolean)">
+            <Messages>
+             <Message Id="Taxlot" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Member">
+               <Item>Taxlot</Item>
+               <Item>'SpatialUtilities.IsTaxlotNumberLocallyUnique(String, IGeometry, Boolean)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="taxlot" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+              <Issue Name="MemberParameter">
+               <Item>'SpatialUtilities.IsTaxlotNumberLocallyUnique(String, IGeometry, Boolean)'</Item>
+               <Item>taxlot</Item>
+               <Item>'taxlotNumber'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'SpatialUtilities.IsTaxlotNumberLocallyUnique(String, IGeometry, Boolean)'</Item>
+              </Issue>
+              <Issue>
+               <Item>'SpatialUtilities.IsTaxlotNumberLocallyUnique(String, IGeometry, Boolean)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SetAnnoSize(ESRI.ArcGIS.Geodatabase.IObject)">
+            <Messages>
+             <Message Id="pwrkspedit" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'SpatialUtilities.SetAnnoSize(IObject)'</Item>
+               <Item>'pwrkspedit'</Item>
+               <Item>'IWorkspaceEdit'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'SpatialUtilities.SetAnnoSize(IObject)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SetSelectedFeature(ESRI.ArcGIS.Carto.IFeatureLayer,ESRI.ArcGIS.Geodatabase.IFeature,System.Boolean,System.Boolean)">
+            <Messages>
+             <Message TypeName="ConsiderPassingBaseTypesAsParameters" Category="Microsoft.Design" CheckId="CA1011" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'featureLayer'</Item>
+               <Item>'SpatialUtilities.SetSelectedFeature(IFeatureLayer, IFeature, Boolean, Boolean)'</Item>
+               <Item>'IFeatureLayer'</Item>
+               <Item>'ILayer'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="StandardBothSidesDown">
+          <Members>
+           <Member Name="#DoButtonOperation()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'StandardBothSidesDown.DoButtonOperation()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'StandardBothSidesDown.DoButtonOperation()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="StandardBothSidesUp">
+          <Members>
+           <Member Name="#DoButtonOperation()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'StandardBothSidesUp.DoButtonOperation()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'StandardBothSidesUp.DoButtonOperation()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="StringUtilities">
+          <Members>
+           <Member Name="#AddLeadingZeros(System.String,System.Int32)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'StringUtilities.AddLeadingZeros(String, Integer)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ExtractString(System.String,System.Int32,System.Int32)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'StringUtilities.ExtractString(String, Integer, Integer)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GenerateMapTaxlotValue(System.String,System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message Id="Taxlot" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-07-25 15:29:59Z">
+              <Issue Name="Member">
+               <Item>Taxlot</Item>
+               <Item>'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'StringUtilities.GenerateMapTaxlotValue(String, String)'</Item>
+               <Item>Taxlot</Item>
+               <Item>'mapTaxlotIdValue'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#stripLeadingZeros(System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'StringUtilities.stripLeadingZeros(String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TransposeAnnotation">
+          <Members>
+           <Member Name="#DoButtonOperation()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'TransposeAnnotation.DoButtonOperation()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'TransposeAnnotation.DoButtonOperation()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Utilities">
+          <Members>
+           <Member Name="#FileExists(System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'Utilities.FileExists(String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OpenHelp(System.String,System.IO.Stream)">
+            <Messages>
+             <Message Id="RTF" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-07-25 15:29:59Z">
+              <Issue Name="MemberParameter">
+               <Item>'Utilities.OpenHelp(String, Stream)'</Item>
+               <Item>RTF</Item>
+               <Item>'theRTFStream'</Item>
+               <Item>Rtf</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SendEmailMessage(System.String,System.String,System.String,System.String,System.String)">
+            <Messages>
+             <Message Id="inTo" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2011-07-25 15:29:59Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'Utilities.SendEmailMessage(String, String, String, String, String)'</Item>
+               <Item>inTo</Item>
+               <Item>'inTo'</Item>
+               <Item>into</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'Utilities.SendEmailMessage(String, String, String, String, String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SendEmailMessage(System.String,System.String[],System.String,System.String,System.String[])">
+            <Messages>
+             <Message Id="inTo" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2011-07-25 15:29:59Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'Utilities.SendEmailMessage(String, String(), String, String, String())'</Item>
+               <Item>inTo</Item>
+               <Item>'inTo'</Item>
+               <Item>into</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'Utilities.SendEmailMessage(String, String(), String, String, String())'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#StartDoc(System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'Utilities.StartDoc(String)'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'Utilities.StartDoc(String)'</Item>
+               <Item>'Process.Start(String)'</Item>
+               <Item>&#xD;&#xA;   -&gt;'Utilities.StartDoc(String)'&#xD;&#xA;   -&gt;'Utilities.StartDoc(String)'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'Utilities.StartDoc(String)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="WideBothSidesDown">
+          <Members>
+           <Member Name="#DoButtonOperation()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'WideBothSidesDown.DoButtonOperation()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'WideBothSidesDown.DoButtonOperation()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="WideBothSidesUp">
+          <Members>
+           <Member Name="#DoButtonOperation()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Status="Excluded" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'WideBothSidesUp.DoButtonOperation()'</Item>
+               <Item>'Exception'</Item>
+              </Issue>
+              <Notes>
+               <User Name="gumtowr">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Status="Excluded" Created="2011-07-25 15:29:59Z">
+              <Issue>
+               <Item>'WideBothSidesUp.DoButtonOperation()'</Item>
+              </Issue>
+              <Notes>
+               <User Name="gumtowr">
+                <Note Id="4" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="OrmapTaxlotEditingAddIn.My">
+        <Types>
+         <Type Name="ArcMap">
+          <Members>
+           <Member Name="#DockableWindowManager">
+            <Accessors>
+             <Accessor Name="#get_DockableWindowManager()">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'ArcMap.DockableWindowManager.Get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Events">
+            <Accessors>
+             <Accessor Name="#get_Events()">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'ArcMap.Events.Get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#ThisApplication">
+            <Accessors>
+             <Accessor Name="#get_ThisApplication()">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'ArcMap.ThisApplication.Get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ThisAddIn">
+          <Members>
+           <Member Name="#AddInID">
+            <Accessors>
+             <Accessor Name="#get_AddInID()">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'ThisAddIn.AddInID.Get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Author">
+            <Accessors>
+             <Accessor Name="#get_Author()">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'ThisAddIn.Author.Get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Company">
+            <Accessors>
+             <Accessor Name="#get_Company()">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'ThisAddIn.Company.Get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Date">
+            <Accessors>
+             <Accessor Name="#get_Date()">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'ThisAddIn.Date.Get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Description">
+            <Accessors>
+             <Accessor Name="#get_Description()">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'ThisAddIn.Description.Get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Name">
+            <Accessors>
+             <Accessor Name="#get_Name()">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'ThisAddIn.Name.Get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#Version">
+            <Accessors>
+             <Accessor Name="#get_Version()">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-07-25 15:29:59Z">
+                <Issue>
+                 <Item>'ThisAddIn.Version.Get()'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ThisAddIn+IDs">
+          <Messages>
+           <Message TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812" Created="2011-07-25 15:29:59Z">
+            <Issue>
+             <Item>'ThisAddIn.IDs'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Notes>
+   <User Name="gumtowr">
+    <Note Id="0" Modified="2011-07-25 15:40:18Z">Not necessary</Note>
+    <Note Id="1" Modified="2011-07-25 15:40:47Z">Correct spelling based on ORMAP schema</Note>
+    <Note Id="2" Modified="2011-07-25 15:41:03Z">Correct spelling</Note>
+    <Note Id="3" Modified="2011-07-25 15:48:46Z">Handled by EditorExtension</Note>
+    <Note Id="4" Modified="2011-07-25 15:49:50Z">Doesn't apply</Note>
+    <Note Id="5" Modified="2011-07-25 17:32:16Z">VB.NET is only compatible language under ORMAP standard</Note>
+    <Note Id="6" Modified="2011-07-25 17:32:37Z">VB.NET is only compatible language under ORMAP standard</Note>
+    <Note Id="7" Modified="2011-07-25 17:48:33Z">This is an enum</Note>
+    <Note Id="8" Modified="2011-07-25 18:33:58Z">This is an enum</Note>
+   </User>
+  </Notes>
+  <Rules>
+   <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
+    <Resolution Name="NoStrongName">Sign {0} with a strong name key.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
+    <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812">
+    <Resolution Name="Default">{0} is an internal class that is apparently never instantiated. If so, remove the code from the assembly. If this class is intended to contain only static methods, consider adding a private constructor to prevent the compiler from generating a default constructor.</Resolution>
+   </Rule>
+   <Rule TypeName="ComRegistrationMethodsShouldNotBeVisible" Category="Microsoft.Interoperability" CheckId="CA1411">
+    <Resolution Name="Default">Change the accessibility of {0}, a COM registration function, to private.</Resolution>
+   </Rule>
+   <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+    <Resolution Name="MemberParameterShouldBeCompoundWord">In member {0}, the discrete term '{1}' in parameter name {2} should be expressed as a compound word, '{3}'.</Resolution>
+    <Resolution Name="MemberParameterShouldBeDiscreteTerm">In member {0}, the compound word '{1}' in parameter name {2} exists as a discrete term. If your usage is intended to be single word, case it as '{3}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
+   </Rule>
+   <Rule TypeName="ConsiderPassingBaseTypesAsParameters" Category="Microsoft.Design" CheckId="CA1011">
+    <Resolution Name="Default">Consider changing the type of parameter {0} in {1} from {2} to its base type {3}. This method appears to only require base class members in its implementation. Suppress this violation if there is a compelling reason to require the more derived type in the method signature.</Resolution>
+   </Rule>
+   <Rule TypeName="DefaultParametersShouldNotBeUsed" Category="Microsoft.Design" CheckId="CA1026">
+    <Resolution Name="Default">Replace method {0} with an overload that supplies all default arguments.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800">
+    <Resolution Name="Local">{0}, a variable, is cast to type {1} multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
+    <Resolution Name="Parameter">{0}, a parameter, is cast to type {1} multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031">
+    <Resolution Name="Default">Modify {0} to catch a more specific exception than {1} or rethrow the exception.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122">
+    <Resolution Name="Default">{0} calls into {1} which has a LinkDemand. By making this call, {1} is indirectly exposed to user code. Review the following call stack that might expose a way to circumvent security protection: {2}</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045">
+    <Resolution Name="Default">Consider a design that does not require that {0} be a reference parameter.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+    <Resolution Name="Member">Correct the casing of '{0}' in member name {1} by changing it to '{2}'.</Resolution>
+    <Resolution Name="MemberParameter">In member {0}, correct the casing of '{1}' in parameter name {2} by changing it to '{3}'.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+    <Resolution Name="Assembly">Correct the spelling of '{0}' in assembly name {1}.</Resolution>
+    <Resolution Name="Member">Correct the spelling of '{0}' in member name {1} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+    <Resolution Name="MemberParameter">In method {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+    <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014">
+    <Resolution Name="Default">Mark {0} with CLSCompliant(true) because it exposes externally visible types.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
+    <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
+   </Rule>
+   <Rule TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034">
+    <Resolution Name="Default">Do not nest type {0}. Alternatively, change its accessibility so that it is not externally visible.</Resolution>
+   </Rule>
+   <Rule TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804">
+    <Resolution Name="Default">{0} declares a variable, {1}, of type {2}, which is never used or is only assigned to. Use this variable or remove it.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
+    <Resolution Name="Default">Because the behavior of {0} could vary based on the current user's locale settings, replace this call in {1} with a call to {2}. If the result of {2} will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300">
+    <Resolution Name="Default">Change {0} to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control.</Resolution>
+   </Rule>
+   <Rule TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024">
+    <Resolution Name="Default">Change {0} to a property if appropriate.</Resolution>
+   </Rule>
+  </Rules>
+ </FxCopReport>
+</FxCopProject>
