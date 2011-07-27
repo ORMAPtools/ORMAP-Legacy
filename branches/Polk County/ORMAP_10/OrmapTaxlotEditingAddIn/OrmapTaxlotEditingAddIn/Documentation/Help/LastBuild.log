@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.9.3.0" projectFile="C:\ORMAP_10_Polk\Polk County\ORMAP_10\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\Documentation\OrmapTaxlotEditingAddIn.shfbproj" started="7/22/2011 11:21:15 AM">
+<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.9.3.0" projectFile="C:\ORMAP_10_Polk\Polk County\ORMAP_10\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\Documentation\OrmapTaxlotEditingAddIn.shfbproj" started="7/27/2011 9:07:21 AM">
 <buildStep step="Initializing">
 </buildStep>
 <buildStep step="FindingTools">
@@ -45,11 +45,11 @@ Copying XML comments files
 </buildStep>
 <buildStep step="GenerateSharedContent">
 Generating shared content files (en-US, English (United States))...
-    Last step completed in 00:00:00.1250
+    Last step completed in 00:00:00.1094
 </buildStep>
 <buildStep step="GenerateApiFilter">
 Generating API filter for MRefBuilder...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0312
 </buildStep>
 <buildStep step="GenerateReflectionInfo">
 Generating reflection information...
@@ -57,25 +57,27 @@ Generating reflection information...
   MrefBuilder (v2.6.10621.1)
   Copyright c Microsoft 2006
   Info: Loaded 1 assemblies for reflection and 22 dependency assemblies.
-  Info: Wrote information on 2 namespaces, 43 types, and 572 members
+  Info: Wrote information on 2 namespaces, 43 types, and 552 members
   XslTransform (v2.6.10621.1)
   Copyright c Microsoft 2005-2006
   Info: Applying XSL transformation &#39;C:\Program Files\Sandcastle\ProductionTransforms\MergeDuplicates.xsl&#39;.
   reflection.all -&gt; reflection.org
-    Last step completed in 00:00:04.8889
+    Last step completed in 00:00:05.7025
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
-    Last step completed in 00:00:00.0469
+    Last step completed in 00:00:00.0625
 </buildStep>
 <buildStep step="ApplyVisibilityProperties">
 Applying visibility properties to reflection information file
-    1226 inherited member elements removed
+    1 explicit interface implementations removed
+    176 local and base class EII elements removed
+    1050 inherited member elements removed
     1 event backer fields noted for removal
     132 internal members noted for removal
     12 internal types noted for removal
     Removing previously noted unwanted APIs and elements
-    Last step completed in 00:00:00.5311
+    Last step completed in 00:00:00.5312
 </buildStep>
 <buildStep step="TransformReflectionInfo">
 Transforming reflection output...
@@ -83,19 +85,19 @@ Transforming reflection output...
   XslTransform (v2.6.10621.1)
   Copyright c Microsoft 2005-2006
   Info: Applying XSL transformation &#39;C:\Program Files\Sandcastle\ProductionTransforms\ApplyVSDocModel.xsl&#39;.
-  reflection.org -&gt; C:\Documents and Settings\gumtowr\Local Settings\Temp\tmp5387.tmp
+  reflection.org -&gt; C:\Documents and Settings\gumtowr\Local Settings\Temp\tmp4C60.tmp
   Info: Applying XSL transformation &#39;C:\Program Files\Sandcastle\ProductionTransforms\AddGuidFilenames.xsl&#39;.
-  C:\Documents and Settings\gumtowr\Local Settings\Temp\tmp5387.tmp -&gt; reflection.xml
+  C:\Documents and Settings\gumtowr\Local Settings\Temp\tmp4C60.tmp -&gt; reflection.xml
   XslTransform (v2.6.10621.1)
   Copyright c Microsoft 2005-2006
   Info: Applying XSL transformation &#39;C:\Program Files\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl&#39;.
   reflection.xml -&gt; manifest.xml
-    Last step completed in 00:00:04.5765
+    Last step completed in 00:00:03.9526
 </buildStep>
 <buildStep step="ModifyHelpTopicFilenames">
 Modifying help topic filenames in reflection information file
     No changes required
-    Last step completed in 00:00:00.1562
+    Last step completed in 00:00:00.1406
 </buildStep>
 <buildStep step="CopyStandardContent">
 Copying standard help content...
@@ -206,7 +208,7 @@ C:\Program Files\Sandcastle\Presentation\vs2005\scripts\script_manifold.js -&gt;
 C:\Program Files\Sandcastle\Presentation\vs2005\scripts\SplitScreen.js -&gt; C:\ORMAP_10_Polk\Polk County\ORMAP_10\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\Documentation\Help\Working\Output\HtmlHelp1\scripts\SplitScreen.js
 C:\Program Files\Sandcastle\Presentation\vs2005\styles\Presentation.css -&gt; C:\ORMAP_10_Polk\Polk County\ORMAP_10\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\Documentation\Help\Working\Output\HtmlHelp1\styles\Presentation.css
 C:\Program Files\Sandcastle\Presentation\vs2005\styles\Whidbey\presentation.css -&gt; C:\ORMAP_10_Polk\Polk County\ORMAP_10\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\Documentation\Help\Working\Output\HtmlHelp1\styles\Whidbey\presentation.css
-    Last step completed in 00:00:01.4838
+    Last step completed in 00:00:01.7966
 </buildStep>
 <buildStep step="CopyAdditionalContent">
 Copying additional content files...
@@ -215,7 +217,7 @@ No additional content to copy
 </buildStep>
 <buildStep step="MergeTablesOfContents">
 Merging conceptual and additional tables of contents...
-    Last step completed in 00:00:00.0000
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="GenerateIntermediateTableOfContents">
 Generating intermediate table of contents file...
@@ -225,17 +227,17 @@ Generating intermediate table of contents file...
   Info: Applying XSL transformation &#39;C:\Program Files\Sandcastle\ProductionTransforms\CreateVSToc.xsl&#39;.
   reflection.xml -&gt; toc.xml
 Generating conceptual content intermediate TOC file...
-    Last step completed in 00:00:01.0777
+    Last step completed in 00:00:01.1405
 </buildStep>
 <buildStep step="CreateBuildAssemblerConfigs">
 Creating Sandcastle configuration files...
     sandcastle.config
-    Last step completed in 00:00:00.2499
+    Last step completed in 00:00:00.2968
 </buildStep>
 <buildStep step="MergeCustomConfigs">
 Merging custom build component configurations
 C:\ORMAP_10_Polk\Polk County\ORMAP_10\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\Documentation\Help\Working\sandcastle.config
-    Last step completed in 00:00:00.1562
+    Last step completed in 00:00:00.1719
 </buildStep>
 <buildStep step="BuildReferenceTopics">
 Building reference help topics...
@@ -247,7 +249,7 @@ Building reference help topics...
   Info: CopyFromIndexComponent: Instantiating component.
   Info: CopyFromIndexComponent: Searching for files that match &#39;*.xml&#39;.
   Info: CopyFromIndexComponent: Searching for files that match &#39;reflection.xml&#39;.
-  Info: CopyFromIndexComponent: Indexed 203381 elements in 409 files.
+  Info: CopyFromIndexComponent: Indexed 203360 elements in 409 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: CopyFromIndexComponent: Instantiating component.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
@@ -1236,7 +1238,7 @@ Building reference help topics...
   Warn: CopyFromIndexComponent: Entries for the key &#39;P:System.Web.Routing.VirtualPathData.VirtualPath&#39; occur in both &#39;C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Web.Routing.xml&#39; and &#39;C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Web.xml&#39;. The last entry will be used.
   Info: CopyFromIndexComponent: Searching for files that match &#39;*.xml&#39;.
   Info: CopyFromIndexComponent: Searching for files that match &#39;C:\ORMAP_10_Polk\Polk County\ORMAP_10\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\Documentation\Help\Working\OrmapTaxlotEditingAddIn.xml&#39;.
-  Info: CopyFromIndexComponent: Indexed 145766 elements in 128 files.
+  Info: CopyFromIndexComponent: Indexed 145748 elements in 128 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: ForEachComponent: Instantiating component.
   Info: ForEachComponent: Loading subcomponents.
@@ -1317,11 +1319,10 @@ Building reference help topics...
   Info: ResolveReferenceLinksComponent2: Creating MSDN URL resolver.
   Info: ResolveReferenceLinksComponent2: Searching directory &#39;C:\Program Files\Sandcastle\Data\Reflection&#39; for targets files of the form &#39;*.xml&#39;.
   Info: ResolveReferenceLinksComponent2: Searching directory &#39;C:\ORMAP_10_Polk\Polk County\ORMAP_10\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\Documentation\Help\Working&#39; for targets files of the form &#39;reflection.xml&#39;.
-  Info: ResolveReferenceLinksComponent2: Loaded 203381 reference targets.
+  Info: ResolveReferenceLinksComponent2: Loaded 203360 reference targets.
   Info: SaveComponent: Instantiating component.
   Info: BuildAssembler: Building topic N:OrmapTaxlotEditingAddIn
   Info: BuildAssembler: Building topic T:OrmapTaxlotEditingAddIn.AnnotationUtilities
-  Warn: ResolveReferenceLinksComponent2: MSDN URL not found for target &#39;T:System.Object&#39;.
   Info: BuildAssembler: Building topic AllMembers.T:OrmapTaxlotEditingAddIn.AnnotationUtilities
   Info: BuildAssembler: Building topic Methods.T:OrmapTaxlotEditingAddIn.AnnotationUtilities
   Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditingAddIn.AnnotationUtilities
@@ -1441,11 +1442,6 @@ Building reference help topics...
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.CreateAnnotation._annoClassName
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.CreateAnnotation._annoFeatureLayer
   Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Carto.IFeatureLayer&#39;.
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.CreateAnnotation._application
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditingAddIn.CreateAnnotation._application
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Framework.IApplication&#39;.
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.CreateAnnotation._bitmapResourceName
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditingAddIn.CreateAnnotation._bitmapResourceName
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.CreateAnnotation._isAbove
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.CreateAnnotation._isBelow
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.CreateAnnotation._isBothAbove
@@ -1464,8 +1460,6 @@ Building reference help topics...
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.CreateAnnotation._isStandardAbove
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.CreateAnnotation._isStandardBelow
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.CreateAnnotation._isStandardLine
-  Info: BuildAssembler: Building topic P:OrmapTaxlotEditingAddIn.CreateAnnotation._partnerCreateAnnotationForm
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:OrmapTaxlotEditingAddIn.CreateAnnotation._partnerCreateAnnotationForm
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.CreateAnnotation._referenceScale
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.CreateAnnotation._upperValue
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.CreateAnnotation._wideLine
@@ -1473,9 +1467,6 @@ Building reference help topics...
   Info: BuildAssembler: Building topic P:OrmapTaxlotEditingAddIn.CreateAnnotation.AnnoFeatureLayer
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:OrmapTaxlotEditingAddIn.CreateAnnotation.AnnoFeatureLayer
   Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Carto.IFeatureLayer&#39;.
-  Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.CreateAnnotation.cleanNewAnnotation(ESRI.ArcGIS.Geodatabase.IFeatureClass)
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Geodatabase.IFeatureClass&#39;.
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Geodatabase.IFeatureClass&#39;.
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.CreateAnnotation.clearall(ESRI.ArcGIS.ArcMapUI.IMxDocument)
   Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.ArcMapUI.IMxDocument&#39;.
   Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.ArcMapUI.IMxDocument&#39;.
@@ -1492,16 +1483,6 @@ Building reference help topics...
   Info: ShowMissingComponent: Auto-documenting dispose method M:OrmapTaxlotEditingAddIn.CreateAnnotation.Dispose
   Info: BuildAssembler: Building topic P:OrmapTaxlotEditingAddIn.CreateAnnotation.Enabled
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.CreateAnnotation.getLineOffset(System.Double,System.Boolean)
-  Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.CreateAnnotation.getMapIndexAndScale(ESRI.ArcGIS.Geodatabase.IObject,ESRI.ArcGIS.Geodatabase.IFeature,ESRI.ArcGIS.Geometry.IGeometry)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;obj&quot;/&gt; documentation for M:OrmapTaxlotEditingAddIn.CreateAnnotation.getMapIndexAndScale(ESRI.ArcGIS.Geodatabase.IObject,ESRI.ArcGIS.Geodatabase.IFeature,ESRI.ArcGIS.Geometry.IGeometry)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;theFeature&quot;/&gt; documentation for M:OrmapTaxlotEditingAddIn.CreateAnnotation.getMapIndexAndScale(ESRI.ArcGIS.Geodatabase.IObject,ESRI.ArcGIS.Geodatabase.IFeature,ESRI.ArcGIS.Geometry.IGeometry)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;theSearchGeometry&quot;/&gt; documentation for M:OrmapTaxlotEditingAddIn.CreateAnnotation.getMapIndexAndScale(ESRI.ArcGIS.Geodatabase.IObject,ESRI.ArcGIS.Geodatabase.IFeature,ESRI.ArcGIS.Geometry.IGeometry)
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Geodatabase.IObject&#39;.
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Geodatabase.IFeature&#39;.
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Geometry.IGeometry&#39;.
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Geodatabase.IObject&#39;.
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Geodatabase.IFeature&#39;.
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Geometry.IGeometry&#39;.
   Info: BuildAssembler: Building topic P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsAbove
   Info: BuildAssembler: Building topic P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsBelow
   Info: BuildAssembler: Building topic P:OrmapTaxlotEditingAddIn.CreateAnnotation.IsBothAbove
@@ -1541,7 +1522,7 @@ Building reference help topics...
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.CreateAnnotation.uxHelp_Click(System.Object,System.EventArgs)
   Warn: ShowMissingComponent: Missing &lt;param name=&quot;sender&quot;/&gt; documentation for M:OrmapTaxlotEditingAddIn.CreateAnnotation.uxHelp_Click(System.Object,System.EventArgs)
   Warn: ShowMissingComponent: Missing &lt;param name=&quot;e&quot;/&gt; documentation for M:OrmapTaxlotEditingAddIn.CreateAnnotation.uxHelp_Click(System.Object,System.EventArgs)
-  Info: BuildAssembler: Building topic T:OrmapTaxlotEditingAddIn.CreateAnnotation.topPosition
+  Info: BuildAssembler: Building topic T:OrmapTaxlotEditingAddIn.CreateAnnotation.TopPosition
   Info: BuildAssembler: Building topic T:OrmapTaxlotEditingAddIn.CreateAnnotationButton
   Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Desktop.AddIns.Button&#39;.
   Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Desktop.AddIns.Button&#39;.
@@ -2038,9 +2019,6 @@ Building reference help topics...
   Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditingAddIn.InvertAnnotation
   Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditingAddIn.InvertAnnotation
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.InvertAnnotation.#ctor
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.InvertAnnotation._application
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Framework.IApplication&#39;.
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.InvertAnnotation._bitmapResourceName
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.InvertAnnotation._isDuringDispose
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditingAddIn.InvertAnnotation._isDuringDispose
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.InvertAnnotation.Dispose
@@ -2134,9 +2112,6 @@ Building reference help topics...
   Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditingAddIn.MoveDown
   Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditingAddIn.MoveDown
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.MoveDown.#ctor
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.MoveDown._application
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Framework.IApplication&#39;.
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.MoveDown._bitmapResourceName
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.MoveDown._isDuringDispose
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditingAddIn.MoveDown._isDuringDispose
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.MoveDown.Dispose
@@ -2230,9 +2205,6 @@ Building reference help topics...
   Info: BuildAssembler: Building topic Properties.T:OrmapTaxlotEditingAddIn.MoveUp
   Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditingAddIn.MoveUp
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.MoveUp.#ctor
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.MoveUp._application
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Framework.IApplication&#39;.
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.MoveUp._bitmapResourceName
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.MoveUp._isDuringDispose
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditingAddIn.MoveUp._isDuringDispose
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.MoveUp.Dispose
@@ -2568,9 +2540,6 @@ Building reference help topics...
   Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditingAddIn.StandardBothSidesDown
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.StandardBothSidesDown.#ctor
   Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditingAddIn.StandardBothSidesDown.#ctor
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.StandardBothSidesDown._application
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Framework.IApplication&#39;.
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.StandardBothSidesDown._bitmapResourceName
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.StandardBothSidesDown._isDuringDispose
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditingAddIn.StandardBothSidesDown._isDuringDispose
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.StandardBothSidesDown.Dispose
@@ -2667,9 +2636,6 @@ Building reference help topics...
   Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditingAddIn.StandardBothSidesUp
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.StandardBothSidesUp.#ctor
   Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditingAddIn.StandardBothSidesUp.#ctor
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.StandardBothSidesUp._application
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Framework.IApplication&#39;.
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.StandardBothSidesUp._bitmapResourceName
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.StandardBothSidesUp._isDuringDispose
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditingAddIn.StandardBothSidesUp._isDuringDispose
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.StandardBothSidesUp.Dispose
@@ -2777,9 +2743,6 @@ Building reference help topics...
   Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditingAddIn.TransposeAnnotation
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.TransposeAnnotation.#ctor
   Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditingAddIn.TransposeAnnotation.#ctor
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.TransposeAnnotation._application
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Framework.IApplication&#39;.
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.TransposeAnnotation._bitmapResourceName
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.TransposeAnnotation._isDuringDispose
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditingAddIn.TransposeAnnotation._isDuringDispose
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.TransposeAnnotation.Dispose
@@ -2967,9 +2930,6 @@ Building reference help topics...
   Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditingAddIn.WideBothSidesDown
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.WideBothSidesDown.#ctor
   Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditingAddIn.WideBothSidesDown.#ctor
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.WideBothSidesDown._application
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Framework.IApplication&#39;.
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.WideBothSidesDown._bitmapResourceName
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.WideBothSidesDown._isDuringDispose
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditingAddIn.WideBothSidesDown._isDuringDispose
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.WideBothSidesDown.Dispose
@@ -3066,9 +3026,6 @@ Building reference help topics...
   Info: BuildAssembler: Building topic Fields.T:OrmapTaxlotEditingAddIn.WideBothSidesUp
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.WideBothSidesUp.#ctor
   Info: ShowMissingComponent: Auto-documenting constructor M:OrmapTaxlotEditingAddIn.WideBothSidesUp.#ctor
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.WideBothSidesUp._application
-  Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:ESRI.ArcGIS.Framework.IApplication&#39;.
-  Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.WideBothSidesUp._bitmapResourceName
   Info: BuildAssembler: Building topic F:OrmapTaxlotEditingAddIn.WideBothSidesUp._isDuringDispose
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:OrmapTaxlotEditingAddIn.WideBothSidesUp._isDuringDispose
   Info: BuildAssembler: Building topic M:OrmapTaxlotEditingAddIn.WideBothSidesUp.Dispose
@@ -3349,12 +3306,12 @@ Building reference help topics...
   Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs&#39;.
   Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs&#39;.
   Warn: ResolveReferenceLinksComponent2: Unknown reference link target &#39;T:OrmapTaxlotEditingAddIn.My.ThisAddIn.IDs&#39;.
-  Info: Processed 631 topics
-    Last step completed in 00:01:15.8160
+  Info: Processed 610 topics
+    Last step completed in 00:03:16.8145
 </buildStep>
 <buildStep step="CombiningIntermediateTocFiles">
 Combining conceptual and API intermediate TOC files...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0312
 </buildStep>
 <buildStep step="ExtractingHtmlInfo">
 Extracting HTML info for HTML Help 1 and/or website...
@@ -3366,11 +3323,11 @@ E-Mail: Eric@EWoodruff.us
 Using LCID &#39;1033&#39;, code page &#39;65001&#39;, encoding charset &#39;UTF-8&#39;.
 
 Processing Help 1 files in C:\ORMAP_10_Polk\Polk County\ORMAP_10\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\Documentation\Help\Working\Output\HtmlHelp1
-Processed 631 HTML files
+Processed 610 HTML files
 Sorting keywords and generating See Also indices
 Saving HTML Help 1 keyword index to C:\ORMAP_10_Polk\Polk County\ORMAP_10\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\Documentation\Help\Working\OrmapTaxlotEditingAddIn.hhk
 Saving HTML Help 1 table of contents to C:\ORMAP_10_Polk\Polk County\ORMAP_10\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\Documentation\Help\Working\OrmapTaxlotEditingAddIn.hhc
-    Last step completed in 00:00:05.3919
+    Last step completed in 00:00:06.5301
 </buildStep>
 <buildStep step="GenerateHelpFormatTableOfContents">
 Generating HTML Help 1 table of contents file...
@@ -3378,11 +3335,11 @@ Generating HTML Help 1 table of contents file...
 </buildStep>
 <buildStep step="GenerateHelpFileIndex">
 Generating HTML Help 1 index file...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0000
 </buildStep>
 <buildStep step="GenerateHelpProject">
 Generating HTML Help 1 project file...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0312
 </buildStep>
 <buildStep step="CompilingHelpFile">
 Compiling HTML Help 1 file...
@@ -3399,11 +3356,11 @@ Compiling HTML Help 1 file...
   
   Compile time: 0 minutes, 6 seconds
   
-  633	Topics
+  612	Topics
   
-  6,934	Local links
+  6,687	Local links
   
-  0	Internet links
+  6,487	Internet links
   
   0	Graphics
   
@@ -3411,19 +3368,19 @@ Compiling HTML Help 1 file...
   
   
   
-  Created c:\ORMAP_10_Polk\Polk County\ORMAP_10\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\Documentation\Help\Working\Output\HtmlHelp1\OrmapTaxlotEditingAddIn.chm, 1,030,386 bytes
+  Created c:\ORMAP_10_Polk\Polk County\ORMAP_10\OrmapTaxlotEditingAddIn\OrmapTaxlotEditingAddIn\Documentation\Help\Working\Output\HtmlHelp1\OrmapTaxlotEditingAddIn.chm, 1,052,400 bytes
   
-  Compression decreased file by 7,016,314 bytes.
+  Compression decreased file by 7,105,630 bytes.
   
-    Last step completed in 00:00:07.9706
+    Last step completed in 00:00:07.8580
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.3438
+    Last step completed in 00:00:00.3124
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully at 07/22/2011 11:22 AM.  Total time: 00:01:43.4080
+Build completed successfully at 07/27/2011 09:11 AM.  Total time: 00:03:46.0915
 
 </buildStep>
 </shfbBuild>
