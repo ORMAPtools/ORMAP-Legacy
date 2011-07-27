@@ -62,6 +62,10 @@ Imports ESRI.ArcGIS.SystemUI
 
 #End Region
 
+''' <summary>
+''' Flip the locations of the "top" and "bottom" pieces of annotation.
+''' </summary>
+''' <remarks></remarks>
 Public NotInheritable Class TransposeAnnotation
     Implements IDisposable
 
@@ -99,13 +103,6 @@ Public NotInheritable Class TransposeAnnotation
 
 #Region "Custom Class Members"
 
-#Region "Fields"
-
-    Private _application As IApplication
-    Private _bitmapResourceName As String
-
-#End Region
-
 #Region "Properties"
 
 #End Region
@@ -115,7 +112,10 @@ Public NotInheritable Class TransposeAnnotation
 #End Region
 
 #Region "Methods"
-    Friend Sub DoButtonOperation()
+    ''' <summary>
+    ''' Code entrance point from TransposeAnnotationButton OnClick event.
+    ''' </summary>
+    Friend Shared Sub DoButtonOperation()
 
         Try
             DataMonitor.CheckValidMapIndexDataProperties()
@@ -143,7 +143,7 @@ Public NotInheritable Class TransposeAnnotation
     ''' Called by ArcMap once per second to check if the command is enabled.
     ''' </summary>
     ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
-    Public ReadOnly Property Enabled() As Boolean
+    Public Shared ReadOnly Property Enabled() As Boolean
         Get
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
@@ -191,14 +191,6 @@ Public NotInheritable Class TransposeAnnotation
                 '   e.g. component.Dispose()
 
             End If
-
-            ' Free "native" (shared unmanaged) resources, whether 
-            ' explicitly called or called by the runtime.
-
-            ' Call the appropriate methods to clean up 
-            ' unmanaged resources here.
-            _bitmapResourceName = Nothing
-            'MyBase.m_bitmap = Nothing
 
             ' Flag that disposing has been finished.
             _isDuringDispose = False

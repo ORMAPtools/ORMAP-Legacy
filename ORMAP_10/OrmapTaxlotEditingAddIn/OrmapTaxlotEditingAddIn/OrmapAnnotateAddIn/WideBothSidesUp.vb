@@ -62,6 +62,9 @@ Imports ESRI.ArcGIS.SystemUI
 
 #End Region
 
+''' <summary>
+''' Move annotation up, inserting adequate distance to span a wide line.
+''' </summary>
 Public NotInheritable Class WideBothSidesUp
     Implements IDisposable
 
@@ -72,41 +75,14 @@ Public NotInheritable Class WideBothSidesUp
 
 #Region "Constructors"
 
-    ' A creatable COM class must have a Public Sub New() 
-    ' with no parameters, otherwise, the class will not be 
-    ' registered in the COM registry and cannot be created 
-    ' via CreateObject.
     Public Sub New()
-        MyBase.New()
-
-        'MyBase.m_category = "OrmapAnnotate"  'localizable text 
-        'MyBase.m_caption = "Move Up Wide Space"   'localizable text 
-        'MyBase.m_message = "Moves selected annotation set up and inserts wide space"   'localizable text 
-        'MyBase.m_toolTip = "Move up && insert wide space" 'localizable text 
-        'MyBase.m_name = "_WideBothSidesUp"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
-
-        'Try
-        '    'TODO: change bitmap name if necessary
-        '    Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
-        '    MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
-        'Catch ex As Exception
-        '    System.Diagnostics.Trace.WriteLine(ex.Message, "Invalid Bitmap")
-        'End Try
-
-
     End Sub
+
 #End Region
 
 #End Region
 
 #Region "Custom Class Members"
-
-#Region "Fields"
-
-    Private _application As IApplication
-    Private _bitmapResourceName As String
-
-#End Region
 
 #Region "Properties"
 
@@ -117,7 +93,10 @@ Public NotInheritable Class WideBothSidesUp
 #End Region
 
 #Region "Methods"
-    Friend Sub DoButtonOperation()
+    ''' <summary>
+    ''' Code entrance point from WideBothSidesUpButton OnClick event.
+    ''' </summary>
+    Friend Shared Sub DoButtonOperation()
 
         Try
             DataMonitor.CheckValidMapIndexDataProperties()
@@ -146,7 +125,7 @@ Public NotInheritable Class WideBothSidesUp
     ''' Called by ArcMap once per second to check if the command is enabled.
     ''' </summary>
     ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
-    Public ReadOnly Property Enabled() As Boolean
+    Public Shared ReadOnly Property Enabled() As Boolean
         Get
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
@@ -201,7 +180,7 @@ Public NotInheritable Class WideBothSidesUp
 
             ' Call the appropriate methods to clean up 
             ' unmanaged resources here.
-            _bitmapResourceName = Nothing
+            '_bitmapResourceName = Nothing
             'MyBase.m_bitmap = Nothing
 
             ' Flag that disposing has been finished.

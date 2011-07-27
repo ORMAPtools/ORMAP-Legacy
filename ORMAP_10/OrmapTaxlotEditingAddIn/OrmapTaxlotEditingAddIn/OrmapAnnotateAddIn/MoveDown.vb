@@ -62,6 +62,10 @@ Imports ESRI.ArcGIS.SystemUI
 
 #End Region
 
+''' <summary>
+''' Move annotation down, maintaining distance between pairs when they are on the same side of the line.
+''' </summary>
+''' <remarks>This will remove spacing between annotation pairs that are on both sides of a standard or wide line</remarks>
 Public NotInheritable Class MoveDown
     Implements IDisposable
 
@@ -76,24 +80,11 @@ Public NotInheritable Class MoveDown
     ' with no parameters, otherwise, the class will not be 
     ' registered in the COM registry and cannot be created 
     ' via CreateObject.
+    ''' <summary>
+    ''' Constructor
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub New()
-        MyBase.New()
-
-        '' TODO: Define values for the public properties
-        'MyBase.m_category = "OrmapAnnotate"  'localizable text 
-        'MyBase.m_caption = "MoveDown"   'localizable text 
-        'MyBase.m_message = "Moves annotation down"   'localizable text 
-        'MyBase.m_toolTip = "Moves annotation down" 'localizable text 
-        'MyBase.m_name = MyBase.m_category & "_MoveDown"  'unique id, non-localizable (e.g. "MyCategory_ArcMapCommand")
-
-        'Try
-        '    'TODO: change bitmap name if necessary
-        '    Dim bitmapResourceName As String = Me.GetType().Name + ".bmp"
-        '    MyBase.m_bitmap = New Bitmap(Me.GetType(), bitmapResourceName)
-        'Catch ex As Exception
-        '    System.Diagnostics.Trace.WriteLine(ex.Message, "Invalid Bitmap")
-        'End Try
-
     End Sub
 #End Region
 
@@ -101,23 +92,19 @@ Public NotInheritable Class MoveDown
 
 #Region "Custom Class Members"
 
-#Region "Fields"
-
-    Private _application As IApplication
-    Private _bitmapResourceName As String
+#Region "Properties (none)"
 
 #End Region
 
-#Region "Properties"
-
-#End Region
-
-#Region "Event Handlers"
+#Region "Event Handlers (none)"
 
 #End Region
 
 #Region "Methods"
-    Friend Sub DoButtonOperation()
+    ''' <summary>
+    ''' Code entrance point from MoveDownButton OnClick event.
+    ''' </summary>
+    Friend Shared Sub DoButtonOperation()
 
         Try
             DataMonitor.CheckValidMapIndexDataProperties()
@@ -145,7 +132,7 @@ Public NotInheritable Class MoveDown
     ''' Called by ArcMap once per second to check if the command is enabled.
     ''' </summary>
     ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
-    Public ReadOnly Property Enabled() As Boolean
+    Public Shared ReadOnly Property Enabled() As Boolean
         Get
             Dim canEnable As Boolean
             canEnable = EditorExtension.CanEnableExtendedEditing
@@ -157,7 +144,7 @@ Public NotInheritable Class MoveDown
 
 #End Region
 
-#Region "Methods"
+#Region "Methods (none)"
 
 #End Region
 
@@ -201,11 +188,6 @@ Public NotInheritable Class MoveDown
             ' Free "native" (shared unmanaged) resources, whether 
             ' explicitly called or called by the runtime.
 
-            ' Call the appropriate methods to clean up 
-            ' unmanaged resources here.
-            _bitmapResourceName = Nothing
-            'MyBase.m_bitmap = Nothing
-
             ' Flag that disposing has been finished.
             _isDuringDispose = False
 
@@ -215,7 +197,10 @@ Public NotInheritable Class MoveDown
 
 #Region " IDisposable Support "
 
-    ' This code added by Visual Basic to correctly implement the disposable pattern.
+    ''' <summary>
+    ''' This code added by Visual Basic to correctly implement the disposable pattern.
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub Dispose() Implements IDisposable.Dispose
         ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
         Dispose(True)

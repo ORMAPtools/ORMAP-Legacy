@@ -63,19 +63,18 @@ Imports OrmapTaxlotEditingAddIn.AnnotationUtilities
 #End Region
 
 ''' <summary>
-''' ArcMap Tool which allows users to create Distance and Direction annotation from Line Feature Classes that contain
+''' Allows creation of Distance and Direction annotation from Line Feature Classes that contain
 ''' appropriately formatted Distance and Direction attributes.
 ''' </summary>
 ''' <remarks>
-''' NOTE=> Annotation Feature Classes must have definitions for an Annotation Class named "34" and a
+''' Annotation Feature Classes must have definitions for an Annotation Class named "34" and a
 ''' Symbol named "34" (with appropriately defined font size and type information). The tool will 
-''' use these definitions for new annotation.''' <para><seealso cref="InvertAnnotation"/></para>
+''' use these definitions for new annotation.
+''' <para><seealso cref="InvertAnnotation"/></para>
 ''' <para><seealso cref="TransposeAnnotation"/></para>
 ''' <para><seealso cref="MoveUp"/></para>
 ''' <para><seealso cref="MoveDown"/></para>
 ''' </remarks>
-''' 
-
 Public NotInheritable Class CreateAnnotation
     Implements IDisposable
 
@@ -85,17 +84,17 @@ Public NotInheritable Class CreateAnnotation
     ''' Identifies which annotation element of the pair is placed "on top"
     ''' </summary>
     ''' <remarks></remarks>
-    Enum topPosition
+    Public Enum TopPosition
         ''' <summary>
         ''' The distance value (from the Distance field of the line feature class)
         ''' </summary>
         ''' <remarks></remarks>
-        distance
+        Distance
         ''' <summary>
         ''' The direction (bearing) value (from the Direction field of the line feature class)
         ''' </summary>
         ''' <remarks></remarks>
-        direction
+        Direction
     End Enum
 
 #End Region
@@ -132,13 +131,6 @@ Public NotInheritable Class CreateAnnotation
 
 #Region "Custom Class Members"
 
-#Region "Fields"
-
-    Private _application As IApplication
-    Private _bitmapResourceName As String
-
-#End Region
-
 #Region "Properties"
     '------------------------------------------
     ' Translate the form controls into Properties
@@ -158,7 +150,16 @@ Public NotInheritable Class CreateAnnotation
 
 
 
+    ''' <summary>
+    ''' Form Class Name setting.
+    ''' </summary>
     Private _annoClassName As String
+    ''' <summary>
+    ''' Gets the name of the anno class.
+    ''' </summary>
+    ''' <value>
+    ''' The name of the anno class.
+    ''' </value>
     Public ReadOnly Property AnnoClassName() As String
         Get
             ' Value from constant... could eventually be a setting
@@ -167,7 +168,16 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form Curved setting.
+    ''' </summary>
     Private _isCurved As Boolean
+    ''' <summary>
+    ''' Gets a value indicating whether this instance is curved.
+    ''' </summary>
+    ''' <value>
+    '''   <c>true</c> if this instance is curved; otherwise, <c>false</c>.
+    ''' </value>
     Public ReadOnly Property IsCurved() As Boolean
         Get
             _isCurved = PartnerCreateAnnotationForm.uxCurved.Checked
@@ -175,7 +185,16 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form Parallel setting.
+    ''' </summary>
     Private _isParallel As Boolean
+    ''' <summary>
+    ''' Gets or sets a value indicating whether this instance is parallel.
+    ''' </summary>
+    ''' <value>
+    ''' <c>true</c> if this instance is parallel; otherwise, <c>false</c>.
+    ''' </value>
     Public Property IsParallel() As Boolean
         Get
             _isParallel = PartnerCreateAnnotationForm.uxParallel.Checked
@@ -186,7 +205,18 @@ Public NotInheritable Class CreateAnnotation
         End Set
     End Property
 
+    ''' <summary>
+    ''' Form Horizontal setting.
+    ''' </summary>
     Private _isHorizontal As Boolean
+    ''' <summary>
+    ''' Gets a value indicating whether this instance is horizontal.
+    ''' </summary>
+    ''' <value>
+    ''' 
+    ''' <c>true</c> if this instance is horizontal; otherwise, <c>false</c>.
+    ''' 
+    ''' </value>
     Public ReadOnly Property IsHorizontal() As Boolean
         Get
             _isHorizontal = PartnerCreateAnnotationForm.uxHorizontal.Checked
@@ -194,7 +224,18 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form  Perpendicular setting.
+    ''' </summary>
     Private _isPerpendicular As Boolean
+    ''' <summary>
+    ''' Gets a value indicating whether this instance is perpendicular.
+    ''' </summary>
+    ''' <value>
+    ''' 
+    ''' <c>true</c> if this instance is perpendicular; otherwise, <c>false</c>.
+    ''' 
+    ''' </value>
     Public ReadOnly Property IsPerpendicular() As Boolean
         Get
             _isPerpendicular = PartnerCreateAnnotationForm.uxPerpendicular.Checked
@@ -202,7 +243,16 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form Above setting
+    ''' </summary>
     Private _isAbove As Boolean
+    ''' <summary>
+    ''' Gets or sets a value indicating whether this instance is above.
+    ''' </summary>
+    ''' <value>
+    '''   <c>true</c> if this instance is above; otherwise, <c>false</c>.
+    ''' </value>
     Public Property IsAbove() As Boolean
         ' Property is set programmatically
         Get
@@ -213,7 +263,16 @@ Public NotInheritable Class CreateAnnotation
         End Set
     End Property
 
+    ''' <summary>
+    ''' Form Both Below setting.
+    ''' </summary>
     Private _isBelow As Boolean
+    ''' <summary>
+    ''' Gets or sets a value indicating whether this instance is below.
+    ''' </summary>
+    ''' <value>
+    '''   <c>true</c> if this instance is below; otherwise, <c>false</c>.
+    ''' </value>
     Public Property IsBelow() As Boolean
         ' Property is set programmatically
         Get
@@ -224,7 +283,18 @@ Public NotInheritable Class CreateAnnotation
         End Set
     End Property
 
+    ''' <summary>
+    ''' Form Both Sides setting.
+    ''' </summary>
     Private _isBothSides As Boolean
+    ''' <summary>
+    ''' Gets a value indicating whether this instance is on both sides of line.
+    ''' </summary>
+    ''' <value>
+    ''' 
+    ''' <c>true</c> if this instance is on both sides; otherwise, <c>false</c>.
+    ''' 
+    ''' </value>
     Public ReadOnly Property IsBothSides() As Boolean
         Get
             _isBothSides = PartnerCreateAnnotationForm.uxBothSides.Checked
@@ -232,7 +302,18 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form Both Above setting
+    ''' </summary>
     Private _isBothAbove As Boolean
+    ''' <summary>
+    ''' Gets a value indicating whether annotation pairs are both above line.
+    ''' </summary>
+    ''' <value>
+    ''' 
+    ''' <c>true</c> if this instance is both above; otherwise, <c>false</c>.
+    ''' 
+    ''' </value>
     Public ReadOnly Property IsBothAbove() As Boolean
         Get
             _isBothAbove = PartnerCreateAnnotationForm.uxBothAbove.Checked
@@ -240,7 +321,18 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form Both Below setting
+    ''' </summary>
     Private _isBothBelow As Boolean
+    ''' <summary>
+    ''' Gets a value indicating whether annotation pairs are both below the line.
+    ''' </summary>
+    ''' <value>
+    ''' 
+    ''' <c>true</c> if this instance is both below; otherwise, <c>false</c>.
+    ''' 
+    ''' </value>
     Public ReadOnly Property IsBothBelow() As Boolean
         Get
             _isBothBelow = PartnerCreateAnnotationForm.uxBothBelow.Checked
@@ -248,7 +340,18 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form Standard Above setting.
+    ''' </summary>
     Private _isStandardAbove As Boolean
+    ''' <summary>
+    ''' Gets a value indicating whether annotation is standard offset above line.
+    ''' </summary>
+    ''' <value>
+    ''' 
+    ''' <c>true</c> if this instance is above standard; otherwise, <c>false</c>.
+    ''' 
+    ''' </value>
     Public ReadOnly Property IsStandardAbove() As Boolean
         Get
             _isStandardAbove = PartnerCreateAnnotationForm.uxStandardAbove.Checked
@@ -256,7 +359,19 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form Double Above setting.
+    ''' </summary>
     Private _isDoubleAbove As Boolean
+
+    ''' <summary>
+    ''' Gets a value indicating whether this instance is double offset above line.
+    ''' </summary>
+    ''' <value>
+    ''' 
+    ''' <c>true</c> if this instance is double above; otherwise, <c>false</c>.
+    ''' 
+    ''' </value>
     Public ReadOnly Property IsDoubleAbove() As Boolean
         Get
             _isDoubleAbove = PartnerCreateAnnotationForm.uxDoubleAbove.Checked
@@ -264,7 +379,18 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form Standard Below setting.
+    ''' </summary>
     Private _isStandardBelow As Boolean
+    ''' <summary>
+    ''' Gets a value indicating whether annotation is standard offset below line.
+    ''' </summary>
+    ''' <value>
+    ''' 
+    ''' <c>true</c> if this instance is below standard; otherwise, <c>false</c>.
+    ''' 
+    ''' </value>
     Public ReadOnly Property IsStandardBelow() As Boolean
         Get
             _isStandardBelow = PartnerCreateAnnotationForm.uxStandardBelow.Checked
@@ -272,7 +398,18 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form Double Below setting.
+    ''' </summary>
     Private _isDoubleBelow As Boolean
+    ''' <summary>
+    ''' Gets a value indicating whether this instance is double offset below line.
+    ''' </summary>
+    ''' <value>
+    ''' 
+    ''' <c>true</c> if this instance is double below; otherwise, <c>false</c>.
+    ''' 
+    ''' </value>
     Public ReadOnly Property IsDoubleBelow() As Boolean
         Get
             _isDoubleBelow = PartnerCreateAnnotationForm.uxDoubleBelow.Checked
@@ -280,7 +417,18 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form Standard line setting.
+    ''' </summary>
     Private _isStandardLine As Boolean
+    ''' <summary>
+    ''' Gets a value indicating whether this instance is standard line.
+    ''' </summary>
+    ''' <value>
+    ''' 
+    ''' <c>true</c> if this instance is standard line; otherwise, <c>false</c>.
+    ''' 
+    ''' </value>
     Public ReadOnly Property IsStandardLine() As Boolean
         Get
             _isStandardLine = PartnerCreateAnnotationForm.uxStandardLine.Checked
@@ -288,7 +436,18 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form Wide line setting.
+    ''' </summary>
     Private _wideLine As Boolean
+    ''' <summary>
+    ''' Gets a value indicating whether this instance is wide line.
+    ''' </summary>
+    ''' <value>
+    ''' 
+    ''' <c>true</c> if this instance is wide line; otherwise, <c>false</c>.
+    ''' 
+    ''' </value>
     Public ReadOnly Property IsWideLine() As Boolean
         Get
             _wideLine = PartnerCreateAnnotationForm.uxWideLine.Checked
@@ -296,7 +455,18 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form "Direction" setting.
+    ''' </summary>
     Private _isDirection As Boolean
+    ''' <summary>
+    ''' Gets a value indicating whether this instance is "Direction".
+    ''' </summary>
+    ''' <value>
+    ''' 
+    ''' <c>true</c> if this instance is Direction; otherwise, <c>false</c>.
+    ''' 
+    ''' </value>
     Public ReadOnly Property IsDirection() As Boolean
         Get
             _isDirection = PartnerCreateAnnotationForm.uxDirection.Checked
@@ -304,7 +474,18 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form "Distance" setting.
+    ''' </summary>
     Private _isDistance As Boolean
+    ''' <summary>
+    ''' Gets a value indicating whether this instance is Distance.
+    ''' </summary>
+    ''' <value>
+    ''' 
+    ''' <c>true</c> if this instance is Distance; otherwise, <c>false</c>.
+    ''' 
+    ''' </value>
     Public ReadOnly Property IsDistance() As Boolean
         Get
             _isDistance = PartnerCreateAnnotationForm.uxDistance.Checked
@@ -312,7 +493,14 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form Reference scale value.
+    ''' </summary>
     Private _referenceScale As Integer
+    ''' <summary>
+    ''' Gets the reference scale.
+    ''' </summary>
+    ''' 
     Public ReadOnly Property ReferenceScale() As Integer
         Get
             _referenceScale = CInt(PartnerCreateAnnotationForm.uxReferenceScale.Text)
@@ -320,6 +508,9 @@ Public NotInheritable Class CreateAnnotation
         End Get
     End Property
 
+    ''' <summary>
+    ''' Form Annotation Feature Layer value.
+    ''' </summary>
     Private _annoFeatureLayer As IFeatureLayer
     Public Property AnnoFeatureLayer() As IFeatureLayer
         Get
@@ -330,15 +521,21 @@ Public NotInheritable Class CreateAnnotation
         End Set
     End Property
 
-
-    Private _upperValue As topPosition
-    Public ReadOnly Property UpperValue() As topPosition
+    ''' <summary>
+    ''' Form Upper Value setting
+    ''' </summary>
+    Private _upperValue As TopPosition
+    ''' <summary>
+    ''' Gets the upper value.
+    ''' </summary>
+    ''' 
+    Public ReadOnly Property UpperValue() As TopPosition
         ' Property is set programmatically; enum allows for easier processing later
         Get
             If IsDistance Then
-                _upperValue = topPosition.distance
+                _upperValue = TopPosition.Distance
             ElseIf IsDirection Then
-                _upperValue = topPosition.direction
+                _upperValue = TopPosition.Direction
             End If
             Return _upperValue
         End Get
@@ -408,7 +605,7 @@ Public NotInheritable Class CreateAnnotation
         theMap.MapScale = ReferenceScale
 
         Dim theActiveView As IActiveView = DirectCast(theMap, IActiveView)
-        Dim theMapExtent As IEnvelope = theActiveView.Extent
+        'Dim theMapExtent As IEnvelope = theActiveView.Extent
         Dim theEnumLayer As IEnumLayer = SpatialUtilities.GetTOCLayersEnumerator(EsriLayerTypes.FeatureLayer)
 
         'Store all selected features in a collection and iterate through the collection
@@ -600,9 +797,8 @@ Public NotInheritable Class CreateAnnotation
 #Region "Methods"
 
     ''' <summary>
-    ''' The form entrance operation called by the AddIn button click event
+    ''' The form entrance operation called by the AddIn button OnClick event
     ''' </summary>
-    ''' <remarks></remarks>
     Friend Sub DoButtonOperation()
         Try
             'Dim theMxDoc As IMxDocument = DirectCast(EditorExtension.Application.Document, IMxDocument)
@@ -645,7 +841,6 @@ Public NotInheritable Class CreateAnnotation
     ''' Creates the controller for the Create Annotation form and sets up event handler delegates
     ''' </summary>
     ''' <param name="value">A form of type CreateAnnotationForm</param>
-    ''' <remarks></remarks>
     Private Sub setPartnerCreateAnnotationForm(ByVal value As CreateAnnotationForm)
         If value IsNot Nothing Then
             _partnerCreateAnnotationForm = value
@@ -663,12 +858,18 @@ Public NotInheritable Class CreateAnnotation
     End Sub
 
     ''' <summary>
-    ''' Collects all the needed ORMAP data for the new annotation and copies from the scratch workspace into
+    ''' Collects all needed ORMAP data for the new annotation and copies it from the scratch workspace into
     ''' the appropriate ORMAP annotation feature class
     ''' </summary>
-    ''' <param name="theAnnoFcCollection"></param>
-    ''' <param name="theScratchAnnoWorkspace"></param>
-    ''' <remarks></remarks>
+    ''' <param name="theAnnoFcCollection">The collection of selected annotation feature classes</param>
+    ''' <param name="theScratchAnnoWorkspace">The scratch file geodatabase workspace</param>
+    ''' <remarks>
+    ''' The EditorExtension On_Create event will overlay the anno with the map index and determine the MapNumber. This is incorrect, 
+    ''' as the MapNumber is based on overlay of map index and line feature from which the anno is derived. Correct MapNumber is 
+    ''' calculated during anno conversion and carried in TextString of Direction anno. the second newFeature.Store() method below 
+    ''' assigns the correct MapNumber, and since its already fired (On_Create), it now trips the EditorExtension On_Update event, 
+    ''' which won't perform the overlay and calculate the incorrect MapNumber.
+    ''' </remarks>
     Private Sub processNewAnnotation(ByVal theAnnoFcCollection As Collection, ByVal theScratchAnnoWorkspace As IFeatureWorkspace)
 
         'Now process all the new annotation (since the converter creates new SymbolIDs, adds FeatureIDs, and does not place any of the 
@@ -702,7 +903,7 @@ Public NotInheritable Class CreateAnnotation
             Dim theScratchCursor As IFeatureCursor = CType(theScratchAnnoFC.Search(theQueryFilter, False), IFeatureCursor)
             Dim thisScratchFeature As IFeature
             Dim newFeature As IFeature
-            Dim numberRows As Integer = -1
+            'Dim numberRows As Integer = -1
             Dim theMapNumber As String = Nothing
             PartnerCreateAnnotationForm.uxProgressBarText.Text = "Creating new annotation in " + theAnnoDataset.Name
 
@@ -720,7 +921,7 @@ Public NotInheritable Class CreateAnnotation
                 Dim theFeatureIdIndex As Integer = theAnnoFeatureClass.FindField("FeatureID")
                 Dim theAutoMethodIndex As Integer = theAnnoFeatureClass.FindField("AutoMethod")
                 Dim theAnnoClassIdIndex As Integer = theAnnoFeatureClass.FindField("AnnotationClassID")
-                Dim theSymbolIdIndex As Integer = theAnnoFeatureClass.FindField("SymbolID")
+                'Dim theSymbolIdIndex As Integer = theAnnoFeatureClass.FindField("SymbolID")
                 Dim theMapNumberIndex As Integer = theAnnoFeatureClass.FindField("MapNumber")
                 Dim theSymbolName As String = AnnoClassName
                 Dim theAnnoClassName As String = AnnoClassName
@@ -754,7 +955,7 @@ Public NotInheritable Class CreateAnnotation
                     Dim theValue As String = scratchSCE.Text
                     ' MapNumber is tacked on end of Direction anno by converter... this peels it off and 
                     ' puts it into theMapNumber to be assigned to the anno feature later
-                    Dim theIndex As Integer = theValue.IndexOf("%")
+                    Dim theIndex As Integer = theValue.IndexOf("%", System.StringComparison.CurrentCulture)
                     Dim theDirection As String = Nothing
                     If theIndex > 0 Then
                         theMapNumber = Right(theValue, Len(theValue) - theIndex - 3)
@@ -798,9 +999,9 @@ Public NotInheritable Class CreateAnnotation
     ''' <summary>
     ''' Clears all selected features in the current map document
     ''' </summary>
-    ''' <param name="ThisDocument">An object implementing the IMxDocument interface</param>
-    ''' <remarks>There is probably a way to do this using ArcObjects, but gave up trying to find it</remarks>
-    Private Sub clearall(ByVal ThisDocument As IMxDocument)
+    ''' <param name="ThisDocument">The active map document.</param>
+    ''' <remarks>There is probably a way to do this using ArcObjects, but gave up trying to find it.</remarks>
+    Private Shared Sub clearall(ByVal ThisDocument As IMxDocument)
         ' clears all selections in the focused map
         Dim pMxDoc As IMxDocument
         pMxDoc = ThisDocument
@@ -825,13 +1026,13 @@ Public NotInheritable Class CreateAnnotation
 
     ''' <summary>
     ''' Implements the IConvertLabelsToAnnotation interface to create new bearing and distance 
-    ''' annotation from the selected line(s)
+    ''' annotation from the selected line(s).
     ''' </summary>
-    ''' <param name="theMap">The currently selected map</param>
-    ''' <param name="theGeoFeatureLayer">The geo feature layer of the selected source line feature</param>
-    ''' <param name="theAnnoFeatureClass">The appropriate annotation feature class based on scale</param>
-    ''' <param name="isFeatureLinked">Boolean value for defining whether annotation is feature linked (not supported in this version)</param>
-    ''' <param name="theScratchAnnoWorkspace">An object implementing the IFeatureLayer workspace</param>
+    ''' <param name="theMap">The currently selected map.</param>
+    ''' <param name="theGeoFeatureLayer">The geo feature layer of the selected source line feature.</param>
+    ''' <param name="theAnnoFeatureClass">The appropriate annotation feature class based on scale.</param>
+    ''' <param name="isFeatureLinked">Boolean value for defining whether annotation is feature linked (not supported in this version).</param>
+    ''' <param name="theScratchAnnoWorkspace">The file geodatabase scratch workspace into which new annotation will be placed.</param>
     ''' <remarks></remarks>
     Private Sub convertLabelsToAnnotation(ByVal theMap As IMap, ByVal theGeoFeatureLayer As IGeoFeatureLayer, ByVal theAnnoFeatureClass As IFeatureClass, _
                                           ByVal isFeatureLinked As Boolean, ByVal theScratchAnnoWorkspace As IFeatureWorkspace)
@@ -864,14 +1065,20 @@ Public NotInheritable Class CreateAnnotation
                 ' Add the feature to the converter
                 '------------------------------------------
                 Dim append As Boolean = False
-                Dim theScratchAnno As IFeatureClass = Nothing
 
-                Try
-                    theScratchAnno = theScratchAnnoWorkspace.OpenFeatureClass(annoFCName)
+                Dim theScratchWorkspace As IWorkspace2 = DirectCast(theScratchAnnoWorkspace, IWorkspace2)
+                If theScratchWorkspace.NameExists(esriDatasetType.esriDTFeatureClass, annoFCName) Then
                     append = True
-                Catch ex As Exception
+                Else
                     append = False
-                End Try
+                End If
+
+                'Try
+                '    Dim theScratchAnno As IFeatureClass = theScratchAnnoWorkspace.OpenFeatureClass(annoFCName)
+                '    append = True
+                'Catch ex As Exception
+                '    append = False
+                'End Try
 
                 theConvertLabelsToAnnotation.AddFeatureLayer(theGeoFeatureLayer, _
                                                            annoFCName, _
@@ -894,15 +1101,15 @@ Public NotInheritable Class CreateAnnotation
     End Sub
 
     ''' <summary>
-    ''' Sets up the correct label placements based on type (Distance or Direction)
+    ''' Sets up the correct label placements based on type (Distance or Direction) and form settings.
     ''' </summary>
-    ''' <param name="theFeatureLayerPropsCollection">The annotation properties collection source line feature</param>
-    ''' <param name="theAnnoFeatureClass">The appropriate annotation feature class (based MapIndex)</param>
-    ''' <param name="theAnnoClassName">The annotation class name (should be "34")</param>
+    ''' <param name="theFeatureLayerPropsCollection">The annotation properties collection source line feature.</param>
+    ''' <param name="theAnnoFeatureClass">The appropriate annotation feature class (based MapIndex).</param>
+    ''' <param name="theAnnoClassName">The annotation class name (should be "34").</param>
     ''' <remarks>
     ''' The map number must be embedded in the label now since annotation can be created in various map indices
     ''' simultaneously. Once annotation is created, there is no way of knowing what its map number is, and this
-    ''' must be used later to populate the MapNumber field of the annotation feature class
+    ''' must be used later to populate the MapNumber field of the annotation feature class.
     ''' </remarks>
     Private Sub setLabelProperties(ByVal theFeatureLayerPropsCollection As IAnnotateLayerPropertiesCollection2, ByVal theAnnoFeatureClass As IFeatureClass, _
                                    ByVal theAnnoClassName As String, ByVal theMapNumber As String)
@@ -954,7 +1161,7 @@ Public NotInheritable Class CreateAnnotation
                 "FindLabel = strDegree & strMinute & strSecond & strMapNumber" & vbCrLf & _
                 "End Function"
 
-                If UpperValue = topPosition.direction Then
+                If UpperValue = TopPosition.Direction Then
                     isTop = True
                 Else
                     isTop = False
@@ -968,7 +1175,7 @@ Public NotInheritable Class CreateAnnotation
                 theLabelEngineLayerProperties.IsExpressionSimple = True
                 theLabelEngineLayerProperties.Expression = "FormatNumber([Distance], 2)"
 
-                If UpperValue = topPosition.distance Then
+                If UpperValue = TopPosition.Distance Then
                     isTop = True
                 Else
                     isTop = False
@@ -1034,10 +1241,10 @@ Public NotInheritable Class CreateAnnotation
     ''' Uses form property settings to determine how annotation should be placed relative to the source line
     ''' from which it is created.
     ''' </summary>
-    ''' <param name="thisSize">The font size of the associated annotation feature class</param>
-    ''' <param name="isTop">The form property defining which element should be place "on top" (distance or direction)</param>
-    ''' <returns>The distance used to offset the annotation pairs from the source line feature</returns>
-    ''' <remarks>The fontsize is determined to be roughly to MapScale / 240</remarks>
+    ''' <param name="thisSize">The font size of the associated annotation feature class.</param>
+    ''' <param name="isTop">The form property defining which element should be place "on top" (distance or direction).</param>
+    ''' <returns>The distance used to offset the annotation pairs from the source line feature.</returns>
+    ''' <remarks>The fontsize is roughly calculated by MapScale / 240.</remarks>
     Private Function getLineOffset(ByVal thisSize As Double, ByVal isTop As Boolean) As Double
         '------------------------------------------
         ' Calculate the line offset distances
@@ -1087,10 +1294,10 @@ Public NotInheritable Class CreateAnnotation
     End Function
 
     ''' <summary>
-    ''' Determines annotation place based on form settings
+    ''' Determines annotation placement based on form settings.
     ''' </summary>
-    ''' <param name="isTop">Form property defining which element is "on top"</param>
-    ''' <remarks></remarks>
+    ''' <param name="isTop">Form property defining which element is "on top".</param>
+    ''' <remarks>Sets whether Direction or Distance is place "above" the line.</remarks>
     Private Sub setAnnoPlacement(ByVal isTop As Boolean)
         '------------------------------------------
         ' Set anno placement based on user form settings
@@ -1116,121 +1323,117 @@ Public NotInheritable Class CreateAnnotation
         End Select
     End Sub
 
-    ''' <summary>
-    ''' Cleans "Direction" and "Distance" subtypes, annotation classes, and symbols from the associated
-    ''' annotation feature classes. These are placed by the label-to-annotation engine
-    ''' </summary>
-    ''' <param name="theAnnoFC">The name of the annotation feature class</param>
-    ''' <remarks>Obsolete. Current version uses scratch workspace which is discarded</remarks>
-    Private Sub cleanNewAnnotation(ByVal theAnnoFC As IFeatureClass)
-        '------------------------------------------
-        ' Cleans up the mess left by the converter
-        '------------------------------------------
-        ' The converter chucks all kinds of "Direction" or "Distance" subtypes, annotation classes, 
-        ' and symbols into the annotation feature class(es). They must all be removed AFTER 
-        ' processNewAnnotation has reassigned them to the correct annotation class and symbol. 
+    ' ''' <summary>
+    ' ''' Obsolete. Cleans "Direction" and "Distance" subtypes, annotation classes, and symbols from the associated
+    ' ''' annotation feature classes. These are placed by the label-to-annotation engine.
+    ' ''' </summary>
+    ' ''' <param name="theAnnoFC">The name of the annotation feature class</param>
+    ' ''' <remarks>Obsolete. Current version uses scratch workspace which is discarded</remarks>
+    'Private Sub cleanNewAnnotation(ByVal theAnnoFC As IFeatureClass)
+    '    '------------------------------------------
+    '    ' Cleans up the mess left by the converter
+    '    '------------------------------------------
+    '    ' The converter chucks all kinds of "Direction" or "Distance" subtypes, annotation classes, 
+    '    ' and symbols into the annotation feature class(es). They must all be removed AFTER 
+    '    ' processNewAnnotation has reassigned them to the correct annotation class and symbol. 
 
-        Dim theSubtypes As ISubtypes = DirectCast(theAnnoFC, ISubtypes)
-        Dim theEnumSubtype As IEnumSubtype = theSubtypes.Subtypes
-        theEnumSubtype.Reset()
-        Dim subtypeName As String
-        Dim subtypeCode As Integer
+    '    Dim theSubtypes As ISubtypes = DirectCast(theAnnoFC, ISubtypes)
+    '    Dim theEnumSubtype As IEnumSubtype = theSubtypes.Subtypes
+    '    theEnumSubtype.Reset()
+    '    Dim subtypeName As String
+    '    Dim subtypeCode As Integer
 
-        subtypeName = theEnumSubtype.Next(subtypeCode)
+    '    subtypeName = theEnumSubtype.Next(subtypeCode)
 
-        Dim theAnnoClassExtenstion As IAnnotationClassExtension = DirectCast(theAnnoFC.Extension, IAnnotationClassExtension)
-        Dim theSymbolCollection As ISymbolCollection2 = DirectCast(theAnnoClassExtenstion.SymbolCollection, ISymbolCollection2)
-        Dim theAnnoLayerPropCollection As IAnnotateLayerPropertiesCollection2 = DirectCast(theAnnoClassExtenstion.AnnoProperties, IAnnotateLayerPropertiesCollection2)
-        Dim theAnnoClassAdmin As IAnnoClassAdmin = DirectCast(theAnnoFC.Extension, IAnnoClassAdmin)
+    '    Dim theAnnoClassExtenstion As IAnnotationClassExtension = DirectCast(theAnnoFC.Extension, IAnnotationClassExtension)
+    '    Dim theSymbolCollection As ISymbolCollection2 = DirectCast(theAnnoClassExtenstion.SymbolCollection, ISymbolCollection2)
+    '    Dim theAnnoLayerPropCollection As IAnnotateLayerPropertiesCollection2 = DirectCast(theAnnoClassExtenstion.AnnoProperties, IAnnotateLayerPropertiesCollection2)
+    '    Dim theAnnoClassAdmin As IAnnoClassAdmin = DirectCast(theAnnoFC.Extension, IAnnoClassAdmin)
 
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        ' --DESIGN COMMENT--
-        ' If things go wrong with the CreateAnnotation process, a large number of "Direction" and "Distance" annotation classes 
-        ' can be left behind in the annotation feature class. The following code was structured to ensure these remanants are
-        ' removed from the annotation feature class. This is especially true for AnnotationClassIDs and symbols, which may
-        ' be left behind even when the associated subtypes are removed. The last step of the cleanup process was designed
-        ' to remove any remnant "Direction" or "Distance" annotation classes and symbols left from earlier aborted anno
-        ' creation efforts. 
-        ' NOTE=>    A clean annotation feature class is assumed prior to the CreateAnnotation process being implemented. 
-        '           The following cleanup processes have been verified against aborted CreateAnnotation efforts in file,
-        '           personal, and SDE databases, so they should handle the types of remant data involved with a crashing
-        '           CreateAnnotation effort. There is no way to know, however, if they can handle cleaning up annotation
-        '           feature classes that have other types of non-CreateAnnotion related issues.
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    '    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    '    ' --DESIGN COMMENT--
+    '    ' If things go wrong with the CreateAnnotation process, a large number of "Direction" and "Distance" annotation classes 
+    '    ' can be left behind in the annotation feature class. The following code was structured to ensure these remanants are
+    '    ' removed from the annotation feature class. This is especially true for AnnotationClassIDs and symbols, which may
+    '    ' be left behind even when the associated subtypes are removed. The last step of the cleanup process was designed
+    '    ' to remove any remnant "Direction" or "Distance" annotation classes and symbols left from earlier aborted anno
+    '    ' creation efforts. 
+    '    ' NOTE=>    A clean annotation feature class is assumed prior to the CreateAnnotation process being implemented. 
+    '    '           The following cleanup processes have been verified against aborted CreateAnnotation efforts in file,
+    '    '           personal, and SDE databases, so they should handle the types of remant data involved with a crashing
+    '    '           CreateAnnotation effort. There is no way to know, however, if they can handle cleaning up annotation
+    '    '           feature classes that have other types of non-CreateAnnotion related issues.
+    '    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-        '------------------------------------------
-        ' Now clean up the mess left by the converter
-        '------------------------------------------
-        ' Delete "Direction" and "Distance" subtypes
-        ' Delete "Direction" and "Distance" annotation classes
-        ' Delete "Direction" and "Distance" symbols
-        While Not subtypeName Is Nothing
-            'Remove Distance and Direction subtypes
-            If String.Compare(subtypeName, 0, "Direction", 0, 9, CultureInfo.CurrentCulture, CompareOptions.IgnoreCase) = 0 Or _
-               String.Compare(subtypeName, 0, "Distance", 0, 8, CultureInfo.CurrentCulture, CompareOptions.IgnoreCase) = 0 Then
-                Try
-                    'Delete the subtype, annotation class, and symbol for "Direction" or "Distance" 
-                    theSubtypes.DeleteSubtype(subtypeCode)
-                    theAnnoLayerPropCollection.Remove(subtypeCode)
-                    theSymbolCollection.Remove(GetSymbolId(theAnnoFC, subtypeName))
-                    'Update the anno FCs property collection to reflect all the subtype removals (need an updated count below)... 
-                    theAnnoClassAdmin.UpdateProperties()
-                Catch ex As Exception
-                    EditorExtension.ProcessUnhandledException(ex)
-                End Try
-            End If
-            subtypeName = theEnumSubtype.Next(subtypeCode)
-        End While
+    '    '------------------------------------------
+    '    ' Now clean up the mess left by the converter
+    '    '------------------------------------------
+    '    ' Delete "Direction" and "Distance" subtypes
+    '    ' Delete "Direction" and "Distance" annotation classes
+    '    ' Delete "Direction" and "Distance" symbols
+    '    While Not subtypeName Is Nothing
+    '        'Remove Distance and Direction subtypes
+    '        If String.Compare(subtypeName, 0, "Direction", 0, 9, CultureInfo.CurrentCulture, CompareOptions.IgnoreCase) = 0 Or _
+    '           String.Compare(subtypeName, 0, "Distance", 0, 8, CultureInfo.CurrentCulture, CompareOptions.IgnoreCase) = 0 Then
+    '            Try
+    '                'Delete the subtype, annotation class, and symbol for "Direction" or "Distance" 
+    '                theSubtypes.DeleteSubtype(subtypeCode)
+    '                theAnnoLayerPropCollection.Remove(subtypeCode)
+    '                theSymbolCollection.Remove(GetSymbolId(theAnnoFC, subtypeName))
+    '                'Update the anno FCs property collection to reflect all the subtype removals (need an updated count below)... 
+    '                theAnnoClassAdmin.UpdateProperties()
+    '            Catch ex As Exception
+    '                EditorExtension.ProcessUnhandledException(ex)
+    '            End Try
+    '        End If
+    '        subtypeName = theEnumSubtype.Next(subtypeCode)
+    '    End While
 
 
-    End Sub
+    'End Sub
 
-    ''' <summary>
-    ''' Obsolete.
-    ''' </summary>
-    ''' <param name="obj"></param>
-    ''' <param name="theFeature"></param>
-    ''' <param name="theSearchGeometry"></param>
-    ''' <remarks></remarks>
-    Private Shared Sub getMapIndexAndScale(ByVal obj As IObject, ByVal theFeature As IFeature, ByVal theSearchGeometry As IGeometry)
+    ' ''' <summary>
+    ' ''' Obsolete.
+    ' ''' </summary>
+    'Private Shared Sub getMapIndexAndScale(ByVal obj As IObject, ByVal theFeature As IFeature, ByVal theSearchGeometry As IGeometry)
 
-        Dim theMapScale As String
-        Dim theMapNumber As String
+    '    Dim theMapScale As String
+    '    Dim theMapNumber As String
 
-        ' Get the Map Index map number field index.
-        Dim theMapNumFieldIndex As Integer
-        theMapNumFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
+    '    ' Get the Map Index map number field index.
+    '    Dim theMapNumFieldIndex As Integer
+    '    theMapNumFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapNumberField)
 
-        If theSearchGeometry Is Nothing Then Exit Sub
-        If theSearchGeometry.IsEmpty Then Exit Sub
+    '    If theSearchGeometry Is Nothing Then Exit Sub
+    '    If theSearchGeometry.IsEmpty Then Exit Sub
 
-        If theMapNumFieldIndex > NotFoundIndex AndAlso Not IsMapIndex(obj) Then
-            ' Get the Map Index map number for the location of the new feature.
-            theMapNumber = GetValue(theSearchGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
-            ' Set the feature map number.
-            If Len(theMapNumber) > 0 Then
-                theFeature.Value(theMapNumFieldIndex) = theMapNumber
-            Else
-                theFeature.Value(theMapNumFieldIndex) = System.DBNull.Value
-            End If
-        End If
+    '    If theMapNumFieldIndex > NotFoundIndex AndAlso Not IsMapIndex(obj) Then
+    '        ' Get the Map Index map number for the location of the new feature.
+    '        theMapNumber = GetValue(theSearchGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapNumberField, EditorExtension.MapIndexSettings.MapNumberField)
+    '        ' Set the feature map number.
+    '        If Len(theMapNumber) > 0 Then
+    '            theFeature.Value(theMapNumFieldIndex) = theMapNumber
+    '        Else
+    '            theFeature.Value(theMapNumFieldIndex) = System.DBNull.Value
+    '        End If
+    '    End If
 
-        ' Set the map scale (if the field exists) to the Map Index map scale for the feature location:
+    '    ' Set the map scale (if the field exists) to the Map Index map scale for the feature location:
 
-        ' Get the Map Index map scale field index.
-        Dim theMapScaleFieldIndex As Integer
-        theMapScaleFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
-        If theMapScaleFieldIndex > NotFoundIndex AndAlso Not IsMapIndex(obj) Then
-            ' Get the Map Index map scale for the location of the new feature.
-            theMapScale = GetValue(theSearchGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
-            ' Set the feature map scale.
-            If Len(theMapScale) > 0 Then
-                theFeature.Value(theMapScaleFieldIndex) = theMapScale
-            Else
-                theFeature.Value(theMapScaleFieldIndex) = System.DBNull.Value
-            End If
-        End If
-    End Sub
+    '    ' Get the Map Index map scale field index.
+    '    Dim theMapScaleFieldIndex As Integer
+    '    theMapScaleFieldIndex = theFeature.Fields.FindField(EditorExtension.MapIndexSettings.MapScaleField)
+    '    If theMapScaleFieldIndex > NotFoundIndex AndAlso Not IsMapIndex(obj) Then
+    '        ' Get the Map Index map scale for the location of the new feature.
+    '        theMapScale = GetValue(theSearchGeometry, MapIndexFeatureLayer.FeatureClass, EditorExtension.MapIndexSettings.MapScaleField, EditorExtension.MapIndexSettings.MapNumberField)
+    '        ' Set the feature map scale.
+    '        If Len(theMapScale) > 0 Then
+    '            theFeature.Value(theMapScaleFieldIndex) = theMapScale
+    '        Else
+    '            theFeature.Value(theMapScaleFieldIndex) = System.DBNull.Value
+    '        End If
+    '    End If
+    'End Sub
 
 #End Region
 
@@ -1243,6 +1446,7 @@ Public NotInheritable Class CreateAnnotation
     ''' <summary>
     ''' Called by ArcMap once per second to check if the command is enabled.
     ''' </summary>
+    ''' <returns>Boolean collective determining if tool can be enabled</returns>
     ''' <remarks>WARNING: Do not put computation-intensive code here.</remarks>
     Public ReadOnly Property Enabled() As Boolean
         Get
@@ -1293,14 +1497,6 @@ Public NotInheritable Class CreateAnnotation
                 '   e.g. component.Dispose()
 
             End If
-
-            ' Free "native" (shared unmanaged) resources, whether 
-            ' explicitly called or called by the runtime.
-
-            ' Call the appropriate methods to clean up 
-            ' unmanaged resources here.
-            _bitmapResourceName = Nothing
-            'MyBase.m_bitmap = Nothing
 
             ' Flag that disposing has been finished.
             _isDuringDispose = False
