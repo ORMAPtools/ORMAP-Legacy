@@ -1,0 +1,55 @@
+﻿<ESRI.Configuration xmlns="http://schemas.esri.com/Desktop/AddIns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>OrmapTaxlotEditingAddIn</Name>
+  <AddInID>{dce1ac77-251b-4cd6-937c-1d68e84399e6}</AddInID>
+  <Description>The ORMAP Parcel Editing Toolbar is a set of tools for editing parcel data via ESRI's ArcGIS. The tools consist of an ArcMap toolbar for use in ArcMap version 10.</Description>
+  <Version>1.0</Version>
+  <Image>Images\OrmapLogo.png</Image>
+  <Author>ORMAP Tools Group</Author>
+  <Company>ORMAP</Company>
+  <Date>9/1/2011</Date>
+  <Targets>
+    <Target name="Desktop" version="10.0" />
+  </Targets>
+  <AddIn language="CLR" library="OrmapTaxlotEditing.dll" namespace="OrmapTaxlotEditing">
+    <ArcMap>
+      <Commands>
+        <Button id="ORMAP_OrmapTaxlotEditing_AutoUpdateAllToggle" class="AutoUpdateAllToggle" message="Toggle automatic update of all taxlot fields." caption="AutoUpdateAllToggle" tip="Toggle Automatic Updates" category="OrmapToolbarAddIn" image="Images\AutoUpdateAllToggle.bmp" onDemand="false" />
+        <Button id="ORMAP_OrmapTaxlotEditing_CombineTaxlots" class="CombineTaxlots" message="Combine Selected Taxlots." caption="CombineTaxlots" tip="Combine Selected Taxlots" category="OrmapToolbarAddIn" image="Images\CombineTaxlots.bmp" onDemand="false" />
+        <Button id="ORMAP_OrmapTaxlotEditing_LocateFeature" class="LocateFeature" message="Locate a Taxlot or Mapindex." caption="LocateFeature" tip="Locate a Taxlot or Mapindex" category="OrmapToolbarAddIn" image="Images\LocateFeature.bmp" onDemand="false" />
+        <Button id="ORMAP_OrmapTaxlotEditing_OrmapSettings" class="OrmapSettings" message="Set/Edit the ORMAP Settings." caption="Settings" tip="Set/Edit the ORMAP Settings" category="OrmapToolbarAddIn" image="Images\OrmapSettings.png" />
+        <Button id="ORMAP_OrmapTaxlotEditing_EditMapIndex" class="EditMapIndex" message="Edit the selected MapIndex polygon and underlying Taxlot polygons." caption="EditMapIndex" tip="Edit MapIndex" category="OrmapToolbarAddIn" image="Images\EditMapIndex.bmp" onDemand="false" />
+        <Button id="ORMAP_OrmapTaxlotEditing_SortCancelledNumbers" class="SortCancelledNumbers" message="Sort, add, and delete taxlots from the Cancelled Numbers table." caption="SortCancelledNumbers" tip="Sort Cancelled Numbers" category="OrmapToolbarAddIn" image="Images\SortCancelledNumbers.png" onDemand="false" />
+        <Tool id="ORMAP_OrmapTaxlotEditing_TaxlotAssignment" class="TaxlotAssignment" message="Populate values in the Taxlots feature class based on a starting value and an increment value." caption="TaxlotAssignment" tip="Assign Taxlots" category="OrmapToolbarAddIn" image="Images\TaxlotAssignment.bmp" onDemand="false" />
+        <Tool id="ORMAP_OrmapTaxlotEditing_AddArrows" class="AddArrows" message="Add arrow features to the Cartographic Lines feature class." caption="AddArrows" tip="Add Arrows" category="OrmapToolbarAddIn" image="Images\AddArrows.bmp" onDemand="false" />
+      </Commands>
+      <Extensions>
+        <Extension id="ORMAP_OrmapTaxlotEditing_Extension" class="OrmapExtension" productName="ORMAP Editing Toolbar" autoLoad="true" />
+      </Extensions>
+      <DockableWindows>
+        <DockableWindow id="ORMAP_OrmapTaxlotEditing_LocateFeatureDockWindow" class="LocateFeatureDockWindow+AddinImpl" caption="Locate Features" image="Images\LocateFeature.bmp">
+          <InitialPlacement height="300" width="300" state="pinned" position="left" />
+        </DockableWindow>
+      </DockableWindows>
+      <Editor>
+        <Extensions>
+          <Extension id="ORMAP_OrmapTaxlotEditing_EditorExtension" class="EditorExtension" />
+        </Extensions>
+      </Editor>
+      <Toolbars>
+        <Toolbar id="Deschutes_County_IT_ORMAPToobarAddIn" caption="ORMAP Toolbar" showInitially="true">
+          <Items>
+            <!--Reference to the custom button and tool-->
+            <Button refID="ORMAP_OrmapTaxlotEditing_AutoUpdateAllToggle" />
+            <Button refID="ORMAP_OrmapTaxlotEditing_LocateFeature" />
+            <Tool refID="ORMAP_OrmapTaxlotEditing_TaxlotAssignment" />
+            <Button refID="ORMAP_OrmapTaxlotEditing_EditMapIndex" />
+            <Button refID="ORMAP_OrmapTaxlotEditing_CombineTaxlots" />
+            <Tool refID="ORMAP_OrmapTaxlotEditing_AddArrows" />
+            <Button refID="ORMAP_OrmapTaxlotEditing_SortCancelledNumbers" />
+            <Button refID="ORMAP_OrmapTaxlotEditing_OrmapSettings" />
+          </Items>
+        </Toolbar>
+      </Toolbars>
+    </ArcMap>
+  </AddIn>
+</ESRI.Configuration>
