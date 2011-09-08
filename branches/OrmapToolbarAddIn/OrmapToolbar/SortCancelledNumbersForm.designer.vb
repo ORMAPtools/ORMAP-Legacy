@@ -36,6 +36,7 @@ Partial Class SortCancelledNumbersForm
         Me.uxFind = New System.Windows.Forms.Button()
         Me.ShapeContainer1 = New Microsoft.VisualBasic.PowerPacks.ShapeContainer()
         Me.LineShape1 = New Microsoft.VisualBasic.PowerPacks.LineShape()
+        Me.uxHelp = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'uxCancelledNumbers
@@ -84,7 +85,7 @@ Partial Class SortCancelledNumbersForm
         '
         'uxCancel
         '
-        Me.uxCancel.Location = New System.Drawing.Point(220, 438)
+        Me.uxCancel.Location = New System.Drawing.Point(162, 438)
         Me.uxCancel.Name = "uxCancel"
         Me.uxCancel.Size = New System.Drawing.Size(75, 23)
         Me.uxCancel.TabIndex = 5
@@ -93,7 +94,7 @@ Partial Class SortCancelledNumbersForm
         '
         'uxOK
         '
-        Me.uxOK.Location = New System.Drawing.Point(139, 438)
+        Me.uxOK.Location = New System.Drawing.Point(81, 438)
         Me.uxOK.Name = "uxOK"
         Me.uxOK.Size = New System.Drawing.Size(75, 23)
         Me.uxOK.TabIndex = 6
@@ -164,11 +165,21 @@ Partial Class SortCancelledNumbersForm
         Me.LineShape1.Y1 = 41
         Me.LineShape1.Y2 = 41
         '
+        'uxHelp
+        '
+        Me.uxHelp.Location = New System.Drawing.Point(243, 438)
+        Me.uxHelp.Name = "uxHelp"
+        Me.uxHelp.Size = New System.Drawing.Size(52, 23)
+        Me.uxHelp.TabIndex = 13
+        Me.uxHelp.Text = "Help"
+        Me.uxHelp.UseVisualStyleBackColor = True
+        '
         'SortCancelledNumbersForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(308, 473)
+        Me.Controls.Add(Me.uxHelp)
         Me.Controls.Add(Me.uxFind)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.uxMapIndex)
@@ -205,4 +216,5 @@ Partial Class SortCancelledNumbersForm
     Friend WithEvents uxFind As System.Windows.Forms.Button
     Friend WithEvents ShapeContainer1 As Microsoft.VisualBasic.PowerPacks.ShapeContainer
     Friend WithEvents LineShape1 As Microsoft.VisualBasic.PowerPacks.LineShape
+    Friend WithEvents uxHelp As System.Windows.Forms.Button
 End Class
