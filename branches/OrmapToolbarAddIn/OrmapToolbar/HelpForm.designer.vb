@@ -22,12 +22,12 @@ Partial Class HelpForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.TabControl1 = New System.Windows.Forms.TabControl
-        Me.TabPage1 = New System.Windows.Forms.TabPage
-        Me.uxRichTextBox = New System.Windows.Forms.RichTextBox
-        Me.TabPage2 = New System.Windows.Forms.TabPage
-        Me.WebBrowser1 = New System.Windows.Forms.WebBrowser
-        Me.uxReportOrRequest = New System.Windows.Forms.Button
+        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.uxRichTextBox = New System.Windows.Forms.RichTextBox()
+        Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.WebBrowser1 = New System.Windows.Forms.WebBrowser()
+        Me.uxReportOrRequest = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
@@ -35,9 +35,11 @@ Partial Class HelpForm
         '
         'TabControl1
         '
+        Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabControl1.Controls.Add(Me.TabPage1)
         Me.TabControl1.Controls.Add(Me.TabPage2)
-        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Top
         Me.TabControl1.Location = New System.Drawing.Point(5, 5)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
@@ -57,7 +59,9 @@ Partial Class HelpForm
         '
         'uxRichTextBox
         '
-        Me.uxRichTextBox.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.uxRichTextBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.uxRichTextBox.Location = New System.Drawing.Point(3, 3)
         Me.uxRichTextBox.Name = "uxRichTextBox"
         Me.uxRichTextBox.Size = New System.Drawing.Size(651, 374)
@@ -86,6 +90,7 @@ Partial Class HelpForm
         '
         'uxReportOrRequest
         '
+        Me.uxReportOrRequest.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.uxReportOrRequest.Location = New System.Drawing.Point(5, 417)
         Me.uxReportOrRequest.Name = "uxReportOrRequest"
         Me.uxReportOrRequest.Size = New System.Drawing.Size(202, 23)
