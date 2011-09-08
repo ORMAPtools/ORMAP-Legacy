@@ -132,6 +132,8 @@ Public Class SortCancelledNumbers
             AddHandler _partnerSortCancelledNumbersForm.uxCancelledNumbers.SelectedIndexChanged, AddressOf uxCancelledNumbers_SelectedIndexChanged
             AddHandler _partnerSortCancelledNumbersForm.uxFind.Click, AddressOf uxFind_Click
             AddHandler _partnerSortCancelledNumbersForm.uxMapIndex.TextChanged, AddressOf uxMapNumber_TextChanged
+            AddHandler _partnerSortCancelledNumbersForm.uxHelp.Click, AddressOf uxHelp_Click
+
         Else
             ' Unsubscribe to partner form events.
             RemoveHandler _partnerSortCancelledNumbersForm.Load, AddressOf PartnerSortCancelledNumbersForm_Load
@@ -146,6 +148,7 @@ Public Class SortCancelledNumbers
             RemoveHandler _partnerSortCancelledNumbersForm.uxCancelledNumbers.SelectedIndexChanged, AddressOf uxCancelledNumbers_SelectedIndexChanged
             RemoveHandler _partnerSortCancelledNumbersForm.uxFind.Click, AddressOf uxFind_Click
             RemoveHandler _partnerSortCancelledNumbersForm.uxMapIndex.TextChanged, AddressOf uxMapNumber_TextChanged
+            RemoveHandler _partnerSortCancelledNumbersForm.uxHelp.Click, AddressOf uxHelp_Click
         End If
     End Sub
 #End Region
@@ -187,7 +190,7 @@ Public Class SortCancelledNumbers
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks>Handles uxMapnumber.TextChanged</remarks>
-    Private Sub uxMapNumber_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) ' partnerLocateFeatureUserControl
+    Private Sub uxMapNumber_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         Dim uxMapNumber As TextBox = PartnerSortCancelledNumbersForm.uxMapIndex
 
@@ -210,7 +213,7 @@ Public Class SortCancelledNumbers
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks>Handles uxFind.Click</remarks>
-    Private Sub uxFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxTop.Click
+    Private Sub uxFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         With PartnerSortCancelledNumbersForm
             Try
@@ -267,7 +270,7 @@ Public Class SortCancelledNumbers
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks>Handles uxCancelledNumbers.SelectedIndexChanged</remarks>
-    Private Sub uxCancelledNumbers_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxCancelledNumbers.SelectedIndexChanged
+    Private Sub uxCancelledNumbers_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         With PartnerSortCancelledNumbersForm
             If .uxCancelledNumbers.SelectedIndex = 0 Then
@@ -298,7 +301,7 @@ Public Class SortCancelledNumbers
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks>Handles uxTop.Click</remarks>
-    Private Sub uxTop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxTop.Click
+    Private Sub uxTop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         MoveItems("++")
     End Sub
 
@@ -308,7 +311,7 @@ Public Class SortCancelledNumbers
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks>Handles uxUp.Click</remarks>
-    Private Sub uxUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxUp.Click
+    Private Sub uxUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         MoveItems("+")
     End Sub
 
@@ -318,7 +321,7 @@ Public Class SortCancelledNumbers
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks>Handles uxDown.Click </remarks>
-    Private Sub uxDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxDown.Click
+    Private Sub uxDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         MoveItems("-")
     End Sub
 
@@ -328,7 +331,7 @@ Public Class SortCancelledNumbers
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks>Handles uxBottom.Click</remarks>
-    Private Sub uxBottom_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxBottom.Click
+    Private Sub uxBottom_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         MoveItems("--")
     End Sub
 
@@ -338,7 +341,7 @@ Public Class SortCancelledNumbers
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks>Handles uxCancel.Click</remarks>
-    Private Sub uxCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxCancel.Click
+    Private Sub uxCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         PartnerSortCancelledNumbersForm.Hide()
     End Sub
 
@@ -348,7 +351,7 @@ Public Class SortCancelledNumbers
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks>Hnadles uxOK.Click</remarks>
-    Private Sub uxOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxOK.Click
+    Private Sub uxOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         '-- Start edit operation (must start edit operation due to versioning)
         Dim theDataset As IDataset = CancelledNumbersTable.Table
@@ -380,7 +383,7 @@ Public Class SortCancelledNumbers
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks>Handles uxDelete.Click</remarks>
-    Private Sub uxDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxDelete.Click
+    Private Sub uxDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         With PartnerSortCancelledNumbersForm
             Try
@@ -423,7 +426,7 @@ Public Class SortCancelledNumbers
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks>Handles uxAdd.Click</remarks>
-    Private Sub uxAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 'Handles uxAdd.Click
+    Private Sub uxAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         Dim theInputDialog As New InputDialog
         theInputDialog.uxLabel.Text = "Enter the Cancelled Number:"
@@ -460,6 +463,66 @@ Public Class SortCancelledNumbers
             .uxCancelledNumbers.Items.Insert(.uxCancelledNumbers.Items.Count, theInputDialog.Value)
 
         End With
+
+    End Sub
+
+    Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        ' TODO: [NIS] Could be replaced with new help mechanism.
+
+        Dim theRTFStream As System.IO.Stream = _
+           Me.GetType().Assembly.GetManifestResourceStream("OrmapTaxlotEditing.SortCancelledNumbers_help.rtf")
+        OpenHelp("Sort Cancelled Numbers Help", theRTFStream)
+
+        ' Get the help form.
+        'Dim theHelpForm As New HelpForm
+        'theHelpForm.Text = "Edit Map Index Help"
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        '' Open a custom help text file.
+        '' Note: Requires a specific file in the help subdirectory of the application directory.
+        'Dim theTextFilePath As String
+        'theTextFilePath = My.Application.Info.DirectoryPath & "\help\EditMapIndexHelp.rtf"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theTextFilePath) Then
+        '    theHelpForm.RichTextBox1.LoadFile(theTextFilePath, RichTextBoxStreamType.RichText)
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help" & ".")
+        '    theHelpForm.TabPage1.Hide()
+        'End If
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        ' Open a custom help pdf file.
+        ' Note: Requires a specific file in the help subdirectory of the application directory.
+        ' Requires Adobe Acrobat reader plug-in.
+        'Dim thePdfFilePath As String
+        'thePdfFilePath = My.Application.Info.DirectoryPath & "\help\EditMapIndexHelp.pdf"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(thePdfFilePath) Then
+        '    Dim theUri As New System.Uri("file:///" & thePdfFilePath)
+        '    theHelpForm.WebBrowser1.Url = theUri
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help" & ".")
+        '    theHelpForm.TabPage2.Hide()
+        'End If
+
+        ' KLUDGE: [NIS] Remove comments if file is ready.
+        '' Open a custom help video.
+        '' Note: Requires a specific file in the help\videos subdirectory of the application directory.
+        'Dim theVideoFilePath As String
+        'theVideoFilePath = My.Application.Info.DirectoryPath & "\help\videos\EditMapIndex\EditMapIndex.html"
+        'If Microsoft.VisualBasic.FileIO.FileSystem.FileExists(theVideoFilePath) Then
+        '    Dim theUri As New System.Uri("file:///" & theVideoFilePath)
+        '    theHelpForm.WebBrowser1.Url = theUri
+        'Else
+        '    MessageBox.Show("No help file available in the directory " & NewLine & _
+        '            My.Application.Info.DirectoryPath & "\help\videos\EditMapIndex" & ".")
+        '    theHelpForm.TabPage2.Hide()
+        'End If
+
+        ' KLUDGE: [NIS] Remove comments if form will be used.
+        'theHelpForm.Width = 668
+        'theHelpForm.Height = 400
+        'theHelpForm.Show()
 
     End Sub
 
