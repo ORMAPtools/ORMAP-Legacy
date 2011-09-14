@@ -39,13 +39,14 @@
 #Region "Imported Namespaces"
 Imports ESRI.ArcGIS.Editor
 Imports ESRI.ArcGIS.Geodatabase
-Imports OrmapTaxlotEditing.SpatialUtilities
-Imports OrmapTaxlotEditing.DataMonitor
 Imports System.Windows.Forms
 Imports System.Environment
 Imports ESRI.ArcGIS.Carto
-Imports OrmapTaxlotEditing.Utilities
 Imports ESRI.ArcGIS.Geometry
+Imports OrmapTaxlotEditing.SpatialUtilities
+Imports OrmapTaxlotEditing.DataMonitor
+Imports OrmapTaxlotEditing.Utilities
+
 
 #End Region
 
@@ -56,7 +57,6 @@ Public Class EditorExtension
     Inherits ESRI.ArcGIS.Desktop.AddIns.Extension
 
     Public Sub New()
-
     End Sub
 
 
@@ -694,14 +694,6 @@ Public Class EditorExtension
 #End Region
 
 #End Region
-
-
-
-
-
-
-
-
 
 
 End Class

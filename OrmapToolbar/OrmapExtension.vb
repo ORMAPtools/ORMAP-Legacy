@@ -18,7 +18,6 @@ Public Class OrmapExtension
     Implements IExtensionAccelerators
 
     Public Sub New()
-
     End Sub
 
     Protected Overrides Sub OnStartup()
@@ -38,7 +37,7 @@ Public Class OrmapExtension
             My.User.InitializeWithWindowsUser()
 
             ' Set up document keyboard accelerators for extension commands.
-            CreateAccelerators()
+            'CreateAccelerators()
 
         Catch ex As Exception
             ProcessUnhandledException(ex)
@@ -484,7 +483,6 @@ Public Class OrmapExtension
     End Sub
 
 #End Region
-
 
 #Region "IExtensionAccelerators Interface Implementation"
 
