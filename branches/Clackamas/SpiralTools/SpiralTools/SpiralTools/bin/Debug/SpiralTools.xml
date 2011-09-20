@@ -24,17 +24,17 @@ SpiralTools
 	<summary>
 Returns 'ORMAP_SpiralTools_SCS_button', the id declared for Add-in Button class 'SCS_button'
 </summary>
-</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SpiralConstruction">
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SpiralConstruction_Button">
 	<summary>
-Returns 'ORMAP_SpiralTools_SpiralConstruction', the id declared for Add-in Button class 'SpiralConstruction'
+Returns 'ORMAP_SpiralTools_SpiralConstruction_Button', the id declared for Add-in Button class 'SpiralConstruction_Button'
 </summary>
 </member><member name="P:SpiralTools.My.ThisAddIn.IDs.SpiralCurveSpiralDockWindow">
 	<summary>
 Returns 'ORMAP_SpiralTools_SpiralCurveSpiralDockWindow', the id declared for Add-in DockableWindow class 'SpiralCurveSpiralDockWindow+AddinImpl'
 </summary>
-</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SpiralCurveDockWindow">
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SpiralDockWindow">
 	<summary>
-Returns 'ORMAP_SpiralTools_SpiralCurveDockWindow', the id declared for Add-in DockableWindow class 'SpiralCurveDockWindow+AddinImpl'
+Returns 'ORMAP_SpiralTools_SpiralDockWindow', the id declared for Add-in DockableWindow class 'SpiralDockWindow+AddinImpl'
 </summary>
 </member><member name="P:SpiralTools.My.ThisAddIn.IDs.Spirals">
 	<summary>
@@ -52,6 +52,20 @@ A class for looking up declarative information in the associated configuration x
 	<summary>
  Expose this instance of Add-in class externally
  </summary>
+</member><member name="P:SpiralTools.SpiralDockWindow.Hook">
+	<summary>
+ Host object of the dockable window
+ </summary>
+</member><member name="T:SpiralTools.SpiralDockWindow.AddinImpl">
+	<summary>
+ Implementation class of the dockable window add-in. It is responsible for
+ creating and disposing the user interface class for the dockable window.
+ </summary>
+</member><member name="T:SpiralTools.SpiralDockWindow">
+	<summary>
+ Designer class of the dockable window add-in. It contains user interfaces that
+ make up the dockable window.
+ </summary>
 </member><member name="P:SpiralTools.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
@@ -65,20 +79,6 @@ A class for looking up declarative information in the associated configuration x
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
 </summary>
-</member><member name="P:SpiralTools.SpiralCurveDockWindow.Hook">
-	<summary>
- Host object of the dockable window
- </summary>
-</member><member name="T:SpiralTools.SpiralCurveDockWindow.AddinImpl">
-	<summary>
- Implementation class of the dockable window add-in. It is responsible for
- creating and disposing the user interface class for the dockable window.
- </summary>
-</member><member name="T:SpiralTools.SpiralCurveDockWindow">
-	<summary>
- Designer class of the dockable window add-in. It contains user interfaces that
- make up the dockable window.
- </summary>
 </member><member name="T:SpiralTools.Spirals">
 	<summary>
 Spirals class implementing custom ESRI Editor Extension functionalities.
