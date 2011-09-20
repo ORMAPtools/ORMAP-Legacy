@@ -1,0 +1,12 @@
+C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\bin\Debug\SpiralTools.dll
+C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\bin\Debug\SpiralTools.pdb
+C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\bin\Debug\SpiralTools.xml
+C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\ResolveAssemblyReference.cache
+C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\SpiralTools.Resources.resources
+C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\SpiralTools.SpiralCurveSpiral.resources
+C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\ResGen.read.1.tlog
+C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\ResGen.write.1.tlog
+C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\SpiralTools.dll
+C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\SpiralTools.xml
+C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\SpiralTools.pdb
+C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\bin\Debug\SpiralTools.esriAddIn
