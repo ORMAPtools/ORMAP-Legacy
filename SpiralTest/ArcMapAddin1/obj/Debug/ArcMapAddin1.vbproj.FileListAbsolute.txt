@@ -1,0 +1,11 @@
+C:\SpiralTest\ArcMapAddin1\bin\Debug\ArcMapAddin1.dll
+C:\SpiralTest\ArcMapAddin1\bin\Debug\ArcMapAddin1.pdb
+C:\SpiralTest\ArcMapAddin1\bin\Debug\ArcMapAddin1.xml
+C:\SpiralTest\ArcMapAddin1\obj\Debug\ResolveAssemblyReference.cache
+C:\SpiralTest\ArcMapAddin1\obj\Debug\ArcMapAddin1.Resources.resources
+C:\SpiralTest\ArcMapAddin1\obj\Debug\ResGen.read.1.tlog
+C:\SpiralTest\ArcMapAddin1\obj\Debug\ResGen.write.1.tlog
+C:\SpiralTest\ArcMapAddin1\obj\Debug\ArcMapAddin1.dll
+C:\SpiralTest\ArcMapAddin1\obj\Debug\ArcMapAddin1.xml
+C:\SpiralTest\ArcMapAddin1\obj\Debug\ArcMapAddin1.pdb
+C:\SpiralTest\ArcMapAddin1\bin\Debug\ArcMapAddin1.esriAddIn
