@@ -40,7 +40,11 @@ Public Class SpiralCurveSpiralDockWindow
       m_windowUI = New SpiralCurveSpiralDockWindow(Me.Hook)
       Return m_windowUI.Handle
     End Function
-
+        Friend ReadOnly Property UI As SpiralCurveSpiralDockWindow
+            Get
+                Return m_windowUI
+            End Get
+        End Property
     Protected Overrides Sub Dispose(ByVal Param As Boolean)
       If m_windowUI IsNot Nothing Then
         m_windowUI.Dispose(Param)

@@ -29,14 +29,14 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.uxGettoPoint = New System.Windows.Forms.Button()
         Me.uxGetFromPoint = New System.Windows.Forms.Button()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
-        Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.uxFromPointYValue = New System.Windows.Forms.TextBox()
+        Me.uxFromPointXValue = New System.Windows.Forms.TextBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.uxGetTangentPoint = New System.Windows.Forms.Button()
-        Me.TextBox5 = New System.Windows.Forms.TextBox()
-        Me.TextBox6 = New System.Windows.Forms.TextBox()
+        Me.uxTangentPointYValue = New System.Windows.Forms.TextBox()
+        Me.uxTangentPointXValue = New System.Windows.Forms.TextBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -136,25 +136,25 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxGetFromPoint.Text = "Get Point"
         Me.uxGetFromPoint.UseVisualStyleBackColor = True
         '
-        'TextBox3
+        'uxFromPointYValue
         '
-        Me.TextBox3.Location = New System.Drawing.Point(31, 44)
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(124, 20)
-        Me.TextBox3.TabIndex = 3
+        Me.uxFromPointYValue.Location = New System.Drawing.Point(31, 44)
+        Me.uxFromPointYValue.Name = "uxFromPointYValue"
+        Me.uxFromPointYValue.Size = New System.Drawing.Size(124, 20)
+        Me.uxFromPointYValue.TabIndex = 3
         '
-        'TextBox4
+        'uxFromPointXValue
         '
-        Me.TextBox4.Location = New System.Drawing.Point(31, 20)
-        Me.TextBox4.Name = "TextBox4"
-        Me.TextBox4.Size = New System.Drawing.Size(124, 20)
-        Me.TextBox4.TabIndex = 2
+        Me.uxFromPointXValue.Location = New System.Drawing.Point(31, 20)
+        Me.uxFromPointXValue.Name = "uxFromPointXValue"
+        Me.uxFromPointXValue.Size = New System.Drawing.Size(124, 20)
+        Me.uxFromPointXValue.TabIndex = 2
         '
         'GroupBox2
         '
         Me.GroupBox2.Controls.Add(Me.uxGetFromPoint)
-        Me.GroupBox2.Controls.Add(Me.TextBox3)
-        Me.GroupBox2.Controls.Add(Me.TextBox4)
+        Me.GroupBox2.Controls.Add(Me.uxFromPointYValue)
+        Me.GroupBox2.Controls.Add(Me.uxFromPointXValue)
         Me.GroupBox2.Controls.Add(Me.Label3)
         Me.GroupBox2.Controls.Add(Me.Label4)
         Me.GroupBox2.Location = New System.Drawing.Point(8, 285)
@@ -191,25 +191,25 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxGetTangentPoint.Text = "Get Point"
         Me.uxGetTangentPoint.UseVisualStyleBackColor = True
         '
-        'TextBox5
+        'uxTangentPointYValue
         '
-        Me.TextBox5.Location = New System.Drawing.Point(31, 44)
-        Me.TextBox5.Name = "TextBox5"
-        Me.TextBox5.Size = New System.Drawing.Size(124, 20)
-        Me.TextBox5.TabIndex = 3
+        Me.uxTangentPointYValue.Location = New System.Drawing.Point(31, 44)
+        Me.uxTangentPointYValue.Name = "uxTangentPointYValue"
+        Me.uxTangentPointYValue.Size = New System.Drawing.Size(124, 20)
+        Me.uxTangentPointYValue.TabIndex = 3
         '
-        'TextBox6
+        'uxTangentPointXValue
         '
-        Me.TextBox6.Location = New System.Drawing.Point(31, 20)
-        Me.TextBox6.Name = "TextBox6"
-        Me.TextBox6.Size = New System.Drawing.Size(124, 20)
-        Me.TextBox6.TabIndex = 2
+        Me.uxTangentPointXValue.Location = New System.Drawing.Point(31, 20)
+        Me.uxTangentPointXValue.Name = "uxTangentPointXValue"
+        Me.uxTangentPointXValue.Size = New System.Drawing.Size(124, 20)
+        Me.uxTangentPointXValue.TabIndex = 2
         '
         'GroupBox3
         '
         Me.GroupBox3.Controls.Add(Me.uxGetTangentPoint)
-        Me.GroupBox3.Controls.Add(Me.TextBox5)
-        Me.GroupBox3.Controls.Add(Me.TextBox6)
+        Me.GroupBox3.Controls.Add(Me.uxTangentPointYValue)
+        Me.GroupBox3.Controls.Add(Me.uxTangentPointXValue)
         Me.GroupBox3.Controls.Add(Me.Label5)
         Me.GroupBox3.Controls.Add(Me.Label6)
         Me.GroupBox3.Location = New System.Drawing.Point(8, 360)
@@ -266,14 +266,14 @@ Partial Class SpiralCurveSpiralDockWindow
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents uxGetFromPoint As System.Windows.Forms.Button
-    Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox4 As System.Windows.Forms.TextBox
+    Friend WithEvents uxFromPointYValue As System.Windows.Forms.TextBox
+    Friend WithEvents uxFromPointXValue As System.Windows.Forms.TextBox
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents uxGetTangentPoint As System.Windows.Forms.Button
-    Friend WithEvents TextBox5 As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox6 As System.Windows.Forms.TextBox
+    Friend WithEvents uxTangentPointYValue As System.Windows.Forms.TextBox
+    Friend WithEvents uxTangentPointXValue As System.Windows.Forms.TextBox
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Label6 As System.Windows.Forms.Label
