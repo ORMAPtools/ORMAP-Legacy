@@ -9,5 +9,5 @@ C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\Sp
 C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\SpiralTools.xml
 C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\SpiralTools.pdb
 C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\SpiralTools.SpiralCurveSpiralDockWindow.resources
-C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\SpiralTools.uxSpiralCurve.resources
+C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\obj\Debug\SpiralTools.SpiralDockWindow.resources
 C:\ORMAP_dev\branches\Clackamas\SpiralTools\SpiralTools\SpiralTools\bin\Debug\SpiralTools.esriAddIn
