@@ -14,7 +14,10 @@
     <ArcMap>
       <Toolbars>
         <Toolbar id="ORMAP_SpiralTools_Spiral_Construction_Toolbar" caption="Spiral Construction Toolbar" showInitially="false">
-          <Items />
+          <Items>
+            <Button refID="ORMAP_SpiralTools_SCS_button" />
+            <Button refID="ORMAP_SpiralTools_SpiralConstruction"/>
+          </Items>
         </Toolbar>
       </Toolbars>
       <Commands>
@@ -25,7 +28,7 @@
         <DockableWindow id="ORMAP_SpiralTools_SpiralCurveSpiralDockWindow" class="SpiralCurveSpiralDockWindow+AddinImpl" caption="Spiral-Curve-Spiral Transition Tool" image="Images\SpiralCurveSpiral.png">
           <InitialPlacement height="300" width="300" state="unpinned" position="float" />
         </DockableWindow>
-        <DockableWindow id="ORMAP_SpiralTools_SpiralCurveDockWindow" class="SpiralCurveDockWindow+AddinImpl" caption="Single Spiral Dock Window" image="Images\SpiralCurveDockWindow.png">
+        <DockableWindow id="ORMAP_SpiralTools_SpiralDockWindow" class="SpiralDockWindow+AddinImpl" caption="Single Spiral Dock Window" image="Images\SpiralCurveDockWindow.png">
           <InitialPlacement height="300" width="300" state="pinned" position="left" />
         </DockableWindow>
       </DockableWindows>

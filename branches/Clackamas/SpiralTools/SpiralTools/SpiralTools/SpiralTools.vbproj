@@ -159,10 +159,10 @@
   <ItemGroup>
     <Compile Include="SCS_button.vb" />
     <Compile Include="SpiralConstruction.vb" />
-    <Compile Include="SpiralCurveDockWindow.Designer.vb">
-      <DependentUpon>SpiralCurveDockWindow.vb</DependentUpon>
+    <Compile Include="SpiralDockWindow.Designer.vb">
+      <DependentUpon>SpiralDockWindow.vb</DependentUpon>
     </Compile>
-    <Compile Include="SpiralCurveDockWindow.vb">
+    <Compile Include="SpiralDockWindow.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SpiralCurveSpiralDockWindow.Designer.vb">
