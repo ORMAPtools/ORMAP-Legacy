@@ -1,0 +1,40 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+ArcMapAddin1
+</name>
+</assembly>
+<members>
+<member name="P:ArcMapAddin1.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:ArcMapAddin1.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:ArcMapAddin1.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="P:ArcMapAddin1.My.ThisAddIn.IDs.Spiral">
+	<summary>
+Returns 'Clackamas_County_ArcMapAddin1_Spiral', the id declared for Add-in Tool class 'Spiral'
+</summary>
+</member><member name="T:ArcMapAddin1.My.ThisAddIn.IDs">
+	<summary>
+A class for looking up Add-in id strings declared in the associated configuration xml file (.esriaddinx).
+</summary>
+</member><member name="T:ArcMapAddin1.My.ThisAddIn">
+	<summary>
+A class for looking up declarative information in the associated configuration xml file (.esriaddinx).
+</summary>
+</member><member name="M:ArcMapAddin1.My.Internal.AddInStartupObject.GetThis">
+	<summary>
+ Expose this instance of Add-in class externally
+ </summary>
+</member>
+</members>
+</doc>
