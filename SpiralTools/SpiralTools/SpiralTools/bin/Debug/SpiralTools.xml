@@ -6,9 +6,39 @@ SpiralTools
 </name>
 </assembly>
 <members>
-<member name="P:SpiralTools.My.ThisAddIn.IDs.Spirals">
+<member name="P:SpiralTools.SpiralCurveSpiralDockWindow.Hook">
 	<summary>
-Returns 'Microsoft_SpiralTools_Spirals', the id declared for Add-in Extension class 'Spirals'
+ Host object of the dockable window
+ </summary>
+</member><member name="T:SpiralTools.SpiralCurveSpiralDockWindow.AddinImpl">
+	<summary>
+ Implementation class of the dockable window add-in. It is responsible for
+ creating and disposing the user interface class for the dockable window.
+ </summary>
+</member><member name="T:SpiralTools.SpiralCurveSpiralDockWindow">
+	<summary>
+ Designer class of the dockable window add-in. It contains user interfaces that
+ make up the dockable window.
+ </summary>
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SCS_button">
+	<summary>
+Returns 'ORMAP_SpiralTools_SCS_button', the id declared for Add-in Button class 'SCS_button'
+</summary>
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SpiralConstruction">
+	<summary>
+Returns 'ORMAP_SpiralTools_SpiralConstruction', the id declared for Add-in Button class 'SpiralConstruction'
+</summary>
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SpiralCurveSpiralDockWindow">
+	<summary>
+Returns 'ORMAP_SpiralTools_SpiralCurveSpiralDockWindow', the id declared for Add-in DockableWindow class 'SpiralCurveSpiralDockWindow+AddinImpl'
+</summary>
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SpiralCurveDockWindow">
+	<summary>
+Returns 'ORMAP_SpiralTools_SpiralCurveDockWindow', the id declared for Add-in DockableWindow class 'SpiralCurveDockWindow+AddinImpl'
+</summary>
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.Spirals">
+	<summary>
+Returns 'ORMAP_SpiralTools_Spirals', the id declared for Add-in Extension class 'Spirals'
 </summary>
 </member><member name="T:SpiralTools.My.ThisAddIn.IDs">
 	<summary>
@@ -35,6 +65,20 @@ A class for looking up declarative information in the associated configuration x
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
 </summary>
+</member><member name="P:SpiralTools.SpiralCurveDockWindow.Hook">
+	<summary>
+ Host object of the dockable window
+ </summary>
+</member><member name="T:SpiralTools.SpiralCurveDockWindow.AddinImpl">
+	<summary>
+ Implementation class of the dockable window add-in. It is responsible for
+ creating and disposing the user interface class for the dockable window.
+ </summary>
+</member><member name="T:SpiralTools.SpiralCurveDockWindow">
+	<summary>
+ Designer class of the dockable window add-in. It contains user interfaces that
+ make up the dockable window.
+ </summary>
 </member><member name="T:SpiralTools.Spirals">
 	<summary>
 Spirals class implementing custom ESRI Editor Extension functionalities.
