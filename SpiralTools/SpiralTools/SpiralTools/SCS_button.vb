@@ -39,7 +39,7 @@ Public Class SCS_button
     Friend ReadOnly Property partnerSCSDockFormUI() As SpiralCurveSpiralDockWindow
         Get
             If _partnerSCSDockWindowUI Is Nothing Then
-                'setPartnerSCSDockFormUI()
+                setPartnerSCSDockFormUI(AddIn.FromID(Of SpiralCurveSpiralDockWindow.AddinImpl)(My.ThisAddIn.IDs.SpiralCurveSpiralDockWindow).UI)
             End If
             Return _partnerSCSDockWindowUI
         End Get
@@ -54,6 +54,7 @@ Public Class SCS_button
             AddHandler _partnerSCSDockWindowUI.uxHelp.Click, AddressOf uxHelp_Click
             AddHandler _partnerSCSDockWindowUI.uxGettoPoint.Click, AddressOf uxGettoPoint_Click
             AddHandler _partnerSCSDockWindowUI.uxGetTangentPoint.Click, AddressOf uxGetTangentPoint_Click
+            AddHandler _partnerSCSDockWindowUI.uxGetFromPoint.Click, AddressOf uxGetFromPoint_Click
         Else
             'unSubscribe to partner form events
             RemoveHandler _partnerSCSDockWindowUI.uxCreate.Click, AddressOf uxCreate_Click
@@ -61,6 +62,7 @@ Public Class SCS_button
             RemoveHandler _partnerSCSDockWindowUI.uxHelp.Click, AddressOf uxHelp_Click
             RemoveHandler _partnerSCSDockWindowUI.uxGettoPoint.Click, AddressOf uxGettoPoint_Click
             RemoveHandler _partnerSCSDockWindowUI.uxGetTangentPoint.Click, AddressOf uxGetTangentPoint_Click
+            RemoveHandler _partnerSCSDockWindowUI.uxGetFromPoint.Click, AddressOf uxGetFromPoint_Click
         End If
     End Sub
 #End Region
@@ -83,7 +85,9 @@ Public Class SCS_button
     Private Sub uxGetTangentPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
     End Sub
+    Private Sub uxGetFromPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
+    End Sub
 #End Region
 
 #Region "Methods"
@@ -93,7 +97,7 @@ Public Class SCS_button
 
     Protected Overrides Sub OnClick()
         Try
-
+            DoButtonOperation()
         Catch ex As Exception
 
         End Try
