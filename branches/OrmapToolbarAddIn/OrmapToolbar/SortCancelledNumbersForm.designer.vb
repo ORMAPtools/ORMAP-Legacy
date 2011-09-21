@@ -31,25 +31,25 @@ Partial Class SortCancelledNumbersForm
         Me.uxOK = New System.Windows.Forms.Button()
         Me.uxAdd = New System.Windows.Forms.Button()
         Me.uxDelete = New System.Windows.Forms.Button()
+        Me.uxHelp = New System.Windows.Forms.Button()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.uxFind = New System.Windows.Forms.Button()
         Me.uxMapIndex = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.uxFind = New System.Windows.Forms.Button()
-        Me.ShapeContainer1 = New Microsoft.VisualBasic.PowerPacks.ShapeContainer()
-        Me.LineShape1 = New Microsoft.VisualBasic.PowerPacks.LineShape()
-        Me.uxHelp = New System.Windows.Forms.Button()
+        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'uxCancelledNumbers
         '
         Me.uxCancelledNumbers.FormattingEnabled = True
-        Me.uxCancelledNumbers.Location = New System.Drawing.Point(12, 51)
+        Me.uxCancelledNumbers.Location = New System.Drawing.Point(7, 62)
         Me.uxCancelledNumbers.Name = "uxCancelledNumbers"
         Me.uxCancelledNumbers.Size = New System.Drawing.Size(225, 381)
         Me.uxCancelledNumbers.TabIndex = 0
         '
         'uxTop
         '
-        Me.uxTop.Location = New System.Drawing.Point(243, 129)
+        Me.uxTop.Location = New System.Drawing.Point(238, 151)
         Me.uxTop.Name = "uxTop"
         Me.uxTop.Size = New System.Drawing.Size(52, 23)
         Me.uxTop.TabIndex = 1
@@ -58,7 +58,7 @@ Partial Class SortCancelledNumbersForm
         '
         'uxUp
         '
-        Me.uxUp.Location = New System.Drawing.Point(243, 158)
+        Me.uxUp.Location = New System.Drawing.Point(238, 180)
         Me.uxUp.Name = "uxUp"
         Me.uxUp.Size = New System.Drawing.Size(52, 23)
         Me.uxUp.TabIndex = 2
@@ -67,7 +67,7 @@ Partial Class SortCancelledNumbersForm
         '
         'uxDown
         '
-        Me.uxDown.Location = New System.Drawing.Point(243, 200)
+        Me.uxDown.Location = New System.Drawing.Point(238, 222)
         Me.uxDown.Name = "uxDown"
         Me.uxDown.Size = New System.Drawing.Size(52, 23)
         Me.uxDown.TabIndex = 3
@@ -76,7 +76,7 @@ Partial Class SortCancelledNumbersForm
         '
         'uxBottom
         '
-        Me.uxBottom.Location = New System.Drawing.Point(243, 229)
+        Me.uxBottom.Location = New System.Drawing.Point(238, 251)
         Me.uxBottom.Name = "uxBottom"
         Me.uxBottom.Size = New System.Drawing.Size(52, 23)
         Me.uxBottom.TabIndex = 4
@@ -85,7 +85,7 @@ Partial Class SortCancelledNumbersForm
         '
         'uxCancel
         '
-        Me.uxCancel.Location = New System.Drawing.Point(162, 438)
+        Me.uxCancel.Location = New System.Drawing.Point(157, 448)
         Me.uxCancel.Name = "uxCancel"
         Me.uxCancel.Size = New System.Drawing.Size(75, 23)
         Me.uxCancel.TabIndex = 5
@@ -94,7 +94,7 @@ Partial Class SortCancelledNumbersForm
         '
         'uxOK
         '
-        Me.uxOK.Location = New System.Drawing.Point(81, 438)
+        Me.uxOK.Location = New System.Drawing.Point(76, 448)
         Me.uxOK.Name = "uxOK"
         Me.uxOK.Size = New System.Drawing.Size(75, 23)
         Me.uxOK.TabIndex = 6
@@ -103,7 +103,7 @@ Partial Class SortCancelledNumbersForm
         '
         'uxAdd
         '
-        Me.uxAdd.Location = New System.Drawing.Point(243, 326)
+        Me.uxAdd.Location = New System.Drawing.Point(238, 348)
         Me.uxAdd.Name = "uxAdd"
         Me.uxAdd.Size = New System.Drawing.Size(52, 23)
         Me.uxAdd.TabIndex = 7
@@ -112,77 +112,69 @@ Partial Class SortCancelledNumbersForm
         '
         'uxDelete
         '
-        Me.uxDelete.Location = New System.Drawing.Point(243, 355)
+        Me.uxDelete.Location = New System.Drawing.Point(238, 377)
         Me.uxDelete.Name = "uxDelete"
         Me.uxDelete.Size = New System.Drawing.Size(53, 23)
         Me.uxDelete.TabIndex = 8
         Me.uxDelete.Text = "Delete"
         Me.uxDelete.UseVisualStyleBackColor = True
         '
-        'uxMapIndex
-        '
-        Me.uxMapIndex.AllowDrop = True
-        Me.uxMapIndex.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
-        Me.uxMapIndex.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
-        Me.uxMapIndex.Location = New System.Drawing.Point(114, 12)
-        Me.uxMapIndex.Name = "uxMapIndex"
-        Me.uxMapIndex.Size = New System.Drawing.Size(123, 20)
-        Me.uxMapIndex.TabIndex = 9
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(9, 15)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(99, 13)
-        Me.Label1.TabIndex = 10
-        Me.Label1.Text = "Enter Map Number:"
-        '
-        'uxFind
-        '
-        Me.uxFind.Location = New System.Drawing.Point(243, 10)
-        Me.uxFind.Name = "uxFind"
-        Me.uxFind.Size = New System.Drawing.Size(52, 23)
-        Me.uxFind.TabIndex = 11
-        Me.uxFind.Text = "Find"
-        Me.uxFind.UseVisualStyleBackColor = True
-        '
-        'ShapeContainer1
-        '
-        Me.ShapeContainer1.Location = New System.Drawing.Point(0, 0)
-        Me.ShapeContainer1.Margin = New System.Windows.Forms.Padding(0)
-        Me.ShapeContainer1.Name = "ShapeContainer1"
-        Me.ShapeContainer1.Shapes.AddRange(New Microsoft.VisualBasic.PowerPacks.Shape() {Me.LineShape1})
-        Me.ShapeContainer1.Size = New System.Drawing.Size(308, 473)
-        Me.ShapeContainer1.TabIndex = 12
-        Me.ShapeContainer1.TabStop = False
-        '
-        'LineShape1
-        '
-        Me.LineShape1.Name = "LineShape1"
-        Me.LineShape1.X1 = 6
-        Me.LineShape1.X2 = 301
-        Me.LineShape1.Y1 = 41
-        Me.LineShape1.Y2 = 41
-        '
         'uxHelp
         '
-        Me.uxHelp.Location = New System.Drawing.Point(243, 438)
+        Me.uxHelp.Location = New System.Drawing.Point(238, 448)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(52, 23)
         Me.uxHelp.TabIndex = 13
         Me.uxHelp.Text = "Help"
         Me.uxHelp.UseVisualStyleBackColor = True
         '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.Label1)
+        Me.GroupBox1.Controls.Add(Me.uxFind)
+        Me.GroupBox1.Controls.Add(Me.uxMapIndex)
+        Me.GroupBox1.Location = New System.Drawing.Point(7, 7)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(283, 49)
+        Me.GroupBox1.TabIndex = 14
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Find Map Index:"
+        '
+        'uxFind
+        '
+        Me.uxFind.Location = New System.Drawing.Point(218, 17)
+        Me.uxFind.Name = "uxFind"
+        Me.uxFind.Size = New System.Drawing.Size(52, 23)
+        Me.uxFind.TabIndex = 14
+        Me.uxFind.Text = "Find"
+        Me.uxFind.UseVisualStyleBackColor = True
+        '
+        'uxMapIndex
+        '
+        Me.uxMapIndex.AllowDrop = True
+        Me.uxMapIndex.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
+        Me.uxMapIndex.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
+        Me.uxMapIndex.Location = New System.Drawing.Point(100, 19)
+        Me.uxMapIndex.Name = "uxMapIndex"
+        Me.uxMapIndex.Size = New System.Drawing.Size(112, 20)
+        Me.uxMapIndex.TabIndex = 12
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(6, 22)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(88, 13)
+        Me.Label1.TabIndex = 15
+        Me.Label1.Text = "Enter Map Index:"
+        '
         'SortCancelledNumbersForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(308, 473)
+        Me.ClientSize = New System.Drawing.Size(298, 479)
+        Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.uxHelp)
-        Me.Controls.Add(Me.uxFind)
-        Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.uxMapIndex)
         Me.Controls.Add(Me.uxDelete)
         Me.Controls.Add(Me.uxAdd)
         Me.Controls.Add(Me.uxOK)
@@ -192,14 +184,14 @@ Partial Class SortCancelledNumbersForm
         Me.Controls.Add(Me.uxUp)
         Me.Controls.Add(Me.uxTop)
         Me.Controls.Add(Me.uxCancelledNumbers)
-        Me.Controls.Add(Me.ShapeContainer1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "SortCancelledNumbersForm"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Sort Cancelled Numbers"
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents uxCancelledNumbers As System.Windows.Forms.ListBox
@@ -211,10 +203,9 @@ Partial Class SortCancelledNumbersForm
     Friend WithEvents uxOK As System.Windows.Forms.Button
     Friend WithEvents uxAdd As System.Windows.Forms.Button
     Friend WithEvents uxDelete As System.Windows.Forms.Button
-    Friend WithEvents uxMapIndex As System.Windows.Forms.TextBox
+    Friend WithEvents uxHelp As System.Windows.Forms.Button
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents uxFind As System.Windows.Forms.Button
-    Friend WithEvents ShapeContainer1 As Microsoft.VisualBasic.PowerPacks.ShapeContainer
-    Friend WithEvents LineShape1 As Microsoft.VisualBasic.PowerPacks.LineShape
-    Friend WithEvents uxHelp As System.Windows.Forms.Button
+    Friend WithEvents uxMapIndex As System.Windows.Forms.TextBox
 End Class
