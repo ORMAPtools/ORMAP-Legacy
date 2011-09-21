@@ -75,15 +75,21 @@ Public Class SortCancelledNumbers
     ''' <remarks>Handles on click event of button</remarks>
     Protected Overrides Sub OnClick()
 
-        '-- Make sure this is not null
-        If CancelledNumbersTable Is Nothing Then CheckValidCancelledNumbersTableDataProperties()
+        Try
+            '-- Make sure this is not null
+            If CancelledNumbersTable Is Nothing Then CheckValidCancelledNumbersTableDataProperties()
 
-        If CancelledNumbersTable.Table.FindField("SortOrder") = NotFoundIndex Then
-            MessageBox.Show("This tool requires a field named 'SortOrder' in your cancelled numbers table.  To start using this tool, please add this field and calculate all features SortOrder value equal to the ObjectId field.  IMPORTANT: Be sure to set your Map Production tools to use the SortOrder field also.", "Missing Field", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        End If
+            If CancelledNumbersTable.Table.FindField("SortOrder") = NotFoundIndex Then
+                MessageBox.Show("This tool requires a field named 'SortOrder' in your cancelled numbers table.  To start using this tool, please add this field and calculate all features SortOrder value equal to the ObjectId field.  IMPORTANT: Be sure to set your Map Production tools to use the SortOrder field also.", "Missing Field", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            End If
 
-        PartnerSortCancelledNumbersForm.ShowDialog()
+            PartnerSortCancelledNumbersForm.ShowDialog()
+
+        Catch ex As Exception
+            OrmapExtension.ProcessUnhandledException(ex)
+        End Try
+
     End Sub
 
     ''' <summary>
@@ -133,6 +139,12 @@ Public Class SortCancelledNumbers
             AddHandler _partnerSortCancelledNumbersForm.uxFind.Click, AddressOf uxFind_Click
             AddHandler _partnerSortCancelledNumbersForm.uxMapIndex.TextChanged, AddressOf uxMapNumber_TextChanged
             AddHandler _partnerSortCancelledNumbersForm.uxHelp.Click, AddressOf uxHelp_Click
+
+
+
+            AddHandler _partnerSortCancelledNumbersForm.uxMapIndex.KeyDown, AddressOf uxMapIndex_KeyDown
+
+
 
         Else
             ' Unsubscribe to partner form events.
@@ -224,7 +236,6 @@ Public Class SortCancelledNumbers
                 End If
 
                 .UseWaitCursor = True
-
                 .uxCancelledNumbers.Items.Clear()
 
                 If .uxCancelledNumbers.SelectedIndex = -1 Then .uxDelete.Enabled = False
@@ -294,6 +305,17 @@ Public Class SortCancelledNumbers
         End With
 
     End Sub
+
+    ''' <summary>
+    ''' Event Handler
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks>Handles uxMapIndex.KeyDown</remarks>
+    Private Sub uxMapIndex_KeyDown(sender As Object, e As KeyEventArgs)
+        If e.KeyCode = Keys.Enter Then PartnerSortCancelledNumbersForm.uxFind.PerformClick()
+    End Sub
+
 
     ''' <summary>
     ''' Event Handler
@@ -564,5 +586,10 @@ Public Class SortCancelledNumbers
 #End Region
 
 #End Region
+
+
+
+
+
 
 End Class

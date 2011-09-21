@@ -233,6 +233,10 @@ Public Class EditorExtension
 
 #Region "Fields"
     Private _isDuringAutoUpdate As Boolean
+    Private _activeViewEvents As ESRI.ArcGIS.Carto.IActiveViewEvents_Event
+    Private _ActiveViewEventsFocusMapChanged As ESRI.ArcGIS.Carto.IActiveViewEvents_FocusMapChangedEventHandler
+    Private _ActiveViewEventsItemAdded As ESRI.ArcGIS.Carto.IActiveViewEvents_ItemAddedEventHandler
+    Private _ActiveViewEventsItemDeleted As ESRI.ArcGIS.Carto.IActiveViewEvents_ItemDeletedEventHandler
 #End Region
 
 #Region "Event Handlers"
@@ -307,7 +311,6 @@ Public Class EditorExtension
     Public Sub ActiveViewEvents_ItemAddedOrDeleted(ByVal Item As Object)
         Try
             ClearAllValidDataProperties()
-            MsgBox("ADDING OR DELETING")
         Catch ex As Exception
             OrmapExtension.ProcessUnhandledException(ex)
         End Try
@@ -342,9 +345,19 @@ Public Class EditorExtension
                 AddHandler Events.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
                 AddHandler Events.OnDeleteFeature, AddressOf EditEvents_OnDeleteFeature
 
-                AddHandler DirectCast(My.ArcMap.Document.FocusMap, IActiveViewEvents_Event).FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged  ' TODO: [NIS] Reset this when the focus map changes?
-                AddHandler DirectCast(My.ArcMap.Document.FocusMap, IActiveViewEvents_Event).ItemAdded, AddressOf ActiveViewEvents_ItemAddedOrDeleted
-                AddHandler DirectCast(My.ArcMap.Document.FocusMap, IActiveViewEvents_Event).ItemDeleted, AddressOf ActiveViewEvents_ItemAddedOrDeleted
+                _activeViewEvents = TryCast(My.Document.ActiveView.FocusMap, ESRI.ArcGIS.Carto.IActiveViewEvents_Event)
+
+                'Create an instance of the delegate, add it to FocusMapChanged event
+                _ActiveViewEventsFocusMapChanged = New IActiveViewEvents_FocusMapChangedEventHandler(AddressOf ActiveViewEvents_FocusMapChanged)
+                AddHandler _activeViewEvents.FocusMapChanged, _ActiveViewEventsFocusMapChanged
+
+                'Create an instance of the delegate, add it to ItemAdded event
+                _ActiveViewEventsItemAdded = New IActiveViewEvents_ItemAddedEventHandler(AddressOf ActiveViewEvents_ItemAddedOrDeleted)
+                AddHandler _activeViewEvents.ItemAdded, _ActiveViewEventsItemAdded
+
+                'Create an instance of the delegate, add it to ItemDeleted event
+                _ActiveViewEventsItemDeleted = New IActiveViewEvents_ItemDeletedEventHandler(AddressOf ActiveViewEvents_ItemAddedOrDeleted)
+                AddHandler _activeViewEvents.ItemDeleted, _ActiveViewEventsItemDeleted
 
                 ' Set the valid data properties.
                 ClearAllValidDataProperties()
@@ -366,14 +379,20 @@ Public Class EditorExtension
         Try
             'Since features of shapefiles, coverages etc cannot be validated, ignore wiring events for them
             If My.ArcMap.Editor.EditWorkspace.Type <> esriWorkspaceType.esriFileSystemWorkspace Then
+
+                ' Unsubscribe to active view events.
+                RemoveHandler _activeViewEvents.FocusMapChanged, _ActiveViewEventsFocusMapChanged
+                RemoveHandler _activeViewEvents.ItemAdded, _ActiveViewEventsItemAdded
+                RemoveHandler _activeViewEvents.ItemDeleted, _ActiveViewEventsItemDeleted
+
+                _activeViewEvents = Nothing
+                _ActiveViewEventsFocusMapChanged = Nothing
+                _ActiveViewEventsItemAdded = Nothing
+                _ActiveViewEventsItemDeleted = Nothing
+
                 RemoveHandler Events.OnCreateFeature, AddressOf EditEvents_OnCreateFeature
                 RemoveHandler Events.OnChangeFeature, AddressOf EditEvents_OnChangeFeature
                 RemoveHandler Events.OnDeleteFeature, AddressOf EditEvents_OnDeleteFeature
-
-                ' Unsubscribe to active view events.
-                RemoveHandler DirectCast(My.ArcMap.Document.FocusMap, IActiveViewEvents_Event).FocusMapChanged, AddressOf ActiveViewEvents_FocusMapChanged
-                RemoveHandler DirectCast(My.ArcMap.Document.FocusMap, IActiveViewEvents_Event).ItemAdded, AddressOf ActiveViewEvents_ItemAddedOrDeleted
-                RemoveHandler DirectCast(My.ArcMap.Document.FocusMap, IActiveViewEvents_Event).ItemDeleted, AddressOf ActiveViewEvents_ItemAddedOrDeleted
 
             End If
 
