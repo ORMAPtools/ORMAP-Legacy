@@ -20,7 +20,6 @@ Partial Class SpiralCurveSpiralDockWindow
   <System.Diagnostics.DebuggerStepThrough()> _
   Private Sub InitializeComponent()
         Me.uxCreate = New System.Windows.Forms.Button()
-        Me.uxCancel = New System.Windows.Forms.Button()
         Me.uxHelp = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.uxGettoPoint = New System.Windows.Forms.Button()
@@ -46,6 +45,8 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxCurvebyDegree = New System.Windows.Forms.RadioButton()
         Me.uxCurveByRadius = New System.Windows.Forms.RadioButton()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.uxDeltaAngleValue = New System.Windows.Forms.TextBox()
+        Me.uxArcLengthValue = New System.Windows.Forms.TextBox()
         Me.uxSpiralsbyDelta = New System.Windows.Forms.RadioButton()
         Me.uxSpiralsbyArclength = New System.Windows.Forms.RadioButton()
         Me.Label7 = New System.Windows.Forms.Label()
@@ -55,8 +56,6 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxCurvetotheRight = New System.Windows.Forms.RadioButton()
         Me.Template = New System.Windows.Forms.Label()
         Me.uxTargetTemplate = New System.Windows.Forms.TextBox()
-        Me.uxArcLengthValue = New System.Windows.Forms.TextBox()
-        Me.uxDeltaAngleValue = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -74,18 +73,9 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxCreate.Text = "Create"
         Me.uxCreate.UseVisualStyleBackColor = True
         '
-        'uxCancel
-        '
-        Me.uxCancel.Location = New System.Drawing.Point(91, 507)
-        Me.uxCancel.Name = "uxCancel"
-        Me.uxCancel.Size = New System.Drawing.Size(75, 23)
-        Me.uxCancel.TabIndex = 1
-        Me.uxCancel.Text = "Cancel"
-        Me.uxCancel.UseVisualStyleBackColor = True
-        '
         'uxHelp
         '
-        Me.uxHelp.Location = New System.Drawing.Point(179, 507)
+        Me.uxHelp.Location = New System.Drawing.Point(84, 507)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
         Me.uxHelp.TabIndex = 2
@@ -320,6 +310,20 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "Define both Sprials using:"
         '
+        'uxDeltaAngleValue
+        '
+        Me.uxDeltaAngleValue.Location = New System.Drawing.Point(88, 40)
+        Me.uxDeltaAngleValue.Name = "uxDeltaAngleValue"
+        Me.uxDeltaAngleValue.Size = New System.Drawing.Size(100, 20)
+        Me.uxDeltaAngleValue.TabIndex = 3
+        '
+        'uxArcLengthValue
+        '
+        Me.uxArcLengthValue.Location = New System.Drawing.Point(88, 20)
+        Me.uxArcLengthValue.Name = "uxArcLengthValue"
+        Me.uxArcLengthValue.Size = New System.Drawing.Size(100, 20)
+        Me.uxArcLengthValue.TabIndex = 2
+        '
         'uxSpiralsbyDelta
         '
         Me.uxSpiralsbyDelta.AutoSize = True
@@ -410,20 +414,6 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxTargetTemplate.Size = New System.Drawing.Size(254, 20)
         Me.uxTargetTemplate.TabIndex = 12
         '
-        'uxArcLengthValue
-        '
-        Me.uxArcLengthValue.Location = New System.Drawing.Point(88, 20)
-        Me.uxArcLengthValue.Name = "uxArcLengthValue"
-        Me.uxArcLengthValue.Size = New System.Drawing.Size(100, 20)
-        Me.uxArcLengthValue.TabIndex = 2
-        '
-        'uxDeltaAngleValue
-        '
-        Me.uxDeltaAngleValue.Location = New System.Drawing.Point(88, 40)
-        Me.uxDeltaAngleValue.Name = "uxDeltaAngleValue"
-        Me.uxDeltaAngleValue.Size = New System.Drawing.Size(100, 20)
-        Me.uxDeltaAngleValue.TabIndex = 3
-        '
         'SpiralCurveSpiralDockWindow
         '
         Me.Controls.Add(Me.uxTargetTemplate)
@@ -437,7 +427,6 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.uxHelp)
-        Me.Controls.Add(Me.uxCancel)
         Me.Controls.Add(Me.uxCreate)
         Me.Name = "SpiralCurveSpiralDockWindow"
         Me.Size = New System.Drawing.Size(283, 553)
@@ -458,7 +447,6 @@ Partial Class SpiralCurveSpiralDockWindow
 
     End Sub
     Friend WithEvents uxCreate As System.Windows.Forms.Button
-    Friend WithEvents uxCancel As System.Windows.Forms.Button
     Friend WithEvents uxHelp As System.Windows.Forms.Button
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents uxGettoPoint As System.Windows.Forms.Button

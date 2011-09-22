@@ -10,6 +10,7 @@ Imports ESRI.ArcGIS.Framework
 Imports ESRI.ArcGIS.Geodatabase
 Imports ESRI.ArcGIS.Geometry
 Imports ESRI.ArcGIS.Desktop.AddIns
+Imports ESRI.ArcGIS.Display
 
 #End Region
 
@@ -35,7 +36,7 @@ Public Class SCS_button
 
     Private _partnerSCSDockWindow As IDockableWindow
     Private WithEvents _partnerSCSDockWindowUI As SpiralCurveSpiralDockWindow
-
+   
     Friend ReadOnly Property partnerSCSDockFormUI() As SpiralCurveSpiralDockWindow
         Get
             If _partnerSCSDockWindowUI Is Nothing Then
@@ -50,7 +51,6 @@ Public Class SCS_button
             _partnerSCSDockWindowUI = value
             'subscribe to partner form events
             AddHandler _partnerSCSDockWindowUI.uxCreate.Click, AddressOf uxCreate_Click
-            AddHandler _partnerSCSDockWindowUI.uxCancel.Click, AddressOf uxCancel_Click
             AddHandler _partnerSCSDockWindowUI.uxHelp.Click, AddressOf uxHelp_Click
             AddHandler _partnerSCSDockWindowUI.uxGettoPoint.Click, AddressOf uxGettoPoint_Click
             AddHandler _partnerSCSDockWindowUI.uxGetTangentPoint.Click, AddressOf uxGetTangentPoint_Click
@@ -64,7 +64,6 @@ Public Class SCS_button
         Else
             'unSubscribe to partner form events
             RemoveHandler _partnerSCSDockWindowUI.uxCreate.Click, AddressOf uxCreate_Click
-            RemoveHandler _partnerSCSDockWindowUI.uxCancel.Click, AddressOf uxCancel_Click
             RemoveHandler _partnerSCSDockWindowUI.uxHelp.Click, AddressOf uxHelp_Click
             RemoveHandler _partnerSCSDockWindowUI.uxGettoPoint.Click, AddressOf uxGettoPoint_Click
             RemoveHandler _partnerSCSDockWindowUI.uxGetTangentPoint.Click, AddressOf uxGetTangentPoint_Click
@@ -82,17 +81,18 @@ Public Class SCS_button
 #Region "Event Handler"
 
     Private Sub uxCreate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
+        MsgBox("This Works")
     End Sub
 
-    Private Sub uxCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-    End Sub
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
     End Sub
-    Private Sub uxGettoPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
+    Private Sub uxGettoPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Dim theFromPoint As IPoint = GetPointFromMouseClick(My.ArcMap.Document.ActiveView)
+
+        _partnerSCSDockWindowUI.uxToPointXValue.Text = theFromPoint.X.ToString
+        _partnerSCSDockWindowUI.uxToPointYValue.Text = theFromPoint.Y.ToString
     End Sub
     Private Sub uxGetTangentPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
@@ -121,6 +121,24 @@ Public Class SCS_button
 #End Region
 
 #Region "Methods"
+    Public Function GetPointFromMouseClick(ByVal theActiveView As IActiveView) As IPoint
+
+        'Dim screenDisplay As ESRI.ArcGIS.Display.IScreenDisplay = activeView.ScreenDisplay
+
+        'Dim rubberBand As ESRI.ArcGIS.Display.IRubberBand = New ESRI.ArcGIS.Display.RubberLineClass
+        'Dim geometry As ESRI.ArcGIS.Geometry.IGeometry = rubberBand.TrackNew(screenDisplay, Nothing)
+
+        'Dim polyline As ESRI.ArcGIS.Geometry.IPolyline = CType(geometry, ESRI.ArcGIS.Geometry.IPolyline)
+        Dim theScreenDisplay As IScreenDisplay2 = CType(theActiveView.ScreenDisplay, IScreenDisplay2)
+
+        Dim theRubberBand As IRubberBand2 = New ESRI.ArcGIS.Display.RubberPointClass
+        Dim thePointGeometry As IGeometry5 = CType(theRubberBand.TrackNew(CType(theScreenDisplay, IScreenDisplay), Nothing), IGeometry5)
+
+
+        Dim ThePoint As IPoint = CType(thePointGeometry, IPoint)
+
+        Return ThePoint
+    End Function
     Friend Sub DoButtonOperation()
 
         _partnerSCSDockWindow.Show(Not _partnerSCSDockWindow.IsVisible)
