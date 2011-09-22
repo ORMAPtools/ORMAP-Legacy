@@ -82,7 +82,7 @@ Public Class SpiralConstruction_Button
     End Sub
 
     Protected Overrides Sub OnUpdate()
-
+        Me.Enabled = SpiralUtilities.IsEnable
     End Sub
 #End Region
 End Class

@@ -11,11 +11,16 @@ Imports ESRI.ArcGIS.Geodatabase
 Imports ESRI.ArcGIS.Geometry
 Imports ESRI.ArcGIS.Desktop.AddIns
 Imports ESRI.ArcGIS.Display
+Imports ESRI.ArcGIS.SystemUI
+Imports SpiralTools.SpiralUtilities
+
+
 
 #End Region
 
 Public Class SCS_button
-    Inherits ESRI.ArcGIS.Desktop.AddIns.Button
+    Inherits ESRI.ArcGIS.Desktop.AddIns.Tool
+
 #Region "constructors"
     Public Sub New()
         Try
@@ -34,8 +39,11 @@ Public Class SCS_button
 #End Region
 #Region "Properties"
 
+    Private _IsGettingToPoint As Boolean = False
     Private _partnerSCSDockWindow As IDockableWindow
     Private WithEvents _partnerSCSDockWindowUI As SpiralCurveSpiralDockWindow
+
+
    
     Friend ReadOnly Property partnerSCSDockFormUI() As SpiralCurveSpiralDockWindow
         Get
@@ -79,22 +87,21 @@ Public Class SCS_button
 #End Region
 
 #Region "Event Handler"
-
+    
     Private Sub uxCreate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        MsgBox("This Works")
+        MessageBox.Show("This Works")
     End Sub
 
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
     End Sub
-
     Private Sub uxGettoPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Dim theFromPoint As IPoint = GetPointFromMouseClick(My.ArcMap.Document.ActiveView)
-
-        _partnerSCSDockWindowUI.uxToPointXValue.Text = theFromPoint.X.ToString
-        _partnerSCSDockWindowUI.uxToPointYValue.Text = theFromPoint.Y.ToString
+        _IsGettingToPoint = True
+        MyBase.Cursor = Cursors.Cross
     End Sub
     Private Sub uxGetTangentPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+        Dim thePolyline As IPolyline5 = TestRubberBand(My.ArcMap.Document.ActiveView)
 
     End Sub
     Private Sub uxGetFromPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -121,42 +128,67 @@ Public Class SCS_button
 #End Region
 
 #Region "Methods"
-    Public Function GetPointFromMouseClick(ByVal theActiveView As IActiveView) As IPoint
+    Public Function TestRubberBand(ByVal theActiveView As IActiveView) As IPolyline5
+        Dim screenDisplay As ESRI.ArcGIS.Display.IScreenDisplay = theActiveView.ScreenDisplay
 
-        'Dim screenDisplay As ESRI.ArcGIS.Display.IScreenDisplay = activeView.ScreenDisplay
+        Dim rubberBand As ESRI.ArcGIS.Display.IRubberBand = New ESRI.ArcGIS.Display.RubberLineClass
+        Dim geometry As ESRI.ArcGIS.Geometry.IGeometry = rubberBand.TrackNew(screenDisplay, Nothing)
 
-        'Dim rubberBand As ESRI.ArcGIS.Display.IRubberBand = New ESRI.ArcGIS.Display.RubberLineClass
-        'Dim geometry As ESRI.ArcGIS.Geometry.IGeometry = rubberBand.TrackNew(screenDisplay, Nothing)
+        Dim polyline As ESRI.ArcGIS.Geometry.IPolyline = CType(geometry, ESRI.ArcGIS.Geometry.IPolyline)
+        Return CType(polyline, IPolyline5)
 
-        'Dim polyline As ESRI.ArcGIS.Geometry.IPolyline = CType(geometry, ESRI.ArcGIS.Geometry.IPolyline)
-        Dim theScreenDisplay As IScreenDisplay2 = CType(theActiveView.ScreenDisplay, IScreenDisplay2)
-
-        Dim theRubberBand As IRubberBand2 = New ESRI.ArcGIS.Display.RubberPointClass
-        Dim thePointGeometry As IGeometry5 = CType(theRubberBand.TrackNew(CType(theScreenDisplay, IScreenDisplay), Nothing), IGeometry5)
-
-
-        Dim ThePoint As IPoint = CType(thePointGeometry, IPoint)
-
-        Return ThePoint
     End Function
+    'Public Function GetPointFromMouseClick(ByVal theActiveView As IActiveView) As IPoint
+
+    '    Dim theScreenDisplay As IScreenDisplay2 = CType(theActiveView.ScreenDisplay, IScreenDisplay2)
+    '    Dim theRubberBand As IRubberBand2 = New ESRI.ArcGIS.Display.RubberPoint
+    '    Dim thePointGeometry As IGeometry5 = CType(theRubberBand.TrackNew(CType(theScreenDisplay, IScreenDisplay), Nothing), IGeometry5)
+
+    '    Dim ThePoint As IPoint = CType(thePointGeometry, IPoint)
+
+    '    Return ThePoint
+    'End Function
+
     Friend Sub DoButtonOperation()
 
+        With partnerSCSDockFormUI
+            .uxTargetTemplate.Text = "Construction Lines"
+        End With
         _partnerSCSDockWindow.Show(Not _partnerSCSDockWindow.IsVisible)
 
     End Sub
 
-    Protected Overrides Sub OnClick()
-        Try
+    'Protected Overrides Sub OnClick()
+    '    Try
+    '        DoButtonOperation()
+    '    Catch ex As Exception
+
+    '    End Try
+    'End Sub
+    Protected Overrides Sub OnMouseDown(ByVal arg As ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)
+        MyBase.OnMouseDown(arg)
+        If arg.Button = MouseButtons.Left And arg.Shift = True Then
             DoButtonOperation()
-        Catch ex As Exception
-
-        End Try
+        ElseIf arg.Button = MouseButtons.Left And _IsGettingToPoint Then
+            Dim TheToPoint As IPoint = getSnapPoint(getDataFrameCoords(arg.X, arg.Y))
+            _partnerSCSDockWindowUI.uxToPointXValue.Text = TheToPoint.X.ToString
+            _partnerSCSDockWindowUI.uxToPointYValue.Text = TheToPoint.Y.ToString
+            _IsGettingToPoint = False
+            MyBase.Cursor = Cursors.Arrow
+        End If
     End Sub
-
+    'Protected Overrides Sub OnMouseDown(ByVal arg As ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)
+    '    MyBase.OnMouseDown(arg)
+    '    MsgBox(arg.X & " " & arg.Y)
+    'End Sub
     Protected Overrides Sub OnUpdate()
-
+        Me.Enabled = SpiralUtilities.IsEnable
     End Sub
 
 #End Region
 
+    
+
 End Class
+
+
