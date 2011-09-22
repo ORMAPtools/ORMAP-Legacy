@@ -85,6 +85,10 @@
     <Reference Include="ESRI.ArcGIS.System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -106,6 +110,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Config.esriaddinx</DependentUpon>
     </Compile>
+    <Compile Include="GetPointfromMap.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -205,9 +210,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <AddInContent Include="Images\GetPoint.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AddInContent Include="Images\SCS_button.png" />
   </ItemGroup>
   <ItemGroup>
@@ -218,6 +220,12 @@
   </ItemGroup>
   <ItemGroup>
     <AddInContent Include="Images\SpiralCurveDockWindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AddInContent Include="Images\ArcGISAddin1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AddInContent Include="Images\GetPointFromMapTool.png" />
   </ItemGroup>
   <ItemGroup>
     <AddInContent Include="Images\GetPointfromMap.png" />
