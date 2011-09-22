@@ -28,6 +28,14 @@ Returns 'ORMAP_SpiralTools_SCS_button', the id declared for Add-in Button class 
 	<summary>
 Returns 'ORMAP_SpiralTools_SpiralConstruction_Button', the id declared for Add-in Button class 'SpiralConstruction_Button'
 </summary>
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.GetPoint">
+	<summary>
+Returns 'Microsoft_SpiralTools_GetPoint', the id declared for Add-in Tool class 'GetPoint'
+</summary>
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.GetPointfromMap">
+	<summary>
+Returns 'Microsoft_SpiralTools_GetPointfromMap', the id declared for Add-in Tool class 'GetPointfromMap'
+</summary>
 </member><member name="P:SpiralTools.My.ThisAddIn.IDs.SpiralCurveSpiralDockWindow">
 	<summary>
 Returns 'ORMAP_SpiralTools_SpiralCurveSpiralDockWindow', the id declared for Add-in DockableWindow class 'SpiralCurveSpiralDockWindow+AddinImpl'
@@ -36,9 +44,9 @@ Returns 'ORMAP_SpiralTools_SpiralCurveSpiralDockWindow', the id declared for Add
 	<summary>
 Returns 'ORMAP_SpiralTools_SpiralDockWindow', the id declared for Add-in DockableWindow class 'SpiralDockWindow+AddinImpl'
 </summary>
-</member><member name="P:SpiralTools.My.ThisAddIn.IDs.Spirals">
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SpiralsExtension">
 	<summary>
-Returns 'ORMAP_SpiralTools_Spirals', the id declared for Add-in Extension class 'Spirals'
+Returns 'ORMAP_SpiralTools_Spirals', the id declared for Add-in Extension class 'SpiralsExtension'
 </summary>
 </member><member name="T:SpiralTools.My.ThisAddIn.IDs">
 	<summary>
@@ -66,6 +74,10 @@ A class for looking up declarative information in the associated configuration x
  Designer class of the dockable window add-in. It contains user interfaces that
  make up the dockable window.
  </summary>
+</member><member name="T:SpiralTools.Spiralsextension">
+	<summary>
+Spirals class implementing custom ESRI Editor Extension functionalities.
+</summary>
 </member><member name="P:SpiralTools.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
@@ -78,10 +90,6 @@ A class for looking up declarative information in the associated configuration x
 </member><member name="T:SpiralTools.My.Resources.Resources">
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member><member name="T:SpiralTools.Spirals">
-	<summary>
-Spirals class implementing custom ESRI Editor Extension functionalities.
 </summary>
 </member>
 </members>
