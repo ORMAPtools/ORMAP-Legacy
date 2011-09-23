@@ -82,6 +82,7 @@ Partial Class SpiralDockWindow
         '
         'uxTemplateValue
         '
+        Me.uxTemplateValue.AllowDrop = True
         Me.uxTemplateValue.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
         Me.uxTemplateValue.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
         Me.uxTemplateValue.Location = New System.Drawing.Point(4, 21)

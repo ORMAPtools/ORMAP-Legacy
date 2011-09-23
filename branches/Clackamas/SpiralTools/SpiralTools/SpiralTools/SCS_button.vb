@@ -12,6 +12,7 @@ Imports ESRI.ArcGIS.Geometry
 Imports ESRI.ArcGIS.Desktop.AddIns
 Imports ESRI.ArcGIS.Display
 Imports ESRI.ArcGIS.SystemUI
+Imports ESRI.ArcGIS.Editor
 Imports SpiralTools.SpiralUtilities
 
 
@@ -29,6 +30,9 @@ Public Class SCS_button
             windowID.Value = "ORMAP_SpiralTools_SpiralCurveSpiralDockWindow"
             _partnerSCSDockWindow = My.ArcMap.DockableWindowManager.GetDockableWindow(windowID)
 
+            If _partnerSCSDockWindow.IsVisible Then
+                _partnerSCSDockWindow.Show(False)
+            End If
         Catch ex As Exception
 
             MsgBox(ex.ToString)
@@ -39,8 +43,11 @@ Public Class SCS_button
 #End Region
 #Region "Properties"
 
+    Private _IsGettingTangentPoint As Boolean = False
+    Private _IsGettingFromPoint As Boolean = False
     Private _IsGettingToPoint As Boolean = False
     Private _partnerSCSDockWindow As IDockableWindow
+
     Private WithEvents _partnerSCSDockWindowUI As SpiralCurveSpiralDockWindow
 
 
@@ -67,8 +74,6 @@ Public Class SCS_button
             AddHandler _partnerSCSDockWindowUI.uxCurvebyDegree.CheckedChanged, AddressOf uxCurvebyDegree_CheckedChanged
             AddHandler _partnerSCSDockWindowUI.uxSpiralsbyArclength.CheckedChanged, AddressOf uxSpiralsbyArclength_CheckedChanged
             AddHandler _partnerSCSDockWindowUI.uxSpiralsbyDelta.CheckedChanged, AddressOf uxSpiralsbyDelta_CheckedChanged
-            AddHandler _partnerSCSDockWindowUI.uxCurvetotheRight.CheckedChanged, AddressOf uxCurvetotheRight_CheckedChanged
-            AddHandler _partnerSCSDockWindowUI.uxCurvetotheLeft.CheckedChanged, AddressOf uxCurvetotheLeft_CheckedChanged
         Else
             'unSubscribe to partner form events
             RemoveHandler _partnerSCSDockWindowUI.uxCreate.Click, AddressOf uxCreate_Click
@@ -80,8 +85,6 @@ Public Class SCS_button
             RemoveHandler _partnerSCSDockWindowUI.uxCurvebyDegree.CheckedChanged, AddressOf uxCurvebyDegree_CheckedChanged
             RemoveHandler _partnerSCSDockWindowUI.uxSpiralsbyArclength.CheckedChanged, AddressOf uxSpiralsbyArclength_CheckedChanged
             RemoveHandler _partnerSCSDockWindowUI.uxSpiralsbyDelta.CheckedChanged, AddressOf uxSpiralsbyDelta_CheckedChanged
-            RemoveHandler _partnerSCSDockWindowUI.uxCurveByRadius.CheckedChanged, AddressOf uxCurvetotheRight_CheckedChanged
-            RemoveHandler _partnerSCSDockWindowUI.uxCurvetotheLeft.CheckedChanged, AddressOf uxCurvetotheLeft_CheckedChanged
         End If
     End Sub
 #End Region
@@ -89,105 +92,161 @@ Public Class SCS_button
 #Region "Event Handler"
     
     Private Sub uxCreate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        MessageBox.Show("This Works")
-    End Sub
 
+    End Sub
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
     End Sub
     Private Sub uxGettoPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
         _IsGettingToPoint = True
         MyBase.Cursor = Cursors.Cross
+
     End Sub
     Private Sub uxGetTangentPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        Dim thePolyline As IPolyline5 = TestRubberBand(My.ArcMap.Document.ActiveView)
+        _IsGettingTangentPoint = True
+        MyBase.Cursor = Cursors.Cross
 
     End Sub
     Private Sub uxGetFromPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
+        _IsGettingFromPoint = True
+        _IsCircleActive = True
+        MyBase.Cursor = Cursors.Cross
+
     End Sub
     Private Sub uxCurveByRadius_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+        If _partnerSCSDockWindowUI.uxCurveByRadius.Checked Then
+            _partnerSCSDockWindowUI.uxCurveByRadiusValue.Enabled = True
+        Else
+            _partnerSCSDockWindowUI.uxCurveByRadiusValue.Enabled = False
+        End If
 
     End Sub
     Private Sub uxCurvebyDegree_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
+        If _partnerSCSDockWindowUI.uxCurvebyDegree.Checked Then
+            _partnerSCSDockWindowUI.uxCurveDegreeValue.Enabled = True
+        Else
+            _partnerSCSDockWindowUI.uxCurveDegreeValue.Enabled = False
+        End If
+
     End Sub
     Private Sub uxSpiralsbyArclength_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+        If _partnerSCSDockWindowUI.uxSpiralsbyArclength.Checked Then
+            _partnerSCSDockWindowUI.uxArcLengthValue.Enabled = True
+        Else
+            _partnerSCSDockWindowUI.uxArcLengthValue.Enabled = False
+        End If
 
     End Sub
     Private Sub uxSpiralsbyDelta_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-    End Sub
-    Private Sub uxCurvetotheRight_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        If _partnerSCSDockWindowUI.uxSpiralsbyDelta.Checked Then
+            _partnerSCSDockWindowUI.uxDeltaAngleValue.Enabled = True
+        Else
+            _partnerSCSDockWindowUI.uxDeltaAngleValue.Enabled = False
+        End If
 
     End Sub
-    Private Sub uxCurvetotheLeft_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub partnerSCSDockWindow_load()
+        Try
+            Dim theEnumLayer As IEnumLayer = My.ArcMap.Editor.Map.Layers
+            theEnumLayer.Reset()
+            Dim thisLayer As ILayer = CType(theEnumLayer.Next, ILayer)
+            Do While Not (thisLayer Is Nothing)
+                If TypeOf thisLayer Is FeatureLayer Then
+                    Dim thisFeatureLayer As IFeatureLayer = CType(thisLayer, IFeatureLayer)
+                    If thisFeatureLayer.FeatureClass.ShapeType = 3 Then
+                        _partnerSCSDockWindowUI.uxTargetTemplate.AutoCompleteCustomSource.Add(thisFeatureLayer.Name)
+                    End If
+                End If
+                thisLayer = CType(theEnumLayer.Next, ILayer)
+            Loop
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
 
     End Sub
 #End Region
 
 #Region "Methods"
-    Public Function TestRubberBand(ByVal theActiveView As IActiveView) As IPolyline5
-        Dim screenDisplay As ESRI.ArcGIS.Display.IScreenDisplay = theActiveView.ScreenDisplay
-
-        Dim rubberBand As ESRI.ArcGIS.Display.IRubberBand = New ESRI.ArcGIS.Display.RubberLineClass
-        Dim geometry As ESRI.ArcGIS.Geometry.IGeometry = rubberBand.TrackNew(screenDisplay, Nothing)
-
-        Dim polyline As ESRI.ArcGIS.Geometry.IPolyline = CType(geometry, ESRI.ArcGIS.Geometry.IPolyline)
-        Return CType(polyline, IPolyline5)
-
-    End Function
-    'Public Function GetPointFromMouseClick(ByVal theActiveView As IActiveView) As IPoint
-
-    '    Dim theScreenDisplay As IScreenDisplay2 = CType(theActiveView.ScreenDisplay, IScreenDisplay2)
-    '    Dim theRubberBand As IRubberBand2 = New ESRI.ArcGIS.Display.RubberPoint
-    '    Dim thePointGeometry As IGeometry5 = CType(theRubberBand.TrackNew(CType(theScreenDisplay, IScreenDisplay), Nothing), IGeometry5)
-
-    '    Dim ThePoint As IPoint = CType(thePointGeometry, IPoint)
-
-    '    Return ThePoint
-    'End Function
-
+   
+   
     Friend Sub DoButtonOperation()
 
         With partnerSCSDockFormUI
-            .uxTargetTemplate.Text = "Construction Lines"
+            .uxCurveDegreeValue.Text = ""
         End With
+        If _partnerSCSDockWindow.IsVisible AndAlso _partnerSCSDockWindowUI.uxTargetTemplate.AutoCompleteCustomSource.Count = 0 Then partnerSCSDockWindow_load()
+
         _partnerSCSDockWindow.Show(Not _partnerSCSDockWindow.IsVisible)
+
+        If _partnerSCSDockWindow.IsVisible AndAlso _partnerSCSDockWindowUI.uxTargetTemplate.AutoCompleteCustomSource.Count = 0 Then partnerSCSDockWindow_load()
 
     End Sub
 
-    'Protected Overrides Sub OnClick()
-    '    Try
-    '        DoButtonOperation()
-    '    Catch ex As Exception
-
-    '    End Try
-    'End Sub
     Protected Overrides Sub OnMouseDown(ByVal arg As ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)
         MyBase.OnMouseDown(arg)
         If arg.Button = MouseButtons.Left And arg.Shift = True Then
             DoButtonOperation()
         ElseIf arg.Button = MouseButtons.Left And _IsGettingToPoint Then
-            Dim TheToPoint As IPoint = getSnapPoint(getDataFrameCoords(arg.X, arg.Y))
-            _partnerSCSDockWindowUI.uxToPointXValue.Text = TheToPoint.X.ToString
-            _partnerSCSDockWindowUI.uxToPointYValue.Text = TheToPoint.Y.ToString
+            Dim theToPoint As IPoint = getSnapPoint(getDataFrameCoords(arg.X, arg.Y))
+            _partnerSCSDockWindowUI.uxToPointXValue.Text = theToPoint.X.ToString
+            _partnerSCSDockWindowUI.uxToPointYValue.Text = theToPoint.Y.ToString
             _IsGettingToPoint = False
             MyBase.Cursor = Cursors.Arrow
+        ElseIf arg.Button = MouseButtons.Left And _IsGettingFromPoint Then
+            Dim theFromPoint As IPoint = getSnapPoint(getDataFrameCoords(arg.X, arg.Y))
+            _partnerSCSDockWindowUI.uxFromPointXValue.Text = theFromPoint.X.ToString
+            _partnerSCSDockWindowUI.uxFromPointYValue.Text = theFromPoint.Y.ToString
+            _IsGettingFromPoint = False
+            MyBase.Cursor = Cursors.Arrow
+        ElseIf arg.Button = MouseButtons.Left And _IsGettingTangentPoint Then
+            Dim theTangentPoint As IPoint = getSnapPoint(getDataFrameCoords(arg.X, arg.Y))
+            _partnerSCSDockWindowUI.uxTangentPointXValue.Text = theTangentPoint.X.ToString
+            _partnerSCSDockWindowUI.uxTangentPointYValue.Text = theTangentPoint.Y.ToString
+            _IsGettingTangentPoint = False
+            MyBase.Cursor = Cursors.Arrow
         End If
+        _IsCircleActive = False
     End Sub
-    'Protected Overrides Sub OnMouseDown(ByVal arg As ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)
-    '    MyBase.OnMouseDown(arg)
-    '    MsgBox(arg.X & " " & arg.Y)
-    'End Sub
+    'Show Snap Point
+    Private _IsCircleActive As Boolean = False
+    Private _TheSnapPoint As IPoint
+
+
+    Protected Overrides Sub OnMouseMove(ByVal arg As ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)
+        MyBase.OnMouseMove(arg)
+        Try
+            If _IsCircleActive Then
+
+            End If
+
+
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
+
+    End Sub
+
     Protected Overrides Sub OnUpdate()
         Me.Enabled = SpiralUtilities.IsEnable
+        If Not Me.Enabled Then
+            _partnerSCSDockWindow.Show(False)
+        End If
     End Sub
 
 #End Region
 
-    
+    Private Function featureclass() As Object
+        Throw New NotImplementedException
+    End Function
+
+
 
 End Class
 
