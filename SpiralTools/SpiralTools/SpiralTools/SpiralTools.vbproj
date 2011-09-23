@@ -110,7 +110,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Config.esriaddinx</DependentUpon>
     </Compile>
-    <Compile Include="GetPointfromMap.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -220,15 +219,6 @@
   </ItemGroup>
   <ItemGroup>
     <AddInContent Include="Images\SpiralCurveDockWindow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AddInContent Include="Images\ArcGISAddin1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AddInContent Include="Images\GetPointFromMapTool.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AddInContent Include="Images\GetPointfromMap.png" />
   </ItemGroup>
   <PropertyGroup>
     <ZipFileExtension>esriAddIn</ZipFileExtension>

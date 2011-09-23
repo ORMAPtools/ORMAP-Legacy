@@ -312,6 +312,7 @@ Partial Class SpiralCurveSpiralDockWindow
         '
         'uxDeltaAngleValue
         '
+        Me.uxDeltaAngleValue.Enabled = False
         Me.uxDeltaAngleValue.Location = New System.Drawing.Point(88, 40)
         Me.uxDeltaAngleValue.Name = "uxDeltaAngleValue"
         Me.uxDeltaAngleValue.Size = New System.Drawing.Size(100, 20)
@@ -357,7 +358,7 @@ Partial Class SpiralCurveSpiralDockWindow
         '
         'uxTotalCentralAngleValue
         '
-        Me.uxTotalCentralAngleValue.Location = New System.Drawing.Point(3, 104)
+        Me.uxTotalCentralAngleValue.Location = New System.Drawing.Point(104, 101)
         Me.uxTotalCentralAngleValue.Name = "uxTotalCentralAngleValue"
         Me.uxTotalCentralAngleValue.Size = New System.Drawing.Size(146, 20)
         Me.uxTotalCentralAngleValue.TabIndex = 9
@@ -407,6 +408,7 @@ Partial Class SpiralCurveSpiralDockWindow
         '
         'uxTargetTemplate
         '
+        Me.uxTargetTemplate.AllowDrop = True
         Me.uxTargetTemplate.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
         Me.uxTargetTemplate.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
         Me.uxTargetTemplate.Location = New System.Drawing.Point(6, 21)
