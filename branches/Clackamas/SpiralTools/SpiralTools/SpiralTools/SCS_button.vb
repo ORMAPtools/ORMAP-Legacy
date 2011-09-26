@@ -179,7 +179,7 @@ Public Class SCS_button
     Friend Sub DoButtonOperation()
 
         With partnerSCSDockFormUI
-            .uxCurveDegreeValue.Text = ""
+            .uxCreate.Enabled = True
         End With
         If _partnerSCSDockWindow.IsVisible AndAlso _partnerSCSDockWindowUI.uxTargetTemplate.AutoCompleteCustomSource.Count = 0 Then partnerSCSDockWindow_load()
 
@@ -204,6 +204,7 @@ Public Class SCS_button
             _partnerSCSDockWindowUI.uxFromPointXValue.Text = theFromPoint.X.ToString
             _partnerSCSDockWindowUI.uxFromPointYValue.Text = theFromPoint.Y.ToString
             _IsGettingFromPoint = False
+            _IsCircleActive = False
             MyBase.Cursor = Cursors.Arrow
         ElseIf arg.Button = MouseButtons.Left And _IsGettingTangentPoint Then
             Dim theTangentPoint As IPoint = getSnapPoint(getDataFrameCoords(arg.X, arg.Y))
@@ -213,19 +214,46 @@ Public Class SCS_button
             MyBase.Cursor = Cursors.Arrow
         End If
         _IsCircleActive = False
+        
     End Sub
     'Show Snap Point
+    Private _SnappingMarkerElement As IElement = Nothing
     Private _IsCircleActive As Boolean = False
     Private _TheSnapPoint As IPoint
 
-
+    'Move below sub routine to Spiral Utilities
     Protected Overrides Sub OnMouseMove(ByVal arg As ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)
         MyBase.OnMouseMove(arg)
         Try
-            If _IsCircleActive Then
-
+            If _IsCircleActive And _SnappingMarkerElement Is Nothing Then
+                Dim theMarkerSymbol As ISimpleMarkerSymbol = New SimpleMarkerSymbol
+                Dim TheMarkerColor As IRgbColor = New RgbColor
+                TheMarkerColor.Blue = 255
+                TheMarkerColor.Green = 255
+                TheMarkerColor.Red = 255
+                theMarkerSymbol.Color = TheMarkerColor
+                theMarkerSymbol.OutlineSize = 1
+                theMarkerSymbol.Size = 6
+                theMarkerSymbol.Outline = True
+                theMarkerSymbol.Style = esriSimpleMarkerStyle.esriSMSCircle
+                Dim theMarkerElement As IMarkerElement = New MarkerElement
+                theMarkerElement.Symbol = theMarkerSymbol
+                _SnappingMarkerElement = CType(theMarkerElement, IElement)
+                Dim theGraphicsContainer As IGraphicsContainer = CType(My.ArcMap.Document.ActiveView, IGraphicsContainer)
+                theGraphicsContainer.AddElement(_SnappingMarkerElement, 0)
+                Dim theCurrentPoint As IPoint = getSnapPoint(getDataFrameCoords(arg.X, arg.Y))
+                _SnappingMarkerElement.Geometry = theCurrentPoint
+                My.ArcMap.Document.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, Nothing, Nothing)
+            ElseIf _IsCircleActive And Not _SnappingMarkerElement Is Nothing Then
+                _SnappingMarkerElement.Geometry = CType(getSnapPoint(getDataFrameCoords(arg.X, arg.Y)), IPoint)
+                My.ArcMap.Document.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, Nothing, Nothing)
+            ElseIf Not _IsCircleActive And Not _SnappingMarkerElement Is Nothing Then
+                Dim theGraphicsContainer As IGraphicsContainer = CType(My.ArcMap.Document.ActiveView, IGraphicsContainer)
+                theGraphicsContainer.DeleteElement(_SnappingMarkerElement)
+                _SnappingMarkerElement.Geometry.SetEmpty()
+                _SnappingMarkerElement = Nothing
+                My.ArcMap.Document.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewAll, Nothing, Nothing)
             End If
-
 
         Catch ex As Exception
             MsgBox(ex.ToString)
