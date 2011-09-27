@@ -72,8 +72,7 @@ Public Class SCS_button
             AddHandler _partnerSCSDockWindowUI.uxGetFromPoint.Click, AddressOf uxGetFromPoint_Click
             AddHandler _partnerSCSDockWindowUI.uxCurveByRadius.CheckedChanged, AddressOf uxCurveByRadius_CheckedChanged
             AddHandler _partnerSCSDockWindowUI.uxCurvebyDegree.CheckedChanged, AddressOf uxCurvebyDegree_CheckedChanged
-            AddHandler _partnerSCSDockWindowUI.uxSpiralsbyArclength.CheckedChanged, AddressOf uxSpiralsbyArclength_CheckedChanged
-            AddHandler _partnerSCSDockWindowUI.uxSpiralsbyDelta.CheckedChanged, AddressOf uxSpiralsbyDelta_CheckedChanged
+           
         Else
             'unSubscribe to partner form events
             RemoveHandler _partnerSCSDockWindowUI.uxCreate.Click, AddressOf uxCreate_Click
@@ -83,8 +82,7 @@ Public Class SCS_button
             RemoveHandler _partnerSCSDockWindowUI.uxGetFromPoint.Click, AddressOf uxGetFromPoint_Click
             RemoveHandler _partnerSCSDockWindowUI.uxCurveByRadius.CheckedChanged, AddressOf uxCurveByRadius_CheckedChanged
             RemoveHandler _partnerSCSDockWindowUI.uxCurvebyDegree.CheckedChanged, AddressOf uxCurvebyDegree_CheckedChanged
-            RemoveHandler _partnerSCSDockWindowUI.uxSpiralsbyArclength.CheckedChanged, AddressOf uxSpiralsbyArclength_CheckedChanged
-            RemoveHandler _partnerSCSDockWindowUI.uxSpiralsbyDelta.CheckedChanged, AddressOf uxSpiralsbyDelta_CheckedChanged
+            
         End If
     End Sub
 #End Region
@@ -92,20 +90,55 @@ Public Class SCS_button
 #Region "Event Handler"
     
     Private Sub uxCreate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Dim theFromPoint As IPoint = New ESRI.ArcGIS.Geometry.Point
+        Dim theTangent As IPoint = New ESRI.ArcGIS.Geometry.Point
+        Dim theToPoint As IPoint = New ESRI.ArcGIS.Geometry.Point
+
+        With _partnerSCSDockWindowUI
+            If .uxCurveByRadius.Checked And .uxCurveByRadiusValue.TextLength = 0 Then
+                MessageBox.Show("Please enter a radius value")
+                Exit Sub
+            ElseIf .uxCurveByRadius.Checked And Not IsNumeric(.uxCurveByRadiusValue.Text) Then
+                MessageBox.Show("Please us a numeric value in the radius value box")
+                Exit Sub
+            End If
+            If .uxCurvebyDegree.Checked And .uxCurveDegreeValue.TextLength = 0 Then
+                MessageBox.Show("Please eneter a degree value")
+                Exit Sub
+            ElseIf .uxCurvebyDegree.Checked And Not IsNumeric(.uxCurveDegreeValue.Text) Then
+                MessageBox.Show("Please us a numeric value in the degree value box")
+            End If
+
+            theFromPoint.PutCoords(CDbl(.uxFromPointXValue.Text), CDbl(.uxFromPointYValue.Text))
+            theTangent.PutCoords(CDbl(.uxTangentPointXValue.Text), CDbl(.uxTangentPointYValue.Text))
+            theToPoint.PutCoords(CDbl(.uxToPointXValue.Text), CDbl(.uxToPointYValue.Text))
+
+            If .uxCurveByRadius.Checked Then
+                ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), CDbl(.uxCurveByRadiusValue.Text), .uxCurvetotheRight.Checked)
+            ElseIf .uxCurvebyDegree.Checked Then
+                Dim theCurveRadius As Double = 5729.578 / CDbl(.uxCurveDegreeValue.Text)
+                ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), theCurveRadius, .uxCurvetotheRight.Checked)
+            End If
+        End With
+
+        My.ArcMap.Document.ActiveView.Refresh()
 
     End Sub
+
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
     End Sub
     Private Sub uxGettoPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         _IsGettingToPoint = True
+        _IsCircleActive = True
         MyBase.Cursor = Cursors.Cross
 
     End Sub
     Private Sub uxGetTangentPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         _IsGettingTangentPoint = True
+        _IsCircleActive = True
         MyBase.Cursor = Cursors.Cross
 
     End Sub
@@ -134,24 +167,7 @@ Public Class SCS_button
         End If
 
     End Sub
-    Private Sub uxSpiralsbyArclength_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-        If _partnerSCSDockWindowUI.uxSpiralsbyArclength.Checked Then
-            _partnerSCSDockWindowUI.uxArcLengthValue.Enabled = True
-        Else
-            _partnerSCSDockWindowUI.uxArcLengthValue.Enabled = False
-        End If
-
-    End Sub
-    Private Sub uxSpiralsbyDelta_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-        If _partnerSCSDockWindowUI.uxSpiralsbyDelta.Checked Then
-            _partnerSCSDockWindowUI.uxDeltaAngleValue.Enabled = True
-        Else
-            _partnerSCSDockWindowUI.uxDeltaAngleValue.Enabled = False
-        End If
-
-    End Sub
+   
     Private Sub partnerSCSDockWindow_load()
         Try
             Dim theEnumLayer As IEnumLayer = My.ArcMap.Editor.Map.Layers
@@ -174,8 +190,8 @@ Public Class SCS_button
 #End Region
 
 #Region "Methods"
-   
-   
+
+
     Friend Sub DoButtonOperation()
 
         With partnerSCSDockFormUI
@@ -214,7 +230,7 @@ Public Class SCS_button
             MyBase.Cursor = Cursors.Arrow
         End If
         _IsCircleActive = False
-        
+
     End Sub
     'Show Snap Point
     Private _SnappingMarkerElement As IElement = Nothing
@@ -226,19 +242,7 @@ Public Class SCS_button
         MyBase.OnMouseMove(arg)
         Try
             If _IsCircleActive And _SnappingMarkerElement Is Nothing Then
-                Dim theMarkerSymbol As ISimpleMarkerSymbol = New SimpleMarkerSymbol
-                Dim TheMarkerColor As IRgbColor = New RgbColor
-                TheMarkerColor.Blue = 255
-                TheMarkerColor.Green = 255
-                TheMarkerColor.Red = 255
-                theMarkerSymbol.Color = TheMarkerColor
-                theMarkerSymbol.OutlineSize = 1
-                theMarkerSymbol.Size = 6
-                theMarkerSymbol.Outline = True
-                theMarkerSymbol.Style = esriSimpleMarkerStyle.esriSMSCircle
-                Dim theMarkerElement As IMarkerElement = New MarkerElement
-                theMarkerElement.Symbol = theMarkerSymbol
-                _SnappingMarkerElement = CType(theMarkerElement, IElement)
+                _SnappingMarkerElement = CType(Create_Snap_Marker(), IElement)
                 Dim theGraphicsContainer As IGraphicsContainer = CType(My.ArcMap.Document.ActiveView, IGraphicsContainer)
                 theGraphicsContainer.AddElement(_SnappingMarkerElement, 0)
                 Dim theCurrentPoint As IPoint = getSnapPoint(getDataFrameCoords(arg.X, arg.Y))
@@ -266,6 +270,7 @@ Public Class SCS_button
         If Not Me.Enabled Then
             _partnerSCSDockWindow.Show(False)
         End If
+
     End Sub
 
 #End Region
