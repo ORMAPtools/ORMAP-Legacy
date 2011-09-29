@@ -1,4 +1,35 @@
-﻿#Region "Imported Namespaces"
+﻿#Region "Copyright 2011 ORMAP Tech Group"
+
+' File:  SCS_Button.vb
+'
+' Original Author:  Jonathan McDowell, Clackamas County Technology Services 
+'
+' Date Created:  September 29, 2011
+'
+' Copyright Holder:  ORMAP Tech Group  
+' Contact Info:  ORMAP Tech Group may be reached at 
+' ORMAP_ESRI_Programmers@listsmart.osl.state.or.us
+'
+' This file is part of the ORMAP Taxlot Editing Toolbar.
+'
+' ORMAP Taxlot Editing Toolbar is free software; you can redistribute it and/or
+' modify it under the terms of the Lesser GNU General Public License as 
+' published by the Free Software Foundation; either version 3 of the License, 
+' or (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful, but WITHOUT 
+' ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+' FITNESS FOR A PARTICULAR PURPOSE.  See the Lesser GNU General Public License 
+' located in the COPYING.LESSER.txt file for more details.
+'
+' You should have received a copy of the Lesser GNU General Public License 
+' along with the ORMAP Taxlot Editing Toolbar; if not, write to the Free 
+' Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 
+' 02110-1301 USA.
+
+#End Region
+
+#Region "Imported Namespaces"
 Imports System.Drawing
 Imports System.Environment
 Imports System.Runtime.InteropServices
@@ -14,15 +45,23 @@ Imports ESRI.ArcGIS.Display
 Imports ESRI.ArcGIS.SystemUI
 Imports ESRI.ArcGIS.Editor
 Imports SpiralTools.SpiralUtilities
-
-
-
 #End Region
+
+''' <summary>
+''' Provides an ArcMap Command with functionality to
+''' Construct a Spiral-Curve-Spiral transition feature.
+''' These features are common in Highways and freeways.
+''' </summary>
+''' <remarks><seealso cref="SCS_button"/></remarks>
+
 
 Public Class SCS_button
     Inherits ESRI.ArcGIS.Desktop.AddIns.Tool
 
+#Region "Built-In Class Members (Constructors, Etc.)"
+
 #Region "constructors"
+
     Public Sub New()
         Try
 
@@ -40,7 +79,18 @@ Public Class SCS_button
         End Try
 
     End Sub
+
 #End Region
+
+#End Region
+
+#Region "Custom Class Members"
+
+#Region "Fields (none)"
+#End Region
+
+
+
 #Region "Properties"
 
     Private _IsGettingTangentPoint As Boolean = False
@@ -51,7 +101,7 @@ Public Class SCS_button
     Private WithEvents _partnerSCSDockWindowUI As SpiralCurveSpiralDockWindow
 
 
-   
+
     Friend ReadOnly Property partnerSCSDockFormUI() As SpiralCurveSpiralDockWindow
         Get
             If _partnerSCSDockWindowUI Is Nothing Then
@@ -72,7 +122,7 @@ Public Class SCS_button
             AddHandler _partnerSCSDockWindowUI.uxGetFromPoint.Click, AddressOf uxGetFromPoint_Click
             AddHandler _partnerSCSDockWindowUI.uxCurveByRadius.CheckedChanged, AddressOf uxCurveByRadius_CheckedChanged
             AddHandler _partnerSCSDockWindowUI.uxCurvebyDegree.CheckedChanged, AddressOf uxCurvebyDegree_CheckedChanged
-           
+
         Else
             'unSubscribe to partner form events
             RemoveHandler _partnerSCSDockWindowUI.uxCreate.Click, AddressOf uxCreate_Click
@@ -82,18 +132,23 @@ Public Class SCS_button
             RemoveHandler _partnerSCSDockWindowUI.uxGetFromPoint.Click, AddressOf uxGetFromPoint_Click
             RemoveHandler _partnerSCSDockWindowUI.uxCurveByRadius.CheckedChanged, AddressOf uxCurveByRadius_CheckedChanged
             RemoveHandler _partnerSCSDockWindowUI.uxCurvebyDegree.CheckedChanged, AddressOf uxCurvebyDegree_CheckedChanged
-            
+
         End If
     End Sub
+
 #End Region
 
 #Region "Event Handler"
-    
-    Private Sub uxCreate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Dim theFromPoint As IPoint = New ESRI.ArcGIS.Geometry.Point
-        Dim theTangent As IPoint = New ESRI.ArcGIS.Geometry.Point
-        Dim theToPoint As IPoint = New ESRI.ArcGIS.Geometry.Point
 
+
+    ''' <summary>
+    ''' Constructs the Spiral-Curve-Spiral based on user inputs in the partner Spiral Curve Spiral Dockable Window
+    ''' </summary>
+    Private Sub uxCreate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+
+
+        'Validate user inputs
         With _partnerSCSDockWindowUI
             If .uxCurveByRadius.Checked And .uxCurveByRadiusValue.TextLength = 0 Then
                 MessageBox.Show("Please enter a radius value")
@@ -109,10 +164,17 @@ Public Class SCS_button
                 MessageBox.Show("Please us a numeric value in the degree value box")
             End If
 
+            'Sets the input points
+            Dim theFromPoint As IPoint = New ESRI.ArcGIS.Geometry.Point
+            Dim theTangent As IPoint = New ESRI.ArcGIS.Geometry.Point
+            Dim theToPoint As IPoint = New ESRI.ArcGIS.Geometry.Point
+
+            'Retrieves the points from the partner form
             theFromPoint.PutCoords(CDbl(.uxFromPointXValue.Text), CDbl(.uxFromPointYValue.Text))
             theTangent.PutCoords(CDbl(.uxTangentPointXValue.Text), CDbl(.uxTangentPointYValue.Text))
             theToPoint.PutCoords(CDbl(.uxToPointXValue.Text), CDbl(.uxToPointYValue.Text))
 
+            'Sends data to the SpiralsUtilities ConstructSCSbyLenth function
             If .uxCurveByRadius.Checked Then
                 ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), CDbl(.uxCurveByRadiusValue.Text), .uxCurvetotheRight.Checked)
             ElseIf .uxCurvebyDegree.Checked Then
@@ -124,10 +186,15 @@ Public Class SCS_button
         My.ArcMap.Document.ActiveView.Refresh()
 
     End Sub
-
+    ''' <summary>
+    ''' Opens Help Document
+    ''' </summary>
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
     End Sub
+    ''' <summary>
+    ''' Gets the end point for the Spiral Curve Spiral Construction from the map.
+    ''' </summary>
     Private Sub uxGettoPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         _IsGettingToPoint = True
@@ -135,6 +202,9 @@ Public Class SCS_button
         MyBase.Cursor = Cursors.Cross
 
     End Sub
+    ''' <summary>
+    ''' Gets the tangent point for the Spiral Curve Spiral Construction from the map.
+    ''' </summary>
     Private Sub uxGetTangentPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         _IsGettingTangentPoint = True
@@ -142,6 +212,9 @@ Public Class SCS_button
         MyBase.Cursor = Cursors.Cross
 
     End Sub
+    ''' <summary>
+    ''' Gets the starting point for the Spiral Curve Spiral Construction from the map.
+    ''' </summary>
     Private Sub uxGetFromPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         _IsGettingFromPoint = True
@@ -149,6 +222,10 @@ Public Class SCS_button
         MyBase.Cursor = Cursors.Cross
 
     End Sub
+    ''' <summary>
+    ''' Defines it the central curve is defined by a radius.
+    ''' </summary>
+    ''' <remarks>If checked, the .uxCurvebyRadiusValue is enabled.  The .uxCurvebyDegreeValue is disabled</remarks>
     Private Sub uxCurveByRadius_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         If _partnerSCSDockWindowUI.uxCurveByRadius.Checked Then
@@ -158,6 +235,10 @@ Public Class SCS_button
         End If
 
     End Sub
+    ''' <summary>
+    ''' Defines if the central curve is defined by a degree of curve.
+    ''' </summary>
+    ''' <remarks>If checked, the .uxCurvebyDegreeValue is Enable.  The .uxCurvebyRadiusValue is disabled</remarks>
     Private Sub uxCurvebyDegree_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         If _partnerSCSDockWindowUI.uxCurvebyDegree.Checked Then
@@ -167,26 +248,16 @@ Public Class SCS_button
         End If
 
     End Sub
-   
+
+    ''' <summary>
+    ''' At this point, this routine does not do anything.  
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Sub partnerSCSDockWindow_load()
-        Try
-            Dim theEnumLayer As IEnumLayer = My.ArcMap.Editor.Map.Layers
-            theEnumLayer.Reset()
-            Dim thisLayer As ILayer = CType(theEnumLayer.Next, ILayer)
-            Do While Not (thisLayer Is Nothing)
-                If TypeOf thisLayer Is FeatureLayer Then
-                    Dim thisFeatureLayer As IFeatureLayer = CType(thisLayer, IFeatureLayer)
-                    If thisFeatureLayer.FeatureClass.ShapeType = 3 Then
-                        _partnerSCSDockWindowUI.uxTargetTemplate.AutoCompleteCustomSource.Add(thisFeatureLayer.Name)
-                    End If
-                End If
-                thisLayer = CType(theEnumLayer.Next, ILayer)
-            Loop
-        Catch ex As Exception
-            MsgBox(ex.ToString)
-        End Try
 
     End Sub
+#End Region
+
 #End Region
 
 #Region "Methods"
@@ -197,14 +268,18 @@ Public Class SCS_button
         With partnerSCSDockFormUI
             .uxCreate.Enabled = True
         End With
-        If _partnerSCSDockWindow.IsVisible AndAlso _partnerSCSDockWindowUI.uxTargetTemplate.AutoCompleteCustomSource.Count = 0 Then partnerSCSDockWindow_load()
 
         _partnerSCSDockWindow.Show(Not _partnerSCSDockWindow.IsVisible)
 
-        If _partnerSCSDockWindow.IsVisible AndAlso _partnerSCSDockWindowUI.uxTargetTemplate.AutoCompleteCustomSource.Count = 0 Then partnerSCSDockWindow_load()
-
     End Sub
-
+    ''' <summary>
+    ''' On the MouseDown Event this sub routine checks to see if the user is looking for a point required to construct the spiral
+    ''' curve spiral construction.  If it is, gets the map coordinates and assigns it to the parnter form window text boxes related
+    ''' to the points.
+    ''' </summary>
+    ''' <remarks>This also enables the snap graphic
+    ''' Refer to the OnMouseMove override
+    ''' </remarks>
     Protected Overrides Sub OnMouseDown(ByVal arg As ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)
         MyBase.OnMouseDown(arg)
         If arg.Button = MouseButtons.Left And arg.Shift = True Then
@@ -232,12 +307,17 @@ Public Class SCS_button
         _IsCircleActive = False
 
     End Sub
-    'Show Snap Point
+
+    'Sets the gobal values for the snapping graphic.  The values are set here so they are proceeding the primary sub routine that uses them.
     Private _SnappingMarkerElement As IElement = Nothing
     Private _IsCircleActive As Boolean = False
     Private _TheSnapPoint As IPoint
 
-    'Move below sub routine to Spiral Utilities
+    ''' <summary>
+    ''' Checks to see if _IsCircleActive.  The circle is used to verify if the cursor is snapping to a snap feature.
+    ''' </summary>
+    ''' <param name="arg"></param>
+    ''' <remarks></remarks>
     Protected Overrides Sub OnMouseMove(ByVal arg As ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)
         MyBase.OnMouseMove(arg)
         Try
@@ -264,13 +344,24 @@ Public Class SCS_button
         End Try
 
     End Sub
-
+    ''' <summary>
+    ''' Enables the tool when the edit session is started.  It also hides the SCSDockwindow when the edit session is ended.
+    ''' if the snapping marker is visible at the stop editing event, it is deleted.
+    ''' </summary>
+    ''' <remarks></remarks>
     Protected Overrides Sub OnUpdate()
+
         Me.Enabled = SpiralUtilities.IsEnable
         If Not Me.Enabled Then
             _partnerSCSDockWindow.Show(False)
+            If Not _SnappingMarkerElement Is Nothing Then
+                Dim theGraphicsContainer As IGraphicsContainer = CType(My.ArcMap.Document.ActiveView, IGraphicsContainer)
+                theGraphicsContainer.DeleteElement(_SnappingMarkerElement)
+                _SnappingMarkerElement.Geometry.SetEmpty()
+                _SnappingMarkerElement = Nothing
+            End If
         End If
-
+       
     End Sub
 
 #End Region

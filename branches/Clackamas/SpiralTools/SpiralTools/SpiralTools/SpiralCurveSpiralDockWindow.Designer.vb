@@ -48,8 +48,6 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox6 = New System.Windows.Forms.GroupBox()
         Me.uxCurvetotheLeft = New System.Windows.Forms.RadioButton()
         Me.uxCurvetotheRight = New System.Windows.Forms.RadioButton()
-        Me.Template = New System.Windows.Forms.Label()
-        Me.uxTargetTemplate = New System.Windows.Forms.TextBox()
         Me.uxArcLengthValue = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -60,7 +58,7 @@ Partial Class SpiralCurveSpiralDockWindow
         '
         'uxCreate
         '
-        Me.uxCreate.Location = New System.Drawing.Point(2, 438)
+        Me.uxCreate.Location = New System.Drawing.Point(2, 383)
         Me.uxCreate.Name = "uxCreate"
         Me.uxCreate.Size = New System.Drawing.Size(75, 23)
         Me.uxCreate.TabIndex = 0
@@ -69,7 +67,7 @@ Partial Class SpiralCurveSpiralDockWindow
         '
         'uxHelp
         '
-        Me.uxHelp.Location = New System.Drawing.Point(83, 438)
+        Me.uxHelp.Location = New System.Drawing.Point(83, 383)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
         Me.uxHelp.TabIndex = 2
@@ -83,7 +81,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox1.Controls.Add(Me.uxToPointXValue)
         Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Controls.Add(Me.Label1)
-        Me.GroupBox1.Location = New System.Drawing.Point(0, 363)
+        Me.GroupBox1.Location = New System.Drawing.Point(0, 308)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(267, 69)
         Me.GroupBox1.TabIndex = 3
@@ -161,7 +159,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox2.Controls.Add(Me.uxFromPointXValue)
         Me.GroupBox2.Controls.Add(Me.Label3)
         Me.GroupBox2.Controls.Add(Me.Label4)
-        Me.GroupBox2.Location = New System.Drawing.Point(3, 213)
+        Me.GroupBox2.Location = New System.Drawing.Point(3, 158)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(267, 69)
         Me.GroupBox2.TabIndex = 4
@@ -216,7 +214,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox3.Controls.Add(Me.uxTangentPointXValue)
         Me.GroupBox3.Controls.Add(Me.Label5)
         Me.GroupBox3.Controls.Add(Me.Label6)
-        Me.GroupBox3.Location = New System.Drawing.Point(3, 288)
+        Me.GroupBox3.Location = New System.Drawing.Point(3, 233)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(267, 69)
         Me.GroupBox3.TabIndex = 5
@@ -247,7 +245,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox4.Controls.Add(Me.uxCurveByRadiusValue)
         Me.GroupBox4.Controls.Add(Me.uxCurvebyDegree)
         Me.GroupBox4.Controls.Add(Me.uxCurveByRadius)
-        Me.GroupBox4.Location = New System.Drawing.Point(6, 130)
+        Me.GroupBox4.Location = New System.Drawing.Point(6, 75)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(257, 77)
         Me.GroupBox4.TabIndex = 6
@@ -294,7 +292,7 @@ Partial Class SpiralCurveSpiralDockWindow
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(9, 107)
+        Me.Label7.Location = New System.Drawing.Point(9, 52)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(94, 13)
         Me.Label7.TabIndex = 8
@@ -304,7 +302,7 @@ Partial Class SpiralCurveSpiralDockWindow
         '
         Me.GroupBox6.Controls.Add(Me.uxCurvetotheLeft)
         Me.GroupBox6.Controls.Add(Me.uxCurvetotheRight)
-        Me.GroupBox6.Location = New System.Drawing.Point(3, 64)
+        Me.GroupBox6.Location = New System.Drawing.Point(3, 9)
         Me.GroupBox6.Name = "GroupBox6"
         Me.GroupBox6.Size = New System.Drawing.Size(247, 34)
         Me.GroupBox6.TabIndex = 10
@@ -334,28 +332,9 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxCurvetotheRight.Text = "Right"
         Me.uxCurvetotheRight.UseVisualStyleBackColor = True
         '
-        'Template
-        '
-        Me.Template.AutoSize = True
-        Me.Template.Location = New System.Drawing.Point(6, 4)
-        Me.Template.Name = "Template"
-        Me.Template.Size = New System.Drawing.Size(51, 13)
-        Me.Template.TabIndex = 11
-        Me.Template.Text = "Template"
-        '
-        'uxTargetTemplate
-        '
-        Me.uxTargetTemplate.AllowDrop = True
-        Me.uxTargetTemplate.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
-        Me.uxTargetTemplate.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
-        Me.uxTargetTemplate.Location = New System.Drawing.Point(6, 21)
-        Me.uxTargetTemplate.Name = "uxTargetTemplate"
-        Me.uxTargetTemplate.Size = New System.Drawing.Size(254, 20)
-        Me.uxTargetTemplate.TabIndex = 12
-        '
         'uxArcLengthValue
         '
-        Me.uxArcLengthValue.Location = New System.Drawing.Point(109, 104)
+        Me.uxArcLengthValue.Location = New System.Drawing.Point(109, 49)
         Me.uxArcLengthValue.Name = "uxArcLengthValue"
         Me.uxArcLengthValue.Size = New System.Drawing.Size(141, 20)
         Me.uxArcLengthValue.TabIndex = 2
@@ -363,8 +342,6 @@ Partial Class SpiralCurveSpiralDockWindow
         'SpiralCurveSpiralDockWindow
         '
         Me.Controls.Add(Me.uxArcLengthValue)
-        Me.Controls.Add(Me.uxTargetTemplate)
-        Me.Controls.Add(Me.Template)
         Me.Controls.Add(Me.GroupBox6)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.GroupBox4)
@@ -374,7 +351,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.Controls.Add(Me.uxHelp)
         Me.Controls.Add(Me.uxCreate)
         Me.Name = "SpiralCurveSpiralDockWindow"
-        Me.Size = New System.Drawing.Size(283, 479)
+        Me.Size = New System.Drawing.Size(272, 414)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
@@ -418,8 +395,6 @@ Partial Class SpiralCurveSpiralDockWindow
     Friend WithEvents GroupBox6 As System.Windows.Forms.GroupBox
     Friend WithEvents uxCurvetotheRight As System.Windows.Forms.RadioButton
     Friend WithEvents uxCurvetotheLeft As System.Windows.Forms.RadioButton
-    Friend WithEvents Template As System.Windows.Forms.Label
-    Friend WithEvents uxTargetTemplate As System.Windows.Forms.TextBox
     Friend WithEvents uxArcLengthValue As System.Windows.Forms.TextBox
 
 End Class
