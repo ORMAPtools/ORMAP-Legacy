@@ -212,13 +212,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <AddInContent Include="Images\SpiralConstruction.png" />
+    <Content Include="Images\3DCenterOnTarget32.png" />
+    <Content Include="Images\SpiralConstruction.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <AddInContent Include="Images\SpiralCurveSpiral.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AddInContent Include="Images\SpiralCurveDockWindow.png" />
+    <Folder Include="Help\" />
   </ItemGroup>
   <PropertyGroup>
     <ZipFileExtension>esriAddIn</ZipFileExtension>

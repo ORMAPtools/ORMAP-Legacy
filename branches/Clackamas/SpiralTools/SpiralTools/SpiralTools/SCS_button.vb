@@ -160,8 +160,6 @@ Public Class SCS_button
             If .uxCurvebyDegree.Checked And .uxCurveDegreeValue.TextLength = 0 Then
                 MessageBox.Show("Please eneter a degree value")
                 Exit Sub
-            ElseIf .uxCurvebyDegree.Checked And Not IsNumeric(.uxCurveDegreeValue.Text) Then
-                MessageBox.Show("Please us a numeric value in the degree value box")
             End If
 
             'Sets the input points
@@ -175,10 +173,23 @@ Public Class SCS_button
             theToPoint.PutCoords(CDbl(.uxToPointXValue.Text), CDbl(.uxToPointYValue.Text))
 
             'Sends data to the SpiralsUtilities ConstructSCSbyLenth function
+            Dim theCurveRadius As Double
             If .uxCurveByRadius.Checked Then
                 ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), CDbl(.uxCurveByRadiusValue.Text), .uxCurvetotheRight.Checked)
             ElseIf .uxCurvebyDegree.Checked Then
-                Dim theCurveRadius As Double = 5729.578 / CDbl(.uxCurveDegreeValue.Text)
+                If Not IsNumeric(.uxCurveDegreeValue.Text) Then
+                    theCurveRadius = DMSAngle_to_double(Trim(.uxCurveDegreeValue.Text))
+                    If theCurveRadius = 0 Then
+                        MessageBox.Show("Please Enter a valid degree value" & vbNewLine _
+                                        & "for example, 1-30-00")
+                        Exit Sub
+                    Else
+                        theCurveRadius = 5729.579 / theCurveRadius
+                    End If
+                Else
+                    theCurveRadius = 5729.578 / CDbl(.uxCurveDegreeValue.Text)
+                End If
+
                 ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), theCurveRadius, .uxCurvetotheRight.Checked)
             End If
         End With

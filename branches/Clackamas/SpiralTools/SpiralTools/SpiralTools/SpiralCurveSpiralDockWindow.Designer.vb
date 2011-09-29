@@ -90,11 +90,11 @@ Partial Class SpiralCurveSpiralDockWindow
         '
         'uxGettoPoint
         '
-        Me.uxGettoPoint.Location = New System.Drawing.Point(176, 31)
+        Me.uxGettoPoint.Image = Global.SpiralTools.My.Resources.Resources._3DCenterOnTarget32
+        Me.uxGettoPoint.Location = New System.Drawing.Point(200, 25)
         Me.uxGettoPoint.Name = "uxGettoPoint"
-        Me.uxGettoPoint.Size = New System.Drawing.Size(75, 23)
+        Me.uxGettoPoint.Size = New System.Drawing.Size(35, 32)
         Me.uxGettoPoint.TabIndex = 4
-        Me.uxGettoPoint.Text = "Get Point"
         Me.uxGettoPoint.UseVisualStyleBackColor = True
         '
         'uxToPointYValue
@@ -131,11 +131,11 @@ Partial Class SpiralCurveSpiralDockWindow
         '
         'uxGetFromPoint
         '
-        Me.uxGetFromPoint.Location = New System.Drawing.Point(176, 31)
+        Me.uxGetFromPoint.Image = Global.SpiralTools.My.Resources.Resources._3DCenterOnTarget32
+        Me.uxGetFromPoint.Location = New System.Drawing.Point(197, 22)
         Me.uxGetFromPoint.Name = "uxGetFromPoint"
-        Me.uxGetFromPoint.Size = New System.Drawing.Size(75, 23)
+        Me.uxGetFromPoint.Size = New System.Drawing.Size(35, 35)
         Me.uxGetFromPoint.TabIndex = 4
-        Me.uxGetFromPoint.Text = "Get Point"
         Me.uxGetFromPoint.UseVisualStyleBackColor = True
         '
         'uxFromPointYValue
@@ -186,11 +186,11 @@ Partial Class SpiralCurveSpiralDockWindow
         '
         'uxGetTangentPoint
         '
-        Me.uxGetTangentPoint.Location = New System.Drawing.Point(176, 31)
+        Me.uxGetTangentPoint.Image = Global.SpiralTools.My.Resources.Resources._3DCenterOnTarget32
+        Me.uxGetTangentPoint.Location = New System.Drawing.Point(197, 25)
         Me.uxGetTangentPoint.Name = "uxGetTangentPoint"
-        Me.uxGetTangentPoint.Size = New System.Drawing.Size(75, 23)
+        Me.uxGetTangentPoint.Size = New System.Drawing.Size(35, 31)
         Me.uxGetTangentPoint.TabIndex = 4
-        Me.uxGetTangentPoint.Text = "Get Point"
         Me.uxGetTangentPoint.UseVisualStyleBackColor = True
         '
         'uxTangentPointYValue

@@ -221,11 +221,11 @@ Partial Class SpiralDockWindow
         '
         'uxGetFromPoint
         '
-        Me.uxGetFromPoint.Location = New System.Drawing.Point(198, 26)
+        Me.uxGetFromPoint.Image = Global.SpiralTools.My.Resources.Resources._3DCenterOnTarget32
+        Me.uxGetFromPoint.Location = New System.Drawing.Point(215, 24)
         Me.uxGetFromPoint.Name = "uxGetFromPoint"
-        Me.uxGetFromPoint.Size = New System.Drawing.Size(75, 23)
+        Me.uxGetFromPoint.Size = New System.Drawing.Size(36, 31)
         Me.uxGetFromPoint.TabIndex = 4
-        Me.uxGetFromPoint.Text = "Get Point"
         Me.uxGetFromPoint.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -276,11 +276,11 @@ Partial Class SpiralDockWindow
         '
         'usGetTangentPoint
         '
-        Me.usGetTangentPoint.Location = New System.Drawing.Point(199, 28)
+        Me.usGetTangentPoint.Image = Global.SpiralTools.My.Resources.Resources._3DCenterOnTarget32
+        Me.usGetTangentPoint.Location = New System.Drawing.Point(216, 22)
         Me.usGetTangentPoint.Name = "usGetTangentPoint"
-        Me.usGetTangentPoint.Size = New System.Drawing.Size(75, 23)
+        Me.usGetTangentPoint.Size = New System.Drawing.Size(34, 33)
         Me.usGetTangentPoint.TabIndex = 5
-        Me.usGetTangentPoint.Text = "Get Point"
         Me.usGetTangentPoint.UseVisualStyleBackColor = True
         '
         'uxTangentPointYValue
