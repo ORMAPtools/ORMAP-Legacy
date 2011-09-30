@@ -175,22 +175,44 @@ Public Class SCS_button
             'Sends data to the SpiralsUtilities ConstructSCSbyLenth function
             Dim theCurveRadius As Double
             If .uxCurveByRadius.Checked Then
-                ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), CDbl(.uxCurveByRadiusValue.Text), .uxCurvetotheRight.Checked)
+                Dim theEditLayers As IEditLayers = CType(My.ArcMap.Editor, IEditLayers)
+                If Not theEditLayers.CurrentLayer Is Nothing Then
+                    If Is_Feature_Class_Valid_Polyline(theEditLayers.CurrentLayer.FeatureClass) Then
+                        ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), CDbl(.uxCurveByRadiusValue.Text), .uxCurvetotheRight.Checked)
+                    End If
+                Else
+                    MessageBox.Show("Please select a line feature class as a target")
+                End If
             ElseIf .uxCurvebyDegree.Checked Then
                 If Not IsNumeric(.uxCurveDegreeValue.Text) Then
-                    theCurveRadius = DMSAngle_to_double(Trim(.uxCurveDegreeValue.Text))
+                    theCurveRadius = 5729.578 / DMSAngle_to_Double(Trim(.uxCurveDegreeValue.Text))
                     If theCurveRadius = 0 Then
                         MessageBox.Show("Please Enter a valid degree value" & vbNewLine _
                                         & "for example, 1-30-00")
                         Exit Sub
                     Else
-                        theCurveRadius = 5729.579 / theCurveRadius
+                        theCurveRadius = 5729.578 / theCurveRadius
                     End If
                 Else
                     theCurveRadius = 5729.578 / CDbl(.uxCurveDegreeValue.Text)
                 End If
 
-                ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), theCurveRadius, .uxCurvetotheRight.Checked)
+                Try
+                    Dim theEditLayers As IEditLayers = CType(My.ArcMap.Editor, IEditLayers)
+                    If Not theEditLayers.CurrentLayer Is Nothing Then
+                        If Is_Feature_Class_Valid_Polyline(theEditLayers.CurrentLayer.FeatureClass) Then
+                            ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), theCurveRadius, .uxCurvetotheRight.Checked)
+                        Else
+                            MessageBox.Show("Please select a line feature class as a target")
+                        End If
+                    Else
+                        MessageBox.Show("Please select a line feature class as a target")
+                    End If
+                Catch ex As Exception
+                    MessageBox.Show(ex.ToString)
+                End Try
+
+
             End If
         End With
 
