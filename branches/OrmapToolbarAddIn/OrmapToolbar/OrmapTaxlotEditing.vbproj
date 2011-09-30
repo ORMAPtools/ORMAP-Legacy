@@ -150,6 +150,31 @@
     <Compile Include="MapDefinitionForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="OrmapAnnotateToolbar\AnnotationUtilities.vb" />
+    <Compile Include="OrmapAnnotateToolbar\CreateAnnotation.vb" />
+    <Compile Include="OrmapAnnotateToolbar\CreateAnnotationButton.vb" />
+    <Compile Include="OrmapAnnotateToolbar\CreateAnnotationForm.Designer.vb">
+      <DependentUpon>CreateAnnotationForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="OrmapAnnotateToolbar\CreateAnnotationForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OrmapAnnotateToolbar\InvertAnnotation.vb" />
+    <Compile Include="OrmapAnnotateToolbar\InvertAnnotationButton.vb" />
+    <Compile Include="OrmapAnnotateToolbar\AnnoMoveDown.vb" />
+    <Compile Include="OrmapAnnotateToolbar\AnnoMoveDownButton.vb" />
+    <Compile Include="OrmapAnnotateToolbar\AnnoMoveUp.vb" />
+    <Compile Include="OrmapAnnotateToolbar\AnnoMoveUpButton.vb" />
+    <Compile Include="OrmapAnnotateToolbar\AnnoBothDownStandard.vb" />
+    <Compile Include="OrmapAnnotateToolbar\AnnoBothDownStandardButton.vb" />
+    <Compile Include="OrmapAnnotateToolbar\AnnoBothUpStandard.vb" />
+    <Compile Include="OrmapAnnotateToolbar\AnnoBothUpStandardButton.vb" />
+    <Compile Include="OrmapAnnotateToolbar\TransposeAnnotation.vb" />
+    <Compile Include="OrmapAnnotateToolbar\TransposeAnnotationButton.vb" />
+    <Compile Include="OrmapAnnotateToolbar\AnnoBothDownWide.vb" />
+    <Compile Include="OrmapAnnotateToolbar\AnnoBothDownWideButton.vb" />
+    <Compile Include="OrmapAnnotateToolbar\AnnoBothUpWide.vb" />
+    <Compile Include="OrmapAnnotateToolbar\AnnoBothUpWideButton.vb" />
     <Compile Include="OrmapSettings.vb" />
     <Compile Include="OrmapSettingsForm.designer.vb">
       <DependentUpon>OrmapSettingsForm.vb</DependentUpon>
@@ -279,6 +304,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MapDefinitionForm.resx">
       <DependentUpon>MapDefinitionForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OrmapAnnotateToolbar\CreateAnnotationForm.resx">
+      <DependentUpon>CreateAnnotationForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OrmapSettingsForm.resx">
       <DependentUpon>OrmapSettingsForm.vb</DependentUpon>
@@ -411,6 +439,17 @@
   </ItemGroup>
   <ItemGroup>
     <AddInContent Include="Images\SortCancelledNumbers.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AddInContent Include="OrmapAnnotateToolbar\Images\CreateAnnotationButton.bmp" />
+    <AddInContent Include="OrmapAnnotateToolbar\Images\InvertAnnotationButton.bmp" />
+    <AddInContent Include="OrmapAnnotateToolbar\Images\MoveDownButton.bmp" />
+    <AddInContent Include="OrmapAnnotateToolbar\Images\MoveUpButton.bmp" />
+    <AddInContent Include="OrmapAnnotateToolbar\Images\StandardBothSidesDownButton.bmp" />
+    <AddInContent Include="OrmapAnnotateToolbar\Images\StandardBothSidesUpButton.bmp" />
+    <AddInContent Include="OrmapAnnotateToolbar\Images\TransposeAnnotationButton.bmp" />
+    <AddInContent Include="OrmapAnnotateToolbar\Images\WideBothSidesDownButton.bmp" />
+    <AddInContent Include="OrmapAnnotateToolbar\Images\WideBothSidesUpButton.bmp" />
   </ItemGroup>
   <PropertyGroup>
     <ZipFileExtension>esriAddIn</ZipFileExtension>
