@@ -183,6 +183,19 @@ Module SpiralUtilities
         Return TheMarkerElement
     End Function
     ''' <summary>
+    ''' checks to see if the passed feature class is type of polyline
+    ''' </summary>
+    ''' <param name="theFeatureClass">an featureclass object</param>
+    ''' <returns>true or false</returns>
+    ''' <remarks></remarks>
+    Public Function Is_Feature_Class_Valid_Polyline(ByVal theFeatureClass As IFeatureClass) As Boolean
+        Dim isValid As Boolean = False
+        If theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolyline Then
+            isValid = True
+        End If
+        Return isValid
+    End Function
+    ''' <summary>
     ''' 
     ''' </summary>
     ''' <param name="theFromPoint"></param>
@@ -206,71 +219,31 @@ Module SpiralUtilities
 
         Return thePolyLine
     End Function
+    
+
     ''' <summary>
-    ''' Coverts a degree string of 00-00-00 to decimal degrees.
+    ''' Takes a Quadrant angle and converts to Decimal Degrees
     ''' </summary>
     ''' <param name="TheCircularDegree"></param>
-    ''' <returns>Double value</returns>
-    ''' <remarks></remarks>A return of 0 means an invalid string was passed to function
-    Public Function DMSAngle_to_double(ByVal TheCircularDegree As String) As Double
-        Dim theNewCircularValue As Double
-        Dim TheFirstDash As Integer = InStr(Trim(TheCircularDegree), "-")
-        Dim theSecondDash As Integer = InStr(TheFirstDash + 1, TheCircularDegree, "-")
-        Dim theLength As Integer = Len(Trim(TheCircularDegree))
+    ''' <returns>A double value.</returns>
+    ''' <remarks>If 0 is returned then an invalid value was sent.</remarks>
+    Public Function DMSAngle_to_Double(ByVal TheCircularDegree As String) As Double
+        Try
+            Dim theNewValue As Double = 0
 
-        Dim theDegress As Double = 0
-        Dim theMinutes As Double = 0
-        Dim theSeconds As Double = 0
+            Dim theDirectionFormat As IDirectionFormat = New DirectionFormat
+            Dim theNumberFormat As INumberFormat = CType(theDirectionFormat, INumberFormat)
 
-        'Checks if a value is actually passed
-        If theLength = 0 Then
-            theNewCircularValue = 0
-            Return theNewCircularValue
-            Exit Function
-        End If
+            theDirectionFormat.DirectionUnits = esriDirectionUnits.esriDUDegreesMinutesSeconds
+            theNewValue = theNumberFormat.StringToValue(TheCircularDegree)
 
-        'Checks to see if there is a dash in the string
-        If TheFirstDash = 0 Then
-            Return theNewCircularValue
-            Exit Function
-        End If
-
-        If Not IsNumeric(Mid(TheCircularDegree, 1, TheFirstDash - 1)) Then
-            Return theNewCircularValue
-            Exit Function
-        End If
-
-        theDegress = CDbl(Mid(TheCircularDegree, 1, TheFirstDash - 1))
-
-        If TheFirstDash = 1 And theSecondDash = 0 Then
-            If Not IsNumeric(Mid(TheCircularDegree, TheFirstDash + 1, 2)) Then
-                Return theNewCircularValue
-                Exit Function
-            Else
-                theMinutes = CDbl(Mid(TheCircularDegree, TheFirstDash + 1, 2)) / 60
-            End If
-        Else
-
-        End If
+            Return theNewValue
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString)
+        End Try
 
 
-
-
-
-
-        If theSecondDash = 1 Then
-            If Not IsNumeric(Mid(TheCircularDegree, theSecondDash + 1, 2)) Then
-                Return theNewCircularValue
-                Exit Function
-            Else
-
-            End If
-        End If
-
-        theNewCircularValue = theDegrees + theMinutes + theSeconds
-
-
-        Return theNewCircularValue
     End Function
+
 End Module
 
