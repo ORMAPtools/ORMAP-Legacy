@@ -99,9 +99,6 @@ Public Class SCS_button
     Private _partnerSCSDockWindow As IDockableWindow
 
     Private WithEvents _partnerSCSDockWindowUI As SpiralCurveSpiralDockWindow
-
-
-
     Friend ReadOnly Property partnerSCSDockFormUI() As SpiralCurveSpiralDockWindow
         Get
             If _partnerSCSDockWindowUI Is Nothing Then
@@ -110,8 +107,8 @@ Public Class SCS_button
             Return _partnerSCSDockWindowUI
         End Get
     End Property
-
     Private Sub setPartnerSCSDockFormUI(ByVal value As SpiralCurveSpiralDockWindow)
+
         If value IsNot Nothing Then
             _partnerSCSDockWindowUI = value
             'subscribe to partner form events
@@ -132,7 +129,6 @@ Public Class SCS_button
             RemoveHandler _partnerSCSDockWindowUI.uxGetFromPoint.Click, AddressOf uxGetFromPoint_Click
             RemoveHandler _partnerSCSDockWindowUI.uxCurveByRadius.CheckedChanged, AddressOf uxCurveByRadius_CheckedChanged
             RemoveHandler _partnerSCSDockWindowUI.uxCurvebyDegree.CheckedChanged, AddressOf uxCurvebyDegree_CheckedChanged
-
         End If
     End Sub
 
@@ -140,14 +136,10 @@ Public Class SCS_button
 
 #Region "Event Handler"
 
-
     ''' <summary>
     ''' Constructs the Spiral-Curve-Spiral based on user inputs in the partner Spiral Curve Spiral Dockable Window
     ''' </summary>
     Private Sub uxCreate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-
-
         'Validate user inputs
         With _partnerSCSDockWindowUI
             If .uxCurveByRadius.Checked And .uxCurveByRadiusValue.TextLength = 0 Then
@@ -179,6 +171,8 @@ Public Class SCS_button
                 If Not theEditLayers.CurrentLayer Is Nothing Then
                     If Is_Feature_Class_Valid_Polyline(theEditLayers.CurrentLayer.FeatureClass) Then
                         ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), CDbl(.uxCurveByRadiusValue.Text), .uxCurvetotheRight.Checked)
+                    Else
+                        MessageBox.Show("Please select a line feature class as a target")
                     End If
                 Else
                     MessageBox.Show("Please select a line feature class as a target")
@@ -223,7 +217,9 @@ Public Class SCS_button
     ''' Opens Help Document
     ''' </summary>
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
+        Dim theRTFStream As System.IO.Stream = _
+           Me.GetType().Assembly.GetManifestResourceStream("SpiralTools.SpiralCurveSpiral_help.rtf")
+        OpenHelp("Spiral-Curve-Spiral Transition", theRTFStream)
     End Sub
     ''' <summary>
     ''' Gets the end point for the Spiral Curve Spiral Construction from the map.
@@ -281,7 +277,6 @@ Public Class SCS_button
         End If
 
     End Sub
-
     ''' <summary>
     ''' At this point, this routine does not do anything.  
     ''' </summary>
@@ -289,6 +284,7 @@ Public Class SCS_button
     Private Sub partnerSCSDockWindow_load()
 
     End Sub
+    
 #End Region
 
 #End Region
@@ -371,7 +367,6 @@ Public Class SCS_button
                 _SnappingMarkerElement = Nothing
                 My.ArcMap.Document.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewAll, Nothing, Nothing)
             End If
-
         Catch ex As Exception
             MsgBox(ex.ToString)
         End Try
@@ -383,7 +378,6 @@ Public Class SCS_button
     ''' </summary>
     ''' <remarks></remarks>
     Protected Overrides Sub OnUpdate()
-
         Me.Enabled = SpiralUtilities.IsEnable
         If Not Me.Enabled Then
             _partnerSCSDockWindow.Show(False)
@@ -394,7 +388,7 @@ Public Class SCS_button
                 _SnappingMarkerElement = Nothing
             End If
         End If
-       
+
     End Sub
 
 #End Region
