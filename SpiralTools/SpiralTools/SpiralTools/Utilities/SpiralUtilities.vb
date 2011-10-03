@@ -121,6 +121,11 @@ Module SpiralUtilities
 
             'Constructs the spiral curves
             Dim theFirstSpiralPolyLine As IPolyline6 = Construct_Spiral_by_length(theFromPoint, theTangentPoint, 0, toCurvature, isCCW, theSpiralLengths)
+            If theFirstSpiralPolyLine Is Nothing Then
+                MessageBox.Show("Failed to construct the first spiral" & vbNewLine & "Please check construction inputs")
+                Exit Sub
+            End If
+
 
             If isCCW Then
                 isCCW = False
@@ -129,10 +134,19 @@ Module SpiralUtilities
             End If
 
             Dim theSecondSpiralPolyLine As IPolyline6 = Construct_Spiral_by_length(theToPoint, theTangentPoint, 0, toCurvature, isCCW, theSpiralLengths)
+            If theSecondSpiralPolyLine Is Nothing Then
+                MessageBox.Show("Failed to construct the first spiral" & vbNewLine & "Please check construction inputs")
+                Exit Sub
+            End If
 
             'Constructs the Central Curve
             Dim TheCentralCurveConstruction As IConstructCircularArc2 = New CircularArc
-            TheCentralCurveConstruction.ConstructEndPointsRadius(theFirstSpiralPolyLine.ToPoint, theSecondSpiralPolyLine.ToPoint, isCCW, theRadius, True)
+            Try
+                TheCentralCurveConstruction.ConstructEndPointsRadius(theFirstSpiralPolyLine.ToPoint, theSecondSpiralPolyLine.ToPoint, isCCW, theRadius, True)
+            Catch ex As Exception
+                MessageBox.Show("Failed to construct central curve." & vbNewLine & "Please check the curve input.")
+            End Try
+
             Dim theCentralCurve As ICurve3 = TryCast(TheCentralCurveConstruction, ICurve3)
             Dim TheCurvePolyline As ISegmentCollection = New PolylineClass()
             TheCurvePolyline.AddSegment(TryCast(TheCentralCurveConstruction, ISegment))
@@ -150,7 +164,7 @@ Module SpiralUtilities
             theCenterCircularFeature.Store()
             theSecondSpiralFeature.Shape = CType(theSecondSpiralPolyLine, IGeometry)
             theSecondSpiralFeature.Store()
-            My.ArcMap.Editor.StopOperation("Finished Construction")
+            My.ArcMap.Editor.StopOperation("Spiral Construction")
 
         Catch ex As Exception
             MsgBox(ex.ToString)
@@ -214,7 +228,8 @@ Module SpiralUtilities
             Dim TheSpiralConstruction As IConstructClothoid = CType(theGeometryEnvironment, IConstructClothoid)
             thePolyLine = CType(TheSpiralConstruction.ConstructClothoidByLength(theFromPoint, theTangentpoint, isCCW, theFromCurvature, theToCurvature, theSpiralLength, esriCurveDensifyMethod.esriCurveDensifyByLength, densifyParameter:=0.5), IPolyline6)
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            MsgBox("Failed to construct spiral")
+            thePolyLine = Nothing
         End Try
 
         Return thePolyLine
@@ -228,6 +243,7 @@ Module SpiralUtilities
     ''' <returns>A double value.</returns>
     ''' <remarks>If 0 is returned then an invalid value was sent.</remarks>
     Public Function DMSAngle_to_Double(ByVal TheCircularDegree As String) As Double
+
         Try
             Dim theNewValue As Double = 0
 
@@ -245,5 +261,24 @@ Module SpiralUtilities
 
     End Function
 
+    Public Sub OpenHelp(ByVal helpFormText As String, ByVal theRTFStream As Stream)
+
+        ' Get the help form.
+        Dim theHelpForm As New HelpForm
+        theHelpForm.Text = helpFormText
+
+        If Not (theRTFStream Is Nothing) Then
+            Dim sr As New StreamReader(theRTFStream)
+            theHelpForm.uxRichTextBox.LoadFile(theRTFStream, RichTextBoxStreamType.RichText)
+            sr.Close()
+        End If
+
+        If helpFormText = "Report Bug or Request New Feature" Then
+            theHelpForm.uxReportOrRequest.Visible = False
+        End If
+
+        theHelpForm.Show()
+
+    End Sub
 End Module
 
