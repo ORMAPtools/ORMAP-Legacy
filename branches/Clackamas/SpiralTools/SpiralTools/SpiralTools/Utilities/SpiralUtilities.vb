@@ -59,7 +59,7 @@ Imports stdole
 ''' <remarks></remarks>
 ''' 
 Module SpiralUtilities
-    Dim _editor As IEditor3 = CType(My.ArcMap.Editor, IEditor3)
+    Dim _editor As IEditor3 = DirectCast(My.ArcMap.Editor, IEditor3)
 
     ''' <summary>
     ''' Checks the editing State
@@ -97,9 +97,23 @@ Module SpiralUtilities
     ''' <returns>a point</returns>
     ''' <remarks></remarks>
     Function getSnapPoint(ByVal point As IPoint) As IPoint
-        Dim snapEnv As ISnapEnvironment = CType(_editor, ISnapEnvironment)
+        Dim snapEnv As ISnapEnvironment = DirectCast(_editor, ISnapEnvironment)
         snapEnv.SnapPoint(point)
         Return point
+    End Function
+    Function GetTargetFeatureClass(ByVal theLayerName As String) As IFeatureClass
+        Dim theEnumLayers As IEnumLayer = My.ArcMap.Editor.Map.Layers
+        theEnumLayers.Reset()
+        Dim theTargetFeatureClass As IFeatureClass = Nothing
+        Dim thisLayer As ILayer2 = DirectCast(theEnumLayers.Next, ILayer2)
+        While Not thisLayer Is Nothing
+            If thisLayer.Name = theLayerName Then
+                Dim thisFeatureLayer As IFeatureLayer2 = DirectCast(thisLayer, IFeatureLayer2)
+                theTargetFeatureClass = thisFeatureLayer.FeatureClass
+            End If
+            thisLayer = DirectCast(theEnumLayers.Next, ILayer2)
+        End While
+        Return theTargetFeatureClass
     End Function
     ''' <summary>
     ''' Constructs to spiral curve sprial transition
@@ -111,29 +125,23 @@ Module SpiralUtilities
     ''' <param name="theRadius">As double, the radius of the central spiral</param>
     ''' <param name="isCCW">as boolena, is curve counter clockwise</param>
     ''' <remarks></remarks>
-    Public Sub ConstructSCSbyLength(ByVal theFromPoint As IPoint, ByVal theTangentPoint As IPoint, ByVal theToPoint As IPoint, ByVal theSpiralLengths As Double, ByVal theRadius As Double, ByVal isCCW As Boolean)
-        If My.ArcMap.Editor.EditState = esriEditState.esriStateNotEditing Then
-            Exit Sub
-        End If
+    Public Sub ConstructSCSbyLength(ByVal theFromPoint As IPoint, ByVal theTangentPoint As IPoint, ByVal theToPoint As IPoint, ByVal theSpiralLengths As Double, ByVal theRadius As Double, ByVal isCCW As Boolean, ByVal theTargetLayerName As String)
+        If My.ArcMap.Editor.EditState = esriEditState.esriStateNotEditing Then Exit Sub
+
         Try
             Dim toCurvature As Double = 1 / theRadius
             Dim DensifyParameter As Double = 0.5
 
             'Constructs the spiral curves
-            Dim theFirstSpiralPolyLine As IPolyline6 = Construct_Spiral_by_length(theFromPoint, theTangentPoint, 0, toCurvature, isCCW, theSpiralLengths)
+            Dim theFirstSpiralPolyLine As IPolyline6 = ConstructSpiralbyLength(theFromPoint, theTangentPoint, 0, toCurvature, isCCW, theSpiralLengths)
             If theFirstSpiralPolyLine Is Nothing Then
                 MessageBox.Show("Failed to construct the first spiral" & vbNewLine & "Please check construction inputs")
                 Exit Sub
             End If
 
+            Dim theSecondSpiralisCCW As Boolean = Not isCCW
 
-            If isCCW Then
-                isCCW = False
-            Else
-                isCCW = True
-            End If
-
-            Dim theSecondSpiralPolyLine As IPolyline6 = Construct_Spiral_by_length(theToPoint, theTangentPoint, 0, toCurvature, isCCW, theSpiralLengths)
+            Dim theSecondSpiralPolyLine As IPolyline6 = ConstructSpiralbyLength(theToPoint, theTangentPoint, 0, toCurvature, theSecondSpiralisCCW, theSpiralLengths)
             If theSecondSpiralPolyLine Is Nothing Then
                 MessageBox.Show("Failed to construct the first spiral" & vbNewLine & "Please check construction inputs")
                 Exit Sub
@@ -142,45 +150,102 @@ Module SpiralUtilities
             'Constructs the Central Curve
             Dim TheCentralCurveConstruction As IConstructCircularArc2 = New CircularArc
             Try
-                TheCentralCurveConstruction.ConstructEndPointsRadius(theFirstSpiralPolyLine.ToPoint, theSecondSpiralPolyLine.ToPoint, isCCW, theRadius, True)
+                TheCentralCurveConstruction.ConstructEndPointsRadius(theFirstSpiralPolyLine.ToPoint, theSecondSpiralPolyLine.ToPoint, theSecondSpiralisCCW, theRadius, True)
             Catch ex As Exception
                 MessageBox.Show("Failed to construct central curve." & vbNewLine & "Please check the curve input.")
             End Try
 
-            Dim theCentralCurve As ICurve3 = TryCast(TheCentralCurveConstruction, ICurve3)
+            Dim theCentralCurve As ICurve3 = DirectCast(TheCentralCurveConstruction, ICurve3)
             Dim TheCurvePolyline As ISegmentCollection = New PolylineClass()
-            TheCurvePolyline.AddSegment(TryCast(TheCentralCurveConstruction, ISegment))
+            TheCurvePolyline.AddSegment(DirectCast(TheCentralCurveConstruction, ISegment))
 
-            Dim theFeatureclass As IFeatureClass = CType(My.ArcMap.Editor.Map.Layer(0), IFeatureLayer2).FeatureClass
+            Dim theFeatureclass As IFeatureClass = GetTargetFeatureClass(theTargetLayerName)
             Dim theFirstSpiralFeature As IFeature = theFeatureclass.CreateFeature
             Dim theSecondSpiralFeature As IFeature = theFeatureclass.CreateFeature
             Dim theCenterCircularFeature As IFeature = theFeatureclass.CreateFeature
 
+            Dim theCurveDirection As String = "L"
+            If Not isCCW Then theCurveDirection = "R"
+
             'Add the new features to the feature Class
             My.ArcMap.Editor.StartOperation()
-            theFirstSpiralFeature.Shape = CType(theFirstSpiralPolyLine, IGeometry)
+            'The Geometry and fields for the first Spiral
+            theFirstSpiralFeature.Shape = DirectCast(theFirstSpiralPolyLine, IGeometry)
+            theFirstSpiralFeature.Value(FindField("ARCLENGTH", theFirstSpiralFeature)) = FormatNumber(theSpiralLengths, 2).ToString
+            theFirstSpiralFeature.Value(FindField("RADIUS", theFirstSpiralFeature)) = "INFINITY"
+            theFirstSpiralFeature.Value(FindField("RADIUS2", theFirstSpiralFeature)) = FormatNumber(theRadius, 2).ToString
+            theFirstSpiralFeature.Value(FindField("SIDE", theFirstSpiralFeature)) = theCurveDirection
+            theFirstSpiralFeature.Value(FindField("DISTANCE", theFirstSpiralFeature)) = LineLength(theFirstSpiralPolyLine.FromPoint, theFirstSpiralPolyLine.ToPoint).ToString
             theFirstSpiralFeature.Store()
-            theCenterCircularFeature.Shape = CType(TheCurvePolyline, IGeometry)
+
+
+            'The Geometry and fields for the Central Circular Feature
+            theCenterCircularFeature.Shape = DirectCast(TheCurvePolyline, IGeometry)
+            theCenterCircularFeature.Value(FindField("ARCLENGTH", theCenterCircularFeature)) = FormatNumber(theCentralCurve.Length, 2).ToString
+            theCenterCircularFeature.Value(FindField("RADIUS", theCenterCircularFeature)) = FormatNumber(theRadius, 2).ToString
+            theCenterCircularFeature.Value(FindField("SIDE", theCenterCircularFeature)) = theCurveDirection
+            theCenterCircularFeature.Value(FindField("DISTANCE", theCenterCircularFeature)) = LineLength(theCentralCurve.FromPoint, theCentralCurve.ToPoint).ToString
+            theCenterCircularFeature.Value(FindField("DELTA", theCenterCircularFeature)) = GetDelta(DirectCast(theCentralCurve, ICircularArc))
             theCenterCircularFeature.Store()
-            theSecondSpiralFeature.Shape = CType(theSecondSpiralPolyLine, IGeometry)
+
+            'The Geometry and fileds for the second Central Circulare Feature
+            theSecondSpiralFeature.Shape = DirectCast(theSecondSpiralPolyLine, IGeometry)
+            theSecondSpiralFeature.Value(FindField("ARCLENGTH", theSecondSpiralFeature)) = FormatNumber(theSpiralLengths, 2).ToString
+            theSecondSpiralFeature.Value(FindField("RADIUS", theSecondSpiralFeature)) = "INFINITY"
+            theSecondSpiralFeature.Value(FindField("RADIUS2", theSecondSpiralFeature)) = FormatNumber(theRadius, 2).ToString
+            theSecondSpiralFeature.Value(FindField("SIDE", theSecondSpiralFeature)) = theCurveDirection
+            theSecondSpiralFeature.Value(FindField("DISTANCE", theSecondSpiralFeature)) = LineLength(theSecondSpiralPolyLine.FromPoint, theSecondSpiralPolyLine.ToPoint).ToString
             theSecondSpiralFeature.Store()
             My.ArcMap.Editor.StopOperation("Spiral Construction")
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            MessageBox.Show(ex.ToString)
         End Try
 
 
     End Sub
+    Function GetDelta(ByVal TheCircularArc As ICircularArc) As String
+
+        Dim theDelta As String
+        Dim theCentralAngle As Double = TheCircularArc.CentralAngle * (180 / Math.PI)
+
+        Dim theAngleFormat As IAngleFormat = New AngleFormat
+        theAngleFormat.AngleInDegrees = True
+        theAngleFormat.DisplayDegrees = False
+
+        Dim theNumberFormat As INumberFormat = DirectCast(theAngleFormat, INumberFormat)
+        theDelta = theNumberFormat.ValueToString(theCentralAngle)
+        MessageBox.Show(theDelta)
+
+        Return theDelta
+    End Function
+    Function LineLength(ByVal fromPoint As IPoint, ByVal toPoint As IPoint) As Double
+        Dim theLength As Double
+        Dim theLine As ILine2 = New Line
+        theLine.PutCoords(fromPoint, toPoint)
+        theLength = CDbl(FormatNumber(theLine.Length, 2))
+        Return theLength
+    End Function
+    ''' <summary>
+    ''' Finds the field index for a feature class
+    ''' </summary>
+    ''' <param name="theFieldName"></param>
+    ''' <returns>The index value for the field</returns>
+    ''' <remarks></remarks>
+    Function FindField(ByVal theFieldName As String, ByVal theFeature As IFeature) As Integer
+        Dim theFieldIndex As Integer
+        theFieldIndex = theFeature.Fields.FindField(theFieldName)
+        Return theFieldIndex
+    End Function
     ''' <summary>
     ''' Creates the circle graphic showing where the cursor is snapping to in regards to getting the point inputs.
     ''' </summary>
     ''' <returns>as graphic marker element</returns>
     ''' <remarks></remarks>
-    Public Function Create_Snap_Marker() As IMarkerElement
+    Public Function CreateSnapMarker() As IMarkerElement
         Dim TheMarkerElement As IMarkerElement = New MarkerElement
         Dim theMarkerSymbol As ICharacterMarkerSymbol = New CharacterMarkerSymbol
-        Dim theSnapFont As stdole.IFontDisp = CType(New stdole.StdFont, stdole.IFontDisp)
+        Dim theSnapFont As stdole.IFontDisp = DirectCast(New stdole.StdFont, stdole.IFontDisp)
 
         With theSnapFont
             .Name = "ESRI Default Marker"
@@ -202,7 +267,7 @@ Module SpiralUtilities
     ''' <param name="theFeatureClass">an featureclass object</param>
     ''' <returns>true or false</returns>
     ''' <remarks></remarks>
-    Public Function Is_Feature_Class_Valid_Polyline(ByVal theFeatureClass As IFeatureClass) As Boolean
+    Public Function IsFeatureClassValidPolyline(ByVal theFeatureClass As IFeatureClass) As Boolean
         Dim isValid As Boolean = False
         If theFeatureClass.ShapeType = esriGeometryType.esriGeometryPolyline Then
             isValid = True
@@ -220,21 +285,21 @@ Module SpiralUtilities
     ''' <param name="theSpiralLength"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Private Function Construct_Spiral_by_length(ByVal theFromPoint As IPoint, ByVal theTangentpoint As IPoint, ByRef theFromCurvature As Double, ByRef theToCurvature As Double, ByVal isCCW As Boolean, ByVal theSpiralLength As Double) As IPolyline6
-        Dim thePolyLine As IPolyline6 = CType(New Polyline, IPolyline6)
+    Private Function ConstructSpiralbyLength(ByVal theFromPoint As IPoint, ByVal theTangentpoint As IPoint, ByRef theFromCurvature As Double, ByRef theToCurvature As Double, ByVal isCCW As Boolean, ByVal theSpiralLength As Double) As IPolyline6
+        Dim thePolyLine As IPolyline6 = DirectCast(New Polyline, IPolyline6)
 
         Try
             Dim theGeometryEnvironment As IGeometryEnvironment4 = New GeometryEnvironment
-            Dim TheSpiralConstruction As IConstructClothoid = CType(theGeometryEnvironment, IConstructClothoid)
-            thePolyLine = CType(TheSpiralConstruction.ConstructClothoidByLength(theFromPoint, theTangentpoint, isCCW, theFromCurvature, theToCurvature, theSpiralLength, esriCurveDensifyMethod.esriCurveDensifyByLength, densifyParameter:=0.5), IPolyline6)
+            Dim TheSpiralConstruction As IConstructClothoid = DirectCast(theGeometryEnvironment, IConstructClothoid)
+            thePolyLine = DirectCast(TheSpiralConstruction.ConstructClothoidByLength(theFromPoint, theTangentpoint, isCCW, theFromCurvature, theToCurvature, theSpiralLength, esriCurveDensifyMethod.esriCurveDensifyByLength, densifyParameter:=0.5), IPolyline6)
         Catch ex As Exception
-            MsgBox("Failed to construct spiral")
+            MessageBox.Show("Failed to construct spiral")
             thePolyLine = Nothing
         End Try
 
         Return thePolyLine
     End Function
-    
+
 
     ''' <summary>
     ''' Takes a Quadrant angle and converts to Decimal Degrees
@@ -242,13 +307,13 @@ Module SpiralUtilities
     ''' <param name="TheCircularDegree"></param>
     ''' <returns>A double value.</returns>
     ''' <remarks>If 0 is returned then an invalid value was sent.</remarks>
-    Public Function DMSAngle_to_Double(ByVal TheCircularDegree As String) As Double
+    Public Function DMSAngletoDouble(ByVal TheCircularDegree As String) As Double
 
         Try
             Dim theNewValue As Double = 0
 
             Dim theDirectionFormat As IDirectionFormat = New DirectionFormat
-            Dim theNumberFormat As INumberFormat = CType(theDirectionFormat, INumberFormat)
+            Dim theNumberFormat As INumberFormat = DirectCast(theDirectionFormat, INumberFormat)
 
             theDirectionFormat.DirectionUnits = esriDirectionUnits.esriDUDegreesMinutesSeconds
             theNewValue = theNumberFormat.StringToValue(TheCircularDegree)
@@ -260,7 +325,7 @@ Module SpiralUtilities
 
 
     End Function
-
+   
     Public Sub OpenHelp(ByVal helpFormText As String, ByVal theRTFStream As Stream)
 
         ' Get the help form.

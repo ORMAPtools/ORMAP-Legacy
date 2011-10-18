@@ -19,6 +19,7 @@ Partial Class SpiralCurveSpiralDockWindow
   'Do not modify it using the code editor.
   <System.Diagnostics.DebuggerStepThrough()> _
   Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.uxCreate = New System.Windows.Forms.Button()
         Me.uxHelp = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
@@ -49,6 +50,9 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxCurvetotheLeft = New System.Windows.Forms.RadioButton()
         Me.uxCurvetotheRight = New System.Windows.Forms.RadioButton()
         Me.uxArcLengthValue = New System.Windows.Forms.TextBox()
+        Me.uxTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.uxTargetLayers = New System.Windows.Forms.ComboBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -58,19 +62,19 @@ Partial Class SpiralCurveSpiralDockWindow
         '
         'uxCreate
         '
-        Me.uxCreate.Location = New System.Drawing.Point(2, 383)
+        Me.uxCreate.Location = New System.Drawing.Point(2, 434)
         Me.uxCreate.Name = "uxCreate"
         Me.uxCreate.Size = New System.Drawing.Size(75, 23)
-        Me.uxCreate.TabIndex = 0
+        Me.uxCreate.TabIndex = 17
         Me.uxCreate.Text = "Create"
         Me.uxCreate.UseVisualStyleBackColor = True
         '
         'uxHelp
         '
-        Me.uxHelp.Location = New System.Drawing.Point(83, 383)
+        Me.uxHelp.Location = New System.Drawing.Point(83, 434)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
-        Me.uxHelp.TabIndex = 2
+        Me.uxHelp.TabIndex = 18
         Me.uxHelp.Text = "Help"
         Me.uxHelp.UseVisualStyleBackColor = True
         '
@@ -81,7 +85,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox1.Controls.Add(Me.uxToPointXValue)
         Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Controls.Add(Me.Label1)
-        Me.GroupBox1.Location = New System.Drawing.Point(0, 308)
+        Me.GroupBox1.Location = New System.Drawing.Point(0, 359)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(267, 69)
         Me.GroupBox1.TabIndex = 3
@@ -94,7 +98,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxGettoPoint.Location = New System.Drawing.Point(200, 25)
         Me.uxGettoPoint.Name = "uxGettoPoint"
         Me.uxGettoPoint.Size = New System.Drawing.Size(35, 32)
-        Me.uxGettoPoint.TabIndex = 4
+        Me.uxGettoPoint.TabIndex = 16
         Me.uxGettoPoint.UseVisualStyleBackColor = True
         '
         'uxToPointYValue
@@ -102,14 +106,14 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxToPointYValue.Location = New System.Drawing.Point(31, 44)
         Me.uxToPointYValue.Name = "uxToPointYValue"
         Me.uxToPointYValue.Size = New System.Drawing.Size(124, 20)
-        Me.uxToPointYValue.TabIndex = 3
+        Me.uxToPointYValue.TabIndex = 15
         '
         'uxToPointXValue
         '
         Me.uxToPointXValue.Location = New System.Drawing.Point(31, 20)
         Me.uxToPointXValue.Name = "uxToPointXValue"
         Me.uxToPointXValue.Size = New System.Drawing.Size(124, 20)
-        Me.uxToPointXValue.TabIndex = 2
+        Me.uxToPointXValue.TabIndex = 14
         '
         'Label2
         '
@@ -135,7 +139,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxGetFromPoint.Location = New System.Drawing.Point(197, 22)
         Me.uxGetFromPoint.Name = "uxGetFromPoint"
         Me.uxGetFromPoint.Size = New System.Drawing.Size(35, 35)
-        Me.uxGetFromPoint.TabIndex = 4
+        Me.uxGetFromPoint.TabIndex = 10
         Me.uxGetFromPoint.UseVisualStyleBackColor = True
         '
         'uxFromPointYValue
@@ -143,14 +147,14 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxFromPointYValue.Location = New System.Drawing.Point(31, 44)
         Me.uxFromPointYValue.Name = "uxFromPointYValue"
         Me.uxFromPointYValue.Size = New System.Drawing.Size(124, 20)
-        Me.uxFromPointYValue.TabIndex = 3
+        Me.uxFromPointYValue.TabIndex = 9
         '
         'uxFromPointXValue
         '
         Me.uxFromPointXValue.Location = New System.Drawing.Point(31, 20)
         Me.uxFromPointXValue.Name = "uxFromPointXValue"
         Me.uxFromPointXValue.Size = New System.Drawing.Size(124, 20)
-        Me.uxFromPointXValue.TabIndex = 2
+        Me.uxFromPointXValue.TabIndex = 8
         '
         'GroupBox2
         '
@@ -159,7 +163,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox2.Controls.Add(Me.uxFromPointXValue)
         Me.GroupBox2.Controls.Add(Me.Label3)
         Me.GroupBox2.Controls.Add(Me.Label4)
-        Me.GroupBox2.Location = New System.Drawing.Point(3, 158)
+        Me.GroupBox2.Location = New System.Drawing.Point(3, 209)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(267, 69)
         Me.GroupBox2.TabIndex = 4
@@ -190,7 +194,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxGetTangentPoint.Location = New System.Drawing.Point(197, 25)
         Me.uxGetTangentPoint.Name = "uxGetTangentPoint"
         Me.uxGetTangentPoint.Size = New System.Drawing.Size(35, 31)
-        Me.uxGetTangentPoint.TabIndex = 4
+        Me.uxGetTangentPoint.TabIndex = 13
         Me.uxGetTangentPoint.UseVisualStyleBackColor = True
         '
         'uxTangentPointYValue
@@ -198,14 +202,14 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxTangentPointYValue.Location = New System.Drawing.Point(31, 44)
         Me.uxTangentPointYValue.Name = "uxTangentPointYValue"
         Me.uxTangentPointYValue.Size = New System.Drawing.Size(124, 20)
-        Me.uxTangentPointYValue.TabIndex = 3
+        Me.uxTangentPointYValue.TabIndex = 12
         '
         'uxTangentPointXValue
         '
         Me.uxTangentPointXValue.Location = New System.Drawing.Point(31, 20)
         Me.uxTangentPointXValue.Name = "uxTangentPointXValue"
         Me.uxTangentPointXValue.Size = New System.Drawing.Size(124, 20)
-        Me.uxTangentPointXValue.TabIndex = 2
+        Me.uxTangentPointXValue.TabIndex = 11
         '
         'GroupBox3
         '
@@ -214,7 +218,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox3.Controls.Add(Me.uxTangentPointXValue)
         Me.GroupBox3.Controls.Add(Me.Label5)
         Me.GroupBox3.Controls.Add(Me.Label6)
-        Me.GroupBox3.Location = New System.Drawing.Point(3, 233)
+        Me.GroupBox3.Location = New System.Drawing.Point(3, 284)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(267, 69)
         Me.GroupBox3.TabIndex = 5
@@ -245,7 +249,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox4.Controls.Add(Me.uxCurveByRadiusValue)
         Me.GroupBox4.Controls.Add(Me.uxCurvebyDegree)
         Me.GroupBox4.Controls.Add(Me.uxCurveByRadius)
-        Me.GroupBox4.Location = New System.Drawing.Point(6, 75)
+        Me.GroupBox4.Location = New System.Drawing.Point(6, 126)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(257, 77)
         Me.GroupBox4.TabIndex = 6
@@ -258,14 +262,14 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxCurveDegreeValue.Location = New System.Drawing.Point(120, 49)
         Me.uxCurveDegreeValue.Name = "uxCurveDegreeValue"
         Me.uxCurveDegreeValue.Size = New System.Drawing.Size(124, 20)
-        Me.uxCurveDegreeValue.TabIndex = 3
+        Me.uxCurveDegreeValue.TabIndex = 7
         '
         'uxCurveByRadiusValue
         '
         Me.uxCurveByRadiusValue.Location = New System.Drawing.Point(71, 22)
         Me.uxCurveByRadiusValue.Name = "uxCurveByRadiusValue"
         Me.uxCurveByRadiusValue.Size = New System.Drawing.Size(173, 20)
-        Me.uxCurveByRadiusValue.TabIndex = 2
+        Me.uxCurveByRadiusValue.TabIndex = 5
         '
         'uxCurvebyDegree
         '
@@ -273,7 +277,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxCurvebyDegree.Location = New System.Drawing.Point(7, 49)
         Me.uxCurvebyDegree.Name = "uxCurvebyDegree"
         Me.uxCurvebyDegree.Size = New System.Drawing.Size(106, 17)
-        Me.uxCurvebyDegree.TabIndex = 1
+        Me.uxCurvebyDegree.TabIndex = 6
         Me.uxCurvebyDegree.Text = "Degree of Curve:"
         Me.uxCurvebyDegree.UseVisualStyleBackColor = True
         '
@@ -284,7 +288,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxCurveByRadius.Location = New System.Drawing.Point(7, 22)
         Me.uxCurveByRadius.Name = "uxCurveByRadius"
         Me.uxCurveByRadius.Size = New System.Drawing.Size(61, 17)
-        Me.uxCurveByRadius.TabIndex = 0
+        Me.uxCurveByRadius.TabIndex = 4
         Me.uxCurveByRadius.TabStop = True
         Me.uxCurveByRadius.Text = "Radius:"
         Me.uxCurveByRadius.UseVisualStyleBackColor = True
@@ -292,7 +296,7 @@ Partial Class SpiralCurveSpiralDockWindow
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(9, 52)
+        Me.Label7.Location = New System.Drawing.Point(9, 103)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(94, 13)
         Me.Label7.TabIndex = 8
@@ -302,7 +306,7 @@ Partial Class SpiralCurveSpiralDockWindow
         '
         Me.GroupBox6.Controls.Add(Me.uxCurvetotheLeft)
         Me.GroupBox6.Controls.Add(Me.uxCurvetotheRight)
-        Me.GroupBox6.Location = New System.Drawing.Point(3, 9)
+        Me.GroupBox6.Location = New System.Drawing.Point(3, 60)
         Me.GroupBox6.Name = "GroupBox6"
         Me.GroupBox6.Size = New System.Drawing.Size(247, 34)
         Me.GroupBox6.TabIndex = 10
@@ -315,7 +319,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxCurvetotheLeft.Location = New System.Drawing.Point(63, 12)
         Me.uxCurvetotheLeft.Name = "uxCurvetotheLeft"
         Me.uxCurvetotheLeft.Size = New System.Drawing.Size(43, 17)
-        Me.uxCurvetotheLeft.TabIndex = 1
+        Me.uxCurvetotheLeft.TabIndex = 2
         Me.uxCurvetotheLeft.TabStop = True
         Me.uxCurvetotheLeft.Text = "Left"
         Me.uxCurvetotheLeft.UseVisualStyleBackColor = True
@@ -327,20 +331,45 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxCurvetotheRight.Location = New System.Drawing.Point(7, 12)
         Me.uxCurvetotheRight.Name = "uxCurvetotheRight"
         Me.uxCurvetotheRight.Size = New System.Drawing.Size(50, 17)
-        Me.uxCurvetotheRight.TabIndex = 0
+        Me.uxCurvetotheRight.TabIndex = 1
         Me.uxCurvetotheRight.TabStop = True
         Me.uxCurvetotheRight.Text = "Right"
         Me.uxCurvetotheRight.UseVisualStyleBackColor = True
         '
         'uxArcLengthValue
         '
-        Me.uxArcLengthValue.Location = New System.Drawing.Point(109, 49)
+        Me.uxArcLengthValue.Location = New System.Drawing.Point(109, 100)
         Me.uxArcLengthValue.Name = "uxArcLengthValue"
         Me.uxArcLengthValue.Size = New System.Drawing.Size(141, 20)
-        Me.uxArcLengthValue.TabIndex = 2
+        Me.uxArcLengthValue.TabIndex = 3
+        '
+        'uxTimer
+        '
+        Me.uxTimer.Interval = 1000
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(3, 4)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(108, 13)
+        Me.Label8.TabIndex = 11
+        Me.Label8.Text = "Target Feature Class:"
+        '
+        'uxTargetLayers
+        '
+        Me.uxTargetLayers.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
+        Me.uxTargetLayers.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
+        Me.uxTargetLayers.FormattingEnabled = True
+        Me.uxTargetLayers.Location = New System.Drawing.Point(4, 21)
+        Me.uxTargetLayers.Name = "uxTargetLayers"
+        Me.uxTargetLayers.Size = New System.Drawing.Size(259, 21)
+        Me.uxTargetLayers.TabIndex = 19
         '
         'SpiralCurveSpiralDockWindow
         '
+        Me.Controls.Add(Me.uxTargetLayers)
+        Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.uxArcLengthValue)
         Me.Controls.Add(Me.GroupBox6)
         Me.Controls.Add(Me.Label7)
@@ -351,7 +380,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.Controls.Add(Me.uxHelp)
         Me.Controls.Add(Me.uxCreate)
         Me.Name = "SpiralCurveSpiralDockWindow"
-        Me.Size = New System.Drawing.Size(272, 414)
+        Me.Size = New System.Drawing.Size(272, 468)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
@@ -396,5 +425,8 @@ Partial Class SpiralCurveSpiralDockWindow
     Friend WithEvents uxCurvetotheRight As System.Windows.Forms.RadioButton
     Friend WithEvents uxCurvetotheLeft As System.Windows.Forms.RadioButton
     Friend WithEvents uxArcLengthValue As System.Windows.Forms.TextBox
+    Friend WithEvents uxTimer As System.Windows.Forms.Timer
+    Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents uxTargetLayers As System.Windows.Forms.ComboBox
 
 End Class
