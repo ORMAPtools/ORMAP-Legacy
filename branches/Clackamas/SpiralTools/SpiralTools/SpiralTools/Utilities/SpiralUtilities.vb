@@ -164,8 +164,8 @@ Module SpiralUtilities
             Dim theSecondSpiralFeature As IFeature = theFeatureclass.CreateFeature
             Dim theCenterCircularFeature As IFeature = theFeatureclass.CreateFeature
 
-            Dim theCurveDirection As String = "L"
-            If Not isCCW Then theCurveDirection = "R"
+            Dim theCurveDirection As String = "R"
+            If Not isCCW Then theCurveDirection = "L"
 
             'Add the new features to the feature Class
             My.ArcMap.Editor.StartOperation()
@@ -176,6 +176,7 @@ Module SpiralUtilities
             theFirstSpiralFeature.Value(FindField("RADIUS2", theFirstSpiralFeature)) = FormatNumber(theRadius, 2).ToString
             theFirstSpiralFeature.Value(FindField("SIDE", theFirstSpiralFeature)) = theCurveDirection
             theFirstSpiralFeature.Value(FindField("DISTANCE", theFirstSpiralFeature)) = LineLength(theFirstSpiralPolyLine.FromPoint, theFirstSpiralPolyLine.ToPoint).ToString
+            theFirstSpiralFeature.Value(FindField("DIRECTION", theFirstSpiralFeature)) = getDirection(theFirstSpiralPolyLine.FromPoint, theFirstSpiralPolyLine.ToPoint)
             theFirstSpiralFeature.Store()
 
 
@@ -186,6 +187,7 @@ Module SpiralUtilities
             theCenterCircularFeature.Value(FindField("SIDE", theCenterCircularFeature)) = theCurveDirection
             theCenterCircularFeature.Value(FindField("DISTANCE", theCenterCircularFeature)) = LineLength(theCentralCurve.FromPoint, theCentralCurve.ToPoint).ToString
             theCenterCircularFeature.Value(FindField("DELTA", theCenterCircularFeature)) = GetDelta(DirectCast(theCentralCurve, ICircularArc))
+            theCenterCircularFeature.Value(FindField("DIRECTION", theCenterCircularFeature)) = getDirection(theCentralCurve.FromPoint, theCentralCurve.ToPoint)
             theCenterCircularFeature.Store()
 
             'The Geometry and fileds for the second Central Circulare Feature
@@ -195,6 +197,7 @@ Module SpiralUtilities
             theSecondSpiralFeature.Value(FindField("RADIUS2", theSecondSpiralFeature)) = FormatNumber(theRadius, 2).ToString
             theSecondSpiralFeature.Value(FindField("SIDE", theSecondSpiralFeature)) = theCurveDirection
             theSecondSpiralFeature.Value(FindField("DISTANCE", theSecondSpiralFeature)) = LineLength(theSecondSpiralPolyLine.FromPoint, theSecondSpiralPolyLine.ToPoint).ToString
+            theSecondSpiralFeature.Value(FindField("DIRECTION", theSecondSpiralFeature)) = getDirection(theSecondSpiralPolyLine.ToPoint, theSecondSpiralPolyLine.FromPoint)
             theSecondSpiralFeature.Store()
             My.ArcMap.Editor.StopOperation("Spiral Construction")
 
@@ -204,18 +207,47 @@ Module SpiralUtilities
 
 
     End Sub
+    Function getDirection(ByVal fromPoint As IPoint, ByVal toPoint As IPoint) As String
+        Dim theLineDirection As String = Nothing
+
+        Dim theLine As ILine2 = New Line
+        theLine.PutCoords(fromPoint, toPoint)
+
+        Dim theAngle As Double = 90 - (theLine.Angle * (180 / Math.PI))
+
+        Dim theDirectionFormat As IDirectionFormat = New DirectionFormat
+        'theDirectionFormat.DirectionType = esriDirectionType.esriDTQuadrantBearing
+        theDirectionFormat.DirectionUnits = esriDirectionUnits.esriDUDegreesMinutesSeconds
+        theDirectionFormat.DisplayFormat = esriDirectionFormatEnum.esriDFQuadrantBearing
+
+        Dim theNumberFormat As INumberFormat = DirectCast(theDirectionFormat, INumberFormat)
+
+        theLineDirection = theNumberFormat.ValueToString(theAngle)
+
+        Return theLineDirection
+    End Function
     Function GetDelta(ByVal TheCircularArc As ICircularArc) As String
 
         Dim theDelta As String
         Dim theCentralAngle As Double = TheCircularArc.CentralAngle * (180 / Math.PI)
 
-        Dim theAngleFormat As IAngleFormat = New AngleFormat
-        theAngleFormat.AngleInDegrees = True
-        theAngleFormat.DisplayDegrees = False
+        'Dim theAngleFormat As IAngleFormat = New AngleFormat
+        'theAngleFormat.AngleInDegrees = True
+        'theAngleFormat.DisplayDegrees = False
 
-        Dim theNumberFormat As INumberFormat = DirectCast(theAngleFormat, INumberFormat)
+        'Dim theNumberFormat As INumberFormat = DirectCast(theAngleFormat, INumberFormat)
+        'theDelta = theNumberFormat.ValueToString(theCentralAngle)
+        'MessageBox.Show(theDelta)
+
+        Dim theDirectionFormat As IDirectionFormat = New DirectionFormat
+        theDirectionFormat.DirectionUnits = esriDirectionUnits.esriDUDecimalDegrees
+        theDirectionFormat.DisplayFormat = esriDirectionFormatEnum.esriDFDegreesMinutesSeconds
+
+        Dim theNumberFormat As INumberFormat = DirectCast(theDirectionFormat, INumberFormat)
         theDelta = theNumberFormat.ValueToString(theCentralAngle)
-        MessageBox.Show(theDelta)
+        theDelta = Left(theDelta, Len(theDelta) - 1)
+        theDelta = Replace(theDelta, "'", "-")
+        theDelta = Replace(theDelta, "°", "-")
 
         Return theDelta
     End Function
