@@ -22,7 +22,6 @@ Partial Class SpiralDockWindow
         Me.uxCreate = New System.Windows.Forms.Button()
         Me.uxHelp = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.uxTemplateValue = New System.Windows.Forms.TextBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.uxCurvetotheLeft = New System.Windows.Forms.RadioButton()
         Me.uxCurvetotheRight = New System.Windows.Forms.RadioButton()
@@ -31,7 +30,7 @@ Partial Class SpiralDockWindow
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.uxDeltaAngle = New System.Windows.Forms.TextBox()
         Me.uxArcLenghtValue = New System.Windows.Forms.TextBox()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.uxByDeltaAngle = New System.Windows.Forms.RadioButton()
         Me.uxByArcLength = New System.Windows.Forms.RadioButton()
         Me.uxBeginRadiusValue = New System.Windows.Forms.TextBox()
         Me.uxEndRadiusValue = New System.Windows.Forms.TextBox()
@@ -47,6 +46,7 @@ Partial Class SpiralDockWindow
         Me.uxTangentPointXValue = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
+        Me.uxTargetTemplate = New System.Windows.Forms.ComboBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -79,16 +79,6 @@ Partial Class SpiralDockWindow
         Me.Label1.Size = New System.Drawing.Size(51, 13)
         Me.Label1.TabIndex = 3
         Me.Label1.Text = "Template"
-        '
-        'uxTemplateValue
-        '
-        Me.uxTemplateValue.AllowDrop = True
-        Me.uxTemplateValue.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
-        Me.uxTemplateValue.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
-        Me.uxTemplateValue.Location = New System.Drawing.Point(4, 21)
-        Me.uxTemplateValue.Name = "uxTemplateValue"
-        Me.uxTemplateValue.Size = New System.Drawing.Size(293, 20)
-        Me.uxTemplateValue.TabIndex = 4
         '
         'GroupBox1
         '
@@ -145,7 +135,7 @@ Partial Class SpiralDockWindow
         '
         Me.GroupBox2.Controls.Add(Me.uxDeltaAngle)
         Me.GroupBox2.Controls.Add(Me.uxArcLenghtValue)
-        Me.GroupBox2.Controls.Add(Me.RadioButton2)
+        Me.GroupBox2.Controls.Add(Me.uxByDeltaAngle)
         Me.GroupBox2.Controls.Add(Me.uxByArcLength)
         Me.GroupBox2.Location = New System.Drawing.Point(13, 155)
         Me.GroupBox2.Name = "GroupBox2"
@@ -168,15 +158,15 @@ Partial Class SpiralDockWindow
         Me.uxArcLenghtValue.Size = New System.Drawing.Size(179, 20)
         Me.uxArcLenghtValue.TabIndex = 2
         '
-        'RadioButton2
+        'uxByDeltaAngle
         '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(7, 44)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(80, 17)
-        Me.RadioButton2.TabIndex = 1
-        Me.RadioButton2.Text = "Delta Angle"
-        Me.RadioButton2.UseVisualStyleBackColor = True
+        Me.uxByDeltaAngle.AutoSize = True
+        Me.uxByDeltaAngle.Location = New System.Drawing.Point(7, 44)
+        Me.uxByDeltaAngle.Name = "uxByDeltaAngle"
+        Me.uxByDeltaAngle.Size = New System.Drawing.Size(80, 17)
+        Me.uxByDeltaAngle.TabIndex = 1
+        Me.uxByDeltaAngle.Text = "Delta Angle"
+        Me.uxByDeltaAngle.UseVisualStyleBackColor = True
         '
         'uxByArcLength
         '
@@ -196,7 +186,7 @@ Partial Class SpiralDockWindow
         Me.uxBeginRadiusValue.Name = "uxBeginRadiusValue"
         Me.uxBeginRadiusValue.Size = New System.Drawing.Size(183, 20)
         Me.uxBeginRadiusValue.TabIndex = 9
-        Me.uxBeginRadiusValue.Text = "Infinity"
+        Me.uxBeginRadiusValue.Text = "INFINITY"
         '
         'uxEndRadiusValue
         '
@@ -315,8 +305,19 @@ Partial Class SpiralDockWindow
         Me.Label7.TabIndex = 0
         Me.Label7.Text = "X:"
         '
+        'uxTargetTemplate
+        '
+        Me.uxTargetTemplate.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
+        Me.uxTargetTemplate.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
+        Me.uxTargetTemplate.FormattingEnabled = True
+        Me.uxTargetTemplate.Location = New System.Drawing.Point(7, 21)
+        Me.uxTargetTemplate.Name = "uxTargetTemplate"
+        Me.uxTargetTemplate.Size = New System.Drawing.Size(286, 21)
+        Me.uxTargetTemplate.TabIndex = 13
+        '
         'SpiralDockWindow
         '
+        Me.Controls.Add(Me.uxTargetTemplate)
         Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.uxEndRadiusValue)
@@ -325,7 +326,6 @@ Partial Class SpiralDockWindow
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.GroupBox1)
-        Me.Controls.Add(Me.uxTemplateValue)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.uxHelp)
         Me.Controls.Add(Me.uxCreate)
@@ -346,14 +346,13 @@ Partial Class SpiralDockWindow
     Friend WithEvents uxCreate As System.Windows.Forms.Button
     Friend WithEvents uxHelp As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents uxTemplateValue As System.Windows.Forms.TextBox
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents uxCurvetotheLeft As System.Windows.Forms.RadioButton
     Friend WithEvents uxCurvetotheRight As System.Windows.Forms.RadioButton
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
-    Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
+    Friend WithEvents uxByDeltaAngle As System.Windows.Forms.RadioButton
     Friend WithEvents uxByArcLength As System.Windows.Forms.RadioButton
     Friend WithEvents uxBeginRadiusValue As System.Windows.Forms.TextBox
     Friend WithEvents uxEndRadiusValue As System.Windows.Forms.TextBox
@@ -371,5 +370,6 @@ Partial Class SpiralDockWindow
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents uxGetFromPoint As System.Windows.Forms.Button
     Friend WithEvents usGetTangentPoint As System.Windows.Forms.Button
+    Friend WithEvents uxTargetTemplate As System.Windows.Forms.ComboBox
 
 End Class

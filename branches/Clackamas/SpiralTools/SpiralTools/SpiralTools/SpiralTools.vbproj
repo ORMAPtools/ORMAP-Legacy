@@ -134,6 +134,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="SingleSpiral.vb" />
     <Compile Include="Utilities\SpiralUtilities.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -182,8 +183,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SCS_button.vb" />
-    <Compile Include="SpiralConstruction_Button.vb" />
+    <Compile Include="SCS_tool.vb" />
+    <Compile Include="SpiralConstruction_Button_old.vb" />
     <Compile Include="SpiralDockWindow.Designer.vb">
       <DependentUpon>SpiralDockWindow.vb</DependentUpon>
     </Compile>
@@ -223,7 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\3DCenterOnTarget32.png" />
-    <Content Include="Images\SpiralConstruction.bmp" />
+    <AddInContent Include="Images\SingleSpiral.png" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
