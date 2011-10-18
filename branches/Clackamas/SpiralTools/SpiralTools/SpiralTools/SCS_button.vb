@@ -392,6 +392,17 @@ Public Class SCS_button
         If Not _partnerSCSDockWindow.IsVisible Then DoButtonOperation()
 
     End Sub
+
+    Protected Overrides Function OnDeactivate() As Boolean
+        If Not _SnappingMarkerElement Is Nothing Then
+            Dim theGraphicsContainer As IGraphicsContainer = DirectCast(My.ArcMap.Document.ActiveView, IGraphicsContainer)
+            theGraphicsContainer.DeleteElement(_SnappingMarkerElement)
+            _SnappingMarkerElement.Geometry.SetEmpty()
+            _SnappingMarkerElement = Nothing
+            My.ArcMap.Document.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewAll, Nothing, Nothing)
+        End If
+        Return MyBase.OnDeactivate
+    End Function
     ''' <summary>
     ''' Enables the tool when the edit session is started.  It also hides the SCSDockwindow when the edit session is ended.
     ''' if the snapping marker is visible at the stop editing event, it is deleted.
