@@ -56,5 +56,5 @@ Public Class SpiralCurveSpiralDockWindow
   End Class
 
     
-    
+
 End Class

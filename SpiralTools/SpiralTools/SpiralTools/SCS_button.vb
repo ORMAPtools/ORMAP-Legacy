@@ -74,7 +74,7 @@ Public Class SCS_button
             End If
         Catch ex As Exception
 
-            MsgBox(ex.ToString)
+            MessageBox.Show(ex.ToString)
 
         End Try
 
@@ -119,7 +119,7 @@ Public Class SCS_button
             AddHandler _partnerSCSDockWindowUI.uxGetFromPoint.Click, AddressOf uxGetFromPoint_Click
             AddHandler _partnerSCSDockWindowUI.uxCurveByRadius.CheckedChanged, AddressOf uxCurveByRadius_CheckedChanged
             AddHandler _partnerSCSDockWindowUI.uxCurvebyDegree.CheckedChanged, AddressOf uxCurvebyDegree_CheckedChanged
-
+            AddHandler _partnerSCSDockWindowUI.uxTimer.Tick, AddressOf uxTimer_tick
         Else
             'unSubscribe to partner form events
             RemoveHandler _partnerSCSDockWindowUI.uxCreate.Click, AddressOf uxCreate_Click
@@ -129,6 +129,7 @@ Public Class SCS_button
             RemoveHandler _partnerSCSDockWindowUI.uxGetFromPoint.Click, AddressOf uxGetFromPoint_Click
             RemoveHandler _partnerSCSDockWindowUI.uxCurveByRadius.CheckedChanged, AddressOf uxCurveByRadius_CheckedChanged
             RemoveHandler _partnerSCSDockWindowUI.uxCurvebyDegree.CheckedChanged, AddressOf uxCurvebyDegree_CheckedChanged
+            RemoveHandler _partnerSCSDockWindowUI.uxTimer.Tick, AddressOf uxTimer_tick
         End If
     End Sub
 
@@ -140,6 +141,7 @@ Public Class SCS_button
     ''' Constructs the Spiral-Curve-Spiral based on user inputs in the partner Spiral Curve Spiral Dockable Window
     ''' </summary>
     Private Sub uxCreate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
         'Validate user inputs
         With _partnerSCSDockWindowUI
             If .uxCurveByRadius.Checked And .uxCurveByRadiusValue.TextLength = 0 Then
@@ -151,6 +153,10 @@ Public Class SCS_button
             End If
             If .uxCurvebyDegree.Checked And .uxCurveDegreeValue.TextLength = 0 Then
                 MessageBox.Show("Please eneter a degree value")
+                Exit Sub
+            End If
+            If .uxTargetLayers.SelectedText Is Nothing Then
+                MessageBox.Show("Please select a target layer")
                 Exit Sub
             End If
 
@@ -167,19 +173,10 @@ Public Class SCS_button
             'Sends data to the SpiralsUtilities ConstructSCSbyLenth function
             Dim theCurveRadius As Double
             If .uxCurveByRadius.Checked Then
-                Dim theEditLayers As IEditLayers = CType(My.ArcMap.Editor, IEditLayers)
-                If Not theEditLayers.CurrentLayer Is Nothing Then
-                    If Is_Feature_Class_Valid_Polyline(theEditLayers.CurrentLayer.FeatureClass) Then
-                        ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), CDbl(.uxCurveByRadiusValue.Text), .uxCurvetotheRight.Checked)
-                    Else
-                        MessageBox.Show("Please select a line feature class as a target")
-                    End If
-                Else
-                    MessageBox.Show("Please select a line feature class as a target")
-                End If
+                ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), CDbl(.uxCurveByRadiusValue.Text), .uxCurvetotheRight.Checked, .uxTargetLayers.Text)
             ElseIf .uxCurvebyDegree.Checked Then
                 If Not IsNumeric(.uxCurveDegreeValue.Text) Then
-                    theCurveRadius = 5729.578 / DMSAngle_to_Double(Trim(.uxCurveDegreeValue.Text))
+                    theCurveRadius = 5729.578 / DMSAngletoDouble(Trim(.uxCurveDegreeValue.Text))
                     If theCurveRadius = 0 Then
                         MessageBox.Show("Please Enter a valid degree value" & vbNewLine _
                                         & "for example, 1-30-00")
@@ -192,16 +189,9 @@ Public Class SCS_button
                 End If
 
                 Try
-                    Dim theEditLayers As IEditLayers = CType(My.ArcMap.Editor, IEditLayers)
-                    If Not theEditLayers.CurrentLayer Is Nothing Then
-                        If Is_Feature_Class_Valid_Polyline(theEditLayers.CurrentLayer.FeatureClass) Then
-                            ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), theCurveRadius, .uxCurvetotheRight.Checked)
-                        Else
-                            MessageBox.Show("Please select a line feature class as a target")
-                        End If
-                    Else
-                        MessageBox.Show("Please select a line feature class as a target")
-                    End If
+
+                    ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), theCurveRadius, .uxCurvetotheRight.Checked, .uxTargetLayers.Text)
+                        
                 Catch ex As Exception
                     MessageBox.Show(ex.ToString)
                 End Try
@@ -278,13 +268,31 @@ Public Class SCS_button
 
     End Sub
     ''' <summary>
-    ''' At this point, this routine does not do anything.  
+    ''' Loads the target layers 
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub partnerSCSDockWindow_load()
 
+        Dim theEditor As IEditor3 = DirectCast(My.ArcMap.Editor, IEditor3)
+        Dim theTemplateCounts As Integer = theEditor.TemplateCount - 1
+
+        If _partnerSCSDockWindowUI.uxTargetLayers.Items.Count > 0 Then _partnerSCSDockWindowUI.uxTargetLayers.Items.Clear()
+
+        For i As Integer = 0 To theTemplateCounts
+            Dim thisFeatureLayer As IFeatureLayer2 = DirectCast(theEditor.Template(i).Layer, IFeatureLayer2)
+            If IsFeatureClassValidPolyline(thisFeatureLayer.FeatureClass) Then _partnerSCSDockWindowUI.uxTargetLayers.Items.Add(theEditor.Template(i).Name)
+        Next
+
     End Sub
-    
+    Private Sub uxTimer_tick(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        If MyBase.OnDeactivate Then
+            Dim theGraphicsContainer As IGraphicsContainer = DirectCast(My.ArcMap.Document.ActiveView, IGraphicsContainer)
+            theGraphicsContainer.DeleteElement(_SnappingMarkerElement)
+            _SnappingMarkerElement.Geometry.SetEmpty()
+            _SnappingMarkerElement = Nothing
+            My.ArcMap.Document.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewAll, Nothing, Nothing)
+        End If
+    End Sub
 #End Region
 
 #End Region
@@ -300,6 +308,11 @@ Public Class SCS_button
 
         _partnerSCSDockWindow.Show(Not _partnerSCSDockWindow.IsVisible)
 
+        Dim theEditor As IEditor3 = DirectCast(My.ArcMap.Editor, IEditor3)
+        If _partnerSCSDockWindow.IsVisible And _
+            (_partnerSCSDockWindowUI.uxTargetLayers.Items.Count = 0 _
+             Or _partnerSCSDockWindowUI.uxTargetLayers.Items.Count <> theEditor.TemplateCount) Then partnerSCSDockWindow_load()
+
     End Sub
     ''' <summary>
     ''' On the MouseDown Event this sub routine checks to see if the user is looking for a point required to construct the spiral
@@ -311,9 +324,10 @@ Public Class SCS_button
     ''' </remarks>
     Protected Overrides Sub OnMouseDown(ByVal arg As ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)
         MyBase.OnMouseDown(arg)
-        If arg.Button = MouseButtons.Left And arg.Shift = True Then
-            DoButtonOperation()
-        ElseIf arg.Button = MouseButtons.Left And _IsGettingToPoint Then
+        If arg.Button = MouseButtons.Left And arg.Shift Then
+            If Not _partnerSCSDockWindow.IsVisible Then DoButtonOperation()
+        End If
+        If arg.Button = MouseButtons.Left And _IsGettingToPoint Then
             Dim theToPoint As IPoint = getSnapPoint(getDataFrameCoords(arg.X, arg.Y))
             _partnerSCSDockWindowUI.uxToPointXValue.Text = theToPoint.X.ToString
             _partnerSCSDockWindowUI.uxToPointYValue.Text = theToPoint.Y.ToString
@@ -334,7 +348,6 @@ Public Class SCS_button
             MyBase.Cursor = Cursors.Arrow
         End If
         _IsCircleActive = False
-
     End Sub
 
     'Sets the gobal values for the snapping graphic.  The values are set here so they are proceeding the primary sub routine that uses them.
@@ -351,17 +364,17 @@ Public Class SCS_button
         MyBase.OnMouseMove(arg)
         Try
             If _IsCircleActive And _SnappingMarkerElement Is Nothing Then
-                _SnappingMarkerElement = CType(Create_Snap_Marker(), IElement)
-                Dim theGraphicsContainer As IGraphicsContainer = CType(My.ArcMap.Document.ActiveView, IGraphicsContainer)
+                _SnappingMarkerElement = DirectCast(CreateSnapMarker(), IElement)
+                Dim theGraphicsContainer As IGraphicsContainer = DirectCast(My.ArcMap.Document.ActiveView, IGraphicsContainer)
                 theGraphicsContainer.AddElement(_SnappingMarkerElement, 0)
                 Dim theCurrentPoint As IPoint = getSnapPoint(getDataFrameCoords(arg.X, arg.Y))
                 _SnappingMarkerElement.Geometry = theCurrentPoint
                 My.ArcMap.Document.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, Nothing, Nothing)
             ElseIf _IsCircleActive And Not _SnappingMarkerElement Is Nothing Then
-                _SnappingMarkerElement.Geometry = CType(getSnapPoint(getDataFrameCoords(arg.X, arg.Y)), IPoint)
+                _SnappingMarkerElement.Geometry = DirectCast(getSnapPoint(getDataFrameCoords(arg.X, arg.Y)), IPoint)
                 My.ArcMap.Document.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, Nothing, Nothing)
             ElseIf Not _IsCircleActive And Not _SnappingMarkerElement Is Nothing Then
-                Dim theGraphicsContainer As IGraphicsContainer = CType(My.ArcMap.Document.ActiveView, IGraphicsContainer)
+                Dim theGraphicsContainer As IGraphicsContainer = DirectCast(My.ArcMap.Document.ActiveView, IGraphicsContainer)
                 theGraphicsContainer.DeleteElement(_SnappingMarkerElement)
                 _SnappingMarkerElement.Geometry.SetEmpty()
                 _SnappingMarkerElement = Nothing
@@ -370,6 +383,13 @@ Public Class SCS_button
         Catch ex As Exception
             MsgBox(ex.ToString)
         End Try
+
+    End Sub
+
+    Protected Overrides Sub OnActivate()
+        MyBase.OnActivate()
+
+        If Not _partnerSCSDockWindow.IsVisible Then DoButtonOperation()
 
     End Sub
     ''' <summary>
@@ -382,13 +402,14 @@ Public Class SCS_button
         If Not Me.Enabled Then
             _partnerSCSDockWindow.Show(False)
             If Not _SnappingMarkerElement Is Nothing Then
-                Dim theGraphicsContainer As IGraphicsContainer = CType(My.ArcMap.Document.ActiveView, IGraphicsContainer)
+                Dim theGraphicsContainer As IGraphicsContainer = DirectCast(My.ArcMap.Document.ActiveView, IGraphicsContainer)
                 theGraphicsContainer.DeleteElement(_SnappingMarkerElement)
                 _SnappingMarkerElement.Geometry.SetEmpty()
                 _SnappingMarkerElement = Nothing
+                My.ArcMap.Document.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, Nothing, Nothing)
             End If
         End If
-
+        
     End Sub
 
 #End Region

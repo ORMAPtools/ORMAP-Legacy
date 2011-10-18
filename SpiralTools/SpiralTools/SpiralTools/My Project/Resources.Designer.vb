@@ -63,7 +63,7 @@ Namespace My.Resources
         Friend ReadOnly Property _3DCenterOnTarget32() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("3DCenterOnTarget32", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
+                Return DirectCast(obj, System.Drawing.Bitmap)
             End Get
         End Property
     End Module
