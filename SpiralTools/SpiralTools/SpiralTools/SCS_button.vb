@@ -155,7 +155,7 @@ Public Class SCS_button
                 MessageBox.Show("Please eneter a degree value")
                 Exit Sub
             End If
-            If .uxTargetLayers.SelectedText Is Nothing Then
+            If .uxTargetLayers.Text.Length = 0 Then
                 MessageBox.Show("Please select a target layer")
                 Exit Sub
             End If
