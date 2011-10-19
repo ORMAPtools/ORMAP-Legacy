@@ -115,6 +115,97 @@ Module SpiralUtilities
         End While
         Return theTargetFeatureClass
     End Function
+    Public Sub ConstructSpiralbyDelta(ByVal theFromPoint As IPoint, ByVal theTangentPoint As IPoint, ByVal doesCurveRight As Boolean, ByVal theBeginRadius As Double, ByVal theEndRadius As Double, ByVal theDeltaString As String, ByVal theTargetLayerName As String)
+        If My.ArcMap.Editor.EditState = esriEditState.esriStateNotEditing Then Exit Sub
+
+        Try
+            Dim theBeginCurvature As Double = 0
+            Dim theEndCurvature As Double = 0
+            Dim DensifyParameter As Double = 0.5
+
+            Dim theDelta As Double
+            If IsNumeric(theDeltaString) Then
+                theDelta = CDbl(theDeltaString)
+            Else
+                theDelta = DMSAngletoDouble(theDeltaString)
+            End If
+
+            If theBeginRadius <> 0 Then theBeginCurvature = 1 / theBeginRadius
+            If theEndRadius <> 0 Then theEndCurvature = 1 / theEndRadius
+
+            Dim theGeometryEnvironment As IGeometryEnvironment4 = New GeometryEnvironment
+            Dim TheSpiralConstruction As IConstructClothoid = DirectCast(theGeometryEnvironment, IConstructClothoid)
+            Dim theSpiralPolyline As IPolyline6 = DirectCast(New Polyline, IPolyline6)
+
+            Dim isCCW As Boolean = False
+            If Not doesCurveRight Then isCCW = True
+
+            theSpiralPolyline = DirectCast(TheSpiralConstruction.ConstructClothoidByAngle(theFromPoint, theTangentPoint, isCCW, theBeginCurvature, theEndCurvature, theDelta, esriCurveDensifyMethod.esriCurveDensifyByLength, DensifyParameter), IPolyline6)
+
+            Dim theFeatureClass As IFeatureClass = GetTargetFeatureClass(theTargetLayerName)
+            Dim theSpiralFeature As IFeature = DirectCast(theFeatureClass.CreateFeature, IFeature)
+
+            Dim theSpiralDirection As String = "R"
+            If Not doesCurveRight Then theSpiralDirection = "L"
+
+            My.ArcMap.Editor.StartOperation()
+            'The Geometry and fields for the first Spiral
+            theSpiralFeature.Shape = DirectCast(theSpiralPolyline, IGeometry)
+            If FindField("ARCLENGTH", theSpiralFeature) >= 0 Then theSpiralFeature.Value(FindField("ARCLENGTH", theSpiralFeature)) = FormatNumber(theSpiralPolyline.Length, 2).ToString
+            If FindField("RADIUS", theSpiralFeature) >= 0 Then theSpiralFeature.Value(FindField("RADIUS", theSpiralFeature)) = "INFINITY"
+            If FindField("RADIUS2", theSpiralFeature) >= 0 Then theSpiralFeature.Value(FindField("RADIUS2", theSpiralFeature)) = FormatNumber(theEndRadius, 2).ToString
+            If FindField("SIDE", theSpiralFeature) >= 0 Then theSpiralFeature.Value(FindField("SIDE", theSpiralFeature)) = theSpiralDirection
+            If FindField("DISTANCE", theSpiralFeature) >= 0 Then theSpiralFeature.Value(FindField("DISTANCE", theSpiralFeature)) = LineLength(theSpiralPolyline.FromPoint, theSpiralPolyline.ToPoint).ToString
+            If FindField("DIRECTION", theSpiralFeature) >= 0 Then theSpiralFeature.Value(FindField("DIRECTION", theSpiralFeature)) = getDirection(theSpiralPolyline.FromPoint, theSpiralPolyline.ToPoint)
+            theSpiralFeature.Store()
+            My.ArcMap.Editor.StopOperation("Spiral Construction")
+
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString)
+        End Try
+
+    End Sub
+    Public Sub ConstructSpiralbyLength(ByVal theFromPoint As IPoint, ByVal theTangentPoint As IPoint, ByVal theSpiralLength As Double, ByVal theBeginRadius As Double, ByVal theEndRadius As Double, ByVal isCCW As Boolean, ByVal theTargetLayerName As String)
+        If My.ArcMap.Editor.EditState = esriEditState.esriStateNotEditing Then Exit Sub
+
+        Try
+            Dim theBeginCurvature As Double = 0
+            Dim theEndCurvature As Double = 0
+            Dim DensifyParameter As Double = 0.5
+
+            If theBeginRadius <> 0 Then theBeginCurvature = 1 / theBeginRadius
+            If theEndRadius <> 0 Then theEndCurvature = 1 / theEndRadius
+
+            'Consturcts and validates the polyline
+            Dim theSpiralPolyLine As IPolyline6 = ConstructSpiralbyLength(theFromPoint, theTangentPoint, theBeginCurvature, theEndCurvature, isCCW, theSpiralLength)
+            If theSpiralPolyLine Is Nothing Then
+                MessageBox.Show("Invalid Spiral Parameters.")
+                Exit Sub
+            End If
+
+            Dim theTargetFeatureClass As IFeatureClass = GetTargetFeatureClass(theTargetLayerName)
+            Dim theSpiralFeature As IFeature = theTargetFeatureClass.CreateFeature
+
+            Dim theSpiralDirection As String = "L"
+            If Not isCCW Then theSpiralDirection = "R"
+
+            My.ArcMap.Editor.StartOperation()
+            'The Geometry and fields for the first Spiral
+            theSpiralFeature.Shape = DirectCast(theSpiralPolyLine, IGeometry)
+            If FindField("ARCLENGTH", theSpiralFeature) >= 0 Then theSpiralFeature.Value(FindField("ARCLENGTH", theSpiralFeature)) = FormatNumber(theSpiralLength, 2).ToString
+            If FindField("RADIUS", theSpiralFeature) >= 0 Then theSpiralFeature.Value(FindField("RADIUS", theSpiralFeature)) = "INFINITY"
+            If FindField("RADIUS2", theSpiralFeature) >= 0 Then theSpiralFeature.Value(FindField("RADIUS2", theSpiralFeature)) = FormatNumber(theEndRadius, 2).ToString
+            If FindField("SIDE", theSpiralFeature) >= 0 Then theSpiralFeature.Value(FindField("SIDE", theSpiralFeature)) = theSpiralDirection
+            If FindField("DISTANCE", theSpiralFeature) >= 0 Then theSpiralFeature.Value(FindField("DISTANCE", theSpiralFeature)) = LineLength(theSpiralPolyLine.FromPoint, theSpiralPolyLine.ToPoint).ToString
+            If FindField("DIRECTION", theSpiralFeature) >= 0 Then theSpiralFeature.Value(FindField("DIRECTION", theSpiralFeature)) = getDirection(theSpiralPolyLine.FromPoint, theSpiralPolyLine.ToPoint)
+            theSpiralFeature.Store()
+            My.ArcMap.Editor.StopOperation("Spiral Construction")
+
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString)
+        End Try
+
+    End Sub
     ''' <summary>
     ''' Constructs to spiral curve sprial transition
     ''' </summary>
@@ -171,33 +262,33 @@ Module SpiralUtilities
             My.ArcMap.Editor.StartOperation()
             'The Geometry and fields for the first Spiral
             theFirstSpiralFeature.Shape = DirectCast(theFirstSpiralPolyLine, IGeometry)
-            theFirstSpiralFeature.Value(FindField("ARCLENGTH", theFirstSpiralFeature)) = FormatNumber(theSpiralLengths, 2).ToString
-            theFirstSpiralFeature.Value(FindField("RADIUS", theFirstSpiralFeature)) = "INFINITY"
-            theFirstSpiralFeature.Value(FindField("RADIUS2", theFirstSpiralFeature)) = FormatNumber(theRadius, 2).ToString
-            theFirstSpiralFeature.Value(FindField("SIDE", theFirstSpiralFeature)) = theCurveDirection
-            theFirstSpiralFeature.Value(FindField("DISTANCE", theFirstSpiralFeature)) = LineLength(theFirstSpiralPolyLine.FromPoint, theFirstSpiralPolyLine.ToPoint).ToString
-            theFirstSpiralFeature.Value(FindField("DIRECTION", theFirstSpiralFeature)) = getDirection(theFirstSpiralPolyLine.FromPoint, theFirstSpiralPolyLine.ToPoint)
+            If FindField("ARCLENGTH", theFirstSpiralFeature) >= 0 Then theFirstSpiralFeature.Value(FindField("ARCLENGTH", theFirstSpiralFeature)) = FormatNumber(theSpiralLengths, 2).ToString
+            If FindField("RADIUS", theFirstSpiralFeature) >= 0 Then theFirstSpiralFeature.Value(FindField("RADIUS", theFirstSpiralFeature)) = "INFINITY"
+            If FindField("RADIUS2", theFirstSpiralFeature) >= 0 Then theFirstSpiralFeature.Value(FindField("RADIUS2", theFirstSpiralFeature)) = FormatNumber(theRadius, 2).ToString
+            If FindField("SIDE", theFirstSpiralFeature) >= 0 Then theFirstSpiralFeature.Value(FindField("SIDE", theFirstSpiralFeature)) = theCurveDirection
+            If FindField("DISTANCE", theFirstSpiralFeature) >= 0 Then theFirstSpiralFeature.Value(FindField("DISTANCE", theFirstSpiralFeature)) = LineLength(theFirstSpiralPolyLine.FromPoint, theFirstSpiralPolyLine.ToPoint).ToString
+            If FindField("DIRECTION", theFirstSpiralFeature) >= 0 Then theFirstSpiralFeature.Value(FindField("DIRECTION", theFirstSpiralFeature)) = getDirection(theFirstSpiralPolyLine.FromPoint, theFirstSpiralPolyLine.ToPoint)
             theFirstSpiralFeature.Store()
 
 
             'The Geometry and fields for the Central Circular Feature
             theCenterCircularFeature.Shape = DirectCast(TheCurvePolyline, IGeometry)
-            theCenterCircularFeature.Value(FindField("ARCLENGTH", theCenterCircularFeature)) = FormatNumber(theCentralCurve.Length, 2).ToString
-            theCenterCircularFeature.Value(FindField("RADIUS", theCenterCircularFeature)) = FormatNumber(theRadius, 2).ToString
-            theCenterCircularFeature.Value(FindField("SIDE", theCenterCircularFeature)) = theCurveDirection
-            theCenterCircularFeature.Value(FindField("DISTANCE", theCenterCircularFeature)) = LineLength(theCentralCurve.FromPoint, theCentralCurve.ToPoint).ToString
-            theCenterCircularFeature.Value(FindField("DELTA", theCenterCircularFeature)) = GetDelta(DirectCast(theCentralCurve, ICircularArc))
-            theCenterCircularFeature.Value(FindField("DIRECTION", theCenterCircularFeature)) = getDirection(theCentralCurve.FromPoint, theCentralCurve.ToPoint)
+            If FindField("ARCLENGTH", theCenterCircularFeature) >= 0 Then theCenterCircularFeature.Value(FindField("ARCLENGTH", theCenterCircularFeature)) = FormatNumber(theCentralCurve.Length, 2).ToString
+            If FindField("RADIUS", theCenterCircularFeature) >= 0 Then theCenterCircularFeature.Value(FindField("RADIUS", theCenterCircularFeature)) = FormatNumber(theRadius, 2).ToString
+            If FindField("SIDE", theCenterCircularFeature) >= 0 Then theCenterCircularFeature.Value(FindField("SIDE", theCenterCircularFeature)) = theCurveDirection
+            If FindField("DISTANCE", theCenterCircularFeature) >= 0 Then theCenterCircularFeature.Value(FindField("DISTANCE", theCenterCircularFeature)) = LineLength(theCentralCurve.FromPoint, theCentralCurve.ToPoint).ToString
+            If FindField("DELTA", theCenterCircularFeature) >= 0 Then theCenterCircularFeature.Value(FindField("DELTA", theCenterCircularFeature)) = GetDelta(DirectCast(theCentralCurve, ICircularArc))
+            If FindField("DIRECTION", theCenterCircularFeature) >= 0 Then theCenterCircularFeature.Value(FindField("DIRECTION", theCenterCircularFeature)) = getDirection(theCentralCurve.FromPoint, theCentralCurve.ToPoint)
             theCenterCircularFeature.Store()
 
             'The Geometry and fileds for the second Central Circulare Feature
             theSecondSpiralFeature.Shape = DirectCast(theSecondSpiralPolyLine, IGeometry)
-            theSecondSpiralFeature.Value(FindField("ARCLENGTH", theSecondSpiralFeature)) = FormatNumber(theSpiralLengths, 2).ToString
-            theSecondSpiralFeature.Value(FindField("RADIUS", theSecondSpiralFeature)) = "INFINITY"
-            theSecondSpiralFeature.Value(FindField("RADIUS2", theSecondSpiralFeature)) = FormatNumber(theRadius, 2).ToString
-            theSecondSpiralFeature.Value(FindField("SIDE", theSecondSpiralFeature)) = theCurveDirection
-            theSecondSpiralFeature.Value(FindField("DISTANCE", theSecondSpiralFeature)) = LineLength(theSecondSpiralPolyLine.FromPoint, theSecondSpiralPolyLine.ToPoint).ToString
-            theSecondSpiralFeature.Value(FindField("DIRECTION", theSecondSpiralFeature)) = getDirection(theSecondSpiralPolyLine.ToPoint, theSecondSpiralPolyLine.FromPoint)
+            If FindField("ARCLENGTH", theSecondSpiralFeature) >= 0 Then theSecondSpiralFeature.Value(FindField("ARCLENGTH", theSecondSpiralFeature)) = FormatNumber(theSpiralLengths, 2).ToString
+            If FindField("RADIUS", theSecondSpiralFeature) >= 0 Then theSecondSpiralFeature.Value(FindField("RADIUS", theSecondSpiralFeature)) = "INFINITY"
+            If FindField("RADIUS2", theSecondSpiralFeature) >= 0 Then theSecondSpiralFeature.Value(FindField("RADIUS2", theSecondSpiralFeature)) = FormatNumber(theRadius, 2).ToString
+            If FindField("SIDE", theSecondSpiralFeature) >= 0 Then theSecondSpiralFeature.Value(FindField("SIDE", theSecondSpiralFeature)) = theCurveDirection
+            If FindField("DISTANCE", theSecondSpiralFeature) >= 0 Then theSecondSpiralFeature.Value(FindField("DISTANCE", theSecondSpiralFeature)) = LineLength(theSecondSpiralPolyLine.FromPoint, theSecondSpiralPolyLine.ToPoint).ToString
+            If FindField("DIRECTION", theSecondSpiralFeature) >= 0 Then theSecondSpiralFeature.Value(FindField("DIRECTION", theSecondSpiralFeature)) = getDirection(theSecondSpiralPolyLine.ToPoint, theSecondSpiralPolyLine.FromPoint)
             theSecondSpiralFeature.Store()
             My.ArcMap.Editor.StopOperation("Spiral Construction")
 
@@ -306,8 +397,10 @@ Module SpiralUtilities
         End If
         Return isValid
     End Function
+
+
     ''' <summary>
-    ''' 
+    '''  Creates the spiral Construction by Length
     ''' </summary>
     ''' <param name="theFromPoint"></param>
     ''' <param name="theTangentpoint"></param>
