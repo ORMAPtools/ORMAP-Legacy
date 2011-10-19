@@ -15,7 +15,7 @@
       <Toolbars>
         <Toolbar id="ORMAP_SpiralTools_Spiral_Construction_Toolbar" caption="Spiral Construction Toolbar" showInitially="false">
           <Items>
-            <Tool refID="ORMAP_SpiralTools_SCS_button" />
+            <Tool refID="ORMAP_SpiralTools_SCS_tool" />
             <Tool refID="ORMAP_SpiralTools_SingleSpiral"/>
           </Items>
         </Toolbar>
@@ -29,7 +29,7 @@
           <InitialPlacement height="272" width="414" state="unpinned" position="float" />
         </DockableWindow>
         <DockableWindow id="ORMAP_SpiralTools_SpiralDockWindow" class="SpiralDockWindow+AddinImpl" caption="Single Spiral Dock Window" image="Images\SpiralCurveDockWindow.png">
-          <InitialPlacement height="300" width="300" state="pinned" position="left" />
+          <InitialPlacement height="300" width="300" state="unpinned" position="float" />
         </DockableWindow>
       </DockableWindows>
       <Editor>

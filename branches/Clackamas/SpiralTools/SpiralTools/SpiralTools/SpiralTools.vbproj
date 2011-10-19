@@ -184,7 +184,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SCS_tool.vb" />
-    <Compile Include="SpiralConstruction_Button_old.vb" />
     <Compile Include="SpiralDockWindow.Designer.vb">
       <DependentUpon>SpiralDockWindow.vb</DependentUpon>
     </Compile>
