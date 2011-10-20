@@ -52,6 +52,10 @@ Imports SpiralTools.SpiralUtilities
 Public Class SingleSpiral
     Inherits ESRI.ArcGIS.Desktop.AddIns.Tool
 #Region "constructors"
+    ''' <summary>
+    ''' Gets the window form ID from partner form
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub New()
         Try
             Dim windowID As UID = New UIDClass
@@ -75,7 +79,12 @@ Public Class SingleSpiral
     Private _partnerSpiralDockWindow As IDockableWindow
 
     Private WithEvents _partnerSpiralDockWindowUI As SpiralDockWindow
-
+    ''' <summary>
+    ''' Creates the hook to the parnter form
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>The addin id</returns>
+    ''' <remarks></remarks>
     Friend ReadOnly Property partnerSpiralDockWindowUI() As SpiralDockWindow
         Get
             If _partnerSpiralDockWindowUI Is Nothing Then
@@ -86,7 +95,11 @@ Public Class SingleSpiral
             Return _partnerSpiralDockWindowUI
         End Get
     End Property
-
+    ''' <summary>
+    ''' Adds and removes handlers to the partner form.
+    ''' </summary>
+    ''' <param name="value"></param>
+    ''' <remarks></remarks>
     Private Sub setPartnerSpiralDockWindowUI(ByVal value As SpiralDockWindow)
         If value IsNot Nothing Then
             _partnerSpiralDockWindowUI = value
@@ -107,6 +120,12 @@ Public Class SingleSpiral
             RemoveHandler _partnerSpiralDockWindowUI.uxByDeltaAngle.CheckedChanged, AddressOf uxByDeltaAngle_CheckedChanged
         End If
     End Sub
+    ''' <summary>
+    ''' Enables or disables the .uxByArcLengthValue text box.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub uxByArcLength_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         With _partnerSpiralDockWindowUI
@@ -118,6 +137,12 @@ Public Class SingleSpiral
         End With
 
     End Sub
+    ''' <summary>
+    ''' Enables or disables the .uxDeltaAngle text box
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub uxByDeltaAngle_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         With _partnerSpiralDockWindowUI
@@ -129,7 +154,12 @@ Public Class SingleSpiral
         End With
 
     End Sub
-
+    ''' <summary>
+    ''' Enables onmousedown overrides get the from point from the map
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub uxGetFromPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         _IsGettingFromPoint = True
@@ -137,7 +167,12 @@ Public Class SingleSpiral
         MyBase.Cursor = Cursors.Cross
 
     End Sub
-
+    ''' <summary>
+    ''' Enables onmousedown overrides get the from point from the map
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub uxGetTangentPoint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         _IsGettingTangentPOint = True
@@ -146,6 +181,12 @@ Public Class SingleSpiral
 
     End Sub
 
+    ''' <summary>
+    ''' Validates user inputs.  Intiates the construction of a spiral feature
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub uxCreate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         'Validate User Data
@@ -205,7 +246,6 @@ Public Class SingleSpiral
                 theBeginRadius = CDbl(.uxBeginRadiusValue.Text)
             End If
 
-
             'Sets the Ending Radius Value
             Dim TheEndRadius As Double
             If .uxEndRadiusValue.Text = "INFINITY" Then
@@ -213,7 +253,6 @@ Public Class SingleSpiral
             Else
                 TheEndRadius = CDbl(.uxEndRadiusValue.Text)
             End If
-
 
             'Retrieves the points from the partner form
             theFromPoint.PutCoords(CDbl(.uxFromPointXValue.Text), CDbl(.uxFromPointYValue.Text))
@@ -235,7 +274,10 @@ Public Class SingleSpiral
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
     End Sub
-
+    ''' <summary>
+    ''' Updates the target template drop down with polyline features
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Sub parnterSpiralDockWindow_load()
 
         Dim theEditor As IEditor3 = DirectCast(My.ArcMap.Editor, IEditor3)
@@ -252,6 +294,10 @@ Public Class SingleSpiral
 #End Region
 
 #Region "methods"
+    ''' <summary>
+    ''' Calls the partner form.
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Sub DoButtonOperation()
         Try
             With partnerSpiralDockWindowUI
@@ -269,6 +315,12 @@ Public Class SingleSpiral
             MessageBox.Show(ex.ToString)
         End Try
     End Sub
+
+    ''' <summary>
+    ''' If the snapping marker is active, this delete it from the graphics container
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Protected Overrides Function OnDeactivate() As Boolean
 
         If Not _SnappingMarkerElement Is Nothing Then
@@ -281,6 +333,10 @@ Public Class SingleSpiral
 
         Return MyBase.OnDeactivate()
     End Function
+    ''' <summary>
+    ''' When the tool is activated, calls dobuttonoperation
+    ''' </summary>
+    ''' <remarks></remarks>
     Protected Overrides Sub OnActivate()
         MyBase.OnActivate()
 
