@@ -99,6 +99,12 @@ Public Class SCS_tool
     Private _partnerSCSDockWindow As IDockableWindow
 
     Private WithEvents _partnerSCSDockWindowUI As SpiralCurveSpiralDockWindow
+    ''' <summary>
+    ''' Get the UI id from the SpiralDockWindow
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>Window UI</returns>
+    ''' <remarks></remarks>
     Friend ReadOnly Property partnerSCSDockFormUI() As SpiralCurveSpiralDockWindow
         Get
             If _partnerSCSDockWindowUI Is Nothing Then
@@ -107,6 +113,11 @@ Public Class SCS_tool
             Return _partnerSCSDockWindowUI
         End Get
     End Property
+    ''' <summary>
+    ''' Sets the event handlers
+    ''' </summary>
+    ''' <param name="value"></param>
+    ''' <remarks></remarks>
     Private Sub setPartnerSCSDockFormUI(ByVal value As SpiralCurveSpiralDockWindow)
 
         If value IsNot Nothing Then
@@ -299,7 +310,10 @@ Public Class SCS_tool
 
 #Region "Methods"
 
-
+    ''' <summary>
+    ''' Loads and makes the form visible
+    ''' </summary>
+    ''' <remarks></remarks>
     Friend Sub DoButtonOperation()
 
         With partnerSCSDockFormUI
@@ -387,14 +401,21 @@ Public Class SCS_tool
         End Try
 
     End Sub
-
+    ''' <summary>
+    ''' shows the Dockable Window
+    ''' </summary>
+    ''' <remarks></remarks>
     Protected Overrides Sub OnActivate()
         MyBase.OnActivate()
 
         If Not _partnerSCSDockWindow.IsVisible Then DoButtonOperation()
 
     End Sub
-
+    ''' <summary>
+    ''' When tool is deactivated it removes snap graphic if visible
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Protected Overrides Function OnDeactivate() As Boolean
         If Not _SnappingMarkerElement Is Nothing Then
             Dim theGraphicsContainer As IGraphicsContainer = DirectCast(My.ArcMap.Document.ActiveView, IGraphicsContainer)

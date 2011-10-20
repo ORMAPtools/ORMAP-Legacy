@@ -222,7 +222,7 @@ Public Class SingleSpiral
             If .uxByArcLength.Checked Then
                 ConstructSpiralbyLength(theFromPoint, theTangentPoint, CDbl(.uxArcLenghtValue.Text), theBeginRadius, TheEndRadius, .uxCurvetotheRight.Checked, .uxTargetTemplate.Text)
             Else
-                ConstructSpiralbyDelta(theFromPoint, theTangentPoint, .uxCurvetotheRight.Checked, theBeginRadius, TheEndRadius, .uxDeltaAngle.Text, .uxTargetTemplate.Text)
+                ConstructSpiralbyDelta(theFromPoint, theTangentPoint, .uxCurvetotheLeft.Checked, theBeginRadius, TheEndRadius, .uxDeltaAngle.Text, .uxTargetTemplate.Text)
             End If
 
         End With
