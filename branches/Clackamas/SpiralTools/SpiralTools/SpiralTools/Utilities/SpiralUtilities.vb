@@ -125,9 +125,9 @@ Module SpiralUtilities
 
             Dim theDelta As Double
             If IsNumeric(theDeltaString) Then
-                theDelta = CDbl(theDeltaString)
+                theDelta = CDbl(theDeltaString) * (Math.PI / 180)
             Else
-                theDelta = DMSAngletoDouble(theDeltaString)
+                theDelta = DMSAngletoDouble(theDeltaString) * (Math.PI / 180)
             End If
 
             If theBeginRadius <> 0 Then theBeginCurvature = 1 / theBeginRadius
