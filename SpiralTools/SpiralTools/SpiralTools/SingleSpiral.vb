@@ -269,8 +269,12 @@ Public Class SingleSpiral
         My.ArcMap.Document.ActiveView.Refresh()
 
     End Sub
-
-
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub uxHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
     End Sub
@@ -343,6 +347,10 @@ Public Class SingleSpiral
         If Not _partnerSpiralDockWindow.IsVisible Then DoButtonOperation()
 
     End Sub
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Protected Overrides Sub OnUpdate()
 
         Me.Enabled = SpiralUtilities.IsEnable
@@ -358,6 +366,11 @@ Public Class SingleSpiral
         End If
 
     End Sub
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="arg"></param>
+    ''' <remarks></remarks>
     Protected Overrides Sub OnMouseDown(ByVal arg As ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)
         MyBase.OnMouseDown(arg)
 
@@ -383,7 +396,11 @@ Public Class SingleSpiral
 
     Private _SnappingMarkerElement As IElement = Nothing
     Private _TheSnapPoint As IPoint
-
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="arg"></param>
+    ''' <remarks></remarks>
     Protected Overrides Sub OnMouseMove(ByVal arg As ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)
         MyBase.OnMouseMove(arg)
         Try
