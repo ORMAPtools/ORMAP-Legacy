@@ -1,0 +1,355 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+SpiralTools
+</name>
+</assembly>
+<members>
+<member name="P:SpiralTools.SpiralCurveSpiralDockWindow.Hook">
+	<summary>
+ Host object of the dockable window
+ </summary>
+</member><member name="T:SpiralTools.SpiralCurveSpiralDockWindow.AddinImpl">
+	<summary>
+ Implementation class of the dockable window add-in. It is responsible for
+ creating and disposing the user interface class for the dockable window.
+ </summary>
+</member><member name="T:SpiralTools.SpiralCurveSpiralDockWindow">
+	<summary>
+ Designer class of the dockable window add-in. It contains user interfaces that
+ make up the dockable window.
+ </summary>
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SCS_tool">
+	<summary>
+Returns 'ORMAP_SpiralTools_SCS_tool', the id declared for Add-in Tool class 'SCS_tool'
+</summary>
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SingleSpiral">
+	<summary>
+Returns 'ORMAP_SpiralTools_SingleSpiral', the id declared for Add-in Tool class 'SingleSpiral'
+</summary>
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SpiralCurveSpiralDockWindow">
+	<summary>
+Returns 'ORMAP_SpiralTools_SpiralCurveSpiralDockWindow', the id declared for Add-in DockableWindow class 'SpiralCurveSpiralDockWindow+AddinImpl'
+</summary>
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SpiralDockWindow">
+	<summary>
+Returns 'ORMAP_SpiralTools_SpiralDockWindow', the id declared for Add-in DockableWindow class 'SpiralDockWindow+AddinImpl'
+</summary>
+</member><member name="P:SpiralTools.My.ThisAddIn.IDs.SpiralsExtension">
+	<summary>
+Returns 'ORMAP_SpiralTools_Spirals', the id declared for Add-in Extension class 'SpiralsExtension'
+</summary>
+</member><member name="T:SpiralTools.My.ThisAddIn.IDs">
+	<summary>
+A class for looking up Add-in id strings declared in the associated configuration xml file (.esriaddinx).
+</summary>
+</member><member name="T:SpiralTools.My.ThisAddIn">
+	<summary>
+A class for looking up declarative information in the associated configuration xml file (.esriaddinx).
+</summary>
+</member><member name="M:SpiralTools.My.Internal.AddInStartupObject.GetThis">
+	<summary>
+ Expose this instance of Add-in class externally
+ </summary>
+</member><member name="T:SpiralTools.HelpForm">
+	<summary>
+ Provides user interface for Help.
+ </summary>
+	<remarks></remarks>
+</member><member name="P:SpiralTools.SpiralDockWindow.Hook">
+	<summary>
+ Host object of the dockable window
+ </summary>
+</member><member name="T:SpiralTools.SpiralDockWindow.AddinImpl">
+	<summary>
+ Implementation class of the dockable window add-in. It is responsible for
+ creating and disposing the user interface class for the dockable window.
+ </summary>
+</member><member name="T:SpiralTools.SpiralDockWindow">
+	<summary>
+ Designer class of the dockable window add-in. It contains user interfaces that
+ make up the dockable window.
+ </summary>
+</member><member name="P:SpiralTools.SCS_tool.partnerSCSDockFormUI">
+	<summary>
+ Get the UI id from the SpiralDockWindow
+ </summary>
+	<value></value>
+	<returns>Window UI</returns>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SCS_tool.setPartnerSCSDockFormUI(SpiralTools.SpiralCurveSpiralDockWindow)">
+	<summary>
+ Sets the event handlers
+ </summary>
+	<param name="value"></param>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SCS_tool.uxCreate_Click(System.Object,System.EventArgs)">
+	<summary>
+ Constructs the Spiral-Curve-Spiral based on user inputs in the partner Spiral Curve Spiral Dockable Window
+ </summary>
+</member><member name="M:SpiralTools.SCS_tool.uxHelp_Click(System.Object,System.EventArgs)">
+	<summary>
+ Opens Help Document
+ </summary>
+</member><member name="M:SpiralTools.SCS_tool.uxGettoPoint_Click(System.Object,System.EventArgs)">
+	<summary>
+ Gets the end point for the Spiral Curve Spiral Construction from the map.
+ </summary>
+</member><member name="M:SpiralTools.SCS_tool.uxGetTangentPoint_Click(System.Object,System.EventArgs)">
+	<summary>
+ Gets the tangent point for the Spiral Curve Spiral Construction from the map.
+ </summary>
+</member><member name="M:SpiralTools.SCS_tool.uxGetFromPoint_Click(System.Object,System.EventArgs)">
+	<summary>
+ Gets the starting point for the Spiral Curve Spiral Construction from the map.
+ </summary>
+</member><member name="M:SpiralTools.SCS_tool.uxCurveByRadius_CheckedChanged(System.Object,System.EventArgs)">
+	<summary>
+ Defines it the central curve is defined by a radius.
+ </summary>
+	<remarks>If checked, the .uxCurvebyRadiusValue is enabled.  The .uxCurvebyDegreeValue is disabled</remarks>
+</member><member name="M:SpiralTools.SCS_tool.uxCurvebyDegree_CheckedChanged(System.Object,System.EventArgs)">
+	<summary>
+ Defines if the central curve is defined by a degree of curve.
+ </summary>
+	<remarks>If checked, the .uxCurvebyDegreeValue is Enable.  The .uxCurvebyRadiusValue is disabled</remarks>
+</member><member name="M:SpiralTools.SCS_tool.partnerSCSDockWindow_load">
+	<summary>
+ Loads the target layers 
+ </summary>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SCS_tool.DoButtonOperation">
+	<summary>
+ Loads and makes the form visible
+ </summary>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SCS_tool.OnMouseDown(ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)">
+	<summary>
+ On the MouseDown Event this sub routine checks to see if the user is looking for a point required to construct the spiral
+ curve spiral construction.  If it is, gets the map coordinates and assigns it to the parnter form window text boxes related
+ to the points.
+ </summary>
+	<remarks>This also enables the snap graphic
+ Refer to the OnMouseMove override
+ </remarks>
+</member><member name="M:SpiralTools.SCS_tool.OnMouseMove(ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)">
+	<summary>
+ Checks to see if _IsCircleActive.  The circle is used to verify if the cursor is snapping to a snap feature.
+ </summary>
+	<param name="arg"></param>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SCS_tool.OnActivate">
+	<summary>
+ shows the Dockable Window
+ </summary>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SCS_tool.OnDeactivate">
+	<summary>
+ When tool is deactivated it removes snap graphic if visible
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SCS_tool.OnUpdate">
+	<summary>
+ Enables the tool when the edit session is started.  It also hides the SCSDockwindow when the edit session is ended.
+ if the snapping marker is visible at the stop editing event, it is deleted.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:SpiralTools.SCS_tool">
+	<summary>
+ Provides an ArcMap Command with functionality to
+ Construct a Spiral-Curve-Spiral transition feature.
+ These features are common in Highways and freeways.
+ </summary>
+	<remarks><seealso cref="T:SpiralTools.SCS_tool"/></remarks>
+</member><member name="M:SpiralTools.SpiralUtilities.IsEnable">
+	<summary>
+ Checks the editing State
+ </summary>
+	<returns>True or False</returns>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SpiralUtilities.getDataFrameCoords(System.Int32,System.Int32)">
+	<summary>
+ Transforms the display coordinate to a map coordinate.
+ </summary>
+	<param name="X">Input X value</param>
+	<param name="Y">Input Y Value</param>
+	<returns>The point as withe map coordinates</returns>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SpiralUtilities.getSnapPoint(ESRI.ArcGIS.Geometry.IPoint)">
+	<summary>
+ Gets the closest snapping environment point
+ </summary>
+	<param name="point"></param>
+	<returns>a point</returns>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SpiralUtilities.ConstructSCSbyLength(ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint,System.Double,System.Double,System.Boolean,System.String)">
+	<summary>
+ Constructs to spiral curve sprial transition
+ </summary>
+	<param name="theFromPoint">As an IPoint.  The beginning point of the spiral-curve-spiral construction</param>
+	<param name="theTangentPoint">As an IPoint.  The tangent point, or Point of Intersect of the tangents for the spiral-curve-spiral construction</param>
+	<param name="theToPoint">As an IPoint.  The end point of the spiral-curve-spiral transition</param>
+	<param name="theSpiralLengths"></param>
+	<param name="theRadius">As double, the radius of the central spiral</param>
+	<param name="isCCW">as boolena, is curve counter clockwise</param>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SpiralUtilities.FindField(System.String,ESRI.ArcGIS.Geodatabase.IFeature)">
+	<summary>
+ Finds the field index for a feature class
+ </summary>
+	<param name="theFieldName"></param>
+	<returns>The index value for the field</returns>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SpiralUtilities.CreateSnapMarker">
+	<summary>
+ Creates the circle graphic showing where the cursor is snapping to in regards to getting the point inputs.
+ </summary>
+	<returns>as graphic marker element</returns>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SpiralUtilities.IsFeatureClassValidPolyline(ESRI.ArcGIS.Geodatabase.IFeatureClass)">
+	<summary>
+ checks to see if the passed feature class is type of polyline
+ </summary>
+	<param name="theFeatureClass">an featureclass object</param>
+	<returns>true or false</returns>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SpiralUtilities.ConstructSpiralbyLength(ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint,System.Double@,System.Double@,System.Boolean,System.Double)">
+	<summary>
+  Creates the spiral Construction by Length
+ </summary>
+	<param name="theFromPoint"></param>
+	<param name="theTangentpoint"></param>
+	<param name="theFromCurvature"></param>
+	<param name="theToCurvature"></param>
+	<param name="isCCW"></param>
+	<param name="theSpiralLength"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SpiralUtilities.DMSAngletoDouble(System.String)">
+	<summary>
+ Takes a Quadrant angle and converts to Decimal Degrees
+ </summary>
+	<param name="TheCircularDegree"></param>
+	<returns>A double value.</returns>
+	<remarks>If 0 is returned then an invalid value was sent.</remarks>
+</member><member name="T:SpiralTools.SpiralUtilities">
+	<summary>
+ This module provides helper routines for the construction of spirals.  The routines in this module are used by SCS_Botton.vb adn SpiralConstruction_Button.vb.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:SpiralTools.Spiralsextension">
+	<summary>
+Spirals class implementing custom ESRI Editor Extension functionalities.
+</summary>
+</member><member name="P:SpiralTools.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:SpiralTools.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:SpiralTools.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:SpiralTools.SingleSpiral.#ctor">
+	<summary>
+ Gets the window form ID from partner form
+ </summary>
+	<remarks></remarks>
+</member><member name="P:SpiralTools.SingleSpiral.partnerSpiralDockWindowUI">
+	<summary>
+ Creates the hook to the parnter form
+ </summary>
+	<value></value>
+	<returns>The addin id</returns>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.setPartnerSpiralDockWindowUI(SpiralTools.SpiralDockWindow)">
+	<summary>
+ Adds and removes handlers to the partner form.
+ </summary>
+	<param name="value"></param>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.uxByArcLength_CheckedChanged(System.Object,System.EventArgs)">
+	<summary>
+ Enables or disables the .uxByArcLengthValue text box.
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.uxByDeltaAngle_CheckedChanged(System.Object,System.EventArgs)">
+	<summary>
+ Enables or disables the .uxDeltaAngle text box
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.uxGetFromPoint_Click(System.Object,System.EventArgs)">
+	<summary>
+ Enables onmousedown overrides get the from point from the map
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.uxGetTangentPoint_Click(System.Object,System.EventArgs)">
+	<summary>
+ Enables onmousedown overrides get the from point from the map
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.uxCreate_Click(System.Object,System.EventArgs)">
+	<summary>
+ Validates user inputs.  Intiates the construction of a spiral feature
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.uxHelp_Click(System.Object,System.EventArgs)">
+	<summary>
+	</summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.parnterSpiralDockWindow_load">
+	<summary>
+ Updates the target template drop down with polyline features
+ </summary>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.DoButtonOperation">
+	<summary>
+ Calls the partner form.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.OnDeactivate">
+	<summary>
+ If the snapping marker is active, this delete it from the graphics container
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.OnActivate">
+	<summary>
+ When the tool is activated, calls dobuttonoperation
+ </summary>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.OnUpdate">
+	<summary>
+	</summary>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.OnMouseDown(ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)">
+	<summary>
+	</summary>
+	<param name="arg"></param>
+	<remarks></remarks>
+</member><member name="M:SpiralTools.SingleSpiral.OnMouseMove(ESRI.ArcGIS.Desktop.AddIns.Tool.MouseEventArgs)">
+	<summary>
+	</summary>
+	<param name="arg"></param>
+	<remarks></remarks>
+</member>
+</members>
+</doc>
