@@ -23,18 +23,15 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxCreate = New System.Windows.Forms.Button()
         Me.uxHelp = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.uxGettoPoint = New System.Windows.Forms.Button()
         Me.uxToPointYValue = New System.Windows.Forms.TextBox()
         Me.uxToPointXValue = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.uxGetFromPoint = New System.Windows.Forms.Button()
         Me.uxFromPointYValue = New System.Windows.Forms.TextBox()
         Me.uxFromPointXValue = New System.Windows.Forms.TextBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.uxGetTangentPoint = New System.Windows.Forms.Button()
         Me.uxTangentPointYValue = New System.Windows.Forms.TextBox()
         Me.uxTangentPointXValue = New System.Windows.Forms.TextBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
@@ -53,6 +50,9 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxTimer = New System.Windows.Forms.Timer(Me.components)
         Me.Label8 = New System.Windows.Forms.Label()
         Me.uxTargetLayers = New System.Windows.Forms.ComboBox()
+        Me.uxGetTangentPoint = New System.Windows.Forms.Button()
+        Me.uxGetFromPoint = New System.Windows.Forms.Button()
+        Me.uxGettoPoint = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -92,15 +92,6 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "To Point"
         '
-        'uxGettoPoint
-        '
-        Me.uxGettoPoint.Image = Global.SpiralTools.My.Resources.Resources._3DCenterOnTarget32
-        Me.uxGettoPoint.Location = New System.Drawing.Point(200, 25)
-        Me.uxGettoPoint.Name = "uxGettoPoint"
-        Me.uxGettoPoint.Size = New System.Drawing.Size(35, 32)
-        Me.uxGettoPoint.TabIndex = 16
-        Me.uxGettoPoint.UseVisualStyleBackColor = True
-        '
         'uxToPointYValue
         '
         Me.uxToPointYValue.Location = New System.Drawing.Point(31, 44)
@@ -132,15 +123,6 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.Label1.Size = New System.Drawing.Size(17, 13)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "X:"
-        '
-        'uxGetFromPoint
-        '
-        Me.uxGetFromPoint.Image = Global.SpiralTools.My.Resources.Resources._3DCenterOnTarget32
-        Me.uxGetFromPoint.Location = New System.Drawing.Point(197, 22)
-        Me.uxGetFromPoint.Name = "uxGetFromPoint"
-        Me.uxGetFromPoint.Size = New System.Drawing.Size(35, 35)
-        Me.uxGetFromPoint.TabIndex = 10
-        Me.uxGetFromPoint.UseVisualStyleBackColor = True
         '
         'uxFromPointYValue
         '
@@ -187,15 +169,6 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.Label4.Size = New System.Drawing.Size(17, 13)
         Me.Label4.TabIndex = 0
         Me.Label4.Text = "X:"
-        '
-        'uxGetTangentPoint
-        '
-        Me.uxGetTangentPoint.Image = Global.SpiralTools.My.Resources.Resources._3DCenterOnTarget32
-        Me.uxGetTangentPoint.Location = New System.Drawing.Point(197, 25)
-        Me.uxGetTangentPoint.Name = "uxGetTangentPoint"
-        Me.uxGetTangentPoint.Size = New System.Drawing.Size(35, 31)
-        Me.uxGetTangentPoint.TabIndex = 13
-        Me.uxGetTangentPoint.UseVisualStyleBackColor = True
         '
         'uxTangentPointYValue
         '
@@ -365,6 +338,33 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxTargetLayers.Name = "uxTargetLayers"
         Me.uxTargetLayers.Size = New System.Drawing.Size(259, 21)
         Me.uxTargetLayers.TabIndex = 19
+        '
+        'uxGetTangentPoint
+        '
+        Me.uxGetTangentPoint.Image = Global.SpiralTools.My.Resources.Resources.CenterOnTarget32
+        Me.uxGetTangentPoint.Location = New System.Drawing.Point(197, 25)
+        Me.uxGetTangentPoint.Name = "uxGetTangentPoint"
+        Me.uxGetTangentPoint.Size = New System.Drawing.Size(35, 31)
+        Me.uxGetTangentPoint.TabIndex = 13
+        Me.uxGetTangentPoint.UseVisualStyleBackColor = True
+        '
+        'uxGetFromPoint
+        '
+        Me.uxGetFromPoint.Image = Global.SpiralTools.My.Resources.Resources.CenterOnTarget32
+        Me.uxGetFromPoint.Location = New System.Drawing.Point(197, 22)
+        Me.uxGetFromPoint.Name = "uxGetFromPoint"
+        Me.uxGetFromPoint.Size = New System.Drawing.Size(35, 35)
+        Me.uxGetFromPoint.TabIndex = 10
+        Me.uxGetFromPoint.UseVisualStyleBackColor = True
+        '
+        'uxGettoPoint
+        '
+        Me.uxGettoPoint.Image = Global.SpiralTools.My.Resources.Resources.CenterOnTarget32
+        Me.uxGettoPoint.Location = New System.Drawing.Point(200, 25)
+        Me.uxGettoPoint.Name = "uxGettoPoint"
+        Me.uxGettoPoint.Size = New System.Drawing.Size(35, 32)
+        Me.uxGettoPoint.TabIndex = 16
+        Me.uxGettoPoint.UseVisualStyleBackColor = True
         '
         'SpiralCurveSpiralDockWindow
         '

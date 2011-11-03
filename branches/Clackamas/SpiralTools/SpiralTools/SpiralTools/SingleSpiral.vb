@@ -191,45 +191,45 @@ Public Class SingleSpiral
 
         'Validate User Data
         With _partnerSpiralDockWindowUI
-            If Len(.uxTargetTemplate.Text) = 0 Then
+            If Len(Trim(.uxTargetTemplate.Text)) = 0 Then
                 MessageBox.Show("Please select a target template")
                 Exit Sub
             End If
-            If .uxBeginRadiusValue.TextLength = 0 Then
+            If Trim(.uxBeginRadiusValue.Text).Length = 0 Then
                 MessageBox.Show("please enter a beginning Radius value.")
                 Exit Sub
             End If
-            If Not IsNumeric(.uxBeginRadiusValue.Text) Then
+            If Not IsNumeric(Trim(.uxBeginRadiusValue.Text)) Then
                 If Not UCase(.uxBeginRadiusValue.Text) = "INFINITY" Then
                     MessageBox.Show("invalid entry for the beginning radius value." & vbNewLine & _
                                     "Enter the radius value is infinity, us INFINITY or 0")
                     Exit Sub
                 End If
             End If
-            If .uxEndRadiusValue.TextLength = 0 Then
+            If Trim(.uxEndRadiusValue.Text).Length = 0 Then
                 MessageBox.Show("Please enter an end radius value")
                 Exit Sub
             End If
-            If Not IsNumeric(.uxEndRadiusValue.Text) Then
+            If Not IsNumeric(Trim(.uxEndRadiusValue.Text)) Then
                 If Not UCase(.uxEndRadiusValue.Text) = "INFINITY" Then
                     MessageBox.Show("invalid entry for the ending radius value." & vbNewLine & _
                                     "Enter the radius value is infinity, us INFINITY or 0")
                     Exit Sub
                 End If
             End If
-            If .uxByArcLength.Checked And .uxArcLenghtValue.TextLength = 0 Then
+            If .uxByArcLength.Checked And Trim(.uxArcLenghtValue.Text).Length = 0 Then
                 MessageBox.Show("Please enter a spiral length value.")
                 Exit Sub
             End If
-            If .uxByArcLength.Checked And Not IsNumeric(.uxArcLenghtValue.Text) Then
+            If .uxByArcLength.Checked And Not IsNumeric(Trim(.uxArcLenghtValue.Text)) Then
                 MessageBox.Show("Please enter a valid spiral length")
                 Exit Sub
             End If
-            If .uxByDeltaAngle.Checked And .uxDeltaAngle.TextLength = 0 Then
+            If .uxByDeltaAngle.Checked And Trim(.uxDeltaAngle.Text).Length = 0 Then
                 MessageBox.Show("Please enter avalide delta angle")
                 Exit Sub
             End If
-            If (.uxFromPointXValue.TextLength = 0 Or Not IsNumeric(.uxFromPointXValue.Text)) Or (.uxFromPointYValue.TextLength = 0 Or Not IsNumeric(.uxFromPointYValue.Text)) Then
+            If (Trim(.uxFromPointXValue.Text).Length = 0 Or Not IsNumeric(Trim(.uxFromPointXValue.Text))) Or (Trim(.uxFromPointYValue.Text).Length = 0 Or Not IsNumeric(Trim(.uxFromPointYValue.Text))) Then
                 MessageBox.Show("Please add a spiral from point or specify the tangent point")
                 Exit Sub
             End If
@@ -240,18 +240,18 @@ Public Class SingleSpiral
 
             'Sets the Beginning Radius Value
             Dim theBeginRadius As Double
-            If .uxBeginRadiusValue.Text = "INFINITY" Then
+            If Trim(.uxBeginRadiusValue.Text) = "INFINITY" Then
                 theBeginRadius = 0
             Else
-                theBeginRadius = CDbl(.uxBeginRadiusValue.Text)
+                theBeginRadius = CDbl(Trim(.uxBeginRadiusValue.Text))
             End If
 
             'Sets the Ending Radius Value
             Dim TheEndRadius As Double
-            If .uxEndRadiusValue.Text = "INFINITY" Then
+            If Trim(.uxEndRadiusValue.Text) = "INFINITY" Then
                 TheEndRadius = 0
             Else
-                TheEndRadius = CDbl(.uxEndRadiusValue.Text)
+                TheEndRadius = CDbl(Trim(.uxEndRadiusValue.Text))
             End If
 
             'Retrieves the points from the partner form

@@ -155,18 +155,18 @@ Public Class SCS_tool
 
         'Validate user inputs
         With _partnerSCSDockWindowUI
-            If .uxCurveByRadius.Checked And .uxCurveByRadiusValue.TextLength = 0 Then
+            If .uxCurveByRadius.Checked And Trim(.uxCurveByRadiusValue.Text).Length = 0 Then
                 MessageBox.Show("Please enter a radius value")
                 Exit Sub
-            ElseIf .uxCurveByRadius.Checked And Not IsNumeric(.uxCurveByRadiusValue.Text) Then
+            ElseIf .uxCurveByRadius.Checked And Not IsNumeric(Trim(.uxCurveByRadiusValue.Text)) Then
                 MessageBox.Show("Please us a numeric value in the radius value box")
                 Exit Sub
             End If
-            If .uxCurvebyDegree.Checked And .uxCurveDegreeValue.TextLength = 0 Then
+            If .uxCurvebyDegree.Checked And Trim(.uxCurveDegreeValue.Text).Length = 0 Then
                 MessageBox.Show("Please eneter a degree value")
                 Exit Sub
             End If
-            If .uxTargetLayers.Text.Length = 0 Then
+            If Trim(.uxTargetLayers.Text).Length = 0 Then
                 MessageBox.Show("Please select a target layer")
                 Exit Sub
             End If
