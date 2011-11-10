@@ -23,6 +23,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxCreate = New System.Windows.Forms.Button()
         Me.uxHelp = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.uxGettoPoint = New System.Windows.Forms.Button()
         Me.uxToPointYValue = New System.Windows.Forms.TextBox()
         Me.uxToPointXValue = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -30,11 +31,13 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxFromPointYValue = New System.Windows.Forms.TextBox()
         Me.uxFromPointXValue = New System.Windows.Forms.TextBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.uxGetFromPoint = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.uxTangentPointYValue = New System.Windows.Forms.TextBox()
         Me.uxTangentPointXValue = New System.Windows.Forms.TextBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.uxGetTangentPoint = New System.Windows.Forms.Button()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
@@ -50,19 +53,19 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxTimer = New System.Windows.Forms.Timer(Me.components)
         Me.Label8 = New System.Windows.Forms.Label()
         Me.uxTargetLayers = New System.Windows.Forms.ComboBox()
-        Me.uxGetTangentPoint = New System.Windows.Forms.Button()
-        Me.uxGetFromPoint = New System.Windows.Forms.Button()
-        Me.uxGettoPoint = New System.Windows.Forms.Button()
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.uxCurveDensity = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox6.SuspendLayout()
+        Me.GroupBox5.SuspendLayout()
         Me.SuspendLayout()
         '
         'uxCreate
         '
-        Me.uxCreate.Location = New System.Drawing.Point(2, 434)
+        Me.uxCreate.Location = New System.Drawing.Point(2, 494)
         Me.uxCreate.Name = "uxCreate"
         Me.uxCreate.Size = New System.Drawing.Size(75, 23)
         Me.uxCreate.TabIndex = 17
@@ -71,7 +74,7 @@ Partial Class SpiralCurveSpiralDockWindow
         '
         'uxHelp
         '
-        Me.uxHelp.Location = New System.Drawing.Point(83, 434)
+        Me.uxHelp.Location = New System.Drawing.Point(83, 494)
         Me.uxHelp.Name = "uxHelp"
         Me.uxHelp.Size = New System.Drawing.Size(75, 23)
         Me.uxHelp.TabIndex = 18
@@ -91,6 +94,15 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "To Point"
+        '
+        'uxGettoPoint
+        '
+        Me.uxGettoPoint.Image = Global.SpiralTools.My.Resources.Resources.CenterOnTarget32
+        Me.uxGettoPoint.Location = New System.Drawing.Point(200, 25)
+        Me.uxGettoPoint.Name = "uxGettoPoint"
+        Me.uxGettoPoint.Size = New System.Drawing.Size(35, 32)
+        Me.uxGettoPoint.TabIndex = 16
+        Me.uxGettoPoint.UseVisualStyleBackColor = True
         '
         'uxToPointYValue
         '
@@ -152,6 +164,15 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "From Point"
         '
+        'uxGetFromPoint
+        '
+        Me.uxGetFromPoint.Image = Global.SpiralTools.My.Resources.Resources.CenterOnTarget32
+        Me.uxGetFromPoint.Location = New System.Drawing.Point(197, 22)
+        Me.uxGetFromPoint.Name = "uxGetFromPoint"
+        Me.uxGetFromPoint.Size = New System.Drawing.Size(35, 35)
+        Me.uxGetFromPoint.TabIndex = 10
+        Me.uxGetFromPoint.UseVisualStyleBackColor = True
+        '
         'Label3
         '
         Me.Label3.AutoSize = True
@@ -197,6 +218,15 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox3.TabIndex = 5
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Tangent Point"
+        '
+        'uxGetTangentPoint
+        '
+        Me.uxGetTangentPoint.Image = Global.SpiralTools.My.Resources.Resources.CenterOnTarget32
+        Me.uxGetTangentPoint.Location = New System.Drawing.Point(197, 25)
+        Me.uxGetTangentPoint.Name = "uxGetTangentPoint"
+        Me.uxGetTangentPoint.Size = New System.Drawing.Size(35, 31)
+        Me.uxGetTangentPoint.TabIndex = 13
+        Me.uxGetTangentPoint.UseVisualStyleBackColor = True
         '
         'Label5
         '
@@ -339,35 +369,26 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.uxTargetLayers.Size = New System.Drawing.Size(259, 21)
         Me.uxTargetLayers.TabIndex = 19
         '
-        'uxGetTangentPoint
+        'GroupBox5
         '
-        Me.uxGetTangentPoint.Image = Global.SpiralTools.My.Resources.Resources.CenterOnTarget32
-        Me.uxGetTangentPoint.Location = New System.Drawing.Point(197, 25)
-        Me.uxGetTangentPoint.Name = "uxGetTangentPoint"
-        Me.uxGetTangentPoint.Size = New System.Drawing.Size(35, 31)
-        Me.uxGetTangentPoint.TabIndex = 13
-        Me.uxGetTangentPoint.UseVisualStyleBackColor = True
+        Me.GroupBox5.Controls.Add(Me.uxCurveDensity)
+        Me.GroupBox5.Location = New System.Drawing.Point(2, 434)
+        Me.GroupBox5.Name = "GroupBox5"
+        Me.GroupBox5.Size = New System.Drawing.Size(264, 54)
+        Me.GroupBox5.TabIndex = 20
+        Me.GroupBox5.TabStop = False
+        Me.GroupBox5.Text = "Curve Density"
         '
-        'uxGetFromPoint
+        'uxCurveDensity
         '
-        Me.uxGetFromPoint.Image = Global.SpiralTools.My.Resources.Resources.CenterOnTarget32
-        Me.uxGetFromPoint.Location = New System.Drawing.Point(197, 22)
-        Me.uxGetFromPoint.Name = "uxGetFromPoint"
-        Me.uxGetFromPoint.Size = New System.Drawing.Size(35, 35)
-        Me.uxGetFromPoint.TabIndex = 10
-        Me.uxGetFromPoint.UseVisualStyleBackColor = True
-        '
-        'uxGettoPoint
-        '
-        Me.uxGettoPoint.Image = Global.SpiralTools.My.Resources.Resources.CenterOnTarget32
-        Me.uxGettoPoint.Location = New System.Drawing.Point(200, 25)
-        Me.uxGettoPoint.Name = "uxGettoPoint"
-        Me.uxGettoPoint.Size = New System.Drawing.Size(35, 32)
-        Me.uxGettoPoint.TabIndex = 16
-        Me.uxGettoPoint.UseVisualStyleBackColor = True
+        Me.uxCurveDensity.Location = New System.Drawing.Point(8, 19)
+        Me.uxCurveDensity.Name = "uxCurveDensity"
+        Me.uxCurveDensity.Size = New System.Drawing.Size(100, 20)
+        Me.uxCurveDensity.TabIndex = 0
         '
         'SpiralCurveSpiralDockWindow
         '
+        Me.Controls.Add(Me.GroupBox5)
         Me.Controls.Add(Me.uxTargetLayers)
         Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.uxArcLengthValue)
@@ -380,7 +401,7 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.Controls.Add(Me.uxHelp)
         Me.Controls.Add(Me.uxCreate)
         Me.Name = "SpiralCurveSpiralDockWindow"
-        Me.Size = New System.Drawing.Size(272, 468)
+        Me.Size = New System.Drawing.Size(272, 560)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
@@ -391,6 +412,8 @@ Partial Class SpiralCurveSpiralDockWindow
         Me.GroupBox4.PerformLayout()
         Me.GroupBox6.ResumeLayout(False)
         Me.GroupBox6.PerformLayout()
+        Me.GroupBox5.ResumeLayout(False)
+        Me.GroupBox5.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -428,5 +451,7 @@ Partial Class SpiralCurveSpiralDockWindow
     Friend WithEvents uxTimer As System.Windows.Forms.Timer
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents uxTargetLayers As System.Windows.Forms.ComboBox
+    Friend WithEvents GroupBox5 As System.Windows.Forms.GroupBox
+    Friend WithEvents uxCurveDensity As System.Windows.Forms.TextBox
 
 End Class

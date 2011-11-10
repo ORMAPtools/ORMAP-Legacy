@@ -170,7 +170,14 @@ Public Class SCS_tool
                 MessageBox.Show("Please select a target layer")
                 Exit Sub
             End If
-
+            If Trim(.uxCurveDensity.Text).Length = 0 Then
+                MessageBox.Show("Please enter a spiral curve density value")
+                Exit Sub
+            End If
+            If Not IsNumeric(Trim(.uxCurveDensity.Text)) Then
+                MessageBox.Show("Please enter a valid numeric value for the" & vbNewLine & "spiral curve density")
+                Exit Sub
+            End If
             'Sets the input points
             Dim theFromPoint As IPoint = New ESRI.ArcGIS.Geometry.Point
             Dim theTangent As IPoint = New ESRI.ArcGIS.Geometry.Point
@@ -184,7 +191,7 @@ Public Class SCS_tool
             'Sends data to the SpiralsUtilities ConstructSCSbyLenth function
             Dim theCurveRadius As Double
             If .uxCurveByRadius.Checked Then
-                ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), CDbl(.uxCurveByRadiusValue.Text), .uxCurvetotheRight.Checked, .uxTargetLayers.Text)
+                ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(Trim(.uxArcLengthValue.Text)), CDbl(Trim(.uxCurveByRadiusValue.Text)), .uxCurvetotheRight.Checked, Trim(.uxTargetLayers.Text), CDbl(Trim(.uxCurveDensity.Text)))
             ElseIf .uxCurvebyDegree.Checked Then
                 If Not IsNumeric(.uxCurveDegreeValue.Text) Then
                     theCurveRadius = 5729.578 / DMSAngletoDouble(Trim(.uxCurveDegreeValue.Text))
@@ -201,7 +208,7 @@ Public Class SCS_tool
 
                 Try
 
-                    ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), theCurveRadius, .uxCurvetotheRight.Checked, .uxTargetLayers.Text)
+                    ConstructSCSbyLength(theFromPoint, theTangent, theToPoint, CDbl(.uxArcLengthValue.Text), theCurveRadius, .uxCurvetotheRight.Checked, .uxTargetLayers.Text, CDbl(Trim(.uxCurveDensity.Text)))
 
                 Catch ex As Exception
                     MessageBox.Show(ex.ToString)
@@ -318,6 +325,7 @@ Public Class SCS_tool
 
         With partnerSCSDockFormUI
             .uxCreate.Enabled = True
+            .uxCurveDensity.Text = "0.5"
         End With
 
         _partnerSCSDockWindow.Show(Not _partnerSCSDockWindow.IsVisible)
