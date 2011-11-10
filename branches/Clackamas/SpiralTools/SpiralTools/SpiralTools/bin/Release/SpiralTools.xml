@@ -184,7 +184,7 @@ A class for looking up declarative information in the associated configuration x
 	<param name="point"></param>
 	<returns>a point</returns>
 	<remarks></remarks>
-</member><member name="M:SpiralTools.SpiralUtilities.ConstructSCSbyLength(ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint,System.Double,System.Double,System.Boolean,System.String)">
+</member><member name="M:SpiralTools.SpiralUtilities.ConstructSCSbyLength(ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint,System.Double,System.Double,System.Boolean,System.String,System.Double)">
 	<summary>
  Constructs to spiral curve sprial transition
  </summary>
@@ -215,7 +215,7 @@ A class for looking up declarative information in the associated configuration x
 	<param name="theFeatureClass">an featureclass object</param>
 	<returns>true or false</returns>
 	<remarks></remarks>
-</member><member name="M:SpiralTools.SpiralUtilities.ConstructSpiralbyLength(ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint,System.Double@,System.Double@,System.Boolean,System.Double)">
+</member><member name="M:SpiralTools.SpiralUtilities.ConstructSpiralbyLength(ESRI.ArcGIS.Geometry.IPoint,ESRI.ArcGIS.Geometry.IPoint,System.Double@,System.Double@,System.Boolean,System.Double,System.Double)">
 	<summary>
   Creates the spiral Construction by Length
  </summary>

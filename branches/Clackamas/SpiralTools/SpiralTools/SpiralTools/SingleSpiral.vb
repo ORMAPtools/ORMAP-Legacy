@@ -85,7 +85,7 @@ Public Class SingleSpiral
     ''' <value></value>
     ''' <returns>The addin id</returns>
     ''' <remarks></remarks>
-    Friend ReadOnly Property partnerSpiralDockWindowUI() As SpiralDockWindow
+    Friend ReadOnly Property partnerSpiralDockWindowUI() As spiraldockwindow
         Get
             If _partnerSpiralDockWindowUI Is Nothing Then
 
@@ -233,7 +233,14 @@ Public Class SingleSpiral
                 MessageBox.Show("Please add a spiral from point or specify the tangent point")
                 Exit Sub
             End If
-
+            If Trim(.uxDensityValue.Text).Length = 0 Then
+                MessageBox.Show("Please enter a spiral density value")
+                Exit Sub
+            End If
+            If Not IsNumeric(Trim(.uxDensityValue.Text)) Then
+                MessageBox.Show("Please enter a numeric value for the spiral curve density")
+                Exit Sub
+            End If
             'Sets the input points
             Dim theFromPoint As IPoint = New ESRI.ArcGIS.Geometry.Point
             Dim theTangentPoint As IPoint = New ESRI.ArcGIS.Geometry.Point
@@ -259,9 +266,9 @@ Public Class SingleSpiral
             theTangentPoint.PutCoords(CDbl(.uxTangentPointXValue.Text), CDbl(.uxTangentPointYValue.Text))
 
             If .uxByArcLength.Checked Then
-                ConstructSpiralbyLength(theFromPoint, theTangentPoint, CDbl(.uxArcLenghtValue.Text), theBeginRadius, TheEndRadius, .uxCurvetotheRight.Checked, .uxTargetTemplate.Text)
+                ConstructSpiralbyLength(theFromPoint, theTangentPoint, CDbl(.uxArcLenghtValue.Text), theBeginRadius, TheEndRadius, .uxCurvetotheRight.Checked, .uxTargetTemplate.Text, CDbl(Trim(.uxDensityValue.Text)))
             Else
-                ConstructSpiralbyDelta(theFromPoint, theTangentPoint, .uxCurvetotheLeft.Checked, theBeginRadius, TheEndRadius, .uxDeltaAngle.Text, .uxTargetTemplate.Text)
+                ConstructSpiralbyDelta(theFromPoint, theTangentPoint, .uxCurvetotheLeft.Checked, theBeginRadius, TheEndRadius, .uxDeltaAngle.Text, .uxTargetTemplate.Text, CDbl(Trim(.uxDensityValue.Text)))
             End If
 
         End With

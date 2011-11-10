@@ -55,5 +55,5 @@ Public Class SpiralDockWindow
         End Property
     End Class
 
-    
+
 End Class
