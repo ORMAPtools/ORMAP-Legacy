@@ -92,11 +92,12 @@
     <Reference Include="ESRI.ArcGIS.System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
@@ -106,7 +107,6 @@
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
-    <Import Include="System.Data" />
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +150,11 @@
     <Compile Include="MapDefinitionForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="OrmapAnnotateToolbar\AnnotationUtilities.vb" />
     <Compile Include="OrmapAnnotateToolbar\CreateAnnotation.vb" />
     <Compile Include="OrmapAnnotateToolbar\CreateAnnotationButton.vb" />
@@ -188,6 +193,20 @@
     </Compile>
     <Compile Include="SortCancelledNumbersForm.vb">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SpiralToolbar\SCS_tool.vb" />
+    <Compile Include="SpiralToolbar\SingleSpiral.vb" />
+    <Compile Include="SpiralToolbar\SpiralCurveSpiralDockWindow.Designer.vb">
+      <DependentUpon>SpiralCurveSpiralDockWindow.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SpiralToolbar\SpiralCurveSpiralDockWindow.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SpiralToolbar\SpiralDockWindow.Designer.vb">
+      <DependentUpon>SpiralDockWindow.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SpiralToolbar\SpiralDockWindow.vb">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TaxlotAssignment.vb" />
     <Compile Include="TaxlotAssignmentForm.designer.vb">
@@ -277,6 +296,7 @@
       <DependentUpon>TaxLotSettings.settings</DependentUpon>
     </Compile>
     <Compile Include="UtilityHelpersAndClasses\SpatialUtilities.vb" />
+    <Compile Include="UtilityHelpersAndClasses\SpiralUtilities.vb" />
     <Compile Include="UtilityHelpersAndClasses\StringUtilities.vb" />
     <Compile Include="UtilityHelpersAndClasses\Utilities.vb" />
   </ItemGroup>
@@ -305,6 +325,11 @@
     <EmbeddedResource Include="MapDefinitionForm.resx">
       <DependentUpon>MapDefinitionForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="OrmapAnnotateToolbar\CreateAnnotationForm.resx">
       <DependentUpon>CreateAnnotationForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -313,6 +338,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SortCancelledNumbersForm.resx">
       <DependentUpon>SortCancelledNumbersForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SpiralToolbar\SpiralCurveSpiralDockWindow.resx">
+      <DependentUpon>SpiralCurveSpiralDockWindow.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SpiralToolbar\SpiralDockWindow.resx">
+      <DependentUpon>SpiralDockWindow.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TaxlotAssignmentForm.resx">
       <DependentUpon>TaxlotAssignmentForm.vb</DependentUpon>
@@ -328,6 +359,8 @@
     <EmbeddedResource Include="help\Settings_help.rtf" />
     <EmbeddedResource Include="help\TaxlotAssignment_help.rtf" />
     <EmbeddedResource Include="help\SortCancelledNumbers_help.rtf" />
+    <EmbeddedResource Include="help\SpiralCurveSpiral_help.rtf" />
+    <EmbeddedResource Include="help\Spiral_help.rtf" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -450,6 +483,12 @@
     <AddInContent Include="OrmapAnnotateToolbar\Images\TransposeAnnotationButton.bmp" />
     <AddInContent Include="OrmapAnnotateToolbar\Images\WideBothSidesDownButton.bmp" />
     <AddInContent Include="OrmapAnnotateToolbar\Images\WideBothSidesUpButton.bmp" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <AddInContent Include="SpiralToolbar\Images\CenterOnTarget32.png" />
+    <AddInContent Include="SpiralToolbar\Images\SCS_button.png" />
+    <AddInContent Include="SpiralToolbar\Images\SingleSpiral.png" />
   </ItemGroup>
   <PropertyGroup>
     <ZipFileExtension>esriAddIn</ZipFileExtension>
