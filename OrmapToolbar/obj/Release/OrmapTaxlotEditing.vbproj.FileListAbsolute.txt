@@ -1,0 +1,50 @@
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\bin\Release\OrmapTaxlotEditing.dll
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\bin\Release\OrmapTaxlotEditing.pdb
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\bin\Release\OrmapTaxlotEditing.xml
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\ResolveAssemblyReference.cache
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.AddArrowsForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.CombineTaxlotsForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.DimensionArrowsForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.EditMapIndexForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.HelpForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.InputDialog.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.LocateFeatureDockWindow.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.MapDefinitionForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.Resources.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.CreateAnnotationForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.OrmapSettingsForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.SortCancelledNumbersForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.SpiralCurveSpiralDockWindow.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.SpiralDockWindow.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.TaxlotAssignmentForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\ResGen.read.1.tlog
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\ResGen.write.1.tlog
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.dll
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.xml
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\obj\Release\OrmapTaxlotEditing.pdb
+C:\ORMAP_dev\branches\OrmapToolbarAddIn\OrmapToolbar\bin\Release\OrmapTaxlotEditing.esriAddIn
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\bin\Release\OrmapTaxlotEditing.dll
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\bin\Release\OrmapTaxlotEditing.pdb
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\bin\Release\OrmapTaxlotEditing.xml
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\ResolveAssemblyReference.cache
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.AddArrowsForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.CombineTaxlotsForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.DimensionArrowsForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.EditMapIndexForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.HelpForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.InputDialog.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.LocateFeatureDockWindow.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.MapDefinitionForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.Resources.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.CreateAnnotationForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.OrmapSettingsForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.SortCancelledNumbersForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.SpiralCurveSpiralDockWindow.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.SpiralDockWindow.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.TaxlotAssignmentForm.resources
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\ResGen.read.1.tlog
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\ResGen.write.1.tlog
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.dll
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.xml
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\obj\Release\OrmapTaxlotEditing.pdb
+C:\ORMAP_dev\branches\OrmapToolbarAddIn - 10.1\OrmapToolbar\bin\Release\OrmapTaxlotEditing.esriAddIn
