@@ -42,9 +42,11 @@ Imports ESRI.ArcGIS.Geodatabase
 Imports ESRI.ArcGIS.Geometry
 Imports ESRI.ArcGIS.Desktop.AddIns
 Imports ESRI.ArcGIS.Display
-Imports ESRI.ArcGIS.SystemUI
 Imports ESRI.ArcGIS.Editor
+Imports ESRI.ArcGIS.EditorExt
 Imports SpiralTools.SpiralUtilities
+Imports ESRI.ArcGIS.SystemUI
+
 #End Region
 
 ''' <summary>
@@ -296,10 +298,28 @@ Public Class SCS_tool
 
         If _partnerSCSDockWindowUI.uxTargetLayers.Items.Count > 0 Then _partnerSCSDockWindowUI.uxTargetLayers.Items.Clear()
 
+        'Test Code
+
         For i As Integer = 0 To theTemplateCounts
             Dim thisFeatureLayer As IFeatureLayer2 = DirectCast(theEditor.Template(i).Layer, IFeatureLayer2)
             If IsFeatureClassValidPolyline(thisFeatureLayer.FeatureClass) Then _partnerSCSDockWindowUI.uxTargetLayers.Items.Add(theEditor.Template(i).Name)
         Next
+
+        'Test Code
+        Try
+            '(AddIn.FromID(Of SpiralCurveSpiralDockWindow.AddinImpl)(My.ThisAddIn.IDs.SpiralCurveSpiralDockWindow).UI)
+            Dim theChooseObj As IChooseObjectFromObjectsUI = New ChooseObjectFromObjectsUI
+            For i As Integer = 0 To theTemplateCounts
+                Dim thisLayer As ILayer2 = DirectCast(theEditor.Template(i).Layer, ILayer2)
+                theChooseObj.Layer = CType(thisLayer, ILayer)
+            Next
+
+
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString)
+        End Try
+
+
 
     End Sub
     Private Sub uxTimer_tick(ByVal sender As System.Object, ByVal e As System.EventArgs)
