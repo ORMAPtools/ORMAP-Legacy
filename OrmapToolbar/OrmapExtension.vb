@@ -30,9 +30,11 @@ Public Class OrmapExtension
             Dim theORMAPLogFolder As String = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\" & "ORMAP_LOG"
             addTraceListenerForFileLog(theORMAPLogFolder & "\" & My.ThisAddIn.Name & ".trace.log")
 
+
+
             ' Check for a valid ArcGIS license.
-            setHasValidLicense((validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcEditor) OrElse _
-                            validateLicense(esriLicenseProductCode.esriLicenseProductCodeArcInfo)))
+            setHasValidLicense((validateLicense(esriLicenseProductCode.esriLicenseProductCodeBasic) OrElse _
+                            validateLicense(esriLicenseProductCode.esriLicenseProductCodeAdvanced)))
 
             My.User.InitializeWithWindowsUser()
 
