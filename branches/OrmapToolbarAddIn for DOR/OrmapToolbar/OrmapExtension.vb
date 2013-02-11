@@ -33,7 +33,7 @@ Public Class OrmapExtension
 
 
             ' Check for a valid ArcGIS license.
-            setHasValidLicense((validateLicense(esriLicenseProductCode.esriLicenseProductCodeBasic) OrElse _
+            setHasValidLicense((validateLicense(esriLicenseProductCode.esriLicenseProductCodeStandard) OrElse _
                             validateLicense(esriLicenseProductCode.esriLicenseProductCodeAdvanced)))
 
             My.User.InitializeWithWindowsUser()
@@ -61,11 +61,6 @@ Public Class OrmapExtension
         End Try
 
     End Sub
-
-
-    'Private Sub ArcMapOpenDocument()
-    'End Sub
-
 
 #Region "Properties"
 

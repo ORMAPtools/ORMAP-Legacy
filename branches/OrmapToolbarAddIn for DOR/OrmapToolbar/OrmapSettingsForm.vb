@@ -274,8 +274,9 @@ Public Class OrmapSettingsForm
     ''' Imports application settings values from a file.
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub ImportSettings()
-
+    Friend Sub ImportSettings(Optional theSourceFilePath As String = "", Optional ByRef checkSuccess As Boolean = False)
+        ' John Prychun Feb 2013, added optional filename and successful parameters and changed the sub from private to friend
+        ' end John Prychun Feb 2013
         ' Get the local user.config file path
         Dim config As System.Configuration.Configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal)
         Dim theLocalFilePath As String = config.FilePath
@@ -285,22 +286,33 @@ Public Class OrmapSettingsForm
             My.Computer.FileSystem.CopyFile(theLocalFilePath, theLocalFilePath & ".bak", True)
         End If
 
-        ' Prompt user for config file location
-        Dim theOpenFileDialog As New System.Windows.Forms.OpenFileDialog
-        theOpenFileDialog.Multiselect = False
-        theOpenFileDialog.Filter = "config files (*.config)|*.config"
-        If theOpenFileDialog.ShowDialog <> Windows.Forms.DialogResult.OK Then Exit Sub
-        If theOpenFileDialog.CheckFileExists = False And theOpenFileDialog.CheckPathExists = False Then Exit Sub
-        Dim theSourceFilePath As String = theOpenFileDialog.FileName
-
+        ' John Prychun Feb 2013, prompt for the config file if it's not in the parameter
+        If theSourceFilePath = "" Then
+            ' Prompt user for config file location
+            Dim theOpenFileDialog As New System.Windows.Forms.OpenFileDialog
+            theOpenFileDialog.Multiselect = False
+            theOpenFileDialog.Filter = "config files (*.config)|*.config"
+            If theOpenFileDialog.ShowDialog <> Windows.Forms.DialogResult.OK Then Exit Sub
+            If theOpenFileDialog.CheckFileExists = False And theOpenFileDialog.CheckPathExists = False Then Exit Sub
+            'Dim theSourceFilePath As String = theOpenFileDialog.FileName
+            theSourceFilePath = theOpenFileDialog.FileName
+        End If
+        ' end John Prychun Feb 2013
         ' Copy from source path to local path.
         If My.Computer.FileSystem.FileExists(theSourceFilePath) Then
             My.Computer.FileSystem.CopyFile(theSourceFilePath, theLocalFilePath, True)
             ReloadSettings()
+            ' John Prychun Feb 2013,  set checkSuccess to true
+            checkSuccess = True
+            ' end John Prychun Feb 2013
         Else
-            MessageBox.Show("The source settings file (user.config) is not available at:" & NewLine & _
-                    My.Computer.FileSystem.GetParentPath(theSourceFilePath) & "." & NewLine & NewLine & _
-                    "Copy your source settings file to this location and try again.", "Import Settings", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            ' John Prychun Feb 2013, set value for checkSuccess and modified the message to show the actual name of the file
+            checkSuccess = False
+            MessageBox.Show("The source settings file (" & My.Computer.FileSystem.GetName(theSourceFilePath) & ") is not available at:" _
+                            & NewLine & My.Computer.FileSystem.GetParentPath(theSourceFilePath) & "." & NewLine & NewLine & _
+                            "Copy your source settings file to this location and try again.", "Import Settings", _
+                            MessageBoxButtons.OK, MessageBoxIcon.Error)
+            ' end John Prychun Feb 2013
         End If
 
     End Sub
