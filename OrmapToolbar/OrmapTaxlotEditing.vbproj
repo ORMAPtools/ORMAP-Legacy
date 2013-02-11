@@ -131,6 +131,7 @@
     <Compile Include="EditMapIndexForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="importConfigFile.vb" />
     <Compile Include="InputDialog.designer.vb">
       <DependentUpon>InputDialog.vb</DependentUpon>
     </Compile>
@@ -468,9 +469,6 @@
     <AddInContent Include="Images\TaxlotAssignment.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <AddInContent Include="Images\OrmapSettings.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AddInContent Include="Images\SortCancelledNumbers.png" />
   </ItemGroup>
   <ItemGroup>
@@ -484,11 +482,16 @@
     <AddInContent Include="OrmapAnnotateToolbar\Images\WideBothSidesDownButton.bmp" />
     <AddInContent Include="OrmapAnnotateToolbar\Images\WideBothSidesUpButton.bmp" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <AddInContent Include="Images\importConfigFile.png" />
+  </ItemGroup>
   <ItemGroup>
     <AddInContent Include="SpiralToolbar\Images\CenterOnTarget32.png" />
     <AddInContent Include="SpiralToolbar\Images\SCS_button.png" />
     <AddInContent Include="SpiralToolbar\Images\SingleSpiral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\OrmapSettings.png" />
   </ItemGroup>
   <PropertyGroup>
     <ZipFileExtension>esriAddIn</ZipFileExtension>
